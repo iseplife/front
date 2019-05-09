@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="272px" height="272px" viewBox="0 0 272 272" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 2 Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2-Copy">
+            <rect id="Rectangle-5" fill="#3F51B5" x="0" y="0" width="272" height="272"></rect>
+            <circle id="Oval" fill="#FFFFFF" cx="136.5" cy="136.5" r="79.5"></circle>
+            <g id="Group-2" transform="translate(100.000000, 96.000000)" fill="#FFBE34">
+                <path d="M12,0 L20,0 L20,8 L52,8 L52,0 L60,0 L60,8 L64,8 C68.406252,8 72,11.593752 72,16 L72,72 C72,76.406252 68.406252,80 64,80 L8,80 C3.593752,80 0,76.406252 0,72 L0,16 C0,11.593752 3.593752,8 8,8 L12,8 L12,0 Z M7.71171171,27.7477477 L7.71171171,71.8558559 L64.8888889,71.8558559 L64.8888889,27.7477477 L7.71171171,27.7477477 Z M37.6616617,45.9099099 L59.4434434,45.9099099 L59.4434434,64.0720721 L37.6616617,64.0720721 L37.6616617,45.9099099 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
