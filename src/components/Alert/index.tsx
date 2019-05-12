@@ -34,20 +34,16 @@ class AlertCenter extends Component<AlertCenterProps, AlertCenterState> {
   timeout?: number;
 
   componentDidMount() {
-    document.addEventListener(
-      'notification',
-      this.onReceiveNotification.bind(this)
-    );
+    document.addEventListener('notification', this
+      .onReceiveNotification as EventListener);
   }
 
   componentWillUnmount() {
-    document.removeEventListener(
-      'notification',
-      this.onReceiveNotification.bind(this)
-    );
+    document.removeEventListener('notification', this
+      .onReceiveNotification as EventListener);
   }
 
-  onReceiveNotification(e: any) {
+  onReceiveNotification = (e: CustomEvent<AlertCenterState>) => {
     this.setState({
       message: e.detail.message,
       type: e.detail.type || 'message',
@@ -57,7 +53,7 @@ class AlertCenter extends Component<AlertCenterProps, AlertCenterState> {
     this.timeout = window.setTimeout(() => {
       this.setState({ open: false });
     }, 3000);
-  }
+  };
 
   render() {
     const { open, type, message } = this.state;
