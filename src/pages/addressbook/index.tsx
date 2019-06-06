@@ -106,10 +106,7 @@ class AddressBook extends Component<AddressBookProps, AddressBookState> {
   handlePromoFilter = async (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    const { options } = event.target as HTMLSelectElement;
-    const promotionFilter = Array.from(options)
-      .filter(opt => opt.selected)
-      .map(opt => parseInt(opt.value, 10));
+    const promotionFilter = event.target.value as number[];
     const { search, sort } = this.state;
     const res = await studentData.searchStudents(
       search,

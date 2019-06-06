@@ -225,18 +225,12 @@ class Users extends Component<UsersProps, UsersState> {
   handleSelectRoles = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    const { options } = e.target as HTMLSelectElement;
-    const filterRoles = Array.from(options)
-      .filter(opt => opt.selected)
-      .map(opt => opt.value);
+    const filterRoles = e.target.value as string[];
     this.filterUsers(this.state.filter, filterRoles, this.state.filterPromo, 0);
   };
 
   onPromoFilter = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    const { options } = e.target as HTMLSelectElement;
-    const filterPromo = Array.from(options)
-      .filter(opt => opt.selected)
-      .map(opt => parseInt(opt.value, 10));
+    const filterPromo = e.target.value as number[];
     this.filterUsers(this.state.filter, this.state.filterRoles, filterPromo, 0);
   };
 
