@@ -150,7 +150,7 @@ class ResultPanel extends Component<ResultPanelProps, ResultPanelState> {
             >
               <CloseIcon />
             </IconButton>
-            <Typography variant="h1" color="inherit">
+            <Typography variant="h6" color="inherit">
               {this.props.title}
             </Typography>
           </Toolbar>
