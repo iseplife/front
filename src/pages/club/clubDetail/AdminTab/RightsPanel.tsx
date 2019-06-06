@@ -28,7 +28,7 @@ type RightsPanelProps = {
   userid?: number;
   selection: ClubMember | null;
   handleSelectRole: (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => Promise<void>;
   getRole: (role: ClubMember) => number | null;
   isMemberAdmin: (memberId: number) => boolean;

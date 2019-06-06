@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button';
+import { Fab } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
@@ -238,13 +238,9 @@ class MediaView extends Component<MediaViewProps, MediaViewState> {
             })}
             {!this.props.lastPage && (
               <div style={{ textAlign: 'center' }}>
-                <Button
-                  variant="fab"
-                  color="primary"
-                  onClick={this.props.seeMore}
-                >
+                <Fab color="primary" onClick={this.props.seeMore}>
                   <ArrowDownwardIcon />
-                </Button>
+                </Fab>
               </div>
             )}
           </Loader>

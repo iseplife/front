@@ -193,7 +193,7 @@ export default class ImportStudents extends React.Component<
                 onChange={this.addCsv}
               />
               <label htmlFor="csvFile">
-                <Button component="span" variant="raised" color="primary">
+                <Button component="span" variant="contained" color="primary">
                   <FileUpload style={{ marginRight: 5 }} /> CSV Eleves
                 </Button>
               </label>
@@ -208,7 +208,7 @@ export default class ImportStudents extends React.Component<
                 onChange={this.importPhoto}
               />
               <label htmlFor="photos">
-                <Button component="span" variant="raised" color="primary">
+                <Button component="span" variant="contained" color="primary">
                   <FileUpload style={{ marginRight: 5 }} /> Photos
                 </Button>
               </label>
@@ -237,7 +237,7 @@ export default class ImportStudents extends React.Component<
           <Box mb={1}>
             <Button
               disabled={uploading || !csv || photos.length === 0}
-              variant="raised"
+              variant="contained"
               color="secondary"
               onClick={this.importStudents}
             >
@@ -280,7 +280,7 @@ export default class ImportStudents extends React.Component<
                 <TableRow>
                   <TableCell>Photo</TableCell>
                   <TableCell>Nom</TableCell>
-                  <TableCell numeric>Promotion</TableCell>
+                  <TableCell>Promotion</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -297,7 +297,7 @@ export default class ImportStudents extends React.Component<
                       <TableCell>
                         {s.firstname} {s.lastname}
                       </TableCell>
-                      <TableCell numeric>{s.promo}</TableCell>
+                      <TableCell>{s.promo}</TableCell>
                     </TableRow>
                   );
                 })}

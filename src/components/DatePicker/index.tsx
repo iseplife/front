@@ -24,7 +24,7 @@ const TimeSelect: React.FC<TimeSelectProps> = props => {
       <Select
         native
         value={props.value || 0}
-        onChange={e => props.onChange(e.target.value)}
+        onChange={e => props.onChange(e.target.value as string)}
         input={<Input fullWidth id="input" />}
       >
         {props.items.map((item, id) => (

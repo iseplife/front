@@ -1,3 +1,4 @@
+import { Fab } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -261,8 +262,7 @@ export default class QuestionForm extends React.Component<
             </div>
           )}
         </Paper>
-        <Button
-          variant="fab"
+        <Fab
           size="medium"
           color="primary"
           style={{ marginRight: 10 }}
@@ -275,16 +275,11 @@ export default class QuestionForm extends React.Component<
           }}
         >
           <AddIcon />
-        </Button>
+        </Fab>
         {selected && (
-          <Button
-            variant="fab"
-            size="medium"
-            color="secondary"
-            onClick={this.deleteQuestion}
-          >
+          <Fab size="medium" color="secondary" onClick={this.deleteQuestion}>
             <DeleteIcon />
-          </Button>
+          </Fab>
         )}
       </div>
     );

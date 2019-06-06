@@ -2,6 +2,7 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
+  Fab,
   Input,
   InputLabel,
   MenuItem,
@@ -229,14 +230,14 @@ export default class UpdateStudent extends React.Component<
 
                   {!file && (
                     <label htmlFor="image">
-                      <Button variant="raised" component="span">
+                      <Button variant="contained" component="span">
                         Modifier
                       </Button>
                     </label>
                   )}
                   {file && (
                     <Button
-                      variant="raised"
+                      variant="contained"
                       onClick={() =>
                         this.setState({ file: null, imagePreview: null })
                       }
@@ -377,17 +378,11 @@ export default class UpdateStudent extends React.Component<
         </ExpansionPanel>
 
         <div style={{ margin: 10 }}>
-          <Button
-            variant="fab"
-            color="primary"
-            style={{ margin: 5 }}
-            onClick={this.updateUser}
-          >
+          <Fab color="primary" style={{ margin: 5 }} onClick={this.updateUser}>
             <Save />
-          </Button>
+          </Fab>
           {!selected.archived && (
-            <Button
-              variant="fab"
+            <Fab
               color="secondary"
               style={{ margin: 5 }}
               onClick={() =>
@@ -397,7 +392,7 @@ export default class UpdateStudent extends React.Component<
               }
             >
               <ArchiveIcon />
-            </Button>
+            </Fab>
           )}
         </div>
         <Popup

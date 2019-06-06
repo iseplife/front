@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '@material-ui/core';
+import { Fab, Tab, Tabs } from '@material-ui/core';
 import MUIButton, { ButtonProps } from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -25,7 +25,7 @@ const Explore = styled(ExploreAction)`
 `;
 
 type BtnProps = ButtonProps & { mt?: string };
-const Button = styled(MUIButton as React.FC<BtnProps>)`
+const Button = styled<any>(MUIButton)`
   margin-top: ${(props: BtnProps) => props.mt || '0'};
 `;
 
@@ -63,26 +63,16 @@ const ClubDetailView: React.FC<ClubDetailViewProps> = props => {
               </Box>
               {props.isAdmin && (
                 <Box p={1}>
-                  <Button
-                    variant="fab"
-                    mini
-                    color="primary"
-                    onClick={props.onEdit}
-                  >
+                  <Fab size="small" color="primary" onClick={props.onEdit}>
                     <EditIcon />
-                  </Button>
+                  </Fab>
                 </Box>
               )}
               {authData.hasRole([ADMIN, CLUB_MANAGER]) && (
                 <Box p={1}>
-                  <Button
-                    variant="fab"
-                    mini
-                    color="secondary"
-                    onClick={props.onDelete}
-                  >
+                  <Fab size="small" color="secondary" onClick={props.onDelete}>
                     <DeleteIcon />
-                  </Button>
+                  </Fab>
                 </Box>
               )}
             </Flex>

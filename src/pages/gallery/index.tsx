@@ -6,7 +6,14 @@ import React from 'react';
 import LazyLoad from 'react-lazyload';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
-import { FileUpload, FluidContent, Image, ScrollToTopOnMount, Text, Title } from '../../components/common';
+import {
+  FileUpload,
+  FluidContent,
+  Image,
+  ScrollToTopOnMount,
+  Text,
+  Title,
+} from '../../components/common';
 import FullScreenGallery from '../../components/FullScreen/Gallery';
 import Loader from '../../components/Loader';
 import Popup from '../../components/Popup';
@@ -300,7 +307,7 @@ export default class GalleryPage extends React.Component<
                 <Box ml="auto">
                   {canEdit && (
                     <Button
-                      variant="raised"
+                      variant="contained"
                       color="primary"
                       onClick={this.toggleEdit}
                     >
@@ -313,7 +320,7 @@ export default class GalleryPage extends React.Component<
                 <Flex alignItems="center">
                   <Box p={1}>
                     <Button
-                      variant="raised"
+                      variant="contained"
                       color="primary"
                       onClick={this.deletePhotos}
                       disabled={selectedImages.length === 0}

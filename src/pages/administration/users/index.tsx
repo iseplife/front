@@ -46,7 +46,9 @@ function getRoleName(role: string) {
 type SelectRolesProps = {
   roles: string[];
   filterRoles: string[];
-  handleSelectRoles: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleSelectRoles: (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => void;
 };
 const SelectRoles: React.FC<SelectRolesProps> = props => {
   return (
@@ -78,7 +80,9 @@ const SelectRoles: React.FC<SelectRolesProps> = props => {
 type SelectPromoProps = {
   filterPromo: number[];
   years: number[];
-  onPromoFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onPromoFilter: (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => void;
 };
 const SelectPromo: React.FC<SelectPromoProps> = props => {
   return (
@@ -193,8 +197,10 @@ class Users extends Component<UsersProps, UsersState> {
     );
   };
 
-  changeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const filter = event.target.value;
+  changeFilter = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
+    const filter = event.target.value as string;
     this.filterUsers(filter, this.state.filterRoles, this.state.filterPromo, 0);
   };
 
@@ -216,15 +222,19 @@ class Users extends Component<UsersProps, UsersState> {
     });
   };
 
-  handleSelectRoles = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const filterRoles = Array.from(e.target.options)
+  handleSelectRoles = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
+    const { options } = e.target as HTMLSelectElement;
+    const filterRoles = Array.from(options)
       .filter(opt => opt.selected)
       .map(opt => opt.value);
     this.filterUsers(this.state.filter, filterRoles, this.state.filterPromo, 0);
   };
 
-  onPromoFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const filterPromo = Array.from(e.target.options)
+  onPromoFilter = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const { options } = e.target as HTMLSelectElement;
+    const filterPromo = Array.from(options)
       .filter(opt => opt.selected)
       .map(opt => parseInt(opt.value, 10));
     this.filterUsers(this.state.filter, this.state.filterRoles, filterPromo, 0);
@@ -312,7 +322,7 @@ class Users extends Component<UsersProps, UsersState> {
                   <TableRow>
                     <TableCell>Photo</TableCell>
                     <TableCell>Nom</TableCell>
-                    <TableCell numeric>Promotion</TableCell>
+                    <TableCell>Promotion</TableCell>
                     <TableCell>Role</TableCell>
                   </TableRow>
                 </TableHead>
@@ -338,7 +348,7 @@ class Users extends Component<UsersProps, UsersState> {
                         <TableCell>
                           {u.firstname} {u.lastname}
                         </TableCell>
-                        <TableCell numeric>{u.promo}</TableCell>
+                        <TableCell>{u.promo}</TableCell>
                         <TableCell>
                           {u.rolesValues.map(v => getRoleName(v)).join(', ')}
                         </TableCell>

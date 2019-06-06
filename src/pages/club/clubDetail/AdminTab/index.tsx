@@ -74,11 +74,13 @@ export default class MembersTab extends React.Component<
     return null;
   };
 
-  handleSelectRole = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+  handleSelectRole = async (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
     if (this.state.selection) {
       await clubData.updateMemberRole(
         this.state.selection.id,
-        parseInt(event.target.value, 10)
+        parseInt(event.target.value as string, 10)
       );
       this.loadMembers();
     }

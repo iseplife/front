@@ -522,7 +522,7 @@ class PublishBoxView extends Component<PublishBoxProps, PublishBoxState> {
             </Box>
             <Box ml="10px">
               <Button
-                variant="raised"
+                variant="contained"
                 color="secondary"
                 style={{ float: 'right' }}
                 onClick={this.onPublish}

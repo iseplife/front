@@ -248,7 +248,7 @@ export default class Diploma extends React.Component<{}, DiplomaState> {
           <Button
             onClick={this.updateConfig}
             color="secondary"
-            variant="raised"
+            variant="contained"
           >
             Sauvegarder
           </Button>

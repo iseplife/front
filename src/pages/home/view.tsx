@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button';
+import { Fab } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ScheduleIcon from '@material-ui/icons/Schedule';
@@ -167,14 +167,13 @@ export const HomeView: React.FC<HomeViewProps> = props => {
                 />
                 {!props.lastPage && props.posts.length > 0 && (
                   <Center>
-                    <Button
-                      variant="fab"
+                    <Fab
                       color="primary"
                       disabled={props.isLoading}
                       onClick={props.onSeeMore}
                     >
                       <ArrowDownwardIcon />
-                    </Button>
+                    </Fab>
                   </Center>
                 )}
               </div>

@@ -11,7 +11,7 @@ import React from 'react';
 import { Text } from '../../../components/common';
 import DatePicker from '../../../components/DatePicker';
 import * as userData from '../../../data/users/student';
-import { Student, Club } from '../../../data/users/type';
+import { Club, Student } from '../../../data/users/type';
 
 type UpdateClubFormProps = {
   open: boolean;
@@ -141,7 +141,7 @@ export default class UpdateClubForm extends React.Component<
               style={{ display: 'none' }}
             />
             <label htmlFor="file">
-              <Button variant="raised" component="span">
+              <Button variant="contained" component="span">
                 Ajouter logo
               </Button>
             </label>

@@ -1,11 +1,11 @@
-import { Tooltip } from '@material-ui/core';
+import { Fab, Tooltip } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SendIcon from '@material-ui/icons/Send';
-import { DatePicker } from 'material-ui-pickers';
+import { DatePicker, MaterialUiPickersDate } from '@material-ui/pickers';
 import React, { Fragment } from 'react';
 import { sendAlert } from '../../../../components/Alert';
 import { Paper, Text, Title } from '../../../../components/common';
@@ -53,7 +53,7 @@ export default class SessionForm extends React.Component<
     this.setState({ showResults: false });
   };
 
-  changeForm = (name: string) => (date: Date) => {
+  changeForm = (name: string) => (date: MaterialUiPickersDate) => {
     this.setState(state => ({
       sessionForm: {
         ...state.sessionForm,
@@ -239,8 +239,7 @@ export default class SessionForm extends React.Component<
             </div>
           )}
         </Paper>
-        <Button
-          variant="fab"
+        <Fab
           size="medium"
           color="primary"
           style={{ marginRight: 10 }}
@@ -253,30 +252,24 @@ export default class SessionForm extends React.Component<
           }}
         >
           <AddIcon />
-        </Button>
+        </Fab>
         {selected && (
           <Fragment>
             <Tooltip placement="top" title="Supprimer la session">
-              <Button
-                variant="fab"
+              <Fab
                 size="medium"
                 color="secondary"
                 style={{ marginRight: 10 }}
                 onClick={this.deleteSession}
               >
                 <DeleteIcon />
-              </Button>
+              </Fab>
             </Tooltip>
 
             <Tooltip placement="top" title="Générer et envoyer les diplômes">
-              <Button
-                variant="fab"
-                size="medium"
-                color="secondary"
-                onClick={this.genDiploma}
-              >
+              <Fab size="medium" color="secondary" onClick={this.genDiploma}>
                 <SendIcon />
-              </Button>
+              </Fab>
             </Tooltip>
 
             <ResultPanel

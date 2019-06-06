@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core';
+import { Button, Fab, TextField } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Box, Flex } from '@rebass/grid';
 import React from 'react';
@@ -80,9 +80,8 @@ export class AddRolePanel extends React.Component<
                 <Text>{r.name}</Text>
               </Box>
               <Box ml="auto">
-                <Button
-                  mini
-                  variant="fab"
+                <Fab
+                  size="small"
                   color="primary"
                   onClick={() =>
                     this.setState({
@@ -92,7 +91,7 @@ export class AddRolePanel extends React.Component<
                   }
                 >
                   <DeleteIcon />
-                </Button>
+                </Fab>
               </Box>
             </Flex>
           );

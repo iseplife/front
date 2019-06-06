@@ -1,5 +1,4 @@
-import { Input, InputLabel, MenuItem } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { Fab, Input, InputLabel, MenuItem } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
@@ -95,9 +94,13 @@ type AddressBookViewProps = {
   students: Student[];
   lastPage: boolean;
   onSeeMore: () => void;
-  onSort: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  onPromoFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSort: (event: React.ChangeEvent<{ name?: string; value: unknown }>) => void;
+  onPromoFilter: (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => void;
+  onSearch: (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => void;
 };
 
 export class AddressBookView extends PureComponent<AddressBookViewProps> {
@@ -223,14 +226,13 @@ export class AddressBookView extends PureComponent<AddressBookViewProps> {
             </Flex>
             {!this.props.lastPage && (
               <div style={{ textAlign: 'center' }}>
-                <Button
-                  variant="fab"
+                <Fab
                   color="primary"
                   disabled={this.props.loading}
                   onClick={this.props.onSeeMore}
                 >
                   <ArrowDownwardIcon />
-                </Button>
+                </Fab>
               </div>
             )}
           </Loader>

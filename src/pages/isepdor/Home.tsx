@@ -1,3 +1,4 @@
+import { Fab } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import StarIcon from '@material-ui/icons/Star';
@@ -80,7 +81,7 @@ export default class IsepDorHome extends React.Component<{}, IsepDorHomeState> {
             <Box mt={2}>
               <Button
                 style={btnStyle}
-                variant="raised"
+                variant="contained"
                 color="primary"
                 component={(props: any) => (
                   <Link to="/isepdor/poll" {...props} />
@@ -104,14 +105,13 @@ export default class IsepDorHome extends React.Component<{}, IsepDorHomeState> {
 
         {sessionActive && sessionActive.firstTurn < now && (
           <Tooltip title="ISEP d'Or" placement="left">
-            <Button
+            <Fab
               component={(props: any) => <Link to="/isepdor/poll" {...props} />}
-              variant="fab"
               color="secondary"
               style={pollBtnStyle}
             >
               <StarIcon />
-            </Button>
+            </Fab>
           </Tooltip>
         )}
       </Paper>

@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button';
+import { Fab } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { Box } from '@rebass/grid';
 import React from 'react';
@@ -24,9 +24,9 @@ export const PostTab: React.FC<PostTabProps> = props => {
       <PostListView posts={posts} refreshPosts={props.refreshPosts} />
       {!lastPage && posts.length > 0 && (
         <div style={{ textAlign: 'center' }}>
-          <Button variant="fab" color="primary" onClick={props.onSeeMore}>
+          <Fab color="primary" onClick={props.onSeeMore}>
             <ArrowDownwardIcon />
-          </Button>
+          </Fab>
         </div>
       )}
     </Box>

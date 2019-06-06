@@ -100,7 +100,7 @@ export const ResumeView: React.FC<ResumeViewProps> = ({
                     </Box>
                     <Box ml="auto">
                       <Button
-                        variant="raised"
+                        variant="contained"
                         color="primary"
                         onClick={onModify}
                       >

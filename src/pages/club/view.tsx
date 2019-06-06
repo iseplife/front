@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button';
+import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Box, Flex } from '@rebass/grid';
 import React, { Component } from 'react';
@@ -108,14 +108,13 @@ export default class Club extends Component<Props, State> {
           <Auth roles={[roles.ADMIN, roles.CLUB_MANAGER]}>
             <Flex>
               <Box ml="auto">
-                <Button
-                  variant="fab"
+                <Fab
                   color="primary"
                   aria-label="add"
                   onClick={() => this.setState({ open: true })}
                 >
                   <AddIcon />
-                </Button>
+                </Fab>
               </Box>
               <AddClubForm
                 title="Ajouter une association"
