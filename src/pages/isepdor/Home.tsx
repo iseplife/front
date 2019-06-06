@@ -3,8 +3,8 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import StarIcon from '@material-ui/icons/Star';
 import { Box, Flex } from '@rebass/grid';
+import { LinkAdapter } from 'components/utils';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Paper, Text, Title } from '../../components/common';
 import Time from '../../components/Time';
 import * as dorData from '../../data/dor';
@@ -83,9 +83,8 @@ export default class IsepDorHome extends React.Component<{}, IsepDorHomeState> {
                 style={btnStyle}
                 variant="contained"
                 color="primary"
-                component={(props: any) => (
-                  <Link to="/isepdor/poll" {...props} />
-                )}
+                to="/isepdor/poll"
+                component={LinkAdapter}
                 disabled={now < sessionActive.firstTurn}
               >
                 {sessionActive.result > now ? 'Voter' : 'Résultats'}
@@ -106,7 +105,8 @@ export default class IsepDorHome extends React.Component<{}, IsepDorHomeState> {
         {sessionActive && sessionActive.firstTurn < now && (
           <Tooltip title="ISEP d'Or" placement="left">
             <Fab
-              component={(props: any) => <Link to="/isepdor/poll" {...props} />}
+              to="/isepdor/poll"
+              component={LinkAdapter}
               color="secondary"
               style={pollBtnStyle}
             >

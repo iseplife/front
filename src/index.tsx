@@ -3,6 +3,8 @@ import red from '@material-ui/core/colors/red';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import axios from 'axios';
+import frLocale from 'date-fns/locale/fr';
+// TODO: avoid using both date-fns and moment, migrate to date-fns later
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -63,7 +65,7 @@ const styledTheme = {
 const App = () => (
   <MuiThemeProvider theme={theme}>
     <ThemeProvider theme={styledTheme}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale="fr">
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={frLocale}>
         <>
           <Router>
             <Switch>

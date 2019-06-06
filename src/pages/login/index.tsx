@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from '@material-ui/core/Button';
+import { NavLinkAdapter } from 'components/utils';
 import React, { Component } from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { MAIN_COLOR, SECONDARY_COLOR } from '../../colors';
 import { sendAlert } from '../../components/Alert';
@@ -125,7 +126,7 @@ const ButtonContainer = styled.div`
   text-align: center;
 `;
 
-const BigButton = styled(Button as React.FC<ButtonProps>)`
+const BigButton = styled<any>(Button as React.FC<ButtonProps>)`
   margin-bottom: 20px !important;
   font-size: 1.5em !important;
   color: white !important;
@@ -234,9 +235,7 @@ export default class Login extends Component {
               </BigButton>
             </ButtonContainer>
             <ButtonContainer>
-              <BigButton
-                component={(props: any) => <NavLink to="/accueil" {...props} />}
-              >
+              <BigButton to="/accueil" component={NavLinkAdapter}>
                 Accès visiteur
               </BigButton>
             </ButtonContainer>

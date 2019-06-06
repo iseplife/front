@@ -1,8 +1,9 @@
 import Button from '@material-ui/core/Button';
 import { Box, Flex } from '@rebass/grid';
+import { NavLinkAdapter } from 'components/utils';
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { EventFilter, EventState } from '.';
 import {
   Banner,
   Filler,
@@ -14,10 +15,9 @@ import {
 } from '../../components/common';
 import Loader from '../../components/Loader';
 import Popup from '../../components/Popup';
-import EditEventForm from './EditEventForm';
-import { EventState, EventFilter } from '.';
-import { EventCard } from './EventCard';
 import { Event } from '../../data/media/type';
+import EditEventForm from './EditEventForm';
+import { EventCard } from './EventCard';
 
 const EventsList = styled.ul`
   padding: 0;
@@ -73,9 +73,8 @@ export class EventsView extends Component<EventsViewProps> {
             <Box flex="0 0 auto" ml="10px">
               <Button
                 color="primary"
-                component={(props: any) => (
-                  <NavLink to="/evenements/calendrier" {...props} />
-                )}
+                to="/evenements/calendrier"
+                component={NavLinkAdapter}
               >
                 Calendrier
               </Button>

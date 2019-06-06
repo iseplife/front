@@ -1,12 +1,7 @@
 import { Tab, Tabs } from '@material-ui/core';
+import { LinkAdapter } from 'components/utils';
 import React from 'react';
-import {
-  Link,
-  Redirect,
-  Route,
-  Switch,
-  RouteComponentProps,
-} from 'react-router-dom';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Title } from '../../../components/common';
 import { routes } from './isepdor.routes';
 
@@ -57,9 +52,8 @@ export default class ImportStudents extends React.Component<
               <Tab
                 key={r.path}
                 label={r.tabName}
-                component={(props: any) => (
-                  <Link to={match.url + r.path} {...props} />
-                )}
+                to={match.url + r.path}
+                component={LinkAdapter}
               />
             ))}
           </Tabs>

@@ -1,12 +1,7 @@
 import { Tab, Tabs } from '@material-ui/core';
+import { LinkAdapter } from 'components/utils';
 import React from 'react';
-import {
-  Link,
-  Redirect,
-  Route,
-  Switch,
-  RouteComponentProps,
-} from 'react-router-dom';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import Import from './import';
 import Isepdor from './isepdor';
 import Users from './users';
@@ -53,21 +48,18 @@ class Admin extends React.Component<AdminProps, AdminState> {
         >
           <Tab
             label="Utilisateurs"
-            component={(props: any) => (
-              <Link to={`${match.url}/utilisateurs`} {...props} />
-            )}
+            to={`${match.url}/utilisateurs`}
+            component={LinkAdapter}
           />
           <Tab
             label="Importer"
-            component={(props: any) => (
-              <Link to={`${match.url}/importer`} {...props} />
-            )}
+            to={`${match.url}/importer`}
+            component={LinkAdapter}
           />
           <Tab
             label="Isep d'or"
-            component={(props: any) => (
-              <Link to={`${match.url}/isep-dor`} {...props} />
-            )}
+            to={`${match.url}/isep-dor`}
+            component={LinkAdapter}
           />
         </Tabs>
         <Switch>

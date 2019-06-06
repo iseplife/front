@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import { Box, Flex } from '@rebass/grid';
+import { NavLinkAdapter } from 'components/utils';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { MAIN_COLOR, SECONDARY_COLOR } from '../../colors';
 import { FluidContent } from '../common';
@@ -159,54 +159,38 @@ export default class FooterView extends React.Component {
             <span>© {new Date().getFullYear()} ISEPLive</span>
             <Button
               style={{ marginLeft: 10 }}
-              component={(props: any) => (
-                <NavLink
-                  to="/aide"
-                  activeStyle={{
-                    color: MAIN_COLOR,
-                  }}
-                  {...props}
-                />
-              )}
+              component={NavLinkAdapter}
+              to="/aide"
+              activeStyle={{
+                color: MAIN_COLOR,
+              }}
             >
               Aide
             </Button>
             <Button
-              component={(props: any) => (
-                <NavLink
-                  to="/mentions-legales"
-                  activeStyle={{
-                    color: MAIN_COLOR,
-                  }}
-                  {...props}
-                />
-              )}
+              component={NavLinkAdapter}
+              to="/mentions-legales"
+              activeStyle={{
+                color: MAIN_COLOR,
+              }}
             >
               Mentions Légales
             </Button>
             <Button
-              component={(props: any) => (
-                <NavLink
-                  to="/convention-utilisation"
-                  activeStyle={{
-                    color: MAIN_COLOR,
-                  }}
-                  {...props}
-                />
-              )}
+              component={NavLinkAdapter}
+              to="/convention-utilisation"
+              activeStyle={{
+                color: MAIN_COLOR,
+              }}
             >
               Convention d'utilisation
             </Button>
             <Button
-              component={(props: any) => (
-                <NavLink
-                  to="/contact"
-                  activeStyle={{
-                    color: MAIN_COLOR,
-                  }}
-                  {...props}
-                />
-              )}
+              component={NavLinkAdapter}
+              to="/contact"
+              activeStyle={{
+                color: MAIN_COLOR,
+              }}
             >
               Contact
             </Button>

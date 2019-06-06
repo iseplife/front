@@ -150,7 +150,7 @@ class ResultPanel extends Component<ResultPanelProps, ResultPanelState> {
             >
               <CloseIcon />
             </IconButton>
-            <Typography variant="title" color="inherit">
+            <Typography variant="h1" color="inherit">
               {this.props.title}
             </Typography>
           </Toolbar>
@@ -193,7 +193,7 @@ class ResultPanel extends Component<ResultPanelProps, ResultPanelState> {
                   onChange={this.changeTab}
                   indicatorColor="primary"
                   textColor="primary"
-                  fullWidth
+                  variant="fullWidth"
                 >
                   <Tab label="1er tour" />
                   <Tab label="2ème tour" />

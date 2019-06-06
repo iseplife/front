@@ -3,19 +3,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Slide,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { TransitionProps } from '@material-ui/core/transitions/transition';
+import { SlideTransition } from 'components/MaterialTransition';
 import React from 'react';
 import Loader from '../Loader';
-
-const Transition = React.forwardRef<unknown, TransitionProps>(
-  function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  }
-);
 
 type LoginFormProps = {
   open: boolean;
@@ -31,7 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = props => {
   return (
     <Dialog
       open={props.open}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideTransition}
       onClose={props.handleRequestClose}
     >
       <DialogTitle

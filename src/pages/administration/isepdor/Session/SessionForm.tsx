@@ -162,7 +162,7 @@ export default class SessionForm extends React.Component<
                 label="1er tour"
                 value={sessionForm.firstTurn}
                 onChange={this.changeForm('firstTurn')}
-                format="DD/MM/YY"
+                format="dd/MM/yy"
                 fullWidth
                 {...firstTurnLimit}
               />
@@ -171,7 +171,7 @@ export default class SessionForm extends React.Component<
                 label="2e tour"
                 value={sessionForm.secondTurn}
                 onChange={this.changeForm('secondTurn')}
-                format="DD/MM/YY"
+                format="dd/MM/yy"
                 fullWidth
                 {...secondTurnLimit}
               />
@@ -181,7 +181,7 @@ export default class SessionForm extends React.Component<
                 minDate={sessionForm.secondTurn}
                 value={sessionForm.result}
                 onChange={this.changeForm('result')}
-                format="DD/MM/YY"
+                format="dd/MM/yy"
                 fullWidth
                 {...resultLimit}
               />

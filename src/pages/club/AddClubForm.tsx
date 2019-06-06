@@ -6,9 +6,9 @@ import {
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import { Box, Flex } from '@rebass/grid';
+import { SlideTransition } from 'components/MaterialTransition';
 import React from 'react';
 import AutoComplete from '../../components/Autocomplete';
 import { Text } from '../../components/common';
@@ -104,7 +104,7 @@ export default class AddClubForm extends React.Component<
     return (
       <Dialog
         open={props.open}
-        TransitionComponent={Slide}
+        TransitionComponent={SlideTransition}
         onClose={props.handleRequestClose}
       >
         <DialogTitle>{props.title}</DialogTitle>

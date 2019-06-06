@@ -1,8 +1,9 @@
 import Button from '@material-ui/core/Button';
 import ForumIcon from '@material-ui/icons/Forum';
 import { Box } from '@rebass/grid';
+import { NavLinkAdapter } from 'components/utils';
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Media } from '../../data/media/type';
 import * as postData from '../../data/post';
@@ -92,9 +93,8 @@ export class PostTextView extends Component<PostTextViewProps> {
             <Button
               size="small"
               color="secondary"
-              component={(props: any) => (
-                <NavLink to={`/post/${post.id}`} {...props} />
-              )}
+              to={`/post/${post.id}`}
+              component={NavLinkAdapter}
             >
               {post.nbComments} <ForumIcon style={{ marginLeft: 5 }} />
             </Button>

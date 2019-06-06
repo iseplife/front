@@ -1,10 +1,10 @@
 import Button from '@material-ui/core/Button';
 import { Box, Flex } from '@rebass/grid';
+import { NavLinkAdapter } from 'components/utils';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { NavLink } from 'react-router-dom';
 import {
   Banner,
   Filler,
@@ -72,9 +72,8 @@ class CalendarEvents extends Component {
             <Box ml="auto">
               <Button
                 color="primary"
-                component={(props: any) => (
-                  <NavLink to="/evenements" {...props} />
-                )}
+                to="/evenements"
+                component={NavLinkAdapter}
               >
                 Liste
               </Button>

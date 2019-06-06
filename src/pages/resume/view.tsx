@@ -7,9 +7,9 @@ import {
   Tabs,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import { Box, Flex } from '@rebass/grid';
+import { SlideTransition } from 'components/MaterialTransition';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -182,7 +182,7 @@ class UpdateResume extends React.Component<UpdateResumeProps> {
     return (
       <Dialog
         open={props.open}
-        TransitionComponent={Slide}
+        TransitionComponent={SlideTransition}
         onClose={props.handleRequestClose}
       >
         <DialogTitle

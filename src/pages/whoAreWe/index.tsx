@@ -1,8 +1,9 @@
 import { Tab, Tabs } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import { LinkAdapter } from 'components/utils';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Banner, Filler, Header } from '../../components/common';
 import HallOfFame from './hallOfFame';
 import Target from './target';
@@ -53,21 +54,18 @@ class Whoarewe extends Component<WhoareweProps> {
           >
             <Tab
               label="Nos objectifs"
-              component={(props: any) => (
-                <Link to={`${match.url}/target`} {...props} />
-              )}
+              to={`${match.url}/target`}
+              component={LinkAdapter}
             />
             <Tab
               label="Notre équipe"
-              component={(props: any) => (
-                <Link to={`${match.url}/team`} {...props} />
-              )}
+              to={`${match.url}/team`}
+              component={LinkAdapter}
             />
             <Tab
               label="Hall of Fame"
-              component={(props: any) => (
-                <Link to={`${match.url}/hall-of-fame`} {...props} />
-              )}
+              to={`${match.url}/hall-of-fame`}
+              component={LinkAdapter}
             />
           </Tabs>
           <Switch>
