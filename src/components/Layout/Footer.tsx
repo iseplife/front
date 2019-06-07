@@ -6,6 +6,10 @@ import styled from 'styled-components';
 import { MAIN_COLOR, SECONDARY_COLOR } from '../../colors';
 import { FluidContent } from '../common';
 
+const packageVersion = (require('../../../package.json') as any).version;
+
+const version = `Version: ${packageVersion}`;
+
 const SocialBox = styled.div`
   width: 100%;
   text-align: center;
@@ -156,7 +160,7 @@ export default class FooterView extends React.Component {
         </Footer>
         <LinksBar>
           <div>
-            <span>© {new Date().getFullYear()} ISEPLive</span>
+            <span title={version}>© {new Date().getFullYear()} ISEPLive</span>
             <Button
               style={{ marginLeft: 10 }}
               component={NavLinkAdapter}
