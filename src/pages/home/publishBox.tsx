@@ -247,7 +247,6 @@ class PublishBoxView extends Component<PublishBoxProps, PublishBoxState> {
   }
 
   handleErrors = (err?: Error) => {
-    console.log(err);
     this.setState({ isUploading: false });
     sendAlert("Le post n'a pu être publié", 'error');
   };

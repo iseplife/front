@@ -41,7 +41,6 @@ type CreateClubForm = {
 
 export function createClub(form: CreateClubForm): AxiosPromise<void> {
   const formData = new FormData();
-  console.log(form);
   formData.append(
     'club',
     JSON.stringify({
