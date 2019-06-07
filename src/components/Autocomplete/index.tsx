@@ -40,11 +40,22 @@ export default class Autocomplete<T> extends React.Component<
     focus: false,
   };
 
+  componentDidMount() {
+    this.updateValueIfValid();
+  }
+
   componentDidUpdate(prevProps: AutocompleteProps<T>) {
-    if (this.props.value !== this.state.value) {
-      if (this.props.value || this.props.value === '') {
-        this.setState({ value: this.props.value });
-      }
+    if (
+      prevProps.value !== this.props.value &&
+      this.props.value !== this.state.value
+    ) {
+      this.updateValueIfValid();
+    }
+  }
+
+  updateValueIfValid() {
+    if (this.props.value || this.props.value === '') {
+      this.setState({ value: this.props.value });
     }
   }
 
@@ -57,7 +68,6 @@ export default class Autocomplete<T> extends React.Component<
   };
 
   handleSelect = (sel: T) => () => {
-    console.log(sel);
     const value = this.props.onSelect(sel);
     if (value) {
       this.setState({ value });
@@ -71,9 +81,9 @@ export default class Autocomplete<T> extends React.Component<
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = event.target.value;
-    this.setState({ value: val });
-    this.handleSuggestionsFetchRequested(val);
+    const { value } = event.target;
+    this.setState({ value });
+    this.handleSuggestionsFetchRequested(value);
   };
 
   render() {

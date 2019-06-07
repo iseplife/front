@@ -255,6 +255,7 @@ export default class PollQuestionDor extends React.Component<
 
   getValue(): string {
     const { answer } = this.props;
+    console.log(answer);
     if (answer) {
       if (answer.resAuthor) {
         const author = answer.resAuthor;
@@ -268,6 +269,11 @@ export default class PollQuestionDor extends React.Component<
         if (author.authorType === 'club') {
           return (author as Club).name;
         }
+      }
+
+      if (answer.resEvent) {
+        console.log(answer.resEvent.name);
+        return answer.resEvent.name;
       }
     }
     return '';
