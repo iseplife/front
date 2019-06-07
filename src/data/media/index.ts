@@ -62,7 +62,7 @@ export function createEvent(postId: number, state: any, authorId: number) {
     JSON.stringify({
       title: state.title,
       location: state.location,
-      date: state.date.getTime(),
+      date: state.date,
       description: state.description,
       clubId: authorId,
     })

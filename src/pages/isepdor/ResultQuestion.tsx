@@ -179,7 +179,7 @@ export class ResultQuestion extends React.Component<ResultQuestionProps> {
       <Paper>
         <BgImage
           mh="200px"
-          local
+          localImage
           src={this.getImg()}
           defaultSrc="/img/svg/unknown.svg"
         />

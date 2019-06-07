@@ -57,6 +57,7 @@ export default class Autocomplete<T> extends React.Component<
   };
 
   handleSelect = (sel: T) => () => {
+    console.log(sel);
     const value = this.props.onSelect(sel);
     if (value) {
       this.setState({ value });

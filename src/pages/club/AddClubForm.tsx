@@ -48,12 +48,11 @@ export default class AddClubForm extends React.Component<
     autocompleteValue: '',
   };
 
-  change = (name: string, value: any): string => {
+  change = (name: string, value: any) => {
     this.setState(state => ({
       ...state,
       [name]: value,
     }));
-    return '';
   };
 
   changeLogo = (files: FileList | null) => {
@@ -126,10 +125,13 @@ export default class AddClubForm extends React.Component<
               onChange={date => this.change('creation', date)}
             />
           </div>
-          <AutoComplete
+          <AutoComplete<Student>
             label="Président *"
             search={this.search}
-            onSelect={val => this.change('president', val.id)}
+            onSelect={val => {
+              this.change('president', val.id);
+              return `${val.firstname} ${val.lastname}`;
+            }}
             renderSuggestion={this.renderSuggestion}
           />
           <TextField
