@@ -1,11 +1,14 @@
 # FRONT- Plateforme assocative
 
 ## Getting Started
+
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/): 10.15.3
 - npm: 6.9.0
 
 ### Installation
+
 ```bash
 # Clone the repository (stable branch)
 git clone -b master https://git.dev.juniorisep.com/iseplife/front front
@@ -21,12 +24,14 @@ npm start
 ```
 
 ### Build - Production
+
 ```bash
 # Build the front-end app
 npm run build:prod
 ```
 
 ## Rules
+
 - Use IntelliJ IDEA.
 - Code needs to be written in english. (documentation included)
 - Document all your changes before MR.
