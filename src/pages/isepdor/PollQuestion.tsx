@@ -10,16 +10,15 @@ import Loader from '../../components/Loader';
 import { backUrl } from '../../config';
 import * as clubData from '../../data/club';
 import * as dorData from '../../data/dor';
-import * as userData from '../../data/users/student';
 import {
-  VoteDor,
-  QuestionDor,
-  AnswerDorScore,
   AnswerDor,
+  AnswerDorScore,
   EventDor,
+  QuestionDor,
+  VoteDor,
 } from '../../data/dor/type';
-import { Student, Club, Employee, Author } from '../../data/users/type';
-import { Event } from '../../data/media/type';
+import * as userData from '../../data/users/student';
+import { Author, Club, Employee, Student } from '../../data/users/type';
 
 type PollQuestionDorProps = {
   answer?: VoteDor;
@@ -270,6 +269,10 @@ export default class PollQuestionDor extends React.Component<
           return (author as Club).name;
         }
       }
+
+      if (answer.resEvent) {
+        return answer.resEvent.name;
+      }
     }
     return '';
   }
@@ -343,7 +346,7 @@ export default class PollQuestionDor extends React.Component<
       <Paper>
         <BgImage
           mh="200px"
-          local
+          localImage
           src={this.getImg()}
           defaultSrc="/img/svg/unknown.svg"
         />
@@ -353,7 +356,7 @@ export default class PollQuestionDor extends React.Component<
           <Loader loading={loading}>
             <Fragment>
               {!results && (
-                <Autocomplete
+                <Autocomplete<AnswerDor>
                   label="Mon choix"
                   disabled={answer != null}
                   value={this.getValue()}

@@ -16,14 +16,7 @@ import Play from '@material-ui/icons/PlayCircleFilled';
 import { Flex } from '@rebass/grid';
 import { NavLinkAdapter } from 'components/utils';
 import React from 'react';
-import {
-  Link,
-  NavLink,
-  Redirect,
-  Route,
-  RouteComponentProps,
-  Switch,
-} from 'react-router-dom';
+import { Link, NavLink, Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { MAIN_COLOR, SECONDARY_COLOR } from '../../colors';
 import Auth from '../../components/Auth/AuthComponent';
@@ -261,7 +254,7 @@ class Layout extends React.Component<LayoutProps, LayoutState> {
           }
         });
       } catch (error) {
-        console.log(error);
+        console.warn(error);
       }
     };
 

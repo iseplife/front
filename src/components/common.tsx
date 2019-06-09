@@ -169,7 +169,7 @@ const BgImageStyle = styled.div`
 
 type BgImageProps = BgImageStyleProps & {
   defaultSrc?: string;
-  local?: boolean;
+  localImage?: boolean;
   style?: React.CSSProperties;
   onClick?: () => void;
 };
@@ -177,7 +177,7 @@ export const BgImage: React.FC<BgImageProps> = props => {
   if (!props.src && props.defaultSrc) {
     return <BgImageStyle {...props} src={props.defaultSrc} />;
   }
-  if (props.local) {
+  if (props.localImage) {
     return <BgImageStyle {...props} src={props.src} />;
   }
   return <BgImageStyle {...props} src={props.src && backUrl + props.src} />;

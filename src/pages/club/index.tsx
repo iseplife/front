@@ -26,7 +26,7 @@ class Club extends Component<{}, ClubState> {
   };
 
   addClub = (form: React.FormEvent) => {
-    return clubData.createClub(form).then(res => {
+    return clubData.createClub(form as any).then(res => {
       this.getClubs();
       return res;
     });
