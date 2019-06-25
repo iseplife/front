@@ -6,6 +6,7 @@ import { Title } from '../../../../components/common';
 import { backUrl } from '../../../../config';
 import { ClubMember } from '../../../../data/club/type';
 import * as userData from '../../../../data/users/student';
+import {Student} from "../../../../data/users/type";
 
 type AddUserPanelProps = {
   members: ClubMember[];
@@ -27,10 +28,10 @@ export class AddUserPanel extends React.Component<
     selectValue: '',
   };
 
-  selectUser = (user: ClubMember) => {
+  selectUser = (user: Student) => {
     this.setState({
       selectedUser: user.id,
-      selectValue: `${user.member.firstname} ${user.member.lastname}`,
+      selectValue: `${user.firstname} ${user.lastname}`,
       selected: true,
     });
   };
@@ -71,7 +72,7 @@ export class AddUserPanel extends React.Component<
     return (
       <div>
         <Title invert>Ajouter membre</Title>
-        <Autocomplete<ClubMember>
+        <Autocomplete<Student>
           label="Etudiant"
           value={this.state.selectValue}
           onSelect={this.selectUser}
