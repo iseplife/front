@@ -30,7 +30,7 @@ npm start
 npm run build:prod
 ```
 
-## Contribute to project
+### Contribute to project
 
 Before contributing to the project be sure that you have read the [Contributor guidelines](CONTRIBUTING.md).
 
