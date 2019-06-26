@@ -30,10 +30,7 @@ npm start
 npm run build:prod
 ```
 
-## Rules
+## Contribute to project
 
-- Use IntelliJ IDEA.
-- Code needs to be written in english. (documentation included)
-- Document all your changes before MR.
-- Create a new branch for each issue
-- Create a new branch on issue's branch for each feature
+Before contributing to the project be sure that you have read the [Contributor guidelines](CONTRIBUTOR.md).
+
