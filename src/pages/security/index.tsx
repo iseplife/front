@@ -3,6 +3,7 @@ import {Redirect} from 'react-router-dom';
 import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {connect, isLoggedIn} from "../../data/security";
+import Loading from "../../components/Loading";
 
 interface LoginFormInputs {
     id: string,
@@ -16,7 +17,7 @@ interface LoginForm {
 
 const Login = () => {
     const initialValues: LoginFormInputs = {id: "", password: ""};
-    const {t, i18n} = useTranslation("login");
+    const {t} = useTranslation("login");
     const [loading, setLoadingStatus] = useState<boolean>(false);
     const [error, setError] = useState<string|undefined>();
     const formik = useFormik<LoginFormInputs>({
@@ -52,7 +53,6 @@ const Login = () => {
         <div className="h-full flex justify-center items-center">
             <div className="bg-white rounded-b shadow-lg p-4 flex flex-col">
                 {isLoggedIn() && <Redirect to="/"/>}
-
                 {error &&
                     <div className="text-center text-red-400">
                         <h6>{error}</h6>
@@ -76,7 +76,7 @@ const Login = () => {
                             className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-indigo-500 text-white hover:text-indigo-200 shadow-lg text-xl font-dinotcb`}
                     >
                         {loading ?
-                            <i className="text-indigo-200 fas fa-circle-notch fa-spin"/> :
+                            <Loading /> :
                             "let's go !"
                         }
                     </button>
