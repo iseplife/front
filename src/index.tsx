@@ -8,7 +8,7 @@ import {
     Switch,
     Redirect
 } from 'react-router-dom';
-import { initializeAxios } from './data/requestFactory';
+import {initializeAxios} from './data/requestFactory';
 import Login from "./pages/security";
 import {isLoggedIn} from "./data/security";
 import Template from "./components/Templates";
@@ -37,5 +37,5 @@ const App: React.FC = () => {
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 serviceWorker.register();
