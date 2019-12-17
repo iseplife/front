@@ -18,7 +18,6 @@ const EventsScroller: React.FC = () => {
             // Trigger event loader when bottom of page is almost reached
             if (list && (list.clientHeight + list.offsetTop <= Math.ceil(window.scrollY) + window.innerHeight + PIXEL_BEFORE_REACHED)) {
                 setLoadMore(true);
-                console.log('loading')
             }
         });
     }, []);
@@ -73,7 +72,7 @@ const EventsScroller: React.FC = () => {
                     )
                 }
             )}
-            <div style={{height: 50}}>
+            <div className="h-12 mb-3">
                 {loadMore && <Loading size="3x"/>}
             </div>
         </div>

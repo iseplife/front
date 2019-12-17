@@ -9,7 +9,9 @@ import Calendar from "../../pages/calendar";
 const Template = () => {
     return (
         <div>
-            <h1>default template</h1>
+            <div className="bg-indigo-500 h-12">
+
+            </div>
             <div className="h-full">
                 <Switch>
                     {/* Add your route here */}
