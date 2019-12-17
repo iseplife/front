@@ -9,6 +9,7 @@ i18n
         ns: ['login', 'common'],
         defaultNS: 'global',
         lng: "fr",
+        returnObjects: true,
         whitelist: ["en", "fr"],
         keySeparator: '.', // we do not use keys in form messages.welcome
         interpolation: {
