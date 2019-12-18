@@ -22,3 +22,8 @@
     font-family:DinotM;
     src:url(../fonts/DINOT-Medium.otf)
 }
+
+.side-calendar {
+    position: sticky;
+    top: 1.25rem
+}
