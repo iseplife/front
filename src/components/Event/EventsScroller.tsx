@@ -1,24 +1,36 @@
 import {isToday, toDate} from "date-fns";
 import {useTranslation} from "react-i18next";
-import {EventList} from "../../data/event/types";
+import {EventList, EventPreview} from "../../data/event/types";
 import {getCurrentEvents, getDayEvents} from "../../data/event";
 import React, {useEffect, useState} from "react";
 import Loading from "../Loading";
+import Event from "../Event"
 
 const PIXEL_BEFORE_REACHED = 100;
+interface EventsScrollerProps {
+    className?: string
+}
 
-const EventsScroller: React.FC = () => {
+
+
+const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
     const {t} = useTranslation('date');
     const [events, setEvents] = useState<EventList>(getCurrentEvents());
     const [loadMore, setLoadMore] = useState(false);
 
     useEffect(() => {
+        const page = document.getElementById('events-page');
         const list = document.getElementById('events-list');
         window.addEventListener('scroll', () => {
             // Trigger event loader when bottom of page is almost reached
-            if (list && (list.clientHeight + list.offsetTop <= Math.ceil(window.scrollY) + window.innerHeight + PIXEL_BEFORE_REACHED)) {
-                setLoadMore(true);
+            if(page && list){
+                if (list.clientHeight + list.offsetTop <= Math.ceil(page.scrollTop) + page.clientHeight + PIXEL_BEFORE_REACHED) {
+                    setLoadMore(true);
+                }
+            }else {
+                console.error(`Cannot find elements with ids : events-page, events-list`)
             }
+
         });
     }, []);
 
@@ -36,11 +48,11 @@ const EventsScroller: React.FC = () => {
 
 
     return (
-        <div id="events-list" className="md:w-3/4 w-full h-64 min-h-screen h-auto" style={{height: "auto"}}>
+        <div id="events-list" className={`min-h-screen h-auto ${className}`}>
             {Object.entries(events).map(([timestamp, events]) => {
                     const date: Date = toDate(Number(timestamp));
                     return (
-                        <div key={timestamp} className="my-5 flex">
+                        <div id={timestamp} key={timestamp} className="my-5 flex">
                             <div className="text-center font-dinotcb w-1/6">
                                 <div className="">
                                     <div className="lowercase leading-none text-gray-600 text-4xl">
@@ -62,10 +74,8 @@ const EventsScroller: React.FC = () => {
                                 }
                             </div>
                             <div className="flex flex-row flex-wrap w-5/6">
-                                {events.map((e: Event, index: number) => (
-                                    <div key={index} className="bg-red-200 m-2" style={{height: 100, width: 250}}>
-
-                                    </div>
+                                {events.map((e: EventPreview, index: number) => (
+                                    <Event key={index} data={e}/>
                                 ))}
                             </div>
                         </div>
