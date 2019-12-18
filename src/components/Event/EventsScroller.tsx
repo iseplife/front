@@ -7,10 +7,10 @@ import Loading from "../Loading";
 import Event from "../Event"
 
 const PIXEL_BEFORE_REACHED = 100;
+
 interface EventsScrollerProps {
     className?: string
 }
-
 
 
 const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
@@ -19,19 +19,18 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
     const [loadMore, setLoadMore] = useState(false);
 
     useEffect(() => {
-        const page = document.getElementById('events-page');
-        const list = document.getElementById('events-list');
-        window.addEventListener('scroll', () => {
-            // Trigger event loader when bottom of page is almost reached
-            if(page && list){
-                if (list.clientHeight + list.offsetTop <= Math.ceil(page.scrollTop) + page.clientHeight + PIXEL_BEFORE_REACHED) {
+        const main = document.getElementById("main");
+        if (main) {
+            main.addEventListener('scroll', () => {
+                // Trigger event loader when bottom of page is almost reached
+                if (main.clientHeight + main.scrollTop >= main.scrollHeight - PIXEL_BEFORE_REACHED) {
                     setLoadMore(true);
                 }
-            }else {
-                console.error(`Cannot find elements with ids : events-page, events-list`)
-            }
+            })
+        } else {
+            console.error(`Cannot find elements with ids : events-page, events-list`)
+        }
 
-        });
     }, []);
 
     useEffect(() => {
