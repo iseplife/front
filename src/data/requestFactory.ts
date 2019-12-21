@@ -26,3 +26,10 @@ export const setToken = (tokenSet: TokenSet) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${tokenSet.token}`;
     axios.defaults.headers.common['X-Refresh-Token'] = tokenSet.refreshToken;
 };
+
+export const clearToken = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common['X-Refresh-Token'];
+};

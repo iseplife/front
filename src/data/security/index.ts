@@ -1,6 +1,6 @@
 import {Token, TokenPayload} from './types';
 import axios from 'axios';
-import {setToken} from "../requestFactory";
+import {clearToken, setToken} from "../requestFactory";
 
 export const hasRole = (roles: Array<string>) => {
     const user = getUser();
@@ -23,10 +23,7 @@ export const connect = (username: string, password: string): Promise<void> => {
 };
 
 export const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    delete axios.defaults.headers.common['Authorization'];
-    delete axios.defaults.headers.common['X-Refresh-Token'];
+    clearToken();
 };
 
 export const getUser = (): TokenPayload | null => {
