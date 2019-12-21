@@ -26,7 +26,7 @@ const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError
             case 401:
             case 403:
                 rf.clearToken();
-                props.history.push('/');
+                props.history.push('/login');
                 break;
 
             case 500:
@@ -42,7 +42,7 @@ const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError
     }
 };
 
-const Interceptor: React.FC<RouteComponentProps> = (props) => {
+const Interceptor: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
     useEffect(() => {
         const intercept = axios.interceptors.response.use(
             axiosResponseInterceptor,
@@ -53,10 +53,7 @@ const Interceptor: React.FC<RouteComponentProps> = (props) => {
             axios.interceptors.response.eject(intercept);
         }
     });
-
-    return (
-        <div>oui</div>
-    )
+    return null;
 };
 
 export default withRouter(Interceptor);

@@ -10,16 +10,28 @@ import {
 } from 'react-router-dom';
 import { initializeAxios } from './data/requestFactory';
 import Login from "./pages/security";
+import {isLoggedIn} from "./data/security";
+import Template from "./components/templates";
 
 initializeAxios();
-
 const App: React.FC = () => {
     return (
        <Router>
            <Switch>
-               <Redirect path="/" exact to="/login" />
-               <Route path="/login" component={Login} />
-               <Route path="/" component={Login} />
+               <Route path="/login" component={Login}/>
+               <Route path="/" render={({location}) =>
+                   (
+                       isLoggedIn() ?
+                           <Template/>
+                           :
+                           <Redirect
+                               to={{
+                                   pathname: "/login",
+                                   state: {from: location}
+                               }}
+                           />
+                   )
+               }/>
            </Switch>
        </Router>
     );
