@@ -4,13 +4,16 @@ import {
     Switch,
 } from 'react-router-dom';
 import NotFound from '../../pages/erros/NotFound'
+import Interceptor from "./Interceptor";
 
-const Template = () => {
-
+const Template: React.FC = () => {
     return (
-        <div>
-            <h1>default template</h1>
-            <div>
+        <div className="h-full">
+            <Interceptor />
+            <div id="header" className="bg-indigo-500 h-12 shadow-md">
+
+            </div>
+            <div id="main" className="h-full overflow-y-auto" style={{height: "calc(100% - 3rem)"}}>
                 <Switch>
                     {/* Add your route here */}
                     <Route path="*" component={NotFound}/>
