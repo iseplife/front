@@ -25,5 +25,9 @@
 
 .side-calendar {
     position: sticky;
-    top: 1.25rem
+    top: 1.25rem;
+    border: none !important;
+}
+abbr[title] {
+    text-decoration: none;
 }

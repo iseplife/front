@@ -1,7 +1,7 @@
 import {isToday, toDate} from "date-fns";
 import {useTranslation} from "react-i18next";
 import {EventList, EventPreview} from "../../data/event/types";
-import {getCurrentEvents, getDayEvents} from "../../data/event";
+import {getCurrentEvents, getEventsAround, getNextEvents,} from "../../data/event";
 import React, {useEffect, useState} from "react";
 import Loading from "../Loading";
 import Event from "../Event"
@@ -10,13 +10,33 @@ const PIXEL_BEFORE_REACHED = 100;
 
 interface EventsScrollerProps {
     className?: string
+    timestamp?: number
+}
+
+interface Loader {
+    fetching: boolean
+    count: number
+    over: boolean
 }
 
 
-const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
+const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = Date.now()}) => {
     const {t} = useTranslation('date');
-    const [events, setEvents] = useState<EventList>(getCurrentEvents());
-    const [loadMore, setLoadMore] = useState(false);
+    const [events, setEvents] = useState<EventList>({});
+    const [down, setDown] = useState<Loader>({fetching: false, count: 0, over: false});
+    const [up, setUp] = useState<Loader>({fetching: false, count: 0, over: false});
+
+    useEffect(() => {
+        async function fetchEvents() {
+            const res = await getEventsAround(new Date(timestamp));
+            setEvents(res.data);
+        }
+        fetchEvents().then(r => {
+            console.log(r);
+            setDown({fetching: false, count: 0, over: false});
+            setUp({fetching: false, count: 0, over: false});
+        });
+    }, [timestamp]);
 
     useEffect(() => {
         const main = document.getElementById("main");
@@ -24,7 +44,17 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
             main.addEventListener('scroll', () => {
                 // Trigger event loader when bottom of page is almost reached
                 if (main.clientHeight + main.scrollTop >= main.scrollHeight - PIXEL_BEFORE_REACHED) {
-                    setLoadMore(true);
+                    setDown(p => {
+                        p.fetching = true;
+                        return p;
+                    });
+                }
+
+                if (main.scrollTop <= PIXEL_BEFORE_REACHED) {
+                    setUp(p => {
+                        p.fetching = true;
+                        return p;
+                    });
                 }
             })
         } else {
@@ -34,20 +64,25 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
     }, []);
 
     useEffect(() => {
-        setTimeout(() => {
-            if (loadMore) {
-                setEvents((e: EventList) => {
-                    const nextDay: Date = new Date(Number(Object.keys(e).splice(-1).pop()));
-                    return ({...e, ...getDayEvents(nextDay)});
-                });
-            }
-            setLoadMore(false);
-        }, 2000);
-    }, [loadMore]);
+        if (down.fetching) {
+            setEvents((e: EventList) => {
+                const nextDay: Date = new Date(Number(Object.keys(e).splice(-1).pop()));
+                return ({...e, ...getNextEvents(nextDay, down.count)});
+            });
+            setDown(p => {
+                p.fetching = false;
+                p.count++;
+                return p;
+            });
+        }
+    }, [down.fetching]);
 
 
     return (
         <div id="events-list" className={`min-h-screen h-auto ${className}`}>
+            <div className="h-12 mb-3">
+                {up.fetching && <Loading size="3x"/>}
+            </div>
             {Object.entries(events).map(([timestamp, events]) => {
                     const date: Date = toDate(Number(timestamp));
                     return (
@@ -82,7 +117,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className}) => {
                 }
             )}
             <div className="h-12 mb-3">
-                {loadMore && <Loading size="3x"/>}
+                {down.fetching && <Loading size="3x"/>}
             </div>
         </div>
     )
