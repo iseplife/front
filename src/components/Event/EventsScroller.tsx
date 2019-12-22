@@ -1,41 +1,104 @@
 import {isToday, toDate} from "date-fns";
 import {useTranslation} from "react-i18next";
 import {EventList, EventPreview} from "../../data/event/types";
-import {getCurrentEvents, getEventsAround, getNextEvents,} from "../../data/event";
-import React, {useEffect, useState} from "react";
+import {getEventsAround, getNextEvents, getPreviousEvents} from "../../data/event";
+import React, {useEffect, useReducer} from "react";
 import Loading from "../Loading";
 import Event from "../Event"
+import {AxiosPromise} from "axios";
 
 const PIXEL_BEFORE_REACHED = 100;
+const INITIAL_LOADER: Loader = {loading: false, count: 0, over: false};
+const INITIAL_STATE: EventScrollerState = {
+    events: {},
+    loading: true,
+    up: INITIAL_LOADER,
+    down: INITIAL_LOADER
+};
 
-interface EventsScrollerProps {
+type Loader = {
+    count: number,
+    over: boolean,
+    loading: boolean
+}
+
+type EventsScrollerProps = {
     className?: string
     timestamp?: number
 }
 
-interface Loader {
-    fetching: boolean
-    count: number
-    over: boolean
+type ActionType =
+    "FETCH_AROUND_INIT"
+    | "FETCH_AROUND_COMPLETE"
+    | "FETCH_UP_INIT"
+    | "FETCH_UP_COMPLETE"
+    | "FETCH_UP_OVER"
+    | "FETCH_DOWN_INIT"
+    | "FETCH_DOWN_COMPLETE"
+    | "FETCH_DOWN_OVER";
+
+type ReducerAction = {
+    type: ActionType,
+    events?: EventList,
+    date?: Date
 }
 
+type EventScrollerState = {
+    loading: boolean,
+    events: EventList,
+    up: Loader,
+    down: Loader
+}
+
+const reducer: React.Reducer<EventScrollerState, ReducerAction> = (state, action): EventScrollerState => {
+    const fetchEvents = async (f: (...param: any) => AxiosPromise<EventList>, ...param: any): Promise<EventList> => {
+        const res = await f(...param);
+        return res.data;
+    };
+    let res;
+    switch (action.type) {
+        case "FETCH_AROUND_INIT":
+            return ({...state, loading: true});
+        case "FETCH_AROUND_COMPLETE":
+            return ({...state, loading: false, events: action.events || {}});
+        case "FETCH_UP_INIT":
+            return ({...state, up: {...state.up, loading: true} });
+        case "FETCH_UP_COMPLETE":
+            const nextDay = new Date(Number(Object.keys(state.events).pop()));
+            res = fetchEvents(getNextEvents, nextDay, state.up.count);
+            return ({
+                ...state,
+                //events: {...state.events, ...res},
+                up: {over: Object.keys(res) && true, loading: false, count: ++state.up.count}
+
+            });
+        case "FETCH_DOWN_INIT":
+            return ({...state, down: {...state.down, loading: true}});
+        case "FETCH_DOWN_COMPLETE":
+            const previousDay = new Date(Number(Object.keys(state.events).shift()));
+            res = fetchEvents(getPreviousEvents, previousDay, state.down.count).then(r => console.log(r));
+            return ({
+                ...state,
+                //events: {...state.events, ...res},
+                down: {over: Object.keys(res) && true, loading: false, count: ++state.down.count, }
+            });
+        case "FETCH_DOWN_OVER":
+            break;
+    }
+    return state;
+};
 
 const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = Date.now()}) => {
     const {t} = useTranslation('date');
-    const [events, setEvents] = useState<EventList>({});
-    const [down, setDown] = useState<Loader>({fetching: false, count: 0, over: false});
-    const [up, setUp] = useState<Loader>({fetching: false, count: 0, over: false});
+    const [{events, up, down}, dispatch] = useReducer(reducer, INITIAL_STATE);
 
     useEffect(() => {
-        async function fetchEvents() {
+        const fetchEvents = async () => {
+            dispatch({type: 'FETCH_AROUND_INIT'});
             const res = await getEventsAround(new Date(timestamp));
-            setEvents(res.data);
-        }
-        fetchEvents().then(r => {
-            console.log(r);
-            setDown({fetching: false, count: 0, over: false});
-            setUp({fetching: false, count: 0, over: false});
-        });
+            dispatch({type: 'FETCH_AROUND_COMPLETE', events: res.data});
+        };
+        fetchEvents()
     }, [timestamp]);
 
     useEffect(() => {
@@ -43,45 +106,31 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
         if (main) {
             main.addEventListener('scroll', () => {
                 // Trigger event loader when bottom of page is almost reached
-                if (main.clientHeight + main.scrollTop >= main.scrollHeight - PIXEL_BEFORE_REACHED) {
-                    setDown(p => {
-                        p.fetching = true;
-                        return p;
-                    });
-                }
-
                 if (main.scrollTop <= PIXEL_BEFORE_REACHED) {
-                    setUp(p => {
-                        p.fetching = true;
-                        return p;
-                    });
+                    dispatch({type: "FETCH_UP_INIT"});
+                }
+                if (main.clientHeight + main.scrollTop >= main.scrollHeight - PIXEL_BEFORE_REACHED) {
+                    dispatch({type: "FETCH_DOWN_INIT"});
                 }
             })
         } else {
             console.error(`Cannot find elements with ids : events-page, events-list`)
         }
-
     }, []);
 
     useEffect(() => {
-        if (down.fetching) {
-            setEvents((e: EventList) => {
-                const nextDay: Date = new Date(Number(Object.keys(e).splice(-1).pop()));
-                return ({...e, ...getNextEvents(nextDay, down.count)});
-            });
-            setDown(p => {
-                p.fetching = false;
-                p.count++;
-                return p;
-            });
+        if (up.loading) {
+            dispatch({type: "FETCH_UP_COMPLETE"});
         }
-    }, [down.fetching]);
-
+        if (down.loading) {
+            dispatch({type: "FETCH_DOWN_COMPLETE"});
+        }
+    }, [up.loading, down.loading]);
 
     return (
         <div id="events-list" className={`min-h-screen h-auto ${className}`}>
             <div className="h-12 mb-3">
-                {up.fetching && <Loading size="3x"/>}
+                {up.loading && <Loading size="3x"/>}
             </div>
             {Object.entries(events).map(([timestamp, events]) => {
                     const date: Date = toDate(Number(timestamp));
@@ -117,7 +166,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
                 }
             )}
             <div className="h-12 mb-3">
-                {down.fetching && <Loading size="3x"/>}
+                {down.loading && <Loading size="3x"/>}
             </div>
         </div>
     )
