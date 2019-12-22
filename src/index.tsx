@@ -11,7 +11,7 @@ import {
 import { initializeAxios } from './data/requestFactory';
 import Login from "./pages/security";
 import {isLoggedIn} from "./data/security";
-import Template from "./components/templates";
+import Template from "./components/Templates";
 
 initializeAxios();
 const App: React.FC = () => {
