@@ -14,7 +14,7 @@ const Events: React.FC = () => {
                           next2Label={null}
                           prev2Label={null}
                           value={date}
-                          onChange={setDate}
+                          onChange={(date) => setDate(date)}
                           locale={i18n.language}
                 />
             </div>
