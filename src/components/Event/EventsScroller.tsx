@@ -89,19 +89,19 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
     }, [timestamp]);
 
     useEffect(() => {
+        function scrollerListener(this: HTMLElement) {
+            // Trigger event loader when bottom of page is almost reached
+            if (this.scrollTop <= PIXEL_BEFORE_REACHED) {
+                dispatch({type: "FETCH_UP_INIT"});
+            }
+            if (this.clientHeight + this.scrollTop >= this.scrollHeight - PIXEL_BEFORE_REACHED) {
+                dispatch({type: "FETCH_DOWN_INIT"});
+            }
+        }
         const main = document.getElementById("main");
-        if (main) {
-            main.addEventListener('scroll', () => {
-                // Trigger event loader when bottom of page is almost reached
-                if (main.scrollTop <= PIXEL_BEFORE_REACHED) {
-                    dispatch({type: "FETCH_UP_INIT"});
-                }
-                if (main.clientHeight + main.scrollTop >= main.scrollHeight - PIXEL_BEFORE_REACHED) {
-                    dispatch({type: "FETCH_DOWN_INIT"});
-                }
-            })
-        } else {
-            console.error(`Cannot find elements with ids : events-page, events-list`)
+            main?.addEventListener('scroll',scrollerListener);
+        return () => {
+            main?.removeEventListener("scroll", scrollerListener);
         }
     }, []);
 
