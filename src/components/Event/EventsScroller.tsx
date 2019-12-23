@@ -158,7 +158,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
                             </div>
                             <div className="flex flex-row flex-wrap w-5/6">
                                 {events.map((e: EventPreview, index: number) => (
-                                    <Event key={index} data={e}/>
+                                    <Event key={index} event={e}/>
                                 ))}
                             </div>
                         </div>
