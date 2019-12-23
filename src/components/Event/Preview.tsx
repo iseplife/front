@@ -5,8 +5,7 @@ import {Link} from "react-router-dom";
 type EventProps = {
     event: EventPreview
 }
-
-const Event: React.FC<EventProps> = ({event}) => (
+const Preview: React.FC<EventProps> = ({event}) => (
     <Link to={`/event/${event.id}`}>
         <div  className="bg-red-200 m-2 rounded shadow-md" style={{height: 100, width: 200}}>
 
@@ -14,4 +13,4 @@ const Event: React.FC<EventProps> = ({event}) => (
     </Link>
 );
 
-export default Event;
+export default Preview;

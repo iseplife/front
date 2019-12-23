@@ -4,7 +4,7 @@ import {EventList, EventPreview} from "../../data/event/types";
 import {getEventsAround, getNextEvents, getPreviousEvents} from "../../data/event";
 import React, {useEffect, useReducer} from "react";
 import Loading from "../Loading";
-import Event from "../Event"
+import Event from "./Preview"
 
 const PIXEL_BEFORE_REACHED = 50;
 const INITIAL_LOADER: Loader = {loading: false, count: 0, over: false};
