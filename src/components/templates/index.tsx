@@ -17,7 +17,8 @@ const Template: React.FC = () => {
             <div id="main" className="h-full overflow-y-auto" style={{height: "calc(100% - 3rem)"}}>
                 <Switch>
                     {/* Add your route here */}
-                    <Route path="/calendar" component={Events} />
+                    <Route path="/calendar" children={Events} />
+                    <Route path="/event/:id" children={Event} />
                     <Route path="*" component={NotFound}/>
                 </Switch>
             </div>
