@@ -1,10 +1,11 @@
 import {isToday, toDate} from "date-fns";
 import {useTranslation} from "react-i18next";
-import {EventList, EventPreview} from "../../data/event/types";
+import {EventPreview, EventScrollerState, Loader, ReducerAction} from "../../data/event/types";
 import {getEventsAround, getNextEvents, getPreviousEvents} from "../../data/event";
 import React, {useEffect, useReducer} from "react";
 import Loading from "../Loading";
 import Event from "./Preview"
+
 
 const PIXEL_BEFORE_REACHED = 50;
 const INITIAL_LOADER: Loader = {loading: false, count: 0, over: false};
@@ -15,38 +16,10 @@ const INITIAL_STATE: EventScrollerState = {
     down: INITIAL_LOADER
 };
 
-type Loader = {
-    count: number,
-    over: boolean,
-    loading: boolean
-}
-
 type EventsScrollerProps = {
     className?: string
     timestamp?: number
 }
-
-type ActionType =
-    "FETCH_AROUND_INIT"
-    | "FETCH_AROUND_COMPLETE"
-    | "FETCH_UP_INIT"
-    | "FETCH_UP_COMPLETE"
-    | "FETCH_DOWN_INIT"
-    | "FETCH_DOWN_COMPLETE";
-
-type ReducerAction = {
-    type: ActionType,
-    events?: EventList,
-    date?: Date
-}
-
-type EventScrollerState = {
-    loading: boolean,
-    events: EventList,
-    up: Loader,
-    down: Loader
-}
-
 const reducer: React.Reducer<EventScrollerState, ReducerAction> = (state, action): EventScrollerState => {
     switch (action.type) {
         case "FETCH_AROUND_INIT":
@@ -60,7 +33,6 @@ const reducer: React.Reducer<EventScrollerState, ReducerAction> = (state, action
                 ...state,
                 events: {...state.events, ...action.events},
                 up: {over: Object.keys(action.events || {}) && true, loading: false, count: ++state.up.count}
-
             });
         case "FETCH_DOWN_INIT":
             return ({...state, down: {...state.down, loading: true}});
@@ -78,14 +50,10 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
     const [{events, up, down}, dispatch] = useReducer(reducer, INITIAL_STATE);
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            dispatch({type: 'FETCH_AROUND_INIT'});
-            const res = await getEventsAround(new Date(timestamp));
-            dispatch({type: 'FETCH_AROUND_COMPLETE', events: res.data});
-        };
-        fetchEvents().then(
-
-        )
+        dispatch({type: 'FETCH_AROUND_INIT'});
+        getEventsAround(new Date(timestamp)).then(res => {
+            dispatch({type: 'FETCH_AROUND_COMPLETE', events: res ? res.data: {}});
+        });
     }, [timestamp]);
 
     useEffect(() => {
@@ -99,7 +67,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
             }
         }
         const main = document.getElementById("main");
-            main?.addEventListener('scroll',scrollerListener);
+        main?.addEventListener('scroll', scrollerListener);
         return () => {
             main?.removeEventListener("scroll", scrollerListener);
         }
@@ -107,23 +75,19 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
 
     useEffect(() => {
         if (!up.over && up.loading) {
-            const fetchEvents = async () => {
-                const previousDay = new Date(Number(Object.keys(events).pop()));
-                const res = await getNextEvents(previousDay, up.count);
-                dispatch({type: 'FETCH_UP_COMPLETE', events: res.data});
-            };
-            fetchEvents()
+            const nextDay = new Date(Number(Object.keys(events).pop()));
+            getNextEvents(nextDay, up.count).then(res =>
+                dispatch({type: 'FETCH_UP_COMPLETE', events: res ? res.data: {}})
+            );
         }
     }, [up.loading]);
 
     useEffect(() => {
         if (!down.over && down.loading) {
-            const fetchEvents = async () => {
-                const previousDay = new Date(Number(Object.keys(events).shift()));
-                const res = await getPreviousEvents(previousDay, up.count);
-                dispatch({type: 'FETCH_DOWN_COMPLETE', events: res.data});
-            };
-            fetchEvents()
+            const previousDay = new Date(Number(Object.keys(events).shift()));
+            getPreviousEvents(previousDay, down.count).then(res => {
+                dispatch({type: 'FETCH_DOWN_COMPLETE', events: res ? res.data: {}});
+            });
         }
     }, [down.loading]);
 
@@ -135,23 +99,23 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
             {Object.entries(events).map(([timestamp, events]) => {
                     const date: Date = toDate(Number(timestamp));
                     return (
-                        <div id={timestamp} key={timestamp} className="my-5 flex">
-                            <div className="text-center font-dinotcb w-1/6">
-                                <div className="">
-                                    <div className="lowercase leading-none text-gray-600 text-4xl">
+                        <div id={timestamp} key={timestamp} className="my-5 flex md:flex-row flex-col">
+                            <div className="text-center font-dinotcb md:w-1/6">
+                                <div className="md:block flex items-end">
+                                    <div className="lowercase leading-none md:text-gray-600 text-gray-400 text-4xl order-2">
                                         {t(`day_names.${date.getDay()}`)}
                                     </div>
                                     <div
-                                        className={`text-6xl leading-none ${isToday(date) ? "text-yellow-500" : "text-gray-400"}`}>
+                                        className={`text-6xl leading-none order-first ${isToday(date) ? "text-yellow-500" : "text-gray-400"}`}>
                                         {date.getDate()}
                                     </div>
                                     <div
-                                        className={`text-3xl leading-none ${isToday(date) ? "text-yellow-500" : "text-gray-400"}`}>
+                                        className={`text-3xl leading-none order-last flex-grow md:text-center text-right self-start ${isToday(date) ? "text-yellow-500" : "md:text-gray-400 text-gray-600"}`}>
                                         {t(`month_names.${date.getMonth()}`)}
                                     </div>
                                 </div>
                                 {isToday(date) &&
-                                <div className="my-2 text-gray-500 leading-none border-t border-gray-300">
+                                <div className="md:block hidden my-2 text-gray-500 leading-none border-t border-gray-300">
                                     Today
                                 </div>
                                 }
