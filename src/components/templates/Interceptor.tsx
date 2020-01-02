@@ -17,7 +17,7 @@ const axiosResponseInterceptor = (response: AxiosResponse) => {
 };
 
 const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
-    console.log("oui");
+    props.history.push('/404');
     if (error.response) {
         switch (error.response.status) {
             case 404:
@@ -41,6 +41,7 @@ const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError
                 break;
         }
     }
+    return Promise.reject(error);
 };
 
 const Interceptor: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
