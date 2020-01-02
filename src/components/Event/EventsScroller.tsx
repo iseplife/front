@@ -133,24 +133,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
                                 const date = parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date());
                                 return (
                                     <div className="flex md:flex-row flex-col my-4">
-                                        <div className="text-center md:w-32">
-                                            <div className="md:block flex items-end">
-                                                <div
-                                                    className="lowercase leading-none md:text-gray-600 text-gray-400 text-4xl order-2">
-                                                    {t(`date:day_names.${date.getDay()}`)}
-                                                </div>
-                                                <div
-                                                    className={`text-6xl leading-none order-first ${isToday(date) ? "text-yellow-500" : "text-gray-400"}`}>
-                                                    {date.getDate()}
-                                                </div>
-                                            </div>
-                                            {isToday(date) &&
-                                            <div
-                                                className="md:block hidden my-2 text-gray-500 leading-none border-t border-gray-300">
-                                                Today
-                                            </div>
-                                            }
-                                        </div>
+                                        <WeekDay date={date} t={t}/>
                                         <div className="flex flex-row flex-wrap w-5/6">
                                             {events.map((e: EventPreview, index: number) => (
                                                 <Event key={index} event={e}/>
