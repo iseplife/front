@@ -46,8 +46,8 @@ abbr[title] {
     content:'';
     bottom: 0;
     left: 0;
-    height: 40px;
+    height: 80px;
     right: 0;
-    background: linear-gradient(to top, rgba(251, 251, 251, 1) 0%, rgba(251, 251, 251, 0) 100%);
+    background: linear-gradient(to top, rgba(251, 251, 251, 1) 10%, rgba(251, 251, 251, 0) 100%);
     position: fixed;
 }

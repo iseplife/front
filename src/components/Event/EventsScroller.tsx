@@ -120,11 +120,11 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
             </div>
             {Object.entries(eventsMap).map(([year, monthEvent]) => (
                 <div key={year} className="my-5 mr-3 text-right font-dinotcb">
-                    <div className="sticky -mb-12 text-gray-700 text-4xl top-0">{year}</div>
+                    <div className="sticky -mb-12  text-gray-700 text-4xl top-0">{year}</div>
                     {Object.entries(monthEvent).map(([month, dayEvents]) => (
                         <div>
                             <div
-                                className={`sticky mr-16 pr-2 text-3xl ${(new Date()).getMonth() === +month ? "text-yellow-500" : "text-gray-700"}`}
+                                className={`sticky md:mr-16 mr-12 pr-2 text-3xl md:mb-0 ${(new Date()).getMonth() === +month ? "text-yellow-500" : "text-gray-700"}`}
                                 style={{top: "0.35rem"}}
                             >
                                 {t(`date:month_names.${month}`)}
@@ -132,9 +132,9 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({className, timestamp = D
                             {Object.entries(dayEvents).map(([day, events]) => {
                                 const date = parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date());
                                 return (
-                                    <div className="flex md:flex-row flex-col my-4">
+                                    <div className="flex md:flex-row flex-col md:my-4 my-16 md:mt-0 -mt-16">
                                         <WeekDay date={date} t={t}/>
-                                        <div className="flex flex-row flex-wrap w-5/6">
+                                        <div className="flex flex-row flex-wrap w-5/6 md:self-start self-center md:justify-start justify-center">
                                             {events.map((e: EventPreview, index: number) => (
                                                 <Event key={index} event={e}/>
                                             ))}
