@@ -12,7 +12,7 @@ const Template: React.FC = () => {
     return (
         <div className="h-full">
             <Interceptor />
-            <div id="header" className="bg-indigo-500 h-12 shadow-md">
+            <div id="header" className="bg-indigo-500 h-12 shadow-md mb-2">
 
             </div>
             <div id="main" className="h-full overflow-y-auto" style={{height: "calc(100% - 3rem)"}}>
