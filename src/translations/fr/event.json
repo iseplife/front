@@ -1,0 +1,10 @@
+{
+  "type": {
+    "PARTY": "Soirée",
+    "AFTERWORK":  "Afterwork",
+    "CONFERENCE":  "Conférence",
+    "WORKSHOP": "Workshop",
+    "FORMATION": "Formation",
+    "MEETING": "Réunion"
+  }
+}

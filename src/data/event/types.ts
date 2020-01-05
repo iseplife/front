@@ -1,5 +1,3 @@
-import {Page} from "../request.type";
-
 export type EventPreview = {
     id: number
     name: string
@@ -7,10 +5,6 @@ export type EventPreview = {
     endsAt: Number | Date,
     location: string,
     imageUrl?: string
-}
-
-export type EventList = {
-    [date: number]: EventPreview[]
 }
 
 type DayEvent = {
@@ -23,31 +17,18 @@ export type EventMap = {
     [year: number]: MonthEvent
 }
 
-type ReducerLoading = {
-    type: "FETCH_AROUND_INIT" | "FETCH_UP_INIT" | "FETCH_DOWN_INIT"
+export type FilterReducerAction = {
+    type: "TOGGLE_FEED" | "TOGGLE_TYPE" | "TOGGLE_PUBLISHED",
+    name: string
 }
 
-type ReducerMainAction = {
-    type: "FETCH_AROUND_COMPLETE",
-    events: EventPreview[],
-}
-type ReducerSideAction = {
-    type: "FETCH_UP_COMPLETE" | "FETCH_DOWN_COMPLETE",
-    events: Page<EventPreview>,
+export type FilterList = {
+    [name: string]: boolean,
 }
 
-export type ReducerAction = ReducerMainAction | ReducerSideAction | ReducerLoading
+export type EventFilter = {
+    feeds: FilterList,
+    types: FilterList,
+    publishedOnly: boolean,
 
-export type Loader = {
-    count: number,
-    over: boolean,
-    loading: boolean
 }
-
-export type EventScrollerState = {
-    loading: boolean,
-    eventsMap: EventMap,
-    up: Loader,
-    down: Loader
-}
-

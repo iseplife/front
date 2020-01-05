@@ -22,4 +22,5 @@ export interface TokenPayload {
     roles: Array<string>,
     clubsAdmin: Array<number>,
     clubsPublisher: Array<number>,
+    feed: Array<string>
 }
