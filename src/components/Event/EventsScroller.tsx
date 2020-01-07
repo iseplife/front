@@ -23,6 +23,10 @@ const arrayToEventMap = (events: EventPreview[], initial: EventMap): EventMap =>
     return acc;
 }, initial);
 
+const filterFn = (e: EventPreview) => {
+    return true;
+};
+
 
 type EventsScrollerProps = {
     className?: string
@@ -31,45 +35,60 @@ type EventsScrollerProps = {
 }
 const EventsScroller: React.FC<EventsScrollerProps> = ({filter, className = "", timestamp = Date.now()}) => {
     const {t} = useTranslation('date');
-    const [eventsMap, setEventsMap] = useState<EventMap>({});
+    const [events, setEvents] = useState<EventPreview[]>([]);
+    const [filteredEvents, setFilteredEvents] = useState<EventMap>({});
     const [loading, setLoading] = useState<boolean>(true);
+
 
     useEffect(() => {
         setLoading(true);
         getEventsAround(new Date(timestamp)).then(res => {
-            setEventsMap(() => arrayToEventMap(res.data, {}))
+            setEvents(() => res.data);
+            setFilteredEvents(
+                arrayToEventMap(res.data.filter(filterFn), {})
+            );
         });
         setLoading(false);
     }, [timestamp]);
 
+    // Filter update
+    useEffect(() => {
+        setFilteredEvents(
+            arrayToEventMap(events.filter(filterFn), {})
+        );
+    }, [filter]);
+
 
     const getNext: loaderCallback = async (count) => {
-        const year = Number(Object.keys(eventsMap).pop());
-        const month = Number(Object.keys(eventsMap[year]).pop());
-        const day = Number(Object.keys(eventsMap[year][month]).pop());
+        const evt = events.pop();
+        if (evt) {
+            const res = await getNextEvents(new Date(evt.startsAt), count);
+            setEvents(prevState => [...prevState, ...res.data.content]);
 
-        const res = await getNextEvents(parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date()), count);
-        setEventsMap(prevState => arrayToEventMap(res.data.content, prevState));
-
-        return res.data.last
+            return res.data.last
+        }
+        return true
     };
     const getPrevious: loaderCallback = async (count) => {
-        const year = Number(Object.keys(eventsMap).shift());
-        const month = Number(Object.keys(eventsMap[year]).shift());
-        const day = Number(Object.keys(eventsMap[year][month]).shift());
+        const evt = events.shift();
+        if (evt) {
+            const res = await getPreviousEvents(new Date(evt.startsAt), count);
+            setEvents(prevState => [...res.data.content, ...prevState]);
+            setFilteredEvents(prevState =>
+                arrayToEventMap(res.data.content.filter(filterFn), prevState)
+            );
 
-        const res = await getPreviousEvents(parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date()), count);
-        setEventsMap(prevState => arrayToEventMap(res.data.content, prevState));
-
-        return res.data.last
+            return res.data.last
+        }
+        return true;
     };
 
 
     return (
         <InfiniteScroller watch="BOTH" callback={[getNext, getPrevious]} className={`event-scroller ${className}`}>
             {loading ?
-                <Loading size="5x" style={{margin: "25%"}} />
-                : (Object.entries(eventsMap).map(([year, monthEvent]) => (
+                <Loading size="5x" style={{margin: "25%"}}/>
+                : (Object.entries(filteredEvents).map(([year, monthEvent]) => (
                     <div key={year} className="my-5 mr-3 text-right font-dinotcb">
                         <div className="sticky -mb-12  text-gray-700 text-4xl top-0">{year}</div>
                         {Object.entries(monthEvent).map(([month, dayEvents]) => (
