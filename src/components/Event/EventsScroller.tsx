@@ -1,94 +1,32 @@
 import {parse} from "date-fns";
 import {useTranslation} from "react-i18next";
-import {EventFilter, EventMap, EventPreview} from "../../data/event/types";
-import {getEventsAround, getNextEvents, getPreviousEvents} from "../../data/event";
-import React, {useEffect, useState} from "react";
+import {EventMap, EventPreview} from "../../data/event/types";
+import React, {useEffect,} from "react";
 import Event from "./Preview"
 import WeekDay from "./WeekDay";
-import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
+import InfiniteScroller, {ScrollerCallback} from "../Common/InfiniteScroller";
 import Loading from "../Loading";
-
-const arrayToEventMap = (events: EventPreview[], initial: EventMap): EventMap => events.reduce((acc: EventMap, e: EventPreview): EventMap => {
-    e.startsAt = new Date(e.startsAt);
-    const year = e.startsAt.getFullYear();
-    const month = e.startsAt.getMonth();
-    const day = e.startsAt.getDate();
-    if (!acc[year]) acc[year] = {};
-    if (!acc[year][month]) acc[year][month] = {};
-    if (!acc[year][month][day]) {
-        acc[year][month][day] = [e];
-    } else {
-        acc[year][month][day].push(e);
-    }
-    return acc;
-}, initial);
-
-const filterFn = (e: EventPreview) => {
-    return true;
-};
 
 
 type EventsScrollerProps = {
-    className?: string
-    timestamp?: number
-    filter: EventFilter
+    events: EventMap,
+    timestamp: Date
+    loading: boolean
+    callback: ScrollerCallback,
 }
-const EventsScroller: React.FC<EventsScrollerProps> = ({filter, className = "", timestamp = Date.now()}) => {
+const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loading, timestamp}) => {
     const {t} = useTranslation('date');
-    const [events, setEvents] = useState<EventPreview[]>([]);
-    const [filteredEvents, setFilteredEvents] = useState<EventMap>({});
-    const [loading, setLoading] = useState<boolean>(true);
-
 
     useEffect(() => {
-        setLoading(true);
-        getEventsAround(new Date(timestamp)).then(res => {
-            setEvents(() => res.data);
-            setFilteredEvents(
-                arrayToEventMap(res.data.filter(filterFn), {})
-            );
-        });
-        setLoading(false);
+        const dayEl = document.getElementById(timestamp.getTime().toString());
+        document.getElementById("main")?.scrollTo(0, 0);
     }, [timestamp]);
 
-    // Filter update
-    useEffect(() => {
-        setFilteredEvents(
-            arrayToEventMap(events.filter(filterFn), {})
-        );
-    }, [filter]);
-
-
-    const getNext: loaderCallback = async (count) => {
-        const evt = events.pop();
-        if (evt) {
-            const res = await getNextEvents(new Date(evt.startsAt), count);
-            setEvents(prevState => [...prevState, ...res.data.content]);
-
-            return res.data.last
-        }
-        return true
-    };
-    const getPrevious: loaderCallback = async (count) => {
-        const evt = events.shift();
-        if (evt) {
-            const res = await getPreviousEvents(new Date(evt.startsAt), count);
-            setEvents(prevState => [...res.data.content, ...prevState]);
-            setFilteredEvents(prevState =>
-                arrayToEventMap(res.data.content.filter(filterFn), prevState)
-            );
-
-            return res.data.last
-        }
-        return true;
-    };
-
-
     return (
-        <InfiniteScroller watch="BOTH" callback={[getNext, getPrevious]} className={`event-scroller ${className}`}>
+        <InfiniteScroller watch="BOTH" callback={callback} className="event-scroller md:w-3/4 w-full">
             {loading ?
                 <Loading size="5x" style={{margin: "25%"}}/>
-                : (Object.entries(filteredEvents).map(([year, monthEvent]) => (
+                : (Object.entries(events).map(([year, monthEvent]) => (
                     <div key={year} className="my-5 mr-3 text-right font-dinotcb">
                         <div className="sticky -mb-12  text-gray-700 text-4xl top-0">{year}</div>
                         {Object.entries(monthEvent).map(([month, dayEvents]) => (
@@ -102,7 +40,8 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({filter, className = "", 
                                 {Object.entries(dayEvents).map(([day, events]) => {
                                     const date = parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date());
                                     return (
-                                        <div key={`${(+month) + 1}-${day}`}
+                                        <div id={date.getTime().toString()}
+                                             key={`${(+month) + 1}-${day}`}
                                              className="flex md:flex-row flex-col md:my-4 my-16 md:mt-0 -mt-16">
                                             <WeekDay date={date} t={t}/>
                                             <div

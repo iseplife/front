@@ -10,11 +10,12 @@ type Loader = {
 }
 
 export type loaderCallback =  (count: number, ...param: any) => Promise<boolean>;
+export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
 
 type InfiniteScrollerProps = {
     watch: "UP" | "DOWN" | "BOTH",
     triggerDistance?: number,
-    callback: loaderCallback | [loaderCallback, loaderCallback],
+    callback: ScrollerCallback,
     className?: string
 }
 
