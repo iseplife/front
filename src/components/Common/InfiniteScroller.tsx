@@ -26,11 +26,11 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
     useEffect(() => {
         function scrollerListener(this: HTMLElement) {
             // Trigger event loader when top of page is almost reached
-            if (watch !== "DOWN" && this.scrollTop <= triggerDistance) {
+            if (this.scrollTop <= triggerDistance) {
                 setUpLoader(prevState => ({...prevState, loading: true}));
             }
             // Trigger event loader when bottom of page is almost reached
-            if (watch !== "UP" && this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
+            if (this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
                 setDownLoader(prevState => ({...prevState, loading: true}));
             }
         }
@@ -47,26 +47,26 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
             const f = Array.isArray(callback) ? callback[0] : callback;
             f(upLoader.count).then(over => {
                 setUpLoader(prevState => ({
-                    ...prevState,
                     over,
-                    count: ++prevState.count
+                    count: ++prevState.count,
+                    loading: false
                 }))
             })
         }
-    }, [upLoader, callback]);
+    }, [upLoader.loading, callback]);
 
     useEffect(() => {
         if (!downLoader.over && downLoader.loading) {
             const f = Array.isArray(callback) ? callback[1] : callback;
             f(downLoader.count).then(over => {
                 setDownLoader(prevState => ({
-                    ...prevState,
                     over,
-                    count: ++prevState.count
+                    count: ++prevState.count,
+                    loading: false
                 }))
             })
         }
-    }, [downLoader, callback]);
+    }, [downLoader.loading, callback]);
 
     return (
         <div className={`relative h-full h-auto ${className}`}>

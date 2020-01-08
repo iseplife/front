@@ -79,7 +79,7 @@ const Events: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         getEventsAround(Array.isArray(date) ? date[0] : date).then(res => {
-            setEvents(() => res.data);
+            setEvents(res.data);
             setFilter({type: "INIT_FILTER", events: res.data});
             setLoading(false);
         });
@@ -89,8 +89,8 @@ const Events: React.FC = () => {
      * Filter Update
      */
     useEffect(() => {
-        setFilteredEvents(
-            arrayToEventMap(events.filter(filterFn), {})
+        setFilteredEvents(prevState =>
+            arrayToEventMap(events.filter(filterFn), prevState)
         );
     }, [filter]);
 

@@ -1,7 +1,7 @@
 import {parse} from "date-fns";
 import {useTranslation} from "react-i18next";
 import {EventMap, EventPreview} from "../../data/event/types";
-import React, {useEffect,} from "react";
+import React from "react";
 import Event from "./Preview"
 import WeekDay from "./WeekDay";
 import InfiniteScroller, {ScrollerCallback} from "../Common/InfiniteScroller";
@@ -16,11 +16,6 @@ type EventsScrollerProps = {
 }
 const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loading, timestamp}) => {
     const {t} = useTranslation('date');
-
-    useEffect(() => {
-        const dayEl = document.getElementById(timestamp.getTime().toString());
-        document.getElementById("main")?.scrollTo(0, 0);
-    }, [timestamp]);
 
     return (
         <InfiniteScroller watch="BOTH" callback={callback} className="event-scroller md:w-3/4 w-full">
