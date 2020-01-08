@@ -2,8 +2,8 @@ export type EventPreview = {
     id: number
     name: string
     type: string,
-    startsAt: number | Date,
-    endsAt: Number | Date,
+    startsAt: number,
+    endsAt: number,
     location: string,
     imageUrl?: string,
     target: string,

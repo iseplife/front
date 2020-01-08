@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useMemo, useState} from "react";
 import Loading from "../Loading";
 import {useTranslation} from "react-i18next";
 
-const INITIAL_LOADER: Loader = {loading: false, count: 0, over: false};
+const INITIAL_LOADER: Loader = {loading: false, fetch: false,count: 0, over: false};
 type Loader = {
     count: number,
     over: boolean,
     loading: boolean
+    fetch: boolean
 }
 
 export type loaderCallback =  (count: number, ...param: any) => Promise<boolean>;
@@ -23,15 +24,16 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
     const {t} = useTranslation('common');
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER);
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER);
+
     useEffect(() => {
         function scrollerListener(this: HTMLElement) {
             // Trigger event loader when top of page is almost reached
             if (this.scrollTop <= triggerDistance) {
-                setUpLoader(prevState => ({...prevState, loading: true}));
+                setUpLoader(prevState => ({...prevState, fetch: true}));
             }
             // Trigger event loader when bottom of page is almost reached
             if (this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
-                setDownLoader(prevState => ({...prevState, loading: true}));
+                setDownLoader(prevState => ({...prevState, fetch: true}));
             }
         }
 
@@ -43,30 +45,34 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
     }, [triggerDistance, watch]);
 
     useEffect(() => {
-        if (!upLoader.over && upLoader.loading) {
+        if (!upLoader.over && !upLoader.loading && upLoader.fetch) {
+            setUpLoader(prevState => ({...prevState, loading: true}));
             const f = Array.isArray(callback) ? callback[0] : callback;
             f(upLoader.count).then(over => {
                 setUpLoader(prevState => ({
                     over,
+                    fetch: false,
                     count: ++prevState.count,
                     loading: false
                 }))
             })
         }
-    }, [upLoader.loading, callback]);
+    }, [upLoader, callback]);
 
     useEffect(() => {
-        if (!downLoader.over && downLoader.loading) {
+        if (!downLoader.over && !downLoader.loading && downLoader.fetch) {
+            setDownLoader(prevState => ({...prevState, loading: true}));
             const f = Array.isArray(callback) ? callback[1] : callback;
             f(downLoader.count).then(over => {
                 setDownLoader(prevState => ({
                     over,
+                    fetch: false,
                     count: ++prevState.count,
                     loading: false
                 }))
             })
         }
-    }, [downLoader.loading, callback]);
+    }, [downLoader, callback]);
 
     return (
         <div className={`relative h-full h-auto ${className}`}>

@@ -46,10 +46,11 @@ const reducer: React.Reducer<EventFilter, FilterReducerAction> = (filter, action
 
 const arrayToEventMap = (events: EventPreview[], initial: EventMap): EventMap =>
     events.reduce((acc: EventMap, e: EventPreview): EventMap => {
-        e.startsAt = new Date(e.startsAt);
-        const year = e.startsAt.getFullYear();
-        const month = e.startsAt.getMonth();
-        const day = e.startsAt.getDate();
+        const dt = new Date(e.startsAt);
+
+        const year = dt.getFullYear();
+        const month = dt.getMonth();
+        const day = dt.getDate();
         if (!acc[year]) acc[year] = {};
         if (!acc[year][month]) acc[year][month] = {};
         if (!acc[year][month][day]) {
@@ -60,9 +61,15 @@ const arrayToEventMap = (events: EventPreview[], initial: EventMap): EventMap =>
         return acc;
     }, initial);
 
+type APIDates = {
+    prev: number,
+    curr: Date,
+    next: number
+}
+
 const Events: React.FC = () => {
     const {t, i18n} = useTranslation('common');
-    const [date, setDate] = useState<Date | Date[]>(new Date());
+    const [dates, setDates] = useState<APIDates>({prev: new Date().getTime(), curr: new Date(), next: new Date().getTime()});
     const [events, setEvents] = useState<EventPreview[]>([]);
     const [filter, setFilter] = useReducer(reducer, initFilter([]));
     const [loading, setLoading] = useState<boolean>(true);
@@ -78,12 +85,25 @@ const Events: React.FC = () => {
      */
     useEffect(() => {
         setLoading(true);
-        getEventsAround(Array.isArray(date) ? date[0] : date).then(res => {
+        getEventsAround(dates.curr.getTime()).then(res => {
             setEvents(res.data);
+            const firstEvt = res.data.pop();
+            const lastEvt = res.data.shift();
+            setDates({
+                prev: firstEvt ? firstEvt.startsAt: dates.curr.getTime(),
+                curr: dates.curr,
+                next: lastEvt ? lastEvt.startsAt: dates.curr.getTime()
+            });
+            console.log({
+                prev: firstEvt ? new Date(firstEvt.startsAt): dates.curr,
+                curr: dates.curr,
+                next: lastEvt ? new Date(lastEvt.startsAt): dates.curr
+            });
             setFilter({type: "INIT_FILTER", events: res.data});
             setLoading(false);
+
         });
-    }, [date]);
+    }, [dates.curr]);
 
     /**
      * Filter Update
@@ -95,48 +115,41 @@ const Events: React.FC = () => {
     }, [filter]);
 
     const getNext: loaderCallback = async (count) => {
-        const evt = events.pop();
-        if (evt) {
-            const res = await getNextEvents(new Date(evt.startsAt), count);
-            setEvents(prevState => ([...prevState, ...res.data.content]));
-            setFilteredEvents(prevState =>
-                arrayToEventMap(res.data.content.filter(filterFn), prevState)
-            );
+        const res = await getNextEvents(dates.next, count);
+        setEvents(prevState => ([...prevState, ...res.data.content]));
+        setFilteredEvents(prevState =>
+            arrayToEventMap(res.data.content.filter(filterFn), prevState)
+        );
 
-            return res.data.last
-        }
-        return true
+        return res.data.last
+
     };
     const getPrevious: loaderCallback = async (count) => {
-        const evt = events.shift();
-        if (evt) {
-            const res = await getPreviousEvents(new Date(evt.startsAt), count);
-            setEvents(prevState => [...res.data.content, ...prevState]);
-            setFilteredEvents(prevState =>
-                arrayToEventMap(res.data.content.filter(filterFn), prevState)
-            );
+        const res = await getPreviousEvents(dates.prev, count);
+        setEvents(prevState => [...res.data.content, ...prevState]);
+        setFilteredEvents(prevState =>
+            arrayToEventMap(res.data.content.filter(filterFn), prevState)
+        );
 
-            return res.data.last
-        }
-        return true;
+        return res.data.last
     };
 
     return (
         <div id="events-page" className="flex px-4 flex-row h-full">
             <EventsScroller
-                callback={[getNext, getPrevious]}
+                callback={[getPrevious, getNext]}
                 events={filteredEvents}
                 loading={loading}
-                timestamp={Array.isArray(date) ? date[0] : date}
+                timestamp={dates.curr}
             />
             <div className="mt-5 md:w-1/4 w-1 md:block hidden fixed right-0">
                 <Calendar
                     className="side-calendar shadow-md rounded"
                     next2Label={null}
                     prev2Label={null}
-                    value={date}
+                    value={dates.curr}
                     onChange={(date) => {
-                        setDate(date)
+                        setDates(prevState => ({...prevState, curr: Array.isArray(date) ? date[0] : date}))
                     }}
                     locale={i18n.language}
                 />
