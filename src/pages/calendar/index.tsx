@@ -94,11 +94,6 @@ const Events: React.FC = () => {
                 curr: dates.curr,
                 next: lastEvt ? lastEvt.startsAt: dates.curr.getTime()
             });
-            console.log({
-                prev: firstEvt ? new Date(firstEvt.startsAt): dates.curr,
-                curr: dates.curr,
-                next: lastEvt ? new Date(lastEvt.startsAt): dates.curr
-            });
             setFilter({type: "INIT_FILTER", events: res.data});
             setLoading(false);
 
@@ -109,9 +104,7 @@ const Events: React.FC = () => {
      * Filter Update
      */
     useEffect(() => {
-        setFilteredEvents(prevState =>
-            arrayToEventMap(events.filter(filterFn), prevState)
-        );
+        setFilteredEvents(arrayToEventMap(events.filter(filterFn), {}));
     }, [filter]);
 
     const getNext: loaderCallback = async (count) => {
@@ -136,12 +129,16 @@ const Events: React.FC = () => {
 
     return (
         <div id="events-page" className="flex px-4 flex-row h-full">
-            <EventsScroller
-                callback={[getPrevious, getNext]}
-                events={filteredEvents}
-                loading={loading}
-                timestamp={dates.curr}
-            />
+            { Object.keys(filteredEvents).length || loading ?
+                <EventsScroller
+                    callback={[getPrevious, getNext]}
+                    events={filteredEvents}
+                    loading={loading}
+                    timestamp={dates.curr}
+                />
+                :<p>{t("empty")}</p>
+            }
+
             <div className="mt-5 md:w-1/4 w-1 md:block hidden fixed right-0">
                 <Calendar
                     className="side-calendar shadow-md rounded"
