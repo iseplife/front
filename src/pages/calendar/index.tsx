@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import EventsScroller from "../../components/Event/EventsScroller";
 import Calendar from 'react-calendar'
 import {useTranslation} from "react-i18next";
@@ -74,10 +74,11 @@ const Events: React.FC = () => {
     const [filter, setFilter] = useReducer(reducer, initFilter([]));
     const [loading, setLoading] = useState<boolean>(true);
     const [filteredEvents, setFilteredEvents] = useState<EventMap>({});
+    const [timestamp, setTimestamp] = useState<number>();
 
-    const filterFn = (e: EventPreview) => (
+    const filterFn = useCallback((e: EventPreview) => (
         filter.feeds[e.target] && filter.types[e.type] && (e.published || !filter.publishedOnly)
-    );
+    ), [filter]);
 
     /**
      * Date update
@@ -97,6 +98,10 @@ const Events: React.FC = () => {
             setFilter({type: "INIT_FILTER", events: res.data});
             setLoading(false);
 
+            const time = dates.curr.getTime();
+            console.log(new Date(time));
+            console.log(res.data.find(e => e.startsAt >= time)?.startsAt);
+            setTimestamp(res.data.find(e => e.startsAt >= time)?.startsAt)
         });
     }, [dates.curr]);
 
@@ -105,7 +110,7 @@ const Events: React.FC = () => {
      */
     useEffect(() => {
         setFilteredEvents(arrayToEventMap(events.filter(filterFn), {}));
-    }, [filter]);
+    }, [filter, filterFn]);
 
     const getNext: loaderCallback = async (count) => {
         const res = await getNextEvents(dates.next, count);
@@ -134,7 +139,7 @@ const Events: React.FC = () => {
                     callback={[getPrevious, getNext]}
                     events={filteredEvents}
                     loading={loading}
-                    timestamp={dates.curr}
+                    timestamp={timestamp}
                 />
                 :<p>{t("empty")}</p>
             }
@@ -146,7 +151,7 @@ const Events: React.FC = () => {
                     prev2Label={null}
                     value={dates.curr}
                     onChange={(date) => {
-                        setDates(prevState => ({...prevState, curr: Array.isArray(date) ? date[0] : date}))
+                        setDates(prevState => ({...prevState, curr: Array.isArray(date) ? date[0]: date}))
                     }}
                     locale={i18n.language}
                 />

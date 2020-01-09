@@ -10,7 +10,6 @@ export type EventPreview = {
     published: boolean
 }
 
-
 type DayEvent = {
     [day: number]: EventPreview[]
 }
@@ -46,5 +45,4 @@ export type EventFilter = {
     feeds: FilterList,
     types: FilterList,
     publishedOnly: boolean,
-
 }

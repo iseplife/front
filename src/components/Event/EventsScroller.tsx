@@ -1,7 +1,7 @@
-import {parse} from "date-fns";
+import {format, parse} from "date-fns";
 import {useTranslation} from "react-i18next";
 import {EventMap, EventPreview} from "../../data/event/types";
-import React from "react";
+import React, {useEffect} from "react";
 import Event from "./Preview"
 import WeekDay from "./WeekDay";
 import InfiniteScroller, {ScrollerCallback} from "../Common/InfiniteScroller";
@@ -10,12 +10,26 @@ import Loading from "../Loading";
 
 type EventsScrollerProps = {
     events: EventMap,
-    timestamp: Date
+    timestamp: number | undefined
     loading: boolean
     callback: ScrollerCallback,
 }
 const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loading, timestamp}) => {
     const {t} = useTranslation('date');
+
+    /**
+     * Move scroller automatically
+     * to first following day with events from timestamp
+     */
+    useEffect(() => {
+        if(timestamp){
+            const anchor = document.getElementById(format(new Date(timestamp), 'yyyyMMdd'));
+            if(anchor){
+                const main = document.getElementById("main");
+                main?.scrollTo(0, anchor.offsetTop);
+            }
+        }
+    }, [timestamp]);
 
     return (
         <InfiniteScroller watch="BOTH" callback={callback} className="event-scroller md:w-3/4 w-full">
@@ -35,9 +49,9 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loadin
                                 {Object.entries(dayEvents).map(([day, events]) => {
                                     const date = parse(`${year}-${(+month) + 1}-${day}`, 'y-M-d', new Date());
                                     return (
-                                        <div id={date.getTime().toString()}
-                                             key={`${(+month) + 1}-${day}`}
-                                             className="flex md:flex-row flex-col md:my-4 my-16 md:mt-0 -mt-16">
+                                        <div id={format(date, 'yyyyMMdd')}
+                                             key={format(date, 'yyyyMMdd')}
+                                             className="flex md:flex-row flex-col md:my-4 my-16 pt-10 md:mt-0 -mt-16">
                                             <WeekDay date={date} t={t}/>
                                             <div
                                                 className="flex flex-row flex-wrap w-5/6 md:self-start self-center md:justify-start justify-center">
