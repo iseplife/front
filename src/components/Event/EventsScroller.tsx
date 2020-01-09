@@ -10,11 +10,11 @@ import Loading from "../Loading";
 
 type EventsScrollerProps = {
     events: EventMap,
-    timestamp: number | undefined
+    start: Date | undefined
     loading: boolean
     callback: ScrollerCallback,
 }
-const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loading, timestamp}) => {
+const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loading, start}) => {
     const {t} = useTranslation('date');
 
     /**
@@ -22,14 +22,14 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loadin
      * to first following day with events from timestamp
      */
     useEffect(() => {
-        if(timestamp){
-            const anchor = document.getElementById(format(new Date(timestamp), 'yyyyMMdd'));
+        if(start){
+            const anchor = document.getElementById(format(start, 'yyyyMMdd'));
             if(anchor){
                 const main = document.getElementById("main");
                 main?.scrollTo(0, anchor.offsetTop);
             }
         }
-    }, [timestamp]);
+    }, [start]);
 
     return (
         <InfiniteScroller watch="BOTH" callback={callback} className="event-scroller md:w-3/4 w-full">

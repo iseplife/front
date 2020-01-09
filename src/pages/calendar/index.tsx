@@ -74,7 +74,7 @@ const Events: React.FC = () => {
     const [filter, setFilter] = useReducer(reducer, initFilter([]));
     const [loading, setLoading] = useState<boolean>(true);
     const [filteredEvents, setFilteredEvents] = useState<EventMap>({});
-    const [timestamp, setTimestamp] = useState<number>();
+    const [start, setStart] = useState<Date|undefined>();
 
     const filterFn = useCallback((e: EventPreview) => (
         filter.feeds[e.target] && filter.types[e.type] && (e.published || !filter.publishedOnly)
@@ -98,10 +98,9 @@ const Events: React.FC = () => {
             setFilter({type: "INIT_FILTER", events: res.data});
             setLoading(false);
 
-            const time = dates.curr.getTime();
-            console.log(new Date(time));
-            console.log(res.data.find(e => e.startsAt >= time)?.startsAt);
-            setTimestamp(res.data.find(e => e.startsAt >= time)?.startsAt)
+            const timestamp = dates.curr.getTime();
+            const time = res.data.find(e => e.startsAt >= timestamp)?.startsAt;
+            setStart( time ? new Date(time): undefined)
         });
     }, [dates.curr]);
 
@@ -139,7 +138,7 @@ const Events: React.FC = () => {
                     callback={[getPrevious, getNext]}
                     events={filteredEvents}
                     loading={loading}
-                    timestamp={timestamp}
+                    start={start}
                 />
                 :<p>{t("empty")}</p>
             }
