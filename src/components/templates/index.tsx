@@ -7,14 +7,13 @@ import NotFound from '../../pages/erros/NotFound'
 import Interceptor from "./Interceptor";
 import Events from "../../pages/calendar";
 import Event from "../../pages/event";
+import Header from "./Header";
 
 const Template: React.FC = () => {
     return (
         <div className="h-full">
             <Interceptor />
-            <div id="header" className="bg-indigo-500 h-12 shadow-md">
-
-            </div>
+            <Header />
             <div id="main" className="h-full overflow-y-auto bg-gray-200" style={{height: "calc(100% - 3rem)"}}>
                 <Switch>
                     {/* Add your route here */}
