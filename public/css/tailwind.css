@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: DinotCB, serif;
+    font-family: DinotCB;
     src: url(../fonts/DINOT-CondBold.otf)
 }
 @font-face {
