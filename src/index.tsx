@@ -12,6 +12,7 @@ import {initializeAxios} from './data/requestFactory';
 import Login from "./pages/security";
 import {isLoggedIn} from "./data/security";
 import Template from "./components/Templates";
+import "antd/dist/antd.css";
 
 initializeAxios();
 const App: React.FC = () => {
