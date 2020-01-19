@@ -3,24 +3,27 @@
 @tailwind utilities;
 
 @font-face {
-    font-family:DinotCB;
-    src:url(../fonts/DINOT-CondBold.otf)
+    font-family: DinotCB;
+    src: url(../fonts/DINOT-CondBold.otf)
 }
 @font-face {
-    font-family:DinotCL;
-    src:url(../fonts/DINOT-CondLight.otf)
+    font-family: DinotCL;
+    src: url(../fonts/DINOT-CondLight.otf)
 }
+
 @font-face {
-    font-family:DinotL;
-    src:url(../fonts/DINOT-Light.otf)
+    font-family: DinotL;
+    src: url(../fonts/DINOT-Light.otf)
 }
+
 @font-face {
-    font-family:Dinot;
-    src:url(../fonts/DINOT-Regular.otf)
+    font-family: Dinot;
+    src: url(../fonts/DINOT-Regular.otf)
 }
+
 @font-face {
-    font-family:DinotM;
-    src:url(../fonts/DINOT-Medium.otf)
+    font-family: DinotM;
+    src: url(../fonts/DINOT-Medium.otf)
 }
 
 .side-calendar {
@@ -28,12 +31,13 @@
     top: 1.25rem;
     border: none !important;
 }
+
 abbr[title] {
     text-decoration: none;
 }
 
 .event-scroller:before {
-    content:'';
+    content: '';
     top: 3rem;
     left: 0;
     height: 40px;
@@ -43,7 +47,7 @@ abbr[title] {
 }
 
 .event-scroller:after {
-    content:'';
+    content: '';
     bottom: 0;
     left: 0;
     height: 80px;
