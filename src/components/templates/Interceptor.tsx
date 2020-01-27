@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {withRouter, RouteComponentProps} from "react-router";
 import axios, {AxiosError, AxiosResponse} from 'axios';
-import * as rf from '../../data/requestFactory';
+import {removeTokens, setTokens} from "../../data/security";
 
 
 const axiosResponseInterceptor = (response: AxiosResponse) => {
@@ -10,7 +10,7 @@ const axiosResponseInterceptor = (response: AxiosResponse) => {
         const token = response.headers['authorization'];
         const refreshToken = response.headers['x-refresh-token'];
         if (token && refreshToken) {
-            rf.setToken({token, refreshToken});
+            setTokens({token, refreshToken});
         }
     }
     return response;
@@ -26,7 +26,7 @@ const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError
 
             case 401:
             case 403:
-                rf.clearToken();
+                removeTokens();
                 props.history.push('/login');
                 break;
 
