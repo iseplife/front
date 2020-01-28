@@ -1,14 +1,22 @@
-import {Token, TokenPayload} from './types';
+import {Token, TokenPayload, TokenSet} from './types';
 import axios from 'axios';
-import {clearToken, setToken} from "../requestFactory";
+import {getCookie, removeCookie, setCookie} from "./cookie";
 
-export const hasRole = (roles: Array<string>) => {
-    const user = getUser();
-    return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0);
+export const setTokens = (tokenSet: TokenSet) => {
+    setCookie("token", tokenSet.token , {
+        "max-age": 600      //10 min
+    });
+    setCookie("refreshToken", tokenSet.refreshToken, {
+        "max-age": 604800  //7 days
+    });
+    axios.defaults.headers.common['Authorization'] = `Bearer ${tokenSet.token}`;
+    axios.defaults.headers.common['X-Refresh-Token'] = tokenSet.refreshToken;
 };
-
-export const isLoggedIn = () => {
-    return !!localStorage.getItem('token');
+export const removeTokens = () => {
+    removeCookie('token');
+    removeCookie('refreshToken');
+    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common['X-Refresh-Token'];
 };
 
 export const connect = (username: string, password: string): Promise<void> => {
@@ -18,16 +26,12 @@ export const connect = (username: string, password: string): Promise<void> => {
             username,
             password,
         }).then(res => {
-            setToken(res.data);
+            setTokens(res.data);
         });
 };
 
-export const logout = () => {
-    clearToken();
-};
-
 export const getUser = (): TokenPayload | null => {
-    const token = localStorage.getItem('token');
+    const token = getCookie('token');
     let rawdata = '';
     if (token) {
         rawdata = token.split('.')[1];
@@ -40,3 +44,12 @@ export const getUser = (): TokenPayload | null => {
     }
     return null;
 };
+
+export const hasRole = (roles: Array<string>) => {
+    const user = getUser();
+    return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0);
+};
+
+export const isLoggedIn = () => !!getCookie('token');
+
+export const logout = () => removeTokens();
