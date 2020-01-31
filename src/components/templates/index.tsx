@@ -8,6 +8,7 @@ import Interceptor from "./Interceptor";
 import Events from "../../pages/calendar";
 import Event from "../../pages/event";
 import Header from "./Header";
+import Logout from "../../pages/security/Logout";
 
 const Template: React.FC = () => {
     return (
@@ -17,8 +18,9 @@ const Template: React.FC = () => {
             <div id="main" className="h-full overflow-y-auto bg-gray-200" style={{height: "calc(100% - 3rem)"}}>
                 <Switch>
                     {/* Add your route here */}
-                    <Route path="/calendar" children={<Events />} />
-                    <Route path="/event/:id" children={<Event />} />
+                    <Route path="/calendar" component={Events} />
+                    <Route path="/event/:id" component={Event} />
+                    <Route path="/logout" children={<Logout />}/>
                     <Route path="*" component={NotFound}/>
                 </Switch>
             </div>
