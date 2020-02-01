@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import Loading from "../Loading";
+import Loading from "./Loading";
 import {useTranslation} from "react-i18next";
 
 const INITIAL_LOADER: Loader = {loading: false, fetch: false,count: 0, over: false};
