@@ -5,7 +5,7 @@ import React, {useEffect} from "react";
 import Event from "./Preview"
 import WeekDay from "./WeekDay";
 import InfiniteScroller, {ScrollerCallback} from "../Common/InfiniteScroller";
-import Loading from "../Loading";
+import Loading from "../Common/Loading";
 
 
 type EventsScrollerProps = {
