@@ -1,6 +1,5 @@
 import React, {useMemo, useState} from "react";
 
-import {IconButton} from "../Common/Icon";
 import {Dropdown, Avatar, Menu, Button, Drawer, Icon} from "antd/es";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
@@ -9,23 +8,24 @@ import {AppState} from "../../redux/types";
 import {Student} from "../../data/student/types";
 import "./Navbar.css"
 
-
-const IconBar: React.FC = () => {
+type IconButtonProps = {
+    name: string
+}
+const IconButton: React.FC<IconButtonProps> = ({name}) => {
     return (
-        <>
-            <IconButton className="mx-3" size="lg" name="fa-compass"/>
-            <IconButton className="mx-3" size="lg" name="fa-calendar-alt"/>
-            <IconButton className="mx-3" size="lg" name="fa-bell"/>
-        </>
-    )
+        <div className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
+            <Icon type={name}/>
+        </div>
+    );
 };
+
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
     const payload = useSelector((state: AppState) => state.payload);
     const {t} = useTranslation();
     const isAdmin = useMemo(() => payload.roles.includes("ROLE_ADMIN"), [payload.roles]);
     return (
         <Menu>
-            <Menu.Item  key={0} className="font-bold profile-name">
+            <Menu.Item key={0} className="font-bold profile-name">
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
@@ -56,11 +56,12 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
 const Header: React.FC<{ user: Student }> = ({user}) => (
     <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow-md">
         <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
-        <input type="text"/>
 
         <div className="hidden md:flex justify-end items-center">
             <div className="flex justify-around items-center mr-4">
-                <IconBar/>
+                <IconButton name="compass"/>
+                <IconButton name="calendar"/>
+                <IconButton name="bell"/>
             </div>
             <Dropdown overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
                       trigger={['click']} placement="bottomRight">
@@ -75,13 +76,12 @@ type DrawerItemProps = {
     icon: string,
     className?: string
 }
-const DrawerItem: React.FC<DrawerItemProps> = ({icon,className="", children}) => (
+const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children}) => (
     <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
         <Icon type={icon}/>
         <span className="nav-footer-text">{children}</span>
     </div>
 );
-
 const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
     const payload = useSelector((state: AppState) => state.payload);
     const {t} = useTranslation();
