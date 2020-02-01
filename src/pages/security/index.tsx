@@ -3,21 +3,16 @@ import {Redirect} from 'react-router-dom';
 import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {connect, isLoggedIn} from "../../data/security";
-import Loading from "../../components/Loading";
+import Loading from "../../components/Common/Loading";
 
 interface LoginFormInputs {
     id: string,
     password: string
 }
 
-interface LoginForm {
-    initialValues: LoginFormInputs,
-    onSubmit: (values: LoginFormInputs) => void
-}
-
 const Login = () => {
     const initialValues: LoginFormInputs = {id: "", password: ""};
-    const {t} = useTranslation("login");
+    const {t, i18n} = useTranslation(["login", "common"]);
     const [loading, setLoadingStatus] = useState<boolean>(false);
     const [error, setError] = useState<string|undefined>();
     const formik = useFormik<LoginFormInputs>({
@@ -81,6 +76,14 @@ const Login = () => {
                         }
                     </button>
                 </form>
+            </div>
+
+            <div className="fixed bottom-0 flex flex-col items-center mb-2">
+                <div className="flex flex-row">
+                    <img className="mx-2 cursor-pointer" src="/img/flag/en.jpg" onClick={() => i18n.changeLanguage("en")} style={{height: 30}} alt="uk flag"/>
+                    <img className="mx-2 cursor-pointer" src="/img/flag/fr.jpg" onClick={() => i18n.changeLanguage("fr")} style={{height: 30}} alt="fr flag"/>
+                </div>
+                <span>{t("common:switch_lang")}</span>
             </div>
         </div>
     );
