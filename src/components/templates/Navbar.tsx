@@ -21,7 +21,7 @@ const IconButton: React.FC<IconButtonProps> = ({name}) => {
 
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
     const payload = useSelector((state: AppState) => state.payload);
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const isAdmin = useMemo(() => payload.roles.includes("ROLE_ADMIN"), [payload.roles]);
     return (
         <Menu>
@@ -46,6 +46,11 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 <Link to="/event/new">{t("create_event")}</Link>
             </Menu.Item>
             }
+            {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
+            <Menu.Item key={2} className="flex justify-start items-center" onClick={() => i18n.changeLanguage("en")}>
+                <Icon type="flag"/>
+                <span>{t("switch_lang")}</span>
+            </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={3} className="profile-logout">
                 <Link to="/logout">{t("logout")}</Link>

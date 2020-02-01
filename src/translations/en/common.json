@@ -3,7 +3,8 @@
   "empty": "Nothing to display",
   "filters": "Filters",
   "create_feed": "Create a feed",
-  "create_event": "Create an even",
+  "create_event": "Create an event",
   "create_club": "Create a club",
+  "switch_lang": "Switch language",
   "logout": "Disconnect"
 }
