@@ -30,7 +30,7 @@ export const connect = (username: string, password: string): Promise<void> => {
         });
 };
 
-export const getUser = (): TokenPayload | null => {
+export const getUser = (): TokenPayload => {
     const token = getCookie('token');
     let rawdata = '';
     if (token) {
@@ -39,10 +39,10 @@ export const getUser = (): TokenPayload | null => {
             const tokenJson = JSON.parse(atob(rawdata)) as Token;
             return JSON.parse(tokenJson.payload) as TokenPayload;
         } catch (e) {
-            return null;
+            throw new Error("Auth cookies unreadable");
         }
     }
-    return null;
+    throw new Error("Auth cookies missing");
 };
 
 export const hasRole = (roles: Array<string>) => {
