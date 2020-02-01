@@ -7,7 +7,7 @@ i18n
     .init({
         resources: translations,
         ns: ['login', 'common'],
-        defaultNS: 'global',
+        defaultNS: 'common',
         lng: "fr",
         returnObjects: true,
         whitelist: ["en", "fr"],

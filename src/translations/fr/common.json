@@ -1,5 +1,9 @@
 {
   "end": "Vous avez tous visionné !",
   "empty": "Rien à afficher",
-  "filters": "Filtres"
+  "filters": "Filtres",
+  "create_feed": "Créer un feed",
+  "create_event": "Créer un évènement",
+  "create_club": "Créer un club",
+  "logout": "Se déconnecter"
 }

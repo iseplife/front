@@ -1,5 +1,9 @@
 {
   "end": "You've reached the end !",
   "empty": "Nothing to display",
-  "filters": "Filters"
+  "filters": "Filters",
+  "create_feed": "Create a feed",
+  "create_event": "Create an even",
+  "create_club": "Create a club",
+  "logout": "Disconnect"
 }
