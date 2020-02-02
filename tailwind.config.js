@@ -1,4 +1,5 @@
 module.exports = {
+  important: true,
   theme: {
     extend: {}
   },
@@ -21,8 +22,8 @@ module.exports = {
         '.font-dinotm': {
           fontFamily: 'DinotM',
         },
-      }
+      };
       addComponents(AppLogo)
     }
   ]
-}
+};
