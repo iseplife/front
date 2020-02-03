@@ -4,6 +4,7 @@ import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {connect, isLoggedIn} from "../../data/security";
 import Loading from "../../components/Common/Loading";
+import {SUPPORTED_LANGUAGES} from "../../i18n";
 
 interface LoginFormInputs {
     id: string,
@@ -80,8 +81,9 @@ const Login = () => {
 
             <div className="fixed bottom-0 flex flex-col items-center mb-2">
                 <div className="flex flex-row">
-                    <img className="mx-2 cursor-pointer" src="/img/flag/en.jpg" onClick={() => i18n.changeLanguage("en")} style={{height: 30}} alt="uk flag"/>
-                    <img className="mx-2 cursor-pointer" src="/img/flag/fr.jpg" onClick={() => i18n.changeLanguage("fr")} style={{height: 30}} alt="fr flag"/>
+                    {SUPPORTED_LANGUAGES.map(lng => (
+                        <img key={lng} className="mx-2 cursor-pointer" src={`/img/flag/${lng}.jpg`} onClick={() => i18n.changeLanguage(lng)} style={{height: 30}} alt={lng + " flag"}/>
+                    ))}
                 </div>
                 <span>{t("common:switch_lang")}</span>
             </div>
