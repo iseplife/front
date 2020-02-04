@@ -11,7 +11,7 @@ import {
 import {initializeAxios} from './data/requestFactory';
 import Login from "./pages/security";
 import {isLoggedIn} from "./data/security";
-import Template from "./components/Templates";
+import Template from "./components/Template";
 import "antd/dist/antd.css";
 
 initializeAxios();
