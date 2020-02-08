@@ -1,0 +1,9 @@
+.event-title {
+    font-size: 40px;
+}
+
+@media (min-width: 768px) {
+    .event-title {
+        margin-top: -40px;
+    }
+}
