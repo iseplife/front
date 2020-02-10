@@ -6,5 +6,6 @@
   "create_event": "Create an event",
   "create_club": "Create a club",
   "switch_lang": "Switch language",
+  "parameter": "Parameters",
   "logout": "Disconnect"
 }
