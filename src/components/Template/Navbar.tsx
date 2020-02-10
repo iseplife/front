@@ -35,24 +35,24 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             </Menu.Item>
             }
             {isAdmin &&
-            <Menu.Item key={1} className="flex justify-start items-center">
+            <Menu.Item key={2} className="flex justify-start items-center">
                 <Icon type="usergroup-add"/>
                 <Link to="/club/new">{t("create_club")}</Link>
             </Menu.Item>
             }
             {(isAdmin || payload.clubsPublisher.length > 0) &&
-            <Menu.Item key={2} className="flex justify-start items-center">
+            <Menu.Item key={3} className="flex justify-start items-center">
                 <Icon type="notification"/>
                 <Link to="/event/new">{t("create_event")}</Link>
             </Menu.Item>
             }
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
-            <Menu.Item key={2} className="flex justify-start items-center" onClick={() => i18n.changeLanguage("en")}>
-                <Icon type="flag"/>
-                <span>{t("switch_lang")}</span>
+            <Menu.Item key={4} className="flex justify-start items-center">
+                <Icon type="setting" />
+                <Link to="/parameters"><span>{t("parameter")}</span></Link>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={3} className="profile-logout">
+            <Menu.Item key={5} className="profile-logout">
                 <Link to="/logout">{t("logout")}</Link>
             </Menu.Item>
         </Menu>
