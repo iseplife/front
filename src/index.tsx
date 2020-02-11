@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import './i18n';
@@ -13,9 +13,12 @@ import Login from "./pages/security";
 import {isLoggedIn} from "./data/security";
 import Template from "./components/Templates";
 import "antd/dist/antd.css";
+import {EventEmitter} from "events";
 
 initializeAxios();
+export const mobileViewPortDetectionEvent = new EventEmitter();
 const App: React.FC = () => {
+
     return (
        <Router>
            <Switch>
