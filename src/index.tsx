@@ -19,6 +19,15 @@ initializeAxios();
 export const mobileViewPortDetectionEvent = new EventEmitter();
 const App: React.FC = () => {
 
+    const handleWindowSizeChange = () => {
+        mobileViewPortDetectionEvent.emit('isMobileViewPort', window.innerWidth <= 500)
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+        return () => window.removeEventListener('resize', handleWindowSizeChange);
+    });
+
     return (
        <Router>
            <Switch>
