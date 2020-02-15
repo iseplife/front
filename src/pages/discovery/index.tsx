@@ -2,6 +2,8 @@ import React from "react";
 import DiscoveryClub from "../../components/Discovery/DiscoveryClub";
 import DiscoveryStudent from "../../components/Discovery/DiscoveryStudent";
 
+export const MOBILE_WIDTH = 500;
+
 interface SpacerProps {
     spacing?: number
 }
