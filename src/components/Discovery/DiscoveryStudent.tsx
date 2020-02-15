@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Input, Select} from "antd";
+import {Avatar, Input, Select, Skeleton} from "antd";
 import {getAllStudents, searchStudents, Student} from "../../data/student";
 import {useTranslation} from "react-i18next";
 import {HorizontalSpacer, MOBILE_WIDTH} from "../../pages/discovery";
@@ -15,6 +15,7 @@ const DiscoveryStudent: React.FC = () => {
     const [students, setStudents] = useState<Student[]>([]);
     const [promos, setPromos] = useState<number[]>([]);
     const [selectedPromos, setSelectedPromos] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // const [sortPromo, setSortPromo] = useState([]);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= MOBILE_WIDTH);
@@ -46,9 +47,10 @@ const DiscoveryStudent: React.FC = () => {
 
     // Init
     const initStudents = () => {
+        setIsLoading(true);
         getAllStudents(0).then(res => {
             setStudents(res.data.content);
-        });
+        }).catch().finally(() => setIsLoading(false));
     };
     useEffect(() => initStudents(), []);
     const initPromos = () => {
@@ -151,8 +153,9 @@ const DiscoveryStudent: React.FC = () => {
             {/* List of students */}
             <InfiniteScroller watch="DOWN" callback={getNextStudents} triggerDistance={80}/>
             <div className="flex flex-wrap justify-start">
-                {
-                    students.map(item => (<CustomAvatar key={key++} student={item}/>))
+                {!isLoading
+                    ? students.map(item => (<CustomAvatar key={key++} student={item}/>))
+                    : null
                 }
             </div>
         </div>

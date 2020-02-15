@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Club, getAllClubs} from "../../data/club";
-import {Card, Collapse} from "antd";
+import {Card, Collapse, Skeleton} from "antd";
 import {Link} from "react-router-dom";
 import {HorizontalSpacer} from "../../pages/discovery";
 import CollapsePanel from "antd/es/collapse/CollapsePanel";
@@ -11,12 +11,14 @@ const DiscoveryClub: React.FC = () => {
     const {t} = useTranslation('discovery');
     const [clubs, setClubs] = useState<Club[]>([]);
     const [nbOfClubs, setNbOfClubs] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const initClubs = () => {
+        setIsLoading(true);
         getAllClubs().then(res => {
             setClubs(res.data);
             setNbOfClubs(res.data.length);
-        });
+        }).catch().finally(() => setIsLoading(false));
     };
     useEffect(() => initClubs(), []);
 
@@ -47,11 +49,20 @@ const DiscoveryClub: React.FC = () => {
             <HorizontalSpacer spacing={6}/>
             {/* List of Clubs */}
             <div className="flex flex-wrap justify-start">
-                {
-                    clubs.map(club => {
+                {!isLoading
+                    ? clubs.map(club => {
                         return (<CustomClubCard key={key++} club={club}/>);
                     })
-                }
+                    : <div className="flex flex-wrap flex-row w-full">
+                        <Skeleton className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4" active
+                                  avatar loading={true} paragraph={{rows: 5}}/>
+                        <Skeleton className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4" active
+                                  avatar loading={true} paragraph={{rows: 5}}/>
+                        <Skeleton className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4" active
+                                  avatar loading={true} paragraph={{rows: 5}}/>
+                        <Skeleton className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4" active
+                                  avatar loading={true} paragraph={{rows: 5}}/>
+                    </div>}
             </div>
         </div>
     );
