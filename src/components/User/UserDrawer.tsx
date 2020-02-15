@@ -12,7 +12,7 @@ import {ClubMemberView} from "../../data/club/types"
 const MOBILE_WIDTH = 640
 
 type UserDrawerProps = {
-    backgroundComponent: React.ReactNode,
+    component: any,
 }
 
 const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
@@ -63,7 +63,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
 
     return (
         <div>
-            {backgroundComponent}
+            {component}
             {!isLoading
                 ? <Drawer placement={isMobile ? "bottom" : "right"} height={400}
                     closable={false} width={500}
@@ -81,7 +81,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                 {student.firstName + " " + student.lastName.toUpperCase()}
                             </div>
                             <HorizontalSpacer/>
-                            <div className="text-sm sm:text-base">
+                            <div>
                                 Promo <span className="select-all">{student.promo}</span>, n°<span
                                     className="select-all">{student.id}</span>
                             </div>
@@ -95,10 +95,10 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     : t("user:no-phone")}
                             </div>
                             <div className="mt-3 sm:mt-10 mx-auto">
-                                {student.facebook && socialUserIcon("fa-facebook", student.facebook)}
-                                {student.twitter && socialUserIcon("fa-twitter", student.twitter)}
-                                {student.instagram && socialUserIcon("fa-instagram", student.instagram)}
-                                {student.snapchat && socialUserIcon("fa-snapchat", student.snapchat)}
+                                {isEmpty(student.facebook) ? null : socialUserIcon("facebook", student.facebook)}
+                                {isEmpty(student.twitter) ? null : socialUserIcon("twitter", student.twitter)}
+                                {isEmpty(student.instagram) ? null : socialUserIcon("instagram", student.instagram)}
+                                {isEmpty(student.snapchat) ? null : socialUserIcon("snapchat", student.snapchat)}
                             </div>
                         </div>
 
@@ -130,8 +130,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     }))
                             }
                         </div>
-                        <Divider/>
-                        {/*TODO : Implémenter picture tags */}
+                        {/*<Divider/>*/}
                         {/*<div className="font-bold my-1">{t('user:photos')}</div>*/}
                         {/*{isEmpty(studentPictures) ? t('user:no-photos') : null}*/}
                     </div>
