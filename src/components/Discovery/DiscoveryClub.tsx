@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Club, getAllClubs} from "../../data/club";
+import CollapsePanel from "antd/es/collapse/CollapsePanel";
 import {Card, Collapse, Skeleton} from "antd";
 import {Link} from "react-router-dom";
 import {HorizontalSpacer} from "../../pages/discovery";
-import CollapsePanel from "antd/es/collapse/CollapsePanel";
+import {useTranslation} from "react-i18next";
+import {getAllClubs} from "../../data/club";
+import {Club} from "../../data/club/types";
 
 const DiscoveryClub: React.FC = () => {
     let key = 0;
@@ -37,6 +38,7 @@ const DiscoveryClub: React.FC = () => {
             </Card>
         </div>
     );
+
 
     return (
         <div className="container text-center mx-auto my-5">
