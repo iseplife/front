@@ -8,11 +8,8 @@ export type IconFAProps = {
     className?: string
 }
 
-
-export const IconFA: React.FC<IconFAProps> = ({name, spin, size, style}) => {
 export const IconFA: React.FC<IconFAProps> = ({name, spin, size, style, className = ""}) => {
     return (
-        <i className={`text-indigo-200 far ${"fa" + style?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}/>
         <i className={`${className} ${"fa" + style?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}/>
     );
 };
