@@ -86,20 +86,21 @@ const Events: React.FC = () => {
      */
     useEffect(() => {
         setLoading(true);
-        getEventsAround(dates.curr.getTime()).then(res => {
-            setEvents(res.data);
-            const firstEvt = res.data.pop();
-            const lastEvt = res.data.shift();
+        getEventsAround(dates.curr.getTime()).then(({data}) => {
+            console.log(data);
+            setEvents(data);
+            const firstEvt = data.pop();
+            const lastEvt = data.shift();
             setDates({
                 prev: firstEvt ? firstEvt.startsAt: dates.curr.getTime(),
                 curr: dates.curr,
                 next: lastEvt ? lastEvt.startsAt: dates.curr.getTime()
             });
-            setFilter({type: "INIT_FILTER", events: res.data});
+            setFilter({type: "INIT_FILTER", events: data});
             setLoading(false);
 
             const timestamp = dates.curr.getTime();
-            const time = res.data.find(e => e.startsAt >= timestamp)?.startsAt;
+            const time = data.find(e => e.startsAt >= timestamp)?.startsAt;
             setStart( time ? new Date(time): undefined)
         });
     }, [dates.curr]);
@@ -109,9 +110,10 @@ const Events: React.FC = () => {
      */
     useEffect(() => {
         setFilteredEvents(arrayToEventMap(events.filter(filterFn), {}));
+        console.log("refresh");
     }, [filter, filterFn]);
 
-    const getNext: loaderCallback = async (count) => {
+    const getNext: loaderCallback = useCallback(async (count) => {
         const res = await getNextEvents(dates.next, count);
         setEvents(prevState => ([...prevState, ...res.data.content]));
         setFilteredEvents(prevState =>
@@ -119,9 +121,9 @@ const Events: React.FC = () => {
         );
 
         return res.data.last
+    }, [dates.next, filterFn]);
 
-    };
-    const getPrevious: loaderCallback = async (count) => {
+    const getPrevious: loaderCallback = useCallback(async (count) => {
         const res = await getPreviousEvents(dates.prev, count);
         setEvents(prevState => [...res.data.content, ...prevState]);
         setFilteredEvents(prevState =>
@@ -129,7 +131,7 @@ const Events: React.FC = () => {
         );
 
         return res.data.last
-    };
+    }, [dates.prev, filterFn]);
 
     return (
         <div id="events-page" className="flex px-4 flex-row h-full">
