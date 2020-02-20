@@ -1,4 +1,4 @@
-import {Student} from "../../data/student";
+import {Student} from "../../data/student/types";
 
 export class Utils {
 
