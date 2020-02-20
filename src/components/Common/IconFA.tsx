@@ -9,14 +9,14 @@ export type IconFAProps = {
     className?: string
 }
 
-export const IconFA: React.FC<IconFAProps> = ({name, spin, size, style, className}) => {
+export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className}) => {
     return (
-        <i className={`${className} ${"fa" + style?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}/>
+        <i className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}/>
     );
 };
 IconFA.defaultProps = {
     spin: false,
     size: "sm",
-    style: "regular",
+    type: "regular",
     className: ""
 };
