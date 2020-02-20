@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import Loading from "./Loading";
 import {useTranslation} from "react-i18next";
 
@@ -22,23 +22,56 @@ type InfiniteScrollerProps = {
 
 const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, triggerDistance = 50, children, className = ""}) => {
     const {t} = useTranslation('common');
+    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback]);
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER);
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER);
+
+    /**
+     * Initial data, call on component creation
+     * first element that are going to be displayed
+     */
+    useEffect(() => {
+        switch (watch) {
+            case "UP":
+                upCallback(upLoader.count).then(over => {
+                    setDownLoader(prevState => ({
+                        over,
+                        fetch: false,
+                        count: ++prevState.count,
+                        loading: false
+                    }))
+                });
+                break;
+            case "DOWN":
+                downCallback(downLoader.count).then(over => {
+                    setDownLoader(prevState => ({
+                        over,
+                        fetch: false,
+                        count: ++prevState.count,
+                        loading: false
+                    }))
+                });
+                break;
+        }
+    }, [upCallback, downCallback, watch]);
 
     useEffect(() => {
         function scrollerListener(this: HTMLElement) {
             // Trigger event loader when top of page is almost reached
-            if (this.scrollTop <= triggerDistance) {
+            if (watch !== "DOWN" && this.scrollTop <= triggerDistance) {
                 setUpLoader(prevState => ({...prevState, fetch: true}));
             }
             // Trigger event loader when bottom of page is almost reached
-            if (this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
+            if (watch !== "UP" && this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
                 setDownLoader(prevState => ({...prevState, fetch: true}));
             }
         }
 
         const main = document.getElementById("main");
         main?.addEventListener('scroll', scrollerListener);
+
+
+
         return () => {
             main?.removeEventListener("scroll", scrollerListener);
         }

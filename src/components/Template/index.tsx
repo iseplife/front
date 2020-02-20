@@ -35,7 +35,7 @@ const Template: React.FC = () => {
             <div className="h-full">
                 <Interceptor/>
                 <Navbar>
-                    <div id="main" className="h-full overflow-y-auto bg-gray-200"
+                    <div id="main" className="h-full overflow-y-auto bg-gray-100"
                          style={{height: "calc(100% - 3rem)"}}>
                         <Switch>
                             {/* Add your route here */}

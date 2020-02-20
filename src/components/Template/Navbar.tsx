@@ -48,7 +48,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             }
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
-                <Icon type="setting" />
+                <Icon type="setting"/>
                 <Link to="/parameters"><span>{t("parameter")}</span></Link>
             </Menu.Item>
             <Menu.Divider/>
@@ -64,8 +64,12 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 
         <div className="hidden md:flex justify-end items-center">
             <div className="flex justify-around items-center mr-4">
-                <IconButton name="compass"/>
-                <IconButton name="calendar"/>
+                <Link to="/discovery">
+                    <IconButton name="compass"/>
+                </Link>
+                <Link to="/calendar">
+                    <IconButton name="calendar"/>
+                </Link>
                 <IconButton name="bell"/>
             </div>
             <Dropdown overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
@@ -94,9 +98,13 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
     return (
         <>
             <div className="md:hidden flex justify-around items-center shadow-md fixed bottom-0 w-full h-10 bg-white">
-                <Button shape="circle" icon="home" style={{border: "none"}}/>
-                <Button shape="circle" icon="calendar" style={{border: "none"}}/>
-                <Button shape="circle" icon="bell" style={{border: "none"}}/>
+                <Link to="/">
+                    <Button shape="circle" icon="home" className="border-0"/>
+                </Link>
+                <Link to="/calendar">
+                    <Button shape="circle" icon="calendar" className="border-0"/>
+                </Link>
+                <Button shape="circle" icon="bell" className="border-0"/>
                 <div onClick={() => setVisible(true)}>
                     <Avatar icon="user" src={user.photoUrlThumb} className="cursor-pointer"/>
                 </div>
