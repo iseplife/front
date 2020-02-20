@@ -43,6 +43,12 @@ export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAd
 }
 
 export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.put(`/student/${id}`)
+export function getAllPromo(): AxiosPromise<any> {
+    return axios.get('/student/promos');
+}
+export const searchStudents = (name: string, promo: string): AxiosPromise<any> => {
+    return axios.get(`/search/student/`, {params: {name: name, promos: promo}});
+};
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {
     const fd = new FormData()
