@@ -95,10 +95,10 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     : t("user:no-phone")}
                             </div>
                             <div className="mt-3 sm:mt-10 mx-auto">
-                                {isEmpty(student.facebook) ? null : socialUserIcon("facebook", student.facebook)}
-                                {isEmpty(student.twitter) ? null : socialUserIcon("twitter", student.twitter)}
-                                {isEmpty(student.instagram) ? null : socialUserIcon("instagram", student.instagram)}
-                                {isEmpty(student.snapchat) ? null : socialUserIcon("snapchat", student.snapchat)}
+                                {isEmpty(student.facebook) ? null : socialUserIcon("fa-facebook", student.facebook)}
+                                {isEmpty(student.twitter) ? null : socialUserIcon("fa-twitter", student.twitter)}
+                                {isEmpty(student.instagram) ? null : socialUserIcon("fa-instagram", student.instagram)}
+                                {isEmpty(student.snapchat) ? null : socialUserIcon("fa-snapchat", student.snapchat)}
                             </div>
                         </div>
 
