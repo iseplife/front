@@ -8,7 +8,7 @@ type LoadingProps = {
 }
 const Loading: React.FC<LoadingProps> = (p) => (
     <div className={`text-center ${p.className}`} style={p.style}>
-        <IconFA name="fa-circle-notch" spin size={p.size} className="text-indigo-200"/>
+        <IconFA name="fa-circle-notch" spin size={p.size} className="text-indigo-200" type="solid"/>
     </div>
 );
 
