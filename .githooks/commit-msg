@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Git commit-msg hook which will reject the commit if the commit message is not
+# formated like :
+# [build|ci|docs|feat|fix|perf|refactor|style|test](<scope>): <subject>
+# <!-- Optionnal part -->
+# <new line>
+# <body>
+# <new line>
+# <footer>
+
+LINE_READ=0
+COMMIT_HEADER_REGEXP="(build|ci|docs|feat|fix|perf|refactor|style|test)\(.+\): .+"
+#COMMIT_BLANK_LINE_REGEXP="^$"
+#COMMIT_BODY_REGEXP="^[A-Za-z].*$"
+while read line;
+do
+    LINE_READ=$((LINE_READ + 1))
+    if [[ "$LINE_READ" == "1" ]]; then
+        if ! [[ $line =~ $COMMIT_HEADER_REGEXP ]]; then
+            echo -e "\e[31mLe header de ton commit ne respecte pas les specs :\n\n\e[mExemple de commit : \e[32m[build|ci|docs|feat|fix|perf|refactor|style|test](<scope>): <subject>\e[m\n"
+            echo -e "\e[38;5;220mErreur à la ligne: $line \e[m"
+            exit 1;
+        fi
+    fi
+
+#    if [[ "$LINE_READ" == "2" ]]; then
+#        if ! [[ $line =~ $COMMIT_BLANK_LINE_REGEXP ]]; then
+#            echo -e "Vous devez sauter une ligne entre le header et le body"
+#            echo -e "Ligne: $line"
+#            exit 1;
+#        fi
+#    fi
+#    if [[ "$LINE_READ" == "3" ]]; then
+#        if ! [[ $line =~ $COMMIT_BODY_REGEXP ]]; then
+#            echo -e "Vous devez insérer au moins une ligne de description"
+#            echo "Ligne: $line"
+#            exit 1
+#        fi
+#    fi
+done < "$1"
