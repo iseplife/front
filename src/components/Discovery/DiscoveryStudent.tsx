@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
 import {getAllPromo, getAllStudents} from "../../data/student";
 import {Student} from "../../data/student/types";
@@ -23,7 +23,6 @@ const getStudentAvatarSize = () => {
 };
 
 const DiscoveryStudent: React.FC = () => {
-    let key = 0;
     const {t} = useTranslation('discovery');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [students, setStudents] = useState<Student[]>([]);
@@ -79,13 +78,13 @@ const DiscoveryStudent: React.FC = () => {
     };
 
     // Infinite Scroller next students
-    const getNextStudents: loaderCallback = async (pageCount: number) => {
+    const getNextStudents: loaderCallback = useCallback(async (pageCount: number) => {
         const res = await getAllStudents(pageCount);
         if (pageCount !== 0) {
             setStudents(prevState => ([...prevState, ...res.data.content]));
         }
         return res.data.last;
-    };
+    }, []);
 
     /**
      * Custom component for Students avatar
@@ -140,14 +139,14 @@ const DiscoveryStudent: React.FC = () => {
 
             <HorizontalSpacer spacing={8}/>
             {/* List of students */}
-            {/*<InfiniteScroller watch="DOWN" callback={getNextStudents}>*/}
-            <div className="flex flex-wrap justify-start">
-                {!isLoading
-                    ? students.map(student => (<CustomAvatar key={key++} student={student}/>))
-                    : null
-                }
-            </div>
-            {/*</InfiniteScroller>*/}
+            <InfiniteScroller watch="DOWN" callback={getNextStudents}>
+                <div className="flex flex-wrap justify-start">
+                    {!isLoading
+                        ? students.map((student, i) => (<CustomAvatar key={i} student={student}/>))
+                        : null
+                    }
+                </div>
+            </InfiniteScroller>
         </div>
     );
 };
