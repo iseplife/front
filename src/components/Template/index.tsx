@@ -14,7 +14,6 @@ import rootReducer from "../../redux/reducer"
 import {createStore} from "redux"
 import Navbar from "./Navbar"
 import UserDrawer from "../User/UserDrawer"
-import CustomGallery from "../../pages/gallery"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 
