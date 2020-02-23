@@ -82,19 +82,14 @@ const DiscoveryStudent: React.FC = () => {
     useEffect(() => initStudents(), []);
     useEffect(() => initPromos(), [students]);
     useEffect(() => sortStudents(sortOrder), [sortOrder]);
-
-    const showDrawer = (studentId: number) => {
-        window.history.pushState({}, "Student", `discovery/student/${studentId}`);
-    };
-
-    // Infinite Scroller next students
-    const getNextStudents: loaderCallback = useCallback(async (pageCount: number) => {
-        const res = await getAllStudents(pageCount);
-        if (pageCount !== 0) {
-            setStudents(prevState => ([...prevState, ...res.data.content]));
-        }
-        return res.data.last;
-    }, []);
+    /*useEffect(() => {
+        searchStudents("", selectedPromos.toString()).then(res => {
+            console.log(res.data);
+            res.data.forEach((student: any) => {
+                setStudents(student);
+            });
+        });
+    }, [promos, selectedPromos]);*/
 
     /**
      * Custom component for Students avatar
