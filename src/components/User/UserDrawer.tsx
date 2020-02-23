@@ -12,7 +12,7 @@ import {ClubMemberView} from "../../data/club/types"
 const MOBILE_WIDTH = 640
 
 type UserDrawerProps = {
-    component: any,
+    backgroundComponent: any,
 }
 
 const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
@@ -63,7 +63,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
 
     return (
         <div>
-            {component}
+            {backgroundComponent}
             {!isLoading
                 ? <Drawer placement={isMobile ? "bottom" : "right"} height={400}
                     closable={false} width={500}
