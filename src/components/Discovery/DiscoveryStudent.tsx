@@ -148,7 +148,7 @@ const DiscoveryStudent: React.FC = () => {
 
             <HorizontalSpacer spacing={8}/>
             {/* List of students */}
-            <InfiniteScroller watch="DOWN" callback={getNextStudents}>
+            <InfiniteScroller watch="DOWN" callback={getNextStudents} triggerDistance={5}>
                 <div className="flex flex-wrap justify-start">
                     {!isLoading
                         ? students.map((student, i) => (<CustomAvatar key={i} student={student}/>))
