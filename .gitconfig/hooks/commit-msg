@@ -18,8 +18,9 @@ do
     LINE_READ=$((LINE_READ + 1))
     if [[ "$LINE_READ" == "1" ]]; then
         if ! [[ $line =~ $COMMIT_HEADER_REGEXP ]]; then
-            echo -e "\e[31mLe header de ton commit ne respecte pas les specs :\n\n\e[mExemple de commit : \e[32m[build|ci|docs|feat|fix|perf|refactor|style|test](<scope>): <subject>\e[m\n"
-            echo -e "\e[38;5;220mErreur à la ligne: $line \e[m"
+            echo -e "\e[31mLe header de ton commit ne respecte pas les specs :"
+            echo -e "\e[38;5;220mErreur à la ligne ($LINE_READ): $line \e[m\n"
+            echo -e "\e[mExemple de commit : \e[32m[build|ci|docs|feat|fix|perf|refactor|style|test](<scope>): <subject>\e[m\n"
             exit 1;
         fi
     fi
