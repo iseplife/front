@@ -6,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import {Utils} from "../Common/Utils";
 import {Avatar, Input, Select} from "antd";
 import {HorizontalSpacer} from "../../pages/discovery";
+import {Link} from "react-router-dom";
 
 const {Option} = Select;
 
@@ -69,6 +70,15 @@ const DiscoveryStudent: React.FC = () => {
         setSortOrder(!sortOrder);
     };
 
+    // Infinite Scroller next students
+    const getNextStudents: loaderCallback = useCallback(async (pageCount: number) => {
+        const res = await getAllStudents(pageCount);
+        if (pageCount !== 0) {
+            setStudents(prevState => ([...prevState, ...res.data.content]));
+        }
+        return res.data.last;
+    }, []);
+
     useEffect(() => initStudents(), []);
     useEffect(() => initPromos(), [students]);
     useEffect(() => sortStudents(sortOrder), [sortOrder]);
@@ -92,8 +102,11 @@ const DiscoveryStudent: React.FC = () => {
      * @constructor
      */
     const CustomAvatar = (props: any) => (
-        <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-3/12 xl:w-1/5 text-center cursor-pointer"
-             onClick={() => showDrawer(props.student.id)}>
+        <Link
+            className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-3/12 xl:w-1/5 text-center cursor-pointer no-underline text-gray-700"
+            to={{
+                pathname: `/discovery/student/${props.student.id}`
+            }}>
             <Avatar src={props.student.photoUrl} size={getStudentAvatarSize()}
                     alt={props.student.firstName + props.student.lastName}
                     className={"shadow-xl hover:shadow-outline text-3xl sm:text-5xl " +
@@ -104,7 +117,7 @@ const DiscoveryStudent: React.FC = () => {
                 <span
                     className="italic text-xs sm:text-sm">{'Promo ' + props.student.promo}</span>
             </p>
-        </div>
+        </Link>
     );
 
     return (
