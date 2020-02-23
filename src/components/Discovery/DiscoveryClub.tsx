@@ -8,7 +8,6 @@ import {getAllClubs} from "../../data/club";
 import {Club} from "../../data/club/types";
 
 const DiscoveryClub: React.FC = () => {
-    let key = 0;
     const {t} = useTranslation('discovery');
     const [clubs, setClubs] = useState<Club[]>([]);
     const [nbOfClubs, setNbOfClubs] = useState<number>(0);
@@ -52,8 +51,8 @@ const DiscoveryClub: React.FC = () => {
             {/* List of Clubs */}
             <div className="flex flex-wrap justify-start">
                 {!isLoading
-                    ? clubs.map(club => {
-                        return (<CustomClubCard key={key++} club={club}/>);
+                    ? clubs.map((club, i) => {
+                        return (<CustomClubCard key={i} club={club}/>);
                     })
                     : <div className="flex flex-wrap flex-row w-full">
                         <Skeleton className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4" active
