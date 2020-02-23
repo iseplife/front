@@ -1,3 +1,25 @@
+import {Club} from "../club/type";
+import {Feed} from "../feed/types";
+
+export type Event = {
+    id: number
+    type: string
+    title: string
+    description: string
+    startsAt: number
+    endsAt: number
+    ticketUrl?: string
+    price?: number
+    club: Club
+    location: string
+    imageUrl?: string
+    target: string
+    published: boolean
+    closed: boolean
+    feed: Feed
+}
+
+
 export type EventPreview = {
     id: number
     name: string
