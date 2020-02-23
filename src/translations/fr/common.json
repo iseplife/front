@@ -6,6 +6,11 @@
   "create_event": "Créer un évènement",
   "create_club": "Créer un club",
   "switch_lang": "Changer la langue",
+  "remove_item": {
+    "title": "Voulez-vous supprimez cet élèment ?",
+    "content": "Attention, la suppression d'un élèment est définitive"
+  },
+  "cancel": "Annuler",
   "parameter": "Paramètres",
   "logout": "Se déconnecter"
 }

@@ -12,7 +12,7 @@ type FormValues = {
     description: string
     private: boolean
     draft: boolean
-    feed: number,
+    feed: number
     linkedClub?: number
 }
 
@@ -39,8 +39,8 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting}) => {
 };
 
 type PostFormProps = {
-    feedId: number,
-    sendPost: (post: PostCreation) => Promise<void>
+    feedId: number
+    sendPost: (post: PostCreation) => Promise<boolean>
 }
 
 const PostForm = withFormik<PostFormProps, FormValues>({
@@ -54,7 +54,6 @@ const PostForm = withFormik<PostFormProps, FormValues>({
     },
 
     validate: (values: FormValues) => {
-        console.log("check");
         let errors: FormikErrors<any> = {};
         if (!values.description) {
             errors.description = 'Required';
@@ -62,9 +61,10 @@ const PostForm = withFormik<PostFormProps, FormValues>({
         return errors;
     },
 
-    handleSubmit: async (values, {props}) => {
-        console.log("oui");
-        await props.sendPost(values);
+    handleSubmit: async (values, {props, resetForm}) => {
+        const success = await props.sendPost(values);
+        if(success) resetForm({})
+
     },
 })(InnerForm);
 
