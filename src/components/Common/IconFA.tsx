@@ -19,5 +19,4 @@ IconFA.defaultProps = {
     size: "sm",
     type: "regular",
     className: ""
-    type: "regular"
 };

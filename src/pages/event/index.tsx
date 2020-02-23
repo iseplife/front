@@ -10,6 +10,7 @@ import {Event as EventType} from "../../data/event/types";
 import './Event.css';
 import {Avatar, Icon} from "antd/es";
 import {useTranslation} from "react-i18next";
+import Feed from "../../components/Feed";
 
 
 const Event: React.FC = () => {
@@ -53,8 +54,6 @@ const Event: React.FC = () => {
 
                 <div className="mx-auto p-3 w-full">
                     <div className="flex md:flex-row flex-col ">
-
-
                         <div className="md:w-1/6 w-full md:order-1 order-3">
 
                         </div>
@@ -115,8 +114,7 @@ const Event: React.FC = () => {
                         </div>
                     </div>
                     
-                    {/*<Feed name={"event_" + event.id} className="mx-auto my-3 md:w-3/6 w-full"/>*/}
-
+                    <Feed id={event.feed.id} className="mx-auto my-3 md:w-3/6 w-full"/>
                 </div>
             </div>
         );
