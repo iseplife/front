@@ -1,0 +1,12 @@
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+
+# The header is mandatory and the scope of the header is optional.
+# <type>   : Must be one of the following: (build, ci, docs, feat, fix, perf, refactor, style, test)
+# <scope>  : Scope of the header is optional (authentification, event, calendar, club, ...)
+# <subject>: Succint description of the change
+# <body>   : Recommended to help with the context of your modification
+# <footer> :  optional 
