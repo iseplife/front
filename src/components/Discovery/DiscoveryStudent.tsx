@@ -81,7 +81,8 @@ const DiscoveryStudent: React.FC = () => {
 
     useEffect(() => initStudents(), []);
     useEffect(() => initPromos(), [students]);
-    useEffect(() => sortStudents(sortOrder), [sortOrder]);
+    // useEffect(() => sortStudents(sortOrder), [sortOrder]);
+    sortStudents(sortOrder);
     /*useEffect(() => {
         searchStudents("", selectedPromos.toString()).then(res => {
             console.log(res.data);
