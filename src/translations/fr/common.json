@@ -8,7 +8,13 @@
   "switch_lang": "Changer la langue",
   "remove_item": {
     "title": "Voulez-vous supprimez cet élèment ?",
-    "content": "Attention, la suppression d'un élèment est définitive"
+    "content": "Attention, la suppression d'un élèment est définitive",
+    "complete": "Element supprimé"
+  },
+  "update_item": {
+    "title": "Voulez-vous enregistrer ces modifications ?",
+    "content": "Attention, la modification un élèment ne peut-être annulé",
+    "complete": "Modifications enregistrées"
   },
   "cancel": "Annuler",
   "parameter": "Paramètres",

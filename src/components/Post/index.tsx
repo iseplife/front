@@ -21,7 +21,7 @@ type UpdatePostFormProps = {
     publicationDate: number
     description: string
     onClose: () => void
-    onUpdate: (updates: PostUpdate) => Promise<boolean>
+    onUpdate: (updates: PostUpdate) => void
 }
 
 const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDate, description, onClose, onUpdate}) => {
@@ -34,7 +34,7 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
             description,
         },
         onSubmit: values => {
-            onUpdate(values).then((r) => r && onClose());
+            onUpdate(values);
         },
     });
 
@@ -102,12 +102,26 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: () => {
-                onDelete(data.id).then(() =>
-                    message.info("Deletion complete")
-                );
+                onDelete(data.id).then(() => message.info(t('remove_item.complete')));
             }
         });
     }, [data.id, t, onDelete]);
+    const confirmUpdate = useCallback((update: PostUpdate) => {
+        Modal.confirm({
+            title: t('update_item.title'),
+            content: t('update_item.content'),
+            okText: 'Ok',
+            cancelText: t('cancel'),
+            onOk: () => {
+                onUpdate(data.id, update).then(r => {
+                    if (r) {
+                        message.info(t('update_item.complete'));
+                        onEdit(0);
+                    }
+                })
+            }
+        });
+    }, [data.id, t, onUpdate]);
 
     const toggleLike = async (id: number) => {
         const res = await toggleThreadLike(id);
@@ -124,7 +138,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 <UpdatePostForm description={data.description} isPrivate={data.private}
                                 publicationDate={data.publicationDate}
                                 onClose={() => onEdit(0)}
-                                onUpdate={(update: PostUpdate) => onUpdate(data.id, update)}
+                                onUpdate={confirmUpdate}
                 /> :
                 <>
                     <div className="flex flex-row justify-end items-center">
