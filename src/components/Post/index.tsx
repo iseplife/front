@@ -2,8 +2,7 @@ import React from "react";
 import {Post as PostType} from "../../data/post/types";
 import Embed from "./Embed";
 import EmbedType from "../../constants/EmbedType";
-import {Avatar} from "antd";
-import {Icon} from "antd/es";
+import {Avatar, Icon} from "antd";
 
 type PostProps = {
     data: PostType

@@ -4,7 +4,7 @@ import {getFeedPost} from "../../data/feed";
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
 import Post from "../Post";
 import PostForm from "./PostForm";
-import {Divider} from "antd/es";
+import {Divider} from "antd";
 
 type FeedProps = {
     name: string
