@@ -46,8 +46,14 @@ export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.
 export function getAllPromo(): AxiosPromise<any> {
     return axios.get('/student/promos');
 }
-export const searchStudents = (name: string, promo: string): AxiosPromise<any> => {
-    return axios.get(`/search/student/`, {params: {name: name, promos: promo}});
+
+//
+// export const searchStudents = (name: string, promo: string): AxiosPromise<any> => {
+//     return axios.get(`/search/student/`, {params: {name: name, promos: promo}});
+// };
+
+export const searchStudents = (name: string, promo: string, page: number): AxiosPromise<any> => {
+    return axios.get(`/search/student/`, {params: {name: name, promos: promo, page: page}});
 };
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {

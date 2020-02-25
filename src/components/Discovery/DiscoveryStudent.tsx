@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
-import {getAllPromo, getAllStudents} from "../../data/student";
+import {getAllPromo, getAllStudents, searchStudents} from "../../data/student";
 import {Student} from "../../data/student/types";
 import {useTranslation} from "react-i18next";
 import {Utils} from "../Common/Utils";
@@ -23,13 +23,23 @@ const getStudentAvatarSize = () => {
     return 200;
 };
 
+type SearchItem = {
+    id: number,
+    type: string,
+    name: string,
+    thumbURL: string,
+    description: string,
+    status: boolean
+}
+
 const DiscoveryStudent: React.FC = () => {
     const {t} = useTranslation('discovery');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [students, setStudents] = useState<Student[]>([]);
+    const [sortOrder, setSortOrder] = useState<boolean>(true);
     const [promos, setPromos] = useState<number[]>([]);
     const [selectedPromos, setSelectedPromos] = useState<string[]>([]);
-    const [sortOrder, setSortOrder] = useState<boolean>(true);
+    const [searching, setSearching] = useState<boolean>(false);
 
     const sortStudents = (ascending: any) => {
         let compNumberAsc = 1;
@@ -52,8 +62,8 @@ const DiscoveryStudent: React.FC = () => {
     // Init
     const initStudents = () => {
         setIsLoading(true);
-        getAllStudents(0).then(res => {
-            setStudents(res.data.content);
+        searchStudents("", "", 0).then(res => {
+            setStudents(parseStudents(res.data.content));
         }).catch().finally(() => setIsLoading(false));
     };
     const initPromos = () => {
@@ -70,27 +80,52 @@ const DiscoveryStudent: React.FC = () => {
         setSortOrder(!sortOrder);
     };
 
+    // TODO: change promos to selectedPromos after i think !
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (pageCount: number) => {
-        const res = await getAllStudents(pageCount);
+        const res = await searchStudents("", selectedPromos.toString(), pageCount);
         if (pageCount !== 0) {
-            setStudents(prevState => ([...prevState, ...res.data.content]));
+            setStudents(prevState => ([...prevState, ...parseStudents(res.data.content)]));
         }
         return res.data.last;
-    }, []);
+    }, [selectedPromos]);
 
     useEffect(() => initStudents(), []);
-    useEffect(() => initPromos(), [students]);
+    useEffect(() => initPromos(), []);
     // useEffect(() => sortStudents(sortOrder), [sortOrder]);
     sortStudents(sortOrder);
-    /*useEffect(() => {
-        searchStudents("", selectedPromos.toString()).then(res => {
-            console.log(res.data);
-            res.data.forEach((student: any) => {
-                setStudents(student);
+
+    useEffect(() => {
+        if (selectedPromos.length !== 0) {
+            setSearching(true);
+            searchStudents("", selectedPromos.toString(), 0).then(res => {
+                console.table(res.data.content);
+                setStudents(parseStudents(res.data.content));
             });
-        });
-    }, [promos, selectedPromos]);*/
+        } else {
+            setSearching(false);
+        }
+    }, [selectedPromos]);
+    useEffect(() => {
+        if (!searching) {
+            initStudents();
+        }
+    }, [searching]);
+
+    const parseStudents = (searchItems: SearchItem[]): Student[] => {
+        return searchItems.map((s: SearchItem) => (
+            {
+                id: s.id,
+                promo: parseInt(s.description),
+                firstName: s.name.split(" ")[0],
+                lastName: s.name.split(" ")[1],
+                photoUrl: s.thumbURL,
+                archived: false,
+                rolesValues: [],
+                allowNotifications: false
+            }
+        ));
+    };
 
     /**
      * Custom component for Students avatar
@@ -103,11 +138,14 @@ const DiscoveryStudent: React.FC = () => {
             to={{
                 pathname: `/discovery/student/${props.student.id}`
             }}>
-            <Avatar src={props.student.photoUrl} size={getStudentAvatarSize()}
+            <Avatar src={props.student.photoUrl} /*size={getStudentAvatarSize()}*/
                     alt={props.student.firstName + props.student.lastName}
-                    className={"shadow-xl hover:shadow-outline text-3xl sm:text-5xl " +
+                    className={"w-32 h-3 2 xl:w-48 xl:h-48 shadow-xl hover:shadow-outline" +
+                    " text-3xl" +
+                    " sm:text-5xl " +
                     "md:text-5xl xl:text-6xl " + Utils.randomBackgroundColors()}>
-                {Utils.getInitials(props.student)}
+                <div
+                    className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">{Utils.getInitials(props.student)}</div>
             </Avatar>
             <p className="font-bold sm:text-xl">{props.student.firstName + " " + props.student.lastName.toUpperCase()}<br/>
                 <span
