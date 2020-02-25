@@ -12,5 +12,6 @@
   },
   "cancel": "Cancel",
   "parameter": "Parameters",
-  "logout": "Disconnect"
+  "logout": "Disconnect",
+  "save": "Save"
 }

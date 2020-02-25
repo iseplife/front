@@ -12,5 +12,6 @@
   },
   "cancel": "Annuler",
   "parameter": "Paramètres",
-  "logout": "Se déconnecter"
+  "logout": "Se déconnecter",
+  "save": "Sauvegarder"
 }

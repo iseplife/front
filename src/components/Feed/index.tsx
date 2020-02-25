@@ -1,11 +1,11 @@
 import React, {CSSProperties, useCallback, useState} from "react";
-import {Post as PostType, PostCreation} from "../../data/post/types";
+import {Post as PostType, PostCreation, PostUpdate} from "../../data/post/types";
 import {getFeedPost} from "../../data/feed";
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
 import Post from "../Post";
 import PostForm from "./PostForm";
+import {createPost, deletePost, updatePost} from "../../data/post";
 import {Divider} from "antd";
-import {createPost, deletePost} from "../../data/post";
 
 type FeedProps = {
     id: number
@@ -13,9 +13,9 @@ type FeedProps = {
     style?: CSSProperties
     className?: string
 }
-
 const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => {
     const [posts, setPosts] = useState<PostType[]>([]);
+    const [editPost, setEditPost] = useState<number>(0);
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
         const res = await getFeedPost(id, count);
         setPosts(posts => [...posts, ...res.data.content]);
@@ -23,21 +23,39 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         return res.data.last;
     }, [id]);
 
-    const sendPost = async (post: PostCreation)=> {
+    const sendPost = async (post: PostCreation) => {
         const res = await createPost(post);
-        if(res.status === 200){
+        if (res.status === 200) {
             setPosts(prevPosts => [res.data, ...prevPosts]);
-            return true
+            return true;
         }
         return false;
     };
 
     const removePost = async (id: number) => {
         const res = await deletePost(id);
-        if(res.status === 200){
-            setPosts(posts => posts.filter(p => p.id === id))
+        if (res.status === 200) {
+            setPosts(posts => posts.filter(p => p.id !== id));
         }
     };
+
+    const handlePostUpdate = async (id: number, postUpdate: PostUpdate) => {
+        const res = await updatePost(id, postUpdate);
+        if (res.status === 200) {
+            setPosts(posts => posts.map(p => p.id === id ?
+                {
+                    ...p,
+                    description: postUpdate.description,
+                    publicationDate: postUpdate.publicationDate.getTime(),
+                    private: postUpdate.private
+                }
+                : p
+            ));
+            return true;
+        }
+        return false;
+    };
+
 
     return (
         <div className={`${className} max-w-4xl`} style={style}>
@@ -47,8 +65,13 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
             )}
 
             <InfiniteScroller watch="DOWN" callback={loadMorePost}>
-                {posts.map((p, i) => (
-                    <Post key={i} data={p} onDelete={removePost}/>
+                {posts.map((p) => (
+                    <Post key={p.id} data={p}
+                          onDelete={removePost}
+                          onUpdate={handlePostUpdate}
+                          editMode={editPost === p.id}
+                          onEdit={setEditPost}
+                    />
                 ))}
             </InfiniteScroller>
         </div>

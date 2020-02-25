@@ -5,8 +5,14 @@ export type PostCreation = {
     description: string
     private: boolean
     draft: boolean
-    feed: number,
+    feed: number
     linkedClub?: number
+}
+
+export type PostUpdate = {
+    description: string
+    private: boolean
+    publicationDate: Date
 }
 
 
@@ -19,6 +25,7 @@ export type Post = {
     pinned: boolean
     author: Student
     embed: Embed
+    thread: number
     linkedClub?: Club
 
     nbComments: number
