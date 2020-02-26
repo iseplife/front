@@ -1,9 +1,15 @@
 import React from 'react';
+import {Button, Result} from "antd/es";
 
 
 const NotFound = () => {
     return (
-        <p>Erreur 404: cette page n'existe pas :(</p>
+        <Result
+            status="404"
+            title="404"
+            subTitle="Sorry, the page you visited does not exist."
+            extra={<Button type="primary">Back Home</Button>}
+        />
     )
 };
 

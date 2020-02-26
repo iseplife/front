@@ -21,7 +21,7 @@ const IconButton: React.FC<IconButtonProps> = ({name}) => {
 
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
     const payload = useSelector((state: AppState) => state.payload);
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const isAdmin = useMemo(() => payload.roles.includes("ROLE_ADMIN"), [payload.roles]);
     return (
         <Menu>
