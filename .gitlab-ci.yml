@@ -3,8 +3,12 @@ stages:
   - deploy
 
 build:
-  image: node:latest
   stage: build
+  image: node:latest
+  artifacts:
+    paths:
+      - build
+
   script:
     - yarn install --frozen-lockfile
     - yarn run build:dev
