@@ -3,6 +3,7 @@ stages:
   - deploy
 
 build:
+  image: node:latest
   stage: build
   script:
     - yarn install --frozen-lockfile
