@@ -8,6 +8,8 @@ build:
   script:
     - yarn install --frozen-lockfile
     - yarn run build:dev
+  only:
+    - master
 
 deploy:
   stage: deploy
