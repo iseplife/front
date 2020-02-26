@@ -1,6 +1,6 @@
 import React from "react";
 import {IconFA} from "../Common/IconFA";
-import {Avatar} from "antd/es";
+import {Avatar} from "antd";
 import {useSelector} from "react-redux";
 import {AppState} from "../../redux/types";
 

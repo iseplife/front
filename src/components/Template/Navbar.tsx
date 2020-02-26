@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from "react";
 
-import {Dropdown, Avatar, Menu, Button, Drawer, Icon} from "antd/es";
+import {Dropdown, Avatar, Menu, Button, Drawer, Icon} from "antd";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useSelector} from 'react-redux'
