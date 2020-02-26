@@ -69,8 +69,8 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                     <Post key={p.id} data={p}
                           onDelete={removePost}
                           onUpdate={handlePostUpdate}
-                          editMode={editPost === p.id}
                           onEdit={setEditPost}
+                          editMode={editPost === p.id}
                     />
                 ))}
             </InfiniteScroller>

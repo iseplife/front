@@ -1,12 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import {IconFA} from "../Common/IconFA";
-import {Avatar} from "antd";
-import {useSelector} from "react-redux";
-import {AppState} from "../../redux/types";
-import {Post, PostCreation} from "../../data/post/types";
-import {createPost} from "../../data/post";
-import {Field, Form, Formik, FormikErrors, FormikProps, withFormik} from "formik";
-
+import  {PostCreation} from "../../data/post/types";
+import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik";
 
 type FormValues = {
     description: string
@@ -64,7 +59,6 @@ const PostForm = withFormik<PostFormProps, FormValues>({
     handleSubmit: async (values, {props, resetForm}) => {
         const success = await props.sendPost(values);
         if(success) resetForm({})
-
     },
 })(InnerForm);
 

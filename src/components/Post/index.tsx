@@ -2,7 +2,7 @@ import React, {useCallback, useState} from "react";
 import {Post as PostType, PostUpdate} from "../../data/post/types";
 import Embed from "./Embed";
 import EmbedType from "../../constants/EmbedType";
-import {Avatar, Icon} from "antd";
+import {Avatar, Icon, message, Modal} from "antd";
 import {useTranslation} from "react-i18next";
 import {toggleThreadLike} from "../../data/thread";
 import {format, isPast} from "date-fns";
