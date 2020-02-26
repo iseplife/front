@@ -49,7 +49,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
                 <Icon type="setting"/>
-                <Link to="/parameters"><span>{t("parameter")}</span></Link>
+                <Link to="/parameters"><span>{t("setting")}</span></Link>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={5} className="profile-logout">

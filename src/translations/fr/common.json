@@ -6,6 +6,18 @@
   "create_event": "Créer un évènement",
   "create_club": "Créer un club",
   "switch_lang": "Changer la langue",
-  "parameter": "Paramètres",
-  "logout": "Se déconnecter"
+  "remove_item": {
+    "title": "Voulez-vous supprimez cet élément ?",
+    "content": "Attention, la suppression d'un élément est définitive",
+    "complete": "Elément supprimé"
+  },
+  "update_item": {
+    "title": "Voulez-vous enregistrer ces modifications ?",
+    "content": "Attention, la modification un élément ne peut-être annulé",
+    "complete": "Modifications enregistrées"
+  },
+  "cancel": "Annuler",
+  "setting": "Paramètres",
+  "logout": "Se déconnecter",
+  "save": "Sauvegarder"
 }
