@@ -121,7 +121,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 })
             }
         });
-    }, [data.id, t, onUpdate]);
+    }, [data.id, t, onUpdate, onEdit]);
 
     const toggleLike = async (id: number) => {
         const res = await toggleThreadLike(id);

@@ -5,12 +5,14 @@ import {
 } from "react-router-dom";
 import {format} from "date-fns";
 import {Map, Marker, TileLayer} from 'react-leaflet'
-import {getEvent} from "../../data/event";
-import {Event as EventType} from "../../data/event/types";
+import {getEvent, getEventChildren} from "../../data/event";
+
+import {Event as EventType, EventPreview as PreviewType} from "../../data/event/types";
 import './Event.css';
-import {Avatar, Icon} from "antd/es";
+import {Avatar, Icon} from "antd";
 import {useTranslation} from "react-i18next";
 import Feed from "../../components/Feed";
+import EventPreview from "../../components/Event/Preview";
 
 
 const Event: React.FC = () => {
@@ -18,6 +20,11 @@ const Event: React.FC = () => {
     const {t} = useTranslation("event");
     const history = useHistory();
     const [event, setEvent] = useState<EventType | undefined>();
+
+    const eventsRef = useRef<HTMLInputElement>(null);
+    const [subevents, setSubevents] = useState<PreviewType[]>();
+    const [eventsVisible, setEventVisible] = useState<boolean>(false);
+
     const descriptionRef = useRef<HTMLInputElement>(null);
     const [descVisible, setDescVisible] = useState<boolean>(false);
 
@@ -30,6 +37,14 @@ const Event: React.FC = () => {
             })
         }
     }, [id]);
+
+    useEffect(() => {
+        if (event) {
+            getEventChildren(event.id).then(r => {
+                setSubevents(r.data)
+            })
+        }
+    }, [event]);
 
     return event === undefined ? null :
         (
@@ -51,11 +66,35 @@ const Event: React.FC = () => {
                         {format(event.startsAt, "d MMM") + (event.endsAt ? (" - " + format(event.endsAt, "d MMM")) : "")}
                     </div>
                 </div>
-
                 <div className="mx-auto p-3 w-full">
                     <div className="flex md:flex-row flex-col ">
                         <div className="md:w-1/6 w-full md:order-1 order-3">
+                            {subevents &&
+                            <div className="mt-5 text-center">
+                                <div
+                                    className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
+                                    style={{marginBottom: -5}}
+                                    onClick={() => {
+                                        if (eventsRef.current) {
+                                            setEventVisible(!eventsRef.current?.classList.toggle("h-0"));
+                                        }
+                                    }}>
+                                    <span>{t('event') + "s"}</span>
+                                    <Icon className="md:hidden block mx-2"
+                                          type={eventsVisible ? "up" : "down"}
+                                    />
+                                </div>
+                                <div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
+                                    {subevents.map((se, i) => (
+                                        <EventPreview key={i} event={se}/>
+                                    ))}
+                                </div>
 
+                            </div>
+                            }
+                            <div className="bg-white rounded shadowp-2 mt-3">
+
+                            </div>
                         </div>
 
                         <div className="flex items-center md:w-4/6 w-full flex-col md:order-2 order-1">
@@ -113,7 +152,7 @@ const Event: React.FC = () => {
                             </Map>
                         </div>
                     </div>
-                    
+
                     <Feed id={event.feed.id} className="mx-auto my-3 md:w-3/6 w-full"/>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {IconFA} from "../Common/IconFA";
 import  {PostCreation} from "../../data/post/types";
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik";
