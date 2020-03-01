@@ -1,5 +1,3 @@
-import {Student} from "../../data/student/types";
-
 export class Utils {
 
     static randomBackgroundColors = () => {
@@ -10,7 +8,7 @@ export class Utils {
         return `bg-${randomColor}-${randomOpacity}`;
     };
 
-    static getInitials = (student: Student) => {
-        return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase();
+    static getInitials = (name: string) => {
+        return name.split(" ").map(s => s.charAt(0).toUpperCase()).join(" ");
     };
 }

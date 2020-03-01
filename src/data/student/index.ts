@@ -47,12 +47,7 @@ export function getAllPromo(): AxiosPromise<any> {
     return axios.get('/student/promos');
 }
 
-//
-// export const searchStudents = (name: string, promo: string): AxiosPromise<any> => {
-//     return axios.get(`/search/student/`, {params: {name: name, promos: promo}});
-// };
-
-export const searchStudents = (name: string, promo: string, page: number): AxiosPromise<any> => {
+export const searchStudents = (name: string, promo: string, page: number): AxiosPromise<Page<SearchItem>> => {
     return axios.get(`/search/student/`, {params: {name: name, promos: promo, page: page}});
 };
 

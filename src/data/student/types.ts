@@ -1,3 +1,4 @@
+
 export interface Student {
     id: number
     promo: number
@@ -19,6 +20,13 @@ export interface Student {
     archived: boolean
 }
 
+export type StudentPreview = {
+    id: number
+    firstName: string
+    lastName: string
+    photoUrlThumb?: string;
+}
+    promo: string
 
 export type StudentAdmin = Student & {
     roles: string[]
@@ -51,3 +59,16 @@ export type StudentAdminForm = {
     picture?: File,
     resetPicture?: boolean
 }
+
+type ReducerPromoToggle = {
+    type: "ADD_PROMO" | "REMOVE_PROMO",
+    promo: string
+}
+type ReducerSortToggle = {
+    type: "TOGGLE_SORT",
+}
+
+type ReducerInit = {
+    type: "INIT_FILTER",
+}
+export type FilterReducerAction = ReducerSortToggle | ReducerPromoToggle | ReducerInit;

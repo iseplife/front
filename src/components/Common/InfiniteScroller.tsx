@@ -35,10 +35,10 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
             case "UP":
                 setUpLoader(prevState => ({...prevState, loading: true}))
                 upCallback(upLoader.count).then(over => {
-                    setDownLoader(prevState => ({
+                    setDownLoader({
                         over,
                         fetch: false,
-                        count: ++prevState.count,
+                        count: 1,
                         loading: false
                     }))
                 })
@@ -46,10 +46,10 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
             case "DOWN":
                 setDownLoader(prevState => ({...prevState, loading: true}))
                 downCallback(downLoader.count).then(over => {
-                    setDownLoader(prevState => ({
+                    setDownLoader({
                         over,
                         fetch: false,
-                        count: ++prevState.count,
+                        count: 1,
                         loading: false
                     }))
                 })
