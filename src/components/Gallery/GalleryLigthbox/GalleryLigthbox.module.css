@@ -1,0 +1,23 @@
+.galleryLightboxBody { height: calc(100vh - 10rem);}
+
+.carousel { width: calc(100% - 10rem); }
+
+.carouselContent {
+    width: fit-content;
+    height: calc(100vh - 12rem);
+    margin: auto;
+}
+
+.carouselImage {
+    max-height: 90%;
+    position: fixed;
+    margin-top: 30vh;
+    transform: translate(-50%, -50%);
+}
+
+/* Hide scrollbar for IE and Edge */
+.customScrollBar {
+    -ms-overflow-style: none;
+    transform: translate(0, -1rem);
+}
+.customScrollBar::-webkit-scrollbar {display: none;}
