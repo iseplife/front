@@ -16,6 +16,7 @@ import {getUser} from "../../data/security";
 import rootReducer from "../../redux/reducer";
 import {createStore} from "redux";
 import Navbar from "./Navbar";
+import CustomGallery from "../../pages/gallery";
 
 
 const Template: React.FC = () => {
@@ -41,6 +42,7 @@ const Template: React.FC = () => {
                             {/* Add your route here */}
                             <Route path="/calendar" component={Events}/>
                             <Route path="/event/:id" component={Event}/>
+                            <Route path="/gallery/:id" component={CustomGallery} />
                             <Route path="/logout" children={<Logout/>}/>
                             <Route path="*" component={NotFound}/>
                         </Switch>
