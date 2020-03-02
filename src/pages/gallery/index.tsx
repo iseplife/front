@@ -18,12 +18,14 @@ const CustomGallery: React.FC = () => {
     const [photos, setPhotos] = useState<PhotoProps[]>([]);
 
     // Lightbox props
+    const {pictureId} = useParams();
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false);
     const [currentPhoto, setCurrentPhoto] = useState<PhotoProps>();
 
     // First, load gallery with id contains on url
     useEffect(() => {
-        if (!!id) { initGallery(parseInt(id));
+        if (!!id) {
+            initGallery(parseInt(id));
         }
     }, []);
     const initGallery = (id: number) => {
@@ -32,13 +34,19 @@ const CustomGallery: React.FC = () => {
                 const galleryResponse = res.data;
                 if (!!galleryResponse) {
                     setGallery(galleryResponse);
-                    getPhotosAsync(galleryResponse).then((photos: PhotoProps[]) => setPhotos(photos));
+                    getPhotosAsync(galleryResponse)
+                        .then((photos: PhotoProps[]) => {
+                            setPhotos(photos);
+
+                            if (!!pictureId) {
+                                setCurrentPhoto(photos[parseInt(pictureId)]);
+                                setOpenLigthbox(true);
+                            }
+                        });
                 }
             })
             .catch(e => console.log(e, "ERREUR"))
-            .finally(() => {
-                setIsLoading(false);
-            });
+            .finally(() => { setIsLoading(false); });
     };
 
     // Secund, transform images in photos with the same properties in the react-image-gallery's library.
@@ -62,14 +70,21 @@ const CustomGallery: React.FC = () => {
     };
 
     // Third, lightbox's functions
-    const onCurrentPhotoChange = (photo: PhotoProps) => setCurrentPhoto(photo);
+    const onCurrentPhotoChange = (photo: PhotoProps, index: number) => {
+        setPhotos(photos);
+        window.history.pushState("", "", `/gallery/${id}/picture/${index}`);
+    };
 
-    const closeLightbox = () => setOpenLigthbox(false);
+    const closeLightbox = () => {
+        setOpenLigthbox(false);
+        window.history.pushState("", "", `/gallery/${id}`)
+    };
 
     const openLightbox = useCallback((event, { photo, index }) => {
         if (!!photo) {
             setCurrentPhoto(photo);
             setOpenLigthbox(true);
+            window.history.pushState("", "", `/gallery/${id}/picture/${index}`);
         }
     }, []);
 

@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 export type GalleryLigthboxProps = {
     photos: PhotoProps[];
     currentPhoto: PhotoProps | undefined;
-    onCurrentPhotoChange(photo: PhotoProps): void;
+    onCurrentPhotoChange(photo: PhotoProps, index: number): void;
     onClose(): void;
 }
 
@@ -66,7 +66,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
         accessibility: true,
         cssEase: "linear",
         initialSlide: !!currentPhoto && !!photos.length ? photos.findIndex((p) => p.key === currentPhoto.key) : 0,
-        afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex]),
+        afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex], currentSlideIndex),
         customPaging: (i: number) => (
             <Button className="w-10 h-10 bg-transparent">
                 <Avatar src={photos[i].src} shape="square" size="large" className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"/>

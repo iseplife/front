@@ -42,6 +42,7 @@ const Template: React.FC = () => {
                             {/* Add your route here */}
                             <Route path="/calendar" component={Events}/>
                             <Route path="/event/:id" component={Event}/>
+                            <Route path="/gallery/:id/picture/:pictureId" component={CustomGallery} />
                             <Route path="/gallery/:id" component={CustomGallery} />
                             <Route path="/logout" children={<Logout/>}/>
                             <Route path="*" component={NotFound}/>
