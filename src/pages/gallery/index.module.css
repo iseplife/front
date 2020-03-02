@@ -1,0 +1,10 @@
+.skeletonAvatarCustomSize {
+    width: 7.5rem!important;
+    height: 7.5rem!important;
+}
+
+.skeleton {
+    width: auto!important;
+    margin: auto;
+    margin-bottom: 16px;
+}
