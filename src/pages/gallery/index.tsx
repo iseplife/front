@@ -7,8 +7,10 @@ import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLig
 import {getGalleryById} from "../../data/gallery";
 import {ApiResponse} from "../../data/common/api";
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery";
+import {useTranslation} from "react-i18next";
 
 const CustomGallery: React.FC = () => {
+    const {t, i18n} = useTranslation('gallery');
     // Gallery props
     const {id} = useParams();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -78,7 +80,7 @@ const CustomGallery: React.FC = () => {
                 <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery ? gallery.name : ""}</div>
             </div>
             <div className="text-xs mt-2 mb-1 flex flex-row items-center">
-                {!!gallery ? `${gallery.previewImages.length} files` : ""}
+                {!!gallery ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
                 <Skeleton loading={isLoading} active paragraph={false} className="w-20 mr-2"/>
             </div>
             <div className="flex flex-row bg-white p-1">
@@ -98,7 +100,7 @@ const CustomGallery: React.FC = () => {
                     )
                     : (
                         <div className="h-16 mt-2 mb-4 w-full text-right mr-2">
-                            {`Posted the ${!!gallery ? new Date(gallery.creation).toLocaleDateString() : ""} by `}
+                            {`${t("posted_date")} ${!!gallery ? new Date(gallery.creation).toLocaleDateString() : ""} ${t("by")}`}
                             <Tooltip title={!!gallery ? gallery.club.name : ""}>
                                 <Link to={"/club/1"}>
                                     <Avatar shape="circle" className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer" icon="user" size="large"/>

@@ -3,6 +3,7 @@ import {PhotoProps} from "react-photo-gallery";
 import {Avatar, Button, Carousel, Icon} from "antd";
 import style from "./GalleryLigthbox.module.css";
 import {CarouselProps} from "antd/es/carousel";
+import {useTranslation} from "react-i18next";
 
 export type GalleryLigthboxProps = {
     photos: PhotoProps[];
@@ -12,6 +13,7 @@ export type GalleryLigthboxProps = {
 }
 
 const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, onCurrentPhotoChange, onClose}) => {
+    const {t, i18n} = useTranslation('gallery');
     const [autoPlay, setAutoPlay] = useState<boolean>(false);
     const [autoPlayInterval, setAutoPlayInterval] = useState<NodeJS.Timeout>();
     const carouselRef = useRef<Carousel>(null);
@@ -122,9 +124,9 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                 </div>
             </div>
             <div className="mx-auto flex h-20 items-center">
-                <Button type="default" icon={autoPlay ? "pause-circle" : "play-circle"} onClick={() => setAutoPlay(!autoPlay)} className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? "Pause" : "Play"}</Button>
+                <Button type="default" icon={autoPlay ? "pause-circle" : "play-circle"} onClick={() => setAutoPlay(!autoPlay)} className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? `${t("stop")}` : `${t("play")}`}</Button>
                 <Button type="default" icon="download" className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900" href={!!currentPhoto ? currentPhoto.src : ""}
-                        download={`@prodIsepLife/${!!currentPhoto ? currentPhoto.src : "undefined"}`}>Download</Button>
+                        download={`@prodIsepLife/${!!currentPhoto ? currentPhoto.src : "undefined"}`}>{t("download")}</Button>
             </div>
         </div>
     );
