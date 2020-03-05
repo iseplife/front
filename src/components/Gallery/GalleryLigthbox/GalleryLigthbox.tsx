@@ -139,7 +139,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                                         </div>
                                     </div>
                                 )
-                            })
+                            }, keyIncrementationToAvoidMultiplePhotoSrcName)
                         }
 
                     </Carousel>
