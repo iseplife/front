@@ -3,12 +3,13 @@ import {AvatarProps} from "antd/es/avatar";
 import {Skeleton} from "antd";
 
 const LoadingGallery: React.FC = () => {
+    let numberOfPhotoPlaceholderUseDuringLoading = 10;
 
     const LoadingGalleryElement = () => {
         const avatarProps: AvatarProps = { shape: "square", className: "w-48 h-48"};
 
         let galleryLoading = [];
-        for(let i=0; i< 10; i++) {
+        for(let i=0; i< numberOfPhotoPlaceholderUseDuringLoading; i++) {
             galleryLoading.push(
                 <Skeleton className="w-auto h-auto pb-4 mx-auto" loading={true} active avatar={avatarProps} paragraph={false} title={false}/>
             )
