@@ -13,13 +13,15 @@ export type GalleryLigthboxProps = {
 }
 
 const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, onCurrentPhotoChange, onClose}) => {
-    const {t, i18n} = useTranslation('gallery');
+    const {t} = useTranslation('gallery');
     const [autoPlay, setAutoPlay] = useState<boolean>(false);
     const [autoPlayInterval, setAutoPlayInterval] = useState<NodeJS.Timeout>();
     const carouselRef = useRef<Carousel>(null);
     const dotListRef = useRef<HTMLUListElement>(null);
 
-    useLayoutEffect(() => setArrowKeyboardPressEvent());
+    let keyIncrementationToAvoidMultiplePhotoSrcName = 0;
+
+    useLayoutEffect(() => setArrowKeyboardPressEvent(), []);
     const setArrowKeyboardPressEvent = () =>
         window.addEventListener('keydown', (event) => {
             const key = event.key;
@@ -32,11 +34,11 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
             }
         });
 
-    useEffect(() => scrollAutomaticallyDots());
+    useEffect(() => scrollAutomaticallyDots(), []);
     const scrollAutomaticallyDots = () => {
         if (!!dotListRef.current) {
             const dots = dotListRef.current.children;
-            for (var i = 0; i < dots.length; i++) {
+            for (let i = 0; i < dots.length; i++) {
                 const dot = dots.item(i);
                 if (!!dot && dot.classList.contains("slick-active")) {
                     dot.scrollIntoView({behavior: "smooth"});
@@ -106,15 +108,14 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
                         {
                             photos.map(photo => {
-                                let i =0;
                                 return (
-                                    <div key={photo.src + "/" + i++}>
+                                    <div key={photo.src + "/" + keyIncrementationToAvoidMultiplePhotoSrcName}>
                                         <div className={style.carouselContent}>
                                             <img src={photo.src} className={style.carouselImage}/>
                                         </div>
                                     </div>
                                 )
-                            })
+                            }, keyIncrementationToAvoidMultiplePhotoSrcName)
                         }
 
                     </Carousel>
