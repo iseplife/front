@@ -1,5 +1,6 @@
 import {Student} from "../student/types";
 import {Club} from "../club/type";
+import {Author} from "../request.type";
 
 export type PostCreation = {
     description: string
@@ -23,7 +24,7 @@ export type Post = {
     creationDate: number
     private: boolean
     pinned: boolean
-    author: Student
+    author: Author
     embed: Embed
     thread: number
     linkedClub?: Club
