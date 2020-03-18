@@ -6,5 +6,7 @@
     "WORKSHOP": "Workshop",
     "FORMATION": "Formation",
     "MEETING": "Meeting"
-  }
+  },
+  "free": "Free",
+  "event": "Event"
 }

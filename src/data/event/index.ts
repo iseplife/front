@@ -1,6 +1,18 @@
-import {EventPreview} from "./types";
+import {EventPreview, Event} from "./types";
 import axios, {AxiosPromise} from "axios";
 import {Page} from "../request.type";
+
+export const getEvent = (id: number): AxiosPromise<Event> => {
+    return axios.get(`/event/${id}`);
+};
+
+export const getEventGalleries = (id: number): AxiosPromise<Event> => {
+    return axios.get(`/event/${id}/galleries`);
+};
+
+export const getEventChildren= (id: number): AxiosPromise<EventPreview[]> => {
+    return axios.get(`/event/${id}/children`);
+};
 
 export const getEventsAround = (timestamp: number): AxiosPromise<EventPreview[]> => {
     return axios.get(`/event/t/${timestamp}`);

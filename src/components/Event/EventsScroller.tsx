@@ -1,11 +1,12 @@
 import {format, parse} from "date-fns";
 import {useTranslation} from "react-i18next";
-import {EventMap, EventPreview} from "../../data/event/types";
+import {EventMap, EventPreview,} from "../../data/event/types";
 import React, {useEffect} from "react";
-import Event from "./Preview"
+
 import WeekDay from "./WeekDay";
 import InfiniteScroller, {ScrollerCallback} from "../Common/InfiniteScroller";
 import Loading from "../Common/Loading";
+import Preview from "./Preview";
 
 
 type EventsScrollerProps = {
@@ -56,7 +57,7 @@ const EventsScroller: React.FC<EventsScrollerProps> = ({events, callback, loadin
                                             <div
                                                 className="flex flex-row flex-wrap w-5/6 md:self-start self-center md:justify-start justify-center">
                                                 {events.map((e: EventPreview, index: number) => (
-                                                    <Event key={index} event={e}/>
+                                                    <Preview key={index} event={e}/>
                                                 ))}
                                             </div>
                                         </div>

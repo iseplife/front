@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {withRouter, RouteComponentProps} from "react-router";
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import {removeTokens, setTokens} from "../../data/security";
-import {message} from "antd/es";
+import {message} from "antd";
 
 
 const axiosResponseInterceptor = (response: AxiosResponse) => {
