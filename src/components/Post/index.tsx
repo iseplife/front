@@ -123,13 +123,11 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
         });
     }, [data.id, t, onUpdate, onEdit]);
 
-    const toggleLike = async (id: number) => {
+    const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id);
-        if (res.status === 200) {
-            setLikes(liked ? likes - 1 : likes + 1);
-            setLiked(!liked);
-        }
-    };
+        setLiked(res.data);
+        setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1);
+    }, []);
 
 
     return (
@@ -157,7 +155,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 </>
             }
             <div className="flex flex-row justify-between mt-2">
-                <Avatar icon="user" src={data.linkedClub?.logoUrl || data.author.photoUrlThumb}/>
+                <Avatar icon="user" src={data.author.thumbnail}/>
                 <div className="flex items-center">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
                         {data.nbComments} <Icon type="message" className="ml-1"/>

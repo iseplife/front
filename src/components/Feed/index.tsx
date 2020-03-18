@@ -3,7 +3,7 @@ import {Post as PostType, PostCreation, PostUpdate} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed";
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
 import Post from "../Post";
-import PostForm from "./PostForm";
+import PostForm from "../Post/PostForm";
 import {createPost, deletePost, updatePost} from "../../data/post";
 import {Divider} from "antd";
 
