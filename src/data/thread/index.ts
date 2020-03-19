@@ -5,6 +5,10 @@ export const toggleThreadLike = (id: number): AxiosPromise<boolean> => {
     return axios.put(`/thread/${id}/like`);
 };
 
-export const getComment = (id: number): AxiosPromise<Comment[]> => {
-    return axios.get(`/thead/${id}/comment`)
+export const getThreadComments = (id: number): AxiosPromise<Comment[]> => {
+    return axios.get(`/thread/${id}/comment`);
+};
+
+export const commentThread = (id: number, message: string): AxiosPromise<Comment> => {
+    return axios.put(`/thread/${id}/comment`, { message });
 };
