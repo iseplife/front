@@ -10,4 +10,5 @@ export type Comment = {
     liked: boolean
     message: string
     author: Author
+    hasWriteAccess: boolean
 }
