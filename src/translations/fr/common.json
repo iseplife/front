@@ -19,5 +19,6 @@
   "cancel": "Annuler",
   "setting": "Paramètres",
   "logout": "Se déconnecter",
-  "save": "Sauvegarder"
+  "save": "Sauvegarder",
+  "write_comment": "Ecris ton commentaire..."
 }
