@@ -3,9 +3,7 @@ import {Student, StudentAdminForm, StudentAdmin, StudentPreview, StudentPreviewA
 import {ClubMemberView} from "../club/types";
 import {Page, SearchItem} from "../request.type";
 
-export function getLoggedUser(): AxiosPromise<Student> {
-    return axios.get('/student/me');
-}
+export const getLoggedUser = (): AxiosPromise<Student> => axios.get('/student/me');
 
 export function getStudent(id: number): AxiosPromise<Student> {
     return axios.get(`/student/${id}`);
