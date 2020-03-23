@@ -8,6 +8,7 @@ import {getGalleryById} from "../../data/gallery";
 import {ApiResponse} from "../../data/common/api";
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery";
 import {useTranslation} from "react-i18next";
+import GlobalSearch from "../../components/Gallery/GlobalSearch";
 
 const CustomGallery: React.FC = () => {
     const {t, i18n} = useTranslation('gallery');
@@ -42,18 +43,16 @@ const CustomGallery: React.FC = () => {
                                 setCurrentPhoto(photos[parseInt(pictureId)]);
                                 setOpenLigthbox(true);
                             }
-                        });
+                        }).finally(() => setIsLoading(false));
                 }
             })
-            .catch(e => console.log(e, "ERREUR"))
-            .finally(() => { setIsLoading(false); });
+            .catch(e => e)
     };
 
     // Secund, transform images in photos with the same properties in the react-image-gallery's library.
     const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
-        let uniqueKey = 0;
-        return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: IsepLifeImage) =>
-            parsePhoto(img.name, `${img.name}-${uniqueKey++}`)
+        return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: IsepLifeImage, index: number) =>
+            parsePhoto(img.name, `${img.name}-${index}`)
         ));
     };
     const parsePhoto = (imgUrl: string, imgIndex: string): Promise<PhotoProps> => {
@@ -89,7 +88,7 @@ const CustomGallery: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-5/6 mx-auto flex flex-col m-6 mb-6">
+        <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
             <div className="flex flex-row">
                 <Skeleton loading={isLoading} active paragraph={false} className="w-48 mr-2"/>
                 <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery ? gallery.name : ""}</div>

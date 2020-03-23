@@ -19,8 +19,6 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
     const carouselRef = useRef<Carousel>(null);
     const dotListRef = useRef<HTMLUListElement>(null);
 
-    let keyIncrementationToAvoidMultiplePhotoSrcName = 0;
-
     useLayoutEffect(() => setArrowKeyboardPressEvent(), []);
     const setArrowKeyboardPressEvent = () =>
         window.addEventListener('keydown', (event) => {
@@ -107,15 +105,15 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                 <div className="w-full p-4">
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
                         {
-                            photos.map(photo => {
+                            photos.map((photo: PhotoProps, index: number) => {
                                 return (
-                                    <div key={photo.src + "/" + keyIncrementationToAvoidMultiplePhotoSrcName}>
+                                    <div key={photo.src + "/" + index}>
                                         <div className={style.carouselContent}>
                                             <img src={photo.src} className={style.carouselImage}/>
                                         </div>
                                     </div>
                                 )
-                            }, keyIncrementationToAvoidMultiplePhotoSrcName)
+                            })
                         }
 
                     </Carousel>

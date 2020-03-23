@@ -11,7 +11,7 @@ const LoadingGallery: React.FC = () => {
         let galleryLoading = [];
         for(let i=0; i< numberOfPhotoPlaceholderUseDuringLoading; i++) {
             galleryLoading.push(
-                <Skeleton className="w-auto h-auto pb-4 mx-auto" loading={true} active avatar={avatarProps} paragraph={false} title={false}/>
+                <Skeleton className="w-auto h-auto pb-4 mx-auto" key={i} loading={true} active avatar={avatarProps} paragraph={false} title={false}/>
             )
         }
         return galleryLoading;
