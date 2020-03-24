@@ -2,11 +2,11 @@ import React, {useEffect, useState} from "react";
 import {useParams, useHistory} from "react-router-dom"
 import {getClubsForStudent, getStudentById} from "../../data/student";
 import {Avatar, Divider, Drawer, Tooltip} from "antd";
-import {HorizontalSpacer} from "../../pages/discovery";
 import {useTranslation} from "react-i18next";
 import {Utils} from "../Common/Utils";
 import {Student} from "../../data/student/types";
 import {IconFA} from "../Common/IconFA";
+import {HorizontalSpacer} from "../Common/HorizontalSpacer";
 
 const MOBILE_WIDTH = 640;
 
