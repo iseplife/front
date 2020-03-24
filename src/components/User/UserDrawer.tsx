@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams, useHistory} from "react-router-dom"
+import {useParams, useHistory, Link} from "react-router-dom"
 import {getClubsForStudent, getStudentById} from "../../data/student";
 import {Avatar, Divider, Drawer, Tooltip} from "antd";
 import {useTranslation} from "react-i18next";
@@ -124,12 +124,12 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     (studentClubs.map(club => {
                                         return (
                                             <Tooltip title={club.club.name} placement="top"
-                                                     key={++key}
-                                                     className="m-1 shadow-md hover:shadow-outline">
-                                                <Avatar src={club.club.logoUrl}
-                                                        alt={club.club.name}
-                                                        className="w-12 h-12 sm:w-24 sm:h-24"
-                                                />
+                                                     key={++key}>
+                                                <Link to={`/club/${club.club.id}`}>
+                                                    <Avatar src={club.club.logoUrl}
+                                                            alt={club.club.name}
+                                                            className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
+                                                </Link>
                                             </Tooltip>
                                         );
                                     }))
