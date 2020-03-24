@@ -3,7 +3,7 @@ import {Comment as CommentType} from "../../data/thread/types";
 import {Avatar, Icon} from "antd";
 import {toggleThreadLike} from "../../data/thread";
 import CommentList from "./CommentList";
-import {IconFA} from "../Common/IconFA";
+import EditComment from "./EditComment";
 
 
 interface CommentProps {
@@ -17,9 +17,8 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     const [liked, setLiked] = useState<boolean>(data.liked);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [showComments, setShowComments] = useState<boolean>(false);
-    const [isSubmitting, setSubmitting] = useState<boolean>(false);
     const [likes, setLikes] = useState<number>(data.likes);
-    const [editedMessage, setEditedMessage] = useState<string>(data.message);
+
 
     const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id);
@@ -50,37 +49,13 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 
                 <div className="flex-1 mt-3">
                     {editMode ?
-                        <>
-                            <textarea defaultValue={editedMessage}
-                                      value={editedMessage}
-                                      className="bg-transparent w-full"
-                                      onChange={(e) => setEditedMessage(e.target.value)}
-                            />
-                            <div className="flex items-center justify-end">
-                                <button type="submit"
-                                        className="flex items-center cursor-pointer text-gray-500 hover:text-red-600 px-2"
-                                        disabled={isSubmitting}
-                                        onClick={() => setEditMode(false)}
-                                >
-                                    <Icon type="close" />
-                                </button>
-                                <button type="submit"
-                                        className="flex items-center cursor-pointer text-gray-500 hover:text-indigo-400 px-2"
-                                        disabled={isSubmitting || editedMessage.length === 0}
-                                        onClick={() => {
-                                            setSubmitting(true);
-                                            handleEdit(data.id, editedMessage).then(() => {
-                                                setSubmitting(false);
-                                                setEditMode(false);
-                                            })
-                                        }}
-                                >
-                                    <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid" />
-                                </button>
-                            </div>
-                        </>
+                        <EditComment
+                            value={data.message}
+                            uploadEdit={(msg: string) => handleEdit(data.id, msg)}
+                            disableEditMode={() => setEditMode(false)}
+                        />
                         :
-                        <>{ data.message }</>
+                        <>{data.message}</>
                     }
                 </div>
 
