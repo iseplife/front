@@ -1,4 +1,6 @@
 import ClubType from "../../constants/ClubType";
+import {Student} from "../student/types";
+import RoleType from "../../constants/RoleType";
 
 export type Club = {
     id: number,
@@ -14,4 +16,10 @@ export type ClubPreview = {
     id: number,
     name: string,
     logoUrl: string,
+}
+
+export type ClubMemberView = {
+    club: Club,
+    role: RoleType,
+    member: Student
 }

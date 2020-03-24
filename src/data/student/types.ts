@@ -20,4 +20,4 @@ export interface Student {
     bio?: string;
     archived: boolean;
     rolesValues: string[];
-};
+}
