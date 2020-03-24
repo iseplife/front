@@ -1,107 +1,105 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {Gallery as GalleryType, Media as IsepLifeImage} from "../../data/gallery/type";
-import {Avatar, Skeleton, Tooltip} from "antd";
+import {Avatar, message, Skeleton, Tooltip} from "antd";
 import Gallery, {PhotoProps} from "react-photo-gallery";
 import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox";
 import {getGalleryById} from "../../data/gallery";
-import {ApiResponse} from "../../data/common/api";
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery";
 import {useTranslation} from "react-i18next";
-import GlobalSearch from "../../components/Gallery/GlobalSearch";
+import { useHistory } from 'react-router-dom'
+
+/* We should create a GalleryService with them */
+const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
+    return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: IsepLifeImage, index: number) =>
+        parsePhoto(img.name, `${img.name}-${index}`)
+    ));
+};
+const parsePhoto = (imgUrl: string, imgIndex: string): Promise<PhotoProps> => {
+    return new Promise((resolve, reject) => {
+        let image = new Image();
+        image.src = imgUrl;
+        image.onload = () => resolve({
+            src: imgUrl,
+            width: image.width,
+            height: image.height,
+            key: imgIndex
+        });
+    });
+};
 
 const CustomGallery: React.FC = () => {
-    const {t, i18n} = useTranslation('gallery');
-    // Gallery props
+    const {t} = useTranslation('gallery');
+
     const {id} = useParams();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [gallery, setGallery] = useState<GalleryType>();
     const [photos, setPhotos] = useState<PhotoProps[]>([]);
 
-    // Lightbox props
     const {pictureId} = useParams();
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false);
     const [currentPhoto, setCurrentPhoto] = useState<PhotoProps>();
 
-    // First, load gallery with id contains on url
+    let history = useHistory();
+
+    /*Gallery initialization*/
     useEffect(() => {
         if (!!id) {
-            initGallery(parseInt(id));
+            getGalleryById(id)
+                .then(res => {
+                    const galleryResponse = res.data;
+                    if (!!galleryResponse) {
+                        setGallery(galleryResponse);
+                        getPhotosAsync(galleryResponse)
+                            .then((photos: PhotoProps[]) => {
+                                setPhotos(photos);
+
+                                if (!!pictureId) {
+                                    setCurrentPhoto(photos[parseInt(pictureId)]);
+                                    setOpenLigthbox(true);
+                                }
+                            })
+                            .catch(e => message.error(`Parse gallery's picture to photo type failed, ${e}`))
+                            .finally(() => setIsLoading(false));
+                    }
+                })
+                .catch(e => message.error(`Get this gallery failed ,${e}`))
         }
-    }, []);
-    const initGallery = (id: number) => {
-        getGalleryById(id)
-            .then((res: ApiResponse<GalleryType>) => {
-                const galleryResponse = res.data;
-                if (!!galleryResponse) {
-                    setGallery(galleryResponse);
-                    getPhotosAsync(galleryResponse)
-                        .then((photos: PhotoProps[]) => {
-                            setPhotos(photos);
+    }, [id, pictureId]);
 
-                            if (!!pictureId) {
-                                setCurrentPhoto(photos[parseInt(pictureId)]);
-                                setOpenLigthbox(true);
-                            }
-                        }).finally(() => setIsLoading(false));
-                }
-            })
-            .catch(e => e)
-    };
-
-    // Secund, transform images in photos with the same properties in the react-image-gallery's library.
-    const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
-        return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: IsepLifeImage, index: number) =>
-            parsePhoto(img.name, `${img.name}-${index}`)
-        ));
-    };
-    const parsePhoto = (imgUrl: string, imgIndex: string): Promise<PhotoProps> => {
-        return new Promise((resolve, reject) => {
-            let image = new Image();
-            image.src = imgUrl;
-            image.onload = () => resolve({
-                src: imgUrl,
-                width: image.width,
-                height: image.height,
-                key: imgIndex
-            });
-        });
-    };
-
-    // Third, lightbox's functions
     const onCurrentPhotoChange = (photo: PhotoProps, index: number) => {
         setPhotos(photos);
-        window.history.pushState("", "", `/gallery/${id}/picture/${index}`);
+        history.push(`/gallery/${id}/picture/${index}`);
     };
 
     const closeLightbox = () => {
         setOpenLigthbox(false);
-        window.history.pushState("", "", `/gallery/${id}`)
+        history.push(`/gallery/${id}`)
     };
 
     const openLightbox = useCallback((event, { photo, index }) => {
         if (!!photo) {
             setCurrentPhoto(photo);
             setOpenLigthbox(true);
-            window.history.pushState("", "", `/gallery/${id}/picture/${index}`);
+            history.push(`/gallery/${id}/picture/${index}`);
         }
-    }, []);
+    }, [id, pictureId]);
 
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
             <div className="flex flex-row">
                 <Skeleton loading={isLoading} active paragraph={false} className="w-48 mr-2"/>
-                <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery ? gallery.name : ""}</div>
+                <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery && !isLoading ? gallery.name : ""}</div>
             </div>
             <div className="text-xs mt-2 mb-1 flex flex-row items-center">
-                {!!gallery ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
+                {!!gallery && !isLoading ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
                 <Skeleton loading={isLoading} active paragraph={false} className="w-20 mr-2"/>
             </div>
             <div className="flex flex-row bg-white p-1">
                 {
-                    !isLoading
-                        ? <Gallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
-                        : <LoadingGallery/>
+                    isLoading
+                        ? <LoadingGallery/>
+                        : <Gallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
                 }
             </div>
             {
@@ -124,12 +122,7 @@ const CustomGallery: React.FC = () => {
                     )
             }
             {
-                isOpeningLigthbox
-                    ?  <GalleryLigthbox photos={photos}
-                                        onCurrentPhotoChange={onCurrentPhotoChange}
-                                        onClose={closeLightbox}
-                                        currentPhoto={currentPhoto}/>
-                    : ""
+                isOpeningLigthbox && (<GalleryLigthbox photos={photos} onCurrentPhotoChange={onCurrentPhotoChange} onClose={closeLightbox} currentPhoto={currentPhoto}/>)
             }
         </div>
     );
