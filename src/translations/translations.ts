@@ -3,12 +3,14 @@ import date_en from "./en/date.json";
 import event_en from "./en/event.json";
 import common_en from "./en/common.json";
 import gallery_en from "./en/gallery.json";
+import user_en from "./en/user.json";
 
 import login_fr from "./fr/login.json";
 import date_fr from "./fr/date.json";
 import event_fr from "./fr/event.json";
 import common_fr from "./fr/common.json";
 import gallery_fr from "./fr/gallery.json";
+import user_fr from "./fr/user.json";
 
 export const en = {
     login: login_en,
@@ -16,6 +18,7 @@ export const en = {
     common: common_en,
     event: event_en,
     gallery: gallery_en,
+    user: user_en
 };
 export const fr = {
     login: login_fr,
@@ -23,6 +26,7 @@ export const fr = {
     common: common_fr,
     event: event_fr,
     gallery: gallery_fr,
+    user: user_fr
 };
 
 const translations = {
