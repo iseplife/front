@@ -1,15 +1,24 @@
 import React, {useEffect, useState} from "react";
 import {getPublishersThumbnail} from "../../data/post";
-import {Avatar, Dropdown, Menu} from "antd";
+import {Avatar, Select} from "antd";
 import {useSelector} from "react-redux";
 import {AppState} from "../../redux/types";
 import {Author} from "../../data/request.type";
 import Loading from "./Loading";
 
+import './AvatarPicker.css';
 
 
-const PublisherList: React.FC = () => {
-    const [loading, setLoading] = useState<boolean>();
+const {Option} = Select;
+
+interface AvatarPickerProps {
+    callback: (id?: number) => void
+    className: string
+}
+
+const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, className}) => {
+    const userThumb = useSelector((state: AppState) => state.user.photoUrlThumb);
+    const [loading, setLoading] = useState<boolean>(true);
     const [publishers, setPublishers] = useState<Author[]>([]);
 
     /**
@@ -23,39 +32,26 @@ const PublisherList: React.FC = () => {
         }).finally(() => setLoading(false));
     }, []);
 
+
+    //TODO: when migrate to ant.d v4 remove css and use borderless props
     return (
-        <Menu className="overflow-y-auto overflow-x-hidden" style={{maxHeight: "12rem"}}>
+        <Select
+            id="avatar-select"
+            showArrow={false}
+            defaultValue={0}
+            dropdownClassName="w-auto"
+            onChange={(value: number) => callback(value || undefined)}
+        >
+            <Option value={0}><Avatar icon="user" src={userThumb} size="small"/> moi</Option>
             {loading ?
-                <Menu.Item> <Loading size="lg"/> </Menu.Item> :
+                <Option value="loading" disabled> <Loading size="lg"/> </Option> :
                 publishers.map(p => (
-                    <Menu.Item key={p.id}><Avatar icon="user" src={p.thumbnail} size="small"/> {p.name}</Menu.Item>
+                    <Option key={p.id} value={p.id}>
+                        <Avatar icon="user" src={p.thumbnail} size="small"/> {p.name}
+                    </Option>
                 ))
             }
-        </Menu>
-    )
-};
-
-interface AvatarPickerProps {
-    callback: (id?: number) => void
-    className: string
-}
-
-const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, className}) => {
-    const userThumb = useSelector((state: AppState) => state.user.photoUrlThumb);
-    const [selected, setSelected] = useState<Author>();
-
-
-    /**
-     * Return selected author's id through callback
-     */
-    useEffect(() => {
-        // callback(selected.id);
-    }, [selected, callback]);
-
-    return (
-        <Dropdown overlay={PublisherList({})} trigger={["click"]} placement="bottomRight">
-            <Avatar icon="user" src={selected?.thumbnail} className="cursor-pointer mr-3" size="small"/>
-        </Dropdown>
+        </Select>
     )
 };
 

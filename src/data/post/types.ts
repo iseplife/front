@@ -1,4 +1,3 @@
-import {Student} from "../student/types";
 import {Club} from "../club/type";
 import {Author} from "../request.type";
 
