@@ -3,6 +3,7 @@ import {IconFA} from "../Common/IconFA";
 import  {PostCreation} from "../../data/post/types";
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik";
 import {message} from "antd";
+import AvatarPicker from "../Common/AvatarPicker";
 
 type FormValues = {
     description: string
@@ -12,7 +13,7 @@ type FormValues = {
     linkedClub?: number
 }
 
-const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting}) => {
+const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, values}) => {
     return (
         <Form className="flex flex-col items-center">
             <div className="flex flex-col bg-white rounded-lg w-4/6 h-20 py-3 px-4 text-gray-500">
@@ -22,7 +23,9 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting}) => {
                         <IconFA name="fa-images" className="cursor-pointer mx-1 hover:text-gray-700"/>
                         <IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/>
                     </div>
-
+                    <div className="flex-1 flex justify-end">
+                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3"/>
+                    </div>
                     <div>
                         <button type="submit" className="cursor-pointer hover:text-gray-700" disabled={isSubmitting}>
                             <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid"/>
