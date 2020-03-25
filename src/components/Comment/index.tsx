@@ -1,9 +1,11 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import {Comment as CommentType} from "../../data/thread/types";
 import {Avatar, Icon} from "antd";
 import {toggleThreadLike} from "../../data/thread";
 import CommentList from "./CommentList";
 import EditComment from "./EditComment";
+import {useTranslation} from "react-i18next";
+import {format, isToday} from "date-fns";
 
 
 interface CommentProps {
@@ -14,11 +16,26 @@ interface CommentProps {
 }
 
 const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, handleEdit}) => {
+    const {t} = useTranslation();
     const [liked, setLiked] = useState<boolean>(data.liked);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [showComments, setShowComments] = useState<boolean>(false);
     const [likes, setLikes] = useState<number>(data.likes);
 
+    const publicationDate = useMemo((): string => {
+        let lastDate;
+        let dateString = "";
+        if (data.lastEdition) {
+            lastDate = new Date(data.lastEdition);
+            dateString = t("edited_last_at");
+        } else {
+            lastDate = new Date(data.creation);
+        }
+
+        return dateString + (isToday(lastDate) ?
+            format(lastDate, "HH:mm") :
+            format(lastDate, "HH:mm dd/MM/yy"));
+    }, [data.creation, data.lastEdition]);
 
     const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id);
@@ -31,8 +48,9 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     return (
         <div className="flex flex-col my-3">
             <div className="flex flex-col justify-between bg-gray-100 rounded p-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <Avatar icon="user" src={data.author.thumbnail} size="small" className="mr-3"/>
+                    <span className="text-xs flex-1 text-right mr-3">{publicationDate}</span>
                     {data.hasWriteAccess &&
                     <div className="flex items-center">
                         <Icon type="edit"
@@ -69,7 +87,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 {allowReplies &&
                 <span className="flex items-center cursor-pointer hover:text-indigo-400">
                         {data.comments !== 0 && data.comments}
-                    <Icon type="message" className="ml-1" onClick={() => setShowComments(true)}/>
+                    <Icon type="message" className="ml-1" onClick={() => setShowComments(!showComments)}/>
                 </span>
                 }
             </div>

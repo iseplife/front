@@ -20,5 +20,7 @@
   "setting": "Paramètres",
   "logout": "Se déconnecter",
   "save": "Sauvegarder",
-  "write_comment": "Ecris ton commentaire..."
+  "write_comment": "Ecris ton commentaire...",
+  "published_at": "publié à ",
+  "edited_last_at": "dernière modification à "
 }

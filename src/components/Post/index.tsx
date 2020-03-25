@@ -43,7 +43,7 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
         <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-row justify-end items-center">
                 <div className="mx-2">
-                    <span className="mx-2 text-xs">Publié à </span>
+                    <span className="mx-2 text-xs">{t("published_at")} </span>
                     <input type="time" name="publication-time"
                            defaultValue={format(formik.values.publicationDate, "HH:mm")}
                            onChange={(e) => {
@@ -146,7 +146,8 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     <div className="flex flex-row justify-end items-center">
                         {!isPast(data.publicationDate) &&
                         <span
-                            className="mx-2 text-xs"> Publié à {format(new Date(data.publicationDate), "HH:mm dd/MM/yy")}</span>
+                            className="mx-2 text-xs"> { t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
+                            " dd/MM/yy")}</span>
                         }
                         {data.private && <Icon type="lock"/>}
                     </div>
