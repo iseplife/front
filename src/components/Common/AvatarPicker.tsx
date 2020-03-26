@@ -13,10 +13,11 @@ const {Option} = Select;
 
 interface AvatarPickerProps {
     callback: (id?: number) => void
-    className: string
+    compact?: boolean
+    className?: string
 }
 
-const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, className}) => {
+const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, className}) => {
     const userThumb = useSelector((state: AppState) => state.user.photoUrlThumb);
     const [loading, setLoading] = useState<boolean>(true);
     const [publishers, setPublishers] = useState<Author[]>([]);
@@ -38,21 +39,27 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, className}) => {
         <Select
             id="avatar-select"
             showArrow={false}
+            optionLabelProp={compact ? "label" : "children"}
             defaultValue={0}
             dropdownClassName="w-auto"
             onChange={(value: number) => callback(value || undefined)}
         >
-            <Option value={0}><Avatar icon="user" src={userThumb} size="small"/> moi</Option>
+            <Option value={0} label={<Avatar icon="user" src={userThumb} size="small"/>}><Avatar icon="user" src={userThumb} size="small"/> moi</Option>
             {loading ?
                 <Option value="loading" disabled> <Loading size="lg"/> </Option> :
                 publishers.map(p => (
-                    <Option key={p.id} value={p.id}>
+                    <Option key={p.id} value={p.id} label={<Avatar icon="user" src={p.thumbnail} size="small"/>}>
                         <Avatar icon="user" src={p.thumbnail} size="small"/> {p.name}
                     </Option>
                 ))
             }
         </Select>
     )
+};
+
+AvatarPicker.defaultProps = {
+    className: "",
+    compact: false
 };
 
 export default AvatarPicker

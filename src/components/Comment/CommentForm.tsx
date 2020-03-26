@@ -1,16 +1,13 @@
 import React, {useState} from "react";
-import {Avatar} from "antd";
-import {useSelector} from "react-redux";
-import {AppState} from "../../redux/types";
 import {useFormik} from "formik";
 import {IconFA} from "../Common/IconFA";
 import {useTranslation} from "react-i18next";
+import AvatarPicker from "../Common/AvatarPicker";
 
 interface CommentFormProps {
     handleUpload: (message: string) => Promise<void>
 }
 const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
-    const thumbnail = useSelector((state: AppState) => state.user.photoUrlThumb);
     const {t} = useTranslation();
     const [isSubmitting, setSubmitting] = useState<boolean>(false);
 
@@ -29,7 +26,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-200 flex px-2 py-1 mt-3">
-            <Avatar icon="user" src={thumbnail} size="small" className="mr-3"/>
+            <AvatarPicker callback={(id) => {}} compact/>
             <input id="message"
                    placeholder={t("write_comment")}
                    className="message border-none flex-1 bg-transparent"
