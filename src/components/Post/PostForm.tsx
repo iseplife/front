@@ -1,6 +1,6 @@
 import React from "react";
 import {IconFA} from "../Common/IconFA";
-import  {PostCreation} from "../../data/post/types";
+import {PostCreation} from "../../data/post/types";
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik";
 import {Divider, message} from "antd";
 import AvatarPicker from "../Common/AvatarPicker";
@@ -17,7 +17,8 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, 
     return (
         <Form className="flex flex-col items-center">
             <div className="flex flex-col bg-white rounded-lg w-4/6 h-20 py-3 px-4 text-gray-500">
-                <Field type="textarea" name="description" placeholder="What's on your mind ?" className="text-gray-800 flex-1 bg-transparent resize-none"/>
+                <Field type="textarea" name="description" placeholder="What's on your mind ?"
+                       className="text-gray-800 flex-1 bg-transparent resize-none"/>
                 <div className="flex justify-between">
                     <div className="flex items-center">
                         <IconFA name="fa-images" className="cursor-pointer mx-1 hover:text-gray-700"/>
@@ -25,10 +26,14 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, 
                     </div>
                     <div className="flex-1 flex justify-end items-center">
                         <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3"/>
-                        <Divider type="vertical" />
+                        <Divider type="vertical"/>
                     </div>
                     <div className="flex items-center">
-                        <button type="submit" className="cursor-pointer hover:text-gray-700" disabled={isSubmitting}>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting || !values.description.length}
+                            className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
+                        >
                             <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid"/>
                         </button>
                     </div>
@@ -55,7 +60,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
 
     validate: (values: FormValues) => {
         let errors: FormikErrors<any> = {};
-        if (!values.description) {
+        if (!values.description.length) {
             errors.description = 'Required';
         }
         return errors;
@@ -63,7 +68,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
 
     handleSubmit: async (values, {props, resetForm}) => {
         const success = await props.sendPost(values);
-        if(success) {
+        if (success) {
             resetForm({});
             message.success("Post publié !");
         }
