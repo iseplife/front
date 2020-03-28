@@ -44,8 +44,8 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
                 })
                 break
             case "DOWN":
-                setDownLoader(prevState => ({...prevState, loading: true}))
-                downCallback(downLoader.count).then(over => {
+                setDownLoader(prevState => ({...prevState, loading: true}));
+                downCallback(0).then(over => {
                     setDownLoader({
                         over,
                         fetch: false,
@@ -57,6 +57,10 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
         }
     }, [upCallback, downCallback, watch])
 
+    /**
+     * Init listener on scroller according on which way we're listening,
+     * remove listener on unmount
+     */
     useEffect(() => {
         function scrollerListener(this: HTMLElement) {
             // Trigger event loader when top of page is almost reached

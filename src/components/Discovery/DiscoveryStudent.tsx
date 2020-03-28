@@ -64,13 +64,19 @@ const DiscoveryStudent: React.FC = () => {
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
         const res = await searchStudents("", filter.promos.toString(), page);
-        const parsedResults = parseSearchResults(res.data.content);
+        if(res.status === 200) {
+            const parsedResults = parseSearchResults(res.data.content);
 
-        setStudents(prevState => [...prevState, ...parsedResults]);
-        setFilteredStudents(prevState => [...prevState, ...parsedResults.filter(filterFn)]);
-        return res.data.last;
-    }, [filter.promos, filterFn]);
+            setStudents(prevState => [...prevState, ...parsedResults]);
+            setFilteredStudents(prevState => [...prevState, ...parsedResults.filter(filterFn)]);
+            return res.data.last;
+        }
+        return false;
+    }, [filter.promos.length, filterFn]);
 
+    /**
+     * Get all available promotions on component first load
+     */
     useEffect(() => {
         getAllPromo().then(res => {
             setPromos(res.data);
@@ -81,7 +87,6 @@ const DiscoveryStudent: React.FC = () => {
      * Filter Update
      */
     useEffect(() => {
-
         setFilteredStudents(students.filter(filterFn));
     }, [filterFn, filter.promos.length]);
 
