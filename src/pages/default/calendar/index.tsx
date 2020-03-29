@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
-import EventsScroller from "../../components/Event/EventsScroller";
+import EventsScroller from "../../../components/Event/EventsScroller";
 import Calendar from 'react-calendar'
 import {useTranslation} from "react-i18next";
-import {EventFilter, EventMap, EventPreview, FilterList, FilterReducerAction} from "../../data/event/types";
-import EventsFilter from "../../components/Event/EventsFilter";
-import Types from "../../constants/EventTypes"
-import {loaderCallback} from "../../components/Common/InfiniteScroller";
-import {getEventsAround, getNextEvents, getPreviousEvents} from "../../data/event";
+import {EventFilter, EventMap, EventPreview, FilterList, FilterReducerAction} from "../../../data/event/types";
+import EventsFilter from "../../../components/Event/EventsFilter";
+import Types from "../../../constants/EventTypes"
+import {loaderCallback} from "../../../components/Common/InfiniteScroller";
+import {getEventsAround, getNextEvents, getPreviousEvents} from "../../../data/event";
 
 const initFilter = (events: EventPreview[]): EventFilter => {
     const feeds = Array.from(new Set(events.map(e => e.target)));

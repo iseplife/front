@@ -45,6 +45,8 @@ export const getUser = (): TokenPayload => {
     throw new Error("Auth cookies missing");
 };
 
+export const isAdmin = (): boolean => hasRole(["ROLE_ADMIN"]);
+
 export const hasRole = (roles: Array<string>) => {
     const user = getUser();
     return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0);
