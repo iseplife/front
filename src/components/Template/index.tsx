@@ -36,7 +36,7 @@ const Template: React.FC = () => {
         <Provider store={store}>
             <Interceptor/>
                 <Switch>
-                    <Route path="/admin/" render={({location}) =>
+                    <Route path="/admin" render={({location}) =>
                         (
                             isAdmin() ?
                                 <AdminTemplate/>

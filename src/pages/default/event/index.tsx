@@ -11,8 +11,8 @@ import {Event as EventType, EventPreview as PreviewType} from "../../../data/eve
 import './Event.css';
 import {Avatar, Icon} from "antd";
 import {useTranslation} from "react-i18next";
-import Feed from "../../components/Feed";
-import EventPreview from "../../components/Event/Preview";
+import Feed from "../../../components/Feed";
+import EventPreview from "../../../components/Event/Preview";
 
 
 const Event: React.FC = () => {
