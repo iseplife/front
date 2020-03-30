@@ -1,7 +1,7 @@
 import {Checkbox, Divider, Input, Select, Spin} from "antd";
 import React, {useEffect, useState} from "react";
 import * as querystring from "querystring";
-import {searchClub} from "../../data/searchbar";
+import {globalSearch, searchClub} from "../../data/searchbar";
 import CheckboxGroup from "antd/es/checkbox/Group";
 
 const {Option, OptGroup} = Select;
@@ -40,7 +40,7 @@ const SearchBar: any = () => {
     };
 
     const updateSearchItems = (queryParams: string) => {
-        searchClub(queryParams).then(res => {
+        globalSearch(queryParams, 0).then(res => {
             // You need to create the SearchItem type
             const searchItems: SearchItem[] = res.data;
 
