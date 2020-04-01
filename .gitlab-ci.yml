@@ -1,5 +1,10 @@
+image: docker:latest
+services:
+  - docker:dind
+
 stages:
   - build
+  - package
   - deploy
 
 cache:
@@ -7,15 +12,29 @@ cache:
     - .yarn
     - node_modules/
 
-build:
+react-build:
   stage: build
-  image: node:latest
+  image: node:12.0.0
   artifacts:
     paths:
-      - build
-
+      - build/
   script:
     - yarn install --frozen-lockfile
     - yarn run build:dev
   only:
     - master
+    - feature/ci
+
+
+docker-build:
+  stage: package
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/front:$APP_VERSION -t $CI_REGISTRY_IMAGE/front:latest .
+    - docker push $CI_REGISTRY_IMAGE/front:$APP_VERSION
+    - docker push $CI_REGISTRY_IMAGE/front:latest
+  dependencies:
+    - react-build
+  only:
+    - master
+
