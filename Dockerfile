@@ -1,6 +1,7 @@
-FROM nginx:alpine
-RUN rm -rf /etc/nginx/conf.d
-COPY conf /etc/nginx
-COPY --from=builder /usr/src/app/build /etc/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM nginx:1.17-alpine
+
+# custom config
+COPY nginx.conf /etc/nginx/conf.d/default.conf 
+
+# resources
+COPY build /usr/share/nginx/html
