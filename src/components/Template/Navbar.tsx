@@ -1,12 +1,13 @@
 import React, {useMemo, useState} from "react";
 
-import {Dropdown, Avatar, Menu, Button, Drawer, Icon} from "antd";
+import {Avatar, Button, Drawer, Dropdown, Icon, Menu} from "antd";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useSelector} from 'react-redux'
 import {AppState} from "../../redux/types";
 import {Student} from "../../data/student/types";
 import "./Navbar.css"
+import {Roles} from "../../data/security/types";
 
 type IconButtonProps = {
     name: string
@@ -22,7 +23,7 @@ const IconButton: React.FC<IconButtonProps> = ({name}) => {
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
     const payload = useSelector((state: AppState) => state.payload);
     const {t} = useTranslation();
-    const isAdmin = useMemo(() => payload.roles.includes("ROLE_ADMIN"), [payload.roles]);
+    const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles]);
     return (
         <Menu>
             <Menu.Item key={0} className="font-bold profile-name">
@@ -118,13 +119,13 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                 visible={visible}
             >
                 <div className="flex justify-around">
-                    {payload.roles.includes("ROLE_ADMIN") &&
+                    {payload.roles.includes(Roles.ADMIN) &&
                     <>
                         <DrawerItem icon="book">{t('create_feed')}</DrawerItem>
                         <DrawerItem icon="usergroup-add">{t('create_club')}</DrawerItem>
                     </>
                     }
-                    {(payload.roles.includes("ROLE_ADMIN") || payload.clubsPublisher.length > 0) &&
+                    {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
                     <DrawerItem icon="notification">{t('create_event')}</DrawerItem>
                     }
                     <DrawerItem icon="export" className="text-red-600">{t('logout')}</DrawerItem>

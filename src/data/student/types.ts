@@ -15,9 +15,9 @@ export interface Student {
     snapchat?: string
 
 
-    photoUrl?: string
-    photoUrlThumb?: string
-    bio?: string
-    archived: boolean
-    rolesValues: string[]
-}
+    photoUrl?: string;
+    photoUrlThumb?: string;
+    bio?: string;
+    archived: boolean;
+    flatRoles?: String[];
+};

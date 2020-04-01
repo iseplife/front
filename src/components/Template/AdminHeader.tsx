@@ -1,42 +1,10 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {AppState} from "../../redux/types";
-import {Avatar, Button, Dropdown, Icon, Menu} from "antd";
+import {Avatar, Button, Icon} from "antd";
 import {Link} from "react-router-dom";
-import {Student} from "../../data/student/types";
 
-interface HeaderDropdownProps {
-    user: Student
-}
-
-const {Item} = Menu;
-const HeaderDropdown: React.FC<HeaderDropdownProps> = ({user}) => {
-    return (
-        <Menu>
-            <Item className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                    <Avatar icon="user" src={user.photoUrlThumb} className=""/>
-                </div>
-                <div className="ml-3">
-                    <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + ' ' + user.lastName}</div>
-                    <div className="mt-1 text-sm font-medium leading-none text-gray-400">{user.id + ' - ' + user.promo}</div>
-                </div>
-            </Item>
-            <Menu.Divider />
-            <Item>
-                <Link to="/admin/user">Utilisateurs</Link>
-            </Item>
-            <Item>
-                <Link to="/admin/club">Associations</Link>
-            </Item>
-            <Item>
-                <Link to="/admin/survey">Votes</Link>
-            </Item>
-        </Menu>
-    )
-};
-
-const Header: React.FC = () => {
+const AdminHeader: React.FC = () => {
     const user = useSelector((state: AppState) => state.user);
     const [open, setOpen] = useState<boolean>(false);
 
@@ -61,7 +29,7 @@ const Header: React.FC = () => {
                 <div className="pt-4 pb-3 border-t border-gray-200">
                     <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                            <Avatar icon="user" src={user.photoUrlThumb} className=""/>
+                            <Avatar icon="user" src={user.photoUrlThumb} />
                         </div>
                         <div className="ml-3">
                             <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + ' ' + user.lastName}</div>
@@ -89,4 +57,4 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default AdminHeader;

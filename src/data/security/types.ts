@@ -19,8 +19,14 @@ export interface RefreshToken {
 
 export interface TokenPayload {
     id: number,
-    roles: Array<string>,
+    roles: Roles[],
     clubsAdmin: Array<number>,
     clubsPublisher: Array<number>,
     feed: Array<string>
+}
+
+export enum Roles {
+    ADMIN = "ROLE_ADMIN",
+    STUDENT= "ROLE_STUDENT",
+    LEAD_BDE = "ROLE_BDE"
 }

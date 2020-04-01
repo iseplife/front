@@ -1,4 +1,4 @@
-import {Token, TokenPayload, TokenSet} from './types';
+import {Roles, Token, TokenPayload, TokenSet} from './types';
 import axios from 'axios';
 import {getCookie, removeCookie, setCookie} from "./cookie";
 
@@ -45,9 +45,9 @@ export const getUser = (): TokenPayload => {
     throw new Error("Auth cookies missing");
 };
 
-export const isAdmin = (): boolean => hasRole(["ROLE_ADMIN"]);
+export const isAdmin = (): boolean => hasRole([Roles.ADMIN]);
 
-export const hasRole = (roles: Array<string>) => {
+export const hasRole = (roles: Array<Roles>) => {
     const user = getUser();
     return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0);
 };

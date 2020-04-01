@@ -12,7 +12,7 @@ import Navbar from "./Navbar";
 
 const DefaultTemplate: React.FC = () => {
     return (
-            <div className="h-full">
+            <div className="h-full overflow-hidden">
                 <Navbar>
                     <div id="main" className="h-full overflow-y-auto bg-gray-100"
                          style={{height: "calc(100% - 3rem)"}}>
