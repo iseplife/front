@@ -1,0 +1,22 @@
+/* width */
+ .customScrollbar::-webkit-scrollbar {
+   width: 7px;
+ }
+
+ /* Track */
+ .customScrollbar::-webkit-scrollbar-track {
+   background: #fafafa;
+   border-radius: 1rem;
+
+ }
+
+ /* Handle */
+ .customScrollbar::-webkit-scrollbar-thumb {
+   background: #AAA;
+   border-radius: 1rem;
+ }
+
+ /* Handle on hover */
+ .customScrollbar::-webkit-scrollbar-thumb:hover {
+   background: #888;
+ }
