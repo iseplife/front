@@ -1,0 +1,8 @@
+{
+  "galleries": "Galleries",
+  "about": "Description",
+  "pictures": "photos",
+  "errorFileType": "Vous pouvez seulement télécharger les fichiers de type JPG/PNG/GIF !",
+  "errorFileSize": "Votre image ne doit pas dépasser 2MB !"
+
+}

@@ -1,0 +1,7 @@
+{
+  "galleries": "Galleries",
+  "about": "About",
+  "pictures": "pictures",
+  "errorFileType": "You can only upload JPG/PNG/GIF file!",
+  "errorFileSize": "Image must smaller than 2MB!"
+}
