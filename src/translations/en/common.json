@@ -19,5 +19,8 @@
   "cancel": "Cancel",
   "setting": "Settings",
   "logout": "Disconnect",
-  "save": "Save"
+  "save": "Save",
+  "write_comment": "Write your comment...",
+  "published_at": "published at ",
+  "edited_last_at": "last edited at "
 }

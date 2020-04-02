@@ -1,0 +1,7 @@
+#avatar-select > * {
+    border: none
+}
+
+#avatar-select > *:focus {
+   box-shadow: none
+}

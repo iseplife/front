@@ -2,11 +2,12 @@ import React, {useCallback, useState} from "react";
 import {Post as PostType, PostUpdate} from "../../data/post/types";
 import Embed from "./Embed";
 import EmbedType from "../../constants/EmbedType";
-import {Avatar, Icon, message, Modal} from "antd";
+import {Avatar, Divider, Icon, message, Modal} from "antd";
 import {useTranslation} from "react-i18next";
 import {toggleThreadLike} from "../../data/thread";
 import {format, isPast} from "date-fns";
 import {useFormik} from "formik";
+import CommentList from "../Comment/CommentList";
 
 type PostProps = {
     data: PostType
@@ -42,7 +43,7 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
         <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-row justify-end items-center">
                 <div className="mx-2">
-                    <span className="mx-2 text-xs">Publié à </span>
+                    <span className="mx-2 text-xs">{t("published_at")} </span>
                     <input type="time" name="publication-time"
                            defaultValue={format(formik.values.publicationDate, "HH:mm")}
                            onChange={(e) => {
@@ -95,6 +96,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
     const {t} = useTranslation();
     const [liked, setLiked] = useState<boolean>(data.liked);
     const [likes, setLikes] = useState<number>(data.nbLikes);
+    const [showComments, setShowComments] = useState<boolean>(false);
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
             title: t('remove_item.title'),
@@ -123,13 +125,13 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
         });
     }, [data.id, t, onUpdate, onEdit]);
 
-    const toggleLike = async (id: number) => {
+    const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id);
-        if (res.status === 200) {
-            setLikes(liked ? likes - 1 : likes + 1);
-            setLiked(!liked);
+        if(res.status === 200) {
+            setLiked(res.data);
+            setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1);
         }
-    };
+    }, []);
 
 
     return (
@@ -144,7 +146,8 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     <div className="flex flex-row justify-end items-center">
                         {!isPast(data.publicationDate) &&
                         <span
-                            className="mx-2 text-xs"> Publié à {format(new Date(data.publicationDate), "HH:mm dd/MM/yy")}</span>
+                            className="mx-2 text-xs"> { t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
+                            " dd/MM/yy")}</span>
                         }
                         {data.private && <Icon type="lock"/>}
                     </div>
@@ -157,9 +160,9 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 </>
             }
             <div className="flex flex-row justify-between mt-2">
-                <Avatar icon="user" src={data.linkedClub?.logoUrl || data.author.photoUrlThumb}/>
+                <Avatar icon="user" src={data.author.thumbnail}/>
                 <div className="flex items-center">
-                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
                         {data.nbComments} <Icon type="message" className="ml-1"/>
                     </span>
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
@@ -178,6 +181,12 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     }
                 </div>
             </div>
+            { showComments && (
+                <>
+                    <Divider />
+                    <CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
+                </>
+            )}
         </div>
     );
 };
