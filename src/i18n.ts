@@ -17,10 +17,8 @@ i18n
         interpolation: {
             escapeValue: false // react already safes from xss
         }
-    }).then(r => null);
+    });
 
-i18n.on('languageChanged', (lng) => {
-        localStorage.setItem('lng', lng)
-});
+i18n.on('languageChanged', (lng) => localStorage.setItem('lng', lng));
 
 export default i18n;
