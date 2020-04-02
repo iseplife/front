@@ -14,6 +14,7 @@ import {isLoggedIn} from "./data/security";
 import Template from "./components/Template";
 
 initializeAxios();
+
 const App: React.FC = () => {
     return (
        <Router>
