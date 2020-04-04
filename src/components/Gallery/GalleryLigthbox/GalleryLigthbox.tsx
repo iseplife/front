@@ -19,33 +19,11 @@ const slideRigth = (carouselRef: RefObject<Carousel>): void => {
 
 // Carousel slide with keyboard control
 const handleKeyboardPressAction = (carouselRef: RefObject<Carousel>, event: any) => {
-    if (event.key === "ArrowLeft") { slideLeft(carouselRef);}
-    if (event.key === "ArrowRight") { slideRigth(carouselRef);}
-};
-const arrowKeyboardPressEvent$ = (carouselRef: RefObject<Carousel>) => {
-    window.addEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
-    return () => window.removeEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
-};
-
-// Manage scroll of dots on the lightbox
-const scrollAutomaticallyDots = (dotListRef: RefObject<HTMLUListElement>) => {
-    if (!!dotListRef.current) {
-        const dots = dotListRef.current.children;
-        for (let i = 0; i < dots.length; i++) {
-            const dot = dots.item(i);
-            if (!!dot && dot.classList.contains("slick-active")) {
-                dot.scrollIntoView({behavior: "smooth"});
-                break;
-
-            }
-        }
+    if (event.key === "ArrowLeft") {
+        slideLeft(carouselRef);
     }
-};
-
-// Clear interval between slide for autoPlay
-const clearIntervalAutoplayLoop = (autoPlayInterval: NodeJS.Timeout | undefined) => {
-    if (!!autoPlayInterval) {
-        clearInterval(autoPlayInterval);
+    if (event.key === "ArrowRight") {
+        slideRigth(carouselRef);
     }
 };
 
@@ -56,6 +34,8 @@ export type GalleryLigthboxProps = {
     onClose(): void;
 }
 
+const TIME_PER_SLIDE = 200;
+
 const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, onCurrentPhotoChange, onClose}) => {
     const {t} = useTranslation('gallery');
     const [autoPlay, setAutoPlay] = useState<boolean>(false);
@@ -63,14 +43,46 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
     const carouselRef = useRef<Carousel>(null);
     const dotListRef = useRef<HTMLUListElement>(null);
 
-    useLayoutEffect(() => arrowKeyboardPressEvent$(carouselRef), []);
+    /**
+     * Set up event listener on keyboard arrows on first load
+     */
+    useLayoutEffect(() => {
+        window.addEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
 
-    useEffect(() => scrollAutomaticallyDots(dotListRef), []);
+        return () => {
+            window.removeEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
+        }
+    }, []);
 
-    useEffect(() => autoPlay
-        ? setAutoPlayInterval(setInterval(() => slideRigth(carouselRef), 2000))
-        : clearIntervalAutoplayLoop(autoPlayInterval)
-    , [autoPlay]);
+    /**
+     *  Set up scroll managements of dots on the lightbox on first load
+     */
+    useEffect(() => {
+        if (!!dotListRef.current) {
+            const dots = dotListRef.current.children;
+            for (let i = 0; i < dots.length; i++) {
+                const dot = dots.item(i);
+                if (!!dot && dot.classList.contains("slick-active")) {
+                    dot.scrollIntoView({behavior: "smooth"});
+                    break;
+
+                }
+            }
+        }
+    }, []);
+
+    /**
+     * Starts setInterval when enabling autoPlay and disable it when autoplay is turned off
+     */
+    useEffect(() => {
+        if (autoPlay) {
+            setAutoPlayInterval(setInterval(() => slideRigth(carouselRef), TIME_PER_SLIDE));
+
+            return () => clearInterval(autoPlayInterval as NodeJS.Timeout);
+        } else {
+            clearInterval(autoPlayInterval as NodeJS.Timeout)
+        }
+    }, [autoPlay]);
 
     const carouselProps: CarouselProps = {
         dots: true,
@@ -84,12 +96,14 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
         afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex], currentSlideIndex),
         customPaging: (i: number) => (
             <Button className="w-10 h-10 bg-transparent">
-                <Avatar src={photos[i].src} shape="square" size="large" className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"/>
+                <Avatar src={photos[i].src} shape="square" size="large"
+                        className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"/>
             </Button>
         ),
         appendDots: (dots: React.ReactNode) => (
             <div className="pb-4">
-                <ul ref={dotListRef} className={"w-3/4 mx-auto overflow-x-scroll overflow-y-hidden mb-0 h-14 whitespace-no-wrap " + style.customScrollBar}>
+                <ul ref={dotListRef}
+                    className={"w-3/4 mx-auto overflow-x-scroll overflow-y-hidden mb-0 h-14 whitespace-no-wrap " + style.customScrollBar}>
                     {dots}
                 </ul>
             </div>
@@ -103,7 +117,8 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
             </div>
             <div className={"w-full flex flex-row items-center " + style.galleryLightboxBody}>
                 <div className="m-4 absolute z-30 text-center left-0  hidden sm:block md:block lg:block">
-                    <Icon type="left" onClick={() => slideLeft(carouselRef)} className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
+                    <Icon type="left" onClick={() => slideLeft(carouselRef)}
+                          className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
                 </div>
                 <div className="w-full p-4">
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
@@ -122,12 +137,17 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                     </Carousel>
                 </div>
                 <div className="m-4 text-center absolute z-30 right-0 hidden sm:block md:block lg:block">
-                    <Icon type="right" onClick={() => slideRigth(carouselRef)} className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full" />
+                    <Icon type="right" onClick={() => slideRigth(carouselRef)}
+                          className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
                 </div>
             </div>
             <div className="mx-auto flex h-20 items-center">
-                <Button type="default" icon={autoPlay ? "pause-circle" : "play-circle"} onClick={() => setAutoPlay(!autoPlay)} className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? `${t("stop")}` : `${t("play")}`}</Button>
-                <Button type="default" icon="download" className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900" href={!!currentPhoto ? currentPhoto.src : ""}
+                <Button type="default" icon={autoPlay ? "pause-circle" : "play-circle"}
+                        onClick={() => setAutoPlay(!autoPlay)}
+                        className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? `${t("stop")}` : `${t("play")}`}</Button>
+                <Button type="default" icon="download"
+                        className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900"
+                        href={!!currentPhoto ? currentPhoto.src : ""}
                         download={`@prodIsepLife/${!!currentPhoto ? currentPhoto.src : "undefined"}`}>{t("download")}</Button>
             </div>
         </div>
