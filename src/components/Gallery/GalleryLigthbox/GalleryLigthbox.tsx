@@ -17,15 +17,6 @@ const slideRigth = (carouselRef: RefObject<Carousel>): void => {
     }
 };
 
-// Carousel slide with keyboard control
-const handleKeyboardPressAction = (carouselRef: RefObject<Carousel>, event: any) => {
-    if (event.key === "ArrowLeft") {
-        slideLeft(carouselRef);
-    }
-    if (event.key === "ArrowRight") {
-        slideRigth(carouselRef);
-    }
-};
 
 export type GalleryLigthboxProps = {
     photos: PhotoProps[];
@@ -47,11 +38,18 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
      * Set up event listener on keyboard arrows on first load
      */
     useLayoutEffect(() => {
+        // Carousel slide with keyboard control
+        const handleKeyboardPressAction = (carouselRef: RefObject<Carousel>, event: any) => {
+            if (event.key === "ArrowLeft") {
+                slideLeft(carouselRef);
+            }
+            if (event.key === "ArrowRight") {
+                slideRigth(carouselRef);
+            }
+        };
         window.addEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
 
-        return () => {
-            window.removeEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
-        }
+        return () => window.removeEventListener('keydown', (e) => handleKeyboardPressAction(carouselRef, e));
     }, []);
 
     /**
