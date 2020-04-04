@@ -12,4 +12,8 @@ const Loading: React.FC<LoadingProps> = (p) => (
     </div>
 );
 
+Loading.defaultProps = {
+    className: ""
+};
+
 export default Loading;
