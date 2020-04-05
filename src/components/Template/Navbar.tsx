@@ -35,16 +35,16 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 <Link to="/feed/new">{t("create_feed")}</Link>
             </Menu.Item>
             }
-            {isAdmin &&
-            <Menu.Item key={2} className="flex justify-start items-center">
-                <Icon type="usergroup-add"/>
-                <Link to="/club/new">{t("create_club")}</Link>
-            </Menu.Item>
-            }
             {(isAdmin || payload.clubsPublisher.length > 0) &&
             <Menu.Item key={3} className="flex justify-start items-center">
-                <Icon type="notification"/>
+                <Icon type="setting"/>
                 <Link to="/event/new">{t("create_event")}</Link>
+            </Menu.Item>
+            }
+            {isAdmin &&
+            <Menu.Item key={2} className="flex justify-start items-center">
+                <Icon type="key"/>
+                <Link to="/admin">{t("administration")}</Link>
             </Menu.Item>
             }
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}

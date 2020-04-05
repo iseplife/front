@@ -1,28 +1,27 @@
-import React, {useEffect, useState} from "react";
-import {getStudent} from "../../data/student";
+import React, {useCallback, useEffect, useState} from "react";
+import {
+    createStudent,
+    deleteStudent,
+    getStudent,
+    toggleStudentArchiveStatus,
+    updateStudentAdmin
+} from "../../data/student";
 import {Button, Icon, Input, InputNumber, message, Modal, Upload} from "antd";
 import Loading from "../Common/Loading";
 import {useFormik} from "formik";
 import "./Student.css"
-import {Student} from "../../data/student/types";
+import {Student, StudentAdminForm} from "../../data/student/types";
 import {Link} from "react-router-dom";
 import {format} from "date-fns";
-
-const {confirm} = Modal;
+import {useTranslation} from "react-i18next";
 
 
 interface StudentEditorProps {
     id?: string
-}
-
-interface StudentFields {
-    id: number,
-    promo: string,
-    firstName: string,
-    lastName: string,
-    birthDate?: Date,
-    mail?: string,
-    thumbnail?: File
+    onDelete: (id: number) => void
+    onArchive: (id: number, status: boolean) => void
+    onCreate: (student: Student) => void
+    onUpdate: (student: Student) => void
 }
 
 const DEFAULT_USER = {
@@ -34,19 +33,36 @@ const DEFAULT_USER = {
 };
 
 
-const StudentEditor: React.FC<StudentEditorProps> = ({id}) => {
+const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, onCreate, onArchive}) => {
     const [loading, setLoading] = useState<boolean>(false);
+    const {t} = useTranslation();
     const [student, setStudent] = useState<Student>();
     const [thumbnail, setThumbnail] = useState<string>();
     const [uploading, setUploading] = useState<boolean>();
 
-    const formik = useFormik<StudentFields>({
+    const formik = useFormik<StudentAdminForm>({
         initialValues: DEFAULT_USER,
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            // If student is defined then we are editing an user, otherwise we are creating an user
+            let res;
+            if (student) {
+                res = await createStudent(values);
+                if (res.status === 200) {
+                    onCreate(res.data);
+                }
+            } else {
+                res = await updateStudentAdmin(values);
+                if (res.status === 200) {
+                    onUpdate(res.data);
+                }
+            }
         },
     });
 
+    /**
+     * Get student information according with the id props,
+     * this effect is triggered at each new id update.
+     */
     useEffect(() => {
         if (id !== undefined) {
             if (+id) {
@@ -75,6 +91,43 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id}) => {
             formik.resetForm();
         }
     }, [id]);
+
+
+    const remove = useCallback(() => 
+        Modal.confirm({
+            title: t('remove_item.title'),
+            content: t('remove_item.content'),
+            okText: 'Ok',
+            cancelText: t('cancel'),
+            onOk: async () => {
+                const id = (student as Student).id;
+                const res = await deleteStudent(id);
+                if (res.status === 200) {
+                    onDelete(id);
+                    message.info(t('remove_item.complete'));
+                }
+            }
+        }),[onDelete, student, t]);
+
+    const archive = useCallback(() =>
+        {
+            // Tell TS that student is always defined when calling this function
+            const s = (student as Student);
+            Modal.confirm({
+                title: t(`archive_item.${+s.archived}.title`),
+                content: t(`archive_item.${+s.archived}.content`),
+                okText: 'Ok',
+                cancelText: t('cancel'),
+                onOk: async () => {
+                    const res = await toggleStudentArchiveStatus(s.id);
+                    if (res.status === 200) {
+                        onArchive(s.id, res.data);
+                        message.info(t(`archive_item.${+s.archived}.complete`));
+                    }
+                }
+            })
+    }, [onArchive, student, t]);
+
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded w-full md:w-1/3 mx-2 p-6 sticky"
@@ -154,13 +207,13 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id}) => {
                     </div>
 
                     <div className="self-end flex justify-around w-full">
-                        <Button type="primary" className="mt-5" icon="save">
+                        <Button type="primary" className="mt-5" icon="save" onClick={remove}>
                             Enregistrer
                         </Button>
                         {student &&
                         <>
-                            <Button type="primary" className="mt-5" icon="audit">
-                                Archiver
+                            <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
+                                {student.archived ? "Désarchiver": "Archiver"}
                             </Button>
                             <Button type="danger" className="mt-5" icon="delete">
                                 Supprimer

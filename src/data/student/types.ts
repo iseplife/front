@@ -20,4 +20,14 @@ export interface Student {
     bio?: string;
     archived: boolean;
     flatRoles?: String[];
-};
+}
+
+export type StudentAdminForm = {
+    id: number
+    promo: string
+    firstName: string
+    lastName: string
+    birthDate?: Date
+    mail?: string
+    thumbnail?: File
+}

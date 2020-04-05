@@ -1,40 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Student} from "../../data/student/types";
 import {getEducationYear} from "../../util";
 import {Avatar, Pagination} from "antd";
-import {getAllStudents} from "../../data/student";
 import {Link} from "react-router-dom";
 import Loading from "../Common/Loading";
+import {PageStatus} from "../../pages/admin/student";
 
-type PageStatus = {
-    current: number
-    size?: number
-    total?: number
+type StudentTableProps = {
+    page: PageStatus
+    students: Student[]
+    loading: boolean
+    onPageChange: (page: number) => void
 }
 
-const StudentsTable: React.FC = () => {
-    const [students, setStudents] = useState<Student[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<PageStatus>({current: 0});
-
-    /**
-     * Fetch students first page on first load
-     */
-    useEffect(() => {
-        setLoading(true);
-        getAllStudents(page.current).then(res => {
-            if (res.status === 200) {
-                setStudents(res.data.content);
-
-                setPage(prevState => ({
-                    ...prevState,
-                    size: res.data.size,
-                    total: res.data.totalElements
-                }));
-            }
-        }).finally(() => setLoading(false))
-    }, [page.current]);
-
+const StudentsTable: React.FC<StudentTableProps> = ({page, students, loading, onPageChange}) => {
     return (
         <div className="w-full md:w-2/3 mx-2">
             <div>
@@ -134,7 +113,7 @@ const StudentsTable: React.FC = () => {
                 {(page.total || 1) > 1 &&
                     <Pagination
                         className="text-center my-3" 
-                        onChange={page => setPage(state => ({...state, current: page-1}))}
+                        onChange={onPageChange}
                         defaultCurrent={page.current + 1}
                         pageSize={page.size}
                         total={page.total}
