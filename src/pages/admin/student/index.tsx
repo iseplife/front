@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import StudentsTable from "../../../components/Student/StudentsTable";
 import StudentEditor from "../../../components/Student/StudentEditor";
 import {getAllStudentsAdmin} from "../../../data/student";
-import {Student as StudentType} from "../../../data/student/types";
+import {StudentPreviewAdmin} from "../../../data/student/types";
 
 
 export type PageStatus = {
@@ -13,7 +13,7 @@ export type PageStatus = {
 }
 
 const Student: React.FC = () => {
-    const [students, setStudents] = useState<StudentType[]>([]);
+    const [students, setStudents] = useState<StudentPreviewAdmin[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<PageStatus>({current: 0});
 
@@ -52,7 +52,7 @@ const Student: React.FC = () => {
                     onDelete={id => setStudents(students => students.filter(s => s.id !== id))}
                     onCreate={student => setStudents(students => [...students, student])}
                     onUpdate={student => setStudents(students => students.map(s => s.id === student.id ? student : s))}
-                    onArchive={(id, archived) => setStudents(students => students.filter(s => s.id !== id))}
+                    onArchive={student => setStudents(students => students.map(s => s.id === student.id ? student : s))}
                 />
             </div>
         </div>

@@ -1,0 +1,39 @@
+div.ant-upload {
+    display: flex !important;
+    height: 150px !important;
+    width: 150px !important;
+    overflow: hidden;
+    border-radius: 9999px !important;
+}
+
+span.ant-upload {
+    display: flex !important;
+    padding: 0 !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-display:hover {
+    background-color:#000;
+}
+
+.image-display:hover div {
+    opacity: 0.5;
+}
+
+.image-display:hover .image-options {
+    opacity: 1 !important;
+}
+
+.image-options {
+    top: 45%;
+    left: 50%;
+    z-index: 10;
+    white-space: nowrap;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}

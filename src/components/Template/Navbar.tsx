@@ -84,13 +84,16 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 
 type DrawerItemProps = {
     icon: string,
-    className?: string
+    className?: string,
+    link: string
 }
-const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children}) => (
-    <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
-        <Icon type={icon}/>
-        <span className="nav-footer-text">{children}</span>
-    </div>
+const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
+    <Link to={link}>
+        <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
+            <Icon type={icon}/>
+            <span className="nav-footer-text">{children}</span>
+        </div>
+    </Link>
 );
 const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
     const payload = useSelector((state: AppState) => state.payload);
@@ -120,15 +123,12 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
             >
                 <div className="flex justify-around">
                     {payload.roles.includes(Roles.ADMIN) &&
-                    <>
-                        <DrawerItem icon="book">{t('create_feed')}</DrawerItem>
-                        <DrawerItem icon="usergroup-add">{t('create_club')}</DrawerItem>
-                    </>
+                    <DrawerItem icon="key" link="/admin" >{t('administration')}</DrawerItem>
                     }
                     {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
-                    <DrawerItem icon="notification">{t('create_event')}</DrawerItem>
+                    <DrawerItem icon="notification" link="">{t('create_event')}</DrawerItem>
                     }
-                    <DrawerItem icon="export" className="text-red-600">{t('logout')}</DrawerItem>
+                    <DrawerItem icon="export" link="/logout" className="text-red-600">{t('logout')}</DrawerItem>
                 </div>
             </Drawer>
         </>

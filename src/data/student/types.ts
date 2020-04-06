@@ -14,20 +14,41 @@ export interface Student {
     instagram?: string
     snapchat?: string
 
-
-    photoUrl?: string;
-    photoUrlThumb?: string;
-    bio?: string;
-    archived: boolean;
-    flatRoles?: String[];
+    picture?: string
+    photoUrl?: string
+    photoUrlThumb?: string
+    bio?: string
+    archived: boolean
 }
+
+
+export type StudentAdmin = Student & {
+    roles: string[]
+}
+
+export interface StudentPreview {
+    id: number
+    promo: number
+    firstName: string
+    lastName: string
+    picture?: string
+}
+
+export interface StudentPreviewAdmin extends StudentPreview {
+    roles: string[]
+    archived: boolean
+}
+
+
 
 export type StudentAdminForm = {
     id: number
-    promo: string
+    promo: number
     firstName: string
     lastName: string
     birthDate?: Date
     mail?: string
-    thumbnail?: File
+    phone?: string
+    picture?: File,
+    resetPicture?: boolean
 }

@@ -6,30 +6,29 @@ import {
     toggleStudentArchiveStatus,
     updateStudentAdmin
 } from "../../data/student";
-import {Button, Icon, Input, InputNumber, message, Modal, Upload} from "antd";
+import {Button, Divider, Icon, Input, InputNumber, message, Modal} from "antd";
 import Loading from "../Common/Loading";
 import {useFormik} from "formik";
-import "./Student.css"
-import {Student, StudentAdminForm} from "../../data/student/types";
+import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types";
 import {Link} from "react-router-dom";
 import {format} from "date-fns";
 import {useTranslation} from "react-i18next";
+import ImagePicker from "../Common/ImagePicker";
 
 
-interface StudentEditorProps {
+type StudentEditorProps = {
     id?: string
     onDelete: (id: number) => void
-    onArchive: (id: number, status: boolean) => void
-    onCreate: (student: Student) => void
-    onUpdate: (student: Student) => void
+    onArchive: (student: StudentAdmin) => void
+    onCreate: (student: StudentAdmin) => void
+    onUpdate: (student: StudentAdmin) => void
 }
 
 const DEFAULT_USER = {
     id: 0,
-    promo: new Date().getFullYear().toString(),
+    promo: new Date().getFullYear(),
     firstName: "",
     lastName: "",
-    mail: ""
 };
 
 
@@ -37,8 +36,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     const [loading, setLoading] = useState<boolean>(false);
     const {t} = useTranslation();
     const [student, setStudent] = useState<Student>();
-    const [thumbnail, setThumbnail] = useState<string>();
-    const [uploading, setUploading] = useState<boolean>();
 
     const formik = useFormik<StudentAdminForm>({
         initialValues: DEFAULT_USER,
@@ -49,15 +46,24 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 res = await createStudent(values);
                 if (res.status === 200) {
                     onCreate(res.data);
+                    setStudent(res.data);
                 }
             } else {
                 res = await updateStudentAdmin(values);
                 if (res.status === 200) {
                     onUpdate(res.data);
+                    setStudent(res.data);
                 }
             }
         },
     });
+
+    const handleImage = (file: File | null) => {
+        formik.setFieldValue('picture', file);
+        if (!file) {
+            formik.setFieldValue('resetPicture', true)
+        }
+    };
 
     /**
      * Get student information according with the id props,
@@ -70,13 +76,13 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 getStudent(+id).then(res => {
                     if (res.status === 200) {
                         setStudent(res.data);
-                        setThumbnail(res.data.photoUrlThumb);
                         formik.setValues({
                             id: res.data.id,
-                            promo: res.data.promo.toString(),
+                            promo: res.data.promo,
                             firstName: res.data.firstName,
                             lastName: res.data.lastName,
                             mail: res.data.mail,
+                            phone: res.data.phone,
                             birthDate: res.data.birthDate ? new Date(res.data.birthDate) : undefined
                         })
                     } else {
@@ -93,7 +99,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     }, [id]);
 
 
-    const remove = useCallback(() => 
+    const remove = useCallback(() =>
         Modal.confirm({
             title: t('remove_item.title'),
             content: t('remove_item.content'),
@@ -107,27 +113,26 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     message.info(t('remove_item.complete'));
                 }
             }
-        }),[onDelete, student, t]);
+        }), [onDelete, student, t]);
 
-    const archive = useCallback(() =>
-        {
-            // Tell TS that student is always defined when calling this function
-            const s = (student as Student);
-            Modal.confirm({
-                title: t(`archive_item.${+s.archived}.title`),
-                content: t(`archive_item.${+s.archived}.content`),
-                okText: 'Ok',
-                cancelText: t('cancel'),
-                onOk: async () => {
-                    const res = await toggleStudentArchiveStatus(s.id);
-                    if (res.status === 200) {
-                        onArchive(s.id, res.data);
-                        message.info(t(`archive_item.${+s.archived}.complete`));
-                    }
+    const archive = useCallback(() => {
+        // Tell TS that student is always defined when calling this function
+        const s = (student as Student);
+        Modal.confirm({
+            title: t(`archive_item.${+s.archived}.title`),
+            content: t(`archive_item.${+s.archived}.content`),
+            okText: 'Ok',
+            cancelText: t('cancel'),
+            onOk: async () => {
+                const res = await toggleStudentArchiveStatus(s.id);
+                if (res.status === 200) {
+                    onArchive(res.data);
+                    setStudent(res.data);
+                    message.info(t(`archive_item.${+s.archived}.complete`));
                 }
-            })
+            }
+        })
     }, [onArchive, student, t]);
-
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded w-full md:w-1/3 mx-2 p-6 sticky"
@@ -136,7 +141,13 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
             {loading ?
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col">
+
                     <div className="absolute left-0 top-0 w-16">
+                        {student?.archived &&
+                        <div className="flex items-center text-red-600 font-bold">
+                            <Icon type="lock" className="mr-1"/> ARCHIVÉ
+                        </div>
+                        }
                         <label className="font-dinotcb">numéro élève</label>
                         <InputNumber
                             name="id"
@@ -146,7 +157,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             onChange={(val) => formik.setFieldValue("id", val)}
                         />
                     </div>
-
                     {student &&
                     <Link to="/admin/user">
                         <div className="text-right absolute right-0 top-0 w-16">
@@ -154,68 +164,84 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         </div>
                     </Link>
                     }
-                    <Upload
-                        name="avatar"
-                        listType="picture-card"
-                        className="avatar-uploader flex justify-center mt-5"
-                        showUploadList={false}
-                        //beforeUpload={beforeUpload}
-                        //onChange={formik.handleChange}
-                    >
-                        {thumbnail ?
-                            <img src={thumbnail} alt="avatar" style={{width: '100%'}}/> :
-                            <div>
-                                <Icon type={uploading ? 'loading' : 'plus'}/>
-                                <div className="ant-upload-text">Upload</div>
-                            </div>
-                        }
-                    </Upload>
 
-                    <div className="flex flex-row my-5">
+                    <ImagePicker onChange={handleImage} defaultImage={student?.picture}/>
+
+
+                    <div className="w-16 mb-1">
+                        <label className="font-dinotcb">promo</label>
+                        <InputNumber
+                            name="promo"
+                            formatter={(val = 1968) => val.toString().padStart(4, "0")}
+                            value={formik.values.promo}
+                            onChange={(val) => formik.setFieldValue("promo", val)}
+                        />
+                    </div>
+                    <div className="flex flex-row ">
                         <div className="mr-2 w-1/2">
-                            <label>prénom</label>
-                            <Input placeholder="Dieudonné" name="fistName" value={formik.values.firstName}
-                                   onChange={formik.handleChange}/>
+                            <label className="font-dinotcb">prénom</label>
+                            <Input
+                                placeholder="Dieudonné"
+                                name="fistName"
+                                value={formik.values.firstName}
+                                onChange={formik.handleChange}
+                            />
                         </div>
                         <div className="ml-2 w-1/2">
-                            <label>nom</label>
-                            <Input placeholder="Abboud" name="lastName" value={formik.values.lastName}
-                                   onChange={formik.handleChange}/>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-row my-5">
-                        <div className="w-32 mr-2">
-                            <label htmlFor="promo">promo</label>
-                            <Input placeholder="1968" name="promo" value={formik.values.promo}
-                                   onChange={formik.handleChange}/>
-                        </div>
-                        <div className="ml-2">
-                            <label htmlFor="birthdate">date de naissance</label>
+                            <label className="font-dinotcb">nom</label>
                             <Input
-                                placeholder="29/01/1968" name="birthdate" type="date"
-                                value={formik.values.birthDate && format(formik.values.birthDate, "yyyy-MM-dd")}
-                                onChange={(e) => formik.setFieldValue("birthdate", e.target.valueAsDate)}
+                                placeholder="Abboud"
+                                name="lastName"
+                                value={formik.values.lastName}
+                                onChange={formik.handleChange}
                             />
                         </div>
                     </div>
 
-                    <div className="my-5">
-                        <label htmlFor="email">email</label>
-                        <Input placeholder="dieudonne.abboud@isep.fr" name="mail" value={formik.values.mail}
-                               onChange={formik.handleChange}/>
+                    <Divider />
+
+                    <div className="my-1 flex justify-between">
+                        <div className="mr-1">
+                            <label className="font-dinotcb">email</label>
+                            <Input placeholder="dieudonne.abboud@isep.fr"
+                                   name="mail"
+                                   value={formik.values.mail}
+                                   onChange={formik.handleChange}
+                            />
+                        </div>
+                        <div className="w-32">
+                            <label className="font-dinotcb">téléphone</label>
+                            <Input
+                                pattern="^((\+)33|0)[1-9](\d{2}){4}$"
+                                placeholder="0781140407"
+                                name="phone"
+                                value={formik.values.phone}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-5">
+                        <label className="font-dinotcb">date de naissance</label>
+                        <Input
+                            placeholder="29/01/1968"
+                            name="birthdate"
+                            type="date"
+                            value={formik.values.birthDate && format(formik.values.birthDate, "yyyy-MM-dd")}
+                            onChange={(e) => formik.setFieldValue("birthdate", e.target.valueAsDate)}
+                        />
                     </div>
 
                     <div className="self-end flex justify-around w-full">
-                        <Button type="primary" className="mt-5" icon="save" onClick={remove}>
+                        <Button type="primary" className="mt-5" icon="save">
                             Enregistrer
                         </Button>
                         {student &&
                         <>
                             <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
-                                {student.archived ? "Désarchiver": "Archiver"}
+                                {student.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button type="danger" className="mt-5" icon="delete">
+                            <Button type="danger" className="mt-5" icon="delete" onClick={remove}>
                                 Supprimer
                             </Button>
                         </>

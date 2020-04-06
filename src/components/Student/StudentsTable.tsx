@@ -1,5 +1,5 @@
 import React from "react";
-import {Student} from "../../data/student/types";
+import {Student, StudentPreviewAdmin} from "../../data/student/types";
 import {getEducationYear} from "../../util";
 import {Avatar, Pagination} from "antd";
 import {Link} from "react-router-dom";
@@ -8,7 +8,7 @@ import {PageStatus} from "../../pages/admin/student";
 
 type StudentTableProps = {
     page: PageStatus
-    students: Student[]
+    students: StudentPreviewAdmin[]
     loading: boolean
     onPageChange: (page: number) => void
 }
@@ -54,7 +54,7 @@ const StudentsTable: React.FC<StudentTableProps> = ({page, students, loading, on
                                 <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                                     <div className="flex items-center">
                                         <div className="flex-shrink-0 h-10 w-10">
-                                            <Avatar icon="user" src={s.photoUrlThumb}/>
+                                            <Avatar icon="user" src={s.picture}/>
                                         </div>
                                         <div className="ml-4 overflow-hidden">
                                             <Link to={`/admin/user/${s.id}`}>
@@ -90,7 +90,7 @@ const StudentsTable: React.FC<StudentTableProps> = ({page, students, loading, on
                                 </td>
                                 <td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
                                     <div className="flex flex-wrap">
-                                        {s.flatRoles?.map((r, index) => (
+                                        {s.roles.map((r, index) => (
                                             <span key={index} className="rounded bg-indigo-300 text-white m-1 p-1">
                                             {r.substr(5).replace(/_/g, ' ')}
                                         </span>

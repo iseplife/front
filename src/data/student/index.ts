@@ -1,6 +1,6 @@
-import {Student, StudentAdminForm} from "./types";
+import {AxiosPromise} from "axios";
+import {Student, StudentAdminForm, StudentAdmin, StudentPreview, StudentPreviewAdmin} from "./types";
 import {ClubMemberView} from "../club/types";
-import axios, {AxiosPromise} from "axios";
 import axios from 'axios';
 import {Page} from "../request.type";
 
@@ -12,27 +12,27 @@ export function getStudent(id: number): AxiosPromise<Student> {
     return axios.get(`/student/${id}`);
 }
 
-export const getAllStudents = (page: number = 0): AxiosPromise<Page<Student>> => {
+export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => {
     return axios.get('/student', { params: {page}});
 };
 
-export const getAllStudentsAdmin = (page: number = 0): AxiosPromise<Page<Student>> => {
+export const getAllStudentsAdmin = (page: number = 0): AxiosPromise<Page<StudentPreviewAdmin>> => {
     return axios.get('/student/admin', { params: {page}});
 };
 
-export const createStudent = (student: StudentAdminForm): AxiosPromise<Student> => {
+export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAdmin> => {
     return axios.post(`/student`, student);
 };
 
-export const updateStudent = (id: number): AxiosPromise<Student> => {
+export const updateLoggedStudent = (id: number): AxiosPromise<Student> => {
     return axios.put(`/student/${id}`);
 };
 
-export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<Student> => {
+export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {
     return axios.put(`/student/admin`, form);
 };
 
-export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => {
+export const toggleStudentArchiveStatus = (id: number): AxiosPromise<StudentAdmin> => {
     return axios.put(`/student/${id}/archive`);
 };
 
