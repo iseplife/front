@@ -1,6 +1,21 @@
-import {Roles, Token, TokenPayload, TokenSet} from './types';
-import axios from 'axios';
+import {Role, Roles, Token, TokenPayload, TokenSet} from './types';
+import axios, {AxiosPromise} from 'axios';
 import {getCookie, removeCookie, setCookie} from "./cookie";
+export const connect = (username: string, password: string): Promise<void> => {
+    logout();
+    return axios
+        .post('/auth', {
+            username,
+            password,
+        }).then(res => {
+            setTokens(res.data);
+        });
+};
+
+export const getRoles = (): AxiosPromise<Role[]> => {
+    return axios.get('auth/roles')
+};
+
 
 export const setTokens = (tokenSet: TokenSet) => {
     setCookie("token", tokenSet.token , {
@@ -19,16 +34,6 @@ export const removeTokens = () => {
     delete axios.defaults.headers.common['X-Refresh-Token'];
 };
 
-export const connect = (username: string, password: string): Promise<void> => {
-    logout();
-    return axios
-        .post('/auth', {
-            username,
-            password,
-        }).then(res => {
-            setTokens(res.data);
-        });
-};
 
 export const getUser = (): TokenPayload => {
     const token = getCookie('token');
@@ -44,6 +49,7 @@ export const getUser = (): TokenPayload => {
     }
     throw new Error("Auth cookies missing");
 };
+
 
 export const isAdmin = (): boolean => hasRole([Roles.ADMIN]);
 

@@ -1,12 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {
     createStudent,
-    deleteStudent,
-    getStudent,
+    deleteStudent, getStudentAdmin,
     toggleStudentArchiveStatus,
     updateStudentAdmin
 } from "../../data/student";
-import {Button, Divider, Icon, Input, InputNumber, message, Modal} from "antd";
+import {Button, Divider, Icon, Input, InputNumber, message, Modal, Select} from "antd";
 import Loading from "../Common/Loading";
 import {useFormik} from "formik";
 import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types";
@@ -14,10 +13,13 @@ import {Link} from "react-router-dom";
 import {format} from "date-fns";
 import {useTranslation} from "react-i18next";
 import ImagePicker from "../Common/ImagePicker";
+import {Role} from "../../data/security/types";
 
+const {Option} = Select;
 
 type StudentEditorProps = {
     id?: string
+    roles?: Role[]
     onDelete: (id: number) => void
     onArchive: (student: StudentAdmin) => void
     onCreate: (student: StudentAdmin) => void
@@ -26,15 +28,16 @@ type StudentEditorProps = {
 
 const DEFAULT_USER = {
     id: 0,
+    roles: ["ROLE_STUDENT"],
     promo: new Date().getFullYear(),
     firstName: "",
     lastName: "",
 };
 
 
-const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, onCreate, onArchive}) => {
-    const [loading, setLoading] = useState<boolean>(false);
+const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, onCreate, onArchive, roles}) => {
     const {t} = useTranslation();
+    const [loading, setLoading] = useState<boolean>(false);
     const [student, setStudent] = useState<Student>();
 
     const formik = useFormik<StudentAdminForm>({
@@ -43,15 +46,15 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
             // If student is defined then we are editing an user, otherwise we are creating an user
             let res;
             if (student) {
-                res = await createStudent(values);
-                if (res.status === 200) {
-                    onCreate(res.data);
-                    setStudent(res.data);
-                }
-            } else {
                 res = await updateStudentAdmin(values);
                 if (res.status === 200) {
                     onUpdate(res.data);
+                    setStudent(res.data);
+                }
+            } else {
+                res = await createStudent(values);
+                if (res.status === 200) {
+                    onCreate(res.data);
                     setStudent(res.data);
                 }
             }
@@ -73,11 +76,12 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
         if (id !== undefined) {
             if (+id) {
                 setLoading(true);
-                getStudent(+id).then(res => {
+                getStudentAdmin(+id).then(res => {
                     if (res.status === 200) {
                         setStudent(res.data);
                         formik.setValues({
                             id: res.data.id,
+                            roles: res.data.roles,
                             promo: res.data.promo,
                             firstName: res.data.firstName,
                             lastName: res.data.lastName,
@@ -140,7 +144,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
         >
             {loading ?
                 <Loading size="4x"/> :
-                <form className="relative flex flex-col">
+                <form className="relative flex flex-col" onSubmit={formik.handleSubmit}>
 
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
@@ -150,6 +154,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         }
                         <label className="font-dinotcb">numéro élève</label>
                         <InputNumber
+                            required
                             name="id"
                             className="border-none pl-1"
                             formatter={(val = 0) => val.toString().padStart(4, "0")}
@@ -167,22 +172,37 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
 
                     <ImagePicker onChange={handleImage} defaultImage={student?.picture}/>
 
-
                     <div className="w-16 mb-1">
-                        <label className="font-dinotcb">promo</label>
-                        <InputNumber
-                            name="promo"
-                            formatter={(val = 1968) => val.toString().padStart(4, "0")}
-                            value={formik.values.promo}
-                            onChange={(val) => formik.setFieldValue("promo", val)}
-                        />
+                        <div>
+                            <label className="font-dinotcb">roles</label>
+                            <Select
+                                mode="multiple"
+                                value={formik.values.roles}
+                                notFoundContent={roles ? <Loading size="sm"/> : null}
+                                onChange={(val: string[]) => formik.setFieldValue("roles", val)}
+                            >
+                                { roles && roles.map(r => (
+                                    <Option key={r.id} value={r.role}>{r.role}</Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div>
+                            <label className="font-dinotcb">promo</label>
+                            <InputNumber
+                                name="promo"
+                                formatter={(val = 1968) => val.toString().padStart(4, "0")}
+                                value={formik.values.promo}
+                                onChange={(val) => formik.setFieldValue("promo", val)}
+                            />
+                        </div>
                     </div>
                     <div className="flex flex-row ">
                         <div className="mr-2 w-1/2">
                             <label className="font-dinotcb">prénom</label>
                             <Input
+                                required
                                 placeholder="Dieudonné"
-                                name="fistName"
+                                name="firstName"
                                 value={formik.values.firstName}
                                 onChange={formik.handleChange}
                             />
@@ -190,6 +210,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         <div className="ml-2 w-1/2">
                             <label className="font-dinotcb">nom</label>
                             <Input
+                                required
                                 placeholder="Abboud"
                                 name="lastName"
                                 value={formik.values.lastName}
@@ -198,7 +219,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         </div>
                     </div>
 
-                    <Divider />
+                    <Divider/>
 
                     <div className="my-1 flex justify-between">
                         <div className="mr-1">
@@ -232,8 +253,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         />
                     </div>
 
-                    <div className="self-end flex justify-around w-full">
-                        <Button type="primary" className="mt-5" icon="save">
+                    <div className="self-end flex flex-wrap justify-around w-full">
+                        <Button htmlType="submit" type="primary" className="mt-5" icon="save">
                             Enregistrer
                         </Button>
                         {student &&

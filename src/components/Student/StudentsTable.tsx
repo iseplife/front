@@ -1,5 +1,5 @@
 import React from "react";
-import {Student, StudentPreviewAdmin} from "../../data/student/types";
+import {StudentPreviewAdmin} from "../../data/student/types";
 import {getEducationYear} from "../../util";
 import {Avatar, Pagination} from "antd";
 import {Link} from "react-router-dom";

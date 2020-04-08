@@ -12,6 +12,10 @@ export function getStudent(id: number): AxiosPromise<Student> {
     return axios.get(`/student/${id}`);
 }
 
+export function getStudentAdmin(id: number): AxiosPromise<StudentAdmin> {
+    return axios.get(`/student/${id}/admin`);
+}
+
 export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => {
     return axios.get('/student', { params: {page}});
 };

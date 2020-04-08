@@ -44,6 +44,7 @@ export interface StudentPreviewAdmin extends StudentPreview {
 export type StudentAdminForm = {
     id: number
     promo: number
+    roles: string[]
     firstName: string
     lastName: string
     birthDate?: Date

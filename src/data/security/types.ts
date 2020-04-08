@@ -25,6 +25,12 @@ export interface TokenPayload {
     feed: Array<string>
 }
 
+export type Role = {
+    id: number
+    role: string
+    authority: string
+}
+
 export enum Roles {
     ADMIN = "ROLE_ADMIN",
     STUDENT= "ROLE_STUDENT",
