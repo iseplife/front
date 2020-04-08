@@ -25,7 +25,14 @@ export const getAllStudentsAdmin = (page: number = 0): AxiosPromise<Page<Student
 };
 
 export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAdmin> => {
-    return axios.post(`/student`, student);
+    const fd = new FormData();
+    fd.append('file', student.picture as Blob);
+
+    delete student.picture;
+    delete student.resetPicture;
+    fd.append('form', JSON.stringify(student));
+
+    return axios.post(`/student`, fd);
 };
 
 export const updateLoggedStudent = (id: number): AxiosPromise<Student> => {
@@ -33,7 +40,13 @@ export const updateLoggedStudent = (id: number): AxiosPromise<Student> => {
 };
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {
-    return axios.put(`/student/admin`, form);
+    const fd = new FormData();
+    fd.append('file', form.picture as Blob);
+
+    delete form.picture;
+    fd.append('form', JSON.stringify(form));
+
+    return axios.put(`/student/admin`, fd);
 };
 
 export const toggleStudentArchiveStatus = (id: number): AxiosPromise<StudentAdmin> => {

@@ -9,7 +9,7 @@ import {Button, Divider, Icon, Input, InputNumber, message, Modal, Select} from 
 import Loading from "../Common/Loading";
 import {useFormik} from "formik";
 import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {format} from "date-fns";
 import {useTranslation} from "react-i18next";
 import ImagePicker from "../Common/ImagePicker";
@@ -37,6 +37,7 @@ const DEFAULT_USER = {
 
 const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, onCreate, onArchive, roles}) => {
     const {t} = useTranslation();
+    const history = useHistory();
     const [loading, setLoading] = useState<boolean>(false);
     const [student, setStudent] = useState<Student>();
 
@@ -56,6 +57,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 if (res.status === 200) {
                     onCreate(res.data);
                     setStudent(res.data);
+                    history.push(`/admin/user/${res.data.id}`);
                 }
             }
         },
@@ -190,7 +192,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             <label className="font-dinotcb">promo</label>
                             <InputNumber
                                 name="promo"
-                                formatter={(val = 1968) => val.toString().padStart(4, "0")}
                                 value={formik.values.promo}
                                 onChange={(val) => formik.setFieldValue("promo", val)}
                             />

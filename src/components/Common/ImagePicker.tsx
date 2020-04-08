@@ -38,7 +38,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({defaultImage, onChange}) => {
                         <div
                             className="w-full h-full"
                             style={{
-                                backgroundImage: `url("${image}")`,
+                                backgroundImage: `url("https://iseplife.s3.eu-west-3.amazonaws.com/${image}")`,
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
