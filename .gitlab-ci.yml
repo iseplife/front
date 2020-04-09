@@ -25,6 +25,7 @@ react-build:
     - echo "=== BUILDING REACT PROD ==="
     - yarn install --frozen-lockfile
     - yarn run build:dev
+  retry: 2
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
 
