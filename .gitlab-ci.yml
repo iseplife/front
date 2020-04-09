@@ -22,22 +22,22 @@ react-build:
     paths:
       - build/
   script:
+    - echo "=== BUILDING REACT PROD ==="
     - yarn install --frozen-lockfile
     - yarn run build:dev
-  only:
-    - master
-    - feature/ci
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
 
 
 docker-build:
   stage: package
   script:
+    - echo "=== BUILDING DOCKER IMAGES ==="
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$FRONT_VERSION -t $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$FRONT_VERSION
     - docker push $CI_REGISTRY_IMAGE:latest
-  dependencies:
-    - react-build
-  only:
-    - master
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      when: on_success
 
