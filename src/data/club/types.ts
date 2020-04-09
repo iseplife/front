@@ -5,11 +5,21 @@ import RoleType from "../../constants/RoleType";
 export type Club = {
     id: number
     name: string
-    type: ClubType
     description: string
-    logoUrl: string
-    createdAt: number
     archivedAt?: number
+    createdAt: number
+    feed?: bigint
+    type: ClubType
+    facebook?: string
+    facebook_token?: string
+    snapchat?: string
+    instagram?: string
+    website?: string
+    isAdmin: boolean
+    members?: any
+    events?: any
+    posts?: any
+    logoUrl: string
 }
 
 export type ClubPreview = {
