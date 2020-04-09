@@ -1,4 +1,4 @@
-import {Club} from "../club/type";
+import {Club} from "../club/types";
 import {Feed} from "../feed/types";
 
 export type Event = {
@@ -23,12 +23,12 @@ export type Event = {
 export type EventPreview = {
     id: number
     name: string
-    type: string,
-    startsAt: number,
-    endsAt: number,
-    location: string,
-    imageUrl?: string,
-    target: string,
+    type: string
+    startsAt: number
+    endsAt: number
+    location: string
+    imageUrl?: string
+    target: string
     published: boolean
 }
 
@@ -44,27 +44,27 @@ export type EventMap = {
 
 
 type ReducerFeedType = {
-    type: "TOGGLE_FEED" | "TOGGLE_TYPE",
+    type: "TOGGLE_FEED" | "TOGGLE_TYPE"
     name: string
 }
 type ReducerPublished = {
-    type: "TOGGLE_PUBLISHED",
+    type: "TOGGLE_PUBLISHED"
 }
 type ReducerUpdate = {
-    type: "ADD_FILTER",
+    type: "ADD_FILTER"
     feeds: string[]
 }
 type ReducerInit = {
-    type: "INIT_FILTER",
+    type: "INIT_FILTER"
     events: EventPreview[]
 }
 export type FilterReducerAction = ReducerFeedType | ReducerPublished | ReducerUpdate | ReducerInit;
 
 export type FilterList = {
-    [name: string]: boolean,
+    [name: string]: boolean
 }
 export type EventFilter = {
-    feeds: FilterList,
-    types: FilterList,
-    publishedOnly: boolean,
+    feeds: FilterList
+    types: FilterList
+    publishedOnly: boolean
 }

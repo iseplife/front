@@ -1,4 +1,4 @@
-import {Club} from "../club/type";
+import {Club} from "../club/types";
 import {Author} from "../request.type";
 
 export type PostCreation = {

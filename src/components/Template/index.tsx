@@ -16,6 +16,7 @@ import {getUser} from "../../data/security";
 import rootReducer from "../../redux/reducer";
 import {createStore} from "redux";
 import Navbar from "./Navbar";
+import UserDrawer from "../User/UserDrawer";
 import CustomGallery from "../../pages/gallery";
 
 
@@ -42,8 +43,10 @@ const Template: React.FC = () => {
                             {/* Add your route here */}
                             <Route path="/calendar" component={Events}/>
                             <Route path="/event/:id" component={Event}/>
-                            <Route path="/gallery/:id/picture/:pictureId" component={CustomGallery} />
                             <Route path="/gallery/:id" component={CustomGallery} />
+                            <Route path="/gallery/:id/picture/:pictureId" component={CustomGallery} />
+                            <Route strict exact path="/discovery/student/:user_id"
+                                   render={() => <UserDrawer backgroundComponent={null}/>}/>
                             <Route path="/logout" children={<Logout/>}/>
                             <Route path="*" component={NotFound}/>
                         </Switch>
