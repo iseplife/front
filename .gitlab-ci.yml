@@ -23,12 +23,11 @@ react-build:
       - build/
   script:
     - echo "=== BUILDING REACT PROD ==="
-    - yarn install --frozen-lockfile
+    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
     - yarn run build:dev
   retry: 2
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-
 
 docker-build:
   stage: package
