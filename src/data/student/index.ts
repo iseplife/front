@@ -1,7 +1,7 @@
 import {AxiosPromise} from "axios";
 import {Student, StudentAdminForm, StudentAdmin, StudentPreview, StudentPreviewAdmin} from "./types";
 import {ClubMemberView} from "../club/types";
-import axios from 'axios';
+import axios, {AxiosPromise} from 'axios';
 import {Page} from "../request.type";
 
 export function getLoggedUser(): AxiosPromise<Student> {
