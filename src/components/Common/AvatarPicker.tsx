@@ -18,7 +18,7 @@ interface AvatarPickerProps {
 }
 
 const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, className}) => {
-    const userThumb = useSelector((state: AppState) => state.user.photoUrlThumb);
+    const userThumb = useSelector((state: AppState) => state.user.picture);
     const [loading, setLoading] = useState<boolean>(true);
     const [publishers, setPublishers] = useState<Author[]>([]);
 

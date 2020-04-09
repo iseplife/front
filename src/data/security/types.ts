@@ -1,27 +1,27 @@
 export interface TokenSet {
-    token: string,
-    refreshToken: string,
+    token: string
+    refreshToken: string
 }
 
 export interface Token {
-    payload: string,
-    iss: string,
-    exp: number,
-    iat: number,
+    payload: string
+    iss: string
+    exp: number
+    iat: number
 }
 
 export interface RefreshToken {
-    userID: number,
-    iss: string,
-    exp: number,
-    iat: number,
+    userID: number
+    iss: string
+    exp: number
+    iat: number
 }
 
 export interface TokenPayload {
-    id: number,
-    roles: Roles[],
-    clubsAdmin: Array<number>,
-    clubsPublisher: Array<number>,
+    id: number
+    roles: Roles[]
+    clubsAdmin: Array<number>
+    clubsPublisher: Array<number>
     feed: Array<string>
 }
 

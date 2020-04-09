@@ -15,8 +15,6 @@ export interface Student {
     snapchat?: string
 
     picture?: string
-    photoUrl?: string
-    photoUrlThumb?: string
     bio?: string
     archived: boolean
 }

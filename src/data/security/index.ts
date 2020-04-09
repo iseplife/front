@@ -2,6 +2,7 @@ import {Role, Roles, Token, TokenPayload, TokenSet} from './types';
 import axios, {AxiosPromise} from 'axios';
 import {getCookie, removeCookie, setCookie} from "./cookie";
 export const connect = (username: string, password: string): Promise<void> => {
+    
     logout();
     return axios
         .post('/auth', {

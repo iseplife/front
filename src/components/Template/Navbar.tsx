@@ -75,7 +75,7 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
             </div>
             <Dropdown overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
                       trigger={['click']} placement="bottomRight">
-                <Avatar icon="user" src={user.photoUrlThumb} className="cursor-pointer"/>
+                <Avatar icon="user" src={user.picture} className="cursor-pointer"/>
             </Dropdown>
         </div>
     </div>
@@ -83,8 +83,8 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 
 
 type DrawerItemProps = {
-    icon: string,
-    className?: string,
+    icon: string
+    className?: string
     link: string
 }
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
@@ -110,7 +110,7 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                 </Link>
                 <Button shape="circle" icon="bell" className="border-0"/>
                 <div onClick={() => setVisible(true)}>
-                    <Avatar icon="user" src={user.photoUrlThumb} className="cursor-pointer"/>
+                    <Avatar icon="user" src={user.picture} className="cursor-pointer"/>
                 </div>
             </div>
             <Drawer

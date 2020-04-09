@@ -17,7 +17,7 @@ const AdminHeader: React.FC = () => {
                     </h1>
                 </div>
                 <div className="flex justify-between items-center hidden md:block">
-                    <Avatar icon="user" src={user.photoUrlThumb} className=""/>
+                    <Avatar icon="user" src={user.picture} className=""/>
                     <Link to="/"><Icon className="hover:text-gray-300 text-gray-500 ml-3 p-3" type="export"/> </Link>
                 </div>
                 <div className="block md:hidden">
@@ -29,7 +29,7 @@ const AdminHeader: React.FC = () => {
                 <div className="pt-4 pb-3 border-t border-gray-200">
                     <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                            <Avatar icon="user" src={user.photoUrlThumb} />
+                            <Avatar icon="user" src={user.picture} />
                         </div>
                         <div className="ml-3">
                             <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + ' ' + user.lastName}</div>

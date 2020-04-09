@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams, useHistory, Link} from "react-router-dom"
-import {getClubsForStudent, getStudentById} from "../../data/student";
+import {getClubsForStudent, getStudent} from "../../data/student";
 import {Avatar, Divider, Drawer, Tooltip} from "antd";
 import {useTranslation} from "react-i18next";
 import {Utils} from "../Common/Utils";
@@ -44,7 +44,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
     useEffect(() => {
         if (!!user_id) {
             setIsLoading(true);
-            getStudentById(parseInt(user_id)).then(res => {
+            getStudent(parseInt(user_id)).then(res => {
                 setStudent(res.data);
             }).catch().finally(() => setIsLoading(false));
 
@@ -69,7 +69,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                           closable={false} width={500}
                           onClose={() => closeDrawer()} visible={drawerVisibility}>
                     <div className="flex justify-start items-center sm:items-start">
-                        <Avatar src={!!student ? student.photoUrl : ""}
+                        <Avatar src={!!student ? student.picture : ""}
                                 alt={student.firstName + " " + student.lastName}
                                 className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + Utils.randomBackgroundColors()}>
                             <div
