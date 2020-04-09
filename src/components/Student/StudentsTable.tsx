@@ -13,6 +13,13 @@ type StudentTableProps = {
     onPageChange: (page: number) => void
 }
 
+const TableHeader: React.FC = ({children}) => (
+    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+        {children}
+    </th>
+);
+
+
 const StudentsTable: React.FC<StudentTableProps> = ({page, students, loading, onPageChange}) => {
     return (
         <div className="w-full md:w-2/3 mx-2">
@@ -33,19 +40,11 @@ const StudentsTable: React.FC<StudentTableProps> = ({page, students, loading, on
                         </colgroup>
                         <thead>
                         <tr>
-                            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Nom
-                            </th>
-                            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Promotion
-                            </th>
-                            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Actif
-                            </th>
-                            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Role(s)
-                            </th>
-                            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"/>
+                            <TableHeader>Nom</TableHeader>
+                            <TableHeader>Promotion</TableHeader>
+                            <TableHeader>Actif</TableHeader>
+                            <TableHeader>Role(s)</TableHeader>
+                            <TableHeader />
                         </tr>
                         </thead>
                         <tbody className="bg-white">
