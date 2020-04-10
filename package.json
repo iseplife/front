@@ -42,9 +42,9 @@
   },
   "scripts": {
     "start": "yarn run tailwind:css && react-app-rewired start",
-    "start:dev": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api/ react-app-rewired start",
+    "start:dev": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-app-rewired start",
     "build": "yarn run tailwind:css && react-app-rewired build",
-    "build:dev": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false CI=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api/ react-app-rewired build",
+    "build:dev": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false CI=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "tailwind:css": "tailwind build public/css/tailwind.css -c tailwind.config.js -o public/css/index.css"
