@@ -10,12 +10,10 @@ import Loading from "../Common/Loading"
 import {Provider} from "react-redux"
 import {getUser, isAdmin} from "../../data/security"
 
-import rootReducer from "../../redux/reducer"
-import {createStore} from "redux"
-import Navbar from "./Navbar"
-import UserDrawer from "../User/UserDrawer"
-import DefaultTemplate from "./Default"
-import AdminTemplate from "./Admin"
+import rootReducer from "../../redux/reducer";
+import {createStore} from "redux";
+import AdminTemplate from "./Admin";
+import DefaultTemplate from "./Default";
 
 
 const Template: React.FC = () => {

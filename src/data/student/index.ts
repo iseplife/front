@@ -30,8 +30,8 @@ export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => 
     return axios.get(`/student/${studentId}/club`);
 };
 
-export const searchStudents = (name: string, promo: string, page: number): AxiosPromise<Page<SearchItem>> => {
-    return axios.get(`/search/student/`, {params: {name: name, promos: promo, page: page}});
+export const searchStudents = (name: string, promos: string, page: number, sort: boolean = true): AxiosPromise<Page<SearchItem>> => {
+    return axios.get(`/search/student/`, {params: {name, promos, page, sort}});
 };
 
 export function getAllPromo(): AxiosPromise<string[]> {

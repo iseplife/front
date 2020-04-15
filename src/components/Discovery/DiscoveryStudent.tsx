@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react";
-import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
+import React, {useCallback, useEffect, useReducer, useRef, useState} from "react";
+import InfiniteScroller, {InfiniteScrollerRef, loaderCallback} from "../Common/InfiniteScroller";
 import {getAllPromo, searchStudents} from "../../data/student";
 import {useTranslation} from "react-i18next";
 import {Input, Select, Switch} from "antd";
@@ -11,7 +11,7 @@ import {SearchItem} from "../../data/request.type";
 const {Option} = Select;
 
 type StudentFilter = {
-    promos: string[]
+    promos: number[]
     sorting: boolean
 }
 
@@ -44,7 +44,7 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
                 firstName,
                 lastName,
                 photoUrlThumb: r.thumbURL,
-                promo: r.description
+                promo: +r.description
             })
         }
     );
@@ -56,6 +56,7 @@ const DiscoveryStudent: React.FC = () => {
     const [filteredStudent, setFilteredStudents] = useState<StudentPreview[]>([]);
     const [filter, setFilter] = useReducer(reducer, {promos: [], sorting: true});
     const [promos, setPromos] = useState<string[]>([]);
+    const scrollerRef = useRef<InfiniteScrollerRef>(null);
 
     const filterFn = useCallback((s: StudentPreview) => (
         !filter.promos.length || filter.promos.includes(s.promo)
@@ -63,7 +64,7 @@ const DiscoveryStudent: React.FC = () => {
 
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
-        const res = await searchStudents("", filter.promos.toString(), page);
+        const res = await searchStudents("", filter.promos.toString(), page, filter.sorting);
         if(res.status === 200) {
             const parsedResults = parseSearchResults(res.data.content);
 
@@ -72,7 +73,7 @@ const DiscoveryStudent: React.FC = () => {
             return res.data.last;
         }
         return false;
-    }, [filter.promos.length, filterFn]);
+    }, [filter.promos.length, filterFn, filter.sorting]);
 
     /**
      * Get all available promotions on component first load
@@ -94,11 +95,11 @@ const DiscoveryStudent: React.FC = () => {
      * Sorting Update
      */
     useEffect(() => {
-        setFilteredStudents(fs => fs.sort(({lastName: a}, {lastName: b}) =>
-            filter.sorting ?
-                +((a > b && -1) || (a < b && 1) || (a === b && 0)):
-                +((a > b && 1) || (a < b && -1) || (a === b && 0))
-        ));
+        setStudents([]);
+        setFilteredStudents([]);
+
+        // @ts-ignore
+        scrollerRef!.current!.resetData();
     }, [filter.sorting]);
 
 
@@ -111,10 +112,8 @@ const DiscoveryStudent: React.FC = () => {
 
             <div className="flex flex-wrap sm:flex-no-wrap sm:justify-between">
                 {/* Todo: replace with searchBar */}
-                <Input placeholder={t('placeholder-search')} disabled={true}
-                       className="text-center text-sm sm:text-lg rounded-full w-11/12 sm:w-full mx-auto sm:mx-0"/>
-                <div
-                    className="flex justify-end w-full my-2 sm:my-0 sm:w-1/3 mr-0 sm:mr-3 md:mr-5 lg:mr-6 xl:mr-10">
+                <Input placeholder={t('placeholder-search')} disabled={true} className="text-center text-sm sm:text-lg rounded-full w-11/12 sm:w-full mx-auto sm:mx-0"/>
+                <div className="flex justify-end w-full my-2 sm:my-0 sm:w-1/3 mr-0 sm:mr-3 md:mr-5 lg:mr-6 xl:mr-10">
                     <Select mode="multiple" className="w-1/2 sm:w-40 mx-2"
                             placeholder={t('promotions')}
                             onSelect={(promo: any) => setFilter({type: "ADD_PROMO", promo})}
@@ -131,8 +130,13 @@ const DiscoveryStudent: React.FC = () => {
 
             <HorizontalSpacer spacing={8}/>
             {/* List of students */}
-            <InfiniteScroller watch="DOWN" callback={getNextStudents} triggerDistance={5}
-                              className="flex flex-wrap justify-start">
+            <InfiniteScroller
+                ref={scrollerRef}
+                watch="DOWN"
+                callback={getNextStudents}
+                triggerDistance={5}
+                className="flex flex-wrap justify-start"
+            >
                 {filteredStudent.map((student, i) =>
                     <StudentCard key={i} student={student}/>
                 )}

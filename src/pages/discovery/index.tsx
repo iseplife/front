@@ -26,7 +26,7 @@ const Discovery: React.FC = () => {
                 quas.
             </div>
             <DiscoveryClub/>
-
+            <DiscoveryStudent/>
         </div>
     );
 };

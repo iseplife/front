@@ -13,24 +13,24 @@ type Loader = {
 export type loaderCallback =  (count: number, ...param: any) => Promise<boolean>;
 export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
 
-type InfiniteScrollerProps = {
-    watch: "UP" | "DOWN" | "BOTH",
-    triggerDistance?: number,
-    callback: ScrollerCallback,
-    className?: string
+export type InfiniteScrollerRef = {
+    resetData: () => void
 }
 
-const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, triggerDistance = 50, children, className = ""}) => {
-    const {t} = useTranslation("common")
-    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
-    const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
-    const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
+type InfiniteScrollerProps = {
+    watch: "UP" | "DOWN" | "BOTH"
+    triggerDistance?: number
+    callback: ScrollerCallback
+    className?: string
+    children: ReactNode
+}
 
-    /**
-     * Initial data, call on component creation
-     * first element that are going to be displayed
-     */
-    useEffect(() => {
+const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, children, className = ""}, ref) => {
+    const {t} = useTranslation('common');
+    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback]);
+    const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER);
+    const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER);
+    const initialLoad = useCallback(() => {
         switch (watch) {
             case "UP":
                 setUpLoader(prevState => ({...prevState, loading: true}))
@@ -55,7 +55,21 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
                 })
                 break
         }
-    }, [upCallback, downCallback, watch])
+    }, [downCallback, upCallback, watch]);
+
+    useImperativeHandle(ref, () => ({
+        resetData() {
+            initialLoad();
+        }
+    }));
+
+    /**
+     * Initial data, call on component creation
+     * first element that are going to be displayed
+     */
+    useEffect(() => {
+        initialLoad();
+    }, [initialLoad]);
 
     /**
      * Init listener on scroller according on which way we're listening,
@@ -129,7 +143,7 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
                 </div>
             )}
         </div>
-    )
-}
+    );
+});
 
 export default InfiniteScroller
