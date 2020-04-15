@@ -2,6 +2,7 @@
   "end": "Vous avez tous visionné !",
   "empty": "Rien à afficher",
   "filters": "Filtres",
+  "administration": "Administration",
   "create_feed": "Créer un feed",
   "create_event": "Créer un évènement",
   "create_club": "Créer un club",
@@ -11,6 +12,18 @@
     "content": "Attention, la suppression d'un élément est définitive",
     "complete": "Elément supprimé"
   },
+  "archive_user": [
+    {
+      "title": "Voulez-vous archiver cet utilisateur ?",
+      "content": "Un utilisateur archivé peut devenir inaccessible dans certaines fonctionnalités",
+      "complete": "Utilisateur archivé"
+    },
+    {
+      "title": "Voulez-vous désarchiver cet utilisateur ?",
+      "content": "Un utilisateur désarchivé sera à nouveau visible dans les fonctionnalités",
+      "complete": "Utilisateur désarchivé"
+    }
+  ],
   "update_item": {
     "title": "Voulez-vous enregistrer ces modifications ?",
     "content": "Attention, la modification un élément ne peut-être annulé",

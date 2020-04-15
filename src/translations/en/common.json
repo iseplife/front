@@ -3,6 +3,7 @@
   "empty": "Nothing to display",
   "filters": "Filters",
   "create_feed": "Create a feed",
+  "administration": "Administration",
   "create_event": "Create an event",
   "create_club": "Create a club",
   "switch_lang": "Switch language",
@@ -11,6 +12,18 @@
     "content": "Deleting an item is permanent and cannot be undo",
     "complete": "Deletion complete"
   },
+  "archive_user": [
+    {
+      "title": "Do you want to archive this user?",
+      "content": "Archiving an user will hide it in some features ",
+      "complete": "User item"
+    },
+    {
+      "title": "Do you want to unarchive this user?",
+      "content": "Unarchiving an user will make it visible in features",
+      "complete": "Unarchived user"
+    }
+  ],
   "update_item": {
     "title": "Do you want to save this modifications?",
     "content": "Editing an item cannot be undo",

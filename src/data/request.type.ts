@@ -4,6 +4,7 @@ export type Page<T> = {
     last: boolean
     number: number
     size: number
+    totalPages: number
     totalElements: number
 };
 
