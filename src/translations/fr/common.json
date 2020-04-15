@@ -12,16 +12,16 @@
     "content": "Attention, la suppression d'un élément est définitive",
     "complete": "Elément supprimé"
   },
-  "archive_item": [
+  "archive_user": [
     {
-      "title": "Voulez-vous archiver cet élement ?",
-      "content": "Un élément archivé peut devenir inaccessible dans certaines fonctionnalités",
-      "complete": "Elément archivé"
+      "title": "Voulez-vous archiver cet utilisateur ?",
+      "content": "Un utilisateur archivé peut devenir inaccessible dans certaines fonctionnalités",
+      "complete": "Utilisateur archivé"
     },
     {
-      "title": "Voulez-vous désarchiver cet élement ?",
-      "content": "Un élément désarchivé sera à nouveau visible dans les fonctionnalités",
-      "complete": "Elément désarchivé"
+      "title": "Voulez-vous désarchiver cet utilisateur ?",
+      "content": "Un utilisateur désarchivé sera à nouveau visible dans les fonctionnalités",
+      "complete": "Utilisateur désarchivé"
     }
   ],
   "update_item": {

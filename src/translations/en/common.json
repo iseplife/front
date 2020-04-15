@@ -12,16 +12,16 @@
     "content": "Deleting an item is permanent and cannot be undo",
     "complete": "Deletion complete"
   },
-  "archive_item": [
+  "archive_user": [
     {
-      "title": "Do you want to archive this item?",
-      "content": "Archiving an item will hide it in some features ",
-      "complete": "Archived item"
+      "title": "Do you want to archive this user?",
+      "content": "Archiving an user will hide it in some features ",
+      "complete": "User item"
     },
     {
-      "title": "Do you want to unarchive this item?",
-      "content": "Unarchiving an item will make it visible in features",
-      "complete": "Unarchived item"
+      "title": "Do you want to unarchive this user?",
+      "content": "Unarchiving an user will make it visible in features",
+      "complete": "Unarchived user"
     }
   ],
   "update_item": {

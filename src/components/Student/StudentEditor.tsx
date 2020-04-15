@@ -125,8 +125,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
         // Tell TS that student is always defined when calling this function
         const s = (student as Student);
         Modal.confirm({
-            title: t(`archive_item.${+s.archived}.title`),
-            content: t(`archive_item.${+s.archived}.content`),
+            title: t(`archive_user.${+s.archived}.title`),
+            content: t(`archive_user.${+s.archived}.content`),
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
@@ -134,7 +134,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 if (res.status === 200) {
                     onArchive(res.data);
                     setStudent(res.data);
-                    message.info(t(`archive_item.${+s.archived}.complete`));
+                    message.info(t(`archive_user.${+s.archived}.complete`));
                 }
             }
         })
