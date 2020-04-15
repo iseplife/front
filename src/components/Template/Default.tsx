@@ -8,6 +8,7 @@ import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
 import Navbar from "./Navbar"
+import Discovery from "../../pages/discovery";
 
 
 const DefaultTemplate: React.FC = () => {
@@ -26,6 +27,7 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
         </div>
+                            <Route path="/discovery" component={Discovery}/>
     )
 }
 

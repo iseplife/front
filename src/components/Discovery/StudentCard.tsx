@@ -14,14 +14,14 @@ const StudentCard: React.FC<StudentCardProps> = ({student}) => (
         to={{
             pathname: `/discovery/student/${student.id}`
         }}>
-        <Avatar src={student.photoUrlThumb} /*size={getStudentAvatarSize()}*/
+        <Avatar src={student.picture} /*size={getStudentAvatarSize()}*/
                 alt={student.firstName + student.lastName}
                 className={"w-32 h-3 2 xl:w-48 xl:h-48 shadow-xl hover:shadow-outline" +
                 " text-3xl" +
                 " sm:text-5xl " +
                 "md:text-5xl xl:text-6xl " + Utils.randomBackgroundColors()}>
             <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
-                {Utils.getInitials(student.firstName + student.lastName)}
+
             </div>
         </Avatar>
         <p className="font-bold sm:text-xl">{student.firstName + student.lastName}<br/>

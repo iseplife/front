@@ -22,7 +22,7 @@ export const en = {
     common: common_en,
     event: event_en,
     discovery: discovery_en,
-    user: user_en
+    user: user_en,
     gallery: gallery_en,
     search: search_en
 }
@@ -32,7 +32,7 @@ export const fr = {
     common: common_fr,
     event: event_fr,
     discovery: discovery_fr,
-    user: user_fr
+    user: user_fr,
     gallery: gallery_fr,
     search: search_fr
 }
