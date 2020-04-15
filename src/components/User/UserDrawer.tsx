@@ -90,8 +90,8 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     : t('user:no-mail')}
                             </div>
                             <div className="text-sm sm:text-base">
-                                {student.phoneNumber ? <span className="select-all">
-                                        {student.phoneNumber}</span>
+                                {student.phone ? <span className="select-all">
+                                        {student.phone}</span>
                                     : t('user:no-phone')}
                             </div>
                             <div className="mt-3 sm:mt-10 mx-auto">

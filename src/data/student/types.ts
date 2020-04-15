@@ -6,7 +6,7 @@ export interface Student {
     mail?: string
     birthDate?: number
     archivedAt?: string
-    phoneNumber?: string
+    phone?: string
     allowNotifications: boolean
 
     facebook?: string
