@@ -15,6 +15,7 @@ export type PageStatus = {
 }
 
 const Student: React.FC = () => {
+    const {id} = useParams();
     const [students, setStudents] = useState<StudentPreviewAdmin[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<PageStatus>({current: 0});
@@ -46,8 +47,6 @@ const Student: React.FC = () => {
         }).finally(() => setLoading(false))
     }, [page.current]);
 
-
-    const {id} = useParams();
     return (
         <div>
             <h1 className="font-dinotcb text-2xl text-gray-600">Utilisateurs</h1>

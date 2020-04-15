@@ -7,6 +7,7 @@ import NotFound from '../../pages/erros/NotFound';
 import Dashboard from "../../pages/admin/dashboard";
 import Student from "../../pages/admin/student";
 import AdminHeader from "./AdminHeader";
+import Club from "../../pages/admin/club";
 
 
 const AdminTemplate: React.FC = () => {
@@ -18,6 +19,8 @@ const AdminTemplate: React.FC = () => {
                     <Switch>
                         <Route path="/admin/user/:id" component={Student}/>
                         <Route path="/admin/user" component={Student}/>
+                        <Route path="/admin/club/:id" component={Club}/>
+                        <Route path="/admin/club" component={Club}/>
                         <Route path="/admin" component={Dashboard}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>
