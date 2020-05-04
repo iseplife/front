@@ -12,7 +12,8 @@ const {Option} = Select;
 
 type StudentFilter = {
     promos: number[]
-    sorting: boolean
+    name?: string
+    atoz?: boolean
 }
 
 const reducer: React.Reducer<StudentFilter, FilterReducerAction> = (filter, action) => {
@@ -23,15 +24,14 @@ const reducer: React.Reducer<StudentFilter, FilterReducerAction> = (filter, acti
             break;
         case "REMOVE_PROMO":
             const index = newFilter.promos.indexOf(action.promo);
-            if (index > -1) {
+            if (index > -1)
                 newFilter.promos.splice(index, 1);
-            }
             break;
         case "TOGGLE_SORT":
-            newFilter.sorting = !newFilter.sorting;
+            newFilter.atoz = !newFilter.atoz;
             break;
         case "INIT_FILTER":
-            return {promos: [], sorting: true}
+            return {promos: []}
     }
     return newFilter;
 };
@@ -54,17 +54,17 @@ const DiscoveryStudent: React.FC = () => {
     const {t} = useTranslation('discovery');
     const [students, setStudents] = useState<StudentPreview[]>([]);
     const [filteredStudent, setFilteredStudents] = useState<StudentPreview[]>([]);
-    const [filter, setFilter] = useReducer(reducer, {promos: [], sorting: true});
-    const [promos, setPromos] = useState<string[]>([]);
+    const [filter, setFilter] = useReducer(reducer, {promos: []});
+    const [promos, setPromos] = useState<number[]>([]);
     const scrollerRef = useRef<InfiniteScrollerRef>(null);
 
     const filterFn = useCallback((s: StudentPreview) => (
         !filter.promos.length || filter.promos.includes(s.promo)
-    ), [filter.promos]);
+    ), [filter.promos.length]);
 
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
-        const res = await searchStudents("", filter.promos.toString(), page, filter.sorting);
+        const res = await searchStudents(page, filter.name, filter.promos.toString(), filter.atoz);
         if(res.status === 200) {
             const parsedResults = parseSearchResults(res.data.content);
 
@@ -73,7 +73,7 @@ const DiscoveryStudent: React.FC = () => {
             return res.data.last;
         }
         return false;
-    }, [filter.promos.length, filterFn, filter.sorting]);
+    }, [filter.promos.length, filterFn, filter.atoz]);
 
     /**
      * Get all available promotions on component first load
@@ -98,9 +98,8 @@ const DiscoveryStudent: React.FC = () => {
         setStudents([]);
         setFilteredStudents([]);
 
-        // @ts-ignore
         scrollerRef!.current!.resetData();
-    }, [filter.sorting]);
+    }, [filter.atoz]);
 
 
     return (
@@ -120,10 +119,10 @@ const DiscoveryStudent: React.FC = () => {
                             onDeselect={(promo: any) => setFilter({type: "REMOVE_PROMO", promo})}
                     >
                         {
-                            promos.map(p => <Option key={p} value={p}>{'Promo ' + p}</Option>)
+                            promos.map(p => <Option key={p} value={p}>{p}</Option>)
                         }
                     </Select>
-                    <Switch checkedChildren="Az" unCheckedChildren="Za" defaultChecked={filter.sorting}
+                    <Switch checkedChildren="Az" unCheckedChildren="Za" defaultChecked={filter.atoz}
                             onChange={() => setFilter({type: "TOGGLE_SORT"})}/>
                 </div>
             </div>
