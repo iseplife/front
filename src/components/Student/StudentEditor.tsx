@@ -141,7 +141,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     }, [onArchive, student, t]);
 
     return (
-        <div className="flex flex-col items-center bg-white shadow rounded w-full md:w-1/3 mx-2 p-6 sticky"
+        <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
              style={{height: "min-content", minHeight: "16rem", top: 5}}
         >
             {loading ?
