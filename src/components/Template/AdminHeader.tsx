@@ -16,6 +16,17 @@ const AdminHeader: React.FC = () => {
                         Administration
                     </h1>
                 </div>
+                <div className="flex flex-1 items-center hidden md:block pt-4 mr-4">
+                    <Link to="/admin/user" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Students
+                    </Link>
+                    <Link to="/admin/club" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Clubs
+                    </Link>
+                    <Link to="/admin/feed" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Feed
+                    </Link>
+                </div>
                 <div className="flex justify-between items-center hidden md:block">
                     <Avatar icon="user" src={user.picture} className=""/>
                     <Link to="/"><Icon className="hover:text-gray-300 text-gray-500 ml-3 p-3" type="export"/> </Link>

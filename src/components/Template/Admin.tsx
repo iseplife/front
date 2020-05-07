@@ -8,6 +8,7 @@ import Dashboard from "../../pages/admin/dashboard";
 import Student from "../../pages/admin/student";
 import AdminHeader from "./AdminHeader";
 import Club from "../../pages/admin/club";
+import FeedPanel from "../../pages/admin/feed";
 
 
 const AdminTemplate: React.FC = () => {
@@ -21,6 +22,8 @@ const AdminTemplate: React.FC = () => {
                         <Route path="/admin/user" component={Student}/>
                         <Route path="/admin/club/:id" component={Club}/>
                         <Route path="/admin/club" component={Club}/>
+                        <Route path="/admin/feed/:id" component={FeedPanel}/>
+                        <Route path="/admin/feed" component={FeedPanel}/>
                         <Route path="/admin" component={Dashboard}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>
