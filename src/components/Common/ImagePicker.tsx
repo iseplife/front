@@ -3,11 +3,12 @@ import {Icon, Upload} from "antd";
 import "./ImagePicker.css";
 
 type ImagePickerProps = {
+    className?: string
     defaultImage?: string
     onChange: (file: File | null) => void
 }
 
-const ImagePicker: React.FC<ImagePickerProps> = ({defaultImage, onChange}) => {
+const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onChange}) => {
     const [image, setImage] = useState<string | undefined>(defaultImage);
     const [loading, setLoading] = useState<boolean>();
 
@@ -29,7 +30,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({defaultImage, onChange}) => {
             <Upload
                 name="avatar"
                 listType="picture-card"
-                className="avatar-uploader flex justify-center mt-5"
+                className={` ${className} avatar-uploader flex justify-center mt-5`}
                 showUploadList={false}
                 beforeUpload={handleImage}
             >
