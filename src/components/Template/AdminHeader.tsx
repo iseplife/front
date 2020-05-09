@@ -18,13 +18,16 @@ const AdminHeader: React.FC = () => {
                 </div>
                 <div className="flex flex-1 items-center hidden md:block pt-4 mr-4">
                     <Link to="/admin/user" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
-                        Students
+                        Utilisateurs
                     </Link>
                     <Link to="/admin/club" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
-                        Clubs
+                        Associations
                     </Link>
-                    <Link to="/admin/feed" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
-                        Feed
+                    <Link to="/admin/group" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Groupes
+                    </Link>
+                    <Link to="/admin/survey" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Votes
                     </Link>
                 </div>
                 <div className="flex justify-between items-center hidden md:block">
@@ -56,6 +59,9 @@ const AdminHeader: React.FC = () => {
                         </Link>
                         <Link to="/admin/club" className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200" role="menuitem">
                             Associations
+                        </Link>
+                        <Link to="/admin/group" className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200" role="menuitem">
+                            Groupes
                         </Link>
                         <Link to="/admin/survey" className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-2000 focus:bg-gray-200" role="menuitem">
                             Votes

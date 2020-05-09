@@ -4,12 +4,11 @@ import Table, {ColumnType, RowProps} from "../../../components/Common/TableAdmin
 import AvatarList from "../../../components/Common/AvatarList";
 import {IconFA} from "../../../components/Common/IconFA";
 import {PageStatus} from "../student";
-import {Feed} from "../../../data/feed/types";
-import {getAllFeed} from "../../../data/feed";
-import FeedEditor from "../../../components/Feed/FeedEditor";
-import StudentEditor from "../../../components/Student/StudentEditor";
+import {Group} from "../../../data/group/types";
+import GroupEditor from "../../../components/Group/GroupEditor";
+import {getAllGroup} from "../../../data/group";
 
-const tableConfig: ColumnType<Feed>[] = [
+const tableConfig: ColumnType<Group>[] = [
     {title: "id"},
     {title: "", className:""},
     {title: "Nom", className: "w-2/5"},
@@ -24,17 +23,17 @@ const tableConfig: ColumnType<Feed>[] = [
 ];
 
 
-const FeedPanel: React.FC = () => {
+const GroupPanel: React.FC = () => {
     const {id} = useParams();
-    const [feeds, setFeeds] = useState<Feed[]>([]);
+    const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<PageStatus>({current: 0});
 
-    const fetchFeed = useCallback(() => {
+    const fetchGroup = useCallback(() => {
         setLoading(true);
-        getAllFeed(page.current).then(res => {
+        getAllGroup(page.current).then(res => {
             if (res.status === 200) {
-                setFeeds(res.data.content);
+                setGroups(res.data.content);
 
                 setPage(prevState => ({
                     ...prevState,
@@ -49,43 +48,43 @@ const FeedPanel: React.FC = () => {
      * Fetch feeds  first page on first load
      */
     useEffect(() => {
-        fetchFeed();
+        fetchGroup();
     }, [page.current]);
 
     return (
         <div>
-            <h1 className="font-dinotcb text-2xl text-gray-600">Feeds</h1>
+            <h1 className="font-dinotcb text-2xl text-gray-600">Groupes</h1>
             <div className="flex">
                 <Table
                     className="w-full md:w-1/2"
                     loading={loading}
-                    data={feeds}
+                    data={groups}
                     page={page}
-                    refresh={fetchFeed}
+                    refresh={fetchGroup}
                     onPageChange={(page) => setPage(prevState => ({...prevState, current: page}))}
                     row={TableRow}
                     columns={tableConfig}
                 />
-                <FeedEditor
+                <GroupEditor
                     id={id}
-                    onDelete={id => setFeeds(feeds => feeds.filter(s => s.id !== id))}
-                    onCreate={feed => setFeeds(feeds => [...feeds, feed])}
-                    onUpdate={feed => setFeeds(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
-                    onArchive={feed => setFeeds(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
+                    onDelete={id => setGroups(feeds => feeds.filter(s => s.id !== id))}
+                    onCreate={feed => setGroups(feeds => [...feeds, feed])}
+                    onUpdate={feed => setGroups(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
+                    onArchive={feed => setGroups(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
                 />
             </div>
         </div>
     )
 }
 
-const TableRow: React.FC<RowProps<Feed>> = ({data: f}) => (
+const TableRow: React.FC<RowProps<Group>> = ({data: f}) => (
     <tr key={f.id}>
         <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
         <td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
             <IconFA type="solid" name={f.restricted ? "fa-lock" : "fa-unlock"}/>
         </td>
         <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
-            <Link to={`/admin/feed/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
+            <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
                 {f.name}
             </Link>
         </td>
@@ -104,7 +103,7 @@ const TableRow: React.FC<RowProps<Feed>> = ({data: f}) => (
         </td>
         <td className="p-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
             <Link
-                to={`/admin/feed/${f.id}`}
+                to={`/admin/group/${f.id}`}
                 className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
             >
                 <IconFA name="fa-edit"/>
@@ -113,4 +112,4 @@ const TableRow: React.FC<RowProps<Feed>> = ({data: f}) => (
     </tr>
 )
 
-export default FeedPanel;
+export default GroupPanel;

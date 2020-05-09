@@ -24,16 +24,16 @@
       "complete": "User unarchived"
     }
   ],
-  "archive_feed": [
+  "archive_group": [
     {
-      "title": "Do you want to archive this feed?",
-      "content": "Archiving a feed make it and nobody will be able to post on it",
-      "complete": "Feed archived"
+      "title": "Do you want to archive this group?",
+      "content": "Archiving a group will hide it and nobody will be able to post on it",
+      "complete": "Group archived"
     },
     {
-      "title": "Do you want to unarchive this user?",
-      "content": "Unarchiving a feed will make it visible again",
-      "complete": "Feed unarchived"
+      "title": "Do you want to unarchive this group?",
+      "content": "Unarchiving a group will make it visible again",
+      "complete": "Group unarchived"
     }
   ],
   "update_item": {

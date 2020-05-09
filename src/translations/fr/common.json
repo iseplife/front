@@ -24,16 +24,16 @@
       "complete": "Utilisateur désarchivé"
     }
   ],
-  "archive_feed": [
+  "archive_group": [
     {
-      "title": "Voulez-vous archiver ce feed ?",
-      "content": "Un feed archivé ne sera plus accessible et plus personne ne pourra publier dessus",
-      "complete": "Feed archivé"
+      "title": "Voulez-vous archiver ce groupe ?",
+      "content": "Un groupe archivé ne sera plus accessible et plus personne ne pourra publier dessus",
+      "complete": "Groupe archivé"
     },
     {
-      "title": "Voulez-vous désarchiver cet utilisateur ?",
-      "content": "Un feed désarchivé sera à nouveau accessible et les membres pourront publier desssus",
-      "complete": "Feed désarchivé"
+      "title": "Voulez-vous désarchiver ce groupe ?",
+      "content": "Un groupe désarchivé sera à nouveau accessible et les membres pourront publier dessus",
+      "complete": "Groupe désarchivé"
     }
   ],
   "update_item": {

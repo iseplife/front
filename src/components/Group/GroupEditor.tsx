@@ -2,8 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Button, Divider, Input, message, Modal, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
-import {Feed, FeedForm} from "../../data/feed/types";
-import {createFeed, deleteFeed, getFeed, toggleFeedArchiveStatus, updateFeed} from "../../data/feed";
+import {Group, GroupForm} from "../../data/group/types";
 import {useFormik} from "formik";
 import Loading from "../Common/Loading";
 import ImagePicker from "../Common/ImagePicker";
@@ -11,45 +10,46 @@ import {IconFA} from "../Common/IconFA";
 import StudentSelector from "../Student/StudentSelector";
 import HelperIcon from "../Common/HelperIcon";
 
-import './FeedEditor.css';
+import './GroupEditor.css';
+import {createGroup, deleteGroup, getGroup, toggleGroupArchiveStatus, updateGroup} from "../../data/group";
 
-type FeedEditorProps = {
+type GroupEditorProps = {
     id?: string,
     onDelete: (id: number) => void
-    onArchive: (feed: Feed) => void
-    onCreate: (feed: Feed) => void
-    onUpdate: (feed: Feed) => void
+    onArchive: (feed: Group) => void
+    onCreate: (feed: Group) => void
+    onUpdate: (feed: Group) => void
 }
 
-const DEFAULT_FEED = {
+const DEFAULT_GROUP = {
     id: 0,
     restricted: false,
     name: "",
     admins: []
 };
 
-const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchive, onUpdate}) => {
+const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArchive, onUpdate}) => {
     const {t} = useTranslation();
     const history = useHistory();
     const [loading, setLoading] = useState<boolean>(false);
-    const [feed, setFeed] = useState<Feed>()
+    const [group, setGroup] = useState<Group>()
 
-    const formik = useFormik<FeedForm>({
-        initialValues: DEFAULT_FEED,
+    const formik = useFormik<GroupForm>({
+        initialValues: DEFAULT_GROUP,
         onSubmit: async (values) => {
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
             let res;
-            if (feed) {
-                res = await updateFeed(feed.id, values);
+            if (group) {
+                res = await updateGroup(group.id, values);
                 if (res.status === 200) {
                     onUpdate(res.data);
-                    setFeed(res.data);
+                    setGroup(res.data);
                 }
             } else {
-                res = await createFeed(values);
+                res = await createGroup(values);
                 if (res.status === 200) {
                     onCreate(res.data);
-                    setFeed(res.data);
+                    setGroup(res.data);
                     history.push(`/admin/user/${res.data.id}`);
                 }
             }
@@ -71,9 +71,9 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
         if (id !== undefined) {
             if (+id) {
                 setLoading(true);
-                getFeed(+id).then(res => {
+                getGroup(+id).then(res => {
                     if (res.status === 200) {
-                        setFeed(res.data);
+                        setGroup(res.data);
                         formik.setValues({
                             name: res.data.name,
                             restricted: res.data.restricted,
@@ -87,7 +87,7 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                 message.error("Feed inconnu: " + id)
             }
         } else {
-            setFeed(undefined);
+            setGroup(undefined);
             formik.resetForm();
         }
     }, [id]);
@@ -100,33 +100,33 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
-                const id = (feed as Feed).id;
-                const res = await deleteFeed(id);
+                const id = (group as Group).id;
+                const res = await deleteGroup(id);
                 if (res.status === 200) {
                     onDelete(id);
                     message.info(t('remove_item.complete'));
                 }
             }
-        }), [onDelete, feed, t]);
+        }), [onDelete, group, t]);
 
     const archive = useCallback(() => {
         // Tell TS that student is always defined when calling this function
-        const f = (feed as Feed);
+        const f = (group as Group);
         Modal.confirm({
-            title: t(`archive_feed.${+f.archived}.title`),
-            content: t(`archive_feed.${+f.archived}.content`),
+            title: t(`archive_group.${+f.archived}.title`),
+            content: t(`archive_group.${+f.archived}.content`),
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
-                const res = await toggleFeedArchiveStatus(f.id);
+                const res = await toggleGroupArchiveStatus(f.id);
                 if (res.status === 200) {
                     onArchive(res.data);
-                    setFeed(res.data);
-                    message.info(t(`archive_feed.${+f.archived}.complete`));
+                    setGroup(res.data);
+                    message.info(t(`archive_group.${+f.archived}.complete`));
                 }
             }
         })
-    }, [onArchive, feed, t]);
+    }, [onArchive, group, t]);
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/2 mx-2 p-6 sticky"
@@ -135,13 +135,13 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
             {loading ?
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
-                    <ImagePicker className="cover-selector" onChange={handleImage} defaultImage={feed?.cover}/>
+                    <ImagePicker className="cover-selector" onChange={handleImage} defaultImage={group?.cover}/>
 
                    <div className="flex mt-5">
                        <div className="flex flex-col mx-3">
-                           <label className="font-dinotcb">Feed privé
+                           <label className="font-dinotcb">Groupe privé
                               <HelperIcon
-                                  text="Un feed privé n'est visible et accessible que par les personnes faisant parti de ce feed"
+                                  text="Un groupe privé n'est visible et accessible que par les personnes faisant parti de celui-ci"
                               />
                            </label>
                            <Switch
@@ -154,10 +154,10 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
 
                        </div>
                        <div className="flex-1 mx-3">
-                           <label className="font-dinotcb">Nom du feed</label>
+                           <label className="font-dinotcb">Nom du groupe</label>
                            <Input
                                required
-                               placeholder="Entrez un nom pour votre feed"
+                               placeholder="Entrez un nom pour votre groupe"
                                name="name"
                                value={formik.values.name}
                                onChange={formik.handleChange}
@@ -168,7 +168,7 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                     <div className="mx-3 mb-5">
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
-                            defaultValues={feed?.admins}
+                            defaultValues={group?.admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />
                     </div>
@@ -177,10 +177,10 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                         <Button htmlType="submit" type="primary" className="mt-5" icon="save">
                             Enregistrer
                         </Button>
-                        {feed &&
+                        {(group && !group.locked )  &&
                         <>
                             <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
-                                {feed.archived ? "Désarchiver" : "Archiver"}
+                                {group.archived ? "Désarchiver" : "Archiver"}
                             </Button>
                             <Button type="danger" className="mt-5" icon="delete" onClick={remove}>
                                 Supprimer
@@ -194,4 +194,4 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
     )
 }
 
-export default FeedEditor;
+export default GroupEditor;

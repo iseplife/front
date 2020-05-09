@@ -9,7 +9,7 @@ type ImagePickerProps = {
 }
 
 const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onChange}) => {
-    const [image, setImage] = useState<string | undefined>(defaultImage);
+    const [image, setImage] = useState<string | undefined>(defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage: undefined);
     const [loading, setLoading] = useState<boolean>();
 
     const handleImage = (file: File) => {
@@ -30,7 +30,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
             <Upload
                 name="avatar"
                 listType="picture-card"
-                className={` ${className} avatar-uploader flex justify-center mt-5`}
+                className={`${className} avatar-uploader flex justify-center mt-5`}
                 showUploadList={false}
                 beforeUpload={handleImage}
             >
@@ -39,7 +39,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                         <div
                             className="w-full h-full"
                             style={{
-                                backgroundImage: `url("https://iseplife.s3.eu-west-3.amazonaws.com/${image}")`,
+                                backgroundImage: `url("${image}")`,
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
@@ -57,10 +57,10 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                 }
             </Upload>
             {image &&
-                <span className="text-center cursor-pointer hover:text-red-700" onClick={() => {
-                    setImage(undefined);
-                    onChange(null);
-                }}>
+            <span className="text-center cursor-pointer hover:text-red-700" onClick={() => {
+                setImage(undefined);
+                onChange(null);
+            }}>
                    Supprimer
                 </span>
             }
