@@ -54,12 +54,12 @@ const Table = <T, >(props: TableProps<T>) => {
             <div>
 
             </div>
-            <div className="flex flex-col items-center justify-between w-full shadow sm:rounded-lg border-b"
+            <div className="flex flex-col items-center justify-between w-full shadow sm:rounded-lg border-b bg-white"
                  style={{minHeight: "16rem"}}>
                 {props.loading ?
                     <div className="flex flex-1 w-full"><Loading size="4x" className="m-auto"/></div> :
                     <table className="table-fixed w-full">
-                        <thead>
+                        <thead className="bg-gray-100">
                         <tr>
                             {Headers}
                         </tr>
