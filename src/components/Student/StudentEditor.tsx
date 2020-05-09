@@ -178,6 +178,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         <div>
                             <label className="font-dinotcb">roles</label>
                             <Select
+                                style={{width: "max-content"}}
                                 mode="multiple"
                                 value={formik.values.roles}
                                 notFoundContent={roles ? <Loading size="sm"/> : null}

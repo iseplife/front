@@ -6,14 +6,19 @@ import {IconFA} from "../../../components/Common/IconFA";
 import {PageStatus} from "../student";
 import {Feed} from "../../../data/feed/types";
 import {getAllFeed} from "../../../data/feed";
+import FeedEditor from "../../../components/Feed/FeedEditor";
+import StudentEditor from "../../../components/Student/StudentEditor";
 
 const tableConfig: ColumnType<Feed>[] = [
     {title: "id"},
+    {title: "", className:""},
     {title: "Nom", className: "w-2/5"},
-    {title: "Administrateurs", className: "w-2/5"},
+    {title: "Administrateurs", className: "w-1/3"},
+    {title: ""},
     (props) => (
-        <div className="cursor-pointer rounded border border-gray-300 hover:border-gray-500 py-1 px-2 w-8" onClick={() => props.refresh && props.refresh()}>
-            <IconFA name="fa-redo" type="solid" />
+        <div className="cursor-pointer rounded border border-gray-300 hover:border-gray-500 py-1 px-2 w-8"
+             onClick={() => props.refresh && props.refresh()}>
+            <IconFA name="fa-redo" type="solid"/>
         </div>
     )
 ];
@@ -52,7 +57,7 @@ const FeedPanel: React.FC = () => {
             <h1 className="font-dinotcb text-2xl text-gray-600">Feeds</h1>
             <div className="flex">
                 <Table
-                    className="w-full md:w-1/3"
+                    className="w-full md:w-1/2"
                     loading={loading}
                     data={feeds}
                     page={page}
@@ -60,6 +65,13 @@ const FeedPanel: React.FC = () => {
                     onPageChange={(page) => setPage(prevState => ({...prevState, current: page}))}
                     row={TableRow}
                     columns={tableConfig}
+                />
+                <FeedEditor
+                    id={id}
+                    onDelete={id => setFeeds(feeds => feeds.filter(s => s.id !== id))}
+                    onCreate={feed => setFeeds(feeds => [...feeds, feed])}
+                    onUpdate={feed => setFeeds(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
+                    onArchive={feed => setFeeds(feeds => feeds.map(f => f.id === feed.id ? feed : f))}
                 />
             </div>
         </div>
@@ -69,16 +81,33 @@ const FeedPanel: React.FC = () => {
 const TableRow: React.FC<RowProps<Feed>> = ({data: f}) => (
     <tr key={f.id}>
         <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
-        <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">{f.name}</td>
+        <td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
+            <IconFA type="solid" name={f.restricted ? "fa-lock" : "fa-unlock"}/>
+        </td>
         <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
+            <Link to={`/admin/feed/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
+                {f.name}
+            </Link>
+        </td>
+        <td className="border-b border-gray-200 text-sm leading-5 font-medium pl-6 py-2">
             <AvatarList users={f.admins}/>
+        </td>
+        <td className="py-2 whitespace-no-wrap border-b border-gray-200">
+            {f.archived ?
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    Archivé
+                </span> :
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Actif
+                </span>
+            }
         </td>
         <td className="p-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
             <Link
                 to={`/admin/feed/${f.id}`}
                 className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
             >
-                <IconFA name="fa-edit" />
+                <IconFA name="fa-edit"/>
             </Link>
         </td>
     </tr>
