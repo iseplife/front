@@ -109,16 +109,13 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
         </td>
         <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
             {s.archived ?
-                <span
-                    className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Archivé
-                                         </span> :
-                <span
-                    className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Actif
-                                        </span>
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    Archivé
+                </span> :
+                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Actif
+                </span>
             }
-
         </td>
         <td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
             <div className="flex flex-wrap">
