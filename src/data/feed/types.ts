@@ -10,7 +10,6 @@ export type Feed = {
 }
 
 export type FeedForm = {
-    id: number
     name: string
     restricted: boolean
     admins: number[]

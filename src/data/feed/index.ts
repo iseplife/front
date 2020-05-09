@@ -20,12 +20,24 @@ export const getFeed = (id: number): AxiosPromise<Feed> => {
 }
 
 export const createFeed = (form: FeedForm): AxiosPromise<Feed> => {
-    return axios.post(`/feed`, {form})
+    const fd = new FormData();
+    fd.append('file', form.cover as Blob);
+
+    delete form.cover;
+    delete form.resetCover;
+    fd.append('form', JSON.stringify(form));
+    return axios.post(`/feed`, fd)
 }
 
 
-export const updateFeed = (form: FeedForm): AxiosPromise<Feed> => {
-    return axios.put(`/feed/${form.id}`, {form})
+export const updateFeed = (id: number, form: FeedForm): AxiosPromise<Feed> => {
+    const fd = new FormData();
+    fd.append('file', form.cover as Blob);
+
+    console.log(form);
+    delete form.cover;
+    fd.append('form', JSON.stringify(form));
+    return axios.put(`/feed/${id}`, fd)
 }
 
 export const deleteFeed = (id: number): AxiosPromise<void> => {
@@ -33,5 +45,5 @@ export const deleteFeed = (id: number): AxiosPromise<void> => {
 }
 
 export const toggleFeedArchiveStatus = (id: number): AxiosPromise<Feed> => {
-    return axios.get(`/feed/${id}/archive`);
+    return axios.put(`/feed/${id}/archive`);
 }

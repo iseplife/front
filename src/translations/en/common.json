@@ -16,12 +16,24 @@
     {
       "title": "Do you want to archive this user?",
       "content": "Archiving an user will hide it in some features ",
-      "complete": "User item"
+      "complete": "User archived"
     },
     {
       "title": "Do you want to unarchive this user?",
       "content": "Unarchiving an user will make it visible in features",
-      "complete": "Unarchived user"
+      "complete": "User unarchived"
+    }
+  ],
+  "archive_feed": [
+    {
+      "title": "Do you want to archive this feed?",
+      "content": "Archiving a feed make it and nobody will be able to post on it",
+      "complete": "Feed archived"
+    },
+    {
+      "title": "Do you want to unarchive this user?",
+      "content": "Unarchiving a feed will make it visible again",
+      "complete": "Feed unarchived"
     }
   ],
   "update_item": {

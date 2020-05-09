@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Divider, Input, message, Modal, Popover, Switch} from "antd";
+import {Button, Divider, Input, message, Modal, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import {Feed, FeedForm} from "../../data/feed/types";
@@ -7,9 +7,11 @@ import {createFeed, deleteFeed, getFeed, toggleFeedArchiveStatus, updateFeed} fr
 import {useFormik} from "formik";
 import Loading from "../Common/Loading";
 import ImagePicker from "../Common/ImagePicker";
+import {IconFA} from "../Common/IconFA";
+import StudentSelector from "../Student/StudentSelector";
+import HelperIcon from "../Common/HelperIcon";
 
 import './FeedEditor.css';
-import {IconFA} from "../Common/IconFA";
 
 type FeedEditorProps = {
     id?: string,
@@ -38,7 +40,7 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
             let res;
             if (feed) {
-                res = await updateFeed(values);
+                res = await updateFeed(feed.id, values);
                 if (res.status === 200) {
                     onUpdate(res.data);
                     setFeed(res.data);
@@ -73,7 +75,6 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                     if (res.status === 200) {
                         setFeed(res.data);
                         formik.setValues({
-                            id: res.data.id,
                             name: res.data.name,
                             restricted: res.data.restricted,
                             admins: res.data.admins.map(a => a.id)
@@ -112,8 +113,8 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
         // Tell TS that student is always defined when calling this function
         const f = (feed as Feed);
         Modal.confirm({
-            title: t(`archive_user.${+f.archived}.title`),
-            content: t(`archive_user.${+f.archived}.content`),
+            title: t(`archive_feed.${+f.archived}.title`),
+            content: t(`archive_feed.${+f.archived}.content`),
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
@@ -121,7 +122,7 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                 if (res.status === 200) {
                     onArchive(res.data);
                     setFeed(res.data);
-                    message.info(t(`archive_user.${+f.archived}.complete`));
+                    message.info(t(`archive_feed.${+f.archived}.complete`));
                 }
             }
         })
@@ -139,17 +140,9 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                    <div className="flex mt-5">
                        <div className="flex flex-col mx-3">
                            <label className="font-dinotcb">Feed privé
-                               <Popover
-                                   trigger="hover"
-                                   content={
-                                       <p className="font-dinotl text-xs">
-                                           Un feed privé n'est visible et accessible que par les personnes faisant parti de ce feed
-                                       </p>
-                                   }
-                                   title=""
-                               >
-                                   <span className="ml-2 cursor-pointer"><IconFA type="solid" name="fa-question-circle"/></span>
-                               </Popover>
+                              <HelperIcon
+                                  text="Un feed privé n'est visible et accessible que par les personnes faisant parti de ce feed"
+                              />
                            </label>
                            <Switch
                                className="m-auto"
@@ -174,6 +167,10 @@ const FeedEditor: React.FC<FeedEditorProps> = ({id, onCreate, onDelete, onArchiv
                     <Divider/>
                     <div className="mx-3 mb-5">
                         <label className="font-dinotcb">Administrateurs</label>
+                        <StudentSelector
+                            defaultValues={feed?.admins}
+                            onChange={(ids) => formik.setFieldValue("admins", ids)}
+                        />
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">

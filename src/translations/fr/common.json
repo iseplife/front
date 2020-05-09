@@ -24,6 +24,18 @@
       "complete": "Utilisateur désarchivé"
     }
   ],
+  "archive_feed": [
+    {
+      "title": "Voulez-vous archiver ce feed ?",
+      "content": "Un feed archivé ne sera plus accessible et plus personne ne pourra publier dessus",
+      "complete": "Feed archivé"
+    },
+    {
+      "title": "Voulez-vous désarchiver cet utilisateur ?",
+      "content": "Un feed désarchivé sera à nouveau accessible et les membres pourront publier desssus",
+      "complete": "Feed désarchivé"
+    }
+  ],
   "update_item": {
     "title": "Voulez-vous enregistrer ces modifications ?",
     "content": "Attention, la modification un élément ne peut-être annulé",
