@@ -37,7 +37,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             }
             {(isAdmin || payload.clubsPublisher.length > 0) &&
             <Menu.Item key={3} className="flex justify-start items-center">
-                <Icon type="setting"/>
+                <Icon type="calendar"/>
                 <Link to="/event/new">{t("create_event")}</Link>
             </Menu.Item>
             }
@@ -61,10 +61,11 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
 };
 const Header: React.FC<{ user: Student }> = ({user}) => (
     <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow-md">
-        <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
-
-        <div className="hidden md:flex justify-end items-center">
-            <div className="flex justify-around items-center mr-4">
+        <Link to="/" className="flex">
+            <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
+        </Link>
+        <div className="hidden md:flex justify-end items-center py-5">
+            <div className="flex justify-around items-center mr-4 ">
                 <Link to="/discovery">
                     <IconButton name="compass"/>
                 </Link>
@@ -73,9 +74,15 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
                 </Link>
                 <IconButton name="bell"/>
             </div>
-            <Dropdown overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
-                      trigger={['click']} placement="bottomRight">
-                <Avatar icon="user" src={user.picture} className="cursor-pointer"/>
+            <Dropdown
+                overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
+                trigger={['click']}
+                placement="bottomRight"
+            >
+                <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                    <Avatar icon="user" src={user.picture} size="small" className="cursor-pointer"/>
+                    <span className="mx-2 ">{user.firstName}</span>
+                </div>
             </Dropdown>
         </div>
     </div>

@@ -56,7 +56,7 @@ export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<Student
     return axios.put(`/student/admin`, fd);
 };
 
-export const toggleStudentArchiveStatus = (id: number): AxiosPromise<StudentAdmin> => {
+export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => {
     return axios.put(`/student/${id}/archive`);
 };
 

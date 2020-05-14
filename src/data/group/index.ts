@@ -36,6 +36,6 @@ export const deleteGroup = (id: number): AxiosPromise<void> => {
     return axios.delete(`/group/${id}`);
 }
 
-export const toggleGroupArchiveStatus = (id: number): AxiosPromise<Group> => {
+export const toggleGroupArchiveStatus = (id: number): AxiosPromise<boolean> => {
     return axios.put(`/group/${id}/archive`);
 }
