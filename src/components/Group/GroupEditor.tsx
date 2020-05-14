@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Divider, Input, message, Modal, Switch} from "antd";
+import {Button, Divider, Icon, Input, message, Modal, Switch} from "antd";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {Group, GroupForm} from "../../data/group/types";
 import {useFormik} from "formik";
 import Loading from "../Common/Loading";
@@ -44,13 +44,15 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                 if (res.status === 200) {
                     onUpdate(res.data);
                     setGroup(res.data);
+                    message.success("Modifications enregistrées !")
                 }
             } else {
                 res = await createGroup(values);
                 if (res.status === 200) {
                     onCreate(res.data);
                     setGroup(res.data);
-                    history.push(`/admin/user/${res.data.id}`);
+                    history.push(`/admin/group/${res.data.id}`);
+                    message.success("Groupe créé !")
                 }
             }
         },
@@ -64,7 +66,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
     };
 
     /**
-     * Get Feed's information according with the id props,
+     * Get group's information according with the id props,
      * this effect is triggered at each new id update.
      */
     useEffect(() => {
@@ -80,11 +82,13 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                             admins: res.data.admins.map(a => a.id)
                         })
                     } else {
-                        message.error("Feed inconnu: " + id)
+                        message.error("Groupe inconnu: " + id);
+                        history.push("/admin/group");
                     }
                 }).finally(() => setLoading(false))
             } else {
-                message.error("Feed inconnu: " + id)
+                message.error("Groupe inconnu: " + id);
+                history.push("/admin/group");
             }
         } else {
             setGroup(undefined);
@@ -100,29 +104,28 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
-                const id = (group as Group).id;
-                const res = await deleteGroup(id);
+                const res = await deleteGroup(group!.id);
                 if (res.status === 200) {
-                    onDelete(id);
+                    onDelete(group!.id);
                     message.info(t('remove_item.complete'));
+                    history.push("/admin/group");
                 }
             }
         }), [onDelete, group, t]);
 
     const archive = useCallback(() => {
         // Tell TS that student is always defined when calling this function
-        const f = (group as Group);
         Modal.confirm({
-            title: t(`archive_group.${+f.archived}.title`),
-            content: t(`archive_group.${+f.archived}.content`),
+            title: t(`archive_group.${+group!.archived}.title`),
+            content: t(`archive_group.${+group!.archived}.content`),
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
-                const res = await toggleGroupArchiveStatus(f.id);
+                const res = await toggleGroupArchiveStatus(group!.id);
                 if (res.status === 200) {
-                    onArchive(res.data);
-                    setGroup(res.data);
-                    message.info(t(`archive_group.${+f.archived}.complete`));
+                    group!.archived = res.data;
+                    onArchive(group!);
+                    message.info(t(`archive_group.${+group!.archived}.complete`));
                 }
             }
         })
@@ -130,40 +133,48 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/2 mx-2 p-6 sticky"
-             style={{height: "min-content", minHeight: "16rem", top: 5}}
+             style={{height: "min-content", minHeight: "16rem", top: "1.5rem"}}
         >
             {loading ?
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
+                    {group &&
+                    <Link to="/admin/group">
+                        <div className="text-right absolute right-0 top-0 w-16">
+                            <Icon type="close-circle" style={{fontSize: '26px'}}/>
+                        </div>
+                    </Link>
+                    }
+
                     <ImagePicker className="cover-selector" onChange={handleImage} defaultImage={group?.cover}/>
 
-                   <div className="flex mt-5">
-                       <div className="flex flex-col mx-3">
-                           <label className="font-dinotcb">Groupe privé
-                              <HelperIcon
-                                  text="Un groupe privé n'est visible et accessible que par les personnes faisant parti de celui-ci"
-                              />
-                           </label>
-                           <Switch
-                               className="m-auto"
-                               checkedChildren={<IconFA type="solid" name="fa-lock"/>}
-                               unCheckedChildren={<IconFA type="solid" name="fa-unlock"/>}
-                               checked={formik.values.restricted}
-                               onChange={(val) => formik.setFieldValue("restricted", val)}
-                           />
+                    <div className="flex mt-5">
+                        <div className="flex flex-col mx-3">
+                            <label className="font-dinotcb">Groupe privé
+                                <HelperIcon
+                                    text="Un groupe privé n'est visible et accessible que par les personnes faisant parti de celui-ci"
+                                />
+                            </label>
+                            <Switch
+                                className="m-auto"
+                                checkedChildren={<IconFA type="solid" name="fa-lock"/>}
+                                unCheckedChildren={<IconFA type="solid" name="fa-unlock"/>}
+                                checked={formik.values.restricted}
+                                onChange={(val) => formik.setFieldValue("restricted", val)}
+                            />
 
-                       </div>
-                       <div className="flex-1 mx-3">
-                           <label className="font-dinotcb">Nom du groupe</label>
-                           <Input
-                               required
-                               placeholder="Entrez un nom pour votre groupe"
-                               name="name"
-                               value={formik.values.name}
-                               onChange={formik.handleChange}
-                           />
-                       </div>
-                   </div>
+                        </div>
+                        <div className="flex-1 mx-3">
+                            <label className="font-dinotcb">Nom du groupe</label>
+                            <Input
+                                required
+                                placeholder="Entrez un nom pour votre groupe"
+                                name="name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                    </div>
                     <Divider/>
                     <div className="mx-3 mb-5">
                         <label className="font-dinotcb">Administrateurs</label>
@@ -177,7 +188,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                         <Button htmlType="submit" type="primary" className="mt-5" icon="save">
                             Enregistrer
                         </Button>
-                        {(group && !group.locked )  &&
+                        {(group && !group.locked) &&
                         <>
                             <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
                                 {group.archived ? "Désarchiver" : "Archiver"}

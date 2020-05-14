@@ -39,7 +39,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     const {t} = useTranslation();
     const history = useHistory();
     const [loading, setLoading] = useState<boolean>(false);
-    const [student, setStudent] = useState<Student>();
+    const [student, setStudent] = useState<StudentAdmin>();
 
     const formik = useFormik<StudentAdminForm>({
         initialValues: DEFAULT_USER,
@@ -51,6 +51,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 if (res.status === 200) {
                     onUpdate(res.data);
                     setStudent(res.data);
+                    message.success("Modifications enregistrées !")
                 }
             } else {
                 res = await createStudent(values);
@@ -58,6 +59,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     onCreate(res.data);
                     setStudent(res.data);
                     history.push(`/admin/user/${res.data.id}`);
+
+                    message.success("Élève créé !")
                 }
             }
         },
@@ -92,11 +95,13 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             birthDate: res.data.birthDate ? new Date(res.data.birthDate) : undefined
                         })
                     } else {
-                        message.error("Utilisateur inconnu: " + id)
+                        message.error("Utilisateur inconnu: " + id);
+                        history.push("/admin/user");
                     }
                 }).finally(() => setLoading(false))
             } else {
                 message.error("Utilisateur inconnu: " + id)
+                history.push("/admin/user");
             }
         } else {
             setStudent(undefined);
@@ -117,24 +122,24 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 if (res.status === 200) {
                     onDelete(id);
                     message.info(t('remove_item.complete'));
+                    history.push("/admin/user");
                 }
             }
         }), [onDelete, student, t]);
 
     const archive = useCallback(() => {
         // Tell TS that student is always defined when calling this function
-        const s = (student as Student);
         Modal.confirm({
-            title: t(`archive_user.${+s.archived}.title`),
-            content: t(`archive_user.${+s.archived}.content`),
+            title: t(`archive_user.${+student!.archived}.title`),
+            content: t(`archive_user.${+student!.archived}.content`),
             okText: 'Ok',
             cancelText: t('cancel'),
             onOk: async () => {
-                const res = await toggleStudentArchiveStatus(s.id);
+                const res = await toggleStudentArchiveStatus(student!.id);
                 if (res.status === 200) {
-                    onArchive(res.data);
-                    setStudent(res.data);
-                    message.info(t(`archive_user.${+s.archived}.complete`));
+                    student!.archived = res.data
+                    onArchive(student!);
+                    message.info(t(`archive_user.${+student!.archived}.complete`));
                 }
             }
         })
@@ -142,7 +147,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
-             style={{height: "min-content", minHeight: "16rem", top: 5}}
+             style={{height: "min-content", minHeight: "16rem", top: "1.5rem"}}
         >
             {loading ?
                 <Loading size="4x"/> :
@@ -174,31 +179,16 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
 
                     <ImagePicker onChange={handleImage} defaultImage={student?.picture}/>
 
-                    <div className="w-16 mb-1">
-                        <div>
-                            <label className="font-dinotcb">roles</label>
-                            <Select
-                                style={{width: "max-content"}}
-                                mode="multiple"
-                                value={formik.values.roles}
-                                notFoundContent={roles ? <Loading size="sm"/> : null}
-                                onChange={(val: string[]) => formik.setFieldValue("roles", val)}
-                            >
-                                { roles && roles.map(r => (
-                                    <Option key={r.id} value={r.role}>{r.role}</Option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div>
+                    <div className="mb-1 w-24">
                             <label className="font-dinotcb">promo</label>
                             <InputNumber
+                                className="w-full"
                                 name="promo"
                                 value={formik.values.promo}
                                 onChange={(val) => formik.setFieldValue("promo", val)}
                             />
-                        </div>
                     </div>
-                    <div className="flex flex-row ">
+                    <div className="flex flex-row">
                         <div className="mr-2 w-1/2">
                             <label className="font-dinotcb">prénom</label>
                             <Input
@@ -220,7 +210,20 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             />
                         </div>
                     </div>
-
+                    <div className="mt-1">
+                        <label className="font-dinotcb">roles</label>
+                        <Select
+                            className="w-full"
+                            mode="multiple"
+                            value={formik.values.roles}
+                            notFoundContent={roles ? <Loading size="sm"/> : null}
+                            onChange={(val: string[]) => formik.setFieldValue("roles", val)}
+                        >
+                            { roles && roles.map(r => (
+                                <Option key={r.id} value={r.role}>{r.role}</Option>
+                            ))}
+                        </Select>
+                    </div>
                     <Divider/>
 
                     <div className="my-1 flex justify-between">
@@ -248,10 +251,10 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         <label className="font-dinotcb">date de naissance</label>
                         <Input
                             placeholder="29/01/1968"
-                            name="birthdate"
+                            name="birthDate"
                             type="date"
                             value={formik.values.birthDate && format(formik.values.birthDate, "yyyy-MM-dd")}
-                            onChange={(e) => formik.setFieldValue("birthdate", e.target.valueAsDate)}
+                            onChange={(e) => formik.setFieldValue("birthDate", e.target.valueAsDate)}
                         />
                     </div>
 

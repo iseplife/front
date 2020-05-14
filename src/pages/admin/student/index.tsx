@@ -22,7 +22,7 @@ const tableConfig = [
     {title: "", className: "w-24"}
 ];
 
-const Student: React.FC = () => {
+const StudentPanel: React.FC = () => {
     const {id} = useParams();
     const [students, setStudents] = useState<StudentPreviewAdmin[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -57,17 +57,21 @@ const Student: React.FC = () => {
 
     return (
         <div>
-            <h1 className="font-dinotcb text-2xl text-gray-600">Utilisateurs</h1>
+
             <div className="flex">
-                <Table
-                    className="w-full md:w-2/3"
-                    loading={loading}
-                    data={students}
-                    page={page}
-                    onPageChange={(page) => setPage(prevState => ({...prevState, current: page}))}
-                    columns={tableConfig}
-                    row={TableRow}
-                />
+                <div className="w-full md:w-2/3">
+                    <h1 className="font-dinotcb text-2xl text-gray-600">Utilisateurs</h1>
+                    <Table
+                        className=""
+                        loading={loading}
+                        data={students}
+                        page={page}
+                        onPageChange={(page) => setPage(prevState => ({...prevState, current: page}))}
+                        columns={tableConfig}
+                        row={TableRow}
+                    />
+                </div>
+
                 <StudentEditor
                     id={id}
                     roles={roles}
@@ -137,4 +141,4 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
     </tr>
 )
 
-export default Student;
+export default StudentPanel;
