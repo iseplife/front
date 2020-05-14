@@ -9,12 +9,14 @@ const AdminHeader: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
-        <header className="bg-white shadow">
-            <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center py-2 mr-4">
+        <header className="bg-white shadow relative">
+            <div className="flex items-center justify-between h-12 px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center py-1 mr-4">
+                    <Link to="/admin">
                     <h1 className="text-4xl font-bold leading-tight text-indigo-500 my-auto">
                         Administration
                     </h1>
+                    </Link>
                 </div>
                 <div className="flex flex-1 items-center hidden md:block pt-4 mr-4">
                     <Link to="/admin/user" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
@@ -31,7 +33,7 @@ const AdminHeader: React.FC = () => {
                     </Link>
                 </div>
                 <div className="flex justify-between items-center hidden md:block">
-                    <Avatar icon="user" src={user.picture} className=""/>
+                    <Avatar icon="user" src={user.picture} size="small"/>
                     <Link to="/"><Icon className="hover:text-gray-300 text-gray-500 ml-3 p-3" type="export"/> </Link>
                 </div>
                 <div className="block md:hidden">
