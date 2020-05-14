@@ -8,8 +8,10 @@ type ImagePickerProps = {
     onChange: (file: File | null) => void
 }
 
-const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onChange}) => {
-    const [image, setImage] = useState<string | undefined>(defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage: undefined);
+const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, onChange}) => {
+    const [image, setImage] = useState<string | undefined>(
+        defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage: undefined
+    );
     const [loading, setLoading] = useState<boolean>();
 
     const handleImage = (file: File) => {
