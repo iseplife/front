@@ -6,6 +6,12 @@
   "administration": "Administration",
   "create_event": "Create an event",
   "create_club": "Create a club",
+  "club_type": {
+  "STUDENT_UNION": "Student Union",
+  "SPORT_UNION": "Sport Union",
+  "ART_UNION": "Art Union",
+  "CLUB": "Club"
+},
   "switch_lang": "Switch language",
   "remove_item": {
     "title": "Do you want to delete this item?",
@@ -16,12 +22,24 @@
     {
       "title": "Do you want to archive this user?",
       "content": "Archiving an user will hide it in some features ",
-      "complete": "User item"
+      "complete": "User archived"
     },
     {
       "title": "Do you want to unarchive this user?",
       "content": "Unarchiving an user will make it visible in features",
-      "complete": "Unarchived user"
+      "complete": "User unarchived"
+    }
+  ],
+  "archive_group": [
+    {
+      "title": "Do you want to archive this group?",
+      "content": "Archiving a group will hide it and nobody will be able to post on it",
+      "complete": "Group archived"
+    },
+    {
+      "title": "Do you want to unarchive this group?",
+      "content": "Unarchiving a group will make it visible again",
+      "complete": "Group unarchived"
     }
   ],
   "update_item": {

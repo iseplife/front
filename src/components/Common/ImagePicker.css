@@ -1,7 +1,7 @@
 div.ant-upload {
     display: flex !important;
-    height: 150px !important;
-    width: 150px !important;
+    height: 130px !important;
+    width: 130px !important;
     overflow: hidden;
     border-radius: 9999px !important;
 }

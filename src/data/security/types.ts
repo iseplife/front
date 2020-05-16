@@ -22,7 +22,6 @@ export interface TokenPayload {
     roles: Roles[]
     clubsAdmin: Array<number>
     clubsPublisher: Array<number>
-    feed: Array<string>
 }
 
 export type Role = {

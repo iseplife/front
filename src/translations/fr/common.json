@@ -6,6 +6,12 @@
   "create_feed": "Créer un feed",
   "create_event": "Créer un évènement",
   "create_club": "Créer un club",
+  "club_type": {
+    "STUDENT_UNION": "BDE",
+    "SPORT_UNION": "BDS",
+    "ART_UNION": "BDA",
+    "CLUB": "Association"
+  },
   "switch_lang": "Changer la langue",
   "remove_item": {
     "title": "Voulez-vous supprimez cet élément ?",
@@ -22,6 +28,18 @@
       "title": "Voulez-vous désarchiver cet utilisateur ?",
       "content": "Un utilisateur désarchivé sera à nouveau visible dans les fonctionnalités",
       "complete": "Utilisateur désarchivé"
+    }
+  ],
+  "archive_group": [
+    {
+      "title": "Voulez-vous archiver ce groupe ?",
+      "content": "Un groupe archivé ne sera plus accessible et plus personne ne pourra publier dessus",
+      "complete": "Groupe archivé"
+    },
+    {
+      "title": "Voulez-vous désarchiver ce groupe ?",
+      "content": "Un groupe désarchivé sera à nouveau accessible et les membres pourront publier dessus",
+      "complete": "Groupe désarchivé"
     }
   ],
   "update_item": {

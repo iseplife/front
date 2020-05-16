@@ -63,7 +63,7 @@ const Event: React.FC = () => {
                     </Link>
                     <div className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
                          style={{right: 0, bottom: 5}}>
-                        {format(event.startsAt, "d MMM") + (event.endsAt ? (" - " + format(event.endsAt, "d MMM")) : "")}
+                        {format(new Date(event.startsAt), "d MMM") + (event.endsAt ? (" - " + format(new Date(event.endsAt), "d MMM")) : "")}
                     </div>
                 </div>
                 <div className="mx-auto p-3 w-full">
@@ -103,7 +103,7 @@ const Event: React.FC = () => {
                                 {event.title}
                             </div>
                             <div className="font-dinotcb text-4xl text-center">
-                                {format(event.startsAt, "HH:mm") + " " + (event.endsAt ? format(event.endsAt, "HH:mm") : "")}
+                                {format(new Date(event.startsAt), "HH:mm") + " " + (event.endsAt ? format(new Date(event.endsAt), "HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
                                 {event.location}
@@ -153,7 +153,7 @@ const Event: React.FC = () => {
                         </div>
                     </div>
 
-                    <Feed id={event.feed.id} className="mx-auto my-3 md:w-3/6 w-full"/>
+                    <Feed id={event.feed} className="mx-auto my-3 md:w-3/6 w-full"/>
                 </div>
             </div>
         );

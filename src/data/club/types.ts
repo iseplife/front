@@ -4,27 +4,23 @@ import RoleType from "../../constants/RoleType";
 
 export type Club = {
     id: number
+    logoUrl: string
     name: string
     description: string
-    archivedAt?: number
-    createdAt: number
-    feed?: bigint
     type: ClubType
+    creation: number
+    archived: boolean
+    feed: number
+
     facebook?: string
-    facebook_token?: string
-    snapchat?: string
     instagram?: string
     website?: string
-    isAdmin: boolean
-    members?: any
-    events?: any
-    posts?: any
-    logoUrl: string
 }
 
-export type ClubPreview = {
+export interface ClubPreview {
     id: number
     name: string
+    description: string
     logoUrl: string
 }
 
@@ -32,4 +28,17 @@ export type ClubMemberView = {
     club: Club
     role: RoleType
     member: Student
+}
+
+export type ClubForm = {
+    name: string
+    description: string
+    creation: Date
+    type: ClubType
+    admins: number[]
+    logo?: File
+
+    facebook?: string
+    instagram?: string
+    website?: string
 }

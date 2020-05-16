@@ -1,7 +1,7 @@
 import axios, {AxiosPromise} from "axios";
 import {Student, StudentAdminForm, StudentAdmin, StudentPreview, StudentPreviewAdmin} from "./types";
 import {ClubMemberView} from "../club/types";
-import {Page} from "../request.type";
+import {Page, SearchItem} from "../request.type";
 
 export function getLoggedUser(): AxiosPromise<Student> {
     return axios.get('/student/me');
@@ -14,6 +14,14 @@ export function getStudent(id: number): AxiosPromise<Student> {
 export function getStudentAdmin(id: number): AxiosPromise<StudentAdmin> {
     return axios.get(`/student/${id}/admin`);
 }
+
+export const searchStudentsPaged = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => {
+    return axios.get(`/search/student/`, {params: {page, name, promos, atoz}});
+};
+
+export const searchStudents = (name: string): AxiosPromise<SearchItem[]> => {
+    return axios.get(`/search/student/all`, {params: {name}});
+};
 
 export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => {
     return axios.get('/student', { params: {page}});
@@ -48,7 +56,7 @@ export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<Student
     return axios.put(`/student/admin`, fd);
 };
 
-export const toggleStudentArchiveStatus = (id: number): AxiosPromise<StudentAdmin> => {
+export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => {
     return axios.put(`/student/${id}/archive`);
 };
 

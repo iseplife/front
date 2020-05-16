@@ -1,5 +1,4 @@
 import {Club} from "../club/types";
-import {Feed} from "../feed/types";
 
 export type Event = {
     id: number
@@ -16,7 +15,7 @@ export type Event = {
     target: string
     published: boolean
     closed: boolean
-    feed: Feed
+    feed: number
 }
 
 
