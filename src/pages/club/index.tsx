@@ -29,7 +29,7 @@ const Club: React.FC = () => {
             getClubById(id)
                 .then(res => {
                     const club = res.data as ClubType;
-                    setClub(club);
+                    setClub(res.data);
                 })
                 .catch(e => message.error(e))
                 .finally(() => setClubLoading(false));
