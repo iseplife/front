@@ -2,7 +2,6 @@ import React from "react";
 import {Club} from "../../../../data/club/type";
 import {IconFA} from "../../../Common/IconFA";
 import {Avatar, Skeleton} from "antd";
-import SkeletonAvatar from "antd/es/skeleton/Avatar";
 
 interface AboutProps { club: Club | undefined; isLoading: boolean }
 const About: React.FC<AboutProps> = ({club, isLoading}) => {
