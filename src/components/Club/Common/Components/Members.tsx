@@ -12,7 +12,7 @@ const Members: React.FC<MembersProps> = ({members, isLoading}) => {
         <div className="w-full flex flex-row flex-wrap xl:overflow-x-hidden xl:overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-hidden md:overflow-x-hidden md:overflow-y-hidden">
             {
                 isLoading
-                    ? <CardTextSkeleton loading={isLoading} number={10} className="xl:w-56 lg:w-56 md:w-56 w-full m-1 h-24 shadow-md"></CardTextSkeleton>
+                    ? <CardTextSkeleton loading={isLoading} number={10} className="xl:w-56 lg:w-56 md:w-56 w-full m-1 h-24 shadow-md" />
                     :  (
                         members.map((member: ClubMember) => {
                             return (
