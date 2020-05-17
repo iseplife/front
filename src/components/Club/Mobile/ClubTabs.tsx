@@ -1,31 +1,31 @@
 import React, {useState} from "react";
 import {Tab, tabs} from "./ClubTab.helper";
 import ClubNavbar from "./ClubNavbar";
-import {Club, ClubMember} from "../../../data/club/type";
-import Members from "../Common/Components/Members";
-import Galleries from "../Common/Components/Galleries";
-import About from "../Common/Components/About";
+import {Club, ClubMember} from "../../../data/club/types";
+import Members from "../Members";
+import Galleries from "../Galleries";
+import About from "../About";
 import Feed from "../../Feed";
-import {Gallery} from "../../../data/gallery/type";
+import {Gallery} from "../../../data/gallery/types";
 
 // Service
 const renderSwitch = (activeTab : Tab | undefined, club: Club | undefined, clubLoading: boolean, members: ClubMember[], membersLoading: boolean, galleries: Gallery[], galleriesLoading: boolean): React.ReactNode => {
     switch(activeTab) {
         case tabs[0]:
-            return <Members members={members} isLoading={membersLoading}></Members>;
+            return <Members members={members} isLoading={membersLoading} />;
         case tabs[1]:
-            return !!club ? <Feed id={club.feed.id} allowPublication={false}/> : "";
+            return club && <Feed id={club.feed} allowPublication={false} />;
         case tabs[2]:
-            return <Galleries galleries={galleries} isLoading={galleriesLoading}></Galleries>
+            return <Galleries galleries={galleries} isLoading={galleriesLoading} />
         case tabs[3]:
-            return <About club={club} isLoading={clubLoading}></About>;
+            return <About club={club} isLoading={clubLoading} />;
         default:
-            return <Members members={members} isLoading={membersLoading}></Members>;
+            return <Members members={members} isLoading={membersLoading} />;
     }
 };
 
 interface ClubTabsProps {
-    club: Club | undefined,
+    club?: Club,
     galleries: Gallery[],
     members: ClubMember[],
     clubLoading: boolean,
@@ -34,7 +34,6 @@ interface ClubTabsProps {
 }
 const ClubTabs: React.FC<ClubTabsProps> = ({club, galleries, members, clubLoading, membersLoading, galleriesLoading}) => {
     const [activeTab, setActiveTab] = useState<Tab>();
-
     return (
         <div className="w-full xl:hidden lg:hidden md:hidden">
             <ClubNavbar onActiveTabChange={(tab: Tab) => setActiveTab(tab)}/>

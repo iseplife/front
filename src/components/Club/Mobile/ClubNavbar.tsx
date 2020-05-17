@@ -1,7 +1,10 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, {useLayoutEffect, useRef, useState} from "react";
 import {Tab, tabs} from "./ClubTab.helper";
 
-interface ClubNavbarProps { onActiveTabChange(tab: Tab): void; }
+interface ClubNavbarProps {
+    onActiveTabChange(tab: Tab): void;
+}
+
 const ClubNavbar: React.FC<ClubNavbarProps> = ({onActiveTabChange}) => {
     const [navtabs, setNavtabs] = useState<Tab[]>(tabs);
     const [isSticky, setIsSticky] = useState<boolean>(false);
@@ -10,7 +13,7 @@ const ClubNavbar: React.FC<ClubNavbarProps> = ({onActiveTabChange}) => {
 
     useLayoutEffect(() => {
         const element = document.getElementById("main");
-        if (!!element) {
+        if (element) {
             element.addEventListener("scroll", () => scroll$(element));
         }
     });
@@ -43,9 +46,11 @@ const ClubNavbar: React.FC<ClubNavbarProps> = ({onActiveTabChange}) => {
                 {
                     navtabs.map((tab: Tab) => (
                         <li className="-mb-px m-auto" key={tab.id}>
-                            <a className={"inline-block py-2 px-4 text-gray-700 font-semibold xl:text-lg lg:text-lg " + (tab.isActive ? "border-b-4 border-indigo-500" : "")}
-                               onClick={() => onTabChange(tab)}
-                               key={tab.id}>
+                            <a
+                                className={"inline-block py-2 px-4 text-gray-700 font-semibold xl:text-lg lg:text-lg " + (tab.isActive ? "border-b-4 border-indigo-500" : "")}
+                                onClick={() => onTabChange(tab)}
+                                key={tab.id}
+                            >
                                 {tab.name}
                             </a>
                         </li>

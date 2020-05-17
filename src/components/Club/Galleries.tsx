@@ -1,5 +1,5 @@
 import React from "react";
-import {Gallery, Media} from "../../../../data/gallery/type";
+import {Gallery, Media} from "../../data/gallery/types";
 import {Avatar, Divider} from "antd";
 import {Link} from "react-router-dom";
 import GallerySkeleton from "./Skeletons/GallerySkeleton";

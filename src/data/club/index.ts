@@ -34,7 +34,14 @@ export const deleteClub = (id: number): AxiosPromise<void> => {
     return axios.delete(`/club/${id}`)
 }
 
-
 export const getClubAdmins = (id: number): AxiosPromise<StudentPreview[]> => {
     return axios.get(`/club/${id}/admins`)
+}
+
+export const getClubMembers = (id: number): AxiosPromise<ClubMember[]> => {
+    return axios.get(`/club/${id}/member`)
+};
+
+export const getClubGalleries = (id: number): AxiosPromise<Page<Gallery>> => {
+    return axios.get(`/club/${id}/galleries`);
 }

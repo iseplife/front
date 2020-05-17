@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {message, Upload, Icon, Button, Avatar} from "antd";
-import {IconFA} from "../../../Common/IconFA";
+import {IconFA} from "../../Common/IconFA";
 import {useTranslation} from "react-i18next";
 
 const getBase64 = (img: any, callback: any): void => {

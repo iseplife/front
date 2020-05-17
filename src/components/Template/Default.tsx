@@ -9,6 +9,7 @@ import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
 import Discovery from "../../pages/discovery"
 import Navbar from "./Navbar"
+import Club from "../../pages/club";
 
 
 const DefaultTemplate: React.FC = () => {

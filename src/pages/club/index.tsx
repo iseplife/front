@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router";
-import {Club as ClubType, ClubMember} from "../../data/club/type";
-import {getClubById, getClubGalleries, getClubMembers} from "../../data/club";
-import CardDescription from "../../components/Club/Common/ClubDescription/CardDescription";
+import {Club as ClubType, ClubMember} from "../../data/club/types";
+import {getClub, getClubGalleries, getClubMembers} from "../../data/club";
+import CardDescription from "../../components/Club/ClubDescription/CardDescription";
 import ClubTabs from "../../components/Club/Mobile/ClubTabs";
 import {message} from "antd";
-import SidepanelMembers from "../../components/Club/Desktop/SidepanelMembers";
+import SidePanelMembers from "../../components/Club/Desktop/SidePanelMembers";
 import {Page} from "../../data/request.type";
-import {Gallery} from "../../data/gallery/type";
+import {Gallery} from "../../data/gallery/types";
 import Feed from "../../components/Feed";
 import style from "../../components/Club/Club.module.css";
+import {useHistory} from "react-router-dom";
 
 const Club: React.FC = () => {
     const {id} = useParams();
 
+    const history = useHistory();
     const [club, setClub] = useState<ClubType>();
     const [clubLoading, setClubLoading] = useState<boolean>(true);
 
@@ -23,58 +25,62 @@ const Club: React.FC = () => {
     const [galleries, setGalleries] = useState<Gallery[]>([]);
     const [galleriesLoading, setGalleriesLoading] = useState<boolean>(false);
 
-    // Club initialization
-    useEffect(() => {
-        if (!!id) {
-            getClubById(id)
-                .then(res => {
-                    const club = res.data as ClubType;
-                    setClub(res.data);
-                })
-                .catch(e => message.error(e))
-                .finally(() => setClubLoading(false));
-        }
-    }, [id]);
-
-    useEffect(() => {
-        updateMembers(club);
-        updateGalleries(club);
-    }, [club]);
-
     // Updated function called when respective tab is active
-    const updateMembers = (club: ClubType | undefined): void => {
-        if (!!club && !!club.id) {
+    const updateMembers = (club?: ClubType): void => {
+        if (club) {
             setMembersLoading(true);
-            getClubMembers(club.id.toString())
+            getClubMembers(club.id)
                 .then(res => {
-                    const members = res.data as ClubMember[];
-                    setMembers(members);
+                    setMembers(res.data);
                 })
                 .catch(e => message.error(e))
                 .finally(() => setMembersLoading(false));
         }
     };
-    const updateGalleries = (club: ClubType | undefined): void => {
-        if (!!club && !!club.id) {
+    const updateGalleries = (club?: ClubType): void => {
+        if (club) {
             setGalleriesLoading(true);
-            getClubGalleries(club.id.toString())
+            getClubGalleries(club.id)
                 .then(res => {
-                    const page = res.data as Page<Gallery>;
-                    const galleries = page.content;
-                    setGalleries(galleries);
+                    setGalleries(res.data.content);
                 })
                 .catch(e => message.error(e))
                 .finally(() => setGalleriesLoading(false));
         }
     };
 
+    /**
+     * Club initialisation on mounting
+     */
+    useEffect(() => {
+        if (id && +id) {
+            setClubLoading(true);
+            getClub(+id)
+                .then(res => {
+                    setClub(res.data);
+                })
+                .catch(e => message.error(e))
+                .finally(() => setClubLoading(false));
+        }else {
+            history.push("404");
+        }
+    }, [id]);
+
+
+    useEffect(() => {
+        updateMembers(club);
+        updateGalleries(club);
+    }, [club]);
+
     return (
         <div className="xl:overflow-y-hidden lg:overflow-y-hidden md:overflow-y-hidden w-full h-full flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-start">
-            <CardDescription club={club} clubLoading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>
+            <CardDescription club={club} loading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>
             <div className={"overflow-y-auto overflow-x-hidden " + style.customScrollbar}>
-                { club && ( <Feed id={club.feed.id} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/> )}
+                { club &&
+                    <Feed id={club.feed} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/>
+                }
             </div>
-            <SidepanelMembers members={members} isLoading={membersLoading}/>
+            <SidePanelMembers members={members} isLoading={membersLoading}/>
             <ClubTabs 
                 club={club} 
                 members={members} 
