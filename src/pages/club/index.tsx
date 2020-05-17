@@ -75,7 +75,14 @@ const Club: React.FC = () => {
                 { !!club && ( <Feed id={club.feed.id} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/> )}
             </div>
             <SidepanelMembers members={members} isLoading={membersLoading}/>
-            <ClubTabs club={club} members={members} galleries={galleries} clubLoading={clubLoading} membersLoading={membersLoading} galleriesLoading={galleriesLoading}></ClubTabs>
+            <ClubTabs 
+                club={club} 
+                members={members} 
+                galleries={galleries} 
+                clubLoading={clubLoading} 
+                membersLoading={membersLoading} 
+                galleriesLoading={galleriesLoading}
+            /> 
         </div>
     );
 };
