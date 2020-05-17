@@ -4,16 +4,26 @@ services:
 
 variables:
   FRONT_VERSION: v1.4
-
-stages:
-  - build
-  - package
-  - deploy
-
 cache:
   paths:
     - .yarn
     - node_modules/
+
+
+stages:
+  - test
+  - build
+  - package
+
+test:
+  stage: test
+  image: node:12.0.0
+  script:
+    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+    - yarn run build:dev
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+
 
 react-build:
   stage: build
@@ -27,7 +37,7 @@ react-build:
     - yarn run build:dev
   retry: 2
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 docker-build:
   stage: package
@@ -38,6 +48,5 @@ docker-build:
     - docker push $CI_REGISTRY_IMAGE:$FRONT_VERSION
     - docker push $CI_REGISTRY_IMAGE:latest
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-      when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
