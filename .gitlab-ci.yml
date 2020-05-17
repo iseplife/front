@@ -49,5 +49,4 @@ docker-build:
     - docker push $CI_REGISTRY_IMAGE:latest
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: on_success
 
