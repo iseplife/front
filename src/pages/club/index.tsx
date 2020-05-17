@@ -72,7 +72,7 @@ const Club: React.FC = () => {
         <div className="xl:overflow-y-hidden lg:overflow-y-hidden md:overflow-y-hidden w-full h-full flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-start">
             <CardDescription club={club} clubLoading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>
             <div className={"overflow-y-auto overflow-x-hidden " + style.customScrollbar}>
-                { !!club && ( <Feed id={club.feed.id} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/> )}
+                { club && ( <Feed id={club.feed.id} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/> )}
             </div>
             <SidepanelMembers members={members} isLoading={membersLoading}/>
             <ClubTabs 
