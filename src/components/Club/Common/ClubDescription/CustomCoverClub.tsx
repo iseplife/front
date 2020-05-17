@@ -57,7 +57,7 @@ const CustomCoverClub: React.FC = () => {
                 <Button><Icon type="upload"/></Button>
             </Upload>
             {state.imageUrl ? <Avatar shape="square" src={state.imageUrl} className="w-full h-full"></Avatar> : ""}
-            {state.loading ? <IconFA name="fa-circle-notch" spin size="2x" className="m-auto text-white" type="solid"/> : ""}
+            {state.loading && <IconFA name="fa-circle-notch" spin size="2x" className="m-auto text-white" type="solid"/>}
         </div>
     )
 };
