@@ -4,20 +4,23 @@ services:
 
 variables:
   FRONT_VERSION: v1.4
+cache:
+  paths:
+    - .yarn
+    - node_modules/
+
 
 stages:
   - test
   - build
   - package
 
-cache:
-  paths:
-    - .yarn
-    - node_modules/
-
 test:
   stage: test
   image: node:12.0.0
+  script:
+    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+    - yarn run build:dev
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
 
