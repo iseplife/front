@@ -133,7 +133,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
         <div className="relative h-full h-auto">
             {(watch !== "DOWN") && (
                 <div className="h-12 mb-3 text-center">
-                    {upLoader.over ? <p>{t('end')}</p> : upLoader.loading && (!!loadingComponent ? loadingComponent : <Loading size="3x"/>)}
+                    {upLoader.over ? <p>{t('end')}</p> : upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
             )}
 
