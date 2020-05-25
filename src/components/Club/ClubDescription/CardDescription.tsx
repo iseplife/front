@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import {Club} from "../../../data/club/types";
 
 import style from "../Club.module.css";
+const {Panel} = Collapse;
 
 // Service
 const getCoverElement = (club: Club | undefined, clubLoading: boolean): React.ReactNode => {
@@ -31,14 +32,10 @@ interface CardDescriptionProps {
 
 const CardDescription: React.FC<CardDescriptionProps> = ({club, loading, galleries, galleriesLoading}) => {
     const {t} = useTranslation('club');
-    const {Panel} = Collapse;
-
-    const CardCSSProperties: CSSProperties = {height: (window.innerWidth < 500 ? "fit-content" : "calc(100vh - 3rem)")};
-
     return (
         <Card
             className={"w-full md:w-64 lg:w-1/4 xl:w-1/4 xl:overflow-y-auto lg:overflow-y-auto md:overflow-y-auto " + style.customScrollbar}
-            style={CardCSSProperties}
+            style={{height: "calc(100vh - 3rem)"}}
             cover={getCoverElement(club, loading)}
             bodyStyle={{padding: "0"}}
         >
@@ -69,10 +66,18 @@ const CardDescription: React.FC<CardDescriptionProps> = ({club, loading, galleri
                     }
                     className="bg-white rounded-none border-b-0 border-t"
                 >
-                    <Panel header={<span className="text-gray-500">{t('galleries')}</span>} key="1" className="border-b-0 border-t">
-                        <Galleries galleries={galleries} isLoading={galleriesLoading}/>
+                    <Panel
+                        key={1}
+                        className="border-b-0 border-t"
+                        header={<span className="text-gray-500">{t('galleries')}</span>}
+                    >
+                        <Galleries galleries={galleries} loading={galleriesLoading}/>
                     </Panel>
-                    <Panel header={<span className="text-gray-500">{t('about')}</span>} key="2" className="border-b-0 border-t">
+                    <Panel
+                        key={2}
+                        className="border-b-0 border-t"
+                        header={<span className="text-gray-500">{t('about')}</span>}
+                    >
                         <About club={club} isLoading={loading}/>
                     </Panel>
                 </Collapse>,

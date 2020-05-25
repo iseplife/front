@@ -5,20 +5,27 @@ import {Link} from "react-router-dom";
 import GallerySkeleton from "./Skeletons/GallerySkeleton";
 import {useTranslation} from "react-i18next";
 
-interface GalleriesProps { galleries: Gallery[]; isLoading: boolean; }
-const Galleries: React.FC<GalleriesProps> = ({galleries, isLoading}) => {
+interface GalleriesProps {
+    galleries: Gallery[]
+    loading: boolean
+}
+const Galleries: React.FC<GalleriesProps> = ({galleries, loading}) => {
     const {t} = useTranslation('club');
 
     return (
         <div className="w-full">
-            { !!galleries.length && !isLoading
-                ? (
+            { loading ? (
                     galleries.map((gallery: Gallery) => (
                         <div className="w-full text-center h-56" key={gallery.id}>
                             <Divider orientation="left" className="text-gray-600 text-xs">{gallery.name}</Divider>
                             <div className="flex flex-wrap flex-row h-48">
                                 <div className="w-1/2">
-                                    <Avatar shape="square" className="m-px w-full h-40 float-right" src={gallery.coverImage.name} key={gallery.coverImage.id}></Avatar>
+                                    <Avatar
+                                        key={gallery.coverImage.id}
+                                        shape="square"
+                                        className="m-px w-full h-40 float-right"
+                                        src={gallery.coverImage.name}
+                                    />
                                 </div>
                                 <div className="flex flex-wrap flex-row w-1/2 justify-start">
                                     {
@@ -26,7 +33,6 @@ const Galleries: React.FC<GalleriesProps> = ({galleries, isLoading}) => {
                                             if (index <= 2) {
                                                 return <Avatar shape="square" className="m-px h-20" style={{width: "48%"}} src={photo.name} key={index}></Avatar>
                                             }
-
                                             if (index === 3) {
                                                 return (
                                                     <Link to={`/gallery/${gallery.id}`} style={{width: "48%"}} key={index}>
@@ -45,7 +51,8 @@ const Galleries: React.FC<GalleriesProps> = ({galleries, isLoading}) => {
                         </div>
                     ))
                 )
-                : <GallerySkeleton /> }
+                : <GallerySkeleton />
+            }
         </div>
 
     )

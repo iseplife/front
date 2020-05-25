@@ -1,64 +1,41 @@
-import React, {useLayoutEffect, useRef, useState} from "react";
-import {Tab, tabs} from "./ClubTab.helper";
+import React from "react";
+import {Tabs} from "antd";
+import {Club, ClubMember} from "../../../data/club/types";
+import {Gallery} from "../../../data/gallery/types";
+import Feed from "../../Feed";
+import {useTranslation} from "react-i18next";
+import Members from "../Members";
+import Galleries from "../Galleries";
 
-interface ClubNavbarProps {
-    onActiveTabChange(tab: Tab): void;
+const { TabPane } = Tabs;
+
+type ClubTabsProps = {
+    club?: Club
+    galleries: Gallery[]
+    members: ClubMember[]
+    clubLoading: boolean
+    membersLoading: boolean
+    galleriesLoading: boolean
 }
 
-const ClubNavbar: React.FC<ClubNavbarProps> = ({onActiveTabChange}) => {
-    const [navtabs, setNavtabs] = useState<Tab[]>(tabs);
-    const [isSticky, setIsSticky] = useState<boolean>(false);
-
-    let navbarRef = useRef<HTMLDivElement>(null);
-
-    useLayoutEffect(() => {
-        const element = document.getElementById("main");
-        if (element) {
-            element.addEventListener("scroll", () => scroll$(element));
-        }
-    });
-    const scroll$ = (element: HTMLElement): void => {
-        if (!!navbarRef.current) {
-            const elementNav: HTMLDivElement = navbarRef.current;
-
-            const principalNavigationBarHeighInPixel = 48;
-            const currentPositionScroll = element.scrollTop;
-            const positionNavbarFixed = 322;
-            const isNavbarSticky = currentPositionScroll >= (positionNavbarFixed - principalNavigationBarHeighInPixel);
-            setIsSticky(isNavbarSticky);
-
-            isNavbarSticky ? elementNav.style.top = "3rem" : elementNav.style.top = `${positionNavbarFixed}`;
-        }
-    };
-
-    const onTabChange = (tab: Tab): void => {
-        onActiveTabChange(tab);
-        const newTabs = navtabs.map((navtab: Tab) => {
-            tab.id === navtab.id ? navtab.isActive = true : navtab.isActive = false;
-            return navtab;
-        });
-        setNavtabs(newTabs);
-    };
+const ClubNavbar: React.FC<ClubTabsProps> = (props) => {
+    const {t} = useTranslation("club");
 
     return (
-        <div className={"w-full " + (isSticky ? "absolute z-10 " : "")} ref={navbarRef}>
-            <ul className="flex border-b bg-white border mb-0 shadow-md xl:overflow-hidden lg:overflow-hidden md:overflow-hidden overflow-x-scroll overflow-y-hidden">
-                {
-                    navtabs.map((tab: Tab) => (
-                        <li className="-mb-px m-auto" key={tab.id}>
-                            <a
-                                className={"inline-block py-2 px-4 text-gray-700 font-semibold xl:text-lg lg:text-lg " + (tab.isActive ? "border-b-4 border-indigo-500" : "")}
-                                onClick={() => onTabChange(tab)}
-                                key={tab.id}
-                            >
-                                {tab.name}
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
-        </div>
+        <Tabs className="w-full md:hidden block" defaultActiveKey="1" onChange={() => console.log("change")}>
+            <TabPane key="1" tab={"feed"} >
+                {props.club && <Feed id={props.club.feed} allowPublication={false} />}
+            </TabPane>
+            <TabPane key="3" tab={t("galleries")} >
+                <Galleries galleries={props.galleries} loading={props.galleriesLoading} />
+            </TabPane>
+            <TabPane key="3" tab={t("members")}>
+                <Members members={props.members} loading={props.membersLoading} />
+            </TabPane>
+            <TabPane key="4" tab="Admin">
+                Admin
+            </TabPane>
+    </Tabs>
     );
-};
-
+}
 export default ClubNavbar;
