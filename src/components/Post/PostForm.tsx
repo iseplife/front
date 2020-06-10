@@ -151,7 +151,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
                     break;
 
             }
-            (post as PostCreation).attachements = new Map([[embed.type, res!.data.id]])
+            (post as PostCreation).attachements = { [embed.type]: res!.data.id }
         }
 
         const res = await createPost(post as PostCreation);

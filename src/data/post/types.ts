@@ -1,7 +1,7 @@
 import {Club} from "../club/types";
 import {Author} from "../request.type";
 import EmbedType from "../../constants/EmbedType";
-import { GalleryPreForm} from "../gallery/types";
+import {GalleryPreForm} from "../gallery/types";
 
 export type PostCreation = {
     description: string
@@ -9,7 +9,7 @@ export type PostCreation = {
     draft: boolean
     feed: number
     linkedClub?: number
-    attachements: Map<EmbedType, number>
+    attachements:  { [type: string]: number }
 }
 
 export type PostUpdate = {
