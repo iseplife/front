@@ -22,29 +22,31 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
         const [fileStore, setFileStore] = useState<FileStore>([]);
 
         const handleFile = useCallback((type: EmbedType) => (file: File, files: File[]) => {
+            if(values.embed?.type !== type)
+                setFileStore([]);
+
             if (type === EmbedType.IMAGE) {
-                if (files.length > 3) {
+                if (files.length > 5) {
                     setFieldError("attachments", "Vous ne pouvez pas publier plus de 3 photos")
                     return false;
                 }
-                files.forEach((f, i) => {
-                    const reader = new FileReader();
-                    reader.onload = e => setFileStore(store => [
-                        ...store,
-                        {
-                            file: f,
-                            preview: reader.result as string
-                        }
-                    ])
-                    reader.readAsDataURL(f);
-                })
+                const reader = new FileReader();
+                reader.onload = e => setFileStore(store => [
+                    ...store,
+                    {
+                        file,
+                        preview: reader.result as string
+                    }
+                ])
+
+                reader.readAsDataURL(file);
+                setFieldValue('embed', {type, data: files});
             } else {
                 setFileStore([{file: files[0]}]);
+                setFieldValue('embed', {type, data: files[0]});
             }
-            setFieldValue('embed', {type, data: files});
-
             return false;
-        }, []);
+        }, [setFieldError, setFieldValue]);
 
         return (
             <Form className="flex flex-col items-center">
@@ -57,10 +59,10 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                     }
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <Upload name="attachments" showUploadList={false} multiple beforeUpload={handleFile(EmbedType.IMAGE)}>
+                            <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedType.IMAGE)}>
                                 <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
-                            <Upload name="attachments" showUploadList={false} beforeUpload={handleFile(EmbedType.DOCUMENT)}>
+                            <Upload showUploadList={false} beforeUpload={handleFile(EmbedType.DOCUMENT)}>
                                 <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
                             <div><IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/></div>
@@ -112,20 +114,22 @@ const PostForm = withFormik<PostFormProps, FormValues>({
         const {embed, ...post} = values
         if (embed) {
             let res: { data: { id: number } };
+
             switch (embed.type) {
                 case EmbedType.IMAGE:
                     if (embed.data.length > 1 && embed.data.length < 6) {
-                        const id = [];
+                        const ids = [];
                         for (const f of embed.data) {
                             const res = await createMedia(f)
-                            id.push(res.data.id)
+                            ids.push(res.data.id)
                         }
 
                         res = await createGallery({
                             feed: props.feedId,
                             pseudo: true,
-                            images: id
+                            images: ids
                         });
+
                     } else {
                         res = await createMedia(embed.data[0]);
                     }
@@ -151,7 +155,13 @@ const PostForm = withFormik<PostFormProps, FormValues>({
                     break;
 
             }
-            (post as PostCreation).attachements = { [embed.type]: res!.data.id }
+
+            if(embed.type === EmbedType.IMAGE && embed.data.length > 1){
+                (post as PostCreation).attachements = { [EmbedType.GALLERY]: res!.data.id }
+            }else{
+                (post as PostCreation).attachements = { [embed.type]: res!.data.id }
+            }
+
         }
 
         const res = await createPost(post as PostCreation);
