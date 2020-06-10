@@ -1,9 +1,6 @@
 import React from "react"
 import EmbedType from "../../constants/EmbedType"
 
-
-
-
 type EmbedProps = {
     type: EmbedType
 }

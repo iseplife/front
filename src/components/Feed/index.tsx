@@ -1,12 +1,11 @@
-import React, {CSSProperties, useCallback, useState} from "react"
-import {Post as PostType, PostCreation, PostUpdate} from "../../data/post/types"
-import {getFeedPost} from "../../data/feed"
-import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
-import Post from "../Post"
-import PostForm from "../Post/PostForm"
-import {createPost, deletePost, updatePost} from "../../data/post"
-import {Divider} from "antd"
-import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton"
+import React, {CSSProperties, useCallback, useState} from "react";
+import {Post as PostType, PostCreation, PostUpdate} from "../../data/post/types";
+import {getFeedPost} from "../../data/feed";
+import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller";
+import Post from "../Post";
+import PostForm from "../Post/PostForm";
+import { deletePost, updatePost} from "../../data/post";
+import {Divider} from "antd";
 
 type FeedProps = {
     id: number

@@ -6,14 +6,14 @@ export const createPost = (post: PostCreation): AxiosPromise<Post> => {
     return axios.post("/post", post)
 }
 
-export const updatePost = (id: number, updateInformation: PostUpdate): AxiosPromise<void> => {
-    return axios.put(`/post/${id}`, updateInformation)
-}
+export const updatePost = (id: number, update: PostUpdate): AxiosPromise<void> => {
+    return axios.put(`/post/${id}`, update);
+};
 
 export const deletePost = (id: number): AxiosPromise<void> => {
     return axios.delete(`/post/${id}`)
 }
 
-export const getPublishersThumbnail = (clubOnly = false): AxiosPromise<Author[]> => {
-    return axios.get("/post/authors", {params: {club: clubOnly}})
-}
+export const getAuthorsThumbnail = (): AxiosPromise<Author[]> => {
+    return axios.get(`/post/authors`);
+};

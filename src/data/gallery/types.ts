@@ -25,3 +25,10 @@ export type GalleryForm = {
     club: number
 }
 
+export type GalleryPreForm = {
+    name?: string
+    club?: number
+    feed: number
+    pseudo: boolean
+    images: File[]
+}

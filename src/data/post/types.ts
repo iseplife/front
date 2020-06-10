@@ -1,5 +1,7 @@
-import {Club} from "../club/types"
-import {Author} from "../request.type"
+import {Club} from "../club/types";
+import {Author} from "../request.type";
+import EmbedType from "../../constants/EmbedType";
+import { GalleryPreForm} from "../gallery/types";
 
 export type PostCreation = {
     description: string
@@ -7,6 +9,7 @@ export type PostCreation = {
     draft: boolean
     feed: number
     linkedClub?: number
+    attachements: Map<EmbedType, number>
 }
 
 export type PostUpdate = {
@@ -33,7 +36,26 @@ export type Post = {
     liked: boolean
     hasWriteAccess: boolean
 };
-
 type Embed = {
 
 };
+
+
+
+type EmbedGallery = {
+    type: EmbedType.GALLERY
+    data: GalleryPreForm
+}
+type EmbedMedia = {
+    type: EmbedType.DOCUMENT | EmbedType.VIDEO | EmbedType.IMAGE
+    data: File[]
+}
+type EmbedPoll = {
+    type: EmbedType.POLL
+    data: {
+        options: string[]
+        multiple: boolean
+        anonymous: boolean
+    }
+}
+export type EmbedCreation = EmbedMedia | EmbedGallery | EmbedPoll;
