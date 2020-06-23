@@ -5,7 +5,7 @@ import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik";
 import {Divider, message, Upload} from "antd";
 import AvatarPicker from "../Common/AvatarPicker";
 import {createPost} from "../../data/post";
-import EmbedType from "../../constants/EmbedType";
+import EmbedEnumType from "../../constants/EmbedEnumType";
 import EmbedForm, {FileStore} from "./EmbedForm";
 import {createMedia} from "../../data/media";
 import {createGallery} from "../../data/gallery";
@@ -21,11 +21,11 @@ export type FormValues = {
 const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldValue, setValues, values, errors, setFieldError}) => {
         const [fileStore, setFileStore] = useState<FileStore>([]);
 
-        const handleFile = useCallback((type: EmbedType) => (file: File, files: File[]) => {
+        const handleFile = useCallback((type: EmbedEnumType) => (file: File, files: File[]) => {
             if(values.embed?.type !== type)
                 setFileStore([]);
 
-            if (type === EmbedType.IMAGE) {
+            if (type === EmbedEnumType.IMAGE) {
                 if (files.length > 5) {
                     setFieldError("attachments", "Vous ne pouvez pas publier plus de 3 photos")
                     return false;
@@ -59,10 +59,10 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                     }
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedType.IMAGE)}>
+                            <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)}>
                                 <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
-                            <Upload showUploadList={false} beforeUpload={handleFile(EmbedType.DOCUMENT)}>
+                            <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
                                 <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
                             <div><IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/></div>
@@ -116,7 +116,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
             let res: { data: { id: number } };
 
             switch (embed.type) {
-                case EmbedType.IMAGE:
+                case EmbedEnumType.IMAGE:
                     if (embed.data.length > 1 && embed.data.length < 6) {
                         const ids = [];
                         for (const f of embed.data) {
@@ -134,11 +134,11 @@ const PostForm = withFormik<PostFormProps, FormValues>({
                         res = await createMedia(embed.data[0]);
                     }
                     break;
-                case EmbedType.DOCUMENT:
-                case EmbedType.VIDEO:
+                case EmbedEnumType.DOCUMENT:
+                case EmbedEnumType.VIDEO:
                     res = await createMedia(embed.data[0]);
                     break;
-                case EmbedType.GALLERY:
+                case EmbedEnumType.GALLERY:
                     const id = [];
                     for (const f of embed.data.images) {
                         const res = await createMedia(f)
@@ -147,17 +147,17 @@ const PostForm = withFormik<PostFormProps, FormValues>({
 
                     res = await createGallery({
                         feed: props.feedId,
-                        pseudo: true,
+                        pseudo: false,
                         images: id
                     });
-                case EmbedType.POLL:
+                case EmbedEnumType.POLL:
                     //res = createPoll(values.embed.data);
                     break;
 
             }
 
-            if(embed.type === EmbedType.IMAGE && embed.data.length > 1){
-                (post as PostCreation).attachements = { [EmbedType.GALLERY]: res!.data.id }
+            if(embed.type === EmbedEnumType.IMAGE && embed.data.length > 1){
+                (post as PostCreation).attachements = { [EmbedEnumType.GALLERY]: res!.data.id }
             }else{
                 (post as PostCreation).attachements = { [embed.type]: res!.data.id }
             }

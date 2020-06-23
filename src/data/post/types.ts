@@ -1,7 +1,9 @@
 import {Club} from "../club/types";
 import {Author} from "../request.type";
-import EmbedType from "../../constants/EmbedType";
-import {GalleryPreForm} from "../gallery/types";
+import EmbedEnumType from "../../constants/EmbedEnumType";
+import {Gallery, GalleryPreForm} from "../gallery/types";
+import {Image, Video, Document} from "../media/types";
+import {Poll} from "../poll/types";
 
 export type PostCreation = {
     description: string
@@ -36,22 +38,22 @@ export type Post = {
     liked: boolean
     hasWriteAccess: boolean
 };
-type Embed = {
 
-};
+
+export type Embed = Gallery | Image | Poll | Video | Document;
 
 
 
 type EmbedGallery = {
-    type: EmbedType.GALLERY
+    type: EmbedEnumType.GALLERY
     data: GalleryPreForm
 }
 type EmbedMedia = {
-    type: EmbedType.DOCUMENT | EmbedType.VIDEO | EmbedType.IMAGE
+    type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
     data: File[]
 }
 type EmbedPoll = {
-    type: EmbedType.POLL
+    type: EmbedEnumType.POLL
     data: {
         options: string[]
         multiple: boolean

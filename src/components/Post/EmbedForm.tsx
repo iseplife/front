@@ -1,6 +1,6 @@
 import React from "react";
 import {useFormikContext} from "formik";
-import EmbedType from "../../constants/EmbedType";
+import EmbedEnumType from "../../constants/EmbedEnumType";
 import ImageOverlay from "../Common/ImageOverlay";
 import {Icon} from "antd";
 import {FormValues} from "./PostForm";
@@ -19,12 +19,12 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
     const {values: {embed}, setFieldValue, setFieldError} = useFormikContext<FormValues>();
 
     switch (embed!.type) {
-        case EmbedType.GALLERY:
+        case EmbedEnumType.GALLERY:
             return null;
-        case EmbedType.POLL:
+        case EmbedEnumType.POLL:
             return null;
-        case EmbedType.VIDEO:
-        case EmbedType.DOCUMENT:
+        case EmbedEnumType.VIDEO:
+        case EmbedEnumType.DOCUMENT:
             return (
                 <div>
                     {files[0].file.name}
@@ -38,7 +38,7 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
                     />
                 </div>
             );
-        case EmbedType.IMAGE:
+        case EmbedEnumType.IMAGE:
             return (
                 <div className="flex">
                     {files.map((f,i) => (
