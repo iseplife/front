@@ -1,8 +1,10 @@
-import {Checkbox, Divider, Input, Select, Spin} from "antd";
+import {Avatar, Checkbox, Divider, Select} from "antd";
 import React, {useEffect, useState} from "react";
-import * as querystring from "querystring";
-import {globalSearch, searchClub} from "../../data/searchbar";
-import CheckboxGroup from "antd/es/checkbox/Group";
+import {globalSearch} from "../../data/searchbar";
+import {CheckboxValueType} from "antd/es/checkbox/Group";
+import {useHistory} from "react-router-dom";
+import {SearchItem} from "../../data/searchbar/types";
+import {useTranslation} from "react-i18next";
 
 const {Option, OptGroup} = Select;
 
@@ -15,9 +17,12 @@ interface SelectInputProps {
 }
 
 const SearchBar: any = () => {
+    const {t} = useTranslation('search');
+    let history = useHistory();
     const [data, setData] = useState<SelectInputProps[]>([]);
-    const [value, setValue] = useState<any>(undefined);
+    const [value, setValue] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
+    const checkboxOptions = [t("student"), t("club"), t("event")];
     let currentValue: string;
 
     useEffect(() => {
@@ -33,21 +38,20 @@ const SearchBar: any = () => {
 
     const updateSearchItems = (queryParams: string) => {
         globalSearch(queryParams, 0).then(res => {
-            // You need to create the SearchItem type
-            const searchItems: SearchItem[] = res.data;
-
+            const searchItems: SearchItem[] = res.data.content;
             const data: SelectInputProps[] = [];
-            searchItems.map((s: SearchItem) => {
-                data.push({
-                    id: s.id,
-                    type: s.type,
-                    value: s.name,
-                    text: s.name
-                });
+            searchItems.map((searchItem: SearchItem) => {
+                return (
+                    data.push({
+                        id: searchItem.id,
+                        type: searchItem.type,
+                        value: searchItem.name,
+                        text: searchItem.name,
+                        thumbURL: searchItem.thumbURL
+                    }));
             });
             setData(data);
-        }).catch((e) => e)
-            .finally(() => setFetching(false));
+        }).finally(() => setFetching(false));
     };
 
     const fetch = (value: string) => {
@@ -69,15 +73,15 @@ const SearchBar: any = () => {
     };
 
     const handleChange = () => {
-        setValue(undefined);
+        setValue("");
     };
 
     const handleSelect = (value: string) => {
         const arrayOfTypeAndId = value.split("/");
         const id = arrayOfTypeAndId[0];
-        const type = arrayOfTypeAndId[1];
-        console.log(value, id, type);
+        const type = arrayOfTypeAndId[1].toLowerCase();
         setValue(value);
+        history.push("/" + type + "/" + id);
     };
 
     const renderOptions = () => {
@@ -86,11 +90,22 @@ const SearchBar: any = () => {
 
         if (!!keys.length) {
             return keys.map((key: string) =>
-                <OptGroup label={key} key={key}>
+                <OptGroup label={t(key.toLowerCase()).toUpperCase()} key={key}>
                     {
-                        (selectGroupByJson[key] as SelectInputProps[])
-                            .map((s: SelectInputProps) => <Option key={s.value}
-                                                                  value={`${s.id}/${s.type}`}>{s.text}</Option>)
+                        (selectGroupByJson[key] as SelectInputProps[]).map((inputProps: SelectInputProps) => {
+                            return <Option key={inputProps.value}
+                                           value={`${inputProps.id}/${inputProps.type}`}>
+                                <div className="inline-flex">
+                                    <div>
+                                        <Avatar size={"small"} shape={"circle"}
+                                                src={inputProps.thumbURL}>
+                                            {inputProps.text.split(" ")[0].slice(0, 1)}
+                                        </Avatar>
+                                    </div>
+                                    <div className="ml-2 font-bold">{inputProps.text}</div>
+                                </div>
+                            </Option>;
+                        })
                     }
                 </OptGroup>)
         } else {
@@ -98,11 +113,28 @@ const SearchBar: any = () => {
         }
     };
 
+    //Todo: make the checkbox select search type (club, event, user)
+    const handleCheckboxSearch = (checkboxValue: CheckboxValueType[]) => {
+        console.log(checkboxValue);
+    };
+
+    const customDropdownRender = (menu: React.ReactNode) => (
+        <div>
+            <div className="inline-flex flex-no-wrap p-3">
+                <div className="font-bold mr-4">Filtre :</div>
+                <Checkbox.Group options={checkboxOptions} onChange={handleCheckboxSearch}/>
+            </div>
+            <Divider className="my-1"/>
+            {menu}
+        </div>
+    );
+
     return (
         <Select showSearch
+                placeholder={t("placeholder")}
                 mode="default"
-                value={value}
-                className="my-auto w-1/4"
+                value={!!value ? value : undefined}
+                className="my-auto w-1/2 md:w-2/5 lg:w-5/12 xl:w-1/4"
                 defaultActiveFirstOption={false}
                 showArrow={false}
                 filterOption={false}
@@ -110,20 +142,7 @@ const SearchBar: any = () => {
                 onChange={handleChange}
                 onSelect={handleSelect}
                 loading={fetching}
-                dropdownRender={menu => (
-                    <div>
-                        <div className="flex-no-wrap p-3">
-                            <div className="font-bold">Filtre :</div>
-                            <CheckboxGroup>
-                                <Checkbox>Elève</Checkbox>
-                                <Checkbox>Evenement</Checkbox>
-                                <Checkbox>Club</Checkbox>
-                            </CheckboxGroup>
-                        </div>
-                        <Divider style={{margin: '4px 0'}}/>
-                        {menu}
-                    </div>
-                )}>
+                dropdownRender={menu => customDropdownRender(menu)}>
             {renderOptions()}
         </Select>
     );
