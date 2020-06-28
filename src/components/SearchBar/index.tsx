@@ -11,6 +11,7 @@ interface SelectInputProps {
     type?: string
     text: string
     value: string
+    thumbURL: string
 }
 
 type SearchItem = {
