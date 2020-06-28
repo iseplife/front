@@ -122,7 +122,8 @@ const SearchBar: any = () => {
         <div>
             <div className="inline-flex flex-no-wrap p-3">
                 <div className="font-bold mr-4">Filtre :</div>
-                <Checkbox.Group options={checkboxOptions} onChange={handleCheckboxSearch}/>
+                <Checkbox.Group options={checkboxOptions} onChange={handleCheckboxSearch}
+                                disabled={true}/>
             </div>
             <Divider className="my-1"/>
             {menu}
