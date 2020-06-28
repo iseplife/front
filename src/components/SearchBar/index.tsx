@@ -14,15 +14,6 @@ interface SelectInputProps {
     thumbURL: string
 }
 
-type SearchItem = {
-    id: number,
-    type: string,
-    name: string,
-    thumbUrl: string,
-    description?: string,
-    status?: boolean
-}
-
 const SearchBar: any = () => {
     const [data, setData] = useState<SelectInputProps[]>([]);
     const [value, setValue] = useState<any>(undefined);
