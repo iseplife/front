@@ -15,28 +15,25 @@ import Template from "./components/Template";
 
 initializeAxios();
 
-const App: React.FC = () => {
-    return (
-       <Router>
-           <Switch>
-               <Route path="/login" component={Login}/>
-               <Route path="/" render={({location}) =>
-                   (
-                       isLoggedIn() ?
-                           <Template/>
-                           :
-                           <Redirect
-                               to={{
-                                   pathname: "/login",
-                                   state: {from: location}
-                               }}
-                           />
-                   )
-               }/>
-           </Switch>
-       </Router>
-    );
-};
+const App: React.FC = () => (
+    <Router>
+        <Switch>
+            <Route path="/login" component={Login}/>
+            <Route path="/" render={({location}) => (
+                isLoggedIn() ?
+                    <Template/>
+                    :
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                            state: {from: location}
+                        }}
+                    />
+            )}
+            />
+        </Switch>
+    </Router>
+);
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 serviceWorker.register();
