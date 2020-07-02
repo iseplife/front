@@ -27,7 +27,7 @@ const EditComment: React.FC<EditCommentProps> = ({value, uploadEdit, disableEdit
                         disabled={isSubmitting}
                         onClick={disableEditMode}
                 >
-                    <IconFA name="fa-times" type="solid" size="lg" />
+                    <IconFA name="fa-times" size="lg"/>
                 </button>
                 <button type="submit"
                         className="flex items-center cursor-pointer text-gray-500 hover:text-green-400 px-2"
@@ -39,7 +39,7 @@ const EditComment: React.FC<EditCommentProps> = ({value, uploadEdit, disableEdit
                             }).finally(() => setSubmitting(false));
                         }}
                 >
-                    <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-save"} type="solid" size="lg" />
+                    <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-save"} size="lg"/>
                 </button>
             </div>
         </div>

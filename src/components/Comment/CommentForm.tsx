@@ -35,7 +35,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
                    value={formik.values.message}
             />
             <button type="submit" className="cursor-pointer text-gray-500 hover:text-gray-700 px-2" disabled={isSubmitting}>
-                <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid" />
+                <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"}/>
             </button>
         </form>
     );
