@@ -9,9 +9,10 @@ export type IconFAProps = {
     className?: string
 }
 
-export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className}) => {
+export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className, onClick}) => {
     return (
-        <i className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}/>
+        <i className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}
+           onClick={onClick}/>
     );
 };
 IconFA.defaultProps = {
