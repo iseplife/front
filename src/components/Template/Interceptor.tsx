@@ -29,7 +29,6 @@ const axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError
                 props.history.push('/login');
                 message.error('Vous avez été déconnecté !');
                 break;
-
             case 500:
             case 400:
                 message.error('Un probleme a été rencontré');

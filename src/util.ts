@@ -1,3 +1,5 @@
+import {useLocation} from "react-router-dom";
+
 export const getEducationYear = (graduationYear: number): string => {
     const educationsYear = ['Diplomé', 'A3', 'A2', 'A1', 'SUP', 'SUP'];
 
@@ -7,3 +9,6 @@ export const getEducationYear = (graduationYear: number): string => {
 
     return educationsYear[Math.min(Math.max(0, graduationYear - schoolYear), educationsYear.length - 1)];
 };
+
+export const useQuery = () => new URLSearchParams(useLocation().search);
+

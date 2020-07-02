@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, useHistory, useLocation} from 'react-router-dom';
 import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {connect, isLoggedIn} from "../../data/security";
@@ -14,6 +14,9 @@ interface LoginFormInputs {
 const Login = () => {
     const initialValues: LoginFormInputs = {id: "", password: ""};
     const {t, i18n} = useTranslation(["login", "common"]);
+    const history = useHistory();
+    const location = useLocation();
+
     const [loading, setLoadingStatus] = useState<boolean>(false);
     const [error, setError] = useState<string|undefined>();
     const formik = useFormik<LoginFormInputs>({
@@ -38,6 +41,9 @@ const Login = () => {
                         msg = "Serveur indisponible";
                     }
                     setError(msg);
+                }).then(r => {
+                    let { from } = location.state || { from: { pathname: "/" } };
+                    history.replace(from);
                 })
                 .finally(() => {
                     setLoadingStatus(false);
@@ -48,7 +54,7 @@ const Login = () => {
     return (
         <div className="h-full flex justify-center items-center">
             <div className="bg-white rounded-b shadow-lg p-4 flex flex-col">
-                {isLoggedIn() && <Redirect to="/"/>}
+                {isLoggedIn() && <Redirect to="/"/> }
                 {error &&
                     <div className="text-center text-red-400">
                         <h6>{error}</h6>
