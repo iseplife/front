@@ -18,6 +18,6 @@ export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className
 IconFA.defaultProps = {
     spin: false,
     size: "sm",
-    type: "regular",
+    type: "solid",
     className: ""
 };

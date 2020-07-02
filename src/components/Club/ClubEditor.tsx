@@ -243,7 +243,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                             <Input
                                 name="website"
                                 placeholder="Lien Facebook"
-                                suffix={<IconFA type="solid" name="fa-link"/>}/>
+                                suffix={<IconFA name="fa-link"/>}/>
                         </div>
                         <div className="flex-1 mx-1">
                             <label className="font-dinotcb">Instagram</label>

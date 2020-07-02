@@ -21,11 +21,14 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, 
                        className="text-gray-800 flex-1 bg-transparent resize-none"/>
                 <div className="flex justify-between">
                     <div className="flex items-center">
-                        <IconFA name="fa-images" className="cursor-pointer mx-1 hover:text-gray-700"/>
-                        <IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/>
+                        <IconFA name="fa-images" className="cursor-pointer mx-1 hover:text-gray-700"
+                                type="regular"/>
+                        <IconFA name="fa-chart-bar"
+                                className="cursor-pointer mx-1 hover:text-gray-700" type="regular"/>
                     </div>
                     <div className="flex-1 flex justify-end items-center">
-                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3"/>
+                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})}
+                                      className="mr-3"/>
                         <Divider type="vertical"/>
                     </div>
                     <div className="flex items-center">
@@ -34,7 +37,8 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, 
                             disabled={isSubmitting || !values.description.length}
                             className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
                         >
-                            <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid"/>
+                            <IconFA
+                                name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"}/>
                         </button>
                     </div>
                 </div>

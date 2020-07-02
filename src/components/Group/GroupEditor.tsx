@@ -157,8 +157,8 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                             </label>
                             <Switch
                                 className="m-auto"
-                                checkedChildren={<IconFA type="solid" name="fa-lock"/>}
-                                unCheckedChildren={<IconFA type="solid" name="fa-unlock"/>}
+                                checkedChildren={<IconFA name="fa-lock"/>}
+                                unCheckedChildren={<IconFA name="fa-unlock"/>}
                                 checked={formik.values.restricted}
                                 onChange={(val) => formik.setFieldValue("restricted", val)}
                             />

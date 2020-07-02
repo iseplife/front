@@ -17,7 +17,7 @@ const tableConfig: ColumnType<Group>[] = [
     (props) => (
         <div className="cursor-pointer rounded border border-gray-300 hover:border-gray-500 py-1 px-2 w-8"
              onClick={() => props.refresh && props.refresh()}>
-            <IconFA name="fa-redo" type="solid"/>
+            <IconFA name="fa-redo"/>
         </div>
     )
 ];
@@ -81,7 +81,7 @@ const TableRow: React.FC<RowProps<Group>> = ({data: f}) => (
     <tr key={f.id}>
         <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
         <td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
-            <IconFA type="solid" name={f.restricted ? "fa-lock" : "fa-unlock"}/>
+            <IconFA name={f.restricted ? "fa-lock" : "fa-unlock"}/>
         </td>
         <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
             <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
@@ -106,7 +106,7 @@ const TableRow: React.FC<RowProps<Group>> = ({data: f}) => (
                 to={`/admin/group/${f.id}`}
                 className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
             >
-                <IconFA name="fa-edit"/>
+                <IconFA name="fa-edit" type="regular"/>
             </Link>
         </td>
     </tr>

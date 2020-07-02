@@ -12,7 +12,7 @@ const HelperIcon: React.FC<HelperIconProps> = ({text}) => (
         trigger="hover"
         content={<p className="font-dinotl text-xs">{text}</p>}
             >
-        <span className="ml-2 cursor-pointer"><IconFA type="solid" name="fa-question-circle"/></span>
+        <span className="ml-2 cursor-pointer"><IconFA name="fa-question-circle"/></span>
     </Popover>
 );
 
