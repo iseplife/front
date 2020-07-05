@@ -12,8 +12,8 @@ import {getUser, isAdmin} from "../../data/security"
 
 import rootReducer from "../../redux/reducer";
 import {createStore} from "redux";
-import AdminTemplate from "./Admin";
 import DefaultTemplate from "./Default";
+import AdminTemplate from "./Admin";
 
 
 const Template: React.FC = () => {
