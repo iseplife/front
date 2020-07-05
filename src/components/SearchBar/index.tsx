@@ -1,10 +1,11 @@
-import {Avatar, Checkbox, Divider, Select} from "antd";
-import React, {useEffect, useState} from "react";
+import {Avatar, Divider, Select} from "antd";
+import React, {useState} from "react";
 import {globalSearch} from "../../data/searchbar";
-import {CheckboxValueType} from "antd/es/checkbox/Group";
 import {useHistory} from "react-router-dom";
 import {SearchItem} from "../../data/searchbar/types";
 import {useTranslation} from "react-i18next";
+import './searchBar.css'
+import {TFunction} from "i18next";
 
 const {Option, OptGroup} = Select;
 
@@ -16,7 +17,30 @@ interface SelectInputProps {
     thumbURL: string
 }
 
-const SearchBar: any = () => {
+interface CustomCheckBoxProps {
+    title: string
+    t: TFunction
+    filterStatus: boolean
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const CustomCheckbox: React.FC<CustomCheckBoxProps> = ({title, t, filterStatus, onChange}) => {
+    return (
+        <>
+            <input type="checkbox" className="appearance-none pills"
+                   id={`switch-${title.toLowerCase()}`}
+                   onMouseDown={e => e.preventDefault()}
+                   onChange={onChange} checked={filterStatus}/>
+            <label
+                className="label-pills inline-flex items-center rounded-full border
+                    border-indigo-500 text-indigo-500 px-2 my-auto mx-1 ml-1 cursor-pointer
+                    hover:text-white hover:bg-indigo-700"
+                htmlFor={`switch-${title.toLowerCase()}`}>{title}</label>
+        </>
+    );
+};
+
+const SearchBar: React.FC = () => {
     const {t} = useTranslation('search');
     let history = useHistory();
     const [data, setData] = useState<SelectInputProps[]>([]);
@@ -25,9 +49,9 @@ const SearchBar: any = () => {
     const checkboxOptions = [t("student"), t("club"), t("event")];
     let currentValue: string;
 
-    useEffect(() => {
-        updateSearchItems("");
-    }, []);
+    const [filterStudent, setFilterStudent] = useState<boolean>(false);
+    const [filterEvent, setFilterEvent] = useState<boolean>(false);
+    const [filterClub, setFilterClub] = useState<boolean>(false);
 
     const groupBy = (array: SelectInputProps[], key: string) => {
         return array.reduce((result: any, currentValue: any) => {
@@ -113,39 +137,40 @@ const SearchBar: any = () => {
         }
     };
 
-    //Todo: make the checkbox select search type (club, event, user)
-    const handleCheckboxSearch = (checkboxValue: CheckboxValueType[]) => {
-        console.log(checkboxValue);
-    };
-
     const customDropdownRender = (menu: React.ReactNode) => (
-        <div>
-            <div className="inline-flex flex-no-wrap p-3">
-                <div className="font-bold mr-4">Filtre :</div>
-                <Checkbox.Group options={checkboxOptions} onChange={handleCheckboxSearch}
-                                disabled={true}/>
+        <>
+            <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
+                <CustomCheckbox title={checkboxOptions[0]} t={t} filterStatus={filterStudent}
+                                onChange={(e) => setFilterStudent(e.target.checked)}/>
+                <CustomCheckbox title={checkboxOptions[1]} t={t} filterStatus={filterClub}
+                                onChange={(e) => setFilterClub(e.target.checked)}/>
+                <CustomCheckbox title={checkboxOptions[2]} t={t} filterStatus={filterEvent}
+                                onChange={(e) => setFilterEvent(e.target.checked)}/>
             </div>
             <Divider className="my-1"/>
             {menu}
-        </div>
+        </>
     );
 
     return (
-        <Select showSearch
-                placeholder={t("placeholder")}
-                mode="default"
-                value={!!value ? value : undefined}
-                className="my-auto w-1/2 md:w-2/5 lg:w-5/12 xl:w-1/4"
-                defaultActiveFirstOption={false}
-                showArrow={false}
-                filterOption={false}
-                onSearch={handleSearch}
-                onChange={handleChange}
-                onSelect={handleSelect}
-                loading={fetching}
-                dropdownRender={menu => customDropdownRender(menu)}>
-            {renderOptions()}
-        </Select>
+        <>
+            <Select showSearch
+                    showArrow={false}
+                    filterOption={false}
+                    defaultActiveFirstOption={false}
+                    value={!!value ? value : undefined}
+                    loading={fetching}
+                    mode="default"
+                    placeholder={t("placeholder")}
+                    className="my-auto w-4/5 md:w-2/5 lg:w-5/12 xl:w-1/5"
+                    notFoundContent={null}
+                    onSearch={handleSearch}
+                    onChange={handleChange}
+                    onSelect={handleSelect}
+                    dropdownRender={menu => customDropdownRender(menu)}>
+                {renderOptions()}
+            </Select>
+        </>
     );
 };
 
