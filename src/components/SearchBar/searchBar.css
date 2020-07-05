@@ -1,0 +1,9 @@
+.pills:checked + .label-pills {
+    background-color: #667eea;
+    color: white !important;
+}
+
+.pills:checked + .label-pills:hover {
+    background-color: #4c51bf;
+    color: white !important;
+}
