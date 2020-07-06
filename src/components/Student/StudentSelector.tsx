@@ -70,12 +70,12 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
             filterOption={false}
             notFoundContent={fetching ? <Spin size="small"/> : null}
             onSearch={handleSearch}
-            onChange={(selected: { key: number }[]) => {
+            /*onChange={(selected: { key: number }[]) => {
                 setValues(selected)
                 setOptions([])
                 setFetching(false);
                 onChange((selected.map(s => s.key)))
-            }}
+            }}*/
             className="w-full "
         >
             {options.map(o =>
