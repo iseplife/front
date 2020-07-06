@@ -3,6 +3,7 @@ import {Avatar, Select, Spin} from "antd";
 import {SearchItem} from "../../data/request.type";
 import {searchStudents} from "../../data/student";
 import {StudentPreview} from "../../data/student/types";
+import {UserOutlined} from '@ant-design/icons';
 
 const {Option} = Select
 const TRIGGER_LENGTH = 2;
@@ -31,7 +32,8 @@ const studentsParser = (students: StudentPreview[]): any => {
 };
 
 const StudentTag: React.FC<{ data: SearchItem }> = ({data}) => (
-    <><Avatar icon="user" src={data.thumbURL} size={18} className="mr-2 my-1 box-border"/> {data.name}</>
+    <><Avatar icon={<UserOutlined/>} src={data.thumbURL} size={18}
+              className="mr-2 my-1 box-border"/> {data.name}</>
 )
 
 const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValues = []}) => {

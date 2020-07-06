@@ -1,9 +1,17 @@
 import React, {RefObject, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {PhotoProps} from "react-photo-gallery";
-import {Avatar, Button, Carousel, Icon} from "antd";
+import {Avatar, Button, Carousel} from "antd";
 import style from "./GalleryLigthbox.module.css";
 import {CarouselProps} from "antd/es/carousel";
 import {useTranslation} from "react-i18next";
+import {
+    CloseOutlined,
+    LeftOutlined,
+    RightOutlined,
+    DownloadOutlined,
+    PauseCircleOutlined,
+    PlayCircleOutlined
+} from '@ant-design/icons';
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
@@ -111,12 +119,14 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
     return (
         <div className="fixed z-30 top-0 left-0 bg-black w-full h-full flex flex-col">
             <div className="w-full h-20">
-                <Icon type="close" style={{color: "white"}} className="text-xl m-4 float-right" onClick={onClose}/>
+                <CloseOutlined style={{color: "white"}} className="text-xl m-4 float-right"
+                               onClick={onClose}/>
             </div>
             <div className={"w-full flex flex-row items-center " + style.galleryLightboxBody}>
-                <div className="m-4 absolute z-30 text-center left-0  hidden sm:block md:block lg:block">
-                    <Icon type="left" onClick={() => slideLeft(carouselRef)}
-                          className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
+                <div
+                    className="m-4 absolute z-30 text-center left-0  hidden sm:block md:block lg:block">
+                    <LeftOutlined onClick={() => slideLeft(carouselRef)}
+                                  className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
                 </div>
                 <div className="w-full p-4">
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
@@ -134,16 +144,18 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
 
                     </Carousel>
                 </div>
-                <div className="m-4 text-center absolute z-30 right-0 hidden sm:block md:block lg:block">
-                    <Icon type="right" onClick={() => slideRigth(carouselRef)}
-                          className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
+                <div
+                    className="m-4 text-center absolute z-30 right-0 hidden sm:block md:block lg:block">
+                    <RightOutlined onClick={() => slideRigth(carouselRef)}
+                                   className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
                 </div>
             </div>
             <div className="mx-auto flex h-20 items-center">
-                <Button type="default" icon={autoPlay ? "pause-circle" : "play-circle"}
+                <Button type="default"
+                        icon={autoPlay ? <PauseCircleOutlined/> : <PlayCircleOutlined/>}
                         onClick={() => setAutoPlay(!autoPlay)}
                         className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? `${t("stop")}` : `${t("play")}`}</Button>
-                <Button type="default" icon="download"
+                <Button type="default" icon={<DownloadOutlined/>}
                         className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900"
                         href={!!currentPhoto ? currentPhoto.src : ""}
                         download={`@prodIsepLife/${!!currentPhoto ? currentPhoto.src : "undefined"}`}>{t("download")}</Button>

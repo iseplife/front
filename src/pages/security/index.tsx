@@ -42,7 +42,7 @@ const Login = () => {
                     }
                     setError(msg);
                 }).then(r => {
-                    let { from } = location.state || { from: { pathname: "/" } };
+                    let {from} = (location.state as any) || {from: {pathname: "/"}};
                     history.replace(from);
                 })
                 .finally(() => {

@@ -5,7 +5,7 @@ import {
     toggleStudentArchiveStatus,
     updateStudentAdmin
 } from "../../data/student";
-import {Button, Divider, Icon, Input, InputNumber, message, Modal, Select} from "antd";
+import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd";
 import Loading from "../Common/Loading";
 import {useFormik} from "formik";
 import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types";
@@ -14,6 +14,13 @@ import {format} from "date-fns";
 import {useTranslation} from "react-i18next";
 import ImagePicker from "../Common/ImagePicker";
 import {Role} from "../../data/security/types";
+import {
+    LockOutlined,
+    CloseCircleOutlined,
+    SaveOutlined,
+    AuditOutlined,
+    DeleteOutlined
+} from '@ant-design/icons';
 
 const {Option} = Select;
 
@@ -156,7 +163,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
                         <div className="flex items-center text-red-600 font-bold">
-                            <Icon type="lock" className="mr-1"/> ARCHIVÉ
+                            <LockOutlined className="mr-1"/> ARCHIVÉ
                         </div>
                         }
                         <label className="font-dinotcb">numéro élève</label>
@@ -172,7 +179,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     {student &&
                     <Link to="/admin/user">
                         <div className="text-right absolute right-0 top-0 w-16">
-                            <Icon type="close-circle" style={{fontSize: '26px'}}/>
+                            <CloseCircleOutlined style={{fontSize: '26px'}}/>
                         </div>
                     </Link>
                     }
@@ -259,15 +266,18 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" className="mt-5" icon="save">
+                        <Button htmlType="submit" type="primary" className="mt-5"
+                                icon={<SaveOutlined/>}>
                             Enregistrer
                         </Button>
                         {student &&
                         <>
-                            <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
+                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>}
+                                    onClick={archive}>
                                 {student.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button type="danger" className="mt-5" icon="delete" onClick={remove}>
+                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
+                                    danger>
                                 Supprimer
                             </Button>
                         </>

@@ -1,4 +1,3 @@
-import {Icon} from "antd";
 import {IconFA} from "../Common/IconFA";
 import React, {useState} from "react";
 

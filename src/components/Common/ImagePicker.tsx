@@ -1,6 +1,8 @@
 import React, {useState} from "react";
-import {Icon, Upload} from "antd";
+import {Upload} from "antd";
 import "./ImagePicker.css";
+import {EditOutlined} from '@ant-design/icons';
+import {Icon as LegacyIcon} from '@ant-design/compatible';
 
 type ImagePickerProps = {
     className?: string
@@ -10,7 +12,7 @@ type ImagePickerProps = {
 
 const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, onChange}) => {
     const [image, setImage] = useState<string | undefined>(
-        defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage: undefined
+        defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage : undefined
     );
     const [loading, setLoading] = useState<boolean>();
 
@@ -48,12 +50,12 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, 
                             }}
                         />
                         <span className="image-options absolute text-gray-400">
-                        <Icon type="edit" className="mx-1 px-1 hover:text-white"/>
+                        <EditOutlined className="mx-1 px-1 hover:text-white"/>
                     </span>
                     </div>
                     :
                     <div>
-                        <Icon type={loading ? 'loading' : 'plus'}/>
+                        <LegacyIcon type={loading ? 'loading' : 'plus'}/>
                         <div className="ant-upload-text">Upload</div>
                     </div>
                 }

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Divider, Icon, Input, InputNumber, message, Modal, Select} from "antd";
+import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd";
 import {useTranslation} from "react-i18next";
 import {Link, useHistory} from "react-router-dom";
 import {useFormik} from "formik";
@@ -12,6 +12,7 @@ import {IconFA} from "../Common/IconFA";
 import StudentSelector from "../Student/StudentSelector";
 import {StudentPreview} from "../../data/student/types";
 import {format} from "date-fns";
+import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, AuditOutlined} from '@ant-design/icons';
 
 type ClubEditorProps = {
     id?: string
@@ -176,7 +177,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                             onChange={(value: ClubType) => formik.setFieldValue("type", value)}
                         >
                             {ClubTypeArray.map(type => (
-                                <Select.Option key={type}>
+                                <Select.Option key={type} value={type}>
                                     {t(`club_type.${type}`)}
                                 </Select.Option>
                             ))}
@@ -185,7 +186,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     {club &&
                     <Link to="/admin/club">
                         <div className="text-right absolute right-0 top-0 w-16">
-                            <Icon type="close-circle" style={{fontSize: '26px'}}/>
+                            <CloseCircleOutlined style={{fontSize: '26px'}}/>
                         </div>
                     </Link>
                     }
@@ -265,15 +266,15 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" icon="save">
+                        <Button htmlType="submit" type="primary" icon={<SaveOutlined/>}>
                             Enregistrer
                         </Button>
                         {club &&
                         <>
-                            <Button type="primary" icon="audit" onClick={archive}>
+                            <Button type="primary" icon={<AuditOutlined/>} onClick={archive}>
                                 {club.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button type="danger" icon="delete" onClick={remove}>
+                            <Button danger icon={<DeleteOutlined/>} onClick={remove}>
                                 Supprimer
                             </Button>
                         </>

@@ -2,12 +2,20 @@ import React, {useCallback, useState} from "react";
 import {Post as PostType, PostUpdate} from "../../data/post/types";
 import Embed from "./Embed";
 import EmbedType from "../../constants/EmbedType";
-import {Avatar, Divider, Icon, message, Modal} from "antd";
+import {Avatar, Divider, message, Modal} from "antd";
 import {useTranslation} from "react-i18next";
 import {toggleThreadLike} from "../../data/thread";
 import {format, isPast} from "date-fns";
 import {useFormik} from "formik";
 import CommentList from "../Comment/CommentList";
+import {Icon as LegacyIcon} from '@ant-design/compatible';
+import {
+    LockOutlined,
+    MessageOutlined,
+    DeleteOutlined,
+    EditOutlined,
+    UserOutlined
+} from '@ant-design/icons';
 
 type PostProps = {
     data: PostType
@@ -66,8 +74,10 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
                 </div>
 
                 <div className="flex">
-                    <Icon type={lockPost ? "lock" : "unlock"} onClick={() => setLockPost(!lockPost)}/>
-                    <input className="hidden" name="private" type="checkbox" onChange={formik.handleChange}
+                    <LegacyIcon type={lockPost ? "lock" : "unlock"}
+                                onClick={() => setLockPost(!lockPost)}/>
+                    <input className="hidden" name="private" type="checkbox"
+                           onChange={formik.handleChange}
                            checked={lockPost}/>
                 </div>
             </div>
@@ -146,10 +156,10 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     <div className="flex flex-row justify-end items-center">
                         {!isPast(data.publicationDate) &&
                         <span
-                            className="mx-2 text-xs"> { t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
+                            className="mx-2 text-xs"> {t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
                             " dd/MM/yy")}</span>
                         }
-                        {data.private && <Icon type="lock"/>}
+                        {data.private && <LockOutlined/>}
                     </div>
                     <div>
                         <p>
@@ -160,23 +170,25 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 </>
             }
             <div className="flex flex-row justify-between mt-2">
-                <Avatar icon="user" src={data.author.thumbnail}/>
+                <Avatar icon={<UserOutlined/>} src={data.author.thumbnail}/>
                 <div className="flex items-center">
-                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
-                        {data.nbComments} <Icon type="message" className="ml-1"/>
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3"
+                          onClick={() => setShowComments(!showComments)}>
+                        {data.nbComments} <MessageOutlined className="ml-1"/>
                     </span>
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
                         {likes}
-                        <Icon type="heart" className="ml-1" onClick={() => toggleLike(data.thread)}
-                              theme={liked ? "filled" : "outlined"}
+                        <LegacyIcon type="heart" className="ml-1"
+                                    onClick={() => toggleLike(data.thread)}
+                                    theme={liked ? "filled" : "outlined"}
                         />
                     </span>
                     {data.hasWriteAccess &&
                     <>
-                        <Icon type="edit" className="mr-3 cursor-pointer hover:text-indigo-400"
-                              onClick={() => onEdit(data.id)}/>
-                        <Icon type="delete" className="mr-3 cursor-pointer hover:text-red-600"
-                              onClick={confirmDeletion}/>
+                        <EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400"
+                                      onClick={() => onEdit(data.id)}/>
+                        <DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600"
+                                        onClick={confirmDeletion}/>
                     </>
                     }
                 </div>
