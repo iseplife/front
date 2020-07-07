@@ -4,5 +4,5 @@ export type SearchItem = {
     name: string,
     thumbURL: string,
     description?: string,
-    status?: boolean
+    status: boolean
 }
