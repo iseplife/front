@@ -1,13 +1,17 @@
-import {Avatar, Divider, Select} from "antd";
+import {Avatar, Divider, Empty, Select} from "antd";
 import React, {useState} from "react";
 import {globalSearch} from "../../data/searchbar";
 import {useHistory} from "react-router-dom";
 import {SearchItem} from "../../data/searchbar/types";
 import {useTranslation} from "react-i18next";
 import './searchBar.css'
-import {TFunction} from "i18next";
+import {IconFA} from "../Common/IconFA";
 
-const {Option, OptGroup} = Select;
+const {Option} = Select;
+const SEARCH_LENGTH_TRIGGER: number = 2;
+const TYPE_STUDENT: string = "STUDENT";
+const TYPE_EVENT: string = "EVENT";
+const TYPE_CLUB: string = "CLUB";
 
 interface SelectInputProps {
     id?: number
@@ -15,27 +19,48 @@ interface SelectInputProps {
     text: string
     value: string
     thumbURL: string
+    status: boolean
 }
 
 interface CustomCheckBoxProps {
     title: string
-    t: TFunction
     filterStatus: boolean
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const CustomCheckbox: React.FC<CustomCheckBoxProps> = ({title, t, filterStatus, onChange}) => {
+const CustomCheckbox: React.FC<CustomCheckBoxProps> = ({title, filterStatus, onChange}) => (
+    <>
+        <input type="checkbox" className="appearance-none pills"
+               id={`switch-${title.toLowerCase()}`}
+               onMouseDown={e => e.preventDefault()}
+               onChange={onChange} checked={filterStatus}/>
+        <label
+            className="label-pills inline-flex items-center rounded-full border text-xs
+                    border-indigo-500 text-indigo-500 px-2 my-auto mx-1 ml-1 cursor-pointer
+                    hover:text-white hover:bg-indigo-700 active:bg-indigo-500 active:text-white"
+            htmlFor={`switch-${title.toLowerCase()}`}>{title}</label>
+    </>
+);
+
+const AvatarSearchType: React.FC<{ props: SelectInputProps }> = ({props}) => {
+    let iconType: string = "";
+    if (props.type === TYPE_STUDENT)
+        iconType = "user"
+    if (props.type === TYPE_EVENT)
+        iconType = "calendar-day"
+    if (props.type === TYPE_CLUB)
+        iconType = "users"
     return (
         <>
-            <input type="checkbox" className="appearance-none pills"
-                   id={`switch-${title.toLowerCase()}`}
-                   onMouseDown={e => e.preventDefault()}
-                   onChange={onChange} checked={filterStatus}/>
-            <label
-                className="label-pills inline-flex items-center rounded-full border
-                    border-indigo-500 text-indigo-500 px-2 my-auto mx-1 ml-1 cursor-pointer
-                    hover:text-white hover:bg-indigo-700"
-                htmlFor={`switch-${title.toLowerCase()}`}>{title}</label>
+            <Avatar src={props.thumbURL} size={"small"}
+                    shape={"circle"}>
+                {props.text.split(" ")[0].slice(0, 1)}
+            </Avatar>
+            <div className="z-10" style={{fontSize: ".65rem"}}>
+                <IconFA
+                    className="-ml-2 mt-3 bg-white rounded-full border-4 border-transparent text-gray-600"
+                    name={`fa-${iconType}`}/>
+            </div>
         </>
     );
 };
@@ -44,23 +69,19 @@ const SearchBar: React.FC = () => {
     const {t} = useTranslation('search');
     let history = useHistory();
     const [data, setData] = useState<SelectInputProps[]>([]);
-    const [value, setValue] = useState<string>("");
+    const [currentValue, setCurrentValue] = useState<string>("");
     const [fetching, setFetching] = useState<boolean>(false);
-    const checkboxOptions = [t("student"), t("club"), t("event")];
-    let currentValue: string;
 
-    const [filterStudent, setFilterStudent] = useState<boolean>(false);
-    const [filterEvent, setFilterEvent] = useState<boolean>(false);
-    const [filterClub, setFilterClub] = useState<boolean>(false);
+    const [filterStudent, setFilterStudent] = useState<boolean>(true);
+    const [filterEvent, setFilterEvent] = useState<boolean>(true);
+    const [filterClub, setFilterClub] = useState<boolean>(true);
 
-    const groupBy = (array: SelectInputProps[], key: string) => {
-        return array.reduce((result: any, currentValue: any) => {
-            (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
-            return result;
-        }, {});
-    };
-
+    /**
+     * Call to global search in API
+     * @param queryParams
+     */
     const updateSearchItems = (queryParams: string) => {
+        setFetching(true);
         globalSearch(queryParams, 0).then(res => {
             const searchItems: SearchItem[] = res.data.content;
             const data: SelectInputProps[] = [];
@@ -71,80 +92,63 @@ const SearchBar: React.FC = () => {
                         type: searchItem.type,
                         value: searchItem.name,
                         text: searchItem.name,
-                        thumbURL: searchItem.thumbURL
+                        thumbURL: searchItem.thumbURL,
+                        status: searchItem.status
                     }));
             });
             setData(data);
         }).finally(() => setFetching(false));
     };
 
-    const fetch = (value: string) => {
-        currentValue = value;
-        setFetching(true);
-        if (currentValue === value) {
-            updateSearchItems(value);
+    /**
+     * Fires when input change
+     * @param value
+     */
+    const handleSearch = (value: string) => {
+        setCurrentValue(value);
+        if (!!value && value.length > SEARCH_LENGTH_TRIGGER) {
+            if (currentValue !== value) {
+                updateSearchItems(value);
+            }
         }
     };
 
-    const handleSearch = (currentValue: string) => {
-        if (!!currentValue) {
-            setValue(currentValue);
-            fetch(currentValue);
-        } else {
-            updateSearchItems("");
-            setValue("");
-        }
-    };
-
-    const handleChange = () => {
-        setValue("");
-    };
-
+    /**
+     * Fires when item is selected
+     */
     const handleSelect = (value: string) => {
-        const arrayOfTypeAndId = value.split("/");
-        const id = arrayOfTypeAndId[0];
-        const type = arrayOfTypeAndId[1].toLowerCase();
-        setValue(value);
-        history.push("/" + type + "/" + id);
+        setCurrentValue("");
+        history.push("/" + value);
     };
 
     const renderOptions = () => {
-        const selectGroupByJson = (groupBy(data, "type"));
-        const keys = Object.keys(selectGroupByJson);
-
-        if (!!keys.length) {
-            return keys.map((key: string) =>
-                <OptGroup label={t(key.toLowerCase()).toUpperCase()} key={key}>
-                    {
-                        (selectGroupByJson[key] as SelectInputProps[]).map((inputProps: SelectInputProps) => {
-                            return <Option key={inputProps.value}
-                                           value={`${inputProps.id}/${inputProps.type}`}>
-                                <div className="inline-flex">
-                                    <div>
-                                        <Avatar size={"small"} shape={"circle"}
-                                                src={inputProps.thumbURL}>
-                                            {inputProps.text.split(" ")[0].slice(0, 1)}
-                                        </Avatar>
-                                    </div>
-                                    <div className="ml-2 font-bold">{inputProps.text}</div>
-                                </div>
-                            </Option>;
-                        })
-                    }
-                </OptGroup>)
-        } else {
-            return "";
-        }
+        return data.map((inputProps: SelectInputProps) => {
+            return ((inputProps.type === TYPE_STUDENT && filterStudent) || (inputProps.type === TYPE_EVENT && filterEvent) || (inputProps.type === TYPE_CLUB && filterClub))
+                ? (<Option key={inputProps.value}
+                           value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
+                    <div className="flex justify-between">
+                        <div className="inline-flex">
+                            <AvatarSearchType props={inputProps}/>
+                            <div className="ml-2 font-bold">{inputProps.text}</div>
+                        </div>
+                        <span style={{fontSize: ".65rem"}}
+                              className={`inline-flex items-center font-semibold rounded-full px-2 my-1 ${inputProps.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
+                        {inputProps.status ? t("status_active") : inputProps.type === TYPE_EVENT ? t("status_passed") : t("status_archived")}
+                    </span>
+                    </div>
+                </Option>)
+                : null;
+        })
     };
 
     const customDropdownRender = (menu: React.ReactNode) => (
         <>
             <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
-                <CustomCheckbox title={checkboxOptions[0]} t={t} filterStatus={filterStudent}
+                <CustomCheckbox title={t("student")} filterStatus={filterStudent}
                                 onChange={(e) => setFilterStudent(e.target.checked)}/>
-                <CustomCheckbox title={checkboxOptions[1]} t={t} filterStatus={filterClub}
+                <CustomCheckbox title={t("club")} filterStatus={filterClub}
                                 onChange={(e) => setFilterClub(e.target.checked)}/>
-                <CustomCheckbox title={checkboxOptions[2]} t={t} filterStatus={filterEvent}
+                <CustomCheckbox title={t("event")} filterStatus={filterEvent}
                                 onChange={(e) => setFilterEvent(e.target.checked)}/>
             </div>
             <Divider className="my-1"/>
@@ -153,23 +157,22 @@ const SearchBar: React.FC = () => {
     );
 
     return (
-        <>
-            <Select showSearch
-                    showArrow={false}
-                    filterOption={false}
-                    defaultActiveFirstOption={false}
-                    value={!!value ? value : undefined}
-                    loading={fetching}
-                    placeholder={t("placeholder")}
-                    className="my-auto w-4/5 md:w-2/5 lg:w-5/12 xl:w-1/5"
-                    notFoundContent={null}
-                    onSearch={handleSearch}
-                    onChange={handleChange}
-                    onSelect={handleSelect}
-                    dropdownRender={menu => customDropdownRender(menu)}>
-                {renderOptions()}
-            </Select>
-        </>
+        <Select showSearch
+                showArrow={false}
+                filterOption={false}
+                defaultActiveFirstOption={false}
+                value={!!currentValue ? currentValue : undefined}
+                loading={fetching}
+                placeholder={t("placeholder")}
+                className="my-auto w-4/5 md:w-2/5 lg:w-5/12 xl:w-1/5"
+                notFoundContent={<Empty className="flex flex-col items-center"
+                                        image={"/img/meme-face.png"}
+                                        description={t("funny_empty_message")}/>}
+                onSearch={handleSearch}
+                onSelect={handleSelect}
+                dropdownRender={menu => customDropdownRender(menu)}>
+            {renderOptions()}
+        </Select>
     );
 };
 
