@@ -160,7 +160,6 @@ const SearchBar: React.FC = () => {
                     defaultActiveFirstOption={false}
                     value={!!value ? value : undefined}
                     loading={fetching}
-                    mode="default"
                     placeholder={t("placeholder")}
                     className="my-auto w-4/5 md:w-2/5 lg:w-5/12 xl:w-1/5"
                     notFoundContent={null}
