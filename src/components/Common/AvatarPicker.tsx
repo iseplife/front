@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {AppState} from "../../redux/types";
 import {Author} from "../../data/request.type";
 import Loading from "./Loading";
+import {UserOutlined} from '@ant-design/icons';
 
 import './AvatarPicker.css';
 
@@ -44,12 +45,14 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, className
             dropdownClassName="w-auto"
             onChange={(value: number) => callback(value || undefined)}
         >
-            <Option value={0} label={<Avatar icon="user" src={userThumb} size="small"/>}><Avatar icon="user" src={userThumb} size="small"/> moi</Option>
+            <Option value={0} label={<Avatar icon={<UserOutlined/>} src={userThumb} size="small"/>}><Avatar
+                icon={<UserOutlined/>} src={userThumb} size="small"/> moi</Option>
             {loading ?
                 <Option value="loading" disabled> <Loading size="lg"/> </Option> :
                 publishers.map(p => (
-                    <Option key={p.id} value={p.id} label={<Avatar icon="user" src={p.thumbnail} size="small"/>}>
-                        <Avatar icon="user" src={p.thumbnail} size="small"/> {p.name}
+                    <Option key={p.id} value={p.id}
+                            label={<Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/>}>
+                        <Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/> {p.name}
                     </Option>
                 ))
             }

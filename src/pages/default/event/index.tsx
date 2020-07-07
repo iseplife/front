@@ -9,10 +9,12 @@ import {getEvent, getEventChildren} from "../../../data/event";
 
 import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types";
 import './Event.css';
-import {Avatar, Icon} from "antd";
+import {Avatar} from "antd";
 import {useTranslation} from "react-i18next";
 import Feed from "../../../components/Feed";
 import EventPreview from "../../../components/Event/Preview";
+import {Icon as LegacyIcon} from '@ant-design/compatible';
+import {TeamOutlined, EuroOutlined, UserOutlined} from '@ant-design/icons';
 
 
 const Event: React.FC = () => {
@@ -59,7 +61,8 @@ const Event: React.FC = () => {
                           className="absolute flex items-center text-gray-700 font-bold"
                           style={{left: 0, bottom: 5}}
                     >
-                        <Avatar icon="user" src={event.club.logoUrl} className="cursor-pointer mx-3"/> {event.club.name}
+                        <Avatar icon={<UserOutlined/>} src={event.club.logoUrl}
+                                className="cursor-pointer mx-3"/> {event.club.name}
                     </Link>
                     <div className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
                          style={{right: 0, bottom: 5}}>
@@ -80,8 +83,8 @@ const Event: React.FC = () => {
                                         }
                                     }}>
                                     <span>{t('event') + "s"}</span>
-                                    <Icon className="md:hidden block mx-2"
-                                          type={eventsVisible ? "up" : "down"}
+                                    <LegacyIcon className="md:hidden block mx-2"
+                                                type={eventsVisible ? "up" : "down"}
                                     />
                                 </div>
                                 <div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
@@ -120,7 +123,7 @@ const Event: React.FC = () => {
                                         <span key={idx}>{s} <br/></span>
                                     )}
                                 </div>
-                                <Icon className="mx-auto" type={descVisible ? "up" : "down"}/>
+                                <LegacyIcon className="mx-auto" type={descVisible ? "up" : "down"}/>
                             </div>
                         </div>
                         <div
@@ -128,13 +131,13 @@ const Event: React.FC = () => {
                             <div className="flex items-baseline justify-around text-lg font-bold">
                                 <div className="flex items-center"
                                      title={event.closed ? "Evenement ouvert" : "Evenement privé"}>
-                                    <Icon type={event.closed ? "lock" : "unlock"}/>
+                                    <LegacyIcon type={event.closed ? "lock" : "unlock"}/>
                                 </div>
                                 <div className="flex items-center">
-                                    <Icon type="team" className="mr-2"/> 14
+                                    <TeamOutlined className="mr-2"/> 14
                                 </div>
                                 <div className="flex items-center">
-                                    <Icon type="euro" className="mr-2"/>
+                                    <EuroOutlined className="mr-2"/>
                                     {event.price ? event.price.toFixed(2) : t("free")}
                                 </div>
                             </div>

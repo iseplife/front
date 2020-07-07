@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from "react";
 
-import {Avatar, Button, Drawer, Dropdown, Icon, Menu} from "antd";
+import {Avatar, Button, Drawer, Dropdown, Menu} from "antd";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useSelector} from 'react-redux'
@@ -8,14 +8,25 @@ import {AppState} from "../../redux/types";
 import {Student} from "../../data/student/types";
 import "./Navbar.css"
 import {Roles} from "../../data/security/types";
+import {Icon as LegacyIcon} from '@ant-design/compatible';
+import {
+    BookOutlined,
+    CalendarOutlined,
+    KeyOutlined,
+    SettingOutlined,
+    UserOutlined,
+    BellOutlined,
+    HomeOutlined,
+} from '@ant-design/icons';
 
 type IconButtonProps = {
     name: string
 }
 const IconButton: React.FC<IconButtonProps> = ({name}) => {
     return (
-        <div className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
-            <Icon type={name}/>
+        <div
+            className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
+            <LegacyIcon type={name}/>
         </div>
     );
 };
@@ -31,25 +42,25 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             </Menu.Item>
             {isAdmin &&
             <Menu.Item key={1} className="flex justify-start items-center">
-                <Icon type="book"/>
+                <BookOutlined/>
                 <Link to="/feed/new">{t("create_feed")}</Link>
             </Menu.Item>
             }
             {(isAdmin || payload.clubsPublisher.length > 0) &&
             <Menu.Item key={3} className="flex justify-start items-center">
-                <Icon type="calendar"/>
+                <CalendarOutlined/>
                 <Link to="/event/new">{t("create_event")}</Link>
             </Menu.Item>
             }
             {isAdmin &&
             <Menu.Item key={2} className="flex justify-start items-center">
-                <Icon type="key"/>
+                <KeyOutlined/>
                 <Link to="/admin">{t("administration")}</Link>
             </Menu.Item>
             }
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
-                <Icon type="setting"/>
+                <SettingOutlined/>
                 <Link to="/parameters"><span>{t("setting")}</span></Link>
             </Menu.Item>
             <Menu.Divider/>
@@ -75,12 +86,14 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
                 <IconButton name="bell"/>
             </div>
             <Dropdown
-                overlay={ProfileList({firstName: user.firstName, lastName: user.lastName})}
+                overlay={<ProfileList firstName={user.firstName} lastName={user.lastName}/>}
                 trigger={['click']}
                 placement="bottomRight"
             >
-                <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
-                    <Avatar icon="user" src={user.picture} size="small" className="cursor-pointer"/>
+                <div
+                    className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                    <Avatar icon={<UserOutlined/>} src={user.picture} size="small"
+                            className="cursor-pointer"/>
                     <span className="mx-2 ">{user.firstName}</span>
                 </div>
             </Dropdown>
@@ -97,7 +110,7 @@ type DrawerItemProps = {
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
     <Link to={link}>
         <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
-            <Icon type={icon}/>
+            <LegacyIcon type={icon}/>
             <span className="nav-footer-text">{children}</span>
         </div>
     </Link>
@@ -110,14 +123,14 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
         <>
             <div className="md:hidden flex justify-around items-center shadow-md fixed bottom-0 w-full h-10 bg-white">
                 <Link to="/">
-                    <Button shape="circle" icon="home" className="border-0"/>
+                    <Button shape="circle" icon={<HomeOutlined/>} className="border-0"/>
                 </Link>
                 <Link to="/calendar">
-                    <Button shape="circle" icon="calendar" className="border-0"/>
+                    <Button shape="circle" icon={<CalendarOutlined/>} className="border-0"/>
                 </Link>
-                <Button shape="circle" icon="bell" className="border-0"/>
+                <Button shape="circle" icon={<BellOutlined/>} className="border-0"/>
                 <div onClick={() => setVisible(true)}>
-                    <Avatar icon="user" src={user.picture} className="cursor-pointer"/>
+                    <Avatar icon={<UserOutlined/>} src={user.picture} className="cursor-pointer"/>
                 </div>
             </div>
             <Drawer
@@ -130,7 +143,7 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
             >
                 <div className="flex justify-around">
                     {payload.roles.includes(Roles.ADMIN) &&
-                    <DrawerItem icon="key" link="/admin" >{t('administration')}</DrawerItem>
+                    <DrawerItem icon="key" link="/admin">{t('administration')}</DrawerItem>
                     }
                     {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
                     <DrawerItem icon="notification" link="">{t('create_event')}</DrawerItem>

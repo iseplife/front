@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Divider, Icon, Input, message, Modal, Switch} from "antd";
+import {Button, Divider, Input, message, Modal, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 import {Link, useHistory} from "react-router-dom";
 import {Group, GroupForm} from "../../data/group/types";
@@ -9,6 +9,7 @@ import ImagePicker from "../Common/ImagePicker";
 import {IconFA} from "../Common/IconFA";
 import StudentSelector from "../Student/StudentSelector";
 import HelperIcon from "../Common/HelperIcon";
+import {CloseCircleOutlined, AuditOutlined, DeleteOutlined, SaveOutlined} from '@ant-design/icons';
 
 import './GroupEditor.css';
 import {createGroup, deleteGroup, getGroup, toggleGroupArchiveStatus, updateGroup} from "../../data/group";
@@ -141,7 +142,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     {group &&
                     <Link to="/admin/group">
                         <div className="text-right absolute right-0 top-0 w-16">
-                            <Icon type="close-circle" style={{fontSize: '26px'}}/>
+                            <CloseCircleOutlined style={{fontSize: '26px'}}/>
                         </div>
                     </Link>
                     }
@@ -185,15 +186,18 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" className="mt-5" icon="save">
+                        <Button htmlType="submit" type="primary" className="mt-5"
+                                icon={<SaveOutlined/>}>
                             Enregistrer
                         </Button>
                         {(group && !group.locked) &&
                         <>
-                            <Button type="primary" className="mt-5" icon="audit" onClick={archive}>
+                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>}
+                                    onClick={archive}>
                                 {group.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button type="danger" className="mt-5" icon="delete" onClick={remove}>
+                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
+                                    danger>
                                 Supprimer
                             </Button>
                         </>

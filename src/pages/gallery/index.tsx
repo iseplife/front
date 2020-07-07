@@ -7,7 +7,8 @@ import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLig
 import {getGalleryById} from "../../data/gallery";
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery";
 import {useTranslation} from "react-i18next";
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
+import {UserOutlined} from '@ant-design/icons';
 
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
@@ -115,7 +116,9 @@ const CustomGallery: React.FC = () => {
                             {`${t("posted_date")} ${!!gallery ? new Date(gallery.creation).toLocaleDateString() : ""} ${t("by")}`}
                             <Tooltip title={!!gallery ? gallery.club.name : ""}>
                                 <Link to={"/club/1"}>
-                                    <Avatar shape="circle" className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer" icon="user" size="large"/>
+                                    <Avatar shape="circle"
+                                            className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
+                                            icon={<UserOutlined/>} size="large"/>
                                 </Link>
                             </Tooltip>
                         </div>

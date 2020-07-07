@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {AppState} from "../../redux/types";
-import {Avatar, Button, Icon} from "antd";
+import {Avatar, Button} from "antd";
 import {Link} from "react-router-dom";
+import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from '@ant-design/icons';
 
 const AdminHeader: React.FC = () => {
     const user = useSelector((state: AppState) => state.user);
@@ -25,19 +26,23 @@ const AdminHeader: React.FC = () => {
                     <Link to="/admin/club" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
                         Associations
                     </Link>
-                    <Link to="/admin/group" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                    <Link to="/admin/group"
+                          className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
                         Groupes
                     </Link>
-                    <Link to="/admin/survey" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                    <Link to="/admin/survey"
+                          className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
                         Votes
                     </Link>
                 </div>
                 <div className="flex justify-between items-center hidden md:block">
-                    <Avatar icon="user" src={user.picture} size="small"/>
-                    <Link to="/"><Icon className="hover:text-gray-300 text-gray-500 ml-3 p-3" type="export"/> </Link>
+                    <Avatar icon={<UserOutlined/>} src={user.picture} size="small"/>
+                    <Link to="/"><ExportOutlined
+                        className="hover:text-gray-300 text-gray-500 ml-3 p-3"/> </Link>
                 </div>
                 <div className="block md:hidden">
-                    <Button shape="circle" icon={open ? "close": "menu"} className="border-none" onClick={() => setOpen(!open)}/>
+                    <Button shape="circle" icon={open ? <CloseOutlined/> : <MenuOutlined/>}
+                            className="border-none" onClick={() => setOpen(!open)}/>
                 </div>
             </div>
 
@@ -45,7 +50,7 @@ const AdminHeader: React.FC = () => {
                 <div className="pt-4 pb-3 border-t border-gray-200">
                     <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                            <Avatar icon="user" src={user.picture} />
+                            <Avatar icon={<UserOutlined/>} src={user.picture}/>
                         </div>
                         <div className="ml-3">
                             <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + ' ' + user.lastName}</div>

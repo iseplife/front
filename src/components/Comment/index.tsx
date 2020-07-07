@@ -1,11 +1,13 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {Comment as CommentType} from "../../data/thread/types";
-import {Avatar, Icon} from "antd";
+import {Avatar} from "antd";
 import {toggleThreadLike} from "../../data/thread";
 import CommentList from "./CommentList";
 import EditComment from "./EditComment";
 import {useTranslation} from "react-i18next";
 import {format, isToday} from "date-fns";
+import {EditOutlined, DeleteOutlined, MessageOutlined, UserOutlined} from '@ant-design/icons';
+import {Icon as LegacyIcon} from '@ant-design/compatible';
 
 
 interface CommentProps {
@@ -49,17 +51,16 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
         <div className="flex flex-col my-3">
             <div className="flex flex-col justify-between bg-gray-100 rounded p-2">
                 <div className="flex justify-between items-center">
-                    <Avatar icon="user" src={data.author.thumbnail} size="small" className="mr-3"/>
+                    <Avatar icon={<UserOutlined/>} src={data.author.thumbnail} size="small"
+                            className="mr-3"/>
                     <span className="text-xs flex-1 text-right mr-3">{publicationDate}</span>
                     {data.hasWriteAccess &&
                     <div className="flex items-center">
-                        <Icon type="edit"
-                              className="mr-3 cursor-pointer hover:text-indigo-400"
-                              onClick={() => setEditMode(true)}
+                        <EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400"
+                                      onClick={() => setEditMode(true)}
                         />
-                        <Icon type="delete"
-                              className="mr-3 cursor-pointer hover:text-red-600"
-                              onClick={() => handleDeletion(data.id)}
+                        <DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600"
+                                        onClick={() => handleDeletion(data.id)}
                         />
                     </div>
                     }
@@ -81,13 +82,14 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
             <div className="flex items-center text-gray-500">
                 <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
                     {likes !== 0 && likes}
-                    <Icon type="heart" className="ml-1" theme={liked ? "filled" : "outlined"}
-                          onClick={() => toggleLike(data.thread)}/>
+                    <LegacyIcon type="heart" className="ml-1" theme={liked ? "filled" : "outlined"}
+                                onClick={() => toggleLike(data.thread)}/>
                 </span>
                 {allowReplies &&
                 <span className="flex items-center cursor-pointer hover:text-indigo-400">
                         {data.comments !== 0 && data.comments}
-                    <Icon type="message" className="ml-1" onClick={() => setShowComments(!showComments)}/>
+                    <MessageOutlined className="ml-1"
+                                     onClick={() => setShowComments(!showComments)}/>
                 </span>
                 }
             </div>
