@@ -7,3 +7,8 @@
     background-color: #4c51bf !important;
     color: white !important;
 }
+
+.pills:checked + .label-pills:active {
+    background-color: white !important;
+    color: #667eea !important;
+}
