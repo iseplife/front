@@ -39,19 +39,14 @@ const SearchBar: React.FC = () => {
         setFetching(true);
         globalSearch(queryParams, 0).then(res => {
             const searchItems: SearchItem[] = res.data.content;
-            const data: SelectInputProps[] = [];
-            searchItems.map((searchItem: SearchItem) => {
-                return (
-                    data.push({
-                        id: searchItem.id,
-                        type: searchItem.type,
-                        value: searchItem.name,
-                        text: searchItem.name,
-                        thumbURL: searchItem.thumbURL,
-                        status: searchItem.status
-                    }));
-            });
-            setData(data);
+            setData(searchItems.map((searchItem: SearchItem) => ({
+                id: searchItem.id,
+                type: searchItem.type,
+                value: searchItem.name,
+                text: searchItem.name,
+                thumbURL: searchItem.thumbURL,
+                status: searchItem.status
+            })));
         }).finally(() => setFetching(false));
     };
 
