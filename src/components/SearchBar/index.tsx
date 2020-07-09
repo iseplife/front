@@ -2,16 +2,13 @@ import {Avatar, Divider, Empty, Select} from "antd";
 import React, {useState} from "react";
 import {globalSearch} from "../../data/searchbar";
 import {useHistory} from "react-router-dom";
-import {SearchItem} from "../../data/searchbar/types";
+import {SearchItem, SearchItemType} from "../../data/searchbar/types";
 import {useTranslation} from "react-i18next";
 import './searchBar.css'
 import {IconFA} from "../Common/IconFA";
 
 const {Option} = Select;
 const SEARCH_LENGTH_TRIGGER: number = 2;
-const TYPE_STUDENT: string = "STUDENT";
-const TYPE_EVENT: string = "EVENT";
-const TYPE_CLUB: string = "CLUB";
 
 interface SelectInputProps {
     id?: number
@@ -44,11 +41,11 @@ const CustomCheckbox: React.FC<CustomCheckBoxProps> = ({title, filterStatus, onC
 
 const AvatarSearchType: React.FC<{ props: SelectInputProps }> = ({props}) => {
     let iconType: string = "";
-    if (props.type === TYPE_STUDENT)
+    if (props.type === SearchItemType.STUDENT)
         iconType = "user"
-    if (props.type === TYPE_EVENT)
+    if (props.type === SearchItemType.EVENT)
         iconType = "calendar-day"
-    if (props.type === TYPE_CLUB)
+    if (props.type === SearchItemType.CLUB)
         iconType = "users"
     return (
         <>
@@ -123,7 +120,7 @@ const SearchBar: React.FC = () => {
 
     const renderOptions = () => {
         return data.map((inputProps: SelectInputProps) => {
-            return ((inputProps.type === TYPE_STUDENT && filterStudent) || (inputProps.type === TYPE_EVENT && filterEvent) || (inputProps.type === TYPE_CLUB && filterClub))
+            return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub))
                 ? (<Option key={inputProps.value}
                            value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
                     <div className="flex justify-between">
@@ -133,7 +130,7 @@ const SearchBar: React.FC = () => {
                         </div>
                         <span style={{fontSize: ".65rem"}}
                               className={`inline-flex items-center font-semibold rounded-full px-2 my-1 ${inputProps.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
-                        {inputProps.status ? t("status_active") : inputProps.type === TYPE_EVENT ? t("status_passed") : t("status_archived")}
+                        {inputProps.status ? t("status_active") : inputProps.type === SearchItemType.EVENT ? t("status_passed") : t("status_archived")}
                     </span>
                     </div>
                 </Option>)
