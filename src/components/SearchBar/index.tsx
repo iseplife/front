@@ -1,17 +1,17 @@
-import {Avatar, Divider, Empty, Select} from "antd";
+import {Divider, Empty, Select} from "antd";
 import React, {useCallback, useState} from "react";
 import {globalSearch} from "../../data/searchbar";
 import {useHistory} from "react-router-dom";
 import {SearchItem, SearchItemType} from "../../data/searchbar/types";
 import {useTranslation} from "react-i18next";
-import {IconFA} from "../Common/IconFA";
 import CustomCheckbox from "./CustomCheckbox";
 import './CustomCheckbox.css'
+import AvatarSearchType from "./AvatarSearchType";
 
 const {Option} = Select;
 const SEARCH_LENGTH_TRIGGER: number = 2;
 
-interface SelectInputProps {
+export interface SelectInputProps {
     id?: number
     type?: string
     text: string
@@ -19,29 +19,6 @@ interface SelectInputProps {
     thumbURL: string
     status: boolean
 }
-
-const AvatarSearchType: React.FC<{ props: SelectInputProps }> = ({props}) => {
-    let iconType: string = "";
-    if (props.type === SearchItemType.STUDENT)
-        iconType = "user"
-    if (props.type === SearchItemType.EVENT)
-        iconType = "calendar-day"
-    if (props.type === SearchItemType.CLUB)
-        iconType = "users"
-    return (
-        <>
-            <Avatar src={props.thumbURL} size={"small"}
-                    shape={"circle"}>
-                {props.text.split(" ")[0].slice(0, 1)}
-            </Avatar>
-            <div className="z-10" style={{fontSize: ".65rem"}}>
-                <IconFA
-                    className="-ml-2 mt-3 bg-white rounded-full border-4 border-transparent text-gray-600"
-                    name={`fa-${iconType}`}/>
-            </div>
-        </>
-    );
-};
 
 const SearchBar: React.FC = () => {
     const {t} = useTranslation('search');
