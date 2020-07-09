@@ -63,6 +63,8 @@ const SearchBar: React.FC = () => {
         setCurrentValue(value);
         if (!!value && value.length > SEARCH_LENGTH_TRIGGER && currentValue !== value) {
             updateSearchItems(value);
+        } else {
+            setData([]);
         }
     }, [currentValue]);
 
