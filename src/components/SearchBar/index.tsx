@@ -72,7 +72,7 @@ const SearchBar: React.FC = () => {
     const handleSelect = useCallback((value: string) => {
         setCurrentValue("");
         history.push("/" + value);
-    }, [history]);
+    }, []);
 
 
     const renderOptions = () => {
