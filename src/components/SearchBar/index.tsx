@@ -1,5 +1,5 @@
 import {Avatar, Divider, Empty, Select} from "antd";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {globalSearch} from "../../data/searchbar";
 import {useHistory} from "react-router-dom";
 import {SearchItem, SearchItemType} from "../../data/searchbar/types";
@@ -82,22 +82,21 @@ const SearchBar: React.FC = () => {
      * Fires when input change
      * @param value
      */
-    const handleSearch = (value: string) => {
+    const handleSearch = useCallback((value: string) => {
         setCurrentValue(value);
-        if (!!value && value.length > SEARCH_LENGTH_TRIGGER) {
-            if (currentValue !== value) {
-                updateSearchItems(value);
-            }
+        if (!!value && value.length > SEARCH_LENGTH_TRIGGER && currentValue !== value) {
+            updateSearchItems(value);
         }
-    };
+    }, [currentValue]);
 
     /**
      * Fires when item is selected
      */
-    const handleSelect = (value: string) => {
+    const handleSelect = useCallback((value: string) => {
         setCurrentValue("");
         history.push("/" + value);
-    };
+    }, [history]);
+
 
     const renderOptions = () => {
         return data.map((inputProps: SelectInputProps) => {
