@@ -14,12 +14,3 @@ export type Author = {
     name: string
     thumbnail: string
 }
-
-export type SearchItem = {
-    id: number
-    type: "EVENT" | "CLUB" | "STUDENT"
-    name: string
-    description: string
-    thumbURL?: string
-    status: boolean
-}
