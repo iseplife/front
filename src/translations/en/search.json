@@ -1,0 +1,10 @@
+{
+  "placeholder": "Search a user, an event or a club",
+  "student": "Student",
+  "event": "Event",
+  "club": "Club",
+  "status_archived": "Archived",
+  "status_passed": "Passed",
+  "status_active": "Active",
+  "funny_empty_message": "Hmmm... this search bar seems useful"
+}

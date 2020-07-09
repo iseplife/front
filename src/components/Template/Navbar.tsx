@@ -8,6 +8,7 @@ import {AppState} from "../../redux/types";
 import {Student} from "../../data/student/types";
 import "./Navbar.css"
 import {Roles} from "../../data/security/types";
+import SearchBar from "../SearchBar";
 import {Icon as LegacyIcon} from '@ant-design/compatible';
 import {
     BookOutlined,
@@ -75,8 +76,10 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
+        <SearchBar />
+
         <div className="hidden md:flex justify-end items-center py-5">
-            <div className="flex justify-around items-center mr-4 ">
+            <div className="flex justify-around items-center mr-4">
                 <Link to="/discovery">
                     <IconButton name="compass"/>
                 </Link>

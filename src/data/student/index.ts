@@ -1,35 +1,35 @@
 import axios, {AxiosPromise} from "axios";
-import {Student, StudentAdminForm, StudentAdmin, StudentPreview, StudentPreviewAdmin} from "./types";
+import {
+    Student,
+    StudentAdminForm,
+    StudentAdmin,
+    StudentPreview,
+    StudentPreviewAdmin
+} from "./types";
 import {ClubMemberView} from "../club/types";
-import {Page, SearchItem} from "../request.type";
+import {Page} from "../request.type";
+import {SearchItem} from "../searchbar/types";
 
-export function getLoggedUser(): AxiosPromise<Student> {
-    return axios.get('/student/me');
-}
+export const getLoggedUser = (): AxiosPromise<Student> => axios.get('/student/me');
 
-export function getStudent(id: number): AxiosPromise<Student> {
-    return axios.get(`/student/${id}`);
-}
+export const getStudent = (id: number): AxiosPromise<Student> => axios.get(`/student/${id}`);
 
-export function getStudentAdmin(id: number): AxiosPromise<StudentAdmin> {
-    return axios.get(`/student/${id}/admin`);
-}
+export const getStudentAdmin = (id: number): AxiosPromise<StudentAdmin> => axios.get(`/student/${id}/admin`);
 
-export const searchStudentsPaged = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => {
-    return axios.get(`/search/student/`, {params: {page, name, promos, atoz}});
-};
+export const searchStudentsPaged = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => axios.get(`/search/student/`, {
+    params: {
+        page,
+        name,
+        promos,
+        atoz
+    }
+});
 
-export const searchStudents = (name: string): AxiosPromise<SearchItem[]> => {
-    return axios.get(`/search/student/all`, {params: {name}});
-};
+export const searchStudents = (name: string): AxiosPromise<SearchItem[]> => axios.get(`/search/student/all`, {params: {name}});
 
-export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => {
-    return axios.get('/student', { params: {page}});
-};
+export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => axios.get('/student', {params: {page}});
 
-export const getAllStudentsAdmin = (page: number = 0): AxiosPromise<Page<StudentPreviewAdmin>> => {
-    return axios.get('/student/admin', { params: {page}});
-};
+export const getAllStudentsAdmin = (page: number = 0): AxiosPromise<Page<StudentPreviewAdmin>> => axios.get('/student/admin', {params: {page}});
 
 export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAdmin> => {
     const fd = new FormData();
@@ -42,9 +42,7 @@ export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAd
     return axios.post(`/student`, fd);
 };
 
-export const updateLoggedStudent = (id: number): AxiosPromise<Student> => {
-    return axios.put(`/student/${id}`);
-};
+export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.put(`/student/${id}`);
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {
     const fd = new FormData();
@@ -56,16 +54,10 @@ export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<Student
     return axios.put(`/student/admin`, fd);
 };
 
-export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => {
-    return axios.put(`/student/${id}/archive`);
-};
+export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => axios.put(`/student/${id}/archive`);
 
 
-export const deleteStudent = (id: number): AxiosPromise<void> => {
-    return axios.delete(`/student/${id}`);
-};
+export const deleteStudent = (id: number): AxiosPromise<void> => axios.delete(`/student/${id}`);
 
 
-export const getClubsForStudent = (studentId: number): AxiosPromise<ClubMemberView[]> => {
-    return axios.get(`/student/${studentId}/club`);
-};
+export const getClubsForStudent = (studentId: number): AxiosPromise<ClubMemberView[]> => axios.get(`/student/${studentId}/club`);

@@ -3,9 +3,12 @@ module.exports = {
   theme: {
     extend: {}
   },
-  variants: {},
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
+    textColor: ['responsive', 'hover', 'focus', 'active']
+  },
   plugins: [
-    ({ addComponents }) => {
+    ({addComponents}) => {
       const AppLogo = {
         '.font-dinotcb': {
           fontFamily: 'DinotCB',
