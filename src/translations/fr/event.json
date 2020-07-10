@@ -1,4 +1,7 @@
 {
+  "day": "Jour",
+  "month": "Mois",
+  "week": "Semaine",
   "type": {
     "PARTY": "Soirée",
     "AFTERWORK":  "Afterwork",
