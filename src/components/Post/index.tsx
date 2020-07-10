@@ -1,21 +1,23 @@
-import React, {useCallback, useState} from "react"
-import {Post as PostType, PostUpdate} from "../../data/post/types"
-import Embed from "./Embed"
-import EmbedType from "../../constants/EmbedType"
-import {Avatar, Divider, message, Modal} from "antd"
-import {useTranslation} from "react-i18next"
-import {toggleThreadLike} from "../../data/thread"
-import {format, isPast} from "date-fns"
-import {useFormik} from "formik"
-import CommentList from "../Comment/CommentList"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
+import React, {useCallback, useState} from "react";
+import {Post as PostType, PostUpdate} from "../../data/post/types";
+import Embed from "./Embed";
+import EmbedType from "../../constants/EmbedType";
+import {Avatar, Divider, message, Modal} from "antd";
+import {useTranslation} from "react-i18next";
+import {toggleThreadLike} from "../../data/thread";
+import {format, isPast} from "date-fns";
+import {useFormik} from "formik";
+import CommentList from "../Comment/CommentList";
 import {
-	LockOutlined,
-	MessageOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	UserOutlined
-} from "@ant-design/icons"
+    LockOutlined,
+    UnlockOutlined,
+    MessageOutlined,
+    DeleteOutlined,
+    EditOutlined,
+    UserOutlined,
+    HeartFilled,
+    HeartOutlined
+} from '@ant-design/icons';
 
 type PostProps = {
     data: PostType
@@ -73,33 +75,35 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
 						}}/>
 				</div>
 
-				<div className="flex">
-					<LegacyIcon type={lockPost ? "lock" : "unlock"}
-						onClick={() => setLockPost(!lockPost)}/>
-					<input className="hidden" name="private" type="checkbox"
-						onChange={formik.handleChange}
-						checked={lockPost}/>
-				</div>
-			</div>
-			<div>
-				<textarea name="description" className="w-full resize-none" autoFocus
-					onChange={formik.handleChange}
-					value={formik.values.description}
-				/>
-				<Embed type={EmbedType.GALLERY}/>
-			</div>
-			<div className="text-right">
-				<button className="px-2 py-1 mx-1 rounded bg-green-500 text-white hover:bg-green-700" type="submit">
-					{t("save")}
-				</button>
-				<button className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
-					onClick={onClose}>
-					{t("cancel")}
-				</button>
-			</div>
-		</form>
-	)
-}
+                <div className="flex">
+                    {lockPost
+                        ? <LockOutlined onClick={() => setLockPost(!lockPost)}/>
+                        : <UnlockOutlined onClick={() => setLockPost(!lockPost)}/>
+                    }
+                    <input className="hidden" name="private" type="checkbox"
+                           onChange={formik.handleChange}
+                           checked={lockPost}/>
+                </div>
+            </div>
+            <div>
+                <textarea name="description" className="w-full resize-none" autoFocus
+                          onChange={formik.handleChange}
+                          value={formik.values.description}
+                />
+                <Embed type={EmbedType.GALLERY}/>
+            </div>
+            <div className="text-right">
+                <button className="px-2 py-1 mx-1 rounded bg-green-500 text-white hover:bg-green-700" type="submit">
+                    {t('save')}
+                </button>
+                <button className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
+                        onClick={onClose}>
+                    {t('cancel')}
+                </button>
+            </div>
+        </form>
+    );
+};
 
 
 const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit}) => {
@@ -135,13 +139,13 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 		})
 	}, [data.id, t, onUpdate, onEdit])
 
-	const toggleLike = useCallback(async (id: number) => {
-		const res = await toggleThreadLike(id)
-		if(res.status === 200) {
-			setLiked(res.data)
-			setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
-		}
-	}, [])
+    const toggleLike = useCallback(async (id: number) => {
+        const res = await toggleThreadLike(id);
+        if (res.status === 200) {
+            setLiked(res.data);
+            setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1);
+        }
+    }, []);
 
 
 	return (
@@ -158,49 +162,49 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                         <span
                         	className="mx-2 text-xs"> {t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
                             " dd/MM/yy")}</span>
-						}
-						{data.private && <LockOutlined/>}
-					</div>
-					<div>
-						<p>
-							{data.description}
-						</p>
-						<Embed type={EmbedType.GALLERY}/>
-					</div>
-				</>
-			}
-			<div className="flex flex-row justify-between mt-2">
-				<Avatar icon={<UserOutlined/>} src={data.author.thumbnail}/>
-				<div className="flex items-center">
-					<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3"
-						onClick={() => setShowComments(!showComments)}>
-						{data.nbComments} <MessageOutlined className="ml-1"/>
-					</span>
-					<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
-						{likes}
-						<LegacyIcon type="heart" className="ml-1"
-							onClick={() => toggleLike(data.thread)}
-							theme={liked ? "filled" : "outlined"}
-						/>
-					</span>
-					{data.hasWriteAccess &&
+                        }
+                        {data.private && <LockOutlined/>}
+                    </div>
+                    <div>
+                        <p>
+                            {data.description}
+                        </p>
+                        <Embed type={EmbedType.GALLERY}/>
+                    </div>
+                </>
+            }
+            <div className="flex flex-row justify-between mt-2">
+                <Avatar icon={<UserOutlined/>} src={data.author.thumbnail}/>
+                <div className="flex items-center">
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3"
+                          onClick={() => setShowComments(!showComments)}>
+                        {data.nbComments} <MessageOutlined className="ml-1"/>
+                    </span>
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
+                        {likes}
+                        {liked
+                            ? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                            : <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                        }
+                    </span>
+                    {data.hasWriteAccess &&
                     <>
                     	<EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400"
                     		onClick={() => onEdit(data.id)}/>
                     	<DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600"
                     		onClick={confirmDeletion}/>
                     </>
-					}
-				</div>
-			</div>
-			{ showComments && (
-				<>
-					<Divider />
-					<CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
-				</>
-			)}
-		</div>
-	)
-}
+                    }
+                </div>
+            </div>
+            {showComments && (
+                <>
+                    <Divider/>
+                    <CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
+                </>
+            )}
+        </div>
+    );
+};
 
 export default Post

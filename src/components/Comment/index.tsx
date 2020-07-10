@@ -1,13 +1,19 @@
-import React, {useCallback, useMemo, useState} from "react"
-import {Comment as CommentType} from "../../data/thread/types"
-import {Avatar} from "antd"
-import {toggleThreadLike} from "../../data/thread"
-import CommentList from "./CommentList"
-import EditComment from "./EditComment"
-import {useTranslation} from "react-i18next"
-import {format, isToday} from "date-fns"
-import {EditOutlined, DeleteOutlined, MessageOutlined, UserOutlined} from "@ant-design/icons"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
+import React, {useCallback, useMemo, useState} from "react";
+import {Comment as CommentType} from "../../data/thread/types";
+import {Avatar} from "antd";
+import {toggleThreadLike} from "../../data/thread";
+import CommentList from "./CommentList";
+import EditComment from "./EditComment";
+import {useTranslation} from "react-i18next";
+import {format, isToday} from "date-fns";
+import {
+    EditOutlined,
+    DeleteOutlined,
+    MessageOutlined,
+    UserOutlined,
+    HeartOutlined,
+    HeartFilled
+} from '@ant-design/icons';
 
 
 interface CommentProps {
@@ -78,14 +84,16 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 					}
 				</div>
 
-			</div>
-			<div className="flex items-center text-gray-500">
-				<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
-					{likes !== 0 && likes}
-					<LegacyIcon type="heart" className="ml-1" theme={liked ? "filled" : "outlined"}
-						onClick={() => toggleLike(data.thread)}/>
-				</span>
-				{allowReplies &&
+            </div>
+            <div className="flex items-center text-gray-500">
+                <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
+                    {likes !== 0 && likes}
+                    {liked
+                        ? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                        : <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                    }
+                </span>
+                {allowReplies &&
                 <span className="flex items-center cursor-pointer hover:text-indigo-400">
                 	{data.comments !== 0 && data.comments}
                 	<MessageOutlined className="ml-1"
