@@ -7,21 +7,21 @@ import {format} from "date-fns"
 import {Map, Marker, TileLayer} from "react-leaflet"
 import {getEvent, getEventChildren} from "../../../data/event"
 
-import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types";
-import './Event.css';
-import {Avatar} from "antd";
-import {useTranslation} from "react-i18next";
-import Feed from "../../../components/Feed";
-import EventPreview from "../../../components/Event/Preview";
+import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types"
+import "./Event.css"
+import {Avatar} from "antd"
+import {useTranslation} from "react-i18next"
+import Feed from "../../../components/Feed"
+import EventPreview from "../../../components/Event/Preview"
 import {
-    TeamOutlined,
-    EuroOutlined,
-    UserOutlined,
-    UpOutlined,
-    DownOutlined,
-    LockOutlined,
-    UnlockOutlined
-} from '@ant-design/icons';
+	TeamOutlined,
+	EuroOutlined,
+	UserOutlined,
+	UpOutlined,
+	DownOutlined,
+	LockOutlined,
+	UnlockOutlined
+} from "@ant-design/icons"
 
 
 const Event: React.FC = () => {
@@ -81,25 +81,25 @@ const Event: React.FC = () => {
 						<div className="md:w-1/6 w-full md:order-1 order-3">
 							{subevents &&
                             <div className="mt-5 text-center">
-                                <div
-                                    className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
-                                    style={{marginBottom: -5}}
-                                    onClick={() => {
-                                        if (eventsRef.current) {
-                                            setEventVisible(!eventsRef.current?.classList.toggle("h-0"));
-                                        }
-                                    }}>
-                                    <span>{t('event') + "s"}</span>
-                                    {eventsVisible
-                                        ? <UpOutlined className="md:hidden block mx-2"/>
-                                        : <DownOutlined className="md:hidden block mx-2"/>
-                                    }
-                                </div>
-                                <div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
-                                    {subevents.map((se, i) => (
-                                        <EventPreview key={i} event={se}/>
-                                    ))}
-                                </div>
+                            	<div
+                            		className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
+                            		style={{marginBottom: -5}}
+                            		onClick={() => {
+                            			if (eventsRef.current) {
+                            				setEventVisible(!eventsRef.current?.classList.toggle("h-0"))
+                            			}
+                            		}}>
+                            		<span>{t("event") + "s"}</span>
+                            		{eventsVisible
+                            			? <UpOutlined className="md:hidden block mx-2"/>
+                            			: <DownOutlined className="md:hidden block mx-2"/>
+                            		}
+                            	</div>
+                            	<div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
+                            		{subevents.map((se, i) => (
+                            			<EventPreview key={i} event={se}/>
+                            		))}
+                            	</div>
 
                             </div>
 							}
@@ -120,35 +120,35 @@ const Event: React.FC = () => {
 								{event.location}
 							</div>
 
-                            <div className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
-                                 onClick={() => {
-                                     if (descriptionRef.current) {
-                                         setDescVisible(!descriptionRef.current?.classList.toggle("h-32"));
-                                     }
-                                 }}>
-                                <div ref={descriptionRef} className="h-32 overflow-hidden">
-                                    {event.description.split("\n").map((s, idx) =>
-                                        <span key={idx}>{s} <br/></span>
-                                    )}
-                                </div>
-                                {descVisible ? <UpOutlined className="mx-auto"/> : <DownOutlined className="mx-auto"/>}
-                            </div>
-                        </div>
-                        <div
-                            className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
-                            <div className="flex items-baseline justify-around text-lg font-bold">
-                                <div className="flex items-center"
-                                     title={event.closed ? "Evenement ouvert" : "Evenement privé"}>
-                                    {event.closed ? <LockOutlined/> : <UnlockOutlined/>}
-                                </div>
-                                <div className="flex items-center">
-                                    <TeamOutlined className="mr-2"/> 14
-                                </div>
-                                <div className="flex items-center">
-                                    <EuroOutlined className="mr-2"/>
-                                    {event.price ? event.price.toFixed(2) : t("free")}
-                                </div>
-                            </div>
+							<div className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
+								onClick={() => {
+									if (descriptionRef.current) {
+										setDescVisible(!descriptionRef.current?.classList.toggle("h-32"))
+									}
+								}}>
+								<div ref={descriptionRef} className="h-32 overflow-hidden">
+									{event.description.split("\n").map((s, idx) =>
+										<span key={idx}>{s} <br/></span>
+									)}
+								</div>
+								{descVisible ? <UpOutlined className="mx-auto"/> : <DownOutlined className="mx-auto"/>}
+							</div>
+						</div>
+						<div
+							className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
+							<div className="flex items-baseline justify-around text-lg font-bold">
+								<div className="flex items-center"
+									title={event.closed ? "Evenement ouvert" : "Evenement privé"}>
+									{event.closed ? <LockOutlined/> : <UnlockOutlined/>}
+								</div>
+								<div className="flex items-center">
+									<TeamOutlined className="mr-2"/> 14
+								</div>
+								<div className="flex items-center">
+									<EuroOutlined className="mr-2"/>
+									{event.price ? event.price.toFixed(2) : t("free")}
+								</div>
+							</div>
 
 							<Map className="mt-5 rounded md:h-64 h-48"
 								center={[51.505, -0.09]}
