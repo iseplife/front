@@ -8,13 +8,15 @@ import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
 import {useFormik} from "formik"
 import CommentList from "../Comment/CommentList"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
 import {
 	LockOutlined,
+	UnlockOutlined,
 	MessageOutlined,
 	DeleteOutlined,
 	EditOutlined,
-	UserOutlined
+	UserOutlined,
+	HeartFilled,
+	HeartOutlined
 } from "@ant-design/icons"
 
 type PostProps = {
@@ -74,8 +76,10 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
 				</div>
 
 				<div className="flex">
-					<LegacyIcon type={lockPost ? "lock" : "unlock"}
-						onClick={() => setLockPost(!lockPost)}/>
+					{lockPost
+						? <LockOutlined onClick={() => setLockPost(false)}/>
+						: <UnlockOutlined onClick={() => setLockPost(true)}/>
+					}
 					<input className="hidden" name="private" type="checkbox"
 						onChange={formik.handleChange}
 						checked={lockPost}/>
@@ -137,7 +141,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 
 	const toggleLike = useCallback(async (id: number) => {
 		const res = await toggleThreadLike(id)
-		if(res.status === 200) {
+		if (res.status === 200) {
 			setLiked(res.data)
 			setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
 		}
@@ -178,10 +182,10 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 					</span>
 					<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
 						{likes}
-						<LegacyIcon type="heart" className="ml-1"
-							onClick={() => toggleLike(data.thread)}
-							theme={liked ? "filled" : "outlined"}
-						/>
+						{liked
+							? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+							: <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+						}
 					</span>
 					{data.hasWriteAccess &&
                     <>
@@ -193,9 +197,9 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 					}
 				</div>
 			</div>
-			{ showComments && (
+			{showComments && (
 				<>
-					<Divider />
+					<Divider/>
 					<CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
 				</>
 			)}

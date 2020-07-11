@@ -1,8 +1,7 @@
 import React, {useState} from "react"
 import {Upload} from "antd"
 import "./ImagePicker.css"
-import {EditOutlined} from "@ant-design/icons"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
+import {EditOutlined, PlusOutlined, LoadingOutlined} from "@ant-design/icons"
 
 type ImagePickerProps = {
     className?: string
@@ -55,7 +54,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, 
 					</div>
 					:
 					<div>
-						<LegacyIcon type={loading ? "loading" : "plus"}/>
+						{loading ? <LoadingOutlined/> : <PlusOutlined/>}
 						<div className="ant-upload-text">Upload</div>
 					</div>
 				}

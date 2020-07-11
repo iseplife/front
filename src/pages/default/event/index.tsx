@@ -13,8 +13,15 @@ import {Avatar} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
 import EventPreview from "../../../components/Event/Preview"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
-import {TeamOutlined, EuroOutlined, UserOutlined} from "@ant-design/icons"
+import {
+	TeamOutlined,
+	EuroOutlined,
+	UserOutlined,
+	UpOutlined,
+	DownOutlined,
+	LockOutlined,
+	UnlockOutlined
+} from "@ant-design/icons"
 
 
 const Event: React.FC = () => {
@@ -83,9 +90,10 @@ const Event: React.FC = () => {
                             			}
                             		}}>
                             		<span>{t("event") + "s"}</span>
-                            		<LegacyIcon className="md:hidden block mx-2"
-                            			type={eventsVisible ? "up" : "down"}
-                            		/>
+                            		{eventsVisible
+                            			? <UpOutlined className="md:hidden block mx-2"/>
+                            			: <DownOutlined className="md:hidden block mx-2"/>
+                            		}
                             	</div>
                             	<div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
                             		{subevents.map((se, i) => (
@@ -123,7 +131,7 @@ const Event: React.FC = () => {
 										<span key={idx}>{s} <br/></span>
 									)}
 								</div>
-								<LegacyIcon className="mx-auto" type={descVisible ? "up" : "down"}/>
+								{descVisible ? <UpOutlined className="mx-auto"/> : <DownOutlined className="mx-auto"/>}
 							</div>
 						</div>
 						<div
@@ -131,7 +139,7 @@ const Event: React.FC = () => {
 							<div className="flex items-baseline justify-around text-lg font-bold">
 								<div className="flex items-center"
 									title={event.closed ? "Evenement ouvert" : "Evenement privé"}>
-									<LegacyIcon type={event.closed ? "lock" : "unlock"}/>
+									{event.closed ? <LockOutlined/> : <UnlockOutlined/>}
 								</div>
 								<div className="flex items-center">
 									<TeamOutlined className="mr-2"/> 14

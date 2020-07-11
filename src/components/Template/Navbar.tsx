@@ -9,7 +9,6 @@ import {Student} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
 import {
 	BookOutlined,
 	CalendarOutlined,
@@ -18,16 +17,19 @@ import {
 	UserOutlined,
 	BellOutlined,
 	HomeOutlined,
+	NotificationOutlined,
+	ExportOutlined,
+	CompassOutlined
 } from "@ant-design/icons"
 
 type IconButtonProps = {
-    name: string
+    icon: React.ReactNode
 }
-const IconButton: React.FC<IconButtonProps> = ({name}) => {
+const IconButton: React.FC<IconButtonProps> = ({icon}) => {
 	return (
 		<div
 			className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
-			<LegacyIcon type={name}/>
+			{icon}
 		</div>
 	)
 }
@@ -81,12 +83,12 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 		<div className="hidden md:flex justify-end items-center py-5">
 			<div className="flex justify-around items-center mr-4">
 				<Link to="/discovery">
-					<IconButton name="compass"/>
+					<IconButton icon={<CompassOutlined/>}/>
 				</Link>
 				<Link to="/calendar">
-					<IconButton name="calendar"/>
+					<IconButton icon={<CalendarOutlined/>}/>
 				</Link>
-				<IconButton name="bell"/>
+				<IconButton icon={<BellOutlined/>}/>
 			</div>
 			<Dropdown
 				overlay={<ProfileList firstName={user.firstName} lastName={user.lastName}/>}
@@ -106,14 +108,14 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 
 
 type DrawerItemProps = {
-    icon: string
+    icon: React.ReactNode
     className?: string
     link: string
 }
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
 	<Link to={link}>
 		<div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
-			<LegacyIcon type={icon}/>
+			{icon}
 			<span className="nav-footer-text">{children}</span>
 		</div>
 	</Link>
@@ -146,12 +148,13 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
 			>
 				<div className="flex justify-around">
 					{payload.roles.includes(Roles.ADMIN) &&
-                    <DrawerItem icon="key" link="/admin">{t("administration")}</DrawerItem>
+                    <DrawerItem icon={<KeyOutlined/>} link="/admin">{t("administration")}</DrawerItem>
 					}
 					{(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
-                    <DrawerItem icon="notification" link="">{t("create_event")}</DrawerItem>
+                    <DrawerItem icon={<NotificationOutlined/>} link="">{t("create_event")}</DrawerItem>
 					}
-					<DrawerItem icon="export" link="/logout" className="text-red-600">{t("logout")}</DrawerItem>
+					<DrawerItem icon={<ExportOutlined/>} link="/logout"
+						className="text-red-600">{t("logout")}</DrawerItem>
 				</div>
 			</Drawer>
 		</>

@@ -6,8 +6,14 @@ import CommentList from "./CommentList"
 import EditComment from "./EditComment"
 import {useTranslation} from "react-i18next"
 import {format, isToday} from "date-fns"
-import {EditOutlined, DeleteOutlined, MessageOutlined, UserOutlined} from "@ant-design/icons"
-import {Icon as LegacyIcon} from "@ant-design/compatible"
+import {
+	EditOutlined,
+	DeleteOutlined,
+	MessageOutlined,
+	UserOutlined,
+	HeartOutlined,
+	HeartFilled
+} from "@ant-design/icons"
 
 
 interface CommentProps {
@@ -82,8 +88,10 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 			<div className="flex items-center text-gray-500">
 				<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
 					{likes !== 0 && likes}
-					<LegacyIcon type="heart" className="ml-1" theme={liked ? "filled" : "outlined"}
-						onClick={() => toggleLike(data.thread)}/>
+					{liked
+						? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+						: <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+					}
 				</span>
 				{allowReplies &&
                 <span className="flex items-center cursor-pointer hover:text-indigo-400">
