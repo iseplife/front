@@ -1,16 +1,15 @@
-import React, {CSSProperties} from "react";
+import React from "react";
 import "./ImageOverlay.css";
 
 type ImageOverlayProps = {
-    src?: string
+    src: string
     height?: number
     width?: number
     className?: string
-    style?: CSSProperties
 }
-const ImageOverlay: React.FC<ImageOverlayProps> = ({src, height, width, children}) => {
+const ImageOverlay: React.FC<ImageOverlayProps> = ({src, height, width,className, children}) => {
     return (
-        <div className="image-display relative">
+        <div className={`${className} image-display relative`}>
             <span>
                 <img src={src} alt="" style={{height: height || "auto", width: width || "auto"}}/>
             </span>
@@ -21,4 +20,7 @@ const ImageOverlay: React.FC<ImageOverlayProps> = ({src, height, width, children
     )
 }
 
+ImageOverlay.defaultProps = {
+    className: ""
+};
 export default ImageOverlay;

@@ -97,7 +97,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
             description: "",
             feed: props.feedId,
             private: true,
-            draft: true,
+            draft: true
         };
     },
 
