@@ -6,4 +6,4 @@ enum EmbedEnumType {
     IMAGE = "image",
 }
 
-export default EmbedEnumType;
+export default EmbedEnumType

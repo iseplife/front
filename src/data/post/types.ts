@@ -1,9 +1,9 @@
-import {Club} from "../club/types";
-import {Author} from "../request.type";
-import EmbedEnumType from "../../constants/EmbedEnumType";
-import {Gallery, GalleryPreForm} from "../gallery/types";
-import {Image, Video, Document} from "../media/types";
-import {Poll} from "../poll/types";
+import {Club} from "../club/types"
+import {Author} from "../request.type"
+import EmbedEnumType from "../../constants/EmbedEnumType"
+import {Gallery, GalleryPreForm} from "../gallery/types"
+import {Image, Video, Document} from "../media/types"
+import {Poll} from "../poll/types"
 
 export type PostCreation = {
     description: string

@@ -16,6 +16,8 @@ import {
 } from "@ant-design/icons"
 
 
+
+
 interface CommentProps {
     data: CommentType
     allowReplies: boolean
@@ -53,24 +55,24 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
         }
     }, [])
 
-    return (
-        <div className="flex flex-col my-3">
-            <div className="flex flex-col justify-between bg-gray-100 rounded p-2">
-                <div className="flex justify-between items-center">
-                    <Avatar icon={<UserOutlined/>} src={data.author.thumbnail} size="small"
-                        className="mr-3"/>
-                    <span className="text-xs flex-1 text-right mr-3">{publicationDate}</span>
-                    {data.hasWriteAccess &&
-                    <div className="flex items-center">
-                    	<EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400"
-                    		onClick={() => setEditMode(true)}
-                    	/>
-                    	<DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600"
-                    		onClick={() => handleDeletion(data.id)}
-                    	/>
-                    </div>
-                    }
-                </div>
+	return (
+		<div className="flex flex-col my-3">
+			<div className="flex flex-col justify-between bg-gray-100 rounded p-2">
+				<div className="flex justify-between items-center">
+					<Avatar icon={<UserOutlined/>} src={data.author.thumbnail} size="small"
+						className="mr-3"/>
+					<span className="text-xs flex-1 text-right mr-3">{publicationDate}</span>
+					{data.hasWriteAccess &&
+						<div className="flex items-center">
+							<EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400"
+								onClick={() => setEditMode(true)}
+							/>
+							<DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600"
+								onClick={() => handleDeletion(data.id)}
+							/>
+						</div>
+					}
+				</div>
 
                 <div className="flex-1 mt-3">
                     {editMode ?
@@ -84,31 +86,30 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     }
                 </div>
 
-            </div>
-            <div className="flex items-center text-gray-500">
-                <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
-                    {likes !== 0 && likes}
-                    {liked
-                        ? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
-                        : <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
-                    }
-                </span>
-                {allowReplies &&
-                <span className="flex items-center cursor-pointer hover:text-indigo-400">
-                	{data.comments !== 0 && data.comments}
-                	<MessageOutlined className="ml-1"
-                		onClick={() => setShowComments(!showComments)}/>
-                </span>
-                }
-            </div>
-            <div className="flex ">
-                {showComments &&
-                <>
-                	<div className="border border-1 border-gray-200 ml-5 my-4"/>
-                	<CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} className="flex-1"/>
-                </>
-                }
-            </div>
+			</div>
+			<div className="flex items-center text-gray-500">
+				<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-2">
+					{likes !== 0 && likes}
+					{liked
+						? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+						: <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+					}
+				</span>
+				{allowReplies &&
+					<span className="flex items-center cursor-pointer hover:text-indigo-400">
+						{data.comments !== 0 && data.comments}
+						<MessageOutlined className="ml-1" onClick={() => setShowComments(!showComments)}/>
+					</span>
+				}
+			</div>
+			<div className="flex ">
+				{showComments &&
+					<>
+						<div className="border border-1 border-gray-200 ml-5 my-4"/>
+						<CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} className="flex-1"/>
+					</>
+				}
+			</div>
 
         </div>
     )
