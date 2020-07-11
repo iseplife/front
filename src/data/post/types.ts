@@ -1,5 +1,5 @@
-import {Club} from "../club/types";
-import {Author} from "../request.type";
+import {Club} from "../club/types"
+import {Author} from "../request.type"
 
 export type PostCreation = {
     description: string

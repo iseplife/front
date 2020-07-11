@@ -22,6 +22,8 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-var": "warn",
+        "react/prop-types": "off",
         "indent": [
             "error",
             "tab"

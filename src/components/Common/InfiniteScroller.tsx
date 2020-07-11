@@ -1,8 +1,8 @@
-import React, {useEffect, useMemo, useState} from "react";
-import Loading from "./Loading";
-import {useTranslation} from "react-i18next";
+import React, {useEffect, useMemo, useState} from "react"
+import Loading from "./Loading"
+import {useTranslation} from "react-i18next"
 
-const INITIAL_LOADER: Loader = {loading: false, fetch: false,count: 0, over: false};
+const INITIAL_LOADER: Loader = {loading: false, fetch: false,count: 0, over: false}
 type Loader = {
     count: number,
     over: boolean,
@@ -21,111 +21,111 @@ type InfiniteScrollerProps = {
 }
 
 const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, triggerDistance = 50, children, className = ""}) => {
-    const {t} = useTranslation('common');
-    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback]);
-    const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER);
-    const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER);
+	const {t} = useTranslation("common")
+	const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
+	const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
+	const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
 
-    /**
+	/**
      * Initial data, call on component creation
      * first element that are going to be displayed
      */
-    useEffect(() => {
-        switch (watch) {
-            case "UP":
-                setUpLoader(prevState => ({...prevState, loading: true}));
-                upCallback(upLoader.count).then(over => {
-                    setDownLoader(prevState => ({
-                        over,
-                        fetch: false,
-                        count: ++prevState.count,
-                        loading: false
-                    }))
-                });
-                break;
-            case "DOWN":
-                setDownLoader(prevState => ({...prevState, loading: true}));
-                downCallback(downLoader.count).then(over => {
-                    setDownLoader(prevState => ({
-                        over,
-                        fetch: false,
-                        count: ++prevState.count,
-                        loading: false
-                    }))
-                });
-                break;
-        }
-    }, [upCallback, downCallback, watch]);
+	useEffect(() => {
+		switch (watch) {
+		case "UP":
+			setUpLoader(prevState => ({...prevState, loading: true}))
+			upCallback(upLoader.count).then(over => {
+				setDownLoader(prevState => ({
+					over,
+					fetch: false,
+					count: ++prevState.count,
+					loading: false
+				}))
+			})
+			break
+		case "DOWN":
+			setDownLoader(prevState => ({...prevState, loading: true}))
+			downCallback(downLoader.count).then(over => {
+				setDownLoader(prevState => ({
+					over,
+					fetch: false,
+					count: ++prevState.count,
+					loading: false
+				}))
+			})
+			break
+		}
+	}, [upCallback, downCallback, watch])
 
-    useEffect(() => {
-        function scrollerListener(this: HTMLElement) {
-            // Trigger event loader when top of page is almost reached
-            if (watch !== "DOWN" && this.scrollTop <= triggerDistance) {
-                setUpLoader(prevState => ({...prevState, fetch: true}));
-            }
-            // Trigger event loader when bottom of page is almost reached
-            if (watch !== "UP" && this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
-                setDownLoader(prevState => ({...prevState, fetch: true}));
-            }
-        }
+	useEffect(() => {
+		function scrollerListener(this: HTMLElement) {
+			// Trigger event loader when top of page is almost reached
+			if (watch !== "DOWN" && this.scrollTop <= triggerDistance) {
+				setUpLoader(prevState => ({...prevState, fetch: true}))
+			}
+			// Trigger event loader when bottom of page is almost reached
+			if (watch !== "UP" && this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
+				setDownLoader(prevState => ({...prevState, fetch: true}))
+			}
+		}
 
-        const main = document.getElementById("main");
-        main?.addEventListener('scroll', scrollerListener);
+		const main = document.getElementById("main")
+        main?.addEventListener("scroll", scrollerListener)
 
 
 
         return () => {
-            main?.removeEventListener("scroll", scrollerListener);
+            main?.removeEventListener("scroll", scrollerListener)
         }
-    }, [triggerDistance, watch]);
+	}, [triggerDistance, watch])
 
-    useEffect(() => {
-        if (!upLoader.over && !upLoader.loading && upLoader.fetch) {
-            setUpLoader(prevState => ({...prevState, loading: true}));
-            const f = Array.isArray(callback) ? callback[0] : callback;
-            f(upLoader.count).then(over => {
-                setUpLoader(prevState => ({
-                    over,
-                    fetch: false,
-                    count: ++prevState.count,
-                    loading: false
-                }))
-            })
-        }
-    }, [upLoader, callback]);
+	useEffect(() => {
+		if (!upLoader.over && !upLoader.loading && upLoader.fetch) {
+			setUpLoader(prevState => ({...prevState, loading: true}))
+			const f = Array.isArray(callback) ? callback[0] : callback
+			f(upLoader.count).then(over => {
+				setUpLoader(prevState => ({
+					over,
+					fetch: false,
+					count: ++prevState.count,
+					loading: false
+				}))
+			})
+		}
+	}, [upLoader, callback])
 
-    useEffect(() => {
-        if (!downLoader.over && !downLoader.loading && downLoader.fetch) {
-            setDownLoader(prevState => ({...prevState, loading: true}));
-            const f = Array.isArray(callback) ? callback[1] : callback;
-            f(downLoader.count).then(over => {
-                setDownLoader(prevState => ({
-                    over,
-                    fetch: false,
-                    count: ++prevState.count,
-                    loading: false
-                }))
-            })
-        }
-    }, [downLoader, callback]);
+	useEffect(() => {
+		if (!downLoader.over && !downLoader.loading && downLoader.fetch) {
+			setDownLoader(prevState => ({...prevState, loading: true}))
+			const f = Array.isArray(callback) ? callback[1] : callback
+			f(downLoader.count).then(over => {
+				setDownLoader(prevState => ({
+					over,
+					fetch: false,
+					count: ++prevState.count,
+					loading: false
+				}))
+			})
+		}
+	}, [downLoader, callback])
 
-    return (
-        <div className={`relative h-full h-auto ${className}`}>
-            {(watch !== "DOWN") && (
-                <div className="h-12 mb-3 text-center">
-                    {upLoader.over ? <p>{t('end')}</p> : upLoader.loading && <Loading size="3x"/>}
-                </div>
-            )}
+	return (
+		<div className={`relative h-full h-auto ${className}`}>
+			{(watch !== "DOWN") && (
+				<div className="h-12 mb-3 text-center">
+					{upLoader.over ? <p>{t("end")}</p> : upLoader.loading && <Loading size="3x"/>}
+				</div>
+			)}
 
-            {children}
+			{children}
 
-            {(watch !== "UP") && (
-                <div className="h-12 mb-3 text-center">
-                    {downLoader.over ? <p>{t('end')}</p> : downLoader.loading && <Loading size="3x"/>}
-                </div>
-            )}
-        </div>
-    );
-};
+			{(watch !== "UP") && (
+				<div className="h-12 mb-3 text-center">
+					{downLoader.over ? <p>{t("end")}</p> : downLoader.loading && <Loading size="3x"/>}
+				</div>
+			)}
+		</div>
+	)
+}
 
-export default InfiniteScroller;
+export default InfiniteScroller

@@ -5,4 +5,4 @@ enum RoleType {
     SUPER_ADMIN = 3
 }
 
-export default RoleType;
+export default RoleType
