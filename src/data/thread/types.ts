@@ -1,4 +1,4 @@
-import {Author} from "../request.type";
+import {Author} from "../request.type"
 
 export type Comment = {
     id: number

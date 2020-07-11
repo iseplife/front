@@ -1,9 +1,9 @@
-import {Student} from "../data/student/types";
-import {TokenPayload} from "../data/security/types";
+import {Student} from "../data/student/types"
+import {TokenPayload} from "../data/security/types"
 
-const SET_STUDENT= "SET_STUDENT";
-const SET_PAYLOAD= "SET_PAYLOAD";
-const SET_STATE= "SET_STATE";
+const SET_STUDENT= "SET_STUDENT"
+const SET_PAYLOAD= "SET_PAYLOAD"
+const SET_STATE= "SET_STATE"
 interface setStudentAction {
     type: typeof SET_STUDENT,
     user: Student

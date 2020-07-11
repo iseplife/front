@@ -1,4 +1,4 @@
-import {StudentPreview} from "../student/types";
+import {StudentPreview} from "../student/types"
 
 export type Group = {
     id: number

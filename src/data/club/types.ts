@@ -1,6 +1,6 @@
-import ClubType from "../../constants/ClubType";
-import {Student} from "../student/types";
-import RoleType from "../../constants/RoleType";
+import ClubType from "../../constants/ClubType"
+import {Student} from "../student/types"
+import RoleType from "../../constants/RoleType"
 
 export type Club = {
     id: number

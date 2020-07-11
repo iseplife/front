@@ -1,8 +1,8 @@
-import React, {useState} from "react";
-import {Upload} from "antd";
-import "./ImagePicker.css";
-import {EditOutlined} from '@ant-design/icons';
-import {Icon as LegacyIcon} from '@ant-design/compatible';
+import React, {useState} from "react"
+import {Upload} from "antd"
+import "./ImagePicker.css"
+import {EditOutlined} from "@ant-design/icons"
+import {Icon as LegacyIcon} from "@ant-design/compatible"
 
 type ImagePickerProps = {
     className?: string
@@ -11,65 +11,65 @@ type ImagePickerProps = {
 }
 
 const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, onChange}) => {
-    const [image, setImage] = useState<string | undefined>(
-        defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage : undefined
-    );
-    const [loading, setLoading] = useState<boolean>();
+	const [image, setImage] = useState<string | undefined>(
+		defaultImage ? "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage : undefined
+	)
+	const [loading, setLoading] = useState<boolean>()
 
-    const handleImage = (file: File) => {
-        setLoading(true);
-        const reader = new FileReader();
-        reader.onload = e => {
-            setImage(reader.result as string);
-            setLoading(false);
-        };
-        reader.readAsDataURL(file);
+	const handleImage = (file: File) => {
+		setLoading(true)
+		const reader = new FileReader()
+		reader.onload = e => {
+			setImage(reader.result as string)
+			setLoading(false)
+		}
+		reader.readAsDataURL(file)
 
-        onChange(file);
-        return false;
-    };
+		onChange(file)
+		return false
+	}
 
-    return (
-        <>
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className={`${className} avatar-uploader flex justify-center mt-5`}
-                showUploadList={false}
-                beforeUpload={handleImage}
-            >
-                {image ?
-                    <div className="image-display relative w-full h-full">
-                        <div
-                            className="w-full h-full"
-                            style={{
-                                backgroundImage: `url("${image}")`,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                            }}
-                        />
-                        <span className="image-options absolute text-gray-400">
-                        <EditOutlined className="mx-1 px-1 hover:text-white"/>
-                    </span>
-                    </div>
-                    :
-                    <div>
-                        <LegacyIcon type={loading ? 'loading' : 'plus'}/>
-                        <div className="ant-upload-text">Upload</div>
-                    </div>
-                }
-            </Upload>
-            {image &&
+	return (
+		<>
+			<Upload
+				name="avatar"
+				listType="picture-card"
+				className={`${className} avatar-uploader flex justify-center mt-5`}
+				showUploadList={false}
+				beforeUpload={handleImage}
+			>
+				{image ?
+					<div className="image-display relative w-full h-full">
+						<div
+							className="w-full h-full"
+							style={{
+								backgroundImage: `url("${image}")`,
+								backgroundRepeat: "no-repeat",
+								backgroundSize: "cover",
+								backgroundPosition: "center",
+							}}
+						/>
+						<span className="image-options absolute text-gray-400">
+							<EditOutlined className="mx-1 px-1 hover:text-white"/>
+						</span>
+					</div>
+					:
+					<div>
+						<LegacyIcon type={loading ? "loading" : "plus"}/>
+						<div className="ant-upload-text">Upload</div>
+					</div>
+				}
+			</Upload>
+			{image &&
             <span className="text-center cursor-pointer hover:text-red-700" onClick={() => {
-                setImage(undefined);
-                onChange(null);
+            	setImage(undefined)
+            	onChange(null)
             }}>
                    Supprimer
-                </span>
-            }
-        </>
-    )
-};
+            </span>
+			}
+		</>
+	)
+}
 
-export default ImagePicker;
+export default ImagePicker

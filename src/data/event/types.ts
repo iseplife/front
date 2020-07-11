@@ -1,4 +1,4 @@
-import {Club} from "../club/types";
+import {Club} from "../club/types"
 
 export type Event = {
     id: number
