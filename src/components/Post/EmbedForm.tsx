@@ -2,8 +2,8 @@ import React from "react"
 import {useFormikContext} from "formik"
 import EmbedEnumType from "../../constants/EmbedEnumType"
 import ImageOverlay from "../Common/ImageOverlay"
-import {Icon} from "antd"
 import {FormValues} from "./PostForm"
+import { DeleteOutlined} from "@ant-design/icons"
 
 export type FileStore = {
     file: File,
@@ -28,8 +28,7 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
 		return (
 			<div>
 				{files[0].file.name}
-				<Icon
-					type="delete"
+				<DeleteOutlined
 					className="mx-1 px-1 hover:text-white"
 					onClick={() => {
 						setFiles([])
@@ -43,9 +42,8 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
 			<div className="flex">
 				{files.map((f,i) => (
 					<div key={i} className="mx-2">
-						<ImageOverlay src={f.preview} height={50}>
-							<Icon
-								type="delete"
+						<ImageOverlay src={f.preview as string} height={50}>
+							<DeleteOutlined
 								className="mx-1 px-1 hover:text-white"
 								onClick={() => {
 									if(files.length - 1 === 0 ) setFieldValue("embed", undefined)
