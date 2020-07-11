@@ -16,8 +16,6 @@ import {
 } from "@ant-design/icons"
 
 
-
-
 interface CommentProps {
     data: CommentType
     allowReplies: boolean

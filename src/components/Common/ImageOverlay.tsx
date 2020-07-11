@@ -9,7 +9,7 @@ type ImageOverlayProps = {
 }
 const ImageOverlay: React.FC<ImageOverlayProps> = ({src, height, width,className, children}) => {
 	return (
-		<div className={`${className} image-display relative`}>
+		<div className={`${className} image-display relativeEssaye un`}>
 			<span>
 				<img src={src} alt="" style={{height: height || "auto", width: width || "auto"}}/>
 			</span>

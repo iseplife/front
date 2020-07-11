@@ -1,5 +1,5 @@
 import React, {CSSProperties, useCallback, useState} from "react"
-import {Post as PostType, PostCreation, PostUpdate} from "../../data/post/types"
+import {Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
 import Post from "../Post"
