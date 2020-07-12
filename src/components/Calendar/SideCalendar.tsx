@@ -1,18 +1,49 @@
-import React, {Dispatch} from "react"
+import React from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
-import {EventFilter, FilterReducerAction} from "../../data/event/types"
 import Tag from "../Common/Tag"
+import {useRecoilState} from "recoil/dist"
+import {filterState} from "../../pages/default/calendar"
+import {Checkbox} from "antd"
 
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
     className: string
-    filter: EventFilter,
-    handleFilter: Dispatch<FilterReducerAction>
 };
-const SideCalendar: React.FC<SideCalendarProps> = ({filter, handleFilter, date, handleDate, className}) => {
+const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate, className}) => {
     const {t, i18n} = useTranslation("event")
+    const [filter, setFilter] = useRecoilState(filterState)
+
+    const handleChange = (type: string, name: string) => {
+        setFilter(prev => {
+            switch (type) {
+                case "TOGGLE_FEED":
+                    return ({
+                        ...prev,
+                        feeds: {
+                            ...prev.feeds,
+                            [name]: !prev.feeds[name]
+                        }
+                    })
+                case "TOGGLE_TYPE":
+                    return ({
+                        ...prev,
+                        types: {
+                            ...prev.types,
+                            [name]: !prev.types[name]
+                        }
+                    })
+                case "TOGGLE_PUBLISHED":
+                    return ({
+                        ...prev,
+                        publishedOnly: !prev.publishedOnly
+                    })
+                default:
+                    return prev
+            }
+        })
+    }
 
     return (
         <div className={`${className} flex flex-column shadow bg-white p-4 relative`}>
@@ -22,28 +53,24 @@ const SideCalendar: React.FC<SideCalendarProps> = ({filter, handleFilter, date, 
                     value={date}
                     onChange={(d) => handleDate(Array.isArray(d) ? d[0]: d)}
                 />
-                <div className="mt-2 px-4">
+                <div className="mt-2">
+                    <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
                     <div id="feeds-filter">
                         {Object.entries(filter.feeds).map(([feed, selected]) => (
-                            <Tag selected={selected} onClick={() => handleFilter({type: "TOGGLE_FEED", name: feed})}>
+                            <Tag key={feed} selected={selected} onClick={() => handleChange("TOGGLE_FEED", feed)}>
                                 {feed}
                             </Tag>
                         ))}
                     </div>
-                    <p className="text-xs text-color text-gray-600 font-dinotcb uppercase mt-2">Types :</p>
+                    <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Types :</h3>
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (
-                            <div
-                                key={type}
-                                className=" m-1 px-2 py-1 text-xs text-indigo-500 font-dinot font-bold cursor-pointer">
-                                <input className="rounded" type="checkbox"
-                                    onChange={() => handleFilter({type: "TOGGLE_TYPE", name: type})} checked={visible}
-
-                                />
+                            <Checkbox className="w-1/2 mx-0" key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
                                 {t(`type.${type}`)}
-                            </div>
+                            </Checkbox>
                         ))}
                     </div>
+                    <button onClick={() => handleChange("TOGGLE_PUBLISHED", "")}>click</button>
                 </div>
             </div>
         </div>

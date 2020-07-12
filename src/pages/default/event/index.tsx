@@ -73,7 +73,7 @@ const Event: React.FC = () => {
                     </Link>
                     <div className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
                         style={{right: 0, bottom: 5}}>
-                        {format(new Date(event.startsAt), "d MMM") + (event.endsAt ? (" - " + format(new Date(event.endsAt), "d MMM")) : "")}
+                        {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
                     </div>
                 </div>
                 <div className="mx-auto p-3 w-full">
@@ -114,7 +114,7 @@ const Event: React.FC = () => {
                                 {event.title}
                             </div>
                             <div className="font-dinotcb text-4xl text-center">
-                                {format(new Date(event.startsAt), "HH:mm") + " " + (event.endsAt ? format(new Date(event.endsAt), "HH:mm") : "")}
+                                {format(new Date(event.start), "HH:mm") + " " + (event.end ? format(new Date(event.end), "HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
                                 {event.location}

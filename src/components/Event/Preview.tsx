@@ -8,7 +8,7 @@ type EventProps = {
     size?: "big" | "medium" | "small"
 }
 const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
-    const date = useMemo(() => new Date(event.startsAt), [event.startsAt])
+    const date = useMemo(() => new Date(event.start), [event.start])
 
     switch (size) {
         case "big":

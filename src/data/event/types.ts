@@ -5,8 +5,8 @@ export type Event = {
     type: string
     title: string
     description: string
-    startsAt: number
-    endsAt: number
+    start: number
+    end: number
     ticketUrl?: string
     price?: number
     club: Club
@@ -21,10 +21,10 @@ export type Event = {
 
 export type EventPreview = {
     id: number
-    name: string
+    title: string
     type: string
-    startsAt: number
-    endsAt: number
+    start: number
+    end: number
     location: string
     imageUrl?: string
     target: string
