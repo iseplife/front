@@ -78,6 +78,7 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
+
         <SearchBar />
 
         <div className="hidden md:flex justify-end items-center py-5">
