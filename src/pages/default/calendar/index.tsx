@@ -68,7 +68,6 @@ export const filteredEventsState = selector<EventPreview[]>({
 const Events: React.FC = () => {
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
-
     const [date, setDate] = useState<Date>(new Date())
     const [view, setView] = useState<View>("month")
     const {t, i18n} = useTranslation("event")
@@ -116,8 +115,8 @@ const Events: React.FC = () => {
 
     return (
         <div className="h-full flex flex-row flex-wrap bg-gray-100">
-            <SideCalendar className="md:w-1/5 w-full" date={date} handleDate={(d) => setDate(d)}/>
-            <div className="flex flex-col md:w-4/5 w-full h-screen p-3" style={{maxHeight: 600}}>
+            <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
+            <div className="flex flex-col md:w-4/5 w-full p-3">
                 <div className="h-16 w-full flex justify-between items-center">
                     <div className="flex items-baseline">
                         <h1 className="text-2xl font-extrabold my-auto text-gray-800">
@@ -126,23 +125,21 @@ const Events: React.FC = () => {
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
                     </div>
-                    <Radio.Group value="large" onChange={(e) => setView(e.target.value)}>
+                    <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
                         <Radio.Button value="day">{t("day")}</Radio.Button>
                         <Radio.Button value="week">{t("week")}</Radio.Button>
                         <Radio.Button value="month">{t("month")}</Radio.Button>
                     </Radio.Group>
                 </div>
                 <Calendar
+                    className=""
                     onSelectEvent={(e) => console.log(e.title)}
                     date={date}
                     onNavigate={(d) => setDate(d)}
                     culture={i18n.language}
                     localizer={localizer}
                     events={filteredEvents}
-                    startAccessor="start"
-                    endAccessor="end"
                     toolbar={false}
-                    defaultView="month"
                     onView={(v) => setView(v)}
                     view={view}
                 />

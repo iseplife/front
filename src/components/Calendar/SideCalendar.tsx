@@ -9,9 +9,8 @@ import {Checkbox} from "antd"
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
-    className: string
 };
-const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate, className}) => {
+const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
     const {t, i18n} = useTranslation("event")
     const [filter, setFilter] = useRecoilState(filterState)
 
@@ -46,7 +45,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate, className
     }
 
     return (
-        <div className={`${className} flex flex-column shadow bg-white p-4 relative`}>
+        <div className="md:w-1/5 w-full shadow bg-white p-4">
             <div className="sticky w-full" style={{top: "1rem"}}>
                 <Calendar
                     locale={i18n.language}
@@ -77,7 +76,4 @@ const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate, className
     )
 }
 
-SideCalendar.defaultProps = {
-    className: ""
-}
 export default SideCalendar
