@@ -1,6 +1,6 @@
 import {Divider, Empty, Select} from "antd"
-import React, {useCallback, useState} from "react"
-import {globalSearch} from "../../data/searchbar"
+import React, {useCallback, useEffect, useState} from "react"
+import {globalSearch, searchClub, searchEvent, searchStudent} from "../../data/searchbar"
 import {useHistory} from "react-router-dom"
 import {SearchItem, SearchItemType} from "../../data/searchbar/types"
 import {useTranslation} from "react-i18next"
@@ -20,7 +20,11 @@ export interface SelectInputProps {
     status: boolean
 }
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+    searchType?: SearchItemType
+}
+
+const SearchBar: React.FC<SearchBarProps> = (searchType) => {
 	const {t} = useTranslation("search")
 	const history = useHistory()
 	const [data, setData] = useState<SelectInputProps[]>([])
@@ -30,24 +34,73 @@ const SearchBar: React.FC = () => {
 	const [filterStudent, setFilterStudent] = useState<boolean>(true)
 	const [filterEvent, setFilterEvent] = useState<boolean>(true)
 	const [filterClub, setFilterClub] = useState<boolean>(true)
+	const [filterOn, setFilterOn] = useState<boolean>(false)
+
+	useEffect(() => {
+		setFilterOn(searchType.searchType === SearchItemType.ALL)
+	}, [searchType.searchType])
 
 	/**
-     * Call to global search in API
+     * Call to search in API
      * @param queryParams
      */
 	const updateSearchItems = (queryParams: string) => {
 		setFetching(true)
-		globalSearch(queryParams, 0).then(res => {
-			const searchItems: SearchItem[] = res.data.content
-			setData(searchItems.map((searchItem: SearchItem) => ({
-				id: searchItem.id,
-				type: searchItem.type,
-				value: searchItem.name,
-				text: searchItem.name,
-				thumbURL: searchItem.thumbURL,
-				status: searchItem.status
-			})))
-		}).finally(() => setFetching(false))
+		switch (searchType.searchType) {
+		case SearchItemType.STUDENT:
+			searchStudent(queryParams, "", 0).then(res => {
+				const searchItems: SearchItem[] = res.data.content
+				setData(searchItems.map((searchItem: SearchItem) => ({
+					id: searchItem.id,
+					type: searchItem.type,
+					value: searchItem.name,
+					text: searchItem.name,
+					thumbURL: searchItem.thumbURL,
+					status: searchItem.status
+				})))
+			}).finally(() => setFetching(false))
+			break
+		case SearchItemType.EVENT:
+			searchEvent(queryParams, 0).then(res => {
+				const searchItems: SearchItem[] = res.data.content
+				setData(searchItems.map((searchItem: SearchItem) => ({
+					id: searchItem.id,
+					type: searchItem.type,
+					value: searchItem.name,
+					text: searchItem.name,
+					thumbURL: searchItem.thumbURL,
+					status: searchItem.status
+				})))
+			}).finally(() => setFetching(false))
+			break
+		case SearchItemType.CLUB:
+			searchClub(queryParams, 0).then(res => {
+				const searchItems: SearchItem[] = res.data.content
+				setData(searchItems.map((searchItem: SearchItem) => ({
+					id: searchItem.id,
+					type: searchItem.type,
+					value: searchItem.name,
+					text: searchItem.name,
+					thumbURL: searchItem.thumbURL,
+					status: searchItem.status
+				})))
+			}).finally(() => setFetching(false))
+			break
+		case SearchItemType.ALL:
+		default:
+			globalSearch(queryParams, 0).then(res => {
+				const searchItems: SearchItem[] = res.data.content
+				setData(searchItems.map((searchItem: SearchItem) => ({
+					id: searchItem.id,
+					type: searchItem.type,
+					value: searchItem.name,
+					text: searchItem.name,
+					thumbURL: searchItem.thumbURL,
+					status: searchItem.status
+				})))
+			}).finally(() => setFetching(false))
+			break
+		}
 	}
 
 	/**
@@ -92,20 +145,27 @@ const SearchBar: React.FC = () => {
 		})
 	}
 
-	const customDropdownRender = (menu: React.ReactNode) => (
-		<>
-			<div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
-				<CustomCheckbox title={t("student")} filterStatus={filterStudent}
-					onChange={(e) => setFilterStudent(e.target.checked)}/>
-				<CustomCheckbox title={t("club")} filterStatus={filterClub}
-					onChange={(e) => setFilterClub(e.target.checked)}/>
-				<CustomCheckbox title={t("event")} filterStatus={filterEvent}
-					onChange={(e) => setFilterEvent(e.target.checked)}/>
-			</div>
-			<Divider className="my-1"/>
-			{menu}
-		</>
-	)
+	const customDropdownRender = (menu: React.ReactNode) => {
+		return (
+			filterOn
+				? <>
+					<div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
+						<CustomCheckbox title={t("student")} filterStatus={filterStudent}
+							onChange={(e) => setFilterStudent(e.target.checked)}/>
+						<CustomCheckbox title={t("club")} filterStatus={filterClub}
+							onChange={(e) => setFilterClub(e.target.checked)}/>
+						<CustomCheckbox title={t("event")} filterStatus={filterEvent}
+							onChange={(e) => setFilterEvent(e.target.checked)}/>
+					</div>
+					<Divider className="my-1"/>
+					{menu}
+				</>
+				:
+				<>
+					{menu}
+				</>
+		)
+	}
 
 	return (
 		<Select showSearch
@@ -125,6 +185,10 @@ const SearchBar: React.FC = () => {
 			{renderOptions()}
 		</Select>
 	)
+}
+
+SearchBar.defaultProps = {
+	searchType: SearchItemType.ALL
 }
 
 export default SearchBar
