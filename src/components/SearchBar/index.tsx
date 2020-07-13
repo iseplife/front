@@ -146,20 +146,26 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
             filterOn
                 ? <>
                     <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
-                        <CustomCheckbox title={t("student")} filterStatus={filterStudent}
-                            onChange={(e) => setFilterStudent(e.target.checked)}/>
-                        <CustomCheckbox title={t("club")} filterStatus={filterClub}
-                            onChange={(e) => setFilterClub(e.target.checked)}/>
-                        <CustomCheckbox title={t("event")} filterStatus={filterEvent}
-                            onChange={(e) => setFilterEvent(e.target.checked)}/>
+                        <CustomCheckbox
+                            title={t("student")}
+                            filterStatus={filterStudent}
+                            onChange={(e) => setFilterStudent(e.target.checked)}
+                        />
+                        <CustomCheckbox
+                            title={t("club")}
+                            filterStatus={filterClub}
+                            onChange={(e) => setFilterClub(e.target.checked)}
+                        />
+                        <CustomCheckbox
+                            title={t("event")}
+                            filterStatus={filterEvent}
+                            onChange={(e) => setFilterEvent(e.target.checked)}
+                        />
                     </div>
                     <Divider className="my-1"/>
                     {menu}
                 </>
-                :
-                <>
-                    {menu}
-                </>
+                : <>{menu}</>
         )
     }
 
