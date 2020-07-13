@@ -19,50 +19,50 @@ interface AvatarPickerProps {
 }
 
 const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, className}) => {
-	const userThumb = useSelector((state: AppState) => state.user.picture)
-	const [loading, setLoading] = useState<boolean>(true)
-	const [publishers, setPublishers] = useState<Author[]>([])
+    const userThumb = useSelector((state: AppState) => state.user.picture)
+    const [loading, setLoading] = useState<boolean>(true)
+    const [publishers, setPublishers] = useState<Author[]>([])
 
-	/**
+    /**
      * Call on first render to get all publishers thumbnails
      */
-	useEffect(() => {
-		setLoading(true)
-		getPublishersThumbnail().then(res => {
-			if (res.status === 200)
-				setPublishers(res.data)
-		}).finally(() => setLoading(false))
-	}, [])
+    useEffect(() => {
+        setLoading(true)
+        getPublishersThumbnail().then(res => {
+            if (res.status === 200)
+                setPublishers(res.data)
+        }).finally(() => setLoading(false))
+    }, [])
 
 
-	//TODO: when migrate to ant.d v4 remove css and use borderless props
-	return (
-		<Select
-			id="avatar-select"
-			showArrow={false}
-			optionLabelProp={compact ? "label" : "children"}
-			defaultValue={0}
-			dropdownClassName="w-auto"
-			onChange={(value: number) => callback(value || undefined)}
-		>
-			<Option value={0} label={<Avatar icon={<UserOutlined/>} src={userThumb} size="small"/>}><Avatar
-				icon={<UserOutlined/>} src={userThumb} size="small"/> moi</Option>
-			{loading ?
-				<Option value="loading" disabled> <Loading size="lg"/> </Option> :
-				publishers.map(p => (
-					<Option key={p.id} value={p.id}
-						label={<Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/>}>
-						<Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/> {p.name}
-					</Option>
-				))
-			}
-		</Select>
-	)
+    //TODO: when migrate to ant.d v4 remove css and use borderless props
+    return (
+        <Select
+            id="avatar-select"
+            showArrow={false}
+            optionLabelProp={compact ? "label" : "children"}
+            defaultValue={0}
+            dropdownClassName="w-auto"
+            onChange={(value: number) => callback(value || undefined)}
+        >
+            <Option value={0} label={<Avatar icon={<UserOutlined/>} src={userThumb} size="small"/>}><Avatar
+                icon={<UserOutlined/>} src={userThumb} size="small"/> moi</Option>
+            {loading ?
+                <Option value="loading" disabled> <Loading size="lg"/> </Option> :
+                publishers.map(p => (
+                    <Option key={p.id} value={p.id}
+                        label={<Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/>}>
+                        <Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/> {p.name}
+                    </Option>
+                ))
+            }
+        </Select>
+    )
 }
 
 AvatarPicker.defaultProps = {
-	className: "",
-	compact: false
+    className: "",
+    compact: false
 }
 
 export default AvatarPicker

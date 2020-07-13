@@ -9,13 +9,13 @@ export const apiURI = `${httpProtocol}://${url}`
 export const swURI = `${wsProtocol}://${url}`
 
 export function initializeAxios() {
-	const token = getCookie("token")
-	const refreshToken = getCookie("refreshToken")
+    const token = getCookie("token")
+    const refreshToken = getCookie("refreshToken")
 
-	axios.defaults.baseURL = apiURI
-	if (token && refreshToken) {
-		axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-		axios.defaults.headers.common["X-Refresh-Token"] = refreshToken
-		axios.defaults.headers.common["Access-Control-Max-Age"] = "3600"
-	}
+    axios.defaults.baseURL = apiURI
+    if (token && refreshToken) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+        axios.defaults.headers.common["X-Refresh-Token"] = refreshToken
+        axios.defaults.headers.common["Access-Control-Max-Age"] = "3600"
+    }
 }
