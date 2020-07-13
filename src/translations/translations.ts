@@ -15,26 +15,26 @@ import user_fr from "./fr/user.json"
 import search_fr from "./fr/search.json"
 
 export const en = {
-	login: login_en,
-	date: date_en,
-	common: common_en,
-	event: event_en,
-	gallery: gallery_en,
-	user: user_en,
-	search: search_en
+    login: login_en,
+    date: date_en,
+    common: common_en,
+    event: event_en,
+    gallery: gallery_en,
+    user: user_en,
+    search: search_en
 }
 export const fr = {
-	login: login_fr,
-	date: date_fr,
-	common: common_fr,
-	event: event_fr,
-	gallery: gallery_fr,
-	user: user_fr,
-	search: search_fr
+    login: login_fr,
+    date: date_fr,
+    common: common_fr,
+    event: event_fr,
+    gallery: gallery_fr,
+    user: user_fr,
+    search: search_fr
 }
 
 const translations = {
-	en,
-	fr
+    en,
+    fr
 }
 export default translations

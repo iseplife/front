@@ -4,8 +4,8 @@ import {logout} from "../../data/security"
 
 
 const Logout: React.FC = () => {
-	logout()
-	return <Redirect to={"/login"} />
+    logout()
+    return <Redirect to={"/login"} />
 }
 
 export default Logout

@@ -1,8 +1,8 @@
 export default [
-	"PARTY",
-	"AFTERWORK",
-	"CONFERENCE",
-	"WORKSHOP",
-	"FORMATION",
-	"MEETING"
+    "PARTY",
+    "AFTERWORK",
+    "CONFERENCE",
+    "WORKSHOP",
+    "FORMATION",
+    "MEETING"
 ]

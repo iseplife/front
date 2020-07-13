@@ -10,14 +10,14 @@ export type IconFAProps = {
 }
 
 export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className, onClick}) => {
-	return (
-		<i className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}
-			onClick={onClick}/>
-	)
+    return (
+        <i className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}
+            onClick={onClick}/>
+    )
 }
 IconFA.defaultProps = {
-	spin: false,
-	size: "sm",
-	type: "solid",
-	className: ""
+    spin: false,
+    size: "sm",
+    type: "solid",
+    className: ""
 }
