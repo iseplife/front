@@ -10,5 +10,6 @@ export type SearchItem = {
 export enum SearchItemType {
     STUDENT = "STUDENT",
     EVENT = "EVENT",
-    CLUB = "CLUB"
+    CLUB = "CLUB",
+    ALL = "ALL"
 }
