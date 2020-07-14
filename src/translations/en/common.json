@@ -53,5 +53,10 @@
   "save": "Save",
   "write_comment": "Write your comment...",
   "published_at": "published at ",
-  "edited_last_at": "last edited at "
+  "edited_last_at": "last edited at ",
+  "pills": {
+    "status_archived": "Archived",
+    "status_passed": "Passed",
+    "status_active": "Active"
+  }
 }

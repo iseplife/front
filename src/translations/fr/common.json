@@ -53,5 +53,10 @@
   "save": "Sauvegarder",
   "write_comment": "Ecris ton commentaire...",
   "published_at": "publié à ",
-  "edited_last_at": "dernière modification à "
+  "edited_last_at": "dernière modification à ",
+  "pills": {
+    "status_archived": "Archivé",
+    "status_passed": "Passé",
+    "status_active": "Actif"
+  }
 }

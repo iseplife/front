@@ -9,6 +9,7 @@ import Table, {RowProps} from "../../../components/Common/TableAdmin"
 import {Avatar} from "antd"
 import {getEducationYear} from "../../../util"
 import {UserOutlined} from "@ant-design/icons"
+import Pills from "../../../components/Common/Pills"
 
 export type PageStatus = {
     current: number
@@ -113,14 +114,7 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
             <div className="text-sm leading-5 text-gray-500">promo {s.promo}</div>
         </td>
         <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-            {s.archived ?
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                    Archivé
-                </span> :
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Actif
-                </span>
-            }
+            <Pills status={!s.archived} className="text-xs"/>
         </td>
         <td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
             <div className="flex flex-wrap">

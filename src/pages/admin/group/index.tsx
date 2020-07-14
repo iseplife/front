@@ -7,10 +7,11 @@ import {PageStatus} from "../student"
 import {Group} from "../../../data/group/types"
 import GroupEditor from "../../../components/Group/GroupEditor"
 import {getAllGroup} from "../../../data/group"
+import Pills from "../../../components/Common/Pills"
 
 const tableConfig: ColumnType<Group>[] = [
     {title: "id"},
-    {title: "", className:""},
+    {title: "", className: ""},
     {title: "Nom", className: "w-2/5"},
     {title: "Administrateurs", className: "w-1/3"},
     {title: ""},
@@ -92,14 +93,7 @@ const TableRow: React.FC<RowProps<Group>> = ({data: f}) => (
             <AvatarList users={f.admins}/>
         </td>
         <td className="py-2 whitespace-no-wrap border-b border-gray-200">
-            {f.archived ?
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                    Archivé
-                </span> :
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Actif
-                </span>
-            }
+            <Pills status={!f.archived} className="text-xs"/>
         </td>
         <td className="p-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
             <Link

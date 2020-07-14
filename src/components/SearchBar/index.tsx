@@ -7,6 +7,7 @@ import {useTranslation} from "react-i18next"
 import CustomCheckbox from "./CustomCheckbox"
 import "./CustomCheckbox.css"
 import AvatarSearchType from "./AvatarSearchType"
+import Pills from "../Common/Pills"
 
 const {Option} = Select
 const SEARCH_LENGTH_TRIGGER = 2
@@ -135,10 +136,7 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
                             <AvatarSearchType props={inputProps}/>
                             <div className="ml-2 font-bold">{inputProps.text}</div>
                         </div>
-                        <span style={{fontSize: ".65rem"}}
-                            className={`inline-flex items-center font-semibold rounded-full px-2 my-1 ${inputProps.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
-                            {inputProps.status ? t("status_active") : inputProps.type === SearchItemType.EVENT ? t("status_passed") : t("status_archived")}
-                        </span>
+                        <Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
                     </div>
                 </Option>)
                 : null

@@ -3,8 +3,5 @@
   "student": "Élève",
   "event": "Évènement",
   "club": "Club",
-  "status_archived": "Archivé",
-  "status_passed": "Passé",
-  "status_active": "Actif",
   "funny_empty_message": "Hmmm... Cette barre de recherche doit être utile"
 }
