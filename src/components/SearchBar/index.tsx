@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next"
 import CustomCheckbox from "./CustomCheckbox"
 import "./CustomCheckbox.css"
 import AvatarSearchType from "./AvatarSearchType"
-import Pills from "../Common/Pills";
+import Pills from "../Common/Pills"
 
 const {Option} = Select
 const SEARCH_LENGTH_TRIGGER = 2
@@ -126,22 +126,22 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
     }, [])
 
 
-	const renderOptions = () => {
-		return data.map((inputProps: SelectInputProps) => {
-			return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub))
-				? (<Option key={inputProps.value}
-					value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
-					<div className="flex justify-between">
-						<div className="inline-flex">
-							<AvatarSearchType props={inputProps}/>
-							<div className="ml-2 font-bold">{inputProps.text}</div>
-						</div>
-						<Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
-					</div>
-				</Option>)
-				: null
-		})
-	}
+    const renderOptions = () => {
+        return data.map((inputProps: SelectInputProps) => {
+            return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub))
+                ? (<Option key={inputProps.value}
+                    value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
+                    <div className="flex justify-between">
+                        <div className="inline-flex">
+                            <AvatarSearchType props={inputProps}/>
+                            <div className="ml-2 font-bold">{inputProps.text}</div>
+                        </div>
+                        <Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
+                    </div>
+                </Option>)
+                : null
+        })
+    }
 
     const customDropdownRender = (menu: React.ReactNode) => {
         return (

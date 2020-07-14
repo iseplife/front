@@ -88,48 +88,48 @@ const StudentPanel: React.FC = () => {
 }
 
 const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
-	<tr key={s.id}>
-		<td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-			<div className="flex items-center">
-				<div className="flex-shrink-0 h-10 w-10">
-					<Avatar icon={<UserOutlined/>} src={s.picture}/>
-				</div>
-				<div className="ml-4 overflow-hidden">
-					<Link to={`/admin/user/${s.id}`}>
-						<div
-							className="text-sm leading-5 font-medium text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words"
-							title={s.lastName.toUpperCase() + " " + s.firstName}
-						>
-							{s.lastName.toUpperCase() + " " + s.firstName}
-						</div>
-					</Link>
-					<div className="text-sm leading-5 text-gray-500">n° {s.id}</div>
-				</div>
-			</div>
-		</td>
-		<td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-			<div className="text-sm leading-5 text-gray-900">
-				{getEducationYear(s.promo)}
-			</div>
-			<div className="text-sm leading-5 text-gray-500">promo {s.promo}</div>
-		</td>
-		<td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-			<Pills status={!s.archived} className="text-xs"/>
-		</td>
-		<td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
-			<div className="flex flex-wrap">
-				{s.roles.map((r, index) => (
-					<span key={index} className="rounded bg-indigo-300 text-white m-1 p-1">
-						{r.substr(5).replace(/_/g, " ")}
-					</span>
-				))}
-			</div>
-		</td>
-		<td className="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-			<Link
-				to={`/admin/user/${s.id}`}
-				className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
-			>
+    <tr key={s.id}>
+        <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+            <div className="flex items-center">
+                <div className="flex-shrink-0 h-10 w-10">
+                    <Avatar icon={<UserOutlined/>} src={s.picture}/>
+                </div>
+                <div className="ml-4 overflow-hidden">
+                    <Link to={`/admin/user/${s.id}`}>
+                        <div
+                            className="text-sm leading-5 font-medium text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words"
+                            title={s.lastName.toUpperCase() + " " + s.firstName}
+                        >
+                            {s.lastName.toUpperCase() + " " + s.firstName}
+                        </div>
+                    </Link>
+                    <div className="text-sm leading-5 text-gray-500">n° {s.id}</div>
+                </div>
+            </div>
+        </td>
+        <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+            <div className="text-sm leading-5 text-gray-900">
+                {getEducationYear(s.promo)}
+            </div>
+            <div className="text-sm leading-5 text-gray-500">promo {s.promo}</div>
+        </td>
+        <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+            <Pills status={!s.archived} className="text-xs"/>
+        </td>
+        <td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
+            <div className="flex flex-wrap">
+                {s.roles.map((r, index) => (
+                    <span key={index} className="rounded bg-indigo-300 text-white m-1 p-1">
+                        {r.substr(5).replace(/_/g, " ")}
+                    </span>
+                ))}
+            </div>
+        </td>
+        <td className="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+            <Link
+                to={`/admin/user/${s.id}`}
+                className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
+            >
                 Edit
             </Link>
         </td>

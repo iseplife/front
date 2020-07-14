@@ -7,11 +7,11 @@ import {PageStatus} from "../student"
 import {Group} from "../../../data/group/types"
 import GroupEditor from "../../../components/Group/GroupEditor"
 import {getAllGroup} from "../../../data/group"
-import Pills from "../../../components/Common/Pills";
+import Pills from "../../../components/Common/Pills"
 
 const tableConfig: ColumnType<Group>[] = [
     {title: "id"},
-    {title: "", className:""},
+    {title: "", className: ""},
     {title: "Nom", className: "w-2/5"},
     {title: "Administrateurs", className: "w-1/3"},
     {title: ""},
@@ -79,31 +79,31 @@ const GroupPanel: React.FC = () => {
 }
 
 const TableRow: React.FC<RowProps<Group>> = ({data: f}) => (
-	<tr key={f.id}>
-		<td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
-		<td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
-			<IconFA name={f.restricted ? "fa-lock" : "fa-unlock"}/>
-		</td>
-		<td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
-			<Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
-				{f.name}
-			</Link>
-		</td>
-		<td className="border-b border-gray-200 text-sm leading-5 font-medium pl-6 py-2">
-			<AvatarList users={f.admins}/>
-		</td>
-		<td className="py-2 whitespace-no-wrap border-b border-gray-200">
-			<Pills status={!f.archived} className="text-xs"/>
-		</td>
-		<td className="p-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
-			<Link
-				to={`/admin/group/${f.id}`}
-				className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
-			>
-				<IconFA name="fa-edit" type="regular"/>
-			</Link>
-		</td>
-	</tr>
+    <tr key={f.id}>
+        <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
+        <td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
+            <IconFA name={f.restricted ? "fa-lock" : "fa-unlock"}/>
+        </td>
+        <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
+            <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
+                {f.name}
+            </Link>
+        </td>
+        <td className="border-b border-gray-200 text-sm leading-5 font-medium pl-6 py-2">
+            <AvatarList users={f.admins}/>
+        </td>
+        <td className="py-2 whitespace-no-wrap border-b border-gray-200">
+            <Pills status={!f.archived} className="text-xs"/>
+        </td>
+        <td className="p-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
+            <Link
+                to={`/admin/group/${f.id}`}
+                className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
+            >
+                <IconFA name="fa-edit" type="regular"/>
+            </Link>
+        </td>
+    </tr>
 )
 
 export default GroupPanel
