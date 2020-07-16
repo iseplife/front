@@ -1,20 +1,35 @@
-import React from "react"
+import React, {useEffect} from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
 import Tag from "../Common/Tag"
 import {useRecoilState} from "recoil/dist"
 import {filterState} from "../../pages/default/calendar"
 import {Checkbox} from "antd"
+import {useSelector} from "react-redux"
+import {AppState} from "../../redux/types"
+import {FilterList} from "../../data/event/types"
 
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
 };
 const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
+    const feeds = useSelector((state: AppState) => state.feeds)
     const {t, i18n} = useTranslation("event")
     const [filter, setFilter] = useRecoilState(filterState)
 
-    const handleChange = (type: string, name: string) => {
+    useEffect(() => {
+        setFilter(pf => ({
+            ...pf,
+            feeds: feeds.reduce((acc: FilterList, f) => {
+                if (!acc[f.id])
+                    acc[f.id] = true
+                return acc
+            }, pf.feeds),
+        }))
+    }, [feeds])
+
+    const handleChange = (type: string, name: string | number) => {
         setFilter(prev => {
             switch (type) {
                 case "TOGGLE_FEED":
@@ -55,9 +70,12 @@ const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
                 <div className="mt-2">
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
                     <div id="feeds-filter">
-                        {Object.entries(filter.feeds).map(([feed, selected]) => (
-                            <Tag key={feed} selected={selected} onClick={() => handleChange("TOGGLE_FEED", feed)}>
-                                {feed}
+                        <Tag key={-1} selected={filter.feeds[-1]} onClick={() => handleChange("TOGGLE_FEED", -1)}>
+                            Public
+                        </Tag>
+                        {feeds.map(({id, name}) => (
+                            <Tag key={id} selected={filter.feeds[id]} onClick={() => handleChange("TOGGLE_FEED", id)}>
+                                {name}
                             </Tag>
                         ))}
                     </div>

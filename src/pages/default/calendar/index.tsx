@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
 import {Radio} from "antd"
 import {IconFA} from "../../../components/Common/IconFA"
-import {EventFilter, EventPreview, FilterList, FilterReducerAction} from "../../../data/event/types"
+import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
 import {add, parse, format, Locale} from "date-fns"
@@ -11,16 +11,18 @@ import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
 
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import {atom,  selector,  useRecoilValue, useSetRecoilState} from "recoil/dist"
+import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil/dist"
 import {getMonthEvents} from "../../../data/event"
 import Types from "../../../constants/EventTypes"
 
-//TODO: handle filter init so that it doesn't depends of events
-const initFilter = (events: EventPreview[]): EventFilter => {
-    const feeds = Array.from(new Set(events.map(e => e.target)))
+
+const initFilter = (): EventFilter => {
     return (
         {
-            feeds: {},
+            feeds: {
+                // -1 represent public events, those events have an empty targets property
+                [-1]: true
+            },
             types: Types.reduce((acc: FilterList, type) => {
                 if (!acc[type])
                     acc[type] = true
@@ -47,9 +49,8 @@ const localizer = dateFnsLocalizer({
 
 export const filterState = atom<EventFilter>({
     key: "filterState",
-    default: initFilter([])
+    default: initFilter()
 })
-
 export const eventsState = atom<EventPreview[]>({
     key: "eventState",
     default: []
@@ -61,7 +62,11 @@ export const filteredEventsState = selector<EventPreview[]>({
         const events = get(eventsState)
         const filter = get(filterState)
 
-        return events.filter(e => /*filter.feeds[e.target] && */ filter.types[e.type] && (e.published || !filter.publishedOnly))
+
+        return events.filter(e =>
+            filter.types[e.type] &&
+            (e.published || !filter.publishedOnly) &&
+            ((e.targets.length == 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t]))))
     }
 })
 
@@ -132,7 +137,7 @@ const Events: React.FC = () => {
                     </Radio.Group>
                 </div>
                 <Calendar
-                    className=""
+                    className="mb-12"
                     onSelectEvent={(e) => console.log(e.title)}
                     date={date}
                     onNavigate={(d) => setDate(d)}
