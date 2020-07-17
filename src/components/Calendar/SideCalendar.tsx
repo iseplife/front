@@ -4,16 +4,17 @@ import {useTranslation} from "react-i18next"
 import Tag from "../Common/Tag"
 import {useRecoilState} from "recoil/dist"
 import {filterState} from "../../pages/default/calendar"
-import {Checkbox} from "antd"
+import {Checkbox, Switch} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../redux/types"
 import {FilterList} from "../../data/event/types"
+import {isAdmin} from "../../data/security";
 
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
 };
-const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
+const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     const feeds = useSelector((state: AppState) => state.feeds)
     const {t, i18n} = useTranslation("event")
     const [filter, setFilter] = useRecoilState(filterState)
@@ -65,9 +66,15 @@ const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
                 <Calendar
                     locale={i18n.language}
                     value={date}
-                    onChange={(d) => handleDate(Array.isArray(d) ? d[0]: d)}
+                    onChange={(d) => handleDate(Array.isArray(d) ? d[0] : d)}
                 />
                 <div className="mt-2">
+                    {isAdmin() &&
+                        <div className="flex items-center">
+                            <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("published_only")} :</h3>
+                            <Switch className="ml-4" size="small" checked={filter.publishedOnly} onChange={() => handleChange("TOGGLE_PUBLISHED", "")}/>
+                        </div>
+                    }
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
                     <div id="feeds-filter">
                         <Tag key={-1} selected={filter.feeds[-1]} onClick={() => handleChange("TOGGLE_FEED", -1)}>
@@ -87,7 +94,6 @@ const SideCalendar: React.FC<SideCalendarProps> = ({ date, handleDate}) => {
                             </Checkbox>
                         ))}
                     </div>
-                    <button onClick={() => handleChange("TOGGLE_PUBLISHED", "")}>click</button>
                 </div>
             </div>
         </div>

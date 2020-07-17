@@ -11,5 +11,6 @@
     "MEETING": "Meeting"
   },
   "free": "Free",
-  "event": "Event"
+  "event": "Event",
+  "published_only": "Published events only"
 }

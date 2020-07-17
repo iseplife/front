@@ -73,16 +73,23 @@ export const filteredEventsState = selector<EventPreview[]>({
 const Events: React.FC = () => {
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
+    const [loading, setLoading] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
     const [view, setView] = useState<View>("month")
     const {t, i18n} = useTranslation("event")
 
     const currentMonth = date.getMonth()
-    useEffect(() => {
+
+    const fetchMonthEvents = useCallback(() => {
+        setLoading(true)
         getMonthEvents(date.getTime()).then(r => {
             setEvents(r.data)
-        })
+        }).finally(() => setLoading(false))
     }, [currentMonth])
+
+    useEffect(() => {
+        fetchMonthEvents()
+    }, [fetchMonthEvents])
 
 
     const dateTitle: string = useMemo(() => {
@@ -129,12 +136,17 @@ const Events: React.FC = () => {
                         </h1>
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
+
                     </div>
-                    <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
-                        <Radio.Button value="day">{t("day")}</Radio.Button>
-                        <Radio.Button value="week">{t("week")}</Radio.Button>
-                        <Radio.Button value="month">{t("month")}</Radio.Button>
-                    </Radio.Group>
+                    <div>
+                        <IconFA name="fa-sync-alt" className="my-auto mx-3 cursor-pointer text-gray-500" onClick={fetchMonthEvents} spin={loading}/>
+                        <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
+                            <Radio.Button value="day">{t("day")}</Radio.Button>
+                            <Radio.Button value="week">{t("week")}</Radio.Button>
+                            <Radio.Button value="month">{t("month")}</Radio.Button>
+                        </Radio.Group>
+                    </div>
+
                 </div>
                 <Calendar
                     className="mb-12"

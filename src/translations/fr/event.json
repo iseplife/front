@@ -11,5 +11,6 @@
     "MEETING": "Réunion"
   },
   "free": "Gratuit",
-  "event": "Evenement"
+  "event": "Évènement",
+  "published_only": "Évènements publiés seulement"
 }
