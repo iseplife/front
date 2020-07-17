@@ -25,22 +25,14 @@ export const searchStudentsPaged = (page: number, name?: string, promos?: string
     }
 })
 
-export const searchStudents = (name: string): AxiosPromise<SearchItem[]> => axios.get("/search/student/all", {params: {name}})
-export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => {
-    return axios.get(`/student/${studentId}/club`);
-};
+export const searchAllStudents = (name: string): AxiosPromise<SearchItem[]> => axios.get("/search/student/all", {params: {name}})
+export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => axios.get(`/student/${studentId}/club`)
 
-export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => {
-    return axios.get(`/search/student/`, {params: {page, name, promos, atoz}});
-};
+export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => axios.get(`/search/student/`, {params: {page, name, promos, atoz}});
 
-export function getAllPromo(): AxiosPromise<number[]> {
-    return axios.get('/student/promos');
-}
+export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.put(`/student/${id}`)
 
-export const getAllStudents = (page: number = 0): AxiosPromise<Page<StudentPreview>> => {
-    return axios.get('/student', { params: {page}});
-};
+export const getAllPromo = (): AxiosPromise<number[]> => axios.get("/student/promos")
 
 export const getAllStudents = (page = 0): AxiosPromise<Page<StudentPreview>> => axios.get("/student", {params: {page}})
 
@@ -55,11 +47,6 @@ export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAd
     fd.append("form", JSON.stringify(student))
 
     return axios.post("/student", fd)
-}
-
-export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.put(`/student/${id}`)
-export function getAllPromo(): AxiosPromise<any> {
-    return axios.get('/student/promos');
 }
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {

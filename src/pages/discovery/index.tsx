@@ -1,19 +1,19 @@
-import React from "react";
+import React from "react"
 import DiscoveryClub from "../../components/Discovery/DiscoveryClub";
 import DiscoveryStudent from "../../components/Discovery/DiscoveryStudent";
 
-export const MOBILE_WIDTH = 500;
+export const MOBILE_WIDTH = 500
 
 interface SpacerProps {
     spacing?: number
 }
 
 export const HorizontalSpacer = (props: SpacerProps) => {
-    let size: string = "my-" + (props.spacing || 2);
+    const size: string = "my-" + (props.spacing || 2)
     return (
         <div className={size}/>
-    );
-};
+    )
+}
 
 const Discovery: React.FC = () => {
     return (
@@ -28,6 +28,6 @@ const Discovery: React.FC = () => {
             <DiscoveryClub/>
             <DiscoveryStudent/>
         </div>
-    );
-};
-export default Discovery;
+    )
+}
+export default Discovery

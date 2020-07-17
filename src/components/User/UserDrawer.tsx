@@ -72,8 +72,9 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                         <Avatar src={student ? student.picture : ""}
                             alt={student.firstName + " " + student.lastName}
                             className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + Utils.randomBackgroundColors()}>
-                            <div
-                                className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">{Utils.getInitials(student)}</div>
+                            <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
+                                {Utils.getInitials(student)}
+                            </div>
                         </Avatar>
                         <div className="ml-3 mt-2 text-base">
                             <div
@@ -95,10 +96,10 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     : t("user:no-phone")}
                             </div>
                             <div className="mt-3 sm:mt-10 mx-auto">
-                                {isEmpty(student.facebook) ? null : socialUserIcon("fa-facebook", student.facebook)}
-                                {isEmpty(student.twitter) ? null : socialUserIcon("fa-twitter", student.twitter)}
-                                {isEmpty(student.instagram) ? null : socialUserIcon("fa-instagram", student.instagram)}
-                                {isEmpty(student.snapchat) ? null : socialUserIcon("fa-snapchat", student.snapchat)}
+                                {student.facebook && socialUserIcon("fa-facebook", student.facebook)}
+                                {student.twitter && socialUserIcon("fa-twitter", student.twitter)}
+                                {student.instagram && socialUserIcon("fa-instagram", student.instagram)}
+                                {student.snapchat && socialUserIcon("fa-snapchat", student.snapchat)}
                             </div>
                         </div>
 

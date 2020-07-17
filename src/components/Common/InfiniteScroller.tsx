@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react"
+import React, {forwardRef, ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useState} from "react"
 import Loading from "./Loading"
 import {useTranslation} from "react-i18next"
 
@@ -26,50 +26,51 @@ type InfiniteScrollerProps = {
 }
 
 const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, children, className = ""}, ref) => {
-    const {t} = useTranslation('common');
-    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback]);
-    const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER);
-    const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER);
+    const {t} = useTranslation("common")
+    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
+    const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
+    const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
+
     const initialLoad = useCallback(() => {
         switch (watch) {
             case "UP":
                 setUpLoader(prevState => ({...prevState, loading: true}))
-                upCallback(upLoader.count).then(over => {
-                    setDownLoader({
+                upCallback(0).then(over => {
+                    setUpLoader({
                         over,
                         fetch: false,
                         count: 1,
                         loading: false
-                    }))
+                    })
                 })
                 break
             case "DOWN":
-                setDownLoader(prevState => ({...prevState, loading: true}));
+                setDownLoader(prevState => ({...prevState, loading: true}))
                 downCallback(0).then(over => {
                     setDownLoader({
                         over,
                         fetch: false,
                         count: 1,
                         loading: false
-                    }))
+                    })
                 })
                 break
         }
-    }, [downCallback, upCallback, watch]);
+    }, [downCallback, upCallback, watch])
 
     useImperativeHandle(ref, () => ({
         resetData() {
-            initialLoad();
+            initialLoad()
         }
-    }));
+    }))
 
     /**
      * Initial data, call on component creation
      * first element that are going to be displayed
      */
     useEffect(() => {
-        initialLoad();
-    }, [initialLoad]);
+        initialLoad()
+    }, [initialLoad])
 
     /**
      * Init listener on scroller according on which way we're listening,
@@ -143,7 +144,8 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
                 </div>
             )}
         </div>
-    );
-});
-
+    )
+    
+})
+InfiniteScroller.displayName = "InfiniteScroller"
 export default InfiniteScroller

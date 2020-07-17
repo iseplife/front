@@ -1,9 +1,9 @@
-import {Link} from "react-router-dom";
-import React from "react";
-import {Club} from "../../data/club/types";
+import {Link} from "react-router-dom"
+import React from "react"
+import {ClubPreview} from "../../data/club/types"
 
 type ClubCardProps = {
-    club: Club
+    club: ClubPreview
 }
 
 const ClubCard: React.FC<ClubCardProps> = ({club}) => (
@@ -15,9 +15,9 @@ const ClubCard: React.FC<ClubCardProps> = ({club}) => (
                         className="w-full h-full mx-auto rounded-t"
                         style={{
                             backgroundImage: `url("${club.logoUrl}")`,
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
                         }}
                     />
                 </Link>
@@ -27,6 +27,6 @@ const ClubCard: React.FC<ClubCardProps> = ({club}) => (
             </div>
         </div>
     </div>
-);
+)
 
-export default ClubCard;
+export default ClubCard

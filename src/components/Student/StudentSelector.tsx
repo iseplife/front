@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react"
 import {Avatar, Select, Spin, Tag} from "antd"
-import {searchStudents} from "../../data/student"
+import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
 import {UserOutlined} from "@ant-design/icons"
 
@@ -31,7 +31,7 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
     const handleSearch = useCallback((value: string) => {
         if (value.length > TRIGGER_LENGTH) {
             setFetching(true)
-            searchStudents(value).then(res => {
+            searchAllStudents(value).then(res => {
                 if (res.status === 200) {
                     setOptions(res.data.map(o => ({
                         value: o.id,
