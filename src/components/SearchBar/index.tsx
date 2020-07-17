@@ -178,7 +178,7 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
             value={currentValue ? currentValue : undefined}
             loading={fetching}
             placeholder={t("placeholder")}
-            className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5 rounded-full"
+            className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
             notFoundContent={
                 <Empty
                     className="flex flex-col items-center"
