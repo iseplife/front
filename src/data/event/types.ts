@@ -46,8 +46,8 @@ type ReducerFeedType = {
     type: "TOGGLE_FEED" | "TOGGLE_TYPE"
     name: string
 }
-type ReducerPublished = {
-    type: "TOGGLE_PUBLISHED"
+type ReducerToggle = {
+    type: "TOGGLE_PUBLISHED" | "TOGGLE_ADMIN"
 }
 type ReducerUpdate = {
     type: "ADD_FILTER"
@@ -57,7 +57,7 @@ type ReducerInit = {
     type: "INIT_FILTER"
     events: EventPreview[]
 }
-export type FilterReducerAction = ReducerFeedType | ReducerPublished | ReducerUpdate | ReducerInit;
+export type FilterReducerAction = ReducerFeedType | ReducerToggle | ReducerUpdate | ReducerInit;
 
 export type FilterList = {
     [name: string]: boolean
@@ -66,4 +66,5 @@ export type EventFilter = {
     feeds: FilterList
     types: FilterList
     publishedOnly: boolean
+    adminVision: boolean
 }

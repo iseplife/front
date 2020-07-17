@@ -28,7 +28,8 @@ const initFilter = (): EventFilter => {
                     acc[type] = true
                 return acc
             }, {}),
-            publishedOnly: false
+            publishedOnly: false,
+            adminVision: false
         })
 }
 
@@ -62,11 +63,12 @@ export const filteredEventsState = selector<EventPreview[]>({
         const events = get(eventsState)
         const filter = get(filterState)
 
-
         return events.filter(e =>
-            filter.types[e.type] &&
             (e.published || !filter.publishedOnly) &&
-            ((e.targets.length == 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t]))))
+            filter.adminVision || (
+                filter.types[e.type] &&
+                ((e.targets.length == 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t])))
+            ))
     }
 })
 

@@ -12,5 +12,6 @@
   },
   "free": "Gratuit",
   "event": "Évènement",
-  "published_only": "Évènements publiés seulement"
+  "published_only": "Évènements publiés seulement",
+  "admin_view": "Vue admin"
 }

@@ -55,6 +55,11 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                         ...prev,
                         publishedOnly: !prev.publishedOnly
                     })
+                case "TOGGLE_ADMIN":
+                    return ({
+                        ...prev,
+                        adminVision: !prev.adminVision
+                    })
                 default:
                     return prev
             }
@@ -62,7 +67,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     }
 
     return (
-        <div id="side-cal"  className="md:w-1/5 w-full shadow bg-white p-4">
+        <div id="side-cal" className="md:w-1/5 w-full shadow bg-white p-4">
             <div className="sticky w-full" style={{top: "1rem"}}>
                 <Calendar
                     locale={i18n.language}
@@ -72,11 +77,18 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                 <hr className="my-1"/>
                 <div className="mt-2">
                     {isAdmin() &&
+                    <>
+                        <div className="flex items-center">
+                            <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("admin_view")} :</h3>
+                            <Switch className="ml-4" size="small" checked={filter.adminVision} onChange={() => handleChange("TOGGLE_ADMIN", "")}/>
+                        </div>
                         <div className="flex items-center">
                             <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("published_only")} :</h3>
                             <Switch className="ml-4" size="small" checked={filter.publishedOnly} onChange={() => handleChange("TOGGLE_PUBLISHED", "")}/>
                         </div>
+                    </>
                     }
+                    <hr className="my-1"/>
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
                     <div id="feeds-filter">
                         <Tag key={-1} selected={filter.feeds[-1]} onClick={() => handleChange("TOGGLE_FEED", -1)}>
