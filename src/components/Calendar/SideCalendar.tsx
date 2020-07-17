@@ -8,7 +8,8 @@ import {Checkbox, Switch} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../redux/types"
 import {FilterList} from "../../data/event/types"
-import {isAdmin} from "../../data/security";
+import {isAdmin} from "../../data/security"
+import "./SideCalendar.css"
 
 type SideCalendarProps = {
     date: Date
@@ -61,13 +62,14 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     }
 
     return (
-        <div className="md:w-1/5 w-full shadow bg-white p-4">
+        <div id="side-cal"  className="md:w-1/5 w-full shadow bg-white p-4">
             <div className="sticky w-full" style={{top: "1rem"}}>
                 <Calendar
                     locale={i18n.language}
                     value={date}
                     onChange={(d) => handleDate(Array.isArray(d) ? d[0] : d)}
                 />
+                <hr className="my-1"/>
                 <div className="mt-2">
                     {isAdmin() &&
                         <div className="flex items-center">
