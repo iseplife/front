@@ -1,4 +1,5 @@
 import {useLocation} from "react-router-dom"
+import {Entity} from "./data/request.type"
 
 export const getEducationYear = (graduationYear: number): string => {
     const educationsYear = ["Diplomé", "A3", "A2", "A1", "SUP", "SUP"]
@@ -10,5 +11,55 @@ export const getEducationYear = (graduationYear: number): string => {
     return educationsYear[Math.min(Math.max(0, graduationYear - schoolYear), educationsYear.length - 1)]
 }
 
-export const useQuery = () => new URLSearchParams(useLocation().search)
+export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation().search)
 
+
+export class EntitySet<T extends Entity> {
+    private items: Map<number, T>
+
+    constructor() {
+        this.items = new Map()
+    }
+
+    contains(entity: Entity): boolean {
+        return this.items.has(entity.id)
+    }
+
+    add(entity: T): EntitySet<T> {
+        if (!this.contains(entity))
+            this.items.set(entity.id, entity)
+        return this
+    }
+
+    addAll(entities: T[]): EntitySet<T> {
+        entities.forEach(e => this.add(e))
+        return this
+    }
+
+    remove(entity: T): EntitySet<T> {
+        this.items.delete(entity.id)
+        return this
+    }
+
+    clear(): EntitySet<T> {
+        this.items = new Map()
+        return this
+    }
+
+    isEmpty(): boolean {
+        return this.count() === 0
+    }
+
+    count(): number {
+        return this.items.size
+    }
+
+    filter(callbackFn: (val: T) => boolean): T[] {
+        const filteredEntities: T[] = []
+        this.items.forEach((entity) => {
+            if (callbackFn(entity))
+                filteredEntities.push(entity)
+        })
+        return filteredEntities
+    }
+}

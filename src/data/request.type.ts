@@ -14,3 +14,7 @@ export type Author = {
     name: string
     thumbnail: string
 }
+
+export interface Entity {
+    id: number
+}
