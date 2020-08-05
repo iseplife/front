@@ -94,8 +94,8 @@ const YearBook: React.FC = () => {
     }, [filterFn, filter.promos.length, filter.name])
     return (
         <div className="container mx-auto text-center mt-10 mb-20">
-            <div className="font-bold text-indigo-500 py-3 text-4xl">
-                {t("students")}
+            <div className="font-bold text-indigo-400 py-3 text-4xl">
+                {t("yearbook_title")}
             </div>
 
             <HorizontalSpacer spacing={6}/>
@@ -110,8 +110,14 @@ const YearBook: React.FC = () => {
                 triggerDistance={5}
                 className="flex flex-wrap justify-start"
             >
-                {filteredStudent.map((student, i) =>
-                    <StudentCard key={i} student={student}/>
+                {filteredStudent.map((s, i) =>
+                    <StudentCard
+                        key={i}
+                        id={s.id}
+                        picture={s.picture}
+                        promo={s.promo}
+                        fullname={s.firstName+ " " + s.lastName}
+                    />
                 )}
             </InfiniteScroller>
         </div>

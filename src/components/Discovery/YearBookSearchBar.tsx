@@ -30,9 +30,9 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
         <div className="flex flex-col flex-wrap sm:flex-no-wrap sm:justify-between items-center">
             <div className="mx-4 w-full" style={{maxWidth: 1000}}>
                 <Input
-                    placeholder={t("placeholder-search")}
+                    placeholder={t("placeholder_search")}
                     className="text-sm sm:text-lg rounded-full sm:w-full mx-auto sm:mx-0 px-3"
-                    onChange={value => value.target.value.length >= 3 && onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value})}
+                    onChange={value => onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value})}
                 />
             </div>
             <div className="mt-2 flex items-center">
