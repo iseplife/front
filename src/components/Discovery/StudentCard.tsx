@@ -1,14 +1,14 @@
-import {Link} from "react-router-dom";
-import {Avatar} from "antd";
-import {Utils} from "../Common/Utils";
-import React from "react";
-import {StudentPreview} from "../../data/student/types";
+import {Link} from "react-router-dom"
+import {Avatar} from "antd"
+import {Utils} from "../Common/Utils"
+import React from "react"
+import {StudentPreview} from "../../data/student/types"
 
 type StudentCardProps = {
     student: StudentPreview
 }
 
-const StudentCard: React.FC<StudentCardProps> = ({student}) => (
+const StudentCard: React.FC<StudentCardProps> = React.memo(({student}) => (
     <Link
         className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-3/12 xl:w-1/5 text-center cursor-pointer no-underline text-gray-700"
         to={{
@@ -26,10 +26,11 @@ const StudentCard: React.FC<StudentCardProps> = ({student}) => (
             {student.firstName + " " + student.lastName}
             <br/>
             <span className="italic text-xs sm:text-sm">
-                {'Promo ' + student.promo}
+                {"Promo " + student.promo}
             </span>
         </p>
     </Link>
-);
+))
+StudentCard.displayName = "StudentCard"
 
-export default StudentCard;
+export default StudentCard

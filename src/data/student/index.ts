@@ -28,7 +28,7 @@ export const searchStudentsPaged = (page: number, name?: string, promos?: string
 export const searchAllStudents = (name: string): AxiosPromise<SearchItem[]> => axios.get("/search/student/all", {params: {name}})
 export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => axios.get(`/student/${studentId}/club`)
 
-export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => axios.get(`/search/student/`, {params: {page, name, promos, atoz}});
+export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => axios.get("/search/student", {params: {page, name, promos, atoz}})
 
 export const updateLoggedStudent = (id: number): AxiosPromise<Student> => axios.put(`/student/${id}`)
 

@@ -3,7 +3,7 @@ export type SearchItem = {
     type: SearchItemType,
     name: string,
     thumbURL: string,
-    description?: string,
+    description: string,
     status: boolean
 }
 

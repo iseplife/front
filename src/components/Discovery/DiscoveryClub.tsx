@@ -3,7 +3,7 @@ import {Skeleton} from "antd"
 import {HorizontalSpacer} from "../../pages/discovery"
 import {useTranslation} from "react-i18next"
 import {getAllClubs} from "../../data/club"
-import {Club, ClubPreview} from "../../data/club/types"
+import {ClubPreview} from "../../data/club/types"
 import ClubCard from "./ClubCard"
 
 const ClubLoader = [1, 2, 3, 4].map(i =>
@@ -22,6 +22,7 @@ const DiscoveryClub: React.FC = () => {
     const {t} = useTranslation("discovery")
     const [clubs, setClubs] = useState<ClubPreview[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+
     /**
      * Get all active clubs on first load
      */

@@ -1,5 +1,7 @@
 {
-  "placeholder-search": "Rechercher des ami(e)s",
+  "welcome": "Bienvenue sur iseplife",
+  "welcome_description": "",
+  "placeholder-search": "Rechercher un(e) ami(e)...",
   "promotions": "Promotions",
   "students": "Élèves",
   "associations": "Associations"

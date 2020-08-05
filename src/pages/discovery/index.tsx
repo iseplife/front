@@ -1,6 +1,7 @@
 import React from "react"
-import DiscoveryClub from "../../components/Discovery/DiscoveryClub";
-import DiscoveryStudent from "../../components/Discovery/DiscoveryStudent";
+import DiscoveryClub from "../../components/Discovery/DiscoveryClub"
+import YearBook from "../../components/Discovery/YearBook"
+import {useTranslation} from "react-i18next"
 
 export const MOBILE_WIDTH = 500
 
@@ -16,17 +17,15 @@ export const HorizontalSpacer = (props: SpacerProps) => {
 }
 
 const Discovery: React.FC = () => {
+    const {t} = useTranslation("discovery")
     return (
         <div>
-            <div className="w-5/6 sm:w-1/2 max-w-4xl mx-auto my-8 text-sm sm:text-2xl">Lorem ipsum
-                dolor sit amet,
-                consectetur adipisicing elit. Debitis nihil saepe similique? Ad aspernatur
-                consectetur cupiditate deserunt dolore doloremque dolorum eligendi expedita facere,
-                fugit modi molestias officiis perspiciatis quia saepe suscipit velit? Aliquam, quae,
-                quas.
+            <h1>{t("welcome")}</h1>
+            <div className="w-5/6 sm:w-1/2 max-w-4xl mx-auto my-8 text-sm sm:text-2xl">
+                {t("welcome_description")}
             </div>
             <DiscoveryClub/>
-            <DiscoveryStudent/>
+            <YearBook/>
         </div>
     )
 }

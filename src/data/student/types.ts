@@ -57,11 +57,12 @@ type ReducerPromoToggle = {
     type: "ADD_PROMO" | "REMOVE_PROMO",
     promo: number
 }
-type ReducerSortToggle = {
-    type: "TOGGLE_SORT",
-}
 
-type ReducerInit = {
-    type: "INIT_FILTER",
+type ReducerSearchUpdate = {
+    type: "UPDATE_SEARCH",
+    name: string
 }
-export type FilterReducerAction = ReducerSortToggle | ReducerPromoToggle | ReducerInit;
+type NoActionReduction = {
+    type: "TOGGLE_SORT" | "INIT_FILTER",
+}
+export type FilterReducerAction = NoActionReduction | ReducerPromoToggle | ReducerSearchUpdate;
