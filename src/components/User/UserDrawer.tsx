@@ -12,7 +12,7 @@ import {ClubMemberView} from "../../data/club/types"
 const MOBILE_WIDTH = 640
 
 type UserDrawerProps = {
-    backgroundComponent: any,
+    backgroundComponent: React.ReactNode,
 }
 
 const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
