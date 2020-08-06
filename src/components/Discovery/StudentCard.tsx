@@ -19,7 +19,7 @@ const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, pictu
         <Avatar
             src={picture} /*size={getStudentAvatarSize()}*/
             alt={fullname}
-            className={"w-32 h-3 2 xl:w-48 xl:h-48 shadow-xl hover:shadow-outline" +
+            className={"w-32 h-32 xl:w-48 xl:h-48 shadow-xl hover:shadow-outline" +
             " text-3xl" +
             " sm:text-5xl " +
             "md:text-5xl xl:text-6xl " + Utils.randomBackgroundColors()}
