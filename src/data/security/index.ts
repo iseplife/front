@@ -48,6 +48,7 @@ export const getUser = (): TokenPayload => {
             throw new Error("Auth cookies unreadable")
         }
     }
+    window.location.assign("/login")
     throw new Error("Auth cookies missing")
 }
 
