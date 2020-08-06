@@ -17,7 +17,7 @@ const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, pictu
             pathname: `/discovery/student/${id}`
         }}>
         <Avatar
-            src={picture} /*size={getStudentAvatarSize()}*/
+            src={picture}
             alt={fullname}
             className={"w-32 h-32 xl:w-48 xl:h-48 shadow-xl hover:shadow-outline" +
             " text-3xl" +
