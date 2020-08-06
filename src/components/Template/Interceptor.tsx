@@ -6,7 +6,7 @@ import {message} from "antd"
 import {WithTranslation, withTranslation, WithTranslationProps} from "react-i18next"
 
 const errorMessages = [
-    "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupe 👊 !",
+    "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupent 👊 !",
     "Désolé, nous ne sommes pas disponible pour le moment ! 🙀",
     "Revenez d'ici 5 min, il est possible que nous soyons en train de faire de la maintenance ! 🔧",
 ]
