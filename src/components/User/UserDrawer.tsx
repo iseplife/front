@@ -82,7 +82,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                 {student.firstName + " " + student.lastName.toUpperCase()}
                             </div>
                             <HorizontalSpacer/>
-                            <div>
+                            <div className="text-sm sm:text-base">
                                 Promo <span className="select-all">{student.promo}</span>, n°<span
                                     className="select-all">{student.id}</span>
                             </div>
