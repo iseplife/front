@@ -1,15 +1,12 @@
 import React from "react"
-import Modal from "../Common/Modal"
 
 type ModalEventProps = {
     id: number
 }
-const ModalEvent: React.FC<ModalEventProps> = () => {
+const ModalEventContent: React.FC<ModalEventProps> = () => {
     return (
-        <Modal visibleFn={() => true} visible={true}>
-
-        </Modal>
+        <p>pio</p>
     )
 }
 
-export default ModalEvent
+export default ModalEventContent

@@ -103,7 +103,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Types :</h3>
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (
-                            <Checkbox className="w-1/2 mx-0" key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
+                            <Checkbox className="w-1/2 mx-0 text-black" key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
                                 {t(`type.${type}`)}
                             </Checkbox>
                         ))}

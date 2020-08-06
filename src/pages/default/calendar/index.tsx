@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import {Radio} from "antd"
+import {Modal, Radio} from "antd"
 import {IconFA} from "../../../components/Common/IconFA"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -14,6 +14,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css"
 import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil/dist"
 import {getMonthEvents} from "../../../data/event"
 import Types from "../../../constants/EventTypes"
+import ModalEventContent from "../../../components/Event/ModalEvent"
 
 
 const initFilter = (): EventFilter => {
@@ -73,6 +74,7 @@ export const filteredEventsState = selector<EventPreview[]>({
 })
 
 const Events: React.FC = () => {
+    const [selectedEvent, setSelectedEvent] = useState<EventPreview | null>(null)
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
     const [loading, setLoading] = useState<boolean>(false)
@@ -81,7 +83,6 @@ const Events: React.FC = () => {
     const {t, i18n} = useTranslation("event")
 
     const currentMonth = date.getMonth()
-
     const fetchMonthEvents = useCallback(() => {
         setLoading(true)
         getMonthEvents(date.getTime()).then(r => {
@@ -148,11 +149,10 @@ const Events: React.FC = () => {
                             <Radio.Button value="month">{t("month")}</Radio.Button>
                         </Radio.Group>
                     </div>
-
                 </div>
                 <Calendar
                     className="mb-12"
-                    onSelectEvent={(e) => console.log(e.title)}
+                    onSelectEvent={(e) => setSelectedEvent(e)}
                     date={date}
                     onNavigate={(d) => setDate(d)}
                     culture={i18n.language}
@@ -162,6 +162,16 @@ const Events: React.FC = () => {
                     onView={(v) => setView(v)}
                     view={view}
                 />
+                {selectedEvent &&
+                <Modal
+                    visible={true}
+                    title={<h1 className="font-bold text-2xl m-0">{selectedEvent.title}</h1>}
+                    footer={null}
+                    onCancel={() => setSelectedEvent(null)}
+                >
+                    <ModalEventContent id={selectedEvent.id}/>
+                </Modal>
+                }
             </div>
         </div>
     )
