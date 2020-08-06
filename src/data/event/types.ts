@@ -1,8 +1,9 @@
 import {Club} from "../club/types"
+import EventType from "../../constants/EventType"
 
 export type Event = {
     id: number
-    type: string
+    type: EventType
     title: string
     description: string
     start: number
@@ -22,7 +23,7 @@ export type Event = {
 export type EventPreview = {
     id: number
     title: string
-    type: string
+    type: EventType
     start: number
     end: number
     location: string

@@ -6,15 +6,14 @@ import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
 import {add, parse, format, Locale} from "date-fns"
-import startOfWeek from "date-fns/startOfWeek"
-import getDay from "date-fns/getDay"
-import {enUS, fr} from "date-fns/locale"
-
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil/dist"
 import {getMonthEvents} from "../../../data/event"
-import Types from "../../../constants/EventTypes"
 import ModalEventContent from "../../../components/Event/ModalEvent"
+import {EventTypeColor, EventTypes} from "../../../constants/EventType"
+import startOfWeek from "date-fns/startOfWeek"
+import getDay from "date-fns/getDay"
+import {enUS, fr} from "date-fns/locale"
 
 
 const initFilter = (): EventFilter => {
@@ -24,7 +23,7 @@ const initFilter = (): EventFilter => {
                 // -1 represent public events, those events have an empty targets property
                 [-1]: true
             },
-            types: Types.reduce((acc: FilterList, type) => {
+            types: EventTypes.reduce((acc: FilterList, type) => {
                 if (!acc[type])
                     acc[type] = true
                 return acc
@@ -165,7 +164,16 @@ const Events: React.FC = () => {
                 {selectedEvent &&
                 <Modal
                     visible={true}
-                    title={<h1 className="font-bold text-2xl m-0">{selectedEvent.title}</h1>}
+                    title={
+                        <div className="font-bold text-2xl m-0 mx-auto flex items-center">
+                            <span
+                                className="text-white inline-block rounded shadow m-1 px-2 py-1 text-xs font-dinot font-semibold"
+                                style={{backgroundColor: EventTypeColor[selectedEvent.type]}}>
+                                {t(`type.${selectedEvent.type}`)}
+                            </span>
+                            <span className="ml-1">{selectedEvent.title}</span>
+                        </div>
+                    }
                     footer={null}
                     onCancel={() => setSelectedEvent(null)}
                 >
