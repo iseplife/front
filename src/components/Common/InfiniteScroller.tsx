@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react"
+import React, {forwardRef, ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useState} from "react"
 import Loading from "./Loading"
 import {useTranslation} from "react-i18next"
 
@@ -13,50 +13,69 @@ type Loader = {
 export type loaderCallback =  (count: number, ...param: any) => Promise<boolean>;
 export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
 
-type InfiniteScrollerProps = {
-    watch: "UP" | "DOWN" | "BOTH",
-    triggerDistance?: number,
-    callback: ScrollerCallback,
-    className?: string
+export type InfiniteScrollerRef = {
+    resetData: () => void
 }
 
-const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, triggerDistance = 50, children, className = ""}) => {
+type InfiniteScrollerProps = {
+    watch: "UP" | "DOWN" | "BOTH"
+    triggerDistance?: number
+    callback: ScrollerCallback
+    className?: string
+    children: ReactNode
+}
+
+const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, children, className = ""}, ref) => {
     const {t} = useTranslation("common")
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
+
+    const initialLoad = useCallback(() => {
+        switch (watch) {
+            case "UP":
+                setUpLoader(prevState => ({...prevState, loading: true}))
+                upCallback(0).then(over => {
+                    setUpLoader({
+                        over,
+                        fetch: false,
+                        count: 1,
+                        loading: false
+                    })
+                })
+                break
+            case "DOWN":
+                setDownLoader(prevState => ({...prevState, loading: true}))
+                downCallback(0).then(over => {
+                    setDownLoader({
+                        over,
+                        fetch: false,
+                        count: 1,
+                        loading: false
+                    })
+                })
+                break
+        }
+    }, [downCallback, upCallback, watch])
+
+    useImperativeHandle(ref, () => ({
+        resetData() {
+            initialLoad()
+        }
+    }))
 
     /**
      * Initial data, call on component creation
      * first element that are going to be displayed
      */
     useEffect(() => {
-        switch (watch) {
-            case "UP":
-                setUpLoader(prevState => ({...prevState, loading: true}))
-                upCallback(upLoader.count).then(over => {
-                    setDownLoader(prevState => ({
-                        over,
-                        fetch: false,
-                        count: ++prevState.count,
-                        loading: false
-                    }))
-                })
-                break
-            case "DOWN":
-                setDownLoader(prevState => ({...prevState, loading: true}))
-                downCallback(downLoader.count).then(over => {
-                    setDownLoader(prevState => ({
-                        over,
-                        fetch: false,
-                        count: ++prevState.count,
-                        loading: false
-                    }))
-                })
-                break
-        }
-    }, [upCallback, downCallback, watch])
+        initialLoad()
+    }, [initialLoad])
 
+    /**
+     * Init listener on scroller according on which way we're listening,
+     * remove listener on unmount
+     */
     useEffect(() => {
         function scrollerListener(this: HTMLElement) {
             // Trigger event loader when top of page is almost reached
@@ -110,14 +129,16 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
     }, [downLoader, callback])
 
     return (
-        <div className={`relative h-full h-auto ${className}`}>
+        <div className="relative h-full h-auto">
             {(watch !== "DOWN") && (
                 <div className="h-12 mb-3 text-center">
                     {upLoader.over ? <p>{t("end")}</p> : upLoader.loading && <Loading size="3x"/>}
                 </div>
             )}
 
-            {children}
+            <div className={`${className}`}>
+                {children}
+            </div>
 
             {(watch !== "UP") && (
                 <div className="h-12 mb-3 text-center">
@@ -126,6 +147,7 @@ const InfiniteScroller: React.FC<InfiniteScrollerProps> = ({watch, callback, tri
             )}
         </div>
     )
-}
-
+    
+})
+InfiniteScroller.displayName = "InfiniteScroller"
 export default InfiniteScroller

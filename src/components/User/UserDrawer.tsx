@@ -72,8 +72,9 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                         <Avatar src={student ? student.picture : ""}
                             alt={student.firstName + " " + student.lastName}
                             className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + Utils.randomBackgroundColors()}>
-                            <div
-                                className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">{Utils.getInitials(student)}</div>
+                            <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
+                                {Utils.getInitials(student)}
+                            </div>
                         </Avatar>
                         <div className="ml-3 mt-2 text-base">
                             <div
@@ -130,8 +131,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                     }))
                             }
                         </div>
-                        <Divider/>
-                        {/*TODO : Implémenter picture tags */}
+                        {/*<Divider/>*/}
                         {/*<div className="font-bold my-1">{t('user:photos')}</div>*/}
                         {/*{isEmpty(studentPictures) ? t('user:no-photos') : null}*/}
                     </div>

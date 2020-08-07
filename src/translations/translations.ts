@@ -5,6 +5,7 @@ import common_en from "./en/common.json"
 import gallery_en from "./en/gallery.json"
 import user_en from "./en/user.json"
 import search_en from "./en/search.json"
+import discovery_en from "./en/discovery.json";
 
 import login_fr from "./fr/login.json"
 import date_fr from "./fr/date.json"
@@ -13,14 +14,16 @@ import common_fr from "./fr/common.json"
 import gallery_fr from "./fr/gallery.json"
 import user_fr from "./fr/user.json"
 import search_fr from "./fr/search.json"
+import discovery_fr from "./fr/discovery.json";
 
 export const en = {
     login: login_en,
     date: date_en,
     common: common_en,
     event: event_en,
-    gallery: gallery_en,
+    discovery: discovery_en,
     user: user_en,
+    gallery: gallery_en,
     search: search_en
 }
 export const fr = {
@@ -28,8 +31,9 @@ export const fr = {
     date: date_fr,
     common: common_fr,
     event: event_fr,
-    gallery: gallery_fr,
+    discovery: discovery_fr,
     user: user_fr,
+    gallery: gallery_fr,
     search: search_fr
 }
 

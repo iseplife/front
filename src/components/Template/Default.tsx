@@ -7,6 +7,7 @@ import NotFound from "../../pages/erros/NotFound"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
+import Discovery from "../../pages/discovery"
 import Navbar from "./Navbar"
 
 
@@ -18,9 +19,10 @@ const DefaultTemplate: React.FC = () => {
                     style={{height: "calc(100% - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
+                        <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>
-                        <Route path="/logout" children={<Logout/>}/>
+                        <Route path="/logout" component={Logout}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>
                 </div>
