@@ -14,6 +14,7 @@ import {EventTypeColor, EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
+import {CalendarEvent, CalendarEventWrapper} from "../../../components/CalendarItem"
 
 
 const initFilter = (): EventFilter => {
@@ -150,6 +151,10 @@ const Events: React.FC = () => {
                     </div>
                 </div>
                 <Calendar
+                    components={{
+                        event: CalendarEvent,
+                        eventWrapper: CalendarEventWrapper
+                    }}
                     className="mb-12"
                     onSelectEvent={(e) => setSelectedEvent(e)}
                     date={date}
