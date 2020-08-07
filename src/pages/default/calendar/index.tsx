@@ -152,7 +152,6 @@ const Events: React.FC = () => {
                 </div>
                 <Calendar
                     components={{
-                        event: CalendarEvent,
                         eventWrapper: CalendarEventWrapper
                     }}
                     className="mb-12"
