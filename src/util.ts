@@ -1,6 +1,12 @@
 import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
+import {format} from "date-fns"
+import { enUS, fr } from "date-fns/locale"
 
+const locales: {[id: string]: Locale} = {
+    en: enUS,
+    fr
+}
 export const getEducationYear = (graduationYear: number): string => {
     const educationsYear = ["Diplomé", "A3", "A2", "A1", "SUP", "SUP"]
 
@@ -13,6 +19,10 @@ export const getEducationYear = (graduationYear: number): string => {
 
 export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation().search)
 
+export const _format = (date: Date | number, formatStr = "PP"): string =>
+    format(date, formatStr, {
+        locale: locales[localStorage.getItem("lng") || "fr"]
+    })
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>

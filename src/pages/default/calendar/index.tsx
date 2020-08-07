@@ -167,6 +167,7 @@ const Events: React.FC = () => {
                 />
                 {selectedEvent &&
                 <Modal
+                    className="md:w-1/2 w-4/5"
                     visible={true}
                     title={
                         <div className="font-bold text-2xl m-0 mx-auto flex items-center">
