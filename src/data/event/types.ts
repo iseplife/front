@@ -1,21 +1,23 @@
-import {Club} from "../club/types"
+import {Club, ClubPreview} from "../club/types"
 import EventType from "../../constants/EventType"
+import {Feed} from "../feed/types";
 
 export type Event = {
     id: number
     type: EventType
     title: string
     description: string
+    image?: string
     start: number
     end: number
-    ticketUrl?: string
+    ticketURL?: string
     price?: number
-    club: Club
     location: string
-    imageUrl?: string
-    target: string
+    targets: Feed[]
     published: boolean
     closed: boolean
+    subscribed: boolean
+    club: ClubPreview
     feed: number
 }
 

@@ -60,3 +60,7 @@ abbr[title] {
 .ant-modal-content, .ant-modal-header{
     border-radius: 0.25rem !important;
 }
+
+.ant-modal-body {
+    padding: 10px 24px 24px !important;
+}

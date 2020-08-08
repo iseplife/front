@@ -13,5 +13,6 @@
   "free": "Free",
   "event": "Event",
   "published_only": "Published events only",
-  "admin_view": "Admin view"
+  "admin_view": "Admin view",
+  "ticket_url": "Buy a ticket"
 }

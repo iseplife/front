@@ -9,12 +9,12 @@ import {add, parse, format, Locale} from "date-fns"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil/dist"
 import {getMonthEvents} from "../../../data/event"
-import ModalEventContent from "../../../components/Event/ModalEvent"
-import {EventTypeColor, EventTypes} from "../../../constants/EventType"
+import {ModalEventHeader, ModalEventContent} from "../../../components/Event/ModalEvent"
+import {EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
-import {CalendarEvent, CalendarEventWrapper} from "../../../components/CalendarItem"
+import { CalendarEventWrapper} from "../../../components/CalendarItem"
 
 
 const initFilter = (): EventFilter => {
@@ -169,16 +169,7 @@ const Events: React.FC = () => {
                 <Modal
                     className="md:w-1/2 w-4/5"
                     visible={true}
-                    title={
-                        <div className="font-bold text-2xl m-0 mx-auto flex items-center">
-                            <span
-                                className="text-white inline-block rounded shadow m-1 px-2 py-1 text-xs font-dinot font-semibold"
-                                style={{backgroundColor: EventTypeColor[selectedEvent.type]}}>
-                                {t(`type.${selectedEvent.type}`)}
-                            </span>
-                            <span className="ml-1">{selectedEvent.title}</span>
-                        </div>
-                    }
+                    title={<ModalEventHeader event={selectedEvent} />}
                     footer={null}
                     onCancel={() => setSelectedEvent(null)}
                 >

@@ -64,15 +64,21 @@ const Event: React.FC = () => {
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                 }}>
-                    <Link to={`/club/${event.club.id}`}
-                          className="absolute flex items-center text-gray-700 font-bold"
-                          style={{left: 0, bottom: 5}}
+                    <Link
+                        to={`/club/${event.club.id}`}
+                        className="absolute flex items-center text-gray-700 font-bold"
+                        style={{left: 0, bottom: 5}}
                     >
-                        <Avatar icon={<UserOutlined/>} src={event.club.logoUrl}
-                                className="cursor-pointer mx-3"/> {event.club.name}
+                        <Avatar
+                            icon={<UserOutlined/>}
+                            src={event.club.logoUrl}
+                            className="cursor-pointer mx-3"
+                        />
+                        {event.club.name}
                     </Link>
-                    <div className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
-                         style={{right: 0, bottom: 5}}>
+                    <div
+                        className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
+                        style={{right: 0, bottom: 5}}>
                         {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
                     </div>
                 </div>
