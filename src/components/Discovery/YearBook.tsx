@@ -107,7 +107,6 @@ const YearBook: React.FC = () => {
                 ref={scrollerRef}
                 watch="DOWN"
                 callback={getNextStudents}
-                triggerDistance={5}
                 className="flex flex-wrap justify-start"
             >
                 {filteredStudent.map((s, i) =>
