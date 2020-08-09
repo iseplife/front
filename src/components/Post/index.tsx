@@ -159,9 +159,9 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 <>
                     <div className="flex flex-row justify-end items-center">
                         {!isPast(data.publicationDate) &&
-                        <span
-                        	className="mx-2 text-xs"> {t("published_at") + format(new Date(data.publicationDate), "HH:mm" +
-                            " dd/MM/yy")}</span>
+                        <span className="mx-2 text-xs">
+                            {t("published_at") + format(new Date(data.publicationDate), "HH:mm" + " dd/MM/yy")}
+                        </span>
                         }
                         {data.private && <LockOutlined/>}
                     </div>

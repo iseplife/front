@@ -133,7 +133,6 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         />
                         <Marker position={[51.505, -0.09]}/>
                     </Map>
-
                 </div>
             </div>
             : <p>Erreur de chargement...</p>
