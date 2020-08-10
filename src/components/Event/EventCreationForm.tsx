@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {EventForm, Marker as MarkerType} from "../../data/event/types"
-import {getEvent} from "../../data/event"
+import {createEvent, getEvent} from "../../data/event"
 import EventType, {EventTypes} from "../../constants/EventType"
-import {Button, DatePicker, Divider, Input, Select} from "antd"
+import {Button, DatePicker, Input, Select, message} from "antd"
 import {useTranslation} from "react-i18next"
 import {Map, Marker, TileLayer} from "react-leaflet"
 import {IconFA} from "../Common/IconFA"
@@ -29,22 +29,30 @@ const DEFAULT_EVENT: EventForm = {
 
 type EventCreationFormProps = {
     previousEdition?: number
+    onSubmit: () => void
+    onClose: () => void
 }
-const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) => {
+const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition, onSubmit, onClose}) => {
     const {t} = useTranslation("event")
     const [loading, setLoading] = useState<boolean>(false)
     const [marker, setMarker] = useState<MarkerType>()
 
-    const handleMarkerChange = useCallback((e: any) => {
+    const handleMarkerChange = useCallback((e: { latlng: MarkerType }) => {
         setMarker(e.latlng)
         formik.setFieldValue("coordinates", e.latlng)
-        console.log(e.latlng)
     }, [])
 
     const formik = useFormik<EventForm>({
         initialValues: DEFAULT_EVENT,
         onSubmit: async (values) => {
             console.log(values)
+            createEvent(values).then(res => {
+                if(res.status === 200) {
+                    onSubmit()
+                    message.info(t("create.created"))
+                    onClose()
+                }
+            })
         },
     })
 
@@ -185,6 +193,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
                     />
                     <div className="flex items-center">
                         <Button
+                            htmlType="submit"
                             type="primary"
                             icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
                             disabled={formik.isSubmitting}

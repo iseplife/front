@@ -17,8 +17,7 @@ import {enUS, fr} from "date-fns/locale"
 import {CalendarEventWrapper} from "../../../components/CalendarItem"
 import {useSelector} from "react-redux"
 import {AppState} from "../../../redux/types"
-import EventCreationForm from "../../../components/Event/EventCreationForm";
-import {Link} from "react-router-dom";
+import EventCreationForm from "../../../components/Event/EventCreationForm"
 
 const initFilter = (): EventFilter => {
     return (
@@ -194,7 +193,7 @@ const Events: React.FC = () => {
                     title={<span className="text-gray-800 font-bold text-2xl">{t("create.title")}</span>}
                     onCancel={() => setCreateEvent(false)}
                 >
-                    <EventCreationForm />
+                    <EventCreationForm onSubmit={fetchMonthEvents} onClose={() => setCreateEvent(false)} />
                 </Modal>
                 }
             </div>

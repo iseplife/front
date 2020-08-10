@@ -1,7 +1,8 @@
 {
 	"create": {
 		"button": "Créer un évènement",
-		"title": "Création d'un nouvel évènement"
+		"title": "Création d'un nouvel évènement",
+		"created": "Évènement créée !"
 	},
 	"form": {
 		"label": {

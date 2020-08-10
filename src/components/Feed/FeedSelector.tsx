@@ -1,7 +1,7 @@
 import React, {useState} from "react"
-import {Input, Select, Spin, Tag} from "antd"
+import {Select, Spin, Tag} from "antd"
 import {useSelector} from "react-redux"
-import {AppState} from "../../redux/types";
+import {AppState} from "../../redux/types"
 
 type Option = {
     label: string
