@@ -3,11 +3,13 @@ import {useFormik} from "formik"
 import {EventForm, Marker as MarkerType} from "../../data/event/types"
 import {getEvent} from "../../data/event"
 import EventType, {EventTypes} from "../../constants/EventType"
-import {Button, DatePicker, Input, Select} from "antd"
+import {Button, DatePicker, Divider, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Map, Marker, TileLayer} from "react-leaflet"
 import {IconFA} from "../Common/IconFA"
 import Locker from "../Common/Locker"
+import AvatarPicker from "../Common/AvatarPicker"
+import FeedSelector from "../Feed/FeedSelector"
 
 const {RangePicker} = DatePicker
 const {TextArea} = Input
@@ -55,17 +57,17 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
         }
     }, [previousEdition])
     return (
-        <form className="flex flex-col" onSubmit={formik.handleSubmit}>
+        <form className="flex flex-col flex-wrap" onSubmit={formik.handleSubmit}>
             <div className="flex justify-between mb-3 mr-3">
                 <Select defaultValue={EventType.AFTERWORK} onChange={(value) => formik.setFieldValue("type", value)}>
                     {EventTypes.map(e =>
                         <Option key={e} value={e}>{t(`type.${e}`)}</Option>
                     )}
                 </Select>
-                <Locker defaultValue={formik.values.closed} onChange={v => formik.setFieldValue("closed", v)} />
+                <Locker defaultValue={formik.values.closed} onChange={v => formik.setFieldValue("closed", v)}/>
             </div>
-            <div className="flex justify-between items-end">
-                <div className="w-3/5">
+            <div className="flex flex-wrap justify-between items-end">
+                <div className="lg:w-3/5 w-full">
                     <label className="font-dinotcb">{t("form.label.name")}*</label>
                     <Input
                         required
@@ -78,7 +80,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
-                <div>
+                <div className="lg:w-2/5 w-full">
                     <label className="font-dinotcb">Dates*</label>
                     <RangePicker
                         className="ml-4"
@@ -109,8 +111,8 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
             </div>
 
             <div className="w-full">
-                <div className="flex justify-between">
-                    <div className="w-40">
+                <div className="flex justify-between flex-wrap">
+                    <div className="lg:w-40 w-full">
                         <label className="font-dinotcb">{t("form.label.location")}</label>
                         <Input
                             name="location"
@@ -137,7 +139,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
                                 style={{borderBottom: "1px solid #d9d9d9"}}
                             />
                         </div>
-                        <div className="">
+                        <div>
                             <label className="font-dinotcb">{t("form.label.ticket_url")}</label>
                             <Input
                                 name="ticketURL"
@@ -167,15 +169,31 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition}) 
                     {marker && <Marker position={marker}/>}
                 </Map>
             </div>
-            <div>
-                <label className="font-dinotcb">{t("form.label.target")}</label>
+            <div className="flex flex-wrap justify-between items-end mt-2">
+                <div className="lg:w-1/2 w-full">
+                    <label className="font-dinotcb">{t("form.label.target")}</label>
+                    <FeedSelector onChange={targets => formik.setFieldValue("targets", targets)}/>
+                </div>
 
-            </div>
-
-            <div>
-                <Button>
-
-                </Button>
+                <div className="lg:w-1/2 w-full flex mt-2 justify-between">
+                    <AvatarPicker
+                        clubOnly={true}
+                        callback={(id) => formik.setFieldValue("club", id)}
+                        className="mx-2 w-32 hover:border-indigo-400"
+                        style={{borderBottom: "1px solid #d9d9d9"}}
+                        placeholder={t("form.placeholder.club")}
+                    />
+                    <div className="flex items-center">
+                        <Button
+                            type="primary"
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                            disabled={formik.isSubmitting}
+                            className={formik.isValid ? "cursor-pointer hover:text-gray-700 rounded" : "cursor-default text-gray-300 rounded"}
+                        >
+                            Enregistrer
+                        </Button>
+                    </div>
+                </div>
             </div>
         </form>
     )

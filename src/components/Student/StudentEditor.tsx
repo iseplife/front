@@ -273,12 +273,10 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         </Button>
                         {student &&
                         <>
-                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>}
-                                onClick={archive}>
+                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>} onClick={archive}>
                                 {student.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
-                                danger>
+                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove} danger>
                                 Supprimer
                             </Button>
                         </>

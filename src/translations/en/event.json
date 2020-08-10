@@ -19,7 +19,8 @@
 				"Start date",
 				"End date"
 			],
-			"location": "Russia"
+			"location": "Russia",
+			"club": "Organiser"
 		}
 	},
 	"day": "Day",
