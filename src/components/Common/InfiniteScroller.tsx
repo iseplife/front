@@ -23,10 +23,10 @@ type InfiniteScrollerProps = {
     callback: ScrollerCallback
     className?: string
     children: ReactNode
-    loadingComponent?: React.ReactNode,
+    loading?: React.ReactNode,
 }
 
-const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, children, className = ""}, ref) => {
+const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, loading,children, className = ""}, ref) => {
     const {t} = useTranslation("common")
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
@@ -133,7 +133,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
         <div className="relative h-full h-auto">
             {(watch !== "DOWN") && (
                 <div className="h-12 mb-3 text-center">
-                    {upLoader.over ? <p>{t('end')}</p> : upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
+                    {upLoader.over ? <p>{t("end")}</p> : upLoader.loading && (loading || <Loading size="3x"/>)}
                 </div>
             )}
 
@@ -143,7 +143,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
 
             {(watch !== "UP") && (
                 <div className="h-12 mb-3 text-center">
-                    {downLoader.over ? <p>{t('end')}</p> : downLoader.loading && (!!loadingComponent ? loadingComponent : <Loading size="3x"/>)}
+                    {downLoader.over ? <p>{t("end")}</p> : downLoader.loading && ( loading || <Loading size="3x"/>)}
                 </div>
             )}
         </div>
