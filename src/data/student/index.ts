@@ -6,7 +6,7 @@ import {
     StudentPreview,
     StudentPreviewAdmin
 } from "./types"
-import {ClubMemberView} from "../club/types"
+import {ClubMember} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 
@@ -26,6 +26,7 @@ export const searchStudentsPaged = (page: number, name?: string, promos?: string
 })
 
 export const searchAllStudents = (name: string): AxiosPromise<SearchItem[]> => axios.get("/search/student/all", {params: {name}})
+
 export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => axios.get(`/student/${studentId}/club`)
 
 export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => axios.get("/search/student", {params: {page, name, promos, atoz}})
@@ -65,4 +66,4 @@ export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> =>
 export const deleteStudent = (id: number): AxiosPromise<void> => axios.delete(`/student/${id}`)
 
 
-export const getClubsForStudent = (studentId: number): AxiosPromise<ClubMemberView[]> => axios.get(`/student/${studentId}/club`)
+export const getClubsForStudent = (studentId: number): AxiosPromise<ClubMember[]> => axios.get(`/student/${studentId}/club`)
