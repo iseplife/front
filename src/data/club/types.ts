@@ -1,12 +1,11 @@
 import ClubType from "../../constants/ClubType"
 import {Student} from "../student/types"
-import RoleType from "../../constants/RoleType"
 
 export enum ClubRole {
-    MEMBER,
-    PUBLISHER,
-    ADMIN,
-    SUPER_ADMIN,
+    MEMBER = "MEMBER",
+    PUBLISHER = "PUBLISHER",
+    ADMIN = "ADMIN",
+    SUPER_ADMIN = "SUPER_ADMIN",
 }
 
 export type Club = {
@@ -43,8 +42,8 @@ export type ClubMember = {
 
 export type ClubMemberPreview = {
     id: number
+    position: string
     club: ClubPreview
-    role: string
 }
 
 export type ClubForm = {

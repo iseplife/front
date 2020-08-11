@@ -9,7 +9,8 @@ import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
 import Discovery from "../../pages/discovery"
 import Navbar from "./Navbar"
-import Club from "../../pages/club";
+import Club from "../../pages/club"
+import Gallery from "../../pages/gallery"
 
 
 const DefaultTemplate: React.FC = () => {
@@ -23,6 +24,8 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>
+                        <Route path="/club/:id" component={Club}/>
+                        <Route path="/gallery/:id" component={Gallery}/>
                         <Route path="/logout" component={Logout}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>

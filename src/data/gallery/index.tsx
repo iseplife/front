@@ -1,6 +1,4 @@
 import axios, {AxiosPromise} from "axios"
-import {Gallery} from "./type"
+import {Gallery} from "./types"
 
-export const getGalleryById = (id: string): AxiosPromise<Gallery> => {
-    return axios.get(`/gallery/${id}`)
-}
+export const getGallery = (id: string): AxiosPromise<Gallery> => axios.get(`/gallery/${id}`)

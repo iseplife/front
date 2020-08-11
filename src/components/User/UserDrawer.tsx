@@ -7,7 +7,7 @@ import {Utils} from "../Common/Utils"
 import {Student} from "../../data/student/types"
 import {IconFA} from "../Common/IconFA"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
-import {ClubMemberView} from "../../data/club/types"
+import {ClubMemberPreview} from "../../data/club/types"
 
 const MOBILE_WIDTH = 640
 
@@ -21,15 +21,15 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
     const {t} = useTranslation()
     const [student, setStudent] = useState<Student>({} as Student)
     const [drawerVisibility, setDrawerVisibility] = useState<boolean>(true)
-    const [studentClubs, setStudentClubs] = useState<ClubMemberView[]>([])
+    const [clubs, setClubs] = useState<ClubMemberPreview[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isMobile] = useState<boolean>(window.innerWidth <= MOBILE_WIDTH)
 
     const socialUserIcon = (type: string, profile: string) => {
         const urlType = type.substr(3)
-        if (urlType === "snapchat") {
+        if (urlType === "snapchat")
             profile = "add/" + profile
-        }
+
         return (
             <Tooltip title={urlType} placement="bottom">
                 <a href={`https://${urlType}.com/${profile}`} target="_blank"
@@ -49,12 +49,12 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
             }).catch().finally(() => setIsLoading(false))
 
             getClubsForStudent(parseInt(user_id)).then(res => {
-                setStudentClubs(res.data)
+                setClubs(res.data)
             }).finally(() => setIsLoading(false))
         } else {
             history.push("/404")
         }
-    }, [])
+    }, [user_id])
 
     const closeDrawer = () => {
         setDrawerVisibility(false)
@@ -115,16 +115,16 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                         <div className="font-bold my-1">{t("user:clubs")}</div>
                         <div className="flex flex-row flex-wrap">
                             {
-                                !studentClubs.length ? t("user:no-clubs") :
-                                    (studentClubs.map(clubMemberView => {
+                                !clubs.length ? t("user:no-clubs") :
+                                    (clubs.map(cm => {
                                         return (
-                                            <Tooltip title={clubMemberView.club.name}
+                                            <Tooltip
+                                                title={cm.club.name}
                                                 placement="top"
-                                                key={clubMemberView.club.id}>
-                                                <Link to={`/club/${clubMemberView.club.id}`}>
-                                                    <Avatar src={clubMemberView.club.logoUrl}
-                                                        alt={clubMemberView.club.name}
-                                                        className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
+                                                key={cm.club.id}>
+                                                <Link to={`/club/${cm.club.id}`}>
+                                                    <Avatar src={cm.club.logoUrl} alt={cm.club.name} className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
+                                                    {cm.position}
                                                 </Link>
                                             </Tooltip>
                                         )
