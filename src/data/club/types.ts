@@ -19,6 +19,7 @@ export type Club = {
     archived: boolean
     feed: number
 
+    canEdit: boolean
     facebook?: string
     instagram?: string
     snapchat?: string

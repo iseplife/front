@@ -22,6 +22,13 @@ export const uploadLogo = (id: number, file: File): AxiosPromise<string> => {
     return axios.put(`/club/${id}/logo`, fd)
 }
 
+export const uploadCover = (id: number, file: File | null): AxiosPromise<string> => {
+    const fd = new FormData()
+    fd.append("file", file as Blob)
+
+    return axios.put(`/club/${id}/cover`, fd)
+}
+
 export const deleteClub = (id: number): AxiosPromise<void> => axios.delete(`/club/${id}`)
 
 export const getClubAdmins = (id: number): AxiosPromise<StudentPreview[]> => axios.get(`/club/${id}/admins`)

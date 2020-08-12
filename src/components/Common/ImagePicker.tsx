@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import {Upload} from "antd"
 import "./ImagePicker.css"
-import {EditOutlined, PlusOutlined, LoadingOutlined} from "@ant-design/icons"
+import {EditOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined} from "@ant-design/icons"
 
 type ImagePickerProps = {
     className?: string
@@ -33,7 +33,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, 
             <Upload
                 name="avatar"
                 listType="picture-card"
-                className={`${className} avatar-uploader flex justify-center mt-5`}
+                className={`flex justify-center ${className}`}
                 showUploadList={false}
                 beforeUpload={handleImage}
             >
@@ -49,7 +49,17 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, 
                             }}
                         />
                         <span className="image-options absolute text-gray-400">
-                            <EditOutlined className="mx-1 px-1 hover:text-white"/>
+                            <EditOutlined
+                                className="mx-1 px-1 hover:text-white"
+                                onClick={() => console.log("aaa")}
+                            />
+                            <DeleteOutlined
+                                className="mx-1 px-1 hover:text-red-400"
+                                onClickCapture={() => {
+                                    setImage(undefined)
+                                    onChange(null)
+                                }}
+                            />
                         </span>
                     </div>
                     :
@@ -59,14 +69,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className = "", defaultImage, 
                     </div>
                 }
             </Upload>
-            {image &&
-            <span className="text-center cursor-pointer hover:text-red-700" onClick={() => {
-            	setImage(undefined)
-            	onChange(null)
-            }}>
-                   Supprimer
-            </span>
-            }
         </>
     )
 }

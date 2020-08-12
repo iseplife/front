@@ -191,7 +191,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </Link>
                     }
 
-                    <ImagePicker onChange={handleImage} defaultImage={club?.logoUrl}/>
+                    <ImagePicker onChange={handleImage} defaultImage={club?.logoUrl} className="avatar-uploader"/>
 
                     <div className="flex justify-between mx-3">
                         <div className="w-1/2">

@@ -1,7 +1,7 @@
 import React from "react"
 import {Avatar, Card, Collapse,  Skeleton} from "antd"
 import {RightOutlined} from "@ant-design/icons"
-import CustomCoverClub from "./CustomCoverClub"
+import ClubCover from "./ClubCover"
 import About from "../About"
 import Galleries from "../Galleries"
 import {Gallery} from "../../../data/gallery/types"
@@ -15,10 +15,7 @@ const {Panel} = Collapse
 const getCoverElement = (club: Club | undefined, clubLoading: boolean): React.ReactNode => {
     return (
         <div className="h-32 md:h-40 lg:h-40 xl:h-40">
-            {club && club.cover && !clubLoading ?
-                <Avatar className="w-full h-full bg-blue-500" shape="square" src={club.cover}/> :
-                <CustomCoverClub/>
-            }
+
         </div>
     )
 }
