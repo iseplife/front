@@ -22,7 +22,7 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
     }, [id, image, coverChanged])
 
     const resetCover = useCallback(() => {
-        if(pickerRef.current)
+        if (pickerRef.current)
             pickerRef.current.reset()
         setCoverChanged(false)
     }, [pickerRef])
@@ -65,7 +65,7 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
                 <div
                     className="w-full h-full"
                     style={{
-                        backgroundImage: `url("${cover || "/img/default-cover.png"}")`,
+                        backgroundImage: `url("${"https://iseplife.s3.eu-west-3.amazonaws.com/" + cover || "/img/default-cover.png"}")`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
