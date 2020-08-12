@@ -15,9 +15,9 @@ import Gallery from "../../pages/gallery"
 
 const DefaultTemplate: React.FC = () => {
     return (
-        <div className="h-full overflow-hidden">
+        <div className="flex flex-col h-full overflow-hidden">
             <Navbar>
-                <div id="main" className="overflow-y-auto bg-gray-100"
+                <div id="main" className="flex-grow overflow-y-auto bg-gray-100"
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}

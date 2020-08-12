@@ -21,11 +21,11 @@ const ClubNavbar: React.FC<ClubTabsProps> = (props) => {
     const {t} = useTranslation("club")
 
     return (
-        <Tabs className="w-full md:hidden block" defaultActiveKey="1" onChange={() => console.log("change")}>
-            <TabPane key="1" tab={"feed"} >
+        <Tabs className="w-full md:hidden block" defaultActiveKey="1" centered>
+            <TabPane key="1" tab={t("posts")} >
                 {props.club && <Feed id={props.club.feed} allowPublication={false} />}
             </TabPane>
-            <TabPane key="3" tab={t("galleries")} >
+            <TabPane key="2" tab={t("galleries")} >
                 <Galleries galleries={props.galleries} loading={props.galleriesLoading} />
             </TabPane>
             <TabPane key="3" tab={t("members")}>

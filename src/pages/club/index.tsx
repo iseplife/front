@@ -115,19 +115,9 @@ const Club: React.FC = () => {
                 </div>
                 <SidePanelMembers loading={membersLoading} members={members}/>
             </div>
-            {/* Desktop view
-                            <CardDescription club={club} loading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>
-                            <div className={"overflow-y-auto overflow-x-hidden " + style.customScrollbar}>
-                            {club &&
-                            <Feed id={club.feed} allowPublication={false} className="m-4 hidden sm:hidden md:block lg:block xl:block"/>
-                            }
-                            </div>
-                            <SidePanelMembers members={members} loading={membersLoading}/>
-                            */
-            }
-            {/* Mobile view */
-            }
+
             <ClubNavbar
+                key="mobile-display"
                 club={club}
                 members={members}
                 galleries={galleries}
