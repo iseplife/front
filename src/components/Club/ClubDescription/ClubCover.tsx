@@ -33,7 +33,7 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
     }, [])
 
     return (
-        <div className="flex flex-row content-center w-full md:h-40 h-24">
+        <div className="w-full md:h-40 h-24">
             {canEdit ?
                 <div className="relative w-full h-full">
                     <ImagePicker ref={pickerRef} defaultImage={cover} className="cover-uploader h-full" onChange={handleChange}/>

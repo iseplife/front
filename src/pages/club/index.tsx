@@ -8,6 +8,10 @@ import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../components/Club/Mobile/ClubNavbar"
 import ClubCover from "../../components/Club/ClubDescription/ClubCover"
 import {IconFA} from "../../components/Common/IconFA"
+import SocialIcon from "../../components/Common/SocialIcon"
+import SidePanelMembers from "../../components/Club/Desktop/SidePanelMembers"
+import Feed from "../../components/Feed"
+import ClubPresentation from "../../components/Club/ClubDescription/ClubPresentation"
 
 const Club: React.FC = () => {
     const {id} = useParams()
@@ -70,15 +74,15 @@ const Club: React.FC = () => {
     }, [club])
 
     return (
-        <div className="xl:overflow-y-hidden w-full h-full flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-start">
-            <div className="flex flex-col items-center w-full">
-                <ClubCover id={club?.id} cover={club?.coverUrl} canEdit={club ? club.canEdit : false}/>
-                <div className="flex container p-3">
-                    <Avatar src={club?.logoUrl} shape="circle" className="-mt-8 w-20 h-20 sm:w-12 sm:h-12 md:w-32 md:h-32 shadow-md">
+        <div className="w-full h-full ">
+            <ClubCover id={club?.id} cover={club?.coverUrl} canEdit={club ? club.canEdit : false}/>
+            <div className="flex justify-between container p-3 mx-auto">
+                <div className="flex ">
+                    <Avatar src={club?.logoUrl} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md">
                         {clubLoading && <IconFA name="fa-circle-notch" spin size="2x" type="solid" className="text-white mt-6"/>}
                     </Avatar>
 
-                    <div className="flex flex-col ml-4">
+                    <div className="flex flex-col ml-4 md:mt-0 -mt-4">
                         {clubLoading || !club ?
                             <>
                                 <Skeleton className="w-64" active title paragraph={false}/>
@@ -91,6 +95,25 @@ const Club: React.FC = () => {
                         }
                     </div>
                 </div>
+                {club &&
+                <div className="">
+                    {club.website && <SocialIcon type="fa-firefox" url={club.website}/>}
+                    {club.facebook && <SocialIcon type="fa-facebook" url={club.facebook}/>}
+                    {club.instagram && <SocialIcon type="fa-instagram" url={club.instagram}/>}
+                    {club.snapchat && <SocialIcon type="fa-snapchat" url={club.snapchat}/>}
+                </div>
+                }
+            </div>
+
+
+            <div key="desktop-display" className="hidden md:flex flex-row -mt-10 pt-10 px-5">
+                <ClubPresentation club={club} loading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>
+                <div className="flex-grow">
+                    {club &&
+                    <Feed id={club.feed} allowPublication={false} className="m-4 hidden md:block"/>
+                    }
+                </div>
+                <SidePanelMembers loading={membersLoading} members={members}/>
             </div>
             {/* Desktop view
                             <CardDescription club={club} loading={clubLoading} galleries={galleries} galleriesLoading={galleriesLoading}/>

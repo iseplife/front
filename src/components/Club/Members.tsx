@@ -1,15 +1,15 @@
-import React from "react";
-import {ClubMember} from "../../data/club/types";
-import {Avatar, Tooltip} from "antd";
-import CardTextSkeleton from "./Skeletons/CardTextSkeleton";
-import {useHistory } from "react-router-dom";
+import React from "react"
+import {ClubMember} from "../../data/club/types"
+import {Avatar, Tooltip} from "antd"
+import CardTextSkeleton from "./Skeletons/CardTextSkeleton"
+import {useHistory } from "react-router-dom"
 
 type MembersProps = {
     members: ClubMember[]
     loading: boolean
 }
 const Members: React.FC<MembersProps> = ({members, loading}) => {
-    let history = useHistory();
+    const history = useHistory()
 
     return (
         <div className="w-full flex flex-row flex-wrap xl:overflow-x-hidden xl:overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-hidden md:overflow-x-hidden md:overflow-y-hidden">
@@ -32,12 +32,12 @@ const Members: React.FC<MembersProps> = ({members, loading}) => {
                                         <div className="italic">{m.position}</div>
                                     </div>
                                 </div>
-                            );
+                            )
                         })
                     )
             }
         </div>
     )
-};
+}
 
-export default Members;
+export default Members

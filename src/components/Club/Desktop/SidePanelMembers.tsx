@@ -10,12 +10,12 @@ interface SidePanelMembersProps {
 const SidePanelMembers: React.FC<SidePanelMembersProps> = ({members, loading}) => {
     return (
         <div
-            className={"hidden md:block w-64 bg-white shadow-md ml-auto overflow-y-auto " + style.customScrollbar}
-            style={{height: "calc(100vh - 3rem)"}}
+            className={"hidden-scroller w-64 bg-white overflow-y-auto -mt-10 " + style.customScrollbar}
+            style={{height: 530}}
         >
             <Members members={members} loading={loading}/>
         </div>
     )
-};
+}
 
-export default  SidePanelMembers;
+export default  SidePanelMembers

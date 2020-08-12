@@ -10,21 +10,20 @@
     font-family: DinotCL;
     src: url(../fonts/DINOT-CondLight.otf)
 }
-
 @font-face {
     font-family: DinotL;
     src: url(../fonts/DINOT-Light.otf)
 }
-
 @font-face {
     font-family: Dinot;
     src: url(../fonts/DINOT-Regular.otf)
 }
-
 @font-face {
     font-family: DinotM;
     src: url(../fonts/DINOT-Medium.otf)
 }
+
+/********/
 
 .side-calendar {
     position: sticky;
@@ -36,6 +35,8 @@ abbr[title] {
     text-decoration: none;
 }
 
+/********/
+
 .event-scroller:before {
     content: '';
     top: 3rem;
@@ -45,7 +46,6 @@ abbr[title] {
     background: linear-gradient(to bottom, rgba(251, 251, 251, 1) 0%, rgba(251, 251, 251, 0) 100%);
     position: fixed;
 }
-
 .event-scroller:after {
     content: '';
     bottom: 0;
@@ -56,11 +56,25 @@ abbr[title] {
     position: fixed;
 }
 
+/********/
 
 .ant-modal-content, .ant-modal-header{
     border-radius: 0.25rem !important;
 }
-
 .ant-modal-body {
     padding: 10px 24px 24px !important;
 }
+
+/********/
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hidden-scroller::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.hidden-scroller {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/********/
