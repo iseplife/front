@@ -20,6 +20,7 @@ export interface RefreshToken {
 export interface TokenPayload {
     id: number
     roles: Roles[]
+    feeds: Array<number>
     clubsAdmin: Array<number>
     clubsPublisher: Array<number>
 }

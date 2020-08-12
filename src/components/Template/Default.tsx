@@ -15,8 +15,8 @@ const DefaultTemplate: React.FC = () => {
     return (
         <div className="h-full overflow-hidden">
             <Navbar>
-                <div id="main" className="h-full overflow-y-auto bg-gray-100"
-                    style={{height: "calc(100% - 3rem)"}}>
+                <div id="main" className="overflow-y-auto bg-gray-100"
+                    style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
                         <Route path="/discovery" component={Discovery}/>

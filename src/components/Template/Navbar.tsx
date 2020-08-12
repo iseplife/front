@@ -45,20 +45,20 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             </Menu.Item>
             {isAdmin &&
             <Menu.Item key={1} className="flex justify-start items-center">
-            	<BookOutlined/>
-            	<Link to="/feed/new">{t("create_feed")}</Link>
+                <BookOutlined/>
+                <Link to="/feed/new">{t("create_feed")}</Link>
             </Menu.Item>
             }
             {(isAdmin || payload.clubsPublisher.length > 0) &&
             <Menu.Item key={3} className="flex justify-start items-center">
-            	<CalendarOutlined/>
-            	<Link to="/event/new">{t("create_event")}</Link>
+                <CalendarOutlined/>
+                <Link to="/event/new">{t("create_event")}</Link>
             </Menu.Item>
             }
             {isAdmin &&
             <Menu.Item key={2} className="flex justify-start items-center">
-            	<KeyOutlined/>
-            	<Link to="/admin">{t("administration")}</Link>
+                <KeyOutlined/>
+                <Link to="/admin">{t("administration")}</Link>
             </Menu.Item>
             }
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
@@ -78,7 +78,8 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
-        <SearchBar />
+
+        <SearchBar/>
 
         <div className="hidden md:flex justify-end items-center py-5">
             <div className="flex justify-around items-center mr-4">
@@ -95,10 +96,13 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
                 trigger={["click"]}
                 placement="bottomRight"
             >
-                <div
-                    className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
-                    <Avatar icon={<UserOutlined/>} src={user.picture} size="small"
-                        className="cursor-pointer"/>
+                <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                    <Avatar
+                        icon={<UserOutlined/>}
+                        src={user.picture}
+                        size="small"
+                        className="cursor-pointer"
+                    />
                     <span className="mx-2 ">{user.firstName}</span>
                 </div>
             </Dropdown>
@@ -148,13 +152,18 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
             >
                 <div className="flex justify-around">
                     {payload.roles.includes(Roles.ADMIN) &&
-                    <DrawerItem icon={<KeyOutlined/>} link="/admin">{t("administration")}</DrawerItem>
+                    <DrawerItem icon={<KeyOutlined/>} link="/admin">
+                        {t("administration")}
+                    </DrawerItem>
                     }
                     {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
-                    <DrawerItem icon={<NotificationOutlined/>} link="">{t("create_event")}</DrawerItem>
+                    <DrawerItem icon={<NotificationOutlined/>} link="">
+                        {t("create_event")}
+                    </DrawerItem>
                     }
-                    <DrawerItem icon={<ExportOutlined/>} link="/logout"
-                        className="text-red-600">{t("logout")}</DrawerItem>
+                    <DrawerItem icon={<ExportOutlined/>} link="/logout" className="text-red-600">
+                        {t("logout")}
+                    </DrawerItem>
                 </div>
             </Drawer>
         </>

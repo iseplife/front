@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useLayoutEffect, useState} from "react"
 import {
     Redirect,
     Route,
@@ -10,21 +10,21 @@ import Loading from "../Common/Loading"
 import {Provider} from "react-redux"
 import {getUser, isAdmin} from "../../data/security"
 
-import rootReducer from "../../redux/reducer";
-import {createStore} from "redux";
-import AdminTemplate from "./Admin";
-import DefaultTemplate from "./Default";
+import rootReducer from "../../redux/reducer"
+import {createStore} from "redux"
+import DefaultTemplate from "./Default"
+import AdminTemplate from "./Admin"
+import {getUserFeed} from "../../data/feed"
 
 
 const Template: React.FC = () => {
     const [store, setStore] = useState()
     const [loading, setLoading] = useState<boolean>(true)
 
-    useEffect(() => {
-        getLoggedUser().then(res => {
-            setStore(createStore(rootReducer, {user: res.data, payload: getUser()}))
-            setLoading(false)
-        })
+    useLayoutEffect(() => {
+        Promise.all([getLoggedUser(), getUserFeed()]).then((res) => {
+            setStore(createStore(rootReducer, {user: res[0].data, payload: getUser(), feeds: res[1].data}))
+        }).finally(() => setLoading(false))
     }, [])
 
     return loading ?

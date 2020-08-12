@@ -18,7 +18,7 @@ export const getRoles = (): AxiosPromise<Role[]> => {
 }
 
 
-export const setTokens = (tokenSet: TokenSet) => {
+export const setTokens = (tokenSet: TokenSet): void => {
     setCookie("token", tokenSet.token , {
         "max-age": 600      //10 min
     })
@@ -28,7 +28,7 @@ export const setTokens = (tokenSet: TokenSet) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
     axios.defaults.headers.common["X-Refresh-Token"] = tokenSet.refreshToken
 }
-export const removeTokens = () => {
+export const removeTokens = (): void => {
     removeCookie("token")
     removeCookie("refreshToken")
     delete axios.defaults.headers.common["Authorization"]
@@ -48,17 +48,18 @@ export const getUser = (): TokenPayload => {
             throw new Error("Auth cookies unreadable")
         }
     }
+    window.location.assign("/login")
     throw new Error("Auth cookies missing")
 }
 
 
 export const isAdmin = (): boolean => hasRole([Roles.ADMIN])
 
-export const hasRole = (roles: Array<Roles>) => {
+export const hasRole = (roles: Array<Roles>): boolean =>  {
     const user = getUser()
     return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0)
 }
 
-export const isLoggedIn = () => !!getCookie("token")
+export const isLoggedIn = (): boolean => !!getCookie("token")
 
-export const logout = () => removeTokens()
+export const logout = (): void => removeTokens()

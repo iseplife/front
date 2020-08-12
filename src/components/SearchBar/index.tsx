@@ -5,9 +5,9 @@ import {useHistory} from "react-router-dom"
 import {SearchItem, SearchItemType} from "../../data/searchbar/types"
 import {useTranslation} from "react-i18next"
 import CustomCheckbox from "./CustomCheckbox"
-import "./CustomCheckbox.css"
 import AvatarSearchType from "./AvatarSearchType"
 import Pills from "../Common/Pills"
+import "./SearchBar.css"
 
 const {Option} = Select
 const SEARCH_LENGTH_TRIGGER = 2
@@ -128,9 +128,8 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
 
     const renderOptions = () => {
         return data.map((inputProps: SelectInputProps) => {
-            return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub))
-                ? (<Option key={inputProps.value}
-                    value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
+            return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub)) &&
+                <Option key={inputProps.value} value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
                     <div className="flex justify-between">
                         <div className="inline-flex">
                             <AvatarSearchType props={inputProps}/>
@@ -138,8 +137,7 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
                         </div>
                         <Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
                     </div>
-                </Option>)
-                : null
+                </Option>
         })
     }
 
@@ -148,38 +146,50 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
             filterOn
                 ? <>
                     <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
-                        <CustomCheckbox title={t("student")} filterStatus={filterStudent}
-                            onChange={(e) => setFilterStudent(e.target.checked)}/>
-                        <CustomCheckbox title={t("club")} filterStatus={filterClub}
-                            onChange={(e) => setFilterClub(e.target.checked)}/>
-                        <CustomCheckbox title={t("event")} filterStatus={filterEvent}
-                            onChange={(e) => setFilterEvent(e.target.checked)}/>
+                        <CustomCheckbox
+                            title={t("student")}
+                            filterStatus={filterStudent}
+                            onChange={(e) => setFilterStudent(e.target.checked)}
+                        />
+                        <CustomCheckbox
+                            title={t("club")}
+                            filterStatus={filterClub}
+                            onChange={(e) => setFilterClub(e.target.checked)}
+                        />
+                        <CustomCheckbox
+                            title={t("event")}
+                            filterStatus={filterEvent}
+                            onChange={(e) => setFilterEvent(e.target.checked)}
+                        />
                     </div>
                     <Divider className="my-1"/>
                     {menu}
                 </>
-                :
-                <>
-                    {menu}
-                </>
+                : <>{menu}</>
         )
     }
 
     return (
-        <Select showSearch
+        <Select
+            showSearch
             showArrow={false}
             filterOption={false}
             defaultActiveFirstOption={false}
             value={currentValue ? currentValue : undefined}
             loading={fetching}
             placeholder={t("placeholder")}
-            className="my-auto w-4/5 md:w-2/5 lg:w-5/12 xl:w-1/5"
-            notFoundContent={<Empty className="flex flex-col items-center"
-                image={"/img/meme-face.png"}
-                description={t("funny_empty_message")}/>}
+            className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
+            notFoundContent={
+                <Empty
+                    className="flex flex-col items-center"
+                    image={"/img/meme-face.png"}
+                    description={t("funny_empty_message")}
+                />
+            }
             onSearch={handleSearch}
             onSelect={handleSelect}
-            dropdownRender={menu => customDropdownRender(menu)}>
+            dropdownRender={menu => customDropdownRender(menu)}
+        >
             {renderOptions()}
         </Select>
     )

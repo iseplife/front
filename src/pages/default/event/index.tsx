@@ -64,16 +64,22 @@ const Event: React.FC = () => {
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                 }}>
-                    <Link to={`/club/${event.club.id}`}
+                    <Link
+                        to={`/club/${event.club.id}`}
                         className="absolute flex items-center text-gray-700 font-bold"
                         style={{left: 0, bottom: 5}}
                     >
-                        <Avatar icon={<UserOutlined/>} src={event.club.logoUrl}
-                            className="cursor-pointer mx-3"/> {event.club.name}
+                        <Avatar
+                            icon={<UserOutlined/>}
+                            src={event.club.logoUrl}
+                            className="cursor-pointer mx-3"
+                        />
+                        {event.club.name}
                     </Link>
-                    <div className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
+                    <div
+                        className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
                         style={{right: 0, bottom: 5}}>
-                        {format(new Date(event.startsAt), "d MMM") + (event.endsAt ? (" - " + format(new Date(event.endsAt), "d MMM")) : "")}
+                        {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
                     </div>
                 </div>
                 <div className="mx-auto p-3 w-full">
@@ -81,25 +87,25 @@ const Event: React.FC = () => {
                         <div className="md:w-1/6 w-full md:order-1 order-3">
                             {subevents &&
                             <div className="mt-5 text-center">
-                            	<div
-                            		className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
-                            		style={{marginBottom: -5}}
-                            		onClick={() => {
-                            			if (eventsRef.current) {
-                            				setEventVisible(!eventsRef.current?.classList.toggle("h-0"))
-                            			}
-                            		}}>
-                            		<span>{t("event") + "s"}</span>
-                            		{eventsVisible
-                            			? <UpOutlined className="md:hidden block mx-2"/>
-                            			: <DownOutlined className="md:hidden block mx-2"/>
-                            		}
-                            	</div>
-                            	<div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
-                            		{subevents.map((se, i) => (
-                            			<EventPreview key={i} event={se}/>
-                            		))}
-                            	</div>
+                                <div
+                                    className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
+                                    style={{marginBottom: -5}}
+                                    onClick={() => {
+                                        if (eventsRef.current) {
+                                            setEventVisible(!eventsRef.current?.classList.toggle("h-0"))
+                                        }
+                                    }}>
+                                    <span>{t("event") + "s"}</span>
+                                    {eventsVisible
+                                        ? <UpOutlined className="md:hidden block mx-2"/>
+                                        : <DownOutlined className="md:hidden block mx-2"/>
+                                    }
+                                </div>
+                                <div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
+                                    {subevents.map((se, i) => (
+                                        <EventPreview key={i} event={se}/>
+                                    ))}
+                                </div>
 
                             </div>
                             }
@@ -114,18 +120,20 @@ const Event: React.FC = () => {
                                 {event.title}
                             </div>
                             <div className="font-dinotcb text-4xl text-center">
-                                {format(new Date(event.startsAt), "HH:mm") + " " + (event.endsAt ? format(new Date(event.endsAt), "HH:mm") : "")}
+                                {format(new Date(event.start), "HH:mm") + " " + (event.end ? format(new Date(event.end), "HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
                                 {event.location}
                             </div>
 
-                            <div className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
+                            <div
+                                className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
                                 onClick={() => {
                                     if (descriptionRef.current) {
                                         setDescVisible(!descriptionRef.current?.classList.toggle("h-32"))
                                     }
-                                }}>
+                                }}
+                            >
                                 <div ref={descriptionRef} className="h-32 overflow-hidden">
                                     {event.description.split("\n").map((s, idx) =>
                                         <span key={idx}>{s} <br/></span>
@@ -137,8 +145,10 @@ const Event: React.FC = () => {
                         <div
                             className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
                             <div className="flex items-baseline justify-around text-lg font-bold">
-                                <div className="flex items-center"
-                                    title={event.closed ? "Evenement ouvert" : "Evenement privé"}>
+                                <div
+                                    className="flex items-center"
+                                    title={event.closed ? "Evenement ouvert" : "Evenement privé"}
+                                >
                                     {event.closed ? <LockOutlined/> : <UnlockOutlined/>}
                                 </div>
                                 <div className="flex items-center">
@@ -150,9 +160,11 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
 
-                            <Map className="mt-5 rounded md:h-64 h-48"
+                            <Map
+                                className="mt-5 rounded md:h-64 h-48"
                                 center={[51.505, -0.09]}
-                                zoom={13}>
+                                zoom={13}
+                            >
                                 <TileLayer
                                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"

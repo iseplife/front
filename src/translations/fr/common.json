@@ -1,4 +1,6 @@
 {
+  "online": "De nouveau connecté !",
+  "offline": "Connexion interrompue",
   "end": "Vous avez tous visionné !",
   "empty": "Rien à afficher",
   "filters": "Filtres",

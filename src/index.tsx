@@ -12,27 +12,30 @@ import {initializeAxios} from "./data/requestFactory"
 import Login from "./pages/security"
 import {isLoggedIn} from "./data/security"
 import Template from "./components/Template"
+import {RecoilRoot} from "recoil/dist"
 
 initializeAxios()
 
 const App: React.FC = () => (
-    <Router>
-        <Switch>
-            <Route path="/login" component={Login}/>
-            <Route path="/" render={({location}) => (
-                isLoggedIn() ?
-                    <Template/>
-                    :
-                    <Redirect
-                        to={{
-                            pathname: "/login",
-                            state: {from: location}
-                        }}
-                    />
-            )}
-            />
-        </Switch>
-    </Router>
+    <RecoilRoot>
+        <Router>
+            <Switch>
+                <Route path="/login" component={Login}/>
+                <Route path="/" render={({location}) => (
+                    isLoggedIn() ?
+                        <Template/>
+                        :
+                        <Redirect
+                            to={{
+                                pathname: "/login",
+                                state: {from: location}
+                            }}
+                        />
+                )}
+                />
+            </Switch>
+        </Router>
+    </RecoilRoot>
 )
 
 ReactDOM.render(<App/>, document.getElementById("root"))

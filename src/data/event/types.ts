@@ -1,33 +1,36 @@
-import {Club} from "../club/types"
+import {Club, ClubPreview} from "../club/types"
+import EventType from "../../constants/EventType"
+import {Feed} from "../feed/types";
 
 export type Event = {
     id: number
-    type: string
+    type: EventType
     title: string
     description: string
-    startsAt: number
-    endsAt: number
-    ticketUrl?: string
+    image?: string
+    start: number
+    end: number
+    ticketURL?: string
     price?: number
-    club: Club
     location: string
-    imageUrl?: string
-    target: string
+    targets: Feed[]
     published: boolean
     closed: boolean
+    subscribed: boolean
+    club: ClubPreview
     feed: number
 }
 
 
 export type EventPreview = {
     id: number
-    name: string
-    type: string
-    startsAt: number
-    endsAt: number
+    title: string
+    type: EventType
+    start: number
+    end: number
     location: string
     imageUrl?: string
-    target: string
+    targets: number[]
     published: boolean
 }
 
@@ -46,8 +49,8 @@ type ReducerFeedType = {
     type: "TOGGLE_FEED" | "TOGGLE_TYPE"
     name: string
 }
-type ReducerPublished = {
-    type: "TOGGLE_PUBLISHED"
+type ReducerToggle = {
+    type: "TOGGLE_PUBLISHED" | "TOGGLE_ADMIN"
 }
 type ReducerUpdate = {
     type: "ADD_FILTER"
@@ -57,7 +60,7 @@ type ReducerInit = {
     type: "INIT_FILTER"
     events: EventPreview[]
 }
-export type FilterReducerAction = ReducerFeedType | ReducerPublished | ReducerUpdate | ReducerInit;
+export type FilterReducerAction = ReducerFeedType | ReducerToggle | ReducerUpdate | ReducerInit;
 
 export type FilterList = {
     [name: string]: boolean
@@ -66,4 +69,5 @@ export type EventFilter = {
     feeds: FilterList
     types: FilterList
     publishedOnly: boolean
+    adminVision: boolean
 }

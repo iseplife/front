@@ -1,34 +1,35 @@
-import React, {Dispatch, PropsWithChildren, SetStateAction} from "react"
+import React from "react"
+import {createPortal} from "react-dom"
 
-type ModalProps = {
-    visible: boolean,
-    visibleFn: Dispatch<SetStateAction<boolean>>
+const style = {
+    transition: "ease-out duration-300, ease-in duration-200",
 }
-const Modal: React.FC<PropsWithChildren<ModalProps>> = ({children, visible = false, visibleFn}) => {
-    return (
-        <>
-            {visible ? (
-                <>
-                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="bg-white rounded relative w-auto my-6 mx-auto max-w-3xl">
-                            <div>
-                                <button
-                                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                    onClick={() => visibleFn(false)}
-                                >
-                                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
-                                </button>
-                            </div>
-                            <div>
-                                {children}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"/>
-                </>
-            ) : null}
-        </>
-    )
+
+export type ModalProps = {
+    open: boolean
+    onClose: () => void
+    height?: string
+    width?: string
+}
+const Modal: React.FC<ModalProps> = ({children, open = false, onClose, width, height}) => {
+    return open ?
+        createPortal(
+            <div style={style} className="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
+                <div className={`${open ? "opacity-100" : "opacity-0"} fixed inset-0 transition-opacity`}>
+                    <div className="absolute inset-0 bg-gray-500 opacity-75"/>
+                </div>
+
+                <div
+                    style={{...style, width, height }}
+                    className={`z-50 ${open ? "opacity-100 translate-y-0 sm:scale-100": "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"} bg-white rounded-lg overflow-hidden shadow-xl transform transition-all ${width ? "": "sm:max-w-lg sm:w-full"} p-4`}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-headline"
+                >
+                    {children}
+                </div>
+            </div>
+            , document.body) : null
 }
 
 export default Modal

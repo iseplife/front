@@ -1,5 +1,6 @@
 import {Student} from "../data/student/types"
 import {TokenPayload} from "../data/security/types"
+import {Feed} from "../data/feed/types"
 
 const SET_STUDENT= "SET_STUDENT"
 const SET_PAYLOAD= "SET_PAYLOAD"
@@ -14,16 +15,13 @@ interface setPayloadAction {
 }
 interface setFullStateAction {
     type: typeof SET_STATE,
-    state: {
-        payload: TokenPayload,
-        user: Student
-    }
+    state: AppState
 }
-
 
 export type AppState =  {
     user: Student
     payload: TokenPayload
+    feeds: Feed[]
 }
 
 export type AppAction = setStudentAction | setPayloadAction | setFullStateAction;

@@ -1,12 +1,18 @@
 {
+  "day": "Day",
+  "month": "Month",
+  "week": "Week",
   "type": {
-    "PARTY": "Party",
-    "AFTERWORK":  "Afterwork",
-    "CONFERENCE":  "Conference",
-    "WORKSHOP": "Workshop",
-    "FORMATION": "Formation",
-    "MEETING": "Meeting"
+    "PARTY": "\uD83C\uDF89 Party",
+    "AFTERWORK": "\uD83C\uDF7B Afterwork",
+    "CONFERENCE":  "\uD83C\uDF99 Conference",
+    "WORKSHOP": "\uD83D\uDCBB Workshop",
+    "FORMATION": "\uD83D\uDCDA Formation",
+    "MEETING": "\uD83D\uDD14 Meeting"
   },
   "free": "Free",
-  "event": "Event"
+  "event": "Event",
+  "published_only": "Published events only",
+  "admin_view": "Admin view",
+  "ticket_url": "Buy a ticket"
 }
