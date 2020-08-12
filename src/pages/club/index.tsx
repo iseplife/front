@@ -72,7 +72,7 @@ const Club: React.FC = () => {
     return (
         <div className="xl:overflow-y-hidden w-full h-full flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row justify-start">
             <div className="flex flex-col items-center w-full">
-                <ClubCover id={club?.id} cover={club?.cover} canEdit={club ? club.canEdit : false}/>
+                <ClubCover id={club?.id} cover={club?.coverUrl} canEdit={club ? club.canEdit : false}/>
                 <div className="flex container p-3">
                     <Avatar src={club?.logoUrl} shape="circle" className="-mt-8 w-20 h-20 sm:w-12 sm:h-12 md:w-32 md:h-32 shadow-md">
                         {clubLoading && <IconFA name="fa-circle-notch" spin size="2x" type="solid" className="text-white mt-6"/>}

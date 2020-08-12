@@ -1,17 +1,9 @@
-import React, {useCallback, useState} from "react"
-import {Button, message,} from "antd"
+import React, {useCallback, useRef, useState} from "react"
+import {Button,} from "antd"
 import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
-import {EditOutlined, LoadingOutlined, PlusOutlined} from "@ant-design/icons"
-import {RcFile, UploadChangeParam} from "antd/es/upload"
-import ImagePicker from "../../Common/ImagePicker"
-import {uploadCover} from "../../../data/club";
-
-const getBase64 = (img: any, callback: any): void => {
-    const reader = new FileReader()
-    reader.addEventListener("load", () => callback(reader.result))
-    reader.readAsDataURL(img)
-}
+import ImagePicker, {ImagePickerRef} from "../../Common/ImagePicker"
+import {uploadCover} from "../../../data/club"
 
 type ClubCoverProps = {
     id?: number
@@ -20,34 +12,54 @@ type ClubCoverProps = {
 }
 const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
     const {t} = useTranslation()
+    const pickerRef = useRef<ImagePickerRef>(null)
     const [coverChanged, setCoverChanged] = useState(false)
     const [image, setImage] = useState<File | null>(null)
 
     const updateCover = useCallback(() => {
-        if(id)
+        if (id && coverChanged)
             uploadCover(id, image).then()
-    }, [id, image])
+    }, [id, image, coverChanged])
+
+    const resetCover = useCallback(() => {
+        if(pickerRef.current)
+            pickerRef.current.reset()
+        setCoverChanged(false)
+    }, [pickerRef])
+
     const handleChange = useCallback((file: File | null) => {
         setCoverChanged(true)
         setImage(file)
     }, [])
+
     return (
         <div className="flex flex-row content-center w-full md:h-40 h-24">
             {canEdit ?
                 <div className="relative w-full h-full">
-                    <ImagePicker className="cover-uploader h-full" onChange={handleChange}/>
+                    <ImagePicker ref={pickerRef} defaultImage={cover} className="cover-uploader h-full" onChange={handleChange}/>
                     {coverChanged &&
-                    <Button
-                        type="primary"
-                        className="absolute rounded"
-                        onClick={updateCover}
+                    <div
+                        className="absolute"
                         style={{
                             bottom: 5,
                             right: 5
                         }}
                     >
-                        {t("save")} <IconFA className="ml-1" name="fa-save" />
-                    </Button>
+                        <Button
+                            type="primary"
+                            className="mx-1 rounded"
+                            onClick={resetCover}
+                        >
+                            {t("reset")} <IconFA className="ml-1" name="fa-undo"/>
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="mx-1 rounded"
+                            onClick={updateCover}
+                        >
+                            {t("save")} <IconFA className="ml-1" name="fa-save"/>
+                        </Button>
+                    </div>
                     }
                 </div> :
                 <div

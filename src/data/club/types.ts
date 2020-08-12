@@ -11,7 +11,7 @@ export enum ClubRole {
 export type Club = {
     id: number
     logoUrl: string
-    cover?: string
+    coverUrl?: string
     name: string
     description: string
     type: ClubType
