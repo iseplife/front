@@ -5,8 +5,9 @@ export enum ClubRole {
     MEMBER = "MEMBER",
     PUBLISHER = "PUBLISHER",
     ADMIN = "ADMIN",
-    SUPER_ADMIN = "SUPER_ADMIN",
+    SUPER_ADMIN = "SUPER_ADMIN"
 }
+export const ClubRoles = [ClubRole.MEMBER, ClubRole.PUBLISHER, ClubRole.ADMIN, ClubRole.SUPER_ADMIN]
 
 export type Club = {
     id: number
@@ -47,15 +48,23 @@ export type ClubMemberPreview = {
     club: ClubPreview
 }
 
+export type ClubMemberForm = {
+    role: ClubRole
+    position: string
+}
+
 export type ClubForm = {
     name: string
     description: string
-    creation: Date
-    type: ClubType
-    admins: number[]
-    logo?: File
 
     facebook?: string
     instagram?: string
     website?: string
+}
+
+export type ClubAdminForm = ClubForm & {
+    creation: Date
+    type: ClubType
+    admins: number[]
+    logo?: File
 }

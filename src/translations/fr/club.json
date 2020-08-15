@@ -2,9 +2,25 @@
   "posts": "Publications",
   "galleries": "Galleries",
   "members": "Membres",
-  "about": "Description",
+  "about": "Découvrir",
   "pictures": "photos",
   "errorFileType": "Vous pouvez seulement télécharger les fichiers de type JPG/PNG/GIF !",
-  "errorFileSize": "Votre image ne doit pas dépasser 2MB !"
-
+  "errorFileSize": "Votre image ne doit pas dépasser 2MB !",
+  "form": {
+    "name": "Nom de l'association",
+    "creation": "Date de création",
+    "description": "Description",
+    "website": "Site Internet",
+    "position": "Position",
+    "role": "Rôle"
+  },
+  "edit_member": "Modifier membre",
+  "add_member": "Ajouter un nouveau membre",
+  "add": "Ajouter",
+  "role": {
+    "SUPER_ADMIN": "Super Admin",
+    "ADMIN": "Administrateur",
+    "PUBLISHER": "Editeur",
+    "MEMBER": "Membre"
+  }
 }

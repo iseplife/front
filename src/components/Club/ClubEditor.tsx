@@ -3,7 +3,7 @@ import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
 import {useFormik} from "formik"
-import {Club, ClubForm} from "../../data/club/types"
+import {Club, ClubAdminForm} from "../../data/club/types"
 import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus, updateClub, uploadLogo} from "../../data/club"
 import ClubType, {ClubTypeArray} from "../../constants/ClubType"
 import ImagePicker from "../Common/ImagePicker"
@@ -37,7 +37,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
     const [club, setClub] = useState<Club>()
     const [admins, setAdmins] = useState<StudentPreview[]>()
 
-    const formik = useFormik<ClubForm>({
+    const formik = useFormik<ClubAdminForm>({
         initialValues: DEFAULT_CLUB,
         onSubmit: async (values) => {
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
@@ -261,8 +261,6 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                                 suffix={<IconFA type="brands" name="fa-facebook-f"/>}
                             />
                         </div>
-
-
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">

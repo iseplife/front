@@ -1,6 +1,6 @@
 import React from "react"
 import {ClubMember} from "../../../data/club/types"
-import Members from "../Members"
+import MembersList from "../MembersList"
 import style from "../Club.module.css"
 
 interface SidePanelMembersProps {
@@ -10,10 +10,10 @@ interface SidePanelMembersProps {
 const SidePanelMembers: React.FC<SidePanelMembersProps> = ({members, loading}) => {
     return (
         <div
-            className={"hidden-scroller w-64 bg-white overflow-y-auto -mt-10 " + style.customScrollbar}
+            className={"hidden-scroller w-64 overflow-y-auto -mt-10 " + style.customScrollbar}
             style={{height: 530}}
         >
-            <Members members={members} loading={loading}/>
+            <MembersList members={members} loading={loading}/>
         </div>
     )
 }

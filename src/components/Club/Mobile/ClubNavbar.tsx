@@ -4,10 +4,11 @@ import {Club, ClubMember} from "../../../data/club/types"
 import {Gallery} from "../../../data/gallery/types"
 import Feed from "../../Feed"
 import {useTranslation} from "react-i18next"
-import Members from "../Members"
+import MembersList from "../MembersList"
 import Galleries from "../Galleries"
+import ClubAdmin from "../ClubAdmin";
 
-const { TabPane } = Tabs
+const {TabPane} = Tabs
 
 type ClubTabsProps = {
     club?: Club
@@ -22,18 +23,23 @@ const ClubNavbar: React.FC<ClubTabsProps> = (props) => {
 
     return (
         <Tabs className="w-full md:hidden block" defaultActiveKey="1" centered>
-            <TabPane key="1" tab={t("posts")} >
-                {props.club && <Feed id={props.club.feed} allowPublication={false} />}
+            <TabPane key="1" tab={t("posts")}>
+                {props.club && <Feed id={props.club.feed} allowPublication={false}/>}
             </TabPane>
-            <TabPane key="2" tab={t("galleries")} >
-                <Galleries galleries={props.galleries} loading={props.galleriesLoading} />
+            <TabPane key="2" tab={t("galleries")}>
+                <Galleries galleries={props.galleries} loading={props.galleriesLoading}/>
             </TabPane>
-            <TabPane key="3" tab={t("members")}>
-                <Members members={props.members} loading={props.membersLoading} />
+            <TabPane key="3" tab={t("about")}>
+                <div className="w-full text-center mt-2 mb-5 px-2">
+                    {props.club?.description}
+                </div>
+                <MembersList members={props.members} loading={props.membersLoading}/>
             </TabPane>
+            {props.club && props.club.canEdit &&
             <TabPane key="4" tab="Admin">
-                Admin
+                <ClubAdmin club={props.club} members={props.members}/>
             </TabPane>
+            }
         </Tabs>
     )
 }
