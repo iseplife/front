@@ -1,11 +1,12 @@
 import React from "react"
 import {useFormik} from "formik"
 import {Club, ClubForm} from "../../../data/club/types"
-import {Button, Input} from "antd"
+import {Button, Input, message} from "antd"
 import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
 import {IconFA} from "../../Common/IconFA"
 import {SaveOutlined} from "@ant-design/icons"
+import {updateClub} from "../../../data/club";
 
 const {TextArea} = Input
 
@@ -24,10 +25,12 @@ const ClubEditForm: React.FC<ClubEditFormProps> = ({club}) => {
             website: club.website
         },
         onSubmit: values => {
-            console.log(values)
+            updateClub(club.id, values).then(res => {
+                if(res.status === 200)
+                    message.success(t("common:update_item.complete"))
+            })
         }
     })
-
 
     return (
         <form className="rounded shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>

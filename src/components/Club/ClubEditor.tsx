@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
 import {useFormik} from "formik"
 import {Club, ClubAdminForm} from "../../data/club/types"
-import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus, updateClub, uploadLogo} from "../../data/club"
+import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus, updateClubAdmin, uploadClubLogo} from "../../data/club"
 import ClubType, {ClubTypeArray} from "../../constants/ClubType"
 import ImagePicker from "../Common/ImagePicker"
 import Loading from "../Common/Loading"
@@ -45,7 +45,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
             if (club) {
                 const {logo, ...form} = values
 
-                res = await updateClub(club.id, form)
+                res = await updateClubAdmin(club.id, form)
                 if (res.status === 200) {
                     const newClub = res.data
                     onUpdate(res.data)
@@ -54,7 +54,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     message.success("Modifications enregistrées !")
                 }
                 if (logo) {
-                    res = await uploadLogo(club.id, logo)
+                    res = await uploadClubLogo(club.id, logo)
                     if (res.status === 200) {
                         club.logoUrl = res.data
                     } else {
@@ -68,7 +68,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 if (res.status === 200) {
                     const newClub = res.data
                     if (logo) {
-                        res = await uploadLogo(res.data.id, logo)
+                        res = await uploadClubLogo(res.data.id, logo)
                         if (res.status === 200) newClub.logoUrl = res.data
                     }
                     onCreate(newClub)

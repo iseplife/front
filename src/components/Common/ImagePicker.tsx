@@ -1,26 +1,21 @@
-import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useState} from "react"
+import React, { useCallback, useMemo, useState} from "react"
 import {Upload} from "antd"
 import "./ImagePicker.css"
-import {EditOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined} from "@ant-design/icons"
+import {EditOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, UndoOutlined} from "@ant-design/icons"
 
 const DEFAULT_IMAGE = "img/static/default-cover.png"
 
-export type ImagePickerRef = { reset: () => void }
 type ImagePickerProps = {
     className?: string
     defaultImage?: string
+    onReset?: () => void
     onChange: (file: File | null) => void
 }
-const ImagePicker = forwardRef<ImagePickerRef, ImagePickerProps>(({className, defaultImage, onChange}, ref) => {
+const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onChange, onReset}) => {
     const initialImage = useMemo(() => "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage, [defaultImage])
     const [image, setImage] = useState<string>(initialImage)
     const [loading, setLoading] = useState<boolean>()
 
-    useImperativeHandle(ref, () => ({
-        reset() {
-            setImage(initialImage)
-        }
-    }))
 
     const handleImage = useCallback((file: File) => {
         setLoading(true)
@@ -60,14 +55,23 @@ const ImagePicker = forwardRef<ImagePickerRef, ImagePickerProps>(({className, de
                                 className="mx-1 px-1 hover:text-white"
                                 onClick={() => console.log("aaa")}
                             />
-                            {image === initialImage && defaultImage !== DEFAULT_IMAGE &&
-                            <DeleteOutlined
-                                className="mx-1 px-1 hover:text-red-400"
-                                onClickCapture={() => {
-                                    setImage("https://iseplife.s3.eu-west-3.amazonaws.com/" + DEFAULT_IMAGE)
-                                    onChange(null)
-                                }}
-                            />
+                            {image === initialImage && defaultImage !== DEFAULT_IMAGE ?
+                                <DeleteOutlined
+                                    className="mx-1 px-1 hover:text-red-400"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setImage("https://iseplife.s3.eu-west-3.amazonaws.com/" + DEFAULT_IMAGE)
+                                        onChange(null)
+                                    }}
+                                /> :
+                                <UndoOutlined
+                                    className="mx-1 px-1 hover:text-red-400"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setImage(initialImage)
+                                        onReset && onReset()
+                                    }}
+                                />
                             }
                         </span>
                     </div>
@@ -80,8 +84,7 @@ const ImagePicker = forwardRef<ImagePickerRef, ImagePickerProps>(({className, de
             </Upload>
         </>
     )
-})
-ImagePicker.displayName = "ImagePicker"
+}
 ImagePicker.defaultProps = {
     className: "",
     defaultImage: DEFAULT_IMAGE

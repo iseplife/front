@@ -16,6 +16,11 @@
   },
   "edit_member": "Modifier membre",
   "add_member": "Ajouter un nouveau membre",
+  "remove_member": {
+    "title": "Voulez-vous supprimez ce membre ?",
+    "content": "Attention, la suppression d'un membre est irréversible",
+    "complete": "Membre supprimé"
+  },
   "add": "Ajouter",
   "role": {
     "SUPER_ADMIN": "Super Admin",

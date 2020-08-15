@@ -16,6 +16,11 @@
   },
   "edit_member": "Manage member",
   "add_member": "Add a new member",
+  "remove_member": {
+    "title": "Do you want to remove this member ?",
+    "content": "Removing a member is permanent and cannot be undo",
+    "complete": "Member removed"
+  },
   "add": "Add",
   "role": {
     "SUPER_ADMIN": "Super Admin",

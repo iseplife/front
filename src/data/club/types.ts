@@ -5,9 +5,8 @@ export enum ClubRole {
     MEMBER = "MEMBER",
     PUBLISHER = "PUBLISHER",
     ADMIN = "ADMIN",
-    SUPER_ADMIN = "SUPER_ADMIN"
 }
-export const ClubRoles = [ClubRole.MEMBER, ClubRole.PUBLISHER, ClubRole.ADMIN, ClubRole.SUPER_ADMIN]
+export const ClubRoles = [ClubRole.MEMBER, ClubRole.PUBLISHER, ClubRole.ADMIN]
 
 export type Club = {
     id: number

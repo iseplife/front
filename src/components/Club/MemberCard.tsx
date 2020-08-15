@@ -5,7 +5,6 @@ import {useHistory} from "react-router-dom"
 import {IconFA} from "../Common/IconFA"
 
 const ClubRoleIcon: {[role: string]: string} = {
-    [ClubRole.SUPER_ADMIN] : "fa-king",
     [ClubRole.ADMIN] : "fa-user-shield",
     [ClubRole.PUBLISHER] : "fa-edit",
 }

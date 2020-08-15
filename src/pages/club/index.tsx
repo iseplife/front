@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {useParams} from "react-router"
 import {Club as ClubType, ClubMember} from "../../data/club/types"
 import {getClub, getClubGalleries, getClubMembers} from "../../data/club"
-import {Avatar, Button, message, Skeleton} from "antd"
+import { Button, message, Skeleton} from "antd"
 import {Gallery} from "../../data/gallery/types"
 import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../components/Club/Mobile/ClubNavbar"
@@ -13,6 +13,7 @@ import SidePanelMembers from "../../components/Club/Desktop/SidePanelMembers"
 import Feed from "../../components/Feed"
 import ClubPresentation from "../../components/Club/ClubDescription/ClubPresentation"
 import ClubAdmin from "../../components/Club/ClubAdmin"
+import ClubLogo from "../../components/Club/ClubLogo"
 
 const Club: React.FC = () => {
     const {id} = useParams()
@@ -80,10 +81,7 @@ const Club: React.FC = () => {
             <ClubCover id={club?.id} cover={club?.coverUrl} canEdit={adminMode}/>
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
-                    <Avatar src={club?.logoUrl} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md">
-                        {clubLoading && <IconFA name="fa-circle-notch" spin size="2x" type="solid" className="text-white mt-6"/>}
-                    </Avatar>
-
+                    <ClubLogo id={club?.id} canEdit={adminMode} src={club?.logoUrl} loading={clubLoading} />
                     <div className="flex flex-col ml-4 md:mt-0 -mt-4">
                         {clubLoading || !club ?
                             <>

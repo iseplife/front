@@ -1,8 +1,8 @@
-import React, {useCallback, useRef, useState} from "react"
+import React, {useCallback, useState} from "react"
 import {Button,} from "antd"
 import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
-import ImagePicker, {ImagePickerRef} from "../../Common/ImagePicker"
+import ImagePicker from "../../Common/ImagePicker"
 import {uploadCover} from "../../../data/club"
 
 type ClubCoverProps = {
@@ -12,7 +12,6 @@ type ClubCoverProps = {
 }
 const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
     const {t} = useTranslation()
-    const pickerRef = useRef<ImagePickerRef>(null)
     const [coverChanged, setCoverChanged] = useState(false)
     const [image, setImage] = useState<File | null>(null)
 
@@ -21,11 +20,6 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
             uploadCover(id, image).then()
     }, [id, image, coverChanged])
 
-    const resetCover = useCallback(() => {
-        if (pickerRef.current)
-            pickerRef.current.reset()
-        setCoverChanged(false)
-    }, [pickerRef])
 
     const handleChange = useCallback((file: File | null) => {
         setCoverChanged(true)
@@ -36,7 +30,7 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
         <div className="w-full md:h-40 h-24">
             {canEdit ?
                 <div className="relative w-full h-full">
-                    <ImagePicker ref={pickerRef} defaultImage={cover} className="cover-uploader h-full" onChange={handleChange}/>
+                    <ImagePicker defaultImage={cover} className="cover-uploader h-full" onChange={handleChange} onReset={() => setCoverChanged(false)}/>
                     {coverChanged &&
                     <div
                         className="absolute"
@@ -45,13 +39,6 @@ const ClubCover: React.FC<ClubCoverProps> = ({id, cover, canEdit}) => {
                             right: 5
                         }}
                     >
-                        <Button
-                            type="primary"
-                            className="mx-1 rounded"
-                            onClick={resetCover}
-                        >
-                            {t("reset")} <IconFA className="ml-1" name="fa-undo"/>
-                        </Button>
                         <Button
                             type="primary"
                             className="mx-1 rounded"

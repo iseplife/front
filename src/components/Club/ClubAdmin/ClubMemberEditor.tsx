@@ -1,9 +1,10 @@
-import React from "react"
+import React, {useCallback} from "react"
 import {ClubMember, ClubMemberForm, ClubRoles} from "../../../data/club/types"
-import {Avatar, Button, Input, Select} from "antd"
+import {Avatar, Button, Input, message, Modal, Select} from "antd"
 import {UserOutlined, CloseCircleOutlined, DeleteOutlined, SaveOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {useFormik} from "formik"
+import {deleteClub, removeClubMember, updateClubMember} from "../../../data/club";
 
 const {Option} = Select
 
@@ -13,14 +14,30 @@ type ClubMemberEditorProps = {
 }
 const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) => {
     const {t} = useTranslation(["club", "common"])
+
+    const remove = useCallback(() =>
+        Modal.confirm({
+            title: t("remove_member.title"),
+            content: t("remove_member.content"),
+            okText: "Ok",
+            cancelText: t("cancel"),
+            onOk: async () => {
+                const res = await removeClubMember(member.id)
+                if (res.status === 200)
+                    message.success(t("remove_member.complete"))
+            }
+        }), [t, member])
+
     const formik = useFormik<ClubMemberForm>({
         enableReinitialize: true,
         initialValues: {
             role: member.role,
             position: member.position
         },
-        onSubmit: (values) => {
-            console.log(values)
+        onSubmit: async (values) => {
+            const res = await updateClubMember(member.id, values)
+            if(res.status === 200)
+                message.success(t("common:update_item.complete"))
         }
     })
 
@@ -54,7 +71,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
                     <Button htmlType="submit" type="primary" icon={<SaveOutlined/>}>
                         {t("common:save")}
                     </Button>
-                    <Button danger icon={<DeleteOutlined/>} onClick={undefined}>
+                    <Button danger icon={<DeleteOutlined/>} onClick={remove}>
                         {t("common:delete")}
                     </Button>
                 </div>
