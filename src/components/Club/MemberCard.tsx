@@ -10,11 +10,12 @@ const ClubRoleIcon: {[role: string]: string} = {
 }
 
 type MemberCardProps = {
+    id: number
     m: ClubMember
     showRole?: boolean
     onClick?: (id: number) => void
 }
-const MemberCard: React.FC<MemberCardProps> = ({m, onClick, showRole = false}) => {
+const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showRole = false}) => {
     const history = useHistory()
     const handleClick = useCallback((id: number) => {
         return onClick ?
@@ -36,5 +37,7 @@ const MemberCard: React.FC<MemberCardProps> = ({m, onClick, showRole = false}) =
             </div>
         </div>
     )
-}
+})
+MemberCard.displayName = "MemberCard"
+
 export default MemberCard

@@ -22,15 +22,12 @@ const getCoverElement = (club: Club | undefined, clubLoading: boolean): React.Re
 }
 
 type ClubPresentationProps = {
-    club?: Club,
-    loading: boolean,
     galleries: Gallery[],
     galleriesLoading: boolean
 }
-const ClubPresentation: React.FC<ClubPresentationProps> = ({club, loading, galleries, galleriesLoading}) => {
+const ClubPresentation: React.FC<ClubPresentationProps> = ({galleries, galleriesLoading}) => {
     const {t} = useTranslation("club")
     return (
-
         <div key="desktop-display" className="hidden-scroller w-full md:w-64 lg:w-1/4 md:overflow-y-auto" style={{height: 400}}>
             <Collapse
                 className="border-b-0 border-t"
@@ -46,7 +43,7 @@ const ClubPresentation: React.FC<ClubPresentationProps> = ({club, loading, galle
                     className="border-b-0 border-t-0"
                     header={<span className="text-gray-500">{t("about")}</span>}
                 >
-                    <About club={club} isLoading={loading}/>
+                    <About/>
                 </Panel>
                 <Panel
                     key={2}

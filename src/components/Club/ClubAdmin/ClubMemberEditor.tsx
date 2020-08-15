@@ -1,10 +1,12 @@
-import React, {useCallback} from "react"
+import React, {useCallback, useContext} from "react"
 import {ClubMember, ClubMemberForm, ClubRoles} from "../../../data/club/types"
 import {Avatar, Button, Input, message, Modal, Select} from "antd"
-import {UserOutlined, CloseCircleOutlined, DeleteOutlined, SaveOutlined} from "@ant-design/icons"
+import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, UserOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {useFormik} from "formik"
-import {deleteClub, removeClubMember, updateClubMember} from "../../../data/club";
+import {removeClubMember, updateClubMember} from "../../../data/club";
+import {ClubContext} from "../../../context/club/context";
+import {ClubActionType} from "../../../context/club/action";
 
 const {Option} = Select
 
@@ -14,7 +16,7 @@ type ClubMemberEditorProps = {
 }
 const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) => {
     const {t} = useTranslation(["club", "common"])
-
+    const {dispatch} = useContext(ClubContext)
     const remove = useCallback(() =>
         Modal.confirm({
             title: t("remove_member.title"),
@@ -23,8 +25,11 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
             cancelText: t("cancel"),
             onOk: async () => {
                 const res = await removeClubMember(member.id)
-                if (res.status === 200)
+                if (res.status === 200){
                     message.success(t("remove_member.complete"))
+                    dispatch({type: ClubActionType.REMOVE_MEMBER, payload: member.id})
+                }
+
             }
         }), [t, member])
 
@@ -36,8 +41,10 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
         },
         onSubmit: async (values) => {
             const res = await updateClubMember(member.id, values)
-            if(res.status === 200)
+            if(res.status === 200){
                 message.success(t("common:update_item.complete"))
+                dispatch({type: ClubActionType.UPDATE_MEMBER, payload: res.data})
+            }
         }
     })
 

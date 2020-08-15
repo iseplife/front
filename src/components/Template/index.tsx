@@ -10,7 +10,7 @@ import Loading from "../Common/Loading"
 import {Provider} from "react-redux"
 import {getUser, isAdmin} from "../../data/security"
 
-import rootReducer from "../../redux/reducer"
+import rootReducer from "../../context/reducer"
 import {createStore} from "redux"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"

@@ -1,4 +1,4 @@
-import {AppAction, AppState} from "./types"
+import {AppAction, AppState} from "./action"
 
 export default function (state: any, action: AppAction): AppState {
     switch (action.type) {

@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useContext} from "react"
 import {useFormik} from "formik"
 import {Club, ClubForm} from "../../../data/club/types"
 import {Button, Input, message} from "antd"
@@ -6,15 +6,18 @@ import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
 import {IconFA} from "../../Common/IconFA"
 import {SaveOutlined} from "@ant-design/icons"
-import {updateClub} from "../../../data/club";
+import {updateClub} from "../../../data/club"
+import {ClubContext} from "../../../context/club/context"
+import {ClubActionType} from "../../../context/club/action"
 
 const {TextArea} = Input
 
-type ClubEditFormProps = {
-    club: Club
-}
-const ClubEditForm: React.FC<ClubEditFormProps> = ({club}) => {
+
+const ClubEditForm: React.FC = () => {
     const {t} = useTranslation(["club", "common"])
+    const {state: {club: {data} } , dispatch} = useContext(ClubContext)
+    const club = data as Club
+
     const formik = useFormik<ClubForm>({
         initialValues: {
             name: club.name,
@@ -26,8 +29,10 @@ const ClubEditForm: React.FC<ClubEditFormProps> = ({club}) => {
         },
         onSubmit: values => {
             updateClub(club.id, values).then(res => {
-                if(res.status === 200)
+                if(res.status === 200){
                     message.success(t("common:update_item.complete"))
+                    dispatch({type: ClubActionType.UPDATE_CLUB, payload: res.data})
+                }
             })
         }
     })

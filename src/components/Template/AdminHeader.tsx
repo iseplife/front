@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import {useSelector} from "react-redux"
-import {AppState} from "../../redux/types"
+import {AppState} from "../../context/action"
 import {Avatar, Button} from "antd"
 import {Link} from "react-router-dom"
 import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
