@@ -6,7 +6,7 @@ import {
     StudentPreview,
     StudentPreviewAdmin
 } from "./types"
-import {ClubMember, ClubMemberPreview} from "../club/types"
+import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 

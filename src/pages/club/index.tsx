@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer, useState} from "react"
 import {useParams} from "react-router"
-import {Club as ClubType, ClubMember} from "../../data/club/types"
+import {Club as ClubType} from "../../data/club/types"
 import {getClub, getClubGalleries, getClubMembers} from "../../data/club"
 import {Button, message, Skeleton} from "antd"
 import {Gallery} from "../../data/gallery/types"

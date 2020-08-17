@@ -1,25 +1,12 @@
 import React from "react"
-import {Avatar, Card, Collapse, Skeleton} from "antd"
+import {Collapse} from "antd"
 import {RightOutlined} from "@ant-design/icons"
-import ClubCover from "./ClubCover"
 import About from "../About"
 import Galleries from "../Galleries"
 import {Gallery} from "../../../data/gallery/types"
-import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
-import {Club} from "../../../data/club/types"
-
-import style from "../Club.module.css"
 
 const {Panel} = Collapse
-
-const getCoverElement = (club: Club | undefined, clubLoading: boolean): React.ReactNode => {
-    return (
-        <div className="h-32 md:h-40 lg:h-40 xl:h-40">
-
-        </div>
-    )
-}
 
 type ClubPresentationProps = {
     galleries: Gallery[],

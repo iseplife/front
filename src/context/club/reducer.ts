@@ -1,6 +1,5 @@
 import {ClubContextState} from "./context"
 import {ClubActionType, ClubContextAction} from "./action"
-import {ClubMember} from "../../data/club/types"
 
 
 export const clubContextReducer = (state: ClubContextState, action: ClubContextAction): ClubContextState => {

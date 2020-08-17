@@ -70,7 +70,7 @@ export const filteredEventsState = selector<EventPreview[]>({
             (e.published || !filter.publishedOnly) &&
             filter.adminVision || (
                 filter.types[e.type] &&
-                ((e.targets.length == 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t])))
+                ((e.targets.length === 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t])))
             ))
     }
 })

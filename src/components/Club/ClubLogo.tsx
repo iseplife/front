@@ -1,10 +1,10 @@
-import React, {useCallback, useContext, useRef, useState} from "react"
+import React, {useCallback, useContext, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {Avatar, Button, message} from "antd"
 import {IconFA} from "../Common/IconFA"
 import {uploadClubLogo} from "../../data/club"
 import {useTranslation} from "react-i18next"
-import {ClubContext} from "../../context/club/context";
+import {ClubContext} from "../../context/club/context"
 
 
 const ClubLogo: React.FC = () => {
