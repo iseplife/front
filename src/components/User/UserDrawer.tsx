@@ -46,7 +46,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
             setIsLoading(true)
             getStudent(parseInt(user_id)).then(res => {
                 setStudent(res.data)
-            }).catch().finally(() => setIsLoading(false))
+            }).finally(() => setIsLoading(false))
 
             getClubsForStudent(parseInt(user_id)).then(res => {
                 setClubs(res.data)
