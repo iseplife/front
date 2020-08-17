@@ -11,7 +11,7 @@ const CardTextSkeleton: React.FC<CardTextSkeletonProps> = ({loading, number, cla
     const renderLoop = () => {
         let cardTextSkeletonArray = [];
 
-        for (var i=0; i < number; i++) {
+        for (let i=0; i < number; i++) {
             cardTextSkeletonArray.push(
                 <Card className={className} key={i}>
                     <Skeleton loading={loading} avatar active paragraph={true} title={false}></Skeleton>
