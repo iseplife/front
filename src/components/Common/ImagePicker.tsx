@@ -51,10 +51,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                             }}
                         />
                         <span className="image-options absolute text-gray-400">
-                            <EditOutlined
-                                className="mx-1 px-1 hover:text-white"
-                                onClick={() => console.log("aaa")}
-                            />
+                            <EditOutlined className="mx-1 px-1 hover:text-white"/>
                             {image === initialImage && defaultImage !== DEFAULT_IMAGE ?
                                 <DeleteOutlined
                                     className="mx-1 px-1 hover:text-red-400"
