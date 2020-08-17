@@ -2,7 +2,7 @@ import React, {forwardRef, ReactNode, useCallback, useEffect, useImperativeHandl
 import Loading from "./Loading"
 import {useTranslation} from "react-i18next"
 
-const INITIAL_LOADER: Loader = {loading: false, fetch: false,count: 0, over: false}
+const INITIAL_LOADER: Loader = {loading: false, fetch: false, count: 0, over: false}
 type Loader = {
     count: number,
     over: boolean,
@@ -10,7 +10,7 @@ type Loader = {
     fetch: boolean
 }
 
-export type loaderCallback =  (count: number, ...param: any) => Promise<boolean>;
+export type loaderCallback = (count: number, ...param: any) => Promise<boolean>;
 export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
 
 export type InfiniteScrollerRef = {
@@ -26,9 +26,9 @@ type InfiniteScrollerProps = {
     loading?: React.ReactNode,
 }
 
-const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, loading,children, className = ""}, ref) => {
+const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, loading, children, className = ""}, ref) => {
     const {t} = useTranslation("common")
-    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback: [callback, callback]), [callback])
+    const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
 
@@ -93,7 +93,6 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
         main?.addEventListener("scroll", scrollerListener)
 
 
-
         return () => {
             main?.removeEventListener("scroll", scrollerListener)
         }
@@ -143,12 +142,12 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef,InfiniteScrollerProps>((
 
             {(watch !== "UP") && (
                 <div className="h-12 mb-3 text-center">
-                    {downLoader.over ? <p>{t("end")}</p> : downLoader.loading && ( loading || <Loading size="3x"/>)}
+                    {downLoader.over ? <p>{t("end")}</p> : downLoader.loading && (loading || <Loading size="3x"/>)}
                 </div>
             )}
         </div>
     )
-    
+
 })
 InfiniteScroller.displayName = "InfiniteScroller"
 export default InfiniteScroller
