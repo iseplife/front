@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import {Gallery as GalleryType, Media as IsepLifeImage} from "../../data/gallery/types"
+import {Gallery as GalleryType, Media as Image} from "../../data/gallery/type"
 import {Avatar, message, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps} from "react-photo-gallery"
 import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
@@ -12,7 +12,7 @@ import {UserOutlined} from "@ant-design/icons"
 
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
-    return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: IsepLifeImage, index: number) =>
+    return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: Image, index: number) =>
         parsePhoto(img.name, `${img.name}-${index}`)
     ))
 }
