@@ -17,8 +17,9 @@ stages:
 
 test:
   stage: test
-  image: node:12.13.0
+  image: node:14.8.0
   script:
+    - npm upgrade --global yarn
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
     - yarn run build:dev
   rules:
@@ -27,7 +28,7 @@ test:
 
 react-build:
   stage: build
-  image: node:12.13.0
+  image: node:14.8.0
   artifacts:
     paths:
       - build/
