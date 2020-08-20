@@ -22,6 +22,7 @@ import {
     LockOutlined,
     UnlockOutlined
 } from "@ant-design/icons"
+import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm";
 
 
 const Event: React.FC = () => {
@@ -110,7 +111,7 @@ const Event: React.FC = () => {
                             </div>
                             }
                             <div className="bg-white rounded shadowp-2 mt-3">
-
+                                <GalleryModalForm feed={event.feed} />
                             </div>
                         </div>
 

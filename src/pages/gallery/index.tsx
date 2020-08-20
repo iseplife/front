@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import {Gallery as GalleryType, Media as Image} from "../../data/gallery/type"
+import {Gallery as GalleryType} from "../../data/gallery/types"
 import {Avatar, message, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps} from "react-photo-gallery"
 import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
@@ -9,6 +9,7 @@ import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGalle
 import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
 import {UserOutlined} from "@ant-design/icons"
+import {Image} from "../../data/media/types"
 
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
@@ -68,23 +69,23 @@ const Gallery: React.FC = () => {
         }
     }, [id, pictureId])
 
-    const onCurrentPhotoChange = (photo: PhotoProps, index: number) => {
+    const onCurrentPhotoChange = useCallback((photo: PhotoProps, index: number) => {
         setPhotos(photos)
         history.push(`/gallery/${id}/picture/${index}`)
-    }
+    }, [id, photos])
 
-    const closeLightbox = () => {
+    const closeLightbox = useCallback(() => {
         setOpenLigthbox(false)
         history.push(`/gallery/${id}`)
-    }
+    }, [id])
 
-    const openLightbox = useCallback((event, { photo, index }) => {
+    const openLightbox = useCallback((event, {photo, index}) => {
         if (photo) {
             setCurrentPhoto(photo)
             setOpenLigthbox(true)
             history.push(`/gallery/${id}/picture/${index}`)
         }
-    }, [id, pictureId])
+    }, [id])
 
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
@@ -93,39 +94,39 @@ const Gallery: React.FC = () => {
                 <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery && !isLoading ? gallery.name : ""}</div>
             </div>
             <div className="text-xs mt-2 mb-1 flex flex-row items-center">
-                {!!gallery && !isLoading ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
+                {gallery && !isLoading ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
                 <Skeleton loading={isLoading} active paragraph={false} className="w-20 mr-2"/>
             </div>
             <div className="flex flex-row bg-white p-1">
-                {
-                    isLoading
-                        ? <LoadingGallery/>
-                        : <PhotoGallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
+                {isLoading ?
+                    <LoadingGallery/> :
+                    <PhotoGallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
                 }
             </div>
-            {
-                isLoading
-                    ? (
-                        <div className="flex flex-row items-center w-fit-content mt-2 h-16 mb-8 ml-auto">
-                            <Skeleton loading={isLoading} active paragraph={false} className="mr-2 w-48"/>
-                            <Skeleton avatar={true} loading={isLoading} active paragraph={false} title={false}/>
-                        </div>
-                    )
-                    : (
-                        <div className="h-16 mt-2 mb-4 w-full text-right mr-2">
-                            {`${t("posted_date")} ${gallery ? new Date(gallery.creation).toLocaleDateString() : ""} ${t("by")}`}
-                            <Tooltip title={gallery ? gallery.club.name : ""}>
-                                <Link to={"/club/1"}>
-                                    <Avatar shape="circle"
-                                        className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                        icon={<UserOutlined/>} size="large"/>
-                                </Link>
-                            </Tooltip>
-                        </div>
-                    )
+            {isLoading ?
+                <div className="flex flex-row items-center w-fit-content mt-2 h-16 mb-8 ml-auto">
+                    <Skeleton loading={isLoading} active paragraph={false} className="mr-2 w-48"/>
+                    <Skeleton avatar={true} loading={isLoading} active paragraph={false} title={false}/>
+                </div> :
+                <div className="h-16 mt-2 mb-4 w-full text-right mr-2">
+                    {`${t("posted_date")} ${gallery ? new Date(gallery.creation).toLocaleDateString() : ""} ${t("by")}`}
+                    <Tooltip title={gallery ? gallery.club.name : ""}>
+                        <Link to={"/club/1"}>
+                            <Avatar
+                                shape="circle"
+                                className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
+                                icon={<UserOutlined/>} size="large"/>
+                        </Link>
+                    </Tooltip>
+                </div>
             }
-            {
-                isOpeningLigthbox && (<GalleryLigthbox photos={photos} onCurrentPhotoChange={onCurrentPhotoChange} onClose={closeLightbox} currentPhoto={currentPhoto}/>)
+            {isOpeningLigthbox &&
+            <GalleryLigthbox
+                photos={photos}
+                onCurrentPhotoChange={onCurrentPhotoChange}
+                onClose={closeLightbox}
+                currentPhoto={currentPhoto}
+            />
             }
         </div>
     )

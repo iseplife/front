@@ -24,6 +24,12 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
 
+export const isFileImage = (file: File): boolean => {
+    const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"]
+
+    return acceptedImageTypes.includes(file["type"])
+}
+
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>
 

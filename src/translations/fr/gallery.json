@@ -4,5 +4,17 @@
   "pictures": "photos",
   "play": "Lecture",
   "stop": "Pause",
-  "download": "Télécharger"
+  "download": "Télécharger",
+  "add": "Ajouter une galerie",
+  "form": {
+    "title": "Création d'une galerie",
+    "name": "Nom de la galerie",
+    "description": "Description",
+    "draganddrop": [
+      "Importez ici vos photos",
+      "Cliquez ou faites glisser vos photos dans la zone de téléchargement.\n Attention les fichiers qui ne sont pas des images ne seront pas envoyés"
+    ],
+    "create": "Créer"
+  },
+  "created": "Galerie créée avec succès !"
 }

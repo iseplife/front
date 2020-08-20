@@ -85,6 +85,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     break
 
                 default:
+                    message.error("Un probleme a été rencontré")
                     break
             }
         }

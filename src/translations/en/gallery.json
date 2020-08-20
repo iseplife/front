@@ -4,5 +4,17 @@
   "pictures": "pictures",
   "play": "Play",
   "stop": "Stop",
-  "download": "Download"
+  "download": "Download",
+  "add": "Add a new gallery",
+  "form": {
+    "title": "Create a gallery",
+    "name": "Gallery name",
+    "description": "Description",
+    "draganddrop": [
+      "Import here your photos",
+      "Click or draq & drop your pictures in the upload area. Warning, file that are not images will not be upload."
+    ],
+    "create": "Create"
+  },
+  "created": "Gallery successfully created !"
 }

@@ -1,4 +1,5 @@
 import {Club} from "../club/types"
+import {Image} from "../media/types"
 
 export type Gallery = {
     id: number
@@ -7,15 +8,15 @@ export type Gallery = {
     club: Club,
     creation: Date,
     embedType: string,
-    coverImage: Media
-    previewImages: Media[]
+    coverImage: Image
+    previewImages: Image[]
 }
 
-export type Media = {
-    id: number
-    creation: Date
+export type GalleryForm = {
     name: string
-    embedType: string
-    nsfw: string
+    description: string
+    images: number[]
+    feed: number
+    club?: Club
 }
 
