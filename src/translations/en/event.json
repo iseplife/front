@@ -1,18 +1,43 @@
 {
-  "day": "Day",
-  "month": "Month",
-  "week": "Week",
-  "type": {
-    "PARTY": "\uD83C\uDF89 Party",
-    "AFTERWORK": "\uD83C\uDF7B Afterwork",
-    "CONFERENCE":  "\uD83C\uDF99 Conference",
-    "WORKSHOP": "\uD83D\uDCBB Workshop",
-    "FORMATION": "\uD83D\uDCDA Formation",
-    "MEETING": "\uD83D\uDD14 Meeting"
-  },
-  "free": "Free",
-  "event": "Event",
-  "published_only": "Published events only",
-  "admin_view": "Admin view",
-  "ticket_url": "Buy a ticket"
+	"create": {
+		"button": "Create event",
+		"title": "Creation of a new event",
+		"created": "Event created !"
+	},
+	"form": {
+		"label": {
+			"name": "Name",
+			"description": "Description",
+			"location": "Location",
+			"price": "Price",
+			"ticket_url": "Link ticket office",
+			"target": "Audience"
+		},
+		"placeholder": {
+			"title": "Winning of 2018 football world cup",
+			"description": "Describe your event...",
+			"range": [
+				"Start date",
+				"End date"
+			],
+			"location": "Russia",
+			"club": "Organiser"
+		}
+	},
+	"day": "Day",
+	"month": "Month",
+	"week": "Week",
+	"type": {
+		"PARTY": "\uD83C\uDF89 Party",
+		"AFTERWORK": "\uD83C\uDF7B Afterwork",
+		"CONFERENCE": "\uD83C\uDF99 Conference",
+		"WORKSHOP": "\uD83D\uDCBB Workshop",
+		"FORMATION": "\uD83D\uDCDA Formation",
+		"MEETING": "\uD83D\uDD14 Meeting"
+	},
+	"free": "Free",
+	"event": "Event",
+	"published_only": "Published events only",
+	"admin_view": "Admin view",
+	"ticket_url": "Buy a ticket"
 }

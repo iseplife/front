@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import {Modal, Radio} from "antd"
+import {Button, Modal, Radio} from "antd"
 import {IconFA} from "../../../components/Common/IconFA"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -14,8 +14,10 @@ import {EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
-import { CalendarEventWrapper} from "../../../components/CalendarItem"
-
+import {CalendarEventWrapper} from "../../../components/CalendarItem"
+import {useSelector} from "react-redux"
+import {AppState} from "../../../redux/types"
+import EventCreationForm from "../../../components/Event/EventCreationForm"
 
 const initFilter = (): EventFilter => {
     return (
@@ -74,6 +76,8 @@ export const filteredEventsState = selector<EventPreview[]>({
 })
 
 const Events: React.FC = () => {
+    const canCreateEvent: boolean = useSelector((state: AppState) => Boolean(state.payload.clubsPublisher.length))
+    const [createEvent, setCreateEvent] = useState<boolean>(false)
     const [selectedEvent, setSelectedEvent] = useState<EventPreview | null>(null)
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
@@ -133,13 +137,17 @@ const Events: React.FC = () => {
             <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
             <div className="flex flex-col md:w-4/5 w-full p-3">
                 <div className="h-16 w-full flex justify-between items-center">
-                    <div className="flex items-baseline">
+                    <div className="flex items-center">
                         <h1 className="text-2xl font-extrabold my-auto text-gray-800">
                             {dateTitle}
                         </h1>
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
-
+                        {canCreateEvent &&
+                        <Button className="rounded px-2" onClick={() => setCreateEvent(true)}>
+                            + {t("create.button")}
+                        </Button>
+                        }
                     </div>
                     <div>
                         <IconFA name="fa-sync-alt" className="my-auto mx-3 cursor-pointer text-gray-500" onClick={fetchMonthEvents} spin={loading}/>
@@ -169,11 +177,23 @@ const Events: React.FC = () => {
                 <Modal
                     className="md:w-1/2 w-4/5"
                     visible={true}
-                    title={<ModalEventHeader event={selectedEvent} />}
+                    title={<ModalEventHeader event={selectedEvent}/>}
                     footer={null}
                     onCancel={() => setSelectedEvent(null)}
                 >
                     <ModalEventContent id={selectedEvent.id}/>
+                </Modal>
+                }
+
+                {createEvent &&
+                <Modal
+                    className="md:w-1/2 w-4/5"
+                    visible={true}
+                    footer={null}
+                    title={<span className="text-gray-800 font-bold text-2xl">{t("create.title")}</span>}
+                    onCancel={() => setCreateEvent(false)}
+                >
+                    <EventCreationForm onSubmit={fetchMonthEvents} onClose={() => setCreateEvent(false)} />
                 </Modal>
                 }
             </div>

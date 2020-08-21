@@ -14,6 +14,6 @@ export const deletePost = (id: number): AxiosPromise<void> => {
     return axios.delete(`/post/${id}`)
 }
 
-export const getPublishersThumbnail = (): AxiosPromise<Author[]> => {
-    return axios.get("/post/publishers")
+export const getPublishersThumbnail = (clubOnly = false): AxiosPromise<Author[]> => {
+    return axios.get("/post/authors", {params: {club: clubOnly}})
 }

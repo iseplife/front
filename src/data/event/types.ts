@@ -1,6 +1,6 @@
-import {Club, ClubPreview} from "../club/types"
+import {ClubPreview} from "../club/types"
 import EventType from "../../constants/EventType"
-import {Feed} from "../feed/types";
+import {Feed} from "../feed/types"
 
 export type Event = {
     id: number
@@ -21,7 +21,6 @@ export type Event = {
     feed: number
 }
 
-
 export type EventPreview = {
     id: number
     title: string
@@ -34,6 +33,25 @@ export type EventPreview = {
     published: boolean
 }
 
+export type EventForm = {
+    type: EventType
+    title: string
+    description: string
+    image?: string
+    start: Date
+    end: Date
+    ticketURL?: string
+    price?: number
+    location?: string
+    coordinates?: Marker
+    targets: number[]
+    published: boolean
+    closed: boolean
+    club: number
+}
+
+export type Marker = [number, number]
+
 type DayEvent = {
     [day: number]: EventPreview[]
 }
@@ -43,6 +61,7 @@ type MonthEvent = {
 export type EventMap = {
     [year: number]: MonthEvent
 }
+
 
 
 type ReducerFeedType = {

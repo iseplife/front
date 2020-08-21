@@ -1,18 +1,43 @@
 {
-  "day": "Jour",
-  "month": "Mois",
-  "week": "Semaine",
-  "type": {
-    "PARTY": "\uD83C\uDF89 Soirée",
-    "AFTERWORK": "\uD83C\uDF7B Afterwork",
-    "CONFERENCE": "\uD83C\uDF99 Conférence",
-    "WORKSHOP": "\uD83D\uDCBB Workshop",
-    "FORMATION": "\uD83D\uDCDA Formation",
-    "MEETING": "\uD83D\uDD14 Réunion"
-  },
-  "free": "Gratuit",
-  "event": "Évènement",
-  "published_only": "Évènements publiés seulement",
-  "admin_view": "Vue admin",
-  "ticket_url": "Acheter sa place"
+	"create": {
+		"button": "Créer un évènement",
+		"title": "Création d'un nouvel évènement",
+		"created": "Évènement créée !"
+	},
+	"form": {
+		"label": {
+			"name": "Nom",
+			"description": "Description",
+			"location": "Lieu",
+			"price": "Prix",
+			"ticket_url": "Lien billetterie",
+			"target": "Audience"
+		},
+		"placeholder": {
+			"title": "Victoire Coupe du monde 2018",
+			"description": "Décrivez votre évènement...",
+			"range": [
+				"Date de début",
+				"Date de fin"
+			],
+			"location": "Russie",
+			"club": "Organisateur"
+		}
+	},
+	"day": "Jour",
+	"month": "Mois",
+	"week": "Semaine",
+	"type": {
+		"PARTY": "\uD83C\uDF89 Soirée",
+		"AFTERWORK": "\uD83C\uDF7B Afterwork",
+		"CONFERENCE": "\uD83C\uDF99 Conférence",
+		"WORKSHOP": "\uD83D\uDCBB Workshop",
+		"FORMATION": "\uD83D\uDCDA Formation",
+		"MEETING": "\uD83D\uDD14 Réunion"
+	},
+	"free": "Gratuit",
+	"event": "Évènement",
+	"published_only": "Évènements publiés seulement",
+	"admin_view": "Vue admin",
+	"ticket_url": "Acheter sa place"
 }

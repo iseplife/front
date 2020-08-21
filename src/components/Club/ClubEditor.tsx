@@ -57,7 +57,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     res = await uploadLogo(club.id, logo)
                     if (res.status === 200) {
                         club.logoUrl = res.data
-                    }else {
+                    } else {
                         message.error("Un problème lors de l'envoie du logo a été rencontré.")
                     }
                 }
@@ -164,7 +164,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
 
     return (
         <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
-            style={{height: "min-content", minHeight: "20rem", top: "1.5rem"}}
+             style={{height: "min-content", minHeight: "20rem", top: "1.5rem"}}
         >
             {loading ?
                 <Loading size="4x"/> :
@@ -185,9 +185,9 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
                     {club &&
                     <Link to="/admin/club">
-                    	<div className="text-right absolute right-0 top-0 w-16">
-                    		<CloseCircleOutlined style={{fontSize: "26px"}}/>
-                    	</div>
+                        <div className="text-right absolute right-0 top-0 w-16">
+                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
+                        </div>
                     </Link>
                     }
 
@@ -230,11 +230,11 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     <Divider/>
                     {admins &&
                     <div className="mx-3">
-                    	<label className="font-dinotcb">Administrateurs</label>
-                    	<StudentSelector
-                    		defaultValues={admins}
-                    		onChange={(ids) => formik.setFieldValue("admins", ids)}
-                    	/>
+                        <label className="font-dinotcb">Administrateurs</label>
+                        <StudentSelector
+                            defaultValues={admins}
+                            onChange={(ids) => formik.setFieldValue("admins", ids)}
+                        />
                     </div>
                     }
 
@@ -271,12 +271,12 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                         </Button>
                         {club &&
                         <>
-                        	<Button type="primary" icon={<AuditOutlined/>} onClick={archive}>
-                        		{club.archived ? "Désarchiver" : "Archiver"}
-                        	</Button>
-                        	<Button danger icon={<DeleteOutlined/>} onClick={remove}>
+                            <Button type="primary" icon={<AuditOutlined/>} onClick={archive}>
+                                {club.archived ? "Désarchiver" : "Archiver"}
+                            </Button>
+                            <Button danger icon={<DeleteOutlined/>} onClick={remove}>
                                 Supprimer
-                        	</Button>
+                            </Button>
                         </>
                         }
                     </div>

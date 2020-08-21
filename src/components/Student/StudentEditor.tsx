@@ -153,7 +153,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     }, [onArchive, student, t])
 
     return (
-        <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
+        <div
+            className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
             style={{height: "min-content", minHeight: "16rem", top: "1.5rem"}}
         >
             {loading ?
@@ -163,7 +164,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
                         <div className="flex items-center text-red-600 font-bold">
-                        	<LockOutlined className="mr-1"/> ARCHIVÉ
+                            <LockOutlined className="mr-1"/> ARCHIVÉ
                         </div>
                         }
                         <label className="font-dinotcb">numéro élève</label>
@@ -178,9 +179,9 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </div>
                     {student &&
                     <Link to="/admin/user">
-                    	<div className="text-right absolute right-0 top-0 w-16">
-                    		<CloseCircleOutlined style={{fontSize: "26px"}}/>
-                    	</div>
+                        <div className="text-right absolute right-0 top-0 w-16">
+                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
+                        </div>
                     </Link>
                     }
 
@@ -226,7 +227,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             notFoundContent={roles ? <Loading size="sm"/> : null}
                             onChange={(val: string[]) => formik.setFieldValue("roles", val)}
                         >
-                            { roles && roles.map(r => (
+                            {roles && roles.map(r => (
                                 <Option key={r.id} value={r.role}>{r.role}</Option>
                             ))}
                         </Select>
@@ -272,14 +273,12 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         </Button>
                         {student &&
                         <>
-                        	<Button type="primary" className="mt-5" icon={<AuditOutlined/>}
-                        		onClick={archive}>
-                        		{student.archived ? "Désarchiver" : "Archiver"}
-                        	</Button>
-                        	<Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
-                        		danger>
+                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>} onClick={archive}>
+                                {student.archived ? "Désarchiver" : "Archiver"}
+                            </Button>
+                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove} danger>
                                 Supprimer
-                        	</Button>
+                            </Button>
                         </>
                         }
                     </div>
