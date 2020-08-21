@@ -1,6 +1,6 @@
-import React, {useCallback} from "react"
+import React, {useCallback, useMemo} from "react"
 import {useFormik} from "formik"
-import {GalleryForm as GalleryFormType} from "../../../data/gallery/types"
+import {Gallery, GalleryForm as GalleryFormType} from "../../../data/gallery/types"
 import {Input, message} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
@@ -11,8 +11,9 @@ const {TextArea} = Input
 
 type GalleryFormProps = {
     feed: number
+    onSubmit: (g: Gallery) => void
 }
-const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
+const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
     const formik = useFormik<GalleryFormType>({
         initialValues: {
@@ -23,17 +24,20 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
             club: -1,
         },
         onSubmit: (values) => {
-            createGallery(values).then(res =>
+            createGallery(values).then(res => {
                 message.success(t("created"))
-            )
+                onSubmit(res.data)
+            })
         }
     })
 
     const onFilesUploaded = useCallback((ids) => {
         formik.setFieldValue("images", ids)
         formik.submitForm().then(r => console.log(r))
-    },  [formik])
-
+    }, [formik])
+    const isFormValid = useMemo(() => (
+        formik.values.name.length > 3 && formik.values.club != -1
+    ), [formik.values.name, formik.values.club])
 
     return (
         <form className="flex" onSubmit={formik.handleSubmit} style={{height: "30rem", maxHeight: "90%"}}>
@@ -73,12 +77,12 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
                         className="max-w-full w-64 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #e2e8f0"}}
                         clubOnly={true}
-                        callback={(id) => console.log(id)}
+                        callback={id => formik.setFieldValue("club", id || -1)}
                     />
                 </div>
             </div>
             <div className="w-3/4 ">
-                <GalleryDragger canSubmit={formik.values.name.length > 3} afterSubmit={onFilesUploaded}/>
+                <GalleryDragger canSubmit={isFormValid} afterSubmit={onFilesUploaded}/>
             </div>
         </form>
     )

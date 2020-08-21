@@ -1,11 +1,8 @@
 import React, {useEffect, useRef, useState} from "react"
-import {
-    useParams,
-    useHistory, Link
-} from "react-router-dom"
+import {useParams, useHistory, Link} from "react-router-dom"
 import {format} from "date-fns"
 import {Map, Marker, TileLayer} from "react-leaflet"
-import {getEvent, getEventChildren} from "../../../data/event"
+import {getEvent, getEventChildren, getEventGalleries} from "../../../data/event"
 
 import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types"
 import "./Event.css"
@@ -22,7 +19,8 @@ import {
     LockOutlined,
     UnlockOutlined
 } from "@ant-design/icons"
-import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm";
+import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
+import {Gallery} from "../../../data/gallery/types"
 
 
 const Event: React.FC = () => {
@@ -35,6 +33,8 @@ const Event: React.FC = () => {
     const [subevents, setSubevents] = useState<PreviewType[]>()
     const [eventsVisible, setEventVisible] = useState<boolean>(false)
 
+    const [galleries, setGalleries] = useState<Gallery[]>([])
+
     const descriptionRef = useRef<HTMLInputElement>(null)
     const [descVisible, setDescVisible] = useState<boolean>(false)
 
@@ -42,16 +42,19 @@ const Event: React.FC = () => {
         if (!id || !+id) {
             history.push("/")
         } else {
-            getEvent(+id).then(r => {
-                setEvent(r.data)
+            getEvent(+id).then(res => {
+                setEvent(res.data)
             })
         }
     }, [id])
 
     useEffect(() => {
         if (event) {
-            getEventChildren(event.id).then(r => {
-                setSubevents(r.data)
+            getEventChildren(event.id).then(res => {
+                setSubevents(res.data)
+            })
+            getEventGalleries(event.id).then(res => {
+                setGalleries(res.data)
             })
         }
     }, [event])
@@ -111,7 +114,7 @@ const Event: React.FC = () => {
                             </div>
                             }
                             <div className="bg-white rounded shadowp-2 mt-3">
-                                <GalleryModalForm feed={event.feed} />
+                                <GalleryModalForm feed={event.feed} onSubmit={(g) => setGalleries(prevState => [...prevState, g])} />
                             </div>
                         </div>
 
