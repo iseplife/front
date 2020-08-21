@@ -4,8 +4,8 @@ import {GalleryForm as GalleryFormType} from "../../../data/gallery/types"
 import {Input, message} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
-import {createGallery} from "../../../data/gallery";
-import AvatarPicker from "../../Common/AvatarPicker";
+import {createGallery} from "../../../data/gallery"
+import AvatarPicker from "../../Common/AvatarPicker"
 
 const {TextArea} = Input
 
@@ -20,6 +20,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
             description: "",
             images: [],
             feed: feed,
+            club: -1,
         },
         onSubmit: (values) => {
             createGallery(values).then(res =>
@@ -36,7 +37,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
 
     return (
         <form className="flex" onSubmit={formik.handleSubmit} style={{height: "30rem", maxHeight: "90%"}}>
-            <div className="w-1/4 bg-gray-100 p-4 rounded-l border-r-2">
+            <div className="flex flex-col w-1/4 bg-gray-100 p-4 rounded-l border-r-2">
                 <div className="my-2">
                     <h1 className="text-gray-800 font-bold text-xl mb-6">{t("form.title")}</h1>
 
@@ -66,8 +67,14 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed}) => {
                     />
                 </div>
 
-                <div>
-                    <AvatarPicker callback={(id) => console.log(id)} />
+                <div className="flex-grow flex flex-col justify-end">
+                    <label className="font-dinotcb">{t("form.author")}</label>
+                    <AvatarPicker
+                        className="max-w-full w-64 hover:border-indigo-400"
+                        style={{borderBottom: "1px solid #e2e8f0"}}
+                        clubOnly={true}
+                        callback={(id) => console.log(id)}
+                    />
                 </div>
             </div>
             <div className="w-3/4 ">

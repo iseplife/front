@@ -10,6 +10,7 @@
     "title": "Create a gallery",
     "name": "Gallery name",
     "description": "Description",
+    "author": "Author",
     "draganddrop": [
       "Import here your photos",
       "Click or draq & drop your pictures in the upload area. Warning, file that are not images will not be upload."

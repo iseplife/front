@@ -17,6 +17,6 @@ export type GalleryForm = {
     description: string
     images: number[]
     feed: number
-    club?: Club
+    club: number
 }
 
