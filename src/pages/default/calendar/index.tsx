@@ -16,8 +16,8 @@ import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
 import {CalendarEventWrapper} from "../../../components/CalendarItem"
 import {useSelector} from "react-redux"
-import {AppState} from "../../../redux/types"
 import EventCreationForm from "../../../components/Event/EventCreationForm"
+import {AppState} from "../../../context/action";
 
 const initFilter = (): EventFilter => {
     return (

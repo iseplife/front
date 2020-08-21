@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import {Select, Spin, Tag} from "antd"
 import {useSelector} from "react-redux"
-import {AppState} from "../../redux/types"
+import {AppState} from "../../context/action"
 
 type Option = {
     label: string
