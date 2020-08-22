@@ -96,16 +96,16 @@ const Club: React.FC = () => {
                         {state.adminMode && <h1 className="ml-5 my-auto font-dinotcb text-2xl text-gray-600">Panel administration</h1>}
                     </div>
                     {state.club.data &&
-                    <div className="flex items-center" style={{height: "min-content"}}>
+                    <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
                         {state.club.data.website && <SocialIcon type="fa-firefox" url={state.club.data.website}/>}
                         {state.club.data.facebook && <SocialIcon type="fa-facebook" url={state.club.data.facebook}/>}
                         {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
                         {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
                         {state.club.data.canEdit &&
-                        <Button type="primary" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
+                        <Button className="hidden md:block" type="primary" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
                             Mode admin
                             <IconFA
-                                className="hidden md:inline cursor-pointer ml-2"
+                                className="cursor-pointer ml-2"
                                 name={state.adminMode ? "fa-sign-out-alt" : "fa-tools"}
                             />
                         </Button>

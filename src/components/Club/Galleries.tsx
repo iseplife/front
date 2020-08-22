@@ -28,7 +28,7 @@ const Galleries: React.FC = () => {
                 {galleries.map(g =>
                     <GalleryCard
                         key={g.id}
-                        className="w-1/2 p-2"
+                        className="md:w-1/2 w-full p-2"
                         gallery={g}
                     />
                 )}
