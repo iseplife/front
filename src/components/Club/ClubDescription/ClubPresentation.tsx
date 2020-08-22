@@ -2,17 +2,12 @@ import React from "react"
 import {Collapse} from "antd"
 import {RightOutlined} from "@ant-design/icons"
 import About from "../About"
-import Galleries from "../Galleries"
-import {Gallery} from "../../../data/gallery/types"
 import {useTranslation} from "react-i18next"
+import GalleriesPreview from "../../Gallery/GalleriesPreview"
 
 const {Panel} = Collapse
 
-type ClubPresentationProps = {
-    galleries: Gallery[],
-    galleriesLoading: boolean
-}
-const ClubPresentation: React.FC<ClubPresentationProps> = ({galleries, galleriesLoading}) => {
+const ClubPresentation: React.FC = () => {
     const {t} = useTranslation("club")
     return (
         <div key="desktop-display" className="hidden-scroller w-full md:w-64 lg:w-1/4 md:overflow-y-auto" style={{height: 400}}>
@@ -37,7 +32,7 @@ const ClubPresentation: React.FC<ClubPresentationProps> = ({galleries, galleries
                     className="border-b-0 border-t"
                     header={<span className="text-gray-500">{t("galleries")}</span>}
                 >
-                    <Galleries galleries={galleries} loading={galleriesLoading}/>
+                    <GalleriesPreview/>
                 </Panel>
             </Collapse>
         </div>

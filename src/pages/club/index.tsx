@@ -3,7 +3,7 @@ import {useParams} from "react-router"
 import {Club as ClubType} from "../../data/club/types"
 import {getClub, getClubGalleries, getClubMembers} from "../../data/club"
 import {Button, message, Skeleton} from "antd"
-import {Gallery} from "../../data/gallery/types"
+import {Gallery, GalleryPreview} from "../../data/gallery/types"
 import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../components/Club/Mobile/ClubNavbar"
 import ClubCover from "../../components/Club/ClubDescription/ClubCover"
@@ -24,7 +24,7 @@ const Club: React.FC = () => {
     const history = useHistory()
     const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
-    const [galleries, setGalleries] = useState<Gallery[]>([])
+    const [galleries, setGalleries] = useState<GalleryPreview[]>([])
     const [galleriesLoading, setGalleriesLoading] = useState<boolean>(false)
 
     // Updated function called when respective tab is active
@@ -119,7 +119,7 @@ const Club: React.FC = () => {
                     {state.adminMode && state.club.data ?
                         <ClubAdmin /> :
                         <>
-                            <ClubPresentation galleries={galleries} galleriesLoading={galleriesLoading}/>
+                            <ClubPresentation />
                             <div className="flex-grow">
                                 {state.club.data &&
                                 <Feed id={state.club.data.feed} allowPublication={false} className="m-4 hidden md:block"/>
@@ -131,11 +131,7 @@ const Club: React.FC = () => {
                     }
                 </div>
 
-                <ClubNavbar
-                    key="mobile-display"
-                    galleries={galleries}
-                    galleriesLoading={galleriesLoading}
-                />
+                <ClubNavbar key="mobile-display"/>
             </div>
         </ClubContext.Provider>
     )

@@ -1,21 +1,15 @@
 import React, {useContext} from "react"
 import {Tabs} from "antd"
-import {Club, ClubMember} from "../../../data/club/types"
-import {Gallery} from "../../../data/gallery/types"
 import Feed from "../../Feed"
 import {useTranslation} from "react-i18next"
 import MembersList from "../MembersList"
 import Galleries from "../Galleries"
-import ClubAdmin from "../ClubAdmin";
-import {ClubContext} from "../../../context/club/context";
+import ClubAdmin from "../ClubAdmin"
+import {ClubContext} from "../../../context/club/context"
 
 const {TabPane} = Tabs
 
-type ClubTabsProps = {
-    galleries: Gallery[]
-    galleriesLoading: boolean
-}
-const ClubNavbar: React.FC<ClubTabsProps> = (props) => {
+const ClubNavbar: React.FC = () => {
     const {t} = useTranslation("club")
     const {state: {club}} = useContext(ClubContext)
 
@@ -25,7 +19,7 @@ const ClubNavbar: React.FC<ClubTabsProps> = (props) => {
                 {club.data && <Feed id={club.data.feed} allowPublication={false}/>}
             </TabPane>
             <TabPane key="2" tab={t("galleries")}>
-                <Galleries galleries={props.galleries} loading={props.galleriesLoading}/>
+                <Galleries/>
             </TabPane>
             <TabPane key="3" tab={t("about")}>
                 <div className="w-full text-center mt-2 mb-5 px-2">

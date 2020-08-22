@@ -20,7 +20,7 @@ import {
     UnlockOutlined
 } from "@ant-design/icons"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
-import {Gallery} from "../../../data/gallery/types"
+import {GalleryPreview} from "../../../data/gallery/types"
 
 
 const Event: React.FC = () => {
@@ -33,7 +33,7 @@ const Event: React.FC = () => {
     const [subevents, setSubevents] = useState<PreviewType[]>()
     const [eventsVisible, setEventVisible] = useState<boolean>(false)
 
-    const [galleries, setGalleries] = useState<Gallery[]>([])
+    const [galleries, setGalleries] = useState<GalleryPreview[]>([])
 
     const descriptionRef = useRef<HTMLInputElement>(null)
     const [descVisible, setDescVisible] = useState<boolean>(false)
@@ -54,7 +54,7 @@ const Event: React.FC = () => {
                 setSubevents(res.data)
             })
             getEventGalleries(event.id).then(res => {
-                setGalleries(res.data)
+                setGalleries(res.data.content)
             })
         }
     }, [event])

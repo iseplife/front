@@ -3,17 +3,17 @@ import {Button, Modal} from "antd"
 import GalleryForm from "./GalleryForm"
 import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
-import {Gallery} from "../../../data/gallery/types"
+import {GalleryPreview} from "../../../data/gallery/types"
 
 type GalleryModalFormProps = {
     feed: number
-    onSubmit: (g: Gallery) => void
+    onSubmit: (g: GalleryPreview) => void
 }
 const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
     const [visible, setVisible] = useState(false)
 
-    const handleSubmit = useCallback((g: Gallery) => {
+    const handleSubmit = useCallback((g: GalleryPreview) => {
         setVisible(false)
         onSubmit(g)
     }, [onSubmit])

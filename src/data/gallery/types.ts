@@ -1,4 +1,4 @@
-import {Club, ClubPreview} from "../club/types"
+import {ClubPreview} from "../club/types"
 import {Image} from "../media/types"
 
 export type Gallery = {
@@ -20,6 +20,7 @@ export type GalleryForm = {
     description: string
     images: number[]
     feed: number
+    pseudo: boolean
     club: number
 }
 

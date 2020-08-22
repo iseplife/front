@@ -2,7 +2,7 @@ import axios, {AxiosPromise} from "axios"
 import {Club, ClubAdminForm, ClubForm, ClubMember, ClubMemberForm, ClubPreview} from "./types"
 import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
-import {Gallery} from "../gallery/types"
+import {Gallery, GalleryPreview} from "../gallery/types"
 
 
 export const getAllClubs = (): AxiosPromise<ClubPreview[]> => axios.get("/club")
@@ -37,7 +37,7 @@ export const getClubAdmins = (id: number): AxiosPromise<StudentPreview[]> => axi
 
 export const getClubMembers = (id: number): AxiosPromise<ClubMember[]> => axios.get(`/club/${id}/member`)
 
-export const getClubGalleries = (id: number): AxiosPromise<Page<Gallery>> => axios.get(`/club/${id}/galleries`)
+export const getClubGalleries = (id: number): AxiosPromise<Page<GalleryPreview>> => axios.get(`/club/${id}/galleries`)
 
 export const addClubMember = (id: number, student: number): AxiosPromise<ClubMember> => axios.put(`club/${id}/member/${student}`)
 

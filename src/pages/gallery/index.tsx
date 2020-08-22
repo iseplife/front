@@ -13,7 +13,7 @@ import {Image} from "../../data/media/types"
 
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps[]> => {
-    return await Promise.all(gallery.previewImages.map<PromiseLike<PhotoProps>>((img: Image, index: number) =>
+    return await Promise.all(gallery.images.map<PromiseLike<PhotoProps>>((img: Image, index: number) =>
         parsePhoto(img.name, `${img.name}-${index}`)
     ))
 }
@@ -32,13 +32,12 @@ const parsePhoto = (imgUrl: string, imgIndex: string): Promise<PhotoProps> => {
 
 const Gallery: React.FC = () => {
     const {t} = useTranslation("gallery")
-    const {id} = useParams()
+    const {id, picture} = useParams()
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps[]>([])
 
-    const {pictureId} = useParams()
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false)
     const [currentPhoto, setCurrentPhoto] = useState<PhotoProps>()
 
@@ -47,27 +46,25 @@ const Gallery: React.FC = () => {
     /*Gallery initialization*/
     useEffect(() => {
         if (id) {
-            getGallery(id)
-                .then(res => {
-                    const galleryResponse = res.data
-                    if (galleryResponse) {
-                        setGallery(galleryResponse)
-                        getPhotosAsync(galleryResponse)
-                            .then((photos: PhotoProps[]) => {
-                                setPhotos(photos)
+            getGallery(id).then(res => {
+                const galleryResponse = res.data
+                if (galleryResponse) {
+                    setGallery(galleryResponse)
+                    getPhotosAsync(galleryResponse)
+                        .then((photos: PhotoProps[]) => {
+                            setPhotos(photos)
 
-                                if (pictureId) {
-                                    setCurrentPhoto(photos[parseInt(pictureId)])
-                                    setOpenLigthbox(true)
-                                }
-                            })
-                            .catch(e => message.error(`Parse gallery's picture to photo type failed, ${e}`))
-                            .finally(() => setIsLoading(false))
-                    }
-                })
-                .catch(e => message.error(`Get this gallery failed ,${e}`))
+                            if (picture) {
+                                setCurrentPhoto(photos[parseInt(picture)])
+                                setOpenLigthbox(true)
+                            }
+                        })
+                        .catch(e => message.error(`Parse gallery's picture to photo type failed, ${e}`))
+                        .finally(() => setIsLoading(false))
+                }
+            }).catch(e => message.error(`Get this gallery failed ,${e}`))
         }
-    }, [id, pictureId])
+    }, [id, picture])
 
     const onCurrentPhotoChange = useCallback((photo: PhotoProps, index: number) => {
         setPhotos(photos)
@@ -91,10 +88,10 @@ const Gallery: React.FC = () => {
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
             <div className="flex flex-row">
                 <Skeleton loading={isLoading} active paragraph={false} className="w-48 mr-2"/>
-                <div className="font-bold text-xl text-blue-900 mt-2">{!!gallery && !isLoading ? gallery.name : ""}</div>
+                <div className="font-bold text-xl text-blue-900 mt-2">{gallery?.name}</div>
             </div>
             <div className="text-xs mt-2 mb-1 flex flex-row items-center">
-                {gallery && !isLoading ? `${gallery.previewImages.length} ${t("pictures")}` : ""}
+                {`${gallery?.images.length} ${t("pictures")}`}
                 <Skeleton loading={isLoading} active paragraph={false} className="w-20 mr-2"/>
             </div>
             <div className="flex flex-row bg-white p-1">
@@ -109,13 +106,15 @@ const Gallery: React.FC = () => {
                     <Skeleton avatar={true} loading={isLoading} active paragraph={false} title={false}/>
                 </div> :
                 <div className="h-16 mt-2 mb-4 w-full text-right mr-2">
-                    {`${t("posted_date")} ${gallery ? new Date(gallery.creation).toLocaleDateString() : ""} ${t("by")}`}
-                    <Tooltip title={gallery ? gallery.club.name : ""}>
+                    {`${t("posted_date")} ${gallery && new Date(gallery.creation).toLocaleDateString()} ${t("by")}`}
+                    <Tooltip title={gallery?.club.name}>
                         <Link to={"/club/1"}>
                             <Avatar
                                 shape="circle"
                                 className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                icon={<UserOutlined/>} size="large"/>
+                                icon={<UserOutlined/>}
+                                size="large"
+                            />
                         </Link>
                     </Tooltip>
                 </div>

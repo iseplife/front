@@ -1,4 +1,5 @@
 {
+  "galleries": "Galeries",
   "posted_date" : "Posté le",
   "by": "par",
   "pictures": "photos",
@@ -17,5 +18,7 @@
     ],
     "create": "Créer"
   },
-  "created": "Galerie créée avec succès !"
+  "empty": "Galerie vide...",
+  "created": "Galerie créée avec succès !",
+  "see_all": "Voir toutes les galeries"
 }

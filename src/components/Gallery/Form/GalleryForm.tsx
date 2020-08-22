@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from "react"
 import {useFormik} from "formik"
-import {Gallery, GalleryForm as GalleryFormType} from "../../../data/gallery/types"
+import {Gallery, GalleryForm as GalleryFormType, GalleryPreview} from "../../../data/gallery/types"
 import {Input, message} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
@@ -11,7 +11,7 @@ const {TextArea} = Input
 
 type GalleryFormProps = {
     feed: number
-    onSubmit: (g: Gallery) => void
+    onSubmit: (g: GalleryPreview) => void
 }
 const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
@@ -20,13 +20,18 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
             name: "",
             description: "",
             images: [],
+            pseudo: false,
             feed: feed,
             club: -1,
         },
         onSubmit: (values) => {
             createGallery(values).then(res => {
                 message.success(t("created"))
-                onSubmit(res.data)
+                onSubmit({
+                    id: res.data.id,
+                    name: res.data.name,
+                    preview: res.data.images.splice(0, 5)
+                })
             })
         }
     })

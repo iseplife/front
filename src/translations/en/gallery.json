@@ -1,4 +1,5 @@
 {
+  "galleries": "Galleries",
   "posted_date" : "Posted the",
   "by": "by",
   "pictures": "pictures",
@@ -17,5 +18,7 @@
     ],
     "create": "Create"
   },
-  "created": "Gallery successfully created !"
+  "empty": "This gallery is empty...",
+  "created": "Gallery successfully created !",
+  "see_all": "See all galleries"
 }
