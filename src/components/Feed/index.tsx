@@ -6,6 +6,7 @@ import Post from "../Post"
 import PostForm from "../Post/PostForm"
 import {createPost, deletePost, updatePost} from "../../data/post"
 import {Divider} from "antd"
+import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton"
 
 type FeedProps = {
     id: number
@@ -16,9 +17,13 @@ type FeedProps = {
 const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => {
     const [posts, setPosts] = useState<PostType[]>([])
     const [editPost, setEditPost] = useState<number>(0)
+    const [fetching, setFetching] = useState<boolean>(false)
+
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
+        setFetching(true)
         const res = await getFeedPost(id, count)
         setPosts(posts => [...posts, ...res.data.content])
+        setFetching(false)
 
         return res.data.last
     }, [id])
@@ -59,14 +64,17 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
     return (
         <div className={`${className} max-w-4xl`} style={style}>
-            <Divider className="font-dinotcb text-gray-500 text-lg" orientation="left">Publications</Divider>
+            {allowPublication && (
+                <Divider className="font-dinotcb text-gray-500 text-lg" orientation="left">Publications</Divider>
+            )}
             {allowPublication && (
                 <PostForm feedId={id} sendPost={sendPost}/>
             )}
 
-            <InfiniteScroller watch="DOWN" callback={loadMorePost}>
+            <InfiniteScroller watch="DOWN" callback={loadMorePost} loading={<CardTextSkeleton loading={fetching} number={10} className="w-full mb-3 mt-3"/>}>
                 {posts.map((p) => (
-                    <Post key={p.id} data={p}
+                    <Post
+                        key={p.id} data={p}
                         onDelete={removePost}
                         onUpdate={handlePostUpdate}
                         onEdit={setEditPost}

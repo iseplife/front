@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import {Gallery as GalleryType, Media as IsepLifeImage} from "../../data/gallery/type"
+import {Gallery as GalleryType, Media as IsepLifeImage} from "../../data/gallery/types"
 import {Avatar, message, Skeleton, Tooltip} from "antd"
-import Gallery, {PhotoProps} from "react-photo-gallery"
+import PhotoGallery, {PhotoProps} from "react-photo-gallery"
 import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
-import {getGalleryById} from "../../data/gallery"
+import {getGallery} from "../../data/gallery"
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
@@ -29,10 +29,10 @@ const parsePhoto = (imgUrl: string, imgIndex: string): Promise<PhotoProps> => {
     })
 }
 
-const CustomGallery: React.FC = () => {
+const Gallery: React.FC = () => {
     const {t} = useTranslation("gallery")
-
     const {id} = useParams()
+
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps[]>([])
@@ -46,7 +46,7 @@ const CustomGallery: React.FC = () => {
     /*Gallery initialization*/
     useEffect(() => {
         if (id) {
-            getGalleryById(id)
+            getGallery(id)
                 .then(res => {
                     const galleryResponse = res.data
                     if (galleryResponse) {
@@ -100,7 +100,7 @@ const CustomGallery: React.FC = () => {
                 {
                     isLoading
                         ? <LoadingGallery/>
-                        : <Gallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
+                        : <PhotoGallery photos={photos} onClick={openLightbox} targetRowHeight={200} direction="row"/>
                 }
             </div>
             {
@@ -131,4 +131,4 @@ const CustomGallery: React.FC = () => {
     )
 }
 
-export default CustomGallery
+export default Gallery

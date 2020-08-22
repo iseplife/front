@@ -4,7 +4,7 @@ import {Avatar, Button, Drawer, Dropdown, Menu} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import {useSelector} from "react-redux"
-import {AppState} from "../../redux/types"
+import {AppState} from "../../context/action"
 import {Student} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
@@ -130,7 +130,7 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
     const [visible, setVisible] = useState<boolean>(false)
     return (
         <>
-            <div className="md:hidden flex justify-around items-center shadow-md fixed bottom-0 w-full h-10 bg-white">
+            <div className="md:hidden flex justify-around items-center shadow-md w-full h-10 bg-white">
                 <Link to="/">
                     <Button shape="circle" icon={<HomeOutlined/>} className="border-0"/>
                 </Link>

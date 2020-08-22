@@ -3,8 +3,8 @@ import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
 import {useFormik} from "formik"
-import {Club, ClubForm} from "../../data/club/types"
-import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus, updateClub, uploadLogo} from "../../data/club"
+import {Club, ClubAdminForm} from "../../data/club/types"
+import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus, updateClubAdmin, uploadClubLogo} from "../../data/club"
 import ClubType, {ClubTypeArray} from "../../constants/ClubType"
 import ImagePicker from "../Common/ImagePicker"
 import Loading from "../Common/Loading"
@@ -37,7 +37,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
     const [club, setClub] = useState<Club>()
     const [admins, setAdmins] = useState<StudentPreview[]>()
 
-    const formik = useFormik<ClubForm>({
+    const formik = useFormik<ClubAdminForm>({
         initialValues: DEFAULT_CLUB,
         onSubmit: async (values) => {
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
@@ -45,7 +45,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
             if (club) {
                 const {logo, ...form} = values
 
-                res = await updateClub(club.id, form)
+                res = await updateClubAdmin(club.id, form)
                 if (res.status === 200) {
                     const newClub = res.data
                     onUpdate(res.data)
@@ -54,7 +54,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     message.success("Modifications enregistrées !")
                 }
                 if (logo) {
-                    res = await uploadLogo(club.id, logo)
+                    res = await uploadClubLogo(club.id, logo)
                     if (res.status === 200) {
                         club.logoUrl = res.data
                     } else {
@@ -68,7 +68,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 if (res.status === 200) {
                     const newClub = res.data
                     if (logo) {
-                        res = await uploadLogo(res.data.id, logo)
+                        res = await uploadClubLogo(res.data.id, logo)
                         if (res.status === 200) newClub.logoUrl = res.data
                     }
                     onCreate(newClub)
@@ -191,7 +191,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </Link>
                     }
 
-                    <ImagePicker onChange={handleImage} defaultImage={club?.logoUrl}/>
+                    <ImagePicker onChange={handleImage} defaultImage={club?.logoUrl} className="avatar-uploader"/>
 
                     <div className="flex justify-between mx-3">
                         <div className="w-1/2">
@@ -261,8 +261,6 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                                 suffix={<IconFA type="brands" name="fa-facebook-f"/>}
                             />
                         </div>
-
-
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">

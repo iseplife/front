@@ -16,8 +16,8 @@ import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
 import {CalendarEventWrapper} from "../../../components/CalendarItem"
 import {useSelector} from "react-redux"
-import {AppState} from "../../../redux/types"
 import EventCreationForm from "../../../components/Event/EventCreationForm"
+import {AppState} from "../../../context/action";
 
 const initFilter = (): EventFilter => {
     return (
@@ -70,7 +70,7 @@ export const filteredEventsState = selector<EventPreview[]>({
             (e.published || !filter.publishedOnly) &&
             filter.adminVision || (
                 filter.types[e.type] &&
-                ((e.targets.length == 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t])))
+                ((e.targets.length === 0 && filter.feeds[-1]) || (e.targets.some(t => filter.feeds[t])))
             ))
     }
 })

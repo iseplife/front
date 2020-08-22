@@ -1,0 +1,31 @@
+{
+  "posts": "Posts",
+  "galleries": "Galleries",
+  "members": "Members",
+  "about": "About",
+  "pictures": "pictures",
+  "errorFileType": "You can only upload JPG/PNG/GIF file!",
+  "errorFileSize": "Image must smaller than 2MB!",
+  "form": {
+    "name": "Association's name",
+    "creation": "Creation date",
+    "description": "Description",
+    "website": "Website",
+    "position": "Position",
+    "role": "Role"
+  },
+  "edit_member": "Manage member",
+  "add_member": "Add a new member",
+  "remove_member": {
+    "title": "Do you want to remove this member ?",
+    "content": "Removing a member is permanent and cannot be undone",
+    "complete": "Member removed"
+  },
+  "add": "Add",
+  "role": {
+    "SUPER_ADMIN": "Super Admin",
+    "ADMIN": "Administrator",
+    "PUBLISHER": "Publisher",
+    "MEMBER": "Member"
+  }
+}

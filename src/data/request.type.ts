@@ -18,3 +18,8 @@ export type Author = {
 export interface Entity {
     id: number
 }
+
+export type LazyLoad<T> = {
+    loading: boolean
+    data?: T
+}

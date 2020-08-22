@@ -53,6 +53,8 @@
   "setting": "Settings",
   "logout": "Disconnect",
   "save": "Save",
+  "delete": "Delete",
+  "reset": "Reset",
   "write_comment": "Write your comment...",
   "published_at": "published at ",
   "edited_last_at": "last edited at ",

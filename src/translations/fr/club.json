@@ -1,0 +1,31 @@
+{
+  "posts": "Publications",
+  "galleries": "Galleries",
+  "members": "Membres",
+  "about": "Découvrir",
+  "pictures": "photos",
+  "errorFileType": "Vous pouvez seulement télécharger les fichiers de type JPG/PNG/GIF !",
+  "errorFileSize": "Votre image ne doit pas dépasser 2MB !",
+  "form": {
+    "name": "Nom de l'association",
+    "creation": "Date de création",
+    "description": "Description",
+    "website": "Site Internet",
+    "position": "Position",
+    "role": "Rôle"
+  },
+  "edit_member": "Modifier membre",
+  "add_member": "Ajouter un nouveau membre",
+  "remove_member": {
+    "title": "Voulez-vous supprimez ce membre ?",
+    "content": "Attention, la suppression d'un membre est irréversible",
+    "complete": "Membre supprimé"
+  },
+  "add": "Ajouter",
+  "role": {
+    "SUPER_ADMIN": "Super Admin",
+    "ADMIN": "Administrateur",
+    "PUBLISHER": "Editeur",
+    "MEMBER": "Membre"
+  }
+}
