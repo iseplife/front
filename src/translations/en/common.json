@@ -16,8 +16,8 @@
 },
   "switch_lang": "Switch language",
   "remove_item": {
-    "title": "Do you want to delete this item?",
-    "content": "Deleting an item is permanent and cannot be undo",
+    "title": "Do you want to delete this ?",
+    "content": "Deleting is permanent and cannot be undo",
     "complete": "Deletion complete"
   },
   "archive_user": [
@@ -49,11 +49,13 @@
     "content": "Editing an item cannot be undo",
     "complete": "Edition saved"
   },
+  "back": "Back",
   "cancel": "Cancel",
   "setting": "Settings",
   "logout": "Disconnect",
   "save": "Save",
   "delete": "Delete",
+  "edit": "Edit",
   "reset": "Reset",
   "write_comment": "Write your comment...",
   "published_at": "published at ",

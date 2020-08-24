@@ -7,6 +7,7 @@ export type Gallery = {
     name: string
     club: ClubPreview
     images: Image[]
+    hasRight: boolean
 }
 
 export type GalleryPreview = {

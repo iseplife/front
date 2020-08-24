@@ -18,6 +18,11 @@
     ],
     "create": "Créer"
   },
+  "upload_failed":  "Envoie des images a échoué",
+  "upload_success": "Images ajoutées avec succès !",
+  "select_img": "Sélectionner vos photos",
+  "add_img": "Ajouter",
+  "delete_selection": "Supprimer la selection",
   "empty": "Galerie vide...",
   "created": "Galerie créée avec succès !",
   "see_all": "Voir toutes les galeries"

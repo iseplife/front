@@ -7,14 +7,9 @@ import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
 import {Media} from "../../../data/media/types"
+import {UploadState} from "../../../data/request.type"
 
 const UPLOADER_ID = "imgupload"
-enum UploadState {
-    OFF,
-    UPLOADING = "active" ,
-    ERROR ="exception",
-    FINISHED= "normal"
-}
 
 type GalleryDraggerProps = {
     canSubmit: boolean
@@ -48,7 +43,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit})
         if (!inDropZone) setInDropZone(true)
     }, [inDropZone])
 
-    const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const handleClick = useCallback(() => {
         document.getElementById(UPLOADER_ID)?.click()
     }, [])
 
@@ -62,7 +57,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit})
     }, [])
 
     const uploadImages = useCallback(() => {
-        const ids: number[] = []
         const requests: AxiosPromise<Media>[] = []
         setUploadingState(UploadState.UPLOADING)
         images.forEach(img => {

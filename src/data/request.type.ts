@@ -23,3 +23,10 @@ export type LazyLoad<T> = {
     loading: boolean
     data?: T
 }
+
+export enum UploadState {
+    OFF,
+    UPLOADING = "active",
+    ERROR = "exception",
+    FINISHED = "success"
+}

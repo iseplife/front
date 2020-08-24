@@ -24,7 +24,7 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
 
-export const isFileImage = (file: File): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file["type"])
+export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
 
 export const mediaPath = (fullPath: string, size?: string): string => {
     const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
