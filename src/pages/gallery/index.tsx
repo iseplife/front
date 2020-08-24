@@ -4,7 +4,7 @@ import {Gallery as GalleryType} from "../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
 import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
-import {deleteGallery, getGallery} from "../../data/gallery"
+import {deleteGallery, deleteGalleryImages, getGallery} from "../../data/gallery"
 import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
@@ -88,6 +88,38 @@ const Gallery: React.FC = () => {
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
 
+    const removeSelection = useCallback(() => {
+        if (gallery)
+            Modal.confirm({
+                title: t("common:remove_item.title"),
+                content: t("common:remove_item.content"),
+                okText: "Ok",
+                cancelText: t("common:cancel"),
+                onOk: async () => {
+                    const ids: number[] = []
+                    photos.forEach(p => {
+                        if (p.selected)
+                            ids.push(+(p.key as string))
+                    })
+                    if(ids.length === photos.length){
+                        deleteGallery(gallery.id).then(() =>
+                            message.info(t("common:remove_item.complete"))
+                        )
+                    }else {
+                        deleteGalleryImages(gallery.id, ids)
+                            .then(() => {
+                                message.success(t("selection_delete"))
+                                setPhotos(prevPhotos => prevPhotos.filter(p => !p.selected))
+                            })
+                            .catch(e => {
+                                message.error(t("Une erreur est survenue"))
+                                console.log(e)
+                            })
+                    }
+                }
+            })
+    }, [gallery, photos])
+
     const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
         <SelectableImage
             key={key}
@@ -156,7 +188,7 @@ const Gallery: React.FC = () => {
                         </Button>
                         <div className="flex mt-3">
                             <GalleryAdder gallery={gallery.id} afterUpload={addNewImages}/>
-                            <Button className="rounded mx-1" danger onClick={() => setEditMode(true)}>
+                            <Button className="rounded mx-1" danger onClick={removeSelection}>
                                 {t("delete_selection")}
                                 <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
                             </Button>

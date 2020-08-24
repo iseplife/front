@@ -69,7 +69,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 case 404:
                     props.history.push("/404")
                     break
-                case 401:
                 case 403:
                     removeTokens()
                     props.history.push("/login")
@@ -83,9 +82,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 case 503:
                     message.error("Serveur indisponible")
                     break
-
                 default:
-                    message.error("Un probleme a été rencontré")
+                    throw error
                     break
             }
         }

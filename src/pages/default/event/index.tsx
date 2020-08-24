@@ -21,6 +21,7 @@ import {
 } from "@ant-design/icons"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import {GalleryPreview} from "../../../data/gallery/types"
+import GalleryCard from "../../../components/Gallery/GalleryCard"
 
 
 const Event: React.FC = () => {
@@ -30,7 +31,7 @@ const Event: React.FC = () => {
     const [event, setEvent] = useState<EventType | undefined>()
 
     const eventsRef = useRef<HTMLInputElement>(null)
-    const [subevents, setSubevents] = useState<PreviewType[]>()
+    const [subevents, setSubevents] = useState<PreviewType[]>([])
     const [eventsVisible, setEventVisible] = useState<boolean>(false)
 
     const [galleries, setGalleries] = useState<GalleryPreview[]>([])
@@ -82,14 +83,15 @@ const Event: React.FC = () => {
                     </Link>
                     <div
                         className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
-                        style={{right: 0, bottom: 5}}>
+                        style={{right: 0, bottom: 5}}
+                    >
                         {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
                     </div>
                 </div>
                 <div className="mx-auto p-3 w-full">
                     <div className="flex md:flex-row flex-col ">
                         <div className="md:w-1/6 w-full md:order-1 order-3">
-                            {subevents &&
+                            {subevents.length != 0 &&
                             <div className="mt-5 text-center">
                                 <div
                                     className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
@@ -110,12 +112,24 @@ const Event: React.FC = () => {
                                         <EventPreview key={i} event={se}/>
                                     ))}
                                 </div>
-
                             </div>
                             }
-                            <div className="bg-white rounded shadowp-2 mt-3">
-                                <GalleryModalForm feed={event.feed} onSubmit={(g) => setGalleries(prevState => [...prevState, g])} />
+                            {galleries &&
+                            <div className="mt-5 ml-2">
+                                <span className="font-dinotcb text-gray-500 text-lg ">
+                                    {t("gallery")}
+                                </span>
+                                <div className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
+                                    {galleries.map(g => (
+                                        <GalleryCard key={g.id} gallery={g} />
+                                    ))}
+                                </div>
+                                <div className="bg-white rounded shadowp-2 mt-3">
+                                    <GalleryModalForm feed={event.feed} onSubmit={(g) => setGalleries(prevState => [...prevState, g])} />
+                                </div>
                             </div>
+                            }
+
                         </div>
 
                         <div className="flex items-center md:w-4/6 w-full flex-col md:order-2 order-1">
@@ -124,7 +138,7 @@ const Event: React.FC = () => {
                                 {event.title}
                             </div>
                             <div className="font-dinotcb text-4xl text-center">
-                                {format(new Date(event.start), "HH:mm") + " " + (event.end ? format(new Date(event.end), "HH:mm") : "")}
+                                {format(new Date(event.start), "HH:mm") + (event.end ? format(new Date(event.end), " - HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
                                 {event.location}

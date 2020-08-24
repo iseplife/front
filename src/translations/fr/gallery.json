@@ -23,6 +23,7 @@
   "select_img": "Sélectionner vos photos",
   "add_img": "Ajouter",
   "delete_selection": "Supprimer la selection",
+  "selection_delete": "Images supprimées avec succès !",
   "empty": "Galerie vide...",
   "created": "Galerie créée avec succès !",
   "see_all": "Voir toutes les galeries"
