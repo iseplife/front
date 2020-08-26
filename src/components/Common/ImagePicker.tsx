@@ -33,6 +33,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
     return (
         <>
             <Upload
+                id="image-picker"
                 name="avatar"
                 listType="picture-card"
                 className={`flex justify-center ${className}`}

@@ -16,9 +16,9 @@
   },
   "switch_lang": "Changer la langue",
   "remove_item": {
-    "title": "Voulez-vous supprimez cet élément ?",
-    "content": "Attention, la suppression d'un élément est définitive",
-    "complete": "Elément supprimé"
+    "title": "Voulez-vous supprimez cela ?",
+    "content": "Attention, la suppression est une action définitive",
+    "complete": "Élément supprimé"
   },
   "archive_user": [
     {
@@ -49,10 +49,12 @@
     "content": "Attention, la modification un élément ne peut-être annulé",
     "complete": "Modifications enregistrées"
   },
+  "back": "Retour",
   "cancel": "Annuler",
   "setting": "Paramètres",
   "logout": "Se déconnecter",
   "save": "Sauvegarder",
+  "edit": "Modifier",
   "delete": "Supprimer",
   "reset": "Réinitialiser",
   "write_comment": "Ecris ton commentaire...",

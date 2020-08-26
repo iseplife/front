@@ -15,26 +15,22 @@ import {
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
-    if (!!carouselRef && !!carouselRef.current) {
+    if (carouselRef?.current)
         carouselRef.current.prev()
-    }
 }
 const slideRigth = (carouselRef: RefObject<Carousel>): void => {
-    if (!!carouselRef && !!carouselRef.current) {
-        carouselRef.current.next()
-    }
+    if (carouselRef?.current)
+        carouselRef?.current.next()
 }
 
+const TIME_PER_SLIDE = 1000
 
-export type GalleryLigthboxProps = {
+type GalleryLigthboxProps = {
     photos: PhotoProps[];
     currentPhoto: PhotoProps | undefined;
     onCurrentPhotoChange(photo: PhotoProps, index: number): void;
     onClose(): void;
 }
-
-const TIME_PER_SLIDE = 200
-
 const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, onCurrentPhotoChange, onClose}) => {
     const {t} = useTranslation("gallery")
     const [autoPlay, setAutoPlay] = useState<boolean>(false)
@@ -47,13 +43,11 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
      */
     useLayoutEffect(() => {
         // Carousel slide with keyboard control
-        const handleKeyboardPressAction = (carouselRef: RefObject<Carousel>, event: any) => {
-            if (event.key === "ArrowLeft") {
+        const handleKeyboardPressAction = (carouselRef: RefObject<Carousel>, event: KeyboardEvent) => {
+            if (event.key === "ArrowLeft")
                 slideLeft(carouselRef)
-            }
-            if (event.key === "ArrowRight") {
+            if (event.key === "ArrowRight")
                 slideRigth(carouselRef)
-            }
         }
         window.addEventListener("keydown", (e) => handleKeyboardPressAction(carouselRef, e))
 
@@ -68,10 +62,9 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
             const dots = dotListRef.current.children
             for (let i = 0; i < dots.length; i++) {
                 const dot = dots.item(i)
-                if (!!dot && dot.classList.contains("slick-active")) {
+                if (dot?.classList.contains("slick-active")) {
                     dot.scrollIntoView({behavior: "smooth"})
                     break
-
                 }
             }
         }
@@ -88,7 +81,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
         } else {
             clearInterval(autoPlayInterval as NodeJS.Timeout)
         }
-    }, [autoPlay])
+    }, [autoPlay, autoPlayInterval])
 
     const carouselProps: CarouselProps = {
         dots: true,
@@ -102,8 +95,12 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
         afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex], currentSlideIndex),
         customPaging: (i: number) => (
             <Button className="w-10 h-10 bg-transparent">
-                <Avatar src={photos[i].src} shape="square" size="large"
-                    className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"/>
+                <Avatar
+                    src={photos[i].src}
+                    shape="square"
+                    size="large"
+                    className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"
+                />
             </Button>
         ),
         appendDots: (dots: React.ReactNode) => (
@@ -119,46 +116,52 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
     return (
         <div className="fixed z-30 top-0 left-0 bg-black w-full h-full flex flex-col">
             <div className="w-full h-20">
-                <CloseOutlined style={{color: "white"}} className="text-xl m-4 float-right"
-                    onClick={onClose}/>
+                <CloseOutlined style={{color: "white"}} className="text-xl m-4 float-right" onClick={onClose}/>
             </div>
             <div className={"w-full flex flex-row items-center " + style.galleryLightboxBody}>
-                <div
-                    className="m-4 absolute z-30 text-center left-0  hidden sm:block md:block lg:block">
-                    <LeftOutlined onClick={() => slideLeft(carouselRef)}
-                        className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
+                <div className="m-4 absolute z-30 text-center left-0  hidden sm:block md:block lg:block">
+                    <LeftOutlined
+                        className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"
+                        onClick={() => slideLeft(carouselRef)}
+                    />
                 </div>
                 <div className="w-full p-4">
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
-                        {
-                            photos.map((photo: PhotoProps, index: number) => {
-                                return (
-                                    <div key={photo.src + "/" + index}>
-                                        <div className={style.carouselContent}>
-                                            <img src={photo.src} className={style.carouselImage}/>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-
+                        {photos.map((photo: PhotoProps, index: number) => (
+                            <div key={photo.src + "/" + index}>
+                                <div className={style.carouselContent}>
+                                    <img src={photo.src} className={style.carouselImage}/>
+                                </div>
+                            </div>
+                        ))}
                     </Carousel>
                 </div>
-                <div
-                    className="m-4 text-center absolute z-30 right-0 hidden sm:block md:block lg:block">
-                    <RightOutlined onClick={() => slideRigth(carouselRef)}
-                        className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"/>
+                <div className="m-4 text-center absolute z-30 right-0 hidden sm:block md:block lg:block">
+                    <RightOutlined
+                        className="text-white p-4 w-12 h-12 hover:bg-gray-900 rounded-full"
+                        onClick={() => slideRigth(carouselRef)}
+                    />
                 </div>
             </div>
             <div className="mx-auto flex h-20 items-center">
-                <Button type="default"
+                <Button
+                    type="default"
                     icon={autoPlay ? <PauseCircleOutlined/> : <PlayCircleOutlined/>}
                     onClick={() => setAutoPlay(!autoPlay)}
-                    className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}>{autoPlay ? `${t("stop")}` : `${t("play")}`}</Button>
-                <Button type="default" icon={<DownloadOutlined/>}
+                    className={"w-22 h-12 mr-6 flex items-center text-md text-white border-none " + (autoPlay ? "bg-gray-500" : "bg-gray-900")}
+                >
+                    {autoPlay ? `${t("stop")}` : `${t("play")}`}
+                </Button>
+                <Button
+                    type="default"
+                    icon={<DownloadOutlined/>}
                     className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900"
                     href={currentPhoto ? currentPhoto.src : ""}
-                    download={`@prodIsepLife/${currentPhoto ? currentPhoto.src : "undefined"}`}>{t("download")}</Button>
+                    download={`@prodIsepLife/${currentPhoto ? currentPhoto.src : "undefined"}`}
+                >
+                    {t("download")}
+
+                </Button>
             </div>
         </div>
     )

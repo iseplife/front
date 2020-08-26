@@ -1,5 +1,4 @@
 import React, {useMemo} from "react"
-import {AvatarProps} from "antd/es/avatar"
 import {Skeleton} from "antd"
 
 const SKELETON_PLACEHOLDER_COUNT = 10

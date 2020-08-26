@@ -3,7 +3,7 @@ import {useParams} from "react-router"
 import {Club as ClubType} from "../../data/club/types"
 import {getClub, getClubGalleries, getClubMembers} from "../../data/club"
 import {Button, message, Skeleton} from "antd"
-import {Gallery} from "../../data/gallery/types"
+import {Gallery, GalleryPreview} from "../../data/gallery/types"
 import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../components/Club/Mobile/ClubNavbar"
 import ClubCover from "../../components/Club/ClubDescription/ClubCover"
@@ -24,7 +24,7 @@ const Club: React.FC = () => {
     const history = useHistory()
     const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
-    const [galleries, setGalleries] = useState<Gallery[]>([])
+    const [galleries, setGalleries] = useState<GalleryPreview[]>([])
     const [galleriesLoading, setGalleriesLoading] = useState<boolean>(false)
 
     // Updated function called when respective tab is active
@@ -96,16 +96,16 @@ const Club: React.FC = () => {
                         {state.adminMode && <h1 className="ml-5 my-auto font-dinotcb text-2xl text-gray-600">Panel administration</h1>}
                     </div>
                     {state.club.data &&
-                    <div className="flex items-center" style={{height: "min-content"}}>
+                    <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
                         {state.club.data.website && <SocialIcon type="fa-firefox" url={state.club.data.website}/>}
                         {state.club.data.facebook && <SocialIcon type="fa-facebook" url={state.club.data.facebook}/>}
                         {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
                         {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
                         {state.club.data.canEdit &&
-                        <Button type="primary" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
+                        <Button className="hidden md:block" type="primary" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
                             Mode admin
                             <IconFA
-                                className="hidden md:inline cursor-pointer ml-2"
+                                className="cursor-pointer ml-2"
                                 name={state.adminMode ? "fa-sign-out-alt" : "fa-tools"}
                             />
                         </Button>
@@ -119,7 +119,7 @@ const Club: React.FC = () => {
                     {state.adminMode && state.club.data ?
                         <ClubAdmin /> :
                         <>
-                            <ClubPresentation galleries={galleries} galleriesLoading={galleriesLoading}/>
+                            <ClubPresentation />
                             <div className="flex-grow">
                                 {state.club.data &&
                                 <Feed id={state.club.data.feed} allowPublication={false} className="m-4 hidden md:block"/>
@@ -131,11 +131,7 @@ const Club: React.FC = () => {
                     }
                 </div>
 
-                <ClubNavbar
-                    key="mobile-display"
-                    galleries={galleries}
-                    galleriesLoading={galleriesLoading}
-                />
+                <ClubNavbar key="mobile-display"/>
             </div>
         </ClubContext.Provider>
     )

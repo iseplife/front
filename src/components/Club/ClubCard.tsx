@@ -1,5 +1,7 @@
 import React from "react"
 import {ClubPreview} from "../../data/club/types"
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 type ClubCardProps = {
     club: ClubPreview
@@ -7,12 +9,12 @@ type ClubCardProps = {
 }
 const ClubCard: React.FC<ClubCardProps> = ({club, className = ""}) => (
     <div className={`${className}`}>
-        <div className="h-full mx-1 rounded shadow-md hover:shadow-xl">
+        <div className="h-full mx-1 rounded shadow-md hover:shadow-xl bg-white">
             <div style={{height: "80%"}}>
                 <div
                     className="w-full h-full mx-auto rounded-t rounded"
                     style={{
-                        backgroundImage: `url("${club.logoUrl}")`,
+                        backgroundImage: `url("${mediaPath(club.logoUrl, AvatarSizes.DEFAULT)}")`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover",
                         backgroundPosition: "center",

@@ -1,8 +1,30 @@
 {
+  "galleries": "Galeries",
   "posted_date" : "Posté le",
   "by": "par",
   "pictures": "photos",
   "play": "Lecture",
   "stop": "Pause",
-  "download": "Télécharger"
+  "download": "Télécharger",
+  "add": "Ajouter une galerie",
+  "form": {
+    "title": "Création d'une galerie",
+    "name": "Nom de la galerie",
+    "description": "Description",
+    "author": "Auteur",
+    "draganddrop": [
+      "Importez ici vos photos",
+      "Cliquez ou faites glisser vos photos dans la zone de téléchargement.\n Attention les fichiers qui ne sont pas des images ne seront pas envoyés"
+    ],
+    "create": "Créer"
+  },
+  "upload_failed":  "Envoie des images a échoué",
+  "upload_success": "Images ajoutées avec succès !",
+  "select_img": "Sélectionner vos photos",
+  "add_img": "Ajouter",
+  "delete_selection": "Supprimer la selection",
+  "selection_delete": "Images supprimées avec succès !",
+  "empty": "Galerie vide...",
+  "created": "Galerie créée avec succès !",
+  "see_all": "Voir toutes les galeries"
 }

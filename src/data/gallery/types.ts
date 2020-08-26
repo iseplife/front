@@ -1,21 +1,27 @@
-import {Club} from "../club/types"
+import {ClubPreview} from "../club/types"
+import {Image} from "../media/types"
 
 export type Gallery = {
     id: number
-    name: string
-    official: true
-    club: Club,
-    creation: Date,
-    embedType: string,
-    coverImage: Media
-    previewImages: Media[]
-}
-
-export type Media = {
-    id: number
     creation: Date
     name: string
-    embedType: string
-    nsfw: string
+    club: ClubPreview
+    images: Image[]
+    hasRight: boolean
+}
+
+export type GalleryPreview = {
+    id: number
+    name: string
+    preview: Image[]
+}
+
+export type GalleryForm = {
+    name: string
+    description: string
+    images: number[]
+    feed: number
+    pseudo: boolean
+    club: number
 }
 

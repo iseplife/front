@@ -65,6 +65,10 @@ abbr[title] {
     padding: 10px 24px 24px !important;
 }
 
+.no-padding-modal .ant-modal-body {
+    padding: 0 !important;
+}
+
 /********/
 
 /* Hide scrollbar for Chrome, Safari and Opera */

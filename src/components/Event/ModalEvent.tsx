@@ -15,7 +15,7 @@ import {useTranslation} from "react-i18next"
 import {IconFA} from "../Common/IconFA"
 import {EventTypeColor} from "../../constants/EventType"
 import {Link} from "react-router-dom"
-import {Avatar} from "antd";
+import {Avatar} from "antd"
 
 type ModalEventHeaderProps = {
     event: EventPreview

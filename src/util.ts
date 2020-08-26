@@ -1,9 +1,9 @@
 import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format} from "date-fns"
-import { enUS, fr } from "date-fns/locale"
+import {enUS, fr} from "date-fns/locale"
 
-const locales: {[id: string]: Locale} = {
+const locales: { [id: string]: Locale } = {
     en: enUS,
     fr
 }
@@ -23,6 +23,21 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
     format(date, formatStr, {
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
+
+export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
+
+export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
+    if(fullPath){
+        const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
+        if (size) {
+            const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
+            fullPath = `${path}/${size}/${filename}`
+        }
+
+        return `${storageUrl}/${fullPath}`
+    }
+    return fullPath
+}
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>
