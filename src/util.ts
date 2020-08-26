@@ -26,14 +26,17 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
 
 export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
 
-export const mediaPath = (fullPath: string, size?: string): string => {
-    const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
-    if (size) {
-        const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
-        fullPath = `${path}/${size}/${filename}`
-    }
+export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
+    if(fullPath){
+        const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
+        if (size) {
+            const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
+            fullPath = `${path}/${size}/${filename}`
+        }
 
-    return `${storageUrl}/${fullPath}`
+        return `${storageUrl}/${fullPath}`
+    }
+    return fullPath
 }
 
 export class EntitySet<T extends Entity> {

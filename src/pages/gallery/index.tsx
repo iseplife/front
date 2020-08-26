@@ -27,7 +27,7 @@ const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps<Selectab
 const parsePhoto = (imgUrl: string, key: string): Promise<PhotoProps<SelectablePhoto>> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.THUMBNAIL)
+        image.src = mediaPath(imgUrl, GallerySizes.THUMBNAIL) as string
         image.onerror = reject
         image.onload = () => resolve({
             selected: false,

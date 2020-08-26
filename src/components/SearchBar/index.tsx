@@ -132,7 +132,9 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
                 <Option key={inputProps.value} value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
                     <div className="flex justify-between">
                         <div className="inline-flex">
-                            <AvatarSearchType props={inputProps}/>
+                            <AvatarSearchType
+                                props={inputProps}
+                            />
                             <div className="ml-2 font-bold">{inputProps.text}</div>
                         </div>
                         <Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>

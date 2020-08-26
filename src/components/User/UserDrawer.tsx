@@ -90,11 +90,6 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                 {student.mail ? <span className="select-all">{student.mail}</span>
                                     : t("user:no-mail")}
                             </div>
-                            <div className="text-sm sm:text-base">
-                                {student.phone ? <span className="select-all">
-                                    {student.phone}</span>
-                                    : t("user:no-phone")}
-                            </div>
                             <div className="mt-3 sm:mt-10 mx-auto">
                                 {student.facebook && socialUserIcon("fa-facebook", student.facebook)}
                                 {student.twitter && socialUserIcon("fa-twitter", student.twitter)}

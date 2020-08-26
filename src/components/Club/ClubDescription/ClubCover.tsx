@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next"
 import ImagePicker from "../../Common/ImagePicker"
 import {uploadCover} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
+import {mediaPath} from "../../../util";
 
 const ClubCover: React.FC = () => {
     const {t} = useTranslation()
@@ -49,7 +50,7 @@ const ClubCover: React.FC = () => {
                 <div
                     className="w-full h-full"
                     style={{
-                        backgroundImage: `url("${"https://iseplife.s3.eu-west-3.amazonaws.com/" + (club?.coverUrl || "/img/default-cover.png")}")`,
+                        backgroundImage: `url("${mediaPath(club?.coverUrl || "img/static/default-cover.png")}")`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover",
                         backgroundPosition: "center",

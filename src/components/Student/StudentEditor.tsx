@@ -98,7 +98,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             firstName: res.data.firstName,
                             lastName: res.data.lastName,
                             mail: res.data.mail,
-                            phone: res.data.phone,
                             birthDate: res.data.birthDate ? new Date(res.data.birthDate) : undefined
                         })
                     } else {
@@ -240,16 +239,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             <Input placeholder="dieudonne.abboud@isep.fr"
                                 name="mail"
                                 value={formik.values.mail}
-                                onChange={formik.handleChange}
-                            />
-                        </div>
-                        <div className="w-32">
-                            <label className="font-dinotcb">téléphone</label>
-                            <Input
-                                pattern="^((\+)33|0)[1-9](\d{2}){4}$"
-                                placeholder="0781140407"
-                                name="phone"
-                                value={formik.values.phone}
                                 onChange={formik.handleChange}
                             />
                         </div>

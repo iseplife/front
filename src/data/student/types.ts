@@ -7,7 +7,6 @@ export interface Student {
     mail?: string
     birthDate?: number
     archivedAt?: string
-    phone?: string
     allowNotifications: boolean
 
     facebook?: string
@@ -48,7 +47,6 @@ export type StudentAdminForm = {
     lastName: string
     birthDate?: Date
     mail?: string
-    phone?: string
     picture?: File,
     resetPicture?: boolean
 }

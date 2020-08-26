@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
+import {Button, Divider, Input, message, Modal, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
 import {useFormik} from "formik"
@@ -39,6 +39,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
 
     const formik = useFormik<ClubAdminForm>({
         initialValues: DEFAULT_CLUB,
+        enableReinitialize: true,
         onSubmit: async (values) => {
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
             let res
@@ -163,8 +164,9 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
     }, [onArchive, club, t])
 
     return (
-        <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
-             style={{height: "min-content", minHeight: "20rem", top: "1.5rem"}}
+        <div
+            className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/3 mx-2 p-6 sticky"
+            style={{height: "min-content", minHeight: "20rem", top: "1.5rem"}}
         >
             {loading ?
                 <Loading size="4x"/> :

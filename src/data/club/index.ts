@@ -2,7 +2,7 @@ import axios, {AxiosPromise} from "axios"
 import {Club, ClubAdminForm, ClubForm, ClubMember, ClubMemberForm, ClubPreview} from "./types"
 import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
-import {Gallery, GalleryPreview} from "../gallery/types"
+import {GalleryPreview} from "../gallery/types"
 
 
 export const getAllClubs = (): AxiosPromise<ClubPreview[]> => axios.get("/club")
@@ -21,7 +21,7 @@ export const uploadClubLogo = (id: number, file: File | null): AxiosPromise<stri
     const fd = new FormData()
     fd.append("file", file as Blob)
 
-    return axios.put(`/club/${id}/logo`, fd)
+    return axios.post(`/club/${id}/logo`, fd)
 }
 
 export const uploadCover = (id: number, file: File | null): AxiosPromise<string> => {
