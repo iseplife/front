@@ -9,7 +9,7 @@ import "./Event.css"
 import {Avatar} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
-import EventPreview from "../../../components/Event/Preview"
+import EventPreview from "../../../components/Event/EventPreview"
 import {
     TeamOutlined,
     EuroOutlined,

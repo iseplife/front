@@ -16,7 +16,7 @@ type FormValues = {
 const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, values}) => {
     return (
         <Form className="flex flex-col items-center">
-            <div className="flex flex-col bg-white rounded-lg w-4/6 h-20 py-3 px-4 text-gray-500">
+            <div className="flex flex-col bg-white rounded-lg w-full md:w-4/6 h-20 py-3 px-4 text-gray-500">
                 <Field type="textarea" name="description" placeholder="What's on your mind ?"
                     className="text-gray-800 flex-1 bg-transparent resize-none"/>
                 <div className="flex justify-between">

@@ -13,6 +13,7 @@ export type Group = {
     restricted: boolean
     archived: boolean
     locked: boolean
+    feed: number
     admins: StudentPreview[]
 }
 

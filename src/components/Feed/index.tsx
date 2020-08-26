@@ -69,7 +69,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                 <PostForm feedId={id} sendPost={sendPost}/>
             )}
 
-            <InfiniteScroller watch="DOWN" callback={loadMorePost} loading={<CardTextSkeleton loading={fetching} number={10} className="w-full mb-3 mt-3"/>}>
+            <InfiniteScroller watch="DOWN" callback={loadMorePost} loading={<CardTextSkeleton loading={fetching} number={3} className="mb-3 mt-3"/>}>
                 {posts.map((p) => (
                     <Post
                         key={p.id} data={p}

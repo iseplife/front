@@ -37,6 +37,8 @@
 	},
 	"free": "Gratuit",
 	"event": "Évènement",
+	"incoming": "Évènements à venir",
+	"no_events": "Aucun évènement à venir...",
 	"gallery": "Galeries",
 	"published_only": "Évènements publiés seulement",
 	"admin_view": "Vue admin",

@@ -12,6 +12,7 @@ import Navbar from "./Navbar"
 import Club from "../../pages/default/club"
 import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
+import Group from "../../pages/default/group";
 
 
 const DefaultTemplate: React.FC = () => {
@@ -22,11 +23,12 @@ const DefaultTemplate: React.FC = () => {
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
-                        <Route path="/" component={Home}/>
+                        <Route path="/" exact component={Home}/>
                         <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>
                         <Route path="/club/:id" component={Club}/>
+                        <Route path="/group/:id" component={Group}/>
                         <Route path="/gallery/:id" component={Gallery}/>
                         <Route path="/logout" component={Logout}/>
                         <Route path="*" component={NotFound}/>

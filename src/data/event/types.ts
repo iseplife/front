@@ -28,7 +28,7 @@ export type EventPreview = {
     start: number
     end: number
     location: string
-    imageUrl?: string
+    cover?: string
     targets: number[]
     published: boolean
 }

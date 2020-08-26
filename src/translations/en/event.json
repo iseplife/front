@@ -37,6 +37,8 @@
 	},
 	"free": "Free",
 	"event": "Event",
+	"incoming": "Incoming events",
+	"no_events": "No events incoming...",
 	"gallery": "Galleries",
 	"published_only": "Published events only",
 	"admin_view": "Admin view",
