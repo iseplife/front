@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {Skeleton} from "antd"
-import {HorizontalSpacer} from "../../pages/discovery"
+import {HorizontalSpacer} from "../../pages/default/discovery"
 import {useTranslation} from "react-i18next"
 import {getAllClubs} from "../../data/club"
 import {ClubPreview} from "../../data/club/types"

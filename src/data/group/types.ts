@@ -1,5 +1,11 @@
 import {StudentPreview} from "../student/types"
 
+export type GroupPreview = {
+    id: number,
+    name: string,
+    cover?: string
+}
+
 export type Group = {
     id: number
     name: string

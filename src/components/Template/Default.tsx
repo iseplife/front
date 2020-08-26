@@ -7,10 +7,11 @@ import NotFound from "../../pages/erros/NotFound"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
-import Discovery from "../../pages/discovery"
+import Discovery from "../../pages/default/discovery"
 import Navbar from "./Navbar"
-import Club from "../../pages/club"
-import Gallery from "../../pages/gallery"
+import Club from "../../pages/default/club"
+import Gallery from "../../pages/default/gallery"
+import Home from "../../pages/default/home"
 
 
 const DefaultTemplate: React.FC = () => {
@@ -21,6 +22,7 @@ const DefaultTemplate: React.FC = () => {
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
+                        <Route path="/" component={Home}/>
                         <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>

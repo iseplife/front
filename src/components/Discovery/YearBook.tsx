@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useReducer, useRef, useState} from "react
 import InfiniteScroller, {InfiniteScrollerRef, loaderCallback} from "../Common/InfiniteScroller"
 import {searchStudents} from "../../data/student"
 import {useTranslation} from "react-i18next"
-import {HorizontalSpacer} from "../../pages/discovery"
+import {HorizontalSpacer} from "../../pages/default/discovery"
 import StudentCard from "./StudentCard"
 import {FilterReducerAction, StudentPreview} from "../../data/student/types"
 import {SearchItem} from "../../data/searchbar/types"

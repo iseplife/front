@@ -1,7 +1,7 @@
 import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {IconFA} from "../Common/IconFA"
-import {SelectablePhoto} from "../../pages/gallery"
+import {SelectablePhoto} from "../../pages/default/gallery"
 
 const imgStyle = {
     transition: "transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s"

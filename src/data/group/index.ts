@@ -1,16 +1,19 @@
 import axios, {AxiosPromise} from "axios"
 import {Page} from "../request.type"
-import {Group, GroupForm} from "./types"
+import {Group, GroupForm, GroupPreview} from "./types"
 
-export const getAllGroup = (page = 0): AxiosPromise<Page<Group>> => {
-    return axios.get("/group", {
+export const getAllGroup = (page = 0): AxiosPromise<Page<Group>> =>
+    axios.get("/group", {
         params: {page}
     })
-}
 
-export const getGroup = (id: number): AxiosPromise<Group> => {
-    return axios.get(`/group/${id}`)
-}
+export const getUserGroups = (): AxiosPromise<GroupPreview[]> => axios.get("/group/me")
+
+export const getGroup = (id: number): AxiosPromise<Group> => axios.get(`/group/${id}`)
+
+export const deleteGroup = (id: number): AxiosPromise<void> => axios.delete(`/group/${id}`)
+
+export const toggleGroupArchiveStatus = (id: number): AxiosPromise<boolean> => axios.put(`/group/${id}/archive`)
 
 export const createGroup = (form: GroupForm): AxiosPromise<Group> => {
     const fd = new FormData()
@@ -30,12 +33,4 @@ export const updateGroup = (id: number, form: GroupForm): AxiosPromise<Group> =>
     delete form.cover
     fd.append("form", JSON.stringify(form))
     return axios.put(`/group/${id}`, fd)
-}
-
-export const deleteGroup = (id: number): AxiosPromise<void> => {
-    return axios.delete(`/group/${id}`)
-}
-
-export const toggleGroupArchiveStatus = (id: number): AxiosPromise<boolean> => {
-    return axios.put(`/group/${id}/archive`)
 }

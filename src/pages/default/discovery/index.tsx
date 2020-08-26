@@ -1,8 +1,8 @@
 import React from "react"
-import DiscoveryClub from "../../components/Discovery/DiscoveryClub"
-import YearBook from "../../components/Discovery/YearBook"
+import DiscoveryClub from "../../../components/Discovery/DiscoveryClub"
+import YearBook from "../../../components/Discovery/YearBook"
 import {useTranslation} from "react-i18next"
-import DiscoverPurpose from "../../components/Discovery/DiscoveryPurpose"
+import DiscoverPurpose from "../../../components/Discovery/DiscoveryPurpose"
 
 
 interface SpacerProps {

@@ -20,6 +20,8 @@ import {
     ExportOutlined,
     CompassOutlined
 } from "@ant-design/icons"
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 type IconButtonProps = {
     icon: React.ReactNode
@@ -98,7 +100,7 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
                 <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
                     <Avatar
                         icon={<UserOutlined/>}
-                        src={user.picture}
+                        src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}
                         size="small"
                         className="cursor-pointer"
                     />
@@ -138,7 +140,7 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                 </Link>
                 <Button shape="circle" icon={<BellOutlined/>} className="border-0"/>
                 <div onClick={() => setVisible(true)}>
-                    <Avatar icon={<UserOutlined/>} src={user.picture} className="cursor-pointer"/>
+                    <Avatar icon={<UserOutlined/>} src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)} className="cursor-pointer"/>
                 </div>
             </div>
             <Drawer
