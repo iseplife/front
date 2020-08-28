@@ -5,117 +5,39 @@ import {useHistory} from "react-router-dom"
 import {SearchItem, SearchItemType} from "../../data/searchbar/types"
 import {useTranslation} from "react-i18next"
 import CustomCheckbox from "./CustomCheckbox"
+import "./SearchBar.css"
 import AvatarSearchType from "./AvatarSearchType"
 import Pills from "../Common/Pills"
-import "./SearchBar.css"
+import Loading from "../Common/Loading"
 
-const {Option} = Select
 const SEARCH_LENGTH_TRIGGER = 2
+const {Option} = Select
 
-export interface SelectInputProps {
-    id?: number
-    type?: string
-    text: string
-    value: string
-    thumbURL: string
-    status: boolean
+type FilterType = Record<Exclude<SearchItemType, SearchItemType.ALL>, boolean>
+const DEFAULT_FILTER: FilterType = {
+    [SearchItemType.CLUB]: true,
+    [SearchItemType.GROUP]: true,
+    [SearchItemType.EVENT]: true,
+    [SearchItemType.STUDENT]: true,
 }
 
-interface SearchBarProps {
+type SearchBarProps = {
     searchType?: SearchItemType
 }
-
-const SearchBar: React.FC<SearchBarProps> = (searchType) => {
+const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
     const {t} = useTranslation("search")
     const history = useHistory()
-    const [data, setData] = useState<SelectInputProps[]>([])
+    const [data, setData] = useState<SearchItem[]>([])
     const [currentValue, setCurrentValue] = useState<string>("")
     const [fetching, setFetching] = useState<boolean>(false)
 
-    const [filterStudent, setFilterStudent] = useState<boolean>(true)
-    const [filterEvent, setFilterEvent] = useState<boolean>(true)
-    const [filterClub, setFilterClub] = useState<boolean>(true)
-    const [filterOn, setFilterOn] = useState<boolean>(false)
+    const [filter, setFilter] = useState<FilterType>(DEFAULT_FILTER)
 
-    useEffect(() => {
-        setFilterOn(searchType.searchType === SearchItemType.ALL)
-    }, [searchType.searchType])
 
-    /**
-     * Call to search in API
-     * @param queryParams
-     */
-    const updateSearchItems = (queryParams: string) => {
-        setFetching(true)
-        switch (searchType.searchType) {
-            case SearchItemType.STUDENT:
-                searchStudent(queryParams, "", 0).then(res => {
-                    const searchItems: SearchItem[] = res.data.content
-                    setData(searchItems.map((searchItem: SearchItem) => ({
-                        id: searchItem.id,
-                        type: searchItem.type,
-                        value: searchItem.name,
-                        text: searchItem.name,
-                        thumbURL: searchItem.thumbURL,
-                        status: searchItem.status
-                    })))
-                }).finally(() => setFetching(false))
-                break
-            case SearchItemType.EVENT:
-                searchEvent(queryParams, 0).then(res => {
-                    const searchItems: SearchItem[] = res.data.content
-                    setData(searchItems.map((searchItem: SearchItem) => ({
-                        id: searchItem.id,
-                        type: searchItem.type,
-                        value: searchItem.name,
-                        text: searchItem.name,
-                        thumbURL: searchItem.thumbURL,
-                        status: searchItem.status
-                    })))
-                }).finally(() => setFetching(false))
-                break
-            case SearchItemType.CLUB:
-                searchClub(queryParams, 0).then(res => {
-                    const searchItems: SearchItem[] = res.data.content
-                    setData(searchItems.map((searchItem: SearchItem) => ({
-                        id: searchItem.id,
-                        type: searchItem.type,
-                        value: searchItem.name,
-                        text: searchItem.name,
-                        thumbURL: searchItem.thumbURL,
-                        status: searchItem.status
-                    })))
-                }).finally(() => setFetching(false))
-                break
-            case SearchItemType.ALL:
-            default:
-                globalSearch(queryParams, 0).then(res => {
-                    const searchItems: SearchItem[] = res.data.content
-                    setData(searchItems.map((searchItem: SearchItem) => ({
-                        id: searchItem.id,
-                        type: searchItem.type,
-                        value: searchItem.name,
-                        text: searchItem.name,
-                        thumbURL: searchItem.thumbURL,
-                        status: searchItem.status
-                    })))
-                }).finally(() => setFetching(false))
-                break
-        }
-    }
+    const updateFilter = useCallback((type: SearchItemType, state: boolean) => {
+        setFilter(f => ({...f, [type]: state}))
+    }, [])
 
-    /**
-     * Fires when input change
-     * @param value
-     */
-    const handleSearch = useCallback((value: string) => {
-        setCurrentValue(value)
-        if (!!value && value.length > SEARCH_LENGTH_TRIGGER && currentValue !== value) {
-            updateSearchItems(value)
-        } else {
-            setData([])
-        }
-    }, [currentValue])
 
     /**
      * Fires when item is selected
@@ -125,43 +47,69 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
         history.push("/" + value)
     }, [])
 
+    /**
+     * Call to search in API
+     * @param queryParams
+     */
+    useEffect(() => {
+        if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
+            setFetching(true)
+            switch (searchType) {
+                case SearchItemType.STUDENT:
+                    searchStudent(currentValue, "", 0).then(res => {
+                        setData(res.data.content)
+                    }).finally(() => setFetching(false))
+                    break
+                case SearchItemType.EVENT:
+                    searchEvent(currentValue, 0).then(res => {
+                        setData(res.data.content)
+                    }).finally(() => setFetching(false))
+                    break
+                case SearchItemType.CLUB:
+                    searchClub(currentValue, 0)
+                        .then(res => {
+                            setData(res.data.content)
+                        }).finally(() => setFetching(false))
+                    break
+                case SearchItemType.ALL:
+                default:
+                    globalSearch(currentValue, 0).then(res => {
+                        setData(res.data.content)
+                    }).catch(e => {
+                        console.log(e.message)
+                    }).finally(() => setFetching(false))
+                    break
+            }
+        } else {
+            setData([])
+        }
+    }, [currentValue, searchType])
 
-    const renderOptions = () => {
-        return data.map((inputProps: SelectInputProps) => {
-            return ((inputProps.type === SearchItemType.STUDENT && filterStudent) || (inputProps.type === SearchItemType.EVENT && filterEvent) || (inputProps.type === SearchItemType.CLUB && filterClub)) &&
-                <Option key={inputProps.value} value={`${inputProps.type?.toLowerCase()}/${inputProps.id}`}>
-                    <div className="flex justify-between">
-                        <div className="inline-flex">
-                            <AvatarSearchType
-                                props={inputProps}
-                            />
-                            <div className="ml-2 font-bold">{inputProps.text}</div>
-                        </div>
-                        <Pills status={inputProps.status} event={inputProps.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
-                    </div>
-                </Option>
-        })
-    }
 
     const customDropdownRender = (menu: React.ReactNode) => {
         return (
-            filterOn
-                ? <>
+            searchType === SearchItemType.ALL ?
+                <>
                     <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
                         <CustomCheckbox
                             title={t("student")}
-                            filterStatus={filterStudent}
-                            onChange={(e) => setFilterStudent(e.target.checked)}
+                            filterStatus={filter[SearchItemType.STUDENT]}
+                            onChange={(e) => updateFilter(SearchItemType.STUDENT, e.target.checked)}
                         />
                         <CustomCheckbox
                             title={t("club")}
-                            filterStatus={filterClub}
-                            onChange={(e) => setFilterClub(e.target.checked)}
+                            filterStatus={filter[SearchItemType.CLUB]}
+                            onChange={(e) => updateFilter(SearchItemType.CLUB, e.target.checked)}
                         />
                         <CustomCheckbox
                             title={t("event")}
-                            filterStatus={filterEvent}
-                            onChange={(e) => setFilterEvent(e.target.checked)}
+                            filterStatus={filter[SearchItemType.EVENT]}
+                            onChange={(e) => updateFilter(SearchItemType.EVENT, e.target.checked)}
+                        />
+                        <CustomCheckbox
+                            title={t("group")}
+                            filterStatus={filter[SearchItemType.GROUP]}
+                            onChange={(e) => updateFilter(SearchItemType.GROUP, e.target.checked)}
                         />
                     </div>
                     <Divider className="my-1"/>
@@ -182,17 +130,35 @@ const SearchBar: React.FC<SearchBarProps> = (searchType) => {
             placeholder={t("placeholder")}
             className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
             notFoundContent={
-                <Empty
-                    className="flex flex-col items-center"
-                    image={"/img/meme-face.png"}
-                    description={t("funny_empty_message")}
-                />
+                fetching ?
+                    <div>
+                        <Loading size="3x"/>
+                    </div> :
+                    <Empty
+                        className="flex flex-col items-center"
+                        image={"/img/meme-face.png"}
+                        description={t("funny_empty_message")}
+                    />
             }
-            onSearch={handleSearch}
+            onSearch={setCurrentValue}
             onSelect={handleSelect}
             dropdownRender={menu => customDropdownRender(menu)}
         >
-            {renderOptions()}
+            {data.map(({id, type, name, thumbURL, status,}) => filter[type] &&
+                <Option key={`${type}-${id}`} value={`${type.toLowerCase()}/${id}`}>
+                    <div className="flex justify-between">
+                        <div className="inline-flex">
+                            <AvatarSearchType
+                                type={type}
+                                text={name}
+                                thumbURL={thumbURL}
+                            />
+                            <div className="ml-2 font-bold">{name}</div>
+                        </div>
+                        <Pills status={status} event={type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
+                    </div>
+                </Option>
+            )}
         </Select>
     )
 }

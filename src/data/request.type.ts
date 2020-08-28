@@ -30,3 +30,4 @@ export enum UploadState {
     ERROR = "exception",
     FINISHED = "success"
 }
+

@@ -2,6 +2,7 @@
   "placeholder": "Search a user, an event or a club",
   "student": "Student",
   "event": "Event",
+  "group": "Group",
   "club": "Club",
   "funny_empty_message": "Hmmm... this search bar seems useful"
 }
