@@ -1,3 +1,5 @@
 {
-	"group": "Group"
+	"group": "Group",
+	"members": "Membres",
+	"admins": "Administrators"
 }

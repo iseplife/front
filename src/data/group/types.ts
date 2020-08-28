@@ -14,7 +14,13 @@ export type Group = {
     archived: boolean
     locked: boolean
     feed: number
-    admins: StudentPreview[]
+    members: GroupMember[]
+}
+
+export type GroupMember = {
+    id: number
+    admin: boolean
+    student: StudentPreview
 }
 
 export type GroupForm = {
@@ -22,5 +28,4 @@ export type GroupForm = {
     restricted: boolean
     admins: number[]
     cover?: File
-    resetCover?: boolean
 }

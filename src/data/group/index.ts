@@ -15,22 +15,16 @@ export const deleteGroup = (id: number): AxiosPromise<void> => axios.delete(`/gr
 
 export const toggleGroupArchiveStatus = (id: number): AxiosPromise<boolean> => axios.put(`/group/${id}/archive`)
 
-export const createGroup = (form: GroupForm): AxiosPromise<Group> => {
-    const fd = new FormData()
-    fd.append("file", form.cover as Blob)
+export const createGroup = (form: GroupForm): AxiosPromise<Group> => axios.post("/group", form)
 
-    delete form.cover
-    delete form.resetCover
-    fd.append("form", JSON.stringify(form))
-    return axios.post("/group", fd)
+export const updateGroup = (id: number, form: GroupForm): AxiosPromise<Group> => axios.put(`/group/${id}`, form)
+
+export const uploadGroupCover = (id: number, file: File | null): AxiosPromise<string> => {
+    const fd = new FormData()
+    fd.append("file", file as Blob)
+
+    return axios.post(`/group/${id}/cover`, fd)
 }
 
 
-export const updateGroup = (id: number, form: GroupForm): AxiosPromise<Group> => {
-    const fd = new FormData()
-    fd.append("file", form.cover as Blob)
 
-    delete form.cover
-    fd.append("form", JSON.stringify(form))
-    return axios.put(`/group/${id}`, fd)
-}

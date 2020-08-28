@@ -3,6 +3,8 @@ import {Avatar, Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
 import {UserOutlined} from "@ant-design/icons"
+import {mediaPath} from "../../util";
+import {AvatarSizes} from "../../constants/MediaSizes";
 
 const TRIGGER_LENGTH = 2
 type Option = {
@@ -21,7 +23,7 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
         value: v.id,
         label: (
             <>
-                <Avatar icon={<UserOutlined/>} src={v.picture} size={18} className="mr-2 my-1 box-border"/>
+                <Avatar icon={<UserOutlined/>} src={mediaPath(v.picture, AvatarSizes.THUMBNAIL)} size={18} className="mr-2 my-1 box-border"/>
                 {v.firstName + " " + v.lastName}
             </>
         )
@@ -37,7 +39,7 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
                         value: o.id,
                         label: (
                             <>
-                                <Avatar icon={<UserOutlined/>} src={o.thumbURL} size={18} className="mr-2 my-1 box-border"/>
+                                <Avatar icon={<UserOutlined/>} src={mediaPath(o.thumbURL, AvatarSizes.THUMBNAIL)} size={18} className="mr-2 my-1 box-border"/>
                                 {o.name}
                             </>
                         )

@@ -4,6 +4,8 @@ import {AppState} from "../../context/action"
 import {Avatar, Button} from "antd"
 import {Link} from "react-router-dom"
 import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
+import {mediaPath} from "../../util";
+import {AvatarSizes} from "../../constants/MediaSizes";
 
 const AdminHeader: React.FC = () => {
     const user = useSelector((state: AppState) => state.user)
@@ -36,7 +38,7 @@ const AdminHeader: React.FC = () => {
                     </Link>
                 </div>
                 <div className="flex justify-between items-center hidden md:block">
-                    <Avatar icon={<UserOutlined/>} src={user.picture} size="small"/>
+                    <Avatar icon={<UserOutlined/>} src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)} size="small"/>
                     <Link to="/"><ExportOutlined
                         className="hover:text-gray-300 text-gray-500 ml-3 p-3"/> </Link>
                 </div>
@@ -50,7 +52,7 @@ const AdminHeader: React.FC = () => {
                 <div className="pt-4 pb-3 border-t border-gray-200">
                     <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                            <Avatar icon={<UserOutlined/>} src={user.picture}/>
+                            <Avatar icon={<UserOutlined/>} src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}/>
                         </div>
                         <div className="ml-3">
                             <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + " " + user.lastName}</div>

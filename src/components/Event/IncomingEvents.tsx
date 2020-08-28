@@ -3,29 +3,32 @@ import {EventPreview} from "../../data/event/types"
 import {getIncomingEvents} from "../../data/event"
 import {useTranslation} from "react-i18next"
 import {Skeleton} from "antd"
-import EventPreviewList from "./EventPreviewList";
-import {IconFA} from "../Common/IconFA";
+import EventPreviewList from "./EventPreviewList"
+import {IconFA} from "../Common/IconFA"
 
 type IncomingEventsProps = {
     feed?: number
+    wait?: boolean
     className?: string
 }
-const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, className}) => {
+const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, className, wait = false}) => {
     const {t} = useTranslation("event")
     const [events, setEvents] = useState<EventPreview[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
-        setLoading(true)
-        getIncomingEvents(feed).then(res => {
-            //setEvents(res.data)
-        }).finally(() => setLoading(false))
+        if(!wait){
+            setLoading(true)
+            getIncomingEvents(feed).then(res => {
+                setEvents(res.data)
+            }).finally(() => setLoading(false))
+        }
     }, [feed])
 
     return (
         <div className={`${className} flex flex-col justify-center text-left md:text-center`}>
             <h3 className="font-dinotcb text-gray-800 text-lg">{t("incoming")}</h3>
-            {loading ?
+            {wait || loading ?
                 <>
                     <Skeleton.Input className="w-full rounded my-1" active size="large" />
                     <Skeleton.Input className="w-full rounded my-1" active size="large" />

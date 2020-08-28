@@ -1,13 +1,13 @@
 import React from "react"
 import Feed from "../../../components/Feed"
 import UserGroups from "../../../components/Group/UserGroups"
-import {Avatar, Skeleton} from "antd"
+import {Avatar,} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../../context/action"
 import {UserOutlined,} from "@ant-design/icons"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
-import IncomingEvents from "../../../components/Event/IncomingEvents";
+import IncomingEvents from "../../../components/Event/IncomingEvents"
 
 const Home: React.FC = () => {
     const user = useSelector((state: AppState) => state.user)
@@ -21,7 +21,7 @@ const Home: React.FC = () => {
                         size="default"
                     />
                     <div >
-                        <h3 className="mx-2 mb-0 text-lg text-gray-800 ">{user.firstName + " " + user.lastName}</h3>
+                        <h3 className="mx-2 mb-0 text-lg text-gray-800">{user.firstName + " " + user.lastName}</h3>
                         <h6 className="mx-2 -mt-1 uppercase text-sm font-bold text-gray-600">{`Promo ${user.promo}`}</h6>
                     </div>
                 </div>
