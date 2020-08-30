@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import {Button, Modal, Radio} from "antd"
+import { Modal, Radio} from "antd"
 import {IconFA} from "../../../components/Common/IconFA"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -16,8 +16,8 @@ import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
 import {CalendarEventWrapper} from "../../../components/CalendarItem"
 import {useSelector} from "react-redux"
-import EventCreationForm from "../../../components/Event/EventCreationForm"
-import {AppState} from "../../../context/action";
+import {AppState} from "../../../context/action"
+import EventModalForm from "../../../components/Event/EventModalForm"
 
 const initFilter = (): EventFilter => {
     return (
@@ -77,7 +77,6 @@ export const filteredEventsState = selector<EventPreview[]>({
 
 const Events: React.FC = () => {
     const canCreateEvent: boolean = useSelector((state: AppState) => Boolean(state.payload.clubsPublisher.length))
-    const [createEvent, setCreateEvent] = useState<boolean>(false)
     const [selectedEvent, setSelectedEvent] = useState<EventPreview | null>(null)
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
@@ -144,9 +143,7 @@ const Events: React.FC = () => {
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
                         {canCreateEvent &&
-                        <Button className="rounded px-2" onClick={() => setCreateEvent(true)}>
-                            + {t("create.button")}
-                        </Button>
+                            <EventModalForm onSubmit={fetchMonthEvents} />
                         }
                     </div>
                     <div>
@@ -182,18 +179,6 @@ const Events: React.FC = () => {
                     onCancel={() => setSelectedEvent(null)}
                 >
                     <ModalEventContent id={selectedEvent.id}/>
-                </Modal>
-                }
-
-                {createEvent &&
-                <Modal
-                    className="md:w-1/2 w-4/5"
-                    visible={true}
-                    footer={null}
-                    title={<span className="text-gray-800 font-bold text-2xl">{t("create.title")}</span>}
-                    onCancel={() => setCreateEvent(false)}
-                >
-                    <EventCreationForm onSubmit={fetchMonthEvents} onClose={() => setCreateEvent(false)} />
                 </Modal>
                 }
             </div>

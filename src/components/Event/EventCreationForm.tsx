@@ -10,6 +10,8 @@ import {IconFA} from "../Common/IconFA"
 import Locker from "../Common/Locker"
 import AvatarPicker from "../Common/AvatarPicker"
 import FeedSelector from "../Feed/FeedSelector"
+import HelperIcon from "../Common/HelperIcon"
+import moment from "moment"
 
 const {RangePicker} = DatePicker
 const {TextArea} = Input
@@ -23,7 +25,7 @@ const DEFAULT_EVENT: EventForm = {
     start: new Date(),
     end: new Date(),
     club: -1,
-    published: false,
+    published: new Date(),
     targets: [],
 }
 
@@ -47,7 +49,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition, o
         onSubmit: async (values) => {
             console.log(values)
             createEvent(values).then(res => {
-                if(res.status === 200) {
+                if (res.status === 200) {
                     onSubmit()
                     message.info(t("create.created"))
                     onClose()
@@ -66,13 +68,31 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition, o
     }, [previousEdition])
     return (
         <form className="flex flex-col flex-wrap" onSubmit={formik.handleSubmit}>
-            <div className="flex justify-between mb-3 mr-3">
-                <Select defaultValue={EventType.AFTERWORK} onChange={(value) => formik.setFieldValue("type", value)}>
+            <div className="flex items-center justify-between mb-3 mr-3">
+                <Select defaultValue={EventType.AFTERWORK} onChange={value => formik.setFieldValue("type", value)}>
                     {EventTypes.map(e =>
                         <Option key={e} value={e}>{t(`type.${e}`)}</Option>
                     )}
                 </Select>
-                <Locker defaultValue={formik.values.closed} onChange={v => formik.setFieldValue("closed", v)}/>
+                <div className="flex items-center">
+                    <div>
+                        <label className="font-dinotcb mr-2">
+                            {t("form.label.published")}
+                            <HelperIcon text={t("form.label.published_help")}/>
+                        </label>
+                        <DatePicker
+                            format="YYYY-MM-DD HH:mm"
+                            showTime
+                            value={moment(formik.values.published)}
+                            onChange={date => formik.setFieldValue("published", date ? date.toDate(): new Date() )}
+                            bordered={false}
+                            placeholder={t("form.placeholder.published")}
+                            className="hover:border-indigo-400 block"
+                            style={{borderBottom: "1px solid #d9d9d9"}}
+                        />
+                    </div>
+                    <Locker defaultValue={formik.values.closed} onChange={v => formik.setFieldValue("closed", v)}/>
+                </div>
             </div>
             <div className="flex flex-wrap justify-between items-end">
                 <div className="lg:w-3/5 w-full">

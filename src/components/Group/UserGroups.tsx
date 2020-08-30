@@ -12,6 +12,7 @@ const UserGroups: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
+        setLoading(true)
         getUserGroups().then(res => {
             setGroups(res.data)
         }).finally(() => setLoading(false))
@@ -22,9 +23,12 @@ const UserGroups: React.FC = () => {
             <h3 className="font-dinotcb text-gray-800 text-lg">{t("group") + "s"}</h3>
             {loading ?
                 <>
-                    <Skeleton avatar title/>
-                    <Skeleton avatar title/>
-                    <Skeleton avatar title/>
+                    <Skeleton title paragraph={{rows: 0}}/>
+                    <Skeleton title paragraph={{rows: 0}}/>
+                    <Skeleton title paragraph={{rows: 0}}/>
+                    <Skeleton title paragraph={{rows: 0}}/>
+                    <Skeleton title paragraph={{rows: 0}}/>
+                    <Skeleton title paragraph={{rows: 0}}/>
                 </> :
                 <GroupList groups={groups}/>
             }

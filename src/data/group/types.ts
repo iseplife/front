@@ -14,6 +14,7 @@ export type Group = {
     archived: boolean
     locked: boolean
     feed: number
+    hasRight: boolean
     members: GroupMember[]
 }
 

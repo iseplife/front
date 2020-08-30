@@ -11,11 +11,14 @@
 			"location": "Location",
 			"price": "Price",
 			"ticket_url": "Link ticket office",
-			"target": "Audience"
+			"target": "Audience",
+			"published": "Publication",
+			"published_help": "Your event won't be visible before this date"
 		},
 		"placeholder": {
 			"title": "Winning of 2018 football world cup",
 			"description": "Describe your event...",
+			"published": "Publication date",
 			"range": [
 				"Start date",
 				"End date"

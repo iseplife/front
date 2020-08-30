@@ -30,7 +30,7 @@ const Home: React.FC = () => {
             </div>
             <Feed id={1} className="flex-grow"/>
             <div className="w-full md:w-64 lg:w-1/4 pl-4 justify-center md:block hidden">
-                <IncomingEvents />
+                <IncomingEvents allowCreate={false} />
             </div>
         </div>
     )

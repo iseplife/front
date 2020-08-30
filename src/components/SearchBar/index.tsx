@@ -9,6 +9,7 @@ import "./SearchBar.css"
 import AvatarSearchType from "./AvatarSearchType"
 import Pills from "../Common/Pills"
 import Loading from "../Common/Loading"
+import axios, {CancelTokenSource} from "axios"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -32,6 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
     const [fetching, setFetching] = useState<boolean>(false)
 
     const [filter, setFilter] = useState<FilterType>(DEFAULT_FILTER)
+    const [source, setSource] = useState<CancelTokenSource>()
 
 
     const updateFilter = useCallback((type: SearchItemType, state: boolean) => {
@@ -52,37 +54,44 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      * @param queryParams
      */
     useEffect(() => {
-        if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
-            setFetching(true)
-            switch (searchType) {
-                case SearchItemType.STUDENT:
-                    searchStudent(currentValue, "", 0).then(res => {
-                        setData(res.data.content)
-                    }).finally(() => setFetching(false))
-                    break
-                case SearchItemType.EVENT:
-                    searchEvent(currentValue, 0).then(res => {
-                        setData(res.data.content)
-                    }).finally(() => setFetching(false))
-                    break
-                case SearchItemType.CLUB:
-                    searchClub(currentValue, 0)
-                        .then(res => {
+        async function searchItem() {
+            if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
+                setFetching(true)
+                if(source)
+                    source.cancel("Operation canceled due to new request.")
+
+                const tmp = axios.CancelToken.source()
+                setSource(tmp)
+                switch (searchType) {
+                    case SearchItemType.STUDENT:
+                        searchStudent(currentValue, "", 0).then(res => {
                             setData(res.data.content)
                         }).finally(() => setFetching(false))
-                    break
-                case SearchItemType.ALL:
-                default:
-                    globalSearch(currentValue, 0).then(res => {
-                        setData(res.data.content)
-                    }).catch(e => {
-                        console.log(e.message)
-                    }).finally(() => setFetching(false))
-                    break
+                        break
+                    case SearchItemType.EVENT:
+                        searchEvent(currentValue, 0).then(res => {
+                            setData(res.data.content)
+                        }).finally(() => setFetching(false))
+                        break
+                    case SearchItemType.CLUB:
+                        searchClub(currentValue, 0)
+                            .then(res => {
+                                setData(res.data.content)
+                            }).finally(() => setFetching(false))
+                        break
+                    case SearchItemType.ALL:
+                    default:
+                        globalSearch(currentValue, 0, tmp.token).then(res => {
+                            setData(res.data.content)
+                        }).finally(() => setFetching(false))
+                        break
+                }
+            } else {
+                setData([])
             }
-        } else {
-            setData([])
         }
+
+        searchItem()
     }, [currentValue, searchType])
 
 
