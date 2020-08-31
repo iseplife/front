@@ -1,5 +1,5 @@
 import React, {CSSProperties, useEffect, useState} from "react"
-import {getPublishersThumbnail} from "../../data/post"
+import {getAuthorsThumbnail} from "../../data/post"
 import {Avatar, Select} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../context/action"
@@ -31,12 +31,12 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, clubOnly,
     /**
      * Call on first render to get all publishers thumbnails
      */
-    useEffect(() => {
-        setLoading(true)
-        getPublishersThumbnail(clubOnly).then(res => {
-            if (res.status === 200)
-                setPublishers(res.data)
-        }).finally(() => setLoading(false))
+	useEffect(() => {
+		setLoading(true)
+		getAuthorsThumbnail().then(res => {
+			if (res.status === 200)
+				setPublishers(res.data)
+		}).finally(() => setLoading(false))
     }, [clubOnly])
 
 

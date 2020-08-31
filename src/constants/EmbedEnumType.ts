@@ -1,4 +1,4 @@
-enum EmbedType {
+enum EmbedEnumType {
     GALLERY = "gallery",
     POLL = "poll",
     DOCUMENT = "document",
@@ -6,4 +6,4 @@ enum EmbedType {
     IMAGE = "image",
 }
 
-export default EmbedType
+export default EmbedEnumType

@@ -1,25 +1,31 @@
 import React from "react"
-import EmbedType from "../../constants/EmbedType"
-
-
+import Gallery, {PhotoProps} from "react-photo-gallery"
+import EmbedEnumType from "../../constants/EmbedEnumType"
+import {Embed as EmbedType} from "../../data/post/types"
 
 
 type EmbedProps = {
-    type: EmbedType
+    embed: EmbedType
 }
-const Embed: React.FC<EmbedProps> = ({type}) => {
-    switch (type) {
-        case EmbedType.GALLERY:
-            return (null)
-        case EmbedType.POLL:
-            return (null)
-        case EmbedType.DOCUMENT:
-            return (null)
-        case EmbedType.VIDEO:
-            return (null)
-        case EmbedType.IMAGE:
-            return (null)
-    }
+const Embed: React.FC<EmbedProps> = ({embed}) => {
+	switch (embed.embedType) {
+	case EmbedEnumType.GALLERY:
+		const photos: PhotoProps[] = embed.previewImages.map(img => ({
+			src: "https://iseplife.s3.eu-west-3.amazonaws.com/" + img.name,
+			width: 1,
+			height: 1
+		}))
+
+		return <Gallery photos={photos} direction="row" margin={3}/>
+	case EmbedEnumType.POLL:
+		return null
+	case EmbedEnumType.DOCUMENT:
+		return null
+	case EmbedEnumType.VIDEO:
+		return null
+	case EmbedEnumType.IMAGE:
+		return null
+	}
 }
 
 export default Embed
