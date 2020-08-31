@@ -22,6 +22,8 @@ import {
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
+import {mediaPath} from "../../../util";
+import {AvatarSizes} from "../../../constants/MediaSizes";
 
 
 const Event: React.FC = () => {
@@ -76,7 +78,7 @@ const Event: React.FC = () => {
                     >
                         <Avatar
                             icon={<UserOutlined/>}
-                            src={event.club.logoUrl}
+                            src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
                             className="cursor-pointer mx-3"
                         />
                         {event.club.name}
@@ -153,7 +155,7 @@ const Event: React.FC = () => {
                                 }}
                             >
                                 <div ref={descriptionRef} className="h-32 overflow-hidden">
-                                    {event.description.split("\n").map((s, idx) =>
+                                    {event.description && event.description.split("\n").map((s, idx) =>
                                         <span key={idx}>{s} <br/></span>
                                     )}
                                 </div>

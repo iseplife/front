@@ -50,6 +50,7 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
             firstName,
             lastName,
             photoUrlThumb: r.thumbURL,
+            picture: r.thumbURL,
             promo: +r.description || -1
         })
     }
