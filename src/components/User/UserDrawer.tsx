@@ -3,11 +3,11 @@ import {useParams, useHistory, Link} from "react-router-dom"
 import {getClubsForStudent, getStudent} from "../../data/student"
 import {Avatar, Divider, Drawer, Tooltip} from "antd"
 import {useTranslation} from "react-i18next"
-import {Utils} from "../Common/Utils"
 import {Student} from "../../data/student/types"
 import {IconFA} from "../Common/IconFA"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 import {ClubMemberPreview} from "../../data/club/types"
+import {getInitials, randomBackgroundColors} from "../../util"
 
 const MOBILE_WIDTH = 640
 
@@ -71,9 +71,9 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                     <div className="flex justify-start items-center sm:items-start">
                         <Avatar src={student ? student.picture : ""}
                             alt={student.firstName + " " + student.lastName}
-                            className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + Utils.randomBackgroundColors()}>
+                            className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + randomBackgroundColors()}>
                             <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
-                                {Utils.getInitials(student)}
+                                {getInitials(student)}
                             </div>
                         </Avatar>
                         <div className="ml-3 mt-2 text-base">

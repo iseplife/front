@@ -81,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                         break
                     case SearchItemType.ALL:
                     default:
-                        globalSearch(currentValue, 0, tmp.token).then(res => {
+                        globalSearch(currentValue, 0).then(res => {
                             setData(res.data.content)
                         }).finally(() => setFetching(false))
                         break
