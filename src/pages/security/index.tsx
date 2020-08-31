@@ -5,14 +5,17 @@ import {useTranslation} from "react-i18next"
 import {connect, isLoggedIn} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
+import {LocationState} from "../../data/request.type";
+
+
+const initialValues: LoginFormInputs = {id: "", password: ""}
 
 interface LoginFormInputs {
     id: string,
     password: string
 }
-
 const Login: React.FC = () => {
-    const initialValues: LoginFormInputs = {id: "", password: ""}
+
     const {t, i18n} = useTranslation(["login", "common"])
     const history = useHistory()
     const location = useLocation()
@@ -25,10 +28,11 @@ const Login: React.FC = () => {
             setLoadingStatus(true)
             connect(id, password)
                 .then(() => {
-                    const {from} = (location.state as { from: { pathname: string } }) || {from: {pathname: "/"}}
+                    const {from} = (location.state as LocationState) || {from: {pathname: "/"}}
                     history.replace(from)
                 })
                 .catch(e => {
+                    setLoadingStatus(false)
                     let msg
                     if (e.response) {
                         switch (e.response.status) {
@@ -45,7 +49,7 @@ const Login: React.FC = () => {
                         msg = "Serveur indisponible"
                     }
                     setError(msg)
-                }).finally(() => setLoadingStatus(false))
+                })
         }
     })
 
