@@ -9,7 +9,7 @@ import "./SearchBar.css"
 import AvatarSearchType from "./AvatarSearchType"
 import Pills from "../Common/Pills"
 import Loading from "../Common/Loading"
-import axios, {CancelTokenSource} from "axios"
+import Axios, {CancelTokenSource} from "axios"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -54,44 +54,46 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      * @param queryParams
      */
     useEffect(() => {
-        async function searchItem() {
-            if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
-                setFetching(true)
-                if(source)
-                    source.cancel("Operation canceled due to new request.")
+        if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
+            if (source)
+                source.cancel("Operation canceled due to new request.")
 
-                const tmp = axios.CancelToken.source()
-                setSource(tmp)
-                switch (searchType) {
-                    case SearchItemType.STUDENT:
-                        searchStudent(currentValue, "", 0).then(res => {
+            const tmp = Axios.CancelToken.source()
+            setSource(tmp)
+            setFetching(true)
+            switch (searchType) {
+                case SearchItemType.STUDENT:
+                    searchStudent(currentValue, "", 0).then(res => {
+                        setData(res.data.content)
+                    }).finally(() => setFetching(false))
+                    break
+                case SearchItemType.EVENT:
+                    searchEvent(currentValue, 0).then(res => {
+                        setData(res.data.content)
+                    }).finally(() => setFetching(false))
+                    break
+                case SearchItemType.CLUB:
+                    searchClub(currentValue, 0)
+                        .then(res => {
                             setData(res.data.content)
                         }).finally(() => setFetching(false))
-                        break
-                    case SearchItemType.EVENT:
-                        searchEvent(currentValue, 0).then(res => {
+                    break
+                case SearchItemType.ALL:
+                default:
+                    globalSearch(currentValue, 0, tmp?.token).then(res => {
+                        if(res.data)
                             setData(res.data.content)
-                        }).finally(() => setFetching(false))
-                        break
-                    case SearchItemType.CLUB:
-                        searchClub(currentValue, 0)
-                            .then(res => {
-                                setData(res.data.content)
-                            }).finally(() => setFetching(false))
-                        break
-                    case SearchItemType.ALL:
-                    default:
-                        globalSearch(currentValue, 0).then(res => {
-                            setData(res.data.content)
-                        }).finally(() => setFetching(false))
-                        break
-                }
-            } else {
-                setData([])
+                    }).finally(() => setFetching(false))
+                    break
             }
+        } else {
+            setData([])
         }
 
-        searchItem()
+        return () => {
+            if (source)
+                source.cancel("Operation canceled due to an unmounting component.")
+        }
     }, [currentValue, searchType])
 
 
@@ -135,7 +137,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             filterOption={false}
             defaultActiveFirstOption={false}
             value={currentValue ? currentValue : undefined}
-            loading={fetching}
             placeholder={t("placeholder")}
             className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
             notFoundContent={
