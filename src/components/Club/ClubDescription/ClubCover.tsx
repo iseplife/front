@@ -28,7 +28,7 @@ const ClubCover: React.FC = () => {
         <div className="w-full md:h-40 h-24">
             {adminMode ?
                 <div className="relative w-full h-full">
-                    <ImagePicker defaultImage={club?.coverUrl} className="cover-uploader h-full" onChange={handleChange} onReset={() => setCoverChanged(false)}/>
+                    <ImagePicker defaultImage={mediaPath(club?.coverUrl || "img/static/default-cover.png")} className="cover-uploader h-full" onChange={handleChange} onReset={() => setCoverChanged(false)}/>
                     {coverChanged &&
                     <div
                         className="absolute"

@@ -12,8 +12,7 @@ type ImagePickerProps = {
     onChange: (file: File | null) => void
 }
 const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onChange, onReset}) => {
-    const initialImage = useMemo(() => "https://iseplife.s3.eu-west-3.amazonaws.com/" + defaultImage, [defaultImage])
-    const [image, setImage] = useState<string>(initialImage)
+    const [image, setImage] = useState<string|undefined>(defaultImage)
     const [loading, setLoading] = useState<boolean>()
 
 
@@ -53,12 +52,12 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                         />
                         <span className="image-options absolute text-gray-400">
                             <EditOutlined className="mx-1 px-1 hover:text-white"/>
-                            {image === initialImage && defaultImage !== DEFAULT_IMAGE ?
+                            {image === defaultImage ?
                                 <DeleteOutlined
                                     className="mx-1 px-1 hover:text-red-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        setImage("https://iseplife.s3.eu-west-3.amazonaws.com/" + DEFAULT_IMAGE)
+                                        setImage(DEFAULT_IMAGE)
                                         onChange(null)
                                     }}
                                 /> :
@@ -66,7 +65,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                                     className="mx-1 px-1 hover:text-red-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        setImage(initialImage)
+                                        setImage(defaultImage)
                                         onReset && onReset()
                                     }}
                                 />

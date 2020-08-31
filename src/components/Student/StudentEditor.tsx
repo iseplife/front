@@ -21,6 +21,8 @@ import {
     AuditOutlined,
     DeleteOutlined
 } from "@ant-design/icons"
+import {mediaPath} from "../../util";
+import {AvatarSizes} from "../../constants/MediaSizes";
 
 const {Option} = Select
 
@@ -184,7 +186,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </Link>
                     }
 
-                    <ImagePicker onChange={handleImage} defaultImage={student?.picture}  className="avatar-uploader"/>
+                    <ImagePicker onChange={handleImage} defaultImage={mediaPath(student?.picture, AvatarSizes.DEFAULT)}  className="avatar-uploader"/>
 
                     <div className="mb-1 w-24">
                         <label className="font-dinotcb">promo</label>

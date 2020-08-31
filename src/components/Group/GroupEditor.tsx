@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons"
 
 import "./GroupEditor.css"
+import {mediaPath} from "../../util";
 
 
 
@@ -175,7 +176,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     </Link>
                     }
 
-                    <ImagePicker className="cover-selector" onChange={file => formik.setFieldValue("cover", file)} defaultImage={group?.cover}/>
+                    <ImagePicker className="cover-selector" onChange={file => formik.setFieldValue("cover", file)} defaultImage={mediaPath(group?.cover)}/>
 
                     <div className="flex mt-5">
                         <div className="flex flex-col mx-3">

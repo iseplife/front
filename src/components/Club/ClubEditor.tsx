@@ -13,6 +13,8 @@ import StudentSelector from "../Student/StudentSelector"
 import {StudentPreview} from "../../data/student/types"
 import {format} from "date-fns"
 import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, AuditOutlined} from "@ant-design/icons"
+import {mediaPath} from "../../util";
+import {AvatarSizes} from "../../constants/MediaSizes";
 
 type ClubEditorProps = {
     id?: string
@@ -194,7 +196,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     }
 
                     <div className="mt-5">
-                        <ImagePicker onChange={handleImage} defaultImage={club?.logoUrl} className="avatar-uploader"/>
+                        <ImagePicker onChange={handleImage} defaultImage={mediaPath(club?.logoUrl, AvatarSizes.DEFAULT)} className="avatar-uploader"/>
                     </div>
 
 
