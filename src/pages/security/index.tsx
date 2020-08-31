@@ -14,6 +14,7 @@ interface LoginFormInputs {
     id: string,
     password: string
 }
+
 const Login: React.FC = () => {
 
     const {t, i18n} = useTranslation(["login", "common"])
@@ -58,7 +59,11 @@ const Login: React.FC = () => {
             <div className="flex-grow flex items-center">
                 <div className="bg-white rounded-b shadow-lg p-4 flex flex-col">
                     {isLoggedIn() && <Redirect to="/"/>}
-                    {error && <div className="text-center text-red-400"><h6>{error}</h6></div>}
+                    {error &&
+                    <div className="text-center">
+                        <h6 className="text-red-600">{error}</h6>
+                    </div>
+                    }
                     <form className="flex justify-center flex-col" onSubmit={formik.handleSubmit}>
                         <input
                             id="id" name="id" type="text" onChange={formik.handleChange}

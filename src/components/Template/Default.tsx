@@ -12,7 +12,7 @@ import Navbar from "./Navbar"
 import Club from "../../pages/default/club"
 import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
-import Group from "../../pages/default/group";
+import Group from "../../pages/default/group"
 
 
 const DefaultTemplate: React.FC = () => {

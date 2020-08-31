@@ -22,8 +22,12 @@ const Template: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
 
     useLayoutEffect(() => {
-        Promise.all([getLoggedUser(), getUserFeed()]).then((res) => {
-            setStore(createStore(rootReducer, {user: res[0].data, payload: getUser(), feeds: res[1].data}))
+        Promise.all([getLoggedUser(), getUserFeed()]).then(res => {
+            setStore(createStore(rootReducer, {
+                user: res[0].data,
+                payload: getUser(),
+                feeds: res[1].data
+            }))
         }).finally(() => setLoading(false))
     }, [])
 
@@ -36,8 +40,7 @@ const Template: React.FC = () => {
                 <Route path="/admin" render={({location}) =>
                     (
                         isAdmin() ?
-                            <AdminTemplate/>
-                            :
+                            <AdminTemplate/> :
                             <Redirect
                                 to={{
                                     pathname: "/404",
