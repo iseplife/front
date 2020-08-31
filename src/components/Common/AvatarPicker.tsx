@@ -8,6 +8,8 @@ import Loading from "./Loading"
 import {UserOutlined} from "@ant-design/icons"
 
 import "./AvatarPicker.css"
+import {mediaPath} from "../../util";
+import {AvatarSizes} from "../../constants/MediaSizes";
 
 
 const {Option} = Select
@@ -47,25 +49,25 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, clubOnly,
             showArrow={false}
             optionLabelProp={compact ? "label" : "children"}
             defaultValue={clubOnly ? undefined : 0}
-            dropdownClassName="w-auto"
+            dropdownClassName="w-48"
             onChange={(value: number) => callback(value || undefined)}
             className={className}
             style={style}
         >
             {!clubOnly &&
-            <Option value={0} label={<Avatar icon={<UserOutlined/>} src={userThumb} size="small"/>}>
-                <Avatar icon={<UserOutlined/>} src={userThumb} size="small"/> moi
+            <Option value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/>}>
+                <Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/> moi
             </Option>
             }
             {loading ?
                 <Option value="loading" disabled> <Loading size="lg"/> </Option> :
                 publishers.map((p, i) => (
                     <Option
-                        key={i}
+                        key={i+1}
                         value={p.id}
-                        label={<Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/>}
+                        label={<Avatar icon={<UserOutlined/>} src={mediaPath(p.thumbnail, AvatarSizes.THUMBNAIL)} size="small"/>}
                     >
-                        <Avatar icon={<UserOutlined/>} src={p.thumbnail} size="small"/> {p.name}
+                        <Avatar icon={<UserOutlined/>} src={mediaPath(p.thumbnail, AvatarSizes.THUMBNAIL)} size="small"/> {p.name}
                     </Option>
                 ))
             }
