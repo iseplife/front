@@ -13,7 +13,7 @@ type FormValues = {
     linkedClub?: number
 }
 
-const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, values}) => {
+const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldValue, values}) => {
     return (
         <Form className="flex flex-col items-center">
             <div className="flex flex-col bg-white rounded-lg w-full md:w-4/6 h-20 py-3 px-4 text-gray-500">
@@ -28,7 +28,7 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setValues, 
                     </div>
                     <div className="flex-1 flex justify-end items-center">
                         <AvatarPicker
-                            callback={(id) => setValues({...values, linkedClub: id})}
+                            callback={(id) => setFieldValue("linkedClub", id !== 0 ? id: null)}
                             className="mr-3 border-none"
                         />
                         <Divider type="vertical"/>

@@ -55,7 +55,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, clubOnly,
             style={style}
         >
             {!clubOnly &&
-            <Option value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/>}>
+            <Option key={0} value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/>}>
                 <Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/> moi
             </Option>
             }
