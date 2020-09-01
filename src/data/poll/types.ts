@@ -1,4 +1,4 @@
-import EmbedEnumType from "../../constants/EmbedEnumType"
+import {EmbedEnumType} from "../post/types"
 
 export type Poll = {
     id: number

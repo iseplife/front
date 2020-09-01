@@ -3,13 +3,13 @@ import {
     Route,
     Switch,
 } from "react-router-dom"
-import NotFound from "../../pages/erros/NotFound"
 import Dashboard from "../../pages/admin/dashboard"
 import StudentPanel from "../../pages/admin/student"
 import AdminHeader from "./AdminHeader"
 import GroupPanel from "../../pages/admin/group"
 import ClubPanel from "../../pages/admin/club"
 import SurveyPanel from "../../pages/admin/survey"
+import NotFound from "../../pages/errors/NotFound"
 
 
 const AdminTemplate: React.FC = () => {

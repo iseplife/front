@@ -3,7 +3,6 @@ import {
     Route,
     Switch,
 } from "react-router-dom"
-import NotFound from "../../pages/erros/NotFound"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -13,6 +12,7 @@ import Club from "../../pages/default/club"
 import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
+import NotFound from "../../pages/errors/NotFound"
 
 
 const DefaultTemplate: React.FC = () => {

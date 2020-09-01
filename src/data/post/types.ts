@@ -1,9 +1,17 @@
 import {Club} from "../club/types"
 import {Author} from "../request.type"
-import EmbedEnumType from "../../constants/EmbedEnumType"
 import {Gallery, GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document} from "../media/types"
-import {Poll} from "../poll/types"
+import {Poll} from "../poll/types";
+
+
+export enum EmbedEnumType {
+    GALLERY = "gallery",
+    POLL = "poll",
+    DOCUMENT = "document",
+    VIDEO = "video",
+    IMAGE = "image",
+}
 
 export type PostCreation = {
     description: string
@@ -40,19 +48,25 @@ export type Post = {
 };
 
 
-export type Embed = Gallery | Image | Poll | Video | Document;
+
+
+type EmbedGallery = Gallery & {
+    embedType: EmbedEnumType.GALLERY
+}
+type EmbedMedia = Image | Video | Document
+export type Embed = EmbedGallery | EmbedMedia | Poll
 
 
 
-type EmbedGallery = {
+type EmbedGalleryCreation = {
     type: EmbedEnumType.GALLERY
     data: GalleryPreForm
 }
-type EmbedMedia = {
+type EmbedMediaCreation = {
     type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
     data: File[]
 }
-type EmbedPoll = {
+type EmbedPollCreation = {
     type: EmbedEnumType.POLL
     data: {
         options: string[]
@@ -60,4 +74,4 @@ type EmbedPoll = {
         anonymous: boolean
     }
 }
-export type EmbedCreation = EmbedMedia | EmbedGallery | EmbedPoll;
+export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation;

@@ -8,13 +8,13 @@ import {format, isPast} from "date-fns"
 import {useFormik} from "formik"
 import CommentList from "../Comment/CommentList"
 import {
-	LockOutlined,
-	UnlockOutlined,
-	HeartFilled,
-	HeartOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	MessageOutlined
+    LockOutlined,
+    UnlockOutlined,
+    HeartFilled,
+    HeartOutlined,
+    DeleteOutlined,
+    EditOutlined,
+    MessageOutlined
 } from "@ant-design/icons"
 
 type PostProps = {
@@ -52,7 +52,8 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
             <div className="flex flex-row justify-end items-center">
                 <div className="mx-2">
                     <span className="mx-2 text-xs">{t("published_at")} </span>
-                    <input type="time" name="publication-time"
+                    <input
+                        type="time" name="publication-time"
                         defaultValue={format(formik.values.publicationDate, "HH:mm")}
                         onChange={(e) => {
                             const val = e.target.valueAsDate
@@ -60,8 +61,10 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
                                 formik.values.publicationDate.setHours(val.getHours())
                                 formik.values.publicationDate.setMinutes(val.getMinutes())
                             }
-                        }}/>
-                    <input type="date" name="publication-date"
+                        }}
+                    />
+                    <input
+                        type="date" name="publication-date"
                         defaultValue={format(formik.values.publicationDate, "yyyy-MM-dd")}
                         onChange={(e) => {
                             const val = e.target.valueAsDate
@@ -70,37 +73,48 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDa
                                 formik.values.publicationDate.setMonth(val.getMonth())
                                 formik.values.publicationDate.setDate(val.getDate())
                             }
-                        }}/>
+                        }}
+                    />
                 </div>
 
-				<div className="flex">
-					{lockPost
-						? <LockOutlined onClick={() => setLockPost(false)}/>
-						: <UnlockOutlined onClick={() => setLockPost(true)}/>
-					}
+                <div className="flex">
+                    {lockPost
+                        ? <LockOutlined onClick={() => setLockPost(false)}/>
+                        : <UnlockOutlined onClick={() => setLockPost(true)}/>
+                    }
 
-					<input className="hidden" name="private" type="checkbox" onChange={formik.handleChange}
-						checked={lockPost}/>
-				</div>
-			</div>
-			<div>
-				<textarea name="description" className="w-full resize-none" autoFocus
-					onChange={formik.handleChange}
-					value={formik.values.description}
-				/>
-				{/*<Embed embed={po}/>*/}
-			</div>
-			<div className="text-right">
-				<button className="px-2 py-1 mx-1 rounded bg-green-500 text-white hover:bg-green-700" type="submit">
-					{t("save")}
-				</button>
-				<button className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
-					onClick={onClose}>
-					{t("cancel")}
-				</button>
-			</div>
-		</form>
-	)
+                    <input
+                        className="hidden"
+                        name="private"
+                        type="checkbox"
+                        onChange={formik.handleChange}
+                        checked={lockPost}
+                    />
+                </div>
+            </div>
+            <div>
+                <textarea
+                    name="description"
+                    className="w-full resize-none"
+                    autoFocus
+                    onChange={formik.handleChange}
+                    value={formik.values.description}
+                />
+                {/*<Embed embed={po}/>*/}
+            </div>
+            <div className="text-right">
+                <button className="px-2 py-1 mx-1 rounded bg-green-500 text-white hover:bg-green-700" type="submit">
+                    {t("save")}
+                </button>
+                <button
+                    className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
+                    onClick={onClose}
+                >
+                    {t("cancel")}
+                </button>
+            </div>
+        </form>
+    )
 }
 
 
@@ -146,60 +160,62 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
     }, [])
 
 
-	return (
-		<div className="flex flex-col rounded bg-white shadow my-5 p-4">
-			{editMode ?
-				<UpdatePostForm description={data.description} isPrivate={data.private}
-					publicationDate={data.publicationDate}
-					onClose={() => onEdit(0)}
-					onUpdate={confirmUpdate}
-				/> :
-				<>
-					<div className="flex flex-row justify-end items-center">
-						{!isPast(data.publicationDate) &&
-							<span className="mx-2 text-xs">
-								{format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
-							</span>
-						}
-						{data.private && <LockOutlined />}
-					</div>
-					<div>
-						<p>
-							{data.description}
-						</p>
-						<Embed embed={data.embed}/>
-					</div>
-				</>
-			}
-			<div className="flex flex-row justify-between mt-2">
-				<Avatar icon="user" src={data.author.thumbnail}/>
-				<div className="flex items-center">
-					<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
-						{data.nbComments} <MessageOutlined className="ml-1"/>
-					</span>
-					<span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
-						{likes}
-						{liked
-							? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
-							: <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
-						}
-					</span>
-					{data.hasWriteAccess &&
-						<>
-							<EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400" onClick={() => onEdit(data.id)}/>
-							<DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600" onClick={confirmDeletion}/>
-						</>
-					}
-				</div>
-			</div>
-			{showComments && (
-				<>
-					<Divider/>
-					<CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
-				</>
-			)}
-		</div>
-	)
+    return (
+        <div className="flex flex-col rounded bg-white shadow my-5 p-4">
+            {editMode ?
+                <UpdatePostForm
+                    description={data.description}
+                    isPrivate={data.private}
+                    publicationDate={data.publicationDate}
+                    onClose={() => onEdit(0)}
+                    onUpdate={confirmUpdate}
+                /> :
+                <>
+                    <div className="flex flex-row justify-end items-center">
+                        {!isPast(data.publicationDate) &&
+                        <span className="mx-2 text-xs">
+                            {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
+                        </span>
+                        }
+                        {data.private && <LockOutlined/>}
+                    </div>
+                    <div>
+                        <p>
+                            {data.description}
+                        </p>
+                        <Embed embed={data.embed}/>
+                    </div>
+                </>
+            }
+            <div className="flex flex-row justify-between mt-2">
+                <Avatar icon="user" src={data.author.thumbnail}/>
+                <div className="flex items-center">
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
+                        {data.nbComments} <MessageOutlined className="ml-1"/>
+                    </span>
+                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
+                        {likes}
+                        {liked
+                            ? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                            : <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                        }
+                    </span>
+                    {data.hasWriteAccess &&
+                    <>
+                        <EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400" onClick={() => onEdit(data.id)}/>
+                        <DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600" onClick={confirmDeletion}/>
+                    </>
+                    }
+                </div>
+            </div>
+            {showComments && (
+                <>
+                    <Divider/>
+                    <CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
+                </>
+            )}
+        </div>
+    )
 }
 
 export default Post

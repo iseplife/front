@@ -2,7 +2,7 @@ import React from "react"
 import {Button, Result} from "antd"
 
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
     return (
         <div className="mx-auto">
             <Result
