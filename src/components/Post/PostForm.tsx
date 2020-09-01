@@ -49,7 +49,7 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
 
     return (
         <Form className="flex flex-col items-center">
-            <div className="flex flex-col bg-white rounded-lg w-4/6 py-3 px-4 text-gray-500" style={{minHeight: "5rem"}}>
+            <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 px-4 text-gray-500" style={{minHeight: "5rem"}}>
                 <Field
                     type="textarea"
                     name="description"

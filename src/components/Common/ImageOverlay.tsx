@@ -1,26 +1,32 @@
 import React from "react"
+
 import "./ImageOverlay.css"
 
 type ImageOverlayProps = {
     src: string
-    height?: number
-    width?: number
     className?: string
 }
-const ImageOverlay: React.FC<ImageOverlayProps> = ({src, height, width,className, children}) => {
-	return (
-		<div className={`${className} image-display relativeEssaye un`}>
-			<span>
-				<img src={src} alt="" style={{height: height || "auto", width: width || "auto"}}/>
-			</span>
-			<span className="image-options absolute text-gray-400">
-				{children}
-			</span>
-		</div>
-	)
+const ImageOverlay: React.FC<ImageOverlayProps> = ({src, className, children}) => {
+    return (
+        <div className={`image-display relative bg-gray-400 ${className}`}>
+            <div
+                className="w-full h-full rounded"
+                style={{
+                    backgroundImage: `url("${src}")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                }}
+            />
+            <span className="image-options absolute text-gray-400 z-10 whitespace-no-wrap">
+                {children}
+            </span>
+
+        </div>
+    )
 }
 
 ImageOverlay.defaultProps = {
-	className: ""
+    className: ""
 }
 export default ImageOverlay

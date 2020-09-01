@@ -22,7 +22,7 @@ type PseudoGalleryForm = {
     pseudo: true
 }
 
-type OfficialGalleryForm = {
+export type OfficialGalleryForm = {
     name: string
     description: string
     images: number[]

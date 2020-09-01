@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from "react"
 import {useFormik} from "formik"
-import {Gallery, GalleryForm as GalleryFormType, GalleryPreview} from "../../../data/gallery/types"
+import {GalleryPreview, OfficialGalleryForm} from "../../../data/gallery/types"
 import {Input, message} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
@@ -15,7 +15,7 @@ type GalleryFormProps = {
 }
 const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
-    const formik = useFormik<GalleryFormType>({
+    const formik = useFormik<OfficialGalleryForm>({
         initialValues: {
             name: "",
             description: "",
