@@ -1,5 +1,4 @@
 import React, {RefObject, useEffect, useLayoutEffect, useRef, useState} from "react"
-import {PhotoProps} from "react-photo-gallery"
 import {Avatar, Button, Carousel} from "antd"
 import style from "./GalleryLigthbox.module.css"
 import {CarouselProps} from "antd/es/carousel"
@@ -13,6 +12,8 @@ import {
     PlayCircleOutlined
 } from "@ant-design/icons"
 import {Image} from "../../../data/media/types"
+import {GallerySizes} from "../../../constants/MediaSizes";
+import {mediaPath} from "../../../util";
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
@@ -27,12 +28,13 @@ const slideRigth = (carouselRef: RefObject<Carousel>): void => {
 const TIME_PER_SLIDE = 1000
 
 type GalleryLigthboxProps = {
-    photos: Image[];
-    current: Image | undefined;
-    onCurrentPhotoChange(photo: Image, index: number): void;
-    onClose(): void;
+    photos: Image[]
+    current: Image | undefined
+    sizes?: {LIGHTBOX: string, PREVIEW: string}
+    onCurrentPhotoChange(photo: Image, index: number): void
+    onClose(): void
 }
-const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, current, onCurrentPhotoChange, onClose}) => {
+const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, sizes, current, onCurrentPhotoChange, onClose}) => {
     const {t} = useTranslation("gallery")
     const [autoPlay, setAutoPlay] = useState<boolean>(false)
     const [autoPlayInterval, setAutoPlayInterval] = useState<NodeJS.Timeout>()
@@ -92,12 +94,12 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, current, onCur
         swipe: true,
         accessibility: true,
         cssEase: "linear",
-        initialSlide: current && photos.length ? photos.findIndex((p) => p.id === current.id) : 0,
+        initialSlide: current && photos.length ? photos.findIndex(p => p.id === current.id) : 0,
         afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex], currentSlideIndex),
         customPaging: (i: number) => (
             <Button className="w-10 h-10 bg-transparent">
                 <Avatar
-                    src={photos[i].name}
+                    src={mediaPath(photos[i].name, sizes?.PREVIEW)}
                     shape="square"
                     size="large"
                     className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"
@@ -131,7 +133,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, current, onCur
                         {photos.map((photo: Image, index: number) => (
                             <div key={photo.name + "/" + index}>
                                 <div className={style.carouselContent}>
-                                    <img src={photo.name} className={style.carouselImage}/>
+                                    <img src={mediaPath(photo.name, sizes?.LIGHTBOX)} className={style.carouselImage}/>
                                 </div>
                             </div>
                         ))}
@@ -166,6 +168,9 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, current, onCur
             </div>
         </div>
     )
+}
+GalleryLigthbox.defaultProps = {
+    sizes: GallerySizes
 }
 
 export default GalleryLigthbox

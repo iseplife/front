@@ -1,7 +1,7 @@
 export const GallerySizes = {
     PREVIEW: "autox140",
     THUMBNAIL: "autox200",
-    DEFAULT: "1280xauto"
+    LIGHTBOX: "1280xauto"
 }
 
 export const AvatarSizes = {
@@ -11,5 +11,5 @@ export const AvatarSizes = {
 
 export const PostSizes = {
     PREVIEW: "autox300",
-    DEFAULT: "1280xauto"
+    LIGHTBOX: "1280xauto"
 }
