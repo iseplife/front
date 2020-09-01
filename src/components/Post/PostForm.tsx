@@ -70,7 +70,7 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                         <div><IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/></div>
                     </div>
                     <div className="flex-1 flex justify-end items-center">
-                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3"/>
+                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3 rounded hover:bg-gray-100"/>
                         <Divider type="vertical"/>
                     </div>
                     <div className="flex items-center">

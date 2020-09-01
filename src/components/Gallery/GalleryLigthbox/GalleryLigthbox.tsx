@@ -12,6 +12,7 @@ import {
     PauseCircleOutlined,
     PlayCircleOutlined
 } from "@ant-design/icons"
+import {Image} from "../../../data/media/types"
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
@@ -26,12 +27,12 @@ const slideRigth = (carouselRef: RefObject<Carousel>): void => {
 const TIME_PER_SLIDE = 1000
 
 type GalleryLigthboxProps = {
-    photos: PhotoProps[];
-    currentPhoto: PhotoProps | undefined;
-    onCurrentPhotoChange(photo: PhotoProps, index: number): void;
+    photos: Image[];
+    current: Image | undefined;
+    onCurrentPhotoChange(photo: Image, index: number): void;
     onClose(): void;
 }
-const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, onCurrentPhotoChange, onClose}) => {
+const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, current, onCurrentPhotoChange, onClose}) => {
     const {t} = useTranslation("gallery")
     const [autoPlay, setAutoPlay] = useState<boolean>(false)
     const [autoPlayInterval, setAutoPlayInterval] = useState<NodeJS.Timeout>()
@@ -91,12 +92,12 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
         swipe: true,
         accessibility: true,
         cssEase: "linear",
-        initialSlide: !!currentPhoto && !!photos.length ? photos.findIndex((p) => p.key === currentPhoto.key) : 0,
+        initialSlide: current && photos.length ? photos.findIndex((p) => p.id === current.id) : 0,
         afterChange: (currentSlideIndex: number) => onCurrentPhotoChange(photos[currentSlideIndex], currentSlideIndex),
         customPaging: (i: number) => (
             <Button className="w-10 h-10 bg-transparent">
                 <Avatar
-                    src={photos[i].src}
+                    src={photos[i].name}
                     shape="square"
                     size="large"
                     className="w-10 h-10 hover:border-white hover:shadow-md hover:w-12 hover:h-12"
@@ -127,10 +128,10 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                 </div>
                 <div className="w-full p-4">
                     <Carousel {...carouselProps} autoplay={autoPlay} ref={carouselRef}>
-                        {photos.map((photo: PhotoProps, index: number) => (
-                            <div key={photo.src + "/" + index}>
+                        {photos.map((photo: Image, index: number) => (
+                            <div key={photo.name + "/" + index}>
                                 <div className={style.carouselContent}>
-                                    <img src={photo.src} className={style.carouselImage}/>
+                                    <img src={photo.name} className={style.carouselImage}/>
                                 </div>
                             </div>
                         ))}
@@ -156,8 +157,8 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, currentPhoto, 
                     type="default"
                     icon={<DownloadOutlined/>}
                     className="w-22 h-12 flex items-center text-md text-white border-none bg-gray-900"
-                    href={currentPhoto ? currentPhoto.src : ""}
-                    download={`@prodIsepLife/${currentPhoto ? currentPhoto.src : "undefined"}`}
+                    href={current?.name}
+                    download={`@prodIsepLife/${current?.name ||  "undefined"}`}
                 >
                     {t("download")}
 

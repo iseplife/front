@@ -8,4 +8,4 @@ export const updatePost = (id: number, update: PostUpdate): AxiosPromise<void> =
 
 export const deletePost = (id: number): AxiosPromise<void> => axios.delete(`/post/${id}`)
 
-export const getAuthorsThumbnail = (): AxiosPromise<Author[]> => axios.get("/post/authors")
+export const getAuthorsThumbnail = (clubOnly = false): AxiosPromise<Author[]> => axios.get("/post/authors", {params: {club: clubOnly}})

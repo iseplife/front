@@ -8,3 +8,8 @@ export const AvatarSizes = {
     THUMBNAIL: "50x50",
     DEFAULT: "140x140"
 }
+
+export const PostSizes = {
+    PREVIEW: "autox300",
+    DEFAULT: "1280xauto"
+}

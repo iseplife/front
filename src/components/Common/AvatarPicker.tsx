@@ -8,8 +8,8 @@ import Loading from "./Loading"
 import {UserOutlined} from "@ant-design/icons"
 
 import "./AvatarPicker.css"
-import {mediaPath} from "../../util";
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 
 const {Option} = Select
@@ -31,12 +31,12 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({callback, compact, clubOnly,
     /**
      * Call on first render to get all publishers thumbnails
      */
-	useEffect(() => {
-		setLoading(true)
-		getAuthorsThumbnail().then(res => {
-			if (res.status === 200)
-				setPublishers(res.data)
-		}).finally(() => setLoading(false))
+    useEffect(() => {
+        setLoading(true)
+        getAuthorsThumbnail(clubOnly).then(res => {
+            if (res.status === 200)
+                setPublishers(res.data)
+        }).finally(() => setLoading(false))
     }, [clubOnly])
 
 

@@ -1,8 +1,8 @@
 import {Club} from "../club/types"
 import {Author} from "../request.type"
-import {Gallery, GalleryPreForm} from "../gallery/types"
+import {GalleryPreForm, GalleryPreview} from "../gallery/types"
 import {Image, Video, Document} from "../media/types"
-import {Poll} from "../poll/types";
+import {Poll} from "../poll/types"
 
 
 export enum EmbedEnumType {
@@ -48,9 +48,11 @@ export type Post = {
 };
 
 
-
-
-type EmbedGallery = Gallery & {
+export type EmbedGallery = {
+    id: number
+    name: string
+    preview: Image[]
+    pseudo: boolean
     embedType: EmbedEnumType.GALLERY
 }
 type EmbedMedia = Image | Video | Document

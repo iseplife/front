@@ -13,7 +13,7 @@ import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../../components/Common/IconFA"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
-import {Image as ImageType} from "../../../data/media/types"
+import {Image, Image as ImageType, Media} from "../../../data/media/types"
 import {mediaPath} from "../../../util"
 
 export type SelectablePhoto = { selected: boolean }
@@ -49,7 +49,7 @@ const Gallery: React.FC = () => {
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps<SelectablePhoto>[]>([])
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<PhotoProps<SelectablePhoto>>()
+    const [currentPhoto, setCurrentPhoto] = useState<Image>()
 
 
     /*Gallery initialization*/
@@ -62,7 +62,7 @@ const Gallery: React.FC = () => {
                         .then((photos) => {
                             setPhotos(photos)
                             if (picture) {
-                                setCurrentPhoto(photos[parseInt(picture)])
+                                setCurrentPhoto(res.data.images.find(img => img.id === picture))
                                 setOpenLigthbox(true)
                             }
                         })
@@ -135,9 +135,9 @@ const Gallery: React.FC = () => {
         />
     ), [editMode])
 
-    const onCurrentPhotoChange = useCallback((photo) => {
-        setPhotos(photos)
-        history.push(`/gallery/${id}/picture/${photo.key}`)
+    const onCurrentPhotoChange = useCallback((photo: Image) => {
+        setCurrentPhoto(photo)
+        history.push(`/gallery/${id}/picture/${photo.id}`)
     }, [id, photos])
 
     const closeLightbox = useCallback(() => {
@@ -147,7 +147,7 @@ const Gallery: React.FC = () => {
 
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
         if (photo) {
-            setCurrentPhoto(photo as PhotoProps<SelectablePhoto>)
+            setCurrentPhoto(gallery!.images.find(img => img.id === photo.index))
             setOpenLigthbox(true)
             history.push(`/gallery/${id}/picture/${photo.index}`)
         }
@@ -235,10 +235,10 @@ const Gallery: React.FC = () => {
             }
             {isOpeningLigthbox &&
             <GalleryLigthbox
-                photos={photos}
+                photos={gallery?.images || []}
+                current={currentPhoto}
                 onCurrentPhotoChange={onCurrentPhotoChange}
                 onClose={closeLightbox}
-                currentPhoto={currentPhoto}
             />
             }
         </div>

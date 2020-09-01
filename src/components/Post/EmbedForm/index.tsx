@@ -26,10 +26,10 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
             case EmbedEnumType.VIDEO:
             case EmbedEnumType.DOCUMENT:
                 return (
-                    <div>
+                    <div className="flex items-center">
                         {files[0].file.name}
                         <DeleteOutlined
-                            className="mx-1 px-1 hover:text-white"
+                            className="mx-1 px-1 hover:text-red-400"
                             onClick={() => {
                                 setFiles([])
                                 setFieldValue("embed", undefined)
