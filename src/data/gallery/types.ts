@@ -28,6 +28,7 @@ export type OfficialGalleryForm = {
     images: number[]
     feed: number
     pseudo: false
+    generatePost: boolean
     club: number
 }
 

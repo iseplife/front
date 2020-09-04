@@ -14,7 +14,7 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
     })
 
 
-export const randomBackgroundColors = () => {
+export const randomBackgroundColors = (): string => {
     const colors: string[] = ["gray", "red", "orange", "yellow", "green", "teal", "bule", "indigo", "purple", "pink"]
     const opacities: number[] = [300, 400, 500, 600]
     const randomColor: string = colors[Math.floor(Math.random() * colors.length)]
@@ -22,7 +22,7 @@ export const randomBackgroundColors = () => {
     return `bg-${randomColor}-${randomOpacity}`
 }
 
-export const getInitials = (student: Student) => {
+export const getInitials = (student: Student): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
 }
 
@@ -37,7 +37,6 @@ export const getEducationYear = (graduationYear: number): string => {
 }
 
 export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation().search)
-
 
 
 export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)

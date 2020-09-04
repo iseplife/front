@@ -6,7 +6,7 @@ import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {EmbedGallery as EmbedGalleryType} from "../../../data/post/types"
 import GalleryLigthbox from "../../Gallery/GalleryLigthbox/GalleryLigthbox"
-import {Image} from "../../../data/media/types";
+import {Image} from "../../../data/media/types"
 
 const PREVIEW_GALLERY_COUNT = 5
 
@@ -53,6 +53,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                     onClose={() => setCurrentPhoto(undefined)}
                     photos={gallery.preview}
                     onCurrentPhotoChange={setCurrentPhoto}
+                    sizes={PostSizes}
                 />
                 }
             </div> :
