@@ -1,7 +1,7 @@
 import React, {CSSProperties, useMemo, useState} from "react"
 import {Link} from "react-router-dom"
 import {mediaPath} from "../../../util"
-import {PostSizes} from "../../../constants/MediaSizes"
+import {GallerySizes, PostSizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {EmbedGallery as EmbedGalleryType} from "../../../data/post/types"
@@ -12,6 +12,7 @@ const PREVIEW_GALLERY_COUNT = 5
 
 const getFormat = (index: number, size: number): CSSProperties | undefined => {
     switch (size) {
+        case 1:
         case 2:
             return ({height: "100%", width: "50%"})
         case 3:
@@ -68,11 +69,11 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                         >
                             {i === previewLength - 1 ?
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <img className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, PostSizes.PREVIEW)}/>
+                                    <img className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.THUMBNAIL)}/>
                                     <IconFA name="fa-plus" size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
                                 </div> :
                                 <div className="hover:bg-black rounded h-full w-full">
-                                    <img className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75" src={mediaPath(img.name, PostSizes.PREVIEW)}/>
+                                    <img className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75" src={mediaPath(img.name, GallerySizes.THUMBNAIL)}/>
                                 </div>
                             }
                         </Link>

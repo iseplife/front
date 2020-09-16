@@ -13,7 +13,7 @@ import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../../components/Common/IconFA"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
-import {Image, Image as ImageType, Media} from "../../../data/media/types"
+import {Image as ImageType} from "../../../data/media/types"
 import {mediaPath} from "../../../util"
 
 export type SelectablePhoto = { selected: boolean }
@@ -49,17 +49,18 @@ const Gallery: React.FC = () => {
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps<SelectablePhoto>[]>([])
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<Image>()
+    const [currentPhoto, setCurrentPhoto] = useState<ImageType>()
 
-
-    /*Gallery initialization*/
+    /**
+     * Get Gallery and parse photos on first load
+     */
     useEffect(() => {
         if (id) {
             getGallery(id).then(res => {
                 if (res.data) {
                     setGallery(res.data)
                     getPhotosAsync(res.data)
-                        .then((photos) => {
+                        .then(photos => {
                             setPhotos(photos)
                             if (picture) {
                                 setCurrentPhoto(res.data.images.find(img => img.id === picture))
@@ -120,6 +121,14 @@ const Gallery: React.FC = () => {
             })
     }, [gallery, photos])
 
+    const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
+        if (photo && gallery) {
+            setCurrentPhoto(gallery.images.find(img => img.id === photo.index))
+            setOpenLigthbox(true)
+            history.push(`/gallery/${id}/picture/${photo.index}`)
+        }
+    }, [id, gallery])
+
     const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
         <SelectableImage
             key={key}
@@ -133,9 +142,9 @@ const Gallery: React.FC = () => {
             onSelect={handleSelect}
             onClick={openLightbox}
         />
-    ), [editMode])
+    ), [editMode, handleSelect, openLightbox])
 
-    const onCurrentPhotoChange = useCallback((photo: Image) => {
+    const onCurrentPhotoChange = useCallback((photo: ImageType) => {
         setCurrentPhoto(photo)
         history.push(`/gallery/${id}/picture/${photo.id}`)
     }, [id, photos])
@@ -143,14 +152,6 @@ const Gallery: React.FC = () => {
     const closeLightbox = useCallback(() => {
         setOpenLigthbox(false)
         history.push(`/gallery/${id}`)
-    }, [id])
-
-    const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
-        if (photo) {
-            setCurrentPhoto(gallery!.images.find(img => img.id === photo.index))
-            setOpenLigthbox(true)
-            history.push(`/gallery/${id}/picture/${photo.index}`)
-        }
     }, [id])
 
     const removeGallery = useCallback(() =>

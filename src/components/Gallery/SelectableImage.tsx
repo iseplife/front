@@ -47,7 +47,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
                     if (selectable) {
                         onSelect(photo.key as string)
                     } else if (onClick) {
-                        onClick(e, {...photo, index})
+                        onClick(e, {...photo, index: +(photo.key as string)})
                     }
                 }}
             />

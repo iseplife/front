@@ -61,7 +61,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
-        console.log(error.response?.status)
         if(axios.isCancel(error)){
             console.log("Request canceled", error.message)
             // eslint-disable-next-line @typescript-eslint/no-empty-function

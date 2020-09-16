@@ -47,7 +47,6 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({previousEdition, o
     const formik = useFormik<EventForm>({
         initialValues: DEFAULT_EVENT,
         onSubmit: async (values) => {
-            console.log(values)
             createEvent(values).then(res => {
                 if (res.status === 200) {
                     onSubmit()
