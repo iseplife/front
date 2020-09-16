@@ -3,7 +3,7 @@ import {Avatar, Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
 import {UserOutlined} from "@ant-design/icons"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes";
 
 const TRIGGER_LENGTH = 2
