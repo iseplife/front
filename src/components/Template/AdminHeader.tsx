@@ -4,7 +4,7 @@ import {AppState} from "../../context/action"
 import {Avatar, Button} from "antd"
 import {Link} from "react-router-dom"
 import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes";
 
 const AdminHeader: React.FC = () => {
