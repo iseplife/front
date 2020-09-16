@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {DeleteOutlined} from "@ant-design/icons"
-import ImageOverlay from "./ImageOverlay";
+import ImageOverlay from "./ImageOverlay"
 
 type PictureCardProps = {
     index: number
