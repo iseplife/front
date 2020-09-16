@@ -10,7 +10,7 @@
   "form": {
     "title": "Création d'une galerie",
     "generate_post": "Générer post",
-    "generate_post_help": "Generation automatique d'un post avec la galerie attaché à celui-ci",
+    "generate_post_help": "Generation automatique d'un post avec la galerie attachée à celui-ci",
     "name": "Nom de la galerie",
     "description": "Description",
     "author": "Auteur",
