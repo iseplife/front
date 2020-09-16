@@ -33,7 +33,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
 
     return (
         <div className={`${className} flex flex-col justify-center text-left md:text-center`}>
-            <h3 className="font-dinotcb text-gray-800 text-lg">{t("incoming")}</h3>
+            <h3 className="font-dinotcb text-gray-800 text-lg mx-3">{t("incoming")}</h3>
             {wait || loading ?
                 <>
                     <Skeleton.Input className="w-full rounded my-1" active size="large"/>

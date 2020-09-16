@@ -12,7 +12,7 @@ import IncomingEvents from "../../../components/Event/IncomingEvents"
 const Home: React.FC = () => {
     const user = useSelector((state: AppState) => state.user)
     return (
-        <div className="mt-5 px-3 flex flex-wrap">
+        <div className="mt-5 px-3 flex justify-center flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4">
                 <div className="flex p-1 mb-5 font-dinot">
                     <Avatar
