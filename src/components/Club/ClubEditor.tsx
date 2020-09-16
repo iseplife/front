@@ -195,10 +195,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </Link>
                     }
 
-                    <div className="mt-5">
-                        <ImagePicker onChange={handleImage} defaultImage={mediaPath(club?.logoUrl, AvatarSizes.DEFAULT)} className="avatar-uploader"/>
-                    </div>
-
+                    <ImagePicker onChange={handleImage} defaultImage={mediaPath(club?.logoUrl, AvatarSizes.DEFAULT)} className="mt-5 avatar-uploader"/>
 
                     <div className="flex justify-between mx-3">
                         <div className="w-1/2">
