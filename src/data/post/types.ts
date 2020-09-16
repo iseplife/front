@@ -76,4 +76,4 @@ type EmbedPollCreation = {
         anonymous: boolean
     }
 }
-export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation;
+export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation
