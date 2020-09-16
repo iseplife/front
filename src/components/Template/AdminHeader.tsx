@@ -5,7 +5,7 @@ import {Avatar, Button} from "antd"
 import {Link} from "react-router-dom"
 import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 const AdminHeader: React.FC = () => {
     const user = useSelector((state: AppState) => state.user)
