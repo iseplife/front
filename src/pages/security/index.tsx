@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import {connect, isLoggedIn} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
-import {LocationState} from "../../data/request.type";
+import {LocationState} from "../../data/request.type"
 
 
 const initialValues: LoginFormInputs = {id: "", password: ""}
