@@ -22,7 +22,7 @@ import {
     DeleteOutlined
 } from "@ant-design/icons"
 import {mediaPath} from "../../util";
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 const {Option} = Select
 
