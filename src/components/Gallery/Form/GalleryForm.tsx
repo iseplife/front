@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
 import AvatarPicker from "../../Common/AvatarPicker"
-import HelperIcon from "../../Common/HelperIcon";
+import HelperIcon from "../../Common/HelperIcon"
 
 const {TextArea} = Input
 
