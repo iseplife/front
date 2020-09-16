@@ -16,7 +16,7 @@ import {
     EditOutlined,
     MessageOutlined
 } from "@ant-design/icons"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes";
 
 type PostProps = {
