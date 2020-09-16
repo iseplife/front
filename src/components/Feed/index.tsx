@@ -6,7 +6,7 @@ import Post from "../Post"
 import PostForm from "../Post/PostForm"
 import {deletePost, updatePost} from "../../data/post"
 import {Divider} from "antd"
-import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton";
+import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton"
 
 type FeedProps = {
     id: number
