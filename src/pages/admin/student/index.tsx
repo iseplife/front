@@ -10,7 +10,7 @@ import {Avatar} from "antd"
 import {getEducationYear, mediaPath} from "../../../util"
 import {UserOutlined} from "@ant-design/icons"
 import Pills from "../../../components/Common/Pills"
-import {AvatarSizes} from "../../../constants/MediaSizes";
+import {AvatarSizes} from "../../../constants/MediaSizes"
 
 export type PageStatus = {
     current: number
