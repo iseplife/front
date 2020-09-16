@@ -13,7 +13,7 @@ import {
 } from "@ant-design/icons"
 import {Image} from "../../../data/media/types"
 import {GallerySizes} from "../../../constants/MediaSizes"
-import {mediaPath} from "../../../util";
+import {mediaPath} from "../../../util"
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
