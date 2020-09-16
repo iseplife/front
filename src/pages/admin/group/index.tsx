@@ -8,7 +8,7 @@ import {Group} from "../../../data/group/types"
 import GroupEditor from "../../../components/Group/GroupEditor"
 import {getAllGroup} from "../../../data/group"
 import Pills from "../../../components/Common/Pills"
-import {StudentPreview} from "../../../data/student/types";
+import {StudentPreview} from "../../../data/student/types"
 
 const tableConfig: ColumnType<Group>[] = [
     {title: "id"},
