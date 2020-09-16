@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import {Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
 import {IconFA} from "../Common/IconFA"
-import EventModalForm from "./EventModalForm";
+import EventModalForm from "./EventModalForm"
 
 type IncomingEventsProps = {
     feed?: number
