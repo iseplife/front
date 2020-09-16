@@ -2,7 +2,7 @@ import React, {useMemo} from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
 import {format} from "date-fns"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 
 type EventProps = {
     event: PreviewType
