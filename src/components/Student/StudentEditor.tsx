@@ -21,7 +21,7 @@ import {
     AuditOutlined,
     DeleteOutlined
 } from "@ant-design/icons"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 
 const {Option} = Select
