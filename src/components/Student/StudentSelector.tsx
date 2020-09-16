@@ -4,7 +4,7 @@ import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
 import {UserOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 const TRIGGER_LENGTH = 2
 type Option = {
