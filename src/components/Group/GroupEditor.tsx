@@ -19,7 +19,7 @@ import {
 } from "@ant-design/icons"
 
 import "./GroupEditor.css"
-import {mediaPath} from "../../util";
+import {mediaPath} from "../../util"
 
 
 
