@@ -2,7 +2,7 @@ import {Link} from "react-router-dom"
 import React from "react"
 import {ClubPreview} from "../../data/club/types"
 import {mediaPath} from "../../util"
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 type ClubCardProps = {
     club: ClubPreview
