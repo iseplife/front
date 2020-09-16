@@ -12,7 +12,7 @@ import {
     PlayCircleOutlined
 } from "@ant-design/icons"
 import {Image} from "../../../data/media/types"
-import {GallerySizes} from "../../../constants/MediaSizes";
+import {GallerySizes} from "../../../constants/MediaSizes"
 import {mediaPath} from "../../../util";
 
 // Carousel slide move
