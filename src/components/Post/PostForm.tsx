@@ -79,7 +79,7 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                             disabled={isSubmitting || !values.description.length}
                             className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
                         >
-                            <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} type="solid"/>
+                            <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"} />
                         </button>
                     </div>
                 </div>

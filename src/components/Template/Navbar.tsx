@@ -24,7 +24,7 @@ import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 
 type IconButtonProps = {
-	icon: React.ReactNode
+    icon: React.ReactNode
 }
 const IconButton: React.FC<IconButtonProps> = ({icon}) => {
     return (
@@ -114,7 +114,7 @@ const Header: React.FC<{ user: Student }> = ({user}) => (
 
 type DrawerItemProps = {
     icon: React.ReactNode
-	className?: string
+    className?: string
     link: string
 }
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
