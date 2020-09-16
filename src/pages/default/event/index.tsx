@@ -22,7 +22,7 @@ import {
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
-import {mediaPath} from "../../../util";
+import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 
 
