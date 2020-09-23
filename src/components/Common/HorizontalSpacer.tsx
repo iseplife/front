@@ -4,8 +4,8 @@ interface SpacerProps {
     spacing?: number
 }
 
-export const HorizontalSpacer = (props: SpacerProps) => {
-    const size: string = "my-" + (props.spacing)
+export const HorizontalSpacer: React.FC<SpacerProps> = ({spacing}) => {
+    const size: string = "my-" + (spacing)
     return (
         <div className={size}/>
     )
