@@ -67,3 +67,5 @@ export const deleteStudent = (id: number): AxiosPromise<void> => axios.delete(`/
 
 
 export const getClubsForStudent = (id: number): AxiosPromise<ClubMemberPreview[]> => axios.get(`/student/${id}/club`)
+
+export const importStudent = (form: FormData): AxiosPromise => axios.post("/student/import", form)
