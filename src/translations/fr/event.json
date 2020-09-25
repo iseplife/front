@@ -11,11 +11,14 @@
 			"location": "Lieu",
 			"price": "Prix",
 			"ticket_url": "Lien billetterie",
-			"target": "Audience"
+			"target": "Audience",
+			"published": "Publication",
+			"published_help": "Votre évènement ne sera pas visible avant cette date"
 		},
 		"placeholder": {
 			"title": "Victoire Coupe du monde 2018",
 			"description": "Décrivez votre évènement...",
+			"published": "Date de publication",
 			"range": [
 				"Date de début",
 				"Date de fin"
@@ -37,6 +40,8 @@
 	},
 	"free": "Gratuit",
 	"event": "Évènement",
+	"incoming": "Évènements à venir",
+	"no_events": "Aucun évènement à venir...",
 	"gallery": "Galeries",
 	"published_only": "Évènements publiés seulement",
 	"admin_view": "Vue admin",

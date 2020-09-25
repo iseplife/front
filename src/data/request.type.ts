@@ -30,3 +30,9 @@ export enum UploadState {
     ERROR = "exception",
     FINISHED = "success"
 }
+
+export type LocationState = {
+    from: {
+        pathname: string
+    }
+}

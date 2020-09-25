@@ -1,20 +1,20 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import {Gallery as GalleryType} from "../../data/gallery/types"
+import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
-import GalleryLigthbox from "../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
-import {deleteGallery, deleteGalleryImages, getGallery} from "../../data/gallery"
-import LoadingGallery from "../../components/Gallery/LoadingGallery/LoadingGallery"
+import GalleryLigthbox from "../../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
+import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gallery"
+import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
 import {UserOutlined} from "@ant-design/icons"
-import {mediaPath} from "../../util"
-import {AvatarSizes, GallerySizes} from "../../constants/MediaSizes"
-import {IconFA} from "../../components/Common/IconFA"
-import SelectableImage from "../../components/Gallery/SelectableImage"
-import GalleryAdder from "../../components/Gallery/GalleryAdder"
-import {Image as ImageType} from "../../data/media/types"
+import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
+import {IconFA} from "../../../components/Common/IconFA"
+import SelectableImage from "../../../components/Gallery/SelectableImage"
+import GalleryAdder from "../../../components/Gallery/GalleryAdder"
+import {Image as ImageType} from "../../../data/media/types"
+import {mediaPath} from "../../../util"
 
 export type SelectablePhoto = { selected: boolean }
 
@@ -49,20 +49,21 @@ const Gallery: React.FC = () => {
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps<SelectablePhoto>[]>([])
     const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<PhotoProps<SelectablePhoto>>()
+    const [currentPhoto, setCurrentPhoto] = useState<ImageType>()
 
-
-    /*Gallery initialization*/
+    /**
+     * Get Gallery and parse photos on first load
+     */
     useEffect(() => {
         if (id) {
             getGallery(id).then(res => {
                 if (res.data) {
                     setGallery(res.data)
                     getPhotosAsync(res.data)
-                        .then((photos) => {
+                        .then(photos => {
                             setPhotos(photos)
                             if (picture) {
-                                setCurrentPhoto(photos[parseInt(picture)])
+                                setCurrentPhoto(res.data.images.find(img => img.id === picture))
                                 setOpenLigthbox(true)
                             }
                         })
@@ -120,6 +121,14 @@ const Gallery: React.FC = () => {
             })
     }, [gallery, photos])
 
+    const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
+        if (photo && gallery) {
+            setCurrentPhoto(gallery.images.find(img => img.id === photo.index))
+            setOpenLigthbox(true)
+            history.push(`/gallery/${id}/picture/${photo.index}`)
+        }
+    }, [id, gallery])
+
     const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
         <SelectableImage
             key={key}
@@ -133,24 +142,16 @@ const Gallery: React.FC = () => {
             onSelect={handleSelect}
             onClick={openLightbox}
         />
-    ), [editMode])
+    ), [editMode, handleSelect, openLightbox])
 
-    const onCurrentPhotoChange = useCallback((photo) => {
-        setPhotos(photos)
-        history.push(`/gallery/${id}/picture/${photo.key}`)
+    const onCurrentPhotoChange = useCallback((photo: ImageType) => {
+        setCurrentPhoto(photo)
+        history.push(`/gallery/${id}/picture/${photo.id}`)
     }, [id, photos])
 
     const closeLightbox = useCallback(() => {
         setOpenLigthbox(false)
         history.push(`/gallery/${id}`)
-    }, [id])
-
-    const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
-        if (photo) {
-            setCurrentPhoto(photo as PhotoProps<SelectablePhoto>)
-            setOpenLigthbox(true)
-            history.push(`/gallery/${id}/picture/${photo.index}`)
-        }
     }, [id])
 
     const removeGallery = useCallback(() =>
@@ -235,10 +236,10 @@ const Gallery: React.FC = () => {
             }
             {isOpeningLigthbox &&
             <GalleryLigthbox
-                photos={photos}
+                photos={gallery?.images || []}
+                current={currentPhoto}
                 onCurrentPhotoChange={onCurrentPhotoChange}
                 onClose={closeLightbox}
-                currentPhoto={currentPhoto}
             />
             }
         </div>

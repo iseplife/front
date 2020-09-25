@@ -1,32 +1,25 @@
-enum EmbedType {
-    GALLERY = "gallery",
-    POLL = "poll",
-    DOCUMENT = "document",
-    VIDEO = "video",
-    IMAGE = "image",
-}
+import {EmbedEnumType} from "../post/types"
 
 export interface Media {
     id: number
     creation: Date
     name: string
     NSFW: boolean
-    embedType: EmbedType
 }
 
 export type Image = Media & {
     thread: number
-    embedType: EmbedType.IMAGE
+    embedType: EmbedEnumType.IMAGE
 }
 
 export type Video = Media & {
     title: string
     thumbnail: string
     views: number
-    embedType: EmbedType.VIDEO
+    embedType: EmbedEnumType.VIDEO
 }
 
 export type Document = Media & {
     title: string
-    embedType: EmbedType.DOCUMENT
+    embedType: EmbedEnumType.DOCUMENT
 }

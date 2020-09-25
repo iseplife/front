@@ -3,7 +3,7 @@ import {withRouter, RouteComponentProps} from "react-router"
 import axios, {AxiosError, AxiosResponse} from "axios"
 import {removeTokens, setTokens} from "../../data/security"
 import {message} from "antd"
-import {WithTranslation, withTranslation, WithTranslationProps} from "react-i18next"
+import {WithTranslation, withTranslation} from "react-i18next"
 
 const errorMessages = [
     "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupent 👊 !",
@@ -32,13 +32,10 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         window.addEventListener("online", this.handleOnline)
     }
 
-    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-        console.log("Aie... probleme", error, errorInfo)
-    }
-
     componentWillUnmount() {
         if (this.intercept)
             axios.interceptors.response.eject(this.intercept)
+
         window.removeEventListener("offline", this.handleOffline)
         window.removeEventListener("online", this.handleOnline)
     }
@@ -64,6 +61,12 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
+        if(axios.isCancel(error)){
+            console.log("Request canceled", error.message)
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            return new Promise(() => {})
+        }
+
         if (error.response) {
             switch (error.response.status) {
                 case 404:
@@ -77,7 +80,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 case 500:
                 case 400:
                     message.error("Un probleme a été rencontré")
-                    console.error( `[${error.code}] ${error.message}`)
+                    console.error(`[${error.code}] ${error.message}`)
                     break
                 case 503:
                     message.error("Serveur indisponible")

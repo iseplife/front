@@ -1,12 +1,14 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {DeleteOutlined} from "@ant-design/icons"
+import ImageOverlay from "./ImageOverlay"
 
 type PictureCardProps = {
     index: number
     file: File
     onDelete: (id: number) => void
+    className?: string
 }
-const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDelete}) => {
+const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDelete, className}) => {
     const [image, setImage] = useState()
 
     useEffect(() => {
@@ -24,27 +26,20 @@ const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDele
         onDelete(index)
     }, [onDelete, index])
 
+
     return (
-        <div className="image-display relative h-20 w-20 bg-gray-400 m-3">
+        <div className={`h-20 w-20 m-2 ${className}`}>
             {image &&
-            <>
-                <div
-                    className="w-full h-full"
-                    style={{
-                        backgroundImage: `url("${image}")`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                />
-                <span className="image-options absolute text-gray-400">
-                    <DeleteOutlined className="mx-1 px-1 hover:text-red-400" onClick={handleDelete}/>
-                </span>
-            </>
+            <ImageOverlay src={image} className="h-full w-full rounded">
+                <DeleteOutlined className="mx-1 px-1 hover:text-red-400" onClick={handleDelete}/>
+            </ImageOverlay>
             }
         </div>
     )
 })
 PictureCard.displayName = "PictureCard"
+PictureCard.defaultProps = {
+    className: ""
+}
 
 export default PictureCard

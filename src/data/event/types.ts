@@ -14,7 +14,7 @@ export type Event = {
     price?: number
     location: string
     targets: Feed[]
-    published: boolean
+    published: Date
     closed: boolean
     subscribed: boolean
     club: ClubPreview
@@ -28,7 +28,7 @@ export type EventPreview = {
     start: number
     end: number
     location: string
-    imageUrl?: string
+    cover?: string
     targets: number[]
     published: boolean
 }
@@ -45,7 +45,7 @@ export type EventForm = {
     location?: string
     coordinates?: Marker
     targets: number[]
-    published: boolean
+    published: Date
     closed: boolean
     club: number
 }

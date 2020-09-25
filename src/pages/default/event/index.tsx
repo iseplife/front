@@ -9,7 +9,7 @@ import "./Event.css"
 import {Avatar} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
-import EventPreview from "../../../components/Event/Preview"
+import EventPreview from "../../../components/Event/EventPreview"
 import {
     TeamOutlined,
     EuroOutlined,
@@ -22,6 +22,8 @@ import {
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
+import {mediaPath} from "../../../util"
+import {AvatarSizes} from "../../../constants/MediaSizes"
 
 
 const Event: React.FC = () => {
@@ -64,7 +66,7 @@ const Event: React.FC = () => {
         (
             <div className="h-full">
                 <div className="md:h-56 h-24 bg-red-200 relative" style={{
-                    backgroundImage: "linear-gradient(to bottom, rgba(247, 250, 252, 0.3), rgba(247, 250, 252)), url(\"/img/gala.png\")",
+                    backgroundImage: `linear-gradient(to bottom, rgba(247, 250, 252, 0.3), rgba(247, 250, 252)), url(${mediaPath(event.image || "img/static/default-cover.png")})`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "top",
@@ -76,7 +78,7 @@ const Event: React.FC = () => {
                     >
                         <Avatar
                             icon={<UserOutlined/>}
-                            src={event.club.logoUrl}
+                            src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
                             className="cursor-pointer mx-3"
                         />
                         {event.club.name}
@@ -121,12 +123,10 @@ const Event: React.FC = () => {
                                 </span>
                                 <div className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
                                     {galleries.map(g => (
-                                        <GalleryCard key={g.id} gallery={g} />
+                                        <GalleryCard key={g.id} gallery={g}/>
                                     ))}
                                 </div>
-                                <div className="bg-white rounded shadowp-2 mt-3">
-                                    <GalleryModalForm feed={event.feed} onSubmit={(g) => setGalleries(prevState => [...prevState, g])} />
-                                </div>
+                                <GalleryModalForm feed={event.feed} onSubmit={(g) => setGalleries(prevState => [...prevState, g])}/>
                             </div>
                             }
 
@@ -153,7 +153,7 @@ const Event: React.FC = () => {
                                 }}
                             >
                                 <div ref={descriptionRef} className="h-32 overflow-hidden">
-                                    {event.description.split("\n").map((s, idx) =>
+                                    {event.description && event.description.split("\n").map((s, idx) =>
                                         <span key={idx}>{s} <br/></span>
                                     )}
                                 </div>

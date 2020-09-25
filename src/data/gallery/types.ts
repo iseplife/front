@@ -16,12 +16,28 @@ export type GalleryPreview = {
     preview: Image[]
 }
 
-export type GalleryForm = {
+type PseudoGalleryForm = {
+    images: number[]
+    feed: number
+    pseudo: true
+}
+
+export type OfficialGalleryForm = {
     name: string
     description: string
     images: number[]
     feed: number
-    pseudo: boolean
+    pseudo: false
+    generatePost: boolean
     club: number
 }
 
+export type GalleryForm = PseudoGalleryForm | OfficialGalleryForm
+
+export type GalleryPreForm = {
+    name?: string
+    club?: number
+    feed: number
+    pseudo: boolean
+    images: File[]
+}

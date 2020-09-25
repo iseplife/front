@@ -1,5 +1,17 @@
 import {Club} from "../club/types"
 import {Author} from "../request.type"
+import {GalleryPreForm, GalleryPreview} from "../gallery/types"
+import {Image, Video, Document} from "../media/types"
+import {Poll} from "../poll/types"
+
+
+export enum EmbedEnumType {
+    GALLERY = "gallery",
+    POLL = "poll",
+    DOCUMENT = "document",
+    VIDEO = "video",
+    IMAGE = "image",
+}
 
 export type PostCreation = {
     description: string
@@ -7,6 +19,7 @@ export type PostCreation = {
     draft: boolean
     feed: number
     linkedClub?: number
+    attachements:  { [type: string]: number }
 }
 
 export type PostUpdate = {
@@ -34,6 +47,33 @@ export type Post = {
     hasWriteAccess: boolean
 };
 
-type Embed = {
 
-};
+export type EmbedGallery = {
+    id: number
+    name: string
+    preview: Image[]
+    pseudo: boolean
+    embedType: EmbedEnumType.GALLERY
+}
+type EmbedMedia = Image | Video | Document
+export type Embed = EmbedGallery | EmbedMedia | Poll
+
+
+
+type EmbedGalleryCreation = {
+    type: EmbedEnumType.GALLERY
+    data: GalleryPreForm
+}
+type EmbedMediaCreation = {
+    type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
+    data: File[]
+}
+type EmbedPollCreation = {
+    type: EmbedEnumType.POLL
+    data: {
+        options: string[]
+        multiple: boolean
+        anonymous: boolean
+    }
+}
+export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation

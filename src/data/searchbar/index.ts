@@ -1,4 +1,4 @@
-import axios, {AxiosPromise} from "axios"
+import axios, {AxiosPromise, CancelToken} from "axios"
 import {Page} from "../request.type"
 import {SearchItem} from "./types"
 
@@ -14,6 +14,6 @@ export const searchEvent = (name: string, page: number): AxiosPromise<Page<Searc
     return axios.get("/search/event", {params: {name: name, page: page}})
 }
 
-export const globalSearch = (name: string, page: number): AxiosPromise<Page<SearchItem>> => {
-    return axios.get("/search", {params: {name: name, page: page}})
+export const globalSearch = (name: string, page: number, token?: CancelToken): AxiosPromise<Page<SearchItem>> => {
+    return axios.get("/search", {params: {name: name, page: page}, cancelToken: token})
 }

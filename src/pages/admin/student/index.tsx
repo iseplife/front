@@ -7,9 +7,10 @@ import {Role} from "../../../data/security/types"
 import {getRoles} from "../../../data/security"
 import Table, {RowProps} from "../../../components/Common/TableAdmin"
 import {Avatar} from "antd"
-import {getEducationYear} from "../../../util"
+import {getEducationYear, mediaPath} from "../../../util"
 import {UserOutlined} from "@ant-design/icons"
 import Pills from "../../../components/Common/Pills"
+import {AvatarSizes} from "../../../constants/MediaSizes"
 
 export type PageStatus = {
     current: number
@@ -92,7 +93,7 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
         <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
             <div className="flex items-center">
                 <div className="flex-shrink-0 h-10 w-10">
-                    <Avatar icon={<UserOutlined/>} src={s.picture}/>
+                    <Avatar icon={<UserOutlined/>} src={mediaPath(s.picture, AvatarSizes.THUMBNAIL)}/>
                 </div>
                 <div className="ml-4 overflow-hidden">
                     <Link to={`/admin/user/${s.id}`}>

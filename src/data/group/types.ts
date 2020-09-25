@@ -1,5 +1,11 @@
 import {StudentPreview} from "../student/types"
 
+export type GroupPreview = {
+    id: number,
+    name: string,
+    cover?: string
+}
+
 export type Group = {
     id: number
     name: string
@@ -7,7 +13,15 @@ export type Group = {
     restricted: boolean
     archived: boolean
     locked: boolean
-    admins: StudentPreview[]
+    feed: number
+    hasRight: boolean
+    members: GroupMember[]
+}
+
+export type GroupMember = {
+    id: number
+    admin: boolean
+    student: StudentPreview
 }
 
 export type GroupForm = {
@@ -15,5 +29,4 @@ export type GroupForm = {
     restricted: boolean
     admins: number[]
     cover?: File
-    resetCover?: boolean
 }

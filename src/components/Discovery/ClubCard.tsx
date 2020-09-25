@@ -1,6 +1,8 @@
 import {Link} from "react-router-dom"
 import React from "react"
 import {ClubPreview} from "../../data/club/types"
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 type ClubCardProps = {
     club: ClubPreview
@@ -14,7 +16,7 @@ const ClubCard: React.FC<ClubCardProps> = ({club}) => (
                     <div
                         className="w-full h-full mx-auto rounded-t"
                         style={{
-                            backgroundImage: `url("${club.logoUrl}")`,
+                            backgroundImage: `url("${mediaPath(club.logoUrl, AvatarSizes.DEFAULT)}")`,
                             backgroundRepeat: "no-repeat",
                             backgroundSize: "cover",
                             backgroundPosition: "center",

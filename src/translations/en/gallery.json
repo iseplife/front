@@ -9,6 +9,8 @@
   "add": "Add a new gallery",
   "form": {
     "title": "Create a gallery",
+    "generate_post": "Generate post",
+    "generate_post_help": "Post generation will automatically create a new post with this gallery attached",
     "name": "Gallery name",
     "description": "Description",
     "author": "Author",

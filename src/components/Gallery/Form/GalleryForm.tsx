@@ -1,11 +1,12 @@
 import React, {useCallback, useMemo} from "react"
 import {useFormik} from "formik"
-import {Gallery, GalleryForm as GalleryFormType, GalleryPreview} from "../../../data/gallery/types"
-import {Input, message} from "antd"
+import {GalleryPreview, OfficialGalleryForm} from "../../../data/gallery/types"
+import {Input, message, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
 import AvatarPicker from "../../Common/AvatarPicker"
+import HelperIcon from "../../Common/HelperIcon"
 
 const {TextArea} = Input
 
@@ -15,12 +16,13 @@ type GalleryFormProps = {
 }
 const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
-    const formik = useFormik<GalleryFormType>({
+    const formik = useFormik<OfficialGalleryForm>({
         initialValues: {
             name: "",
             description: "",
             images: [],
             pseudo: false,
+            generatePost: true,
             feed: feed,
             club: -1,
         },
@@ -47,6 +49,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     return (
         <form className="flex" onSubmit={formik.handleSubmit} style={{height: "30rem", maxHeight: "90%"}}>
             <div className="flex flex-col w-1/4 bg-gray-100 p-4 rounded-l border-r-2">
+
                 <div className="my-2">
                     <h1 className="text-gray-800 font-bold text-xl mb-6">{t("form.title")}</h1>
 
@@ -62,7 +65,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                     />
                 </div>
 
-                <div className="my-4">
+                <div className="mt-4">
                     <label className="font-dinotcb">{t("form.description")}</label>
                     <TextArea
                         name="description"
@@ -73,6 +76,16 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                         rows={5}
                         value={formik.values.description}
                         onChange={formik.handleChange}
+                    />
+                </div>
+                <div className="mt-1 mb-2">
+                    <label className="font-dinotcb mr-2">
+                        {t("form.generate_post")}
+                        <HelperIcon text={t("form.generate_post_help")}/>
+                    </label>
+                    <Switch
+                        checked={formik.values.generatePost}
+                        onChange={val => formik.setFieldValue("generatePost", val)}
                     />
                 </div>
 

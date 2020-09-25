@@ -2,6 +2,7 @@ import React, {useMemo} from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
 import {format} from "date-fns"
+import {mediaPath} from "../../util"
 
 type EventProps = {
     event: PreviewType
@@ -21,19 +22,18 @@ const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
             )
         case "medium":
             return (
-                <Link to={`/event/${event.id}`} className="m-2">
-                    <div className="text-gray-700 flex bg-white rounded shadow-md h-16 md:max-w-md max-w-lg mx-auto hover:text-gray-500">
+                <Link to={`/event/${event.id}`} className="m-2 w-full max-w-sm">
+                    <div className="text-gray-700 flex bg-white rounded shadow-md h-16 w-full hover:text-gray-500">
                         <div className="w-1/4 max-w-xs h-full text-center pb-1">
                             <div className="font-bold text-3xl">
                                 {date.getDate()}
                             </div>
-                            <div className="w-4/5 bg-gray-400 mx-auto" style={{height: 0.6}}/>
                             <div className="uppercase text-xs font-semibold">
                                 {format(date, "MMM")}
                             </div>
                         </div>
                         <div className="w-3/4 h-full" style={{
-                            backgroundImage: "url(\"/img/gala.png\")",
+                            backgroundImage: `url("${mediaPath(event.cover || "img/static/default-cover.png")}")`,
                             backgroundRepeat: "no-repeat",
                             backgroundSize: "cover",
                             backgroundPosition: "center",

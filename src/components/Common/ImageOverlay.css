@@ -1,0 +1,22 @@
+.image-display:hover {
+    background-color:#000;
+}
+
+.image-display:hover div {
+    opacity: 0.5;
+}
+
+.image-display:hover .image-options {
+    opacity: 1 !important;
+}
+
+.image-options {
+    opacity: 0;
+    top: 45%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}

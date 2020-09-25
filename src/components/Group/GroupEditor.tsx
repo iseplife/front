@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Button, Divider, Input, message, Modal, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
@@ -9,10 +9,19 @@ import ImagePicker from "../Common/ImagePicker"
 import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import HelperIcon from "../Common/HelperIcon"
-import {CloseCircleOutlined, AuditOutlined, DeleteOutlined, SaveOutlined} from "@ant-design/icons"
+import {createGroup, deleteGroup, getGroup, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
+import {StudentPreview} from "../../data/student/types"
+import {
+    CloseCircleOutlined,
+    AuditOutlined,
+    DeleteOutlined,
+    SaveOutlined
+} from "@ant-design/icons"
 
 import "./GroupEditor.css"
-import {createGroup, deleteGroup, getGroup, toggleGroupArchiveStatus, updateGroup} from "../../data/group"
+import {mediaPath} from "../../util"
+
+
 
 type GroupEditorProps = {
     id?: string,
@@ -34,6 +43,11 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(false)
     const [group, setGroup] = useState<Group>()
+    const admins = useMemo(() => group?.members.reduce((acc: StudentPreview[], curr) => {
+        if(curr.admin)
+            acc.push(curr.student)
+        return acc
+    }, []), [group])
 
     const formik = useFormik<GroupForm>({
         initialValues: DEFAULT_GROUP,
@@ -41,30 +55,40 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
             // If feed is defined then we are editing a feed, otherwise we are creating a new feed
             let res
             if (group) {
-                res = await updateGroup(group.id, values)
+                const {cover, ...form} = values
+                res = await updateGroup(group.id, form)
                 if (res.status === 200) {
                     onUpdate(res.data)
                     setGroup(res.data)
                     message.success("Modifications enregistrées !")
                 }
+                if (cover) {
+                    res = await uploadGroupCover(group.id, cover)
+                    if (res.status === 200) {
+                        group.cover = res.data
+                    } else {
+                        message.error("Un problème lors de l'envoie de la couverture a été rencontré.")
+                    }
+                }
             } else {
-                res = await createGroup(values)
+                const {cover, ...form} = values
+
+                res = await createGroup(form)
                 if (res.status === 200) {
-                    onCreate(res.data)
-                    setGroup(res.data)
-                    history.push(`/admin/group/${res.data.id}`)
+                    const newGroup = res.data
+                    if (cover) {
+                        res = await uploadGroupCover(newGroup.id, cover)
+                        if (res.status === 200) newGroup.cover = res.data
+                    }
+                    onCreate(newGroup)
+                    setGroup(newGroup)
+                    history.push(`/admin/group/${newGroup.id}`)
                     message.success("Groupe créé !")
                 }
             }
         },
     })
 
-    const handleImage = (file: File | null) => {
-        formik.setFieldValue("cover", file)
-        if (!file) {
-            formik.setFieldValue("resetCover", true)
-        }
-    }
 
     /**
      * Get group's information according with the id props,
@@ -80,7 +104,11 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                         formik.setValues({
                             name: res.data.name,
                             restricted: res.data.restricted,
-                            admins: res.data.admins.map(a => a.id)
+                            admins: res.data.members.reduce((acc: number[], curr) => {
+                                if(curr.admin)
+                                    acc.push(curr.student.id)
+                                return acc
+                            }, [])
                         })
                     } else {
                         message.error("Groupe inconnu: " + id)
@@ -133,7 +161,8 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
     }, [onArchive, group, t])
 
     return (
-        <div className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/2 mx-2 p-6 sticky"
+        <div
+            className="flex flex-col items-center bg-white shadow rounded-lg w-full md:w-1/2 mx-2 p-6 sticky"
             style={{height: "min-content", minHeight: "16rem", top: "1.5rem"}}
         >
             {loading ?
@@ -141,13 +170,13 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
                     {group &&
                     <Link to="/admin/group">
-                    	<div className="text-right absolute right-0 top-0 w-16">
-                    		<CloseCircleOutlined style={{fontSize: "26px"}}/>
-                    	</div>
+                        <div className="text-right absolute right-0 top-0 w-16">
+                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
+                        </div>
                     </Link>
                     }
 
-                    <ImagePicker className="cover-selector" onChange={handleImage} defaultImage={group?.cover}/>
+                    <ImagePicker className="cover-selector" onChange={file => formik.setFieldValue("cover", file)} defaultImage={mediaPath(group?.cover)}/>
 
                     <div className="flex mt-5">
                         <div className="flex flex-col mx-3">
@@ -180,26 +209,34 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     <div className="mx-3 mb-5">
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
-                            defaultValues={group?.admins}
+                            defaultValues={admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" className="mt-5"
-                            icon={<SaveOutlined/>}>
+                        <Button
+                            htmlType="submit"
+                            type="primary"
+                            className="mt-5"
+                            icon={<SaveOutlined/>}
+                        >
                             Enregistrer
                         </Button>
                         {(group && !group.locked) &&
                         <>
-                        	<Button type="primary" className="mt-5" icon={<AuditOutlined/>}
-                        		onClick={archive}>
-                        		{group.archived ? "Désarchiver" : "Archiver"}
-                        	</Button>
-                        	<Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
-                        		danger>
+                            <Button
+                                type="primary" className="mt-5" icon={<AuditOutlined/>}
+                                onClick={archive}
+                            >
+                                {group.archived ? "Désarchiver" : "Archiver"}
+                            </Button>
+                            <Button
+                                className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
+                                danger
+                            >
                                 Supprimer
-                        	</Button>
+                            </Button>
                         </>
                         }
                     </div>
