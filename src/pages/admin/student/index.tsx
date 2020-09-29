@@ -150,7 +150,7 @@ const StudentPanel: React.FC = () => {
 
     return (
         <div>
-            <Tabs defaultActiveKey="2">
+            <Tabs defaultActiveKey="1">
                 <TabPane tab={"Utilisateurs"} key={1}>
                     <div className="flex">
                         <div className="w-full md:w-2/3">
