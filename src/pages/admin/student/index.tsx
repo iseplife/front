@@ -144,15 +144,7 @@ const StudentPanel: React.FC = () => {
 
     const uploadStudents = () => {
         importedStudents.forEach(({student, file}) => {
-            const fd = new FormData()
-            fd.append("firstName", student.firstName)
-            fd.append("lastName", student.lastName)
-            fd.append("id", student.id.toString())
-            fd.append("promo", student.promo.toString())
-            if (file) {
-                fd.append("picture", file)
-            }
-            importStudent(fd)
+            importStudent(student, file).then(res => console.log(res))
         })
     }
 
