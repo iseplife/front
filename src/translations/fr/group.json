@@ -1,5 +1,9 @@
 {
 	"group": "Groupe",
 	"members": "Membres",
-	"admins": "Administrateurs"
+	"admins": "Administrateurs",
+	"see_all": "Voir tous les membres +",
+	"see_less": "Voir moins de membres -",
+	"promote_member": "Membre promue !",
+	"demote_member": "Membre retiré des administrateurs"
 }

@@ -1,5 +1,9 @@
 {
 	"group": "Group",
 	"members": "Members",
-	"admins": "Administrators"
+	"admins": "Administrators",
+	"see_all": "See all members +",
+	"see_less": "See less members -",
+	"promote_member": "Member promoted",
+	"demote_member": "Member removed from admins"
 }

@@ -47,9 +47,11 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
                         <p>{t("no_events")}</p>
                     </div>
             }
-            {allowCreate &&
-            <EventModalForm onSubmit={fetchEvents}/>
-            }
+            {allowCreate && (
+                <div className="mx-auto">
+                    <EventModalForm onSubmit={fetchEvents}/>
+                </div>
+            )}
         </div>
     )
 }

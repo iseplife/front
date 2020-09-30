@@ -26,5 +26,11 @@ export const uploadGroupCover = (id: number, file: File | null): AxiosPromise<st
     return axios.post(`/group/${id}/cover`, fd)
 }
 
+export const deleteGroupMember = (group: number, member: number): AxiosPromise<boolean> => axios.delete(`/group/${group}/member/${member}`)
+
+export const promoteGroupMember = (group: number, member: number): AxiosPromise<boolean> => axios.post(`/group/${group}/member/${member}/promote`)
+
+export const demoteGroupMember = (group: number, member: number): AxiosPromise<boolean> => axios.post(`/group/${group}/member/${member}/demote`)
+
 
 

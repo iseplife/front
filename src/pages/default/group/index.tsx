@@ -5,7 +5,7 @@ import {getGroup} from "../../../data/group"
 import Feed from "../../../components/Feed"
 import {Divider} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
-import GroupMembers from "../../../components/Group/GroupMembers"
+import GroupMembers from "../../../components/Group/member/GroupMembers"
 
 const Group: React.FC = () => {
     const {id} = useParams()
@@ -27,7 +27,7 @@ const Group: React.FC = () => {
                 <h1 className="mx-2 text-xl p-1 mb-5 font-dinot text-gray-800">{group?.name}</h1>
                 <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
                 <Divider/>
-                <GroupMembers members={group?.members}/>
+                <GroupMembers group={group?.id} members={group?.members}/>
             </div>
             <div className="flex-grow">
                 {group && <Feed id={group.feed} />}
