@@ -4,17 +4,6 @@ import YearBook from "../../../components/Discovery/YearBook"
 import {useTranslation} from "react-i18next"
 import DiscoverPurpose from "../../../components/Discovery/DiscoveryPurpose"
 
-
-interface SpacerProps {
-    spacing?: number
-}
-export const HorizontalSpacer = (props: SpacerProps) => {
-    const size: string = "my-" + (props.spacing || 2)
-    return (
-        <div className={size}/>
-    )
-}
-
 const Discovery: React.FC = () => {
     const {t} = useTranslation("discovery")
     return (

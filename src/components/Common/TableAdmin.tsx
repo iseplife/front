@@ -73,11 +73,11 @@ const Table = <T, >(props: TableProps<T>) => {
                 }
                 {(props.page.total || 1) > 1 &&
                 <Pagination
-                	className="text-center my-3"
-                	onChange={props.onPageChange}
-                	defaultCurrent={props.page.current + 1}
-                	pageSize={props.page.size}
-                	total={props.page.total}
+                    className="text-center my-3"
+                    onChange={props.onPageChange}
+                    defaultCurrent={props.page.current + 1}
+                    pageSize={props.page.size}
+                    total={props.page.total}
                 />
                 }
             </div>
