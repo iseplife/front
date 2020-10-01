@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react"
+import React, {useCallback, useEffect, useRef, useState} from "react"
 import {useParams, useHistory, Link} from "react-router-dom"
 import {format} from "date-fns"
 import {Map, Marker, TileLayer} from "react-leaflet"
@@ -24,6 +24,8 @@ import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
+import {IconFA} from "../../../components/Common/IconFA"
+import {toggleSubscription} from "../../../data/feed";
 
 
 const Event: React.FC = () => {
@@ -41,26 +43,33 @@ const Event: React.FC = () => {
     const descriptionRef = useRef<HTMLInputElement>(null)
     const [descVisible, setDescVisible] = useState<boolean>(false)
 
+    const handleSubscription = useCallback(() => {
+        if (event) {
+            toggleSubscription(event.feed).then(res => {
+                setEvent({
+                    ...event,
+                    subscribed: res.data
+                })
+            })
+        }
+    }, [event])
+
     useEffect(() => {
         if (!id || !+id) {
             history.push("/")
         } else {
             getEvent(+id).then(res => {
                 setEvent(res.data)
+                getEventChildren(res.data.id).then(res => {
+                    setSubevents(res.data)
+                })
+                getEventGalleries(res.data.id).then(res => {
+                    setGalleries(res.data.content)
+                })
             })
         }
     }, [id])
 
-    useEffect(() => {
-        if (event) {
-            getEventChildren(event.id).then(res => {
-                setSubevents(res.data)
-            })
-            getEventGalleries(event.id).then(res => {
-                setGalleries(res.data.content)
-            })
-        }
-    }, [event])
 
     return event === undefined ? null :
         (
@@ -88,6 +97,9 @@ const Event: React.FC = () => {
                         style={{right: 0, bottom: 5}}
                     >
                         {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
+                        <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
+                            <IconFA name={event.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
+                        </span>
                     </div>
                 </div>
                 <div className="mx-auto p-3 w-full">

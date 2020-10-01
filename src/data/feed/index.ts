@@ -9,4 +9,6 @@ export const getFeedPost = (id: number, page = 0): AxiosPromise<Page<Post>> => {
     })
 }
 
+export const toggleSubscription = (id: number): AxiosPromise<boolean> => axios.post(`/feed/${id}/subscribe`)
+
 export const getUserFeed = (): AxiosPromise<Feed[]> => axios.get("/feed")

@@ -12,7 +12,7 @@ const EventModalForm: React.FC<EventModalFormProps> = ({onSubmit}) => {
     return (
         <>
             <Button
-                className="rounded border-2 px-2 self-center md:self-end font-bold bg-transparent text-gray-600"
+                className="rounded px-2 self-center md:self-end bg-transparent text-gray-600"
                 style={{width: "max-content"}}
                 onClick={() => setOpen(true)}
             >
