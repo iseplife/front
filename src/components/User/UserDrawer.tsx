@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {useParams, useHistory, Link} from "react-router-dom"
+import {useHistory, Link} from "react-router-dom"
 import {getClubsForStudent, getStudent} from "../../data/student"
 import {Avatar, Divider, Drawer, Tooltip} from "antd"
 import {useTranslation} from "react-i18next"
@@ -7,23 +7,21 @@ import {Student} from "../../data/student/types"
 import {IconFA} from "../Common/IconFA"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 import {ClubMemberPreview} from "../../data/club/types"
-import {getInitials, randomBackgroundColors} from "../../util"
+import {getInitials, mediaPath, randomBackgroundColors} from "../../util"
+import useDeviceDetect from "./DeviceDetection"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
-const MOBILE_WIDTH = 640
-
-type UserDrawerProps = {
-    backgroundComponent: React.ReactNode,
-}
-
-const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
-    const {user_id} = useParams()
+const UserDrawer: React.FC = () => {
     const history = useHistory()
     const {t} = useTranslation()
+    const isMobile = useDeviceDetect()
+    const [userId, setUserId] = useState<number>()
     const [student, setStudent] = useState<Student>({} as Student)
-    const [drawerVisibility, setDrawerVisibility] = useState<boolean>(true)
     const [clubs, setClubs] = useState<ClubMemberPreview[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [isMobile] = useState<boolean>(window.innerWidth <= MOBILE_WIDTH)
+    const [visibility, setVisibility] = useState<boolean>(false)
+    const [isStudentLoading, setIsStudentLoading] = useState<boolean>(true)
+    const [isClubLoading, setIsClubLoading] = useState<boolean>(true)
+    const [previousRoute, setPreviousRoute] = useState<string>("")
 
     const socialUserIcon = (type: string, profile: string) => {
         const urlType = type.substr(3)
@@ -42,34 +40,42 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
     }
 
     useEffect(() => {
-        if (user_id) {
-            setIsLoading(true)
-            getStudent(parseInt(user_id)).then(res => {
-                setStudent(res.data)
-            }).finally(() => setIsLoading(false))
+        if (userId === undefined) return
+        setIsStudentLoading(true)
+        setIsClubLoading(true)
+        getStudent(userId).then(res => {
+            setStudent(res.data)
+        }).finally(() => setIsStudentLoading(false))
 
-            getClubsForStudent(parseInt(user_id)).then(res => {
-                setClubs(res.data)
-            }).finally(() => setIsLoading(false))
-        } else {
-            history.push("/404")
+        getClubsForStudent(userId).then(res => {
+            setClubs(res.data)
+        }).finally(() => setIsClubLoading(false))
+        setVisibility(true)
+
+        setPreviousRoute(history.location.pathname.slice(0, history.location.pathname.indexOf(`/student/${userId}`)))
+
+    }, [userId])
+
+    useEffect(() => {
+        if (history.location.pathname.includes("/student/")) {
+            const indexUserId = history.location.pathname.lastIndexOf("/")
+            setUserId(parseInt(history.location.pathname.substring(indexUserId + 1)))
         }
-    }, [user_id])
+    }, [history.location.pathname])
 
     const closeDrawer = () => {
-        setDrawerVisibility(false)
-        history.push("/discovery")
+        setVisibility(false)
+        history.push(previousRoute)
     }
 
     return (
-        <div>
-            {backgroundComponent}
-            {!isLoading
-                ? <Drawer placement={isMobile ? "bottom" : "right"} height={400}
-                    closable={false} width={500}
-                    onClose={() => closeDrawer()} visible={drawerVisibility}>
+        <>
+            {!isStudentLoading
+                ? <Drawer placement={isMobile ? "bottom" : "right"}
+                    closable={false} width={500} height={400}
+                    onClose={() => closeDrawer()} visible={visibility}>
                     <div className="flex justify-start items-center sm:items-start">
-                        <Avatar src={student ? student.picture : ""}
+                        <Avatar src={student ? mediaPath(student.picture, AvatarSizes.DEFAULT) : ""}
                             alt={student.firstName + " " + student.lastName}
                             className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + randomBackgroundColors()}>
                             <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
@@ -97,8 +103,6 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                                 {student.snapchat && socialUserIcon("fa-snapchat", student.snapchat)}
                             </div>
                         </div>
-
-
                     </div>
                     <Divider/>
                     <div className="pl-2 text-xs sm:text-lg">
@@ -110,20 +114,24 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                         <div className="font-bold my-1">{t("user:clubs")}</div>
                         <div className="flex flex-row flex-wrap">
                             {
-                                !clubs.length ? t("user:no-clubs") :
-                                    (clubs.map(cm => {
-                                        return (
-                                            <Tooltip
-                                                title={cm.club.name}
-                                                placement="top"
-                                                key={cm.club.id}>
-                                                <Link to={`/club/${cm.club.id}`}>
-                                                    <Avatar src={cm.club.logoUrl} alt={cm.club.name} className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
-                                                    {cm.position}
-                                                </Link>
-                                            </Tooltip>
-                                        )
-                                    }))
+                                isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
+                                    !clubs.length ?
+                                        <span className="px-6 italic">{t("user:no-clubs")}</span> :
+                                        (clubs.map(cm => {
+                                            return (
+                                                <Tooltip
+                                                    title={cm.club.name}
+                                                    placement="top"
+                                                    key={cm.club.id}>
+                                                    <Link to={`/club/${cm.club.id}`} onClick={() => setVisibility(false)}>
+                                                        <Avatar src={mediaPath(cm.club.logoUrl, AvatarSizes.DEFAULT)}
+                                                            alt={cm.club.name}
+                                                            className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
+                                                        {cm.position}
+                                                    </Link>
+                                                </Tooltip>
+                                            )
+                                        }))
                             }
                         </div>
                         {/*<Divider/>*/}
@@ -132,7 +140,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({backgroundComponent}) => {
                     </div>
                 </Drawer>
                 : null}
-        </div>
+        </>
     )
 }
 

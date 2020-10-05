@@ -13,6 +13,7 @@ import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
 import NotFound from "../../pages/errors/NotFound"
+import UserDrawer from "../User/UserDrawer"
 
 
 const DefaultTemplate: React.FC = () => {
@@ -23,7 +24,6 @@ const DefaultTemplate: React.FC = () => {
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
-                        <Route path="/" exact component={Home}/>
                         <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>
@@ -31,10 +31,12 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/group/:id" component={Group}/>
                         <Route path="/gallery/:id" component={Gallery}/>
                         <Route path="/logout" component={Logout}/>
+                        <Route path="/" strict component={Home}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>
                 </div>
             </Navbar>
+            <UserDrawer/>
         </div>
     )
 }
