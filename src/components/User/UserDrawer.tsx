@@ -41,6 +41,7 @@ const UserDrawer: React.FC = () => {
 
     useEffect(() => {
         if (userId === undefined) return
+
         setIsStudentLoading(true)
         setIsClubLoading(true)
         getStudent(userId).then(res => {
@@ -53,7 +54,6 @@ const UserDrawer: React.FC = () => {
         setVisibility(true)
 
         setPreviousRoute(history.location.pathname.slice(0, history.location.pathname.indexOf(`/student/${userId}`)))
-
     }, [userId])
 
     useEffect(() => {
@@ -70,76 +70,75 @@ const UserDrawer: React.FC = () => {
 
     return (
         <>
-            {!isStudentLoading
-                ? <Drawer placement={isMobile ? "bottom" : "right"}
-                    closable={false} width={500} height={400}
-                    onClose={() => closeDrawer()} visible={visibility}>
-                    <div className="flex justify-start items-center sm:items-start">
-                        <Avatar src={student ? mediaPath(student.picture, AvatarSizes.DEFAULT) : ""}
-                            alt={student.firstName + " " + student.lastName}
-                            className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + randomBackgroundColors()}>
-                            <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
-                                {getInitials(student)}
-                            </div>
-                        </Avatar>
-                        <div className="ml-3 mt-2 text-base">
-                            <div
-                                className="text-indigo-500 text-center font-bold text-sm sm:text-2xl mx-auto">
-                                {student.firstName + " " + student.lastName.toUpperCase()}
-                            </div>
-                            <HorizontalSpacer/>
-                            <div className="text-sm sm:text-base">
-                                Promo <span className="select-all">{student.promo}</span>, n°<span
-                                    className="select-all">{student.id}</span>
-                            </div>
-                            <div className="text-sm sm:text-base">
-                                {student.mail ? <span className="select-all">{student.mail}</span>
-                                    : t("user:no-mail")}
-                            </div>
-                            <div className="mt-3 sm:mt-10 mx-auto">
-                                {student.facebook && socialUserIcon("fa-facebook", student.facebook)}
-                                {student.twitter && socialUserIcon("fa-twitter", student.twitter)}
-                                {student.instagram && socialUserIcon("fa-instagram", student.instagram)}
-                                {student.snapchat && socialUserIcon("fa-snapchat", student.snapchat)}
-                            </div>
+            {!isStudentLoading && <Drawer placement={isMobile ? "bottom" : "right"}
+                closable={false} width={500} height={400}
+                onClose={() => closeDrawer()} visible={visibility}>
+                <div className="flex justify-start items-center sm:items-start">
+                    <Avatar src={student ? mediaPath(student.picture, AvatarSizes.DEFAULT) : ""}
+                        alt={student.firstName + " " + student.lastName}
+                        className={"w-32 h-32 xl:w-48 xl:h-48 flex-none text-3xl sm:text-6xl " + randomBackgroundColors()}>
+                        <div className="w-32 h-32 xl:w-48 xl:h-48 flex items-center justify-center">
+                            {getInitials(student)}
                         </div>
+                    </Avatar>
+                    <div className="ml-3 mt-2 text-base">
+                        <div
+                            className="text-indigo-500 text-center font-bold text-sm sm:text-2xl mx-auto">
+                            {student.firstName + " " + student.lastName.toUpperCase()}
+                        </div>
+                        <HorizontalSpacer/>
+                        <div className="text-sm sm:text-base">
+                            Promo <span className="select-all">{student.promo}</span>, n°<span
+                                className="select-all">{student.id}</span>
+                        </div>
+                        <div className="text-sm sm:text-base">
+                            {student.mail ? <span className="select-all">{student.mail}</span>
+                                : t("user:no-mail")}
+                        </div>
+                        <div className="mt-3 sm:mt-10 mx-auto">
+                            {student.facebook && socialUserIcon("fa-facebook", student.facebook)}
+                            {student.twitter && socialUserIcon("fa-twitter", student.twitter)}
+                            {student.instagram && socialUserIcon("fa-instagram", student.instagram)}
+                            {student.snapchat && socialUserIcon("fa-snapchat", student.snapchat)}
+                        </div>
+                    </div>
+                </div>
+                <Divider/>
+                <div className="pl-2 text-xs sm:text-lg">
+                    <div className="font-bold my-1">{t("user:bio")}</div>
+                    <div className="px-6 italic">
+                        {student.bio || t("user:no-bio")}
                     </div>
                     <Divider/>
-                    <div className="pl-2 text-xs sm:text-lg">
-                        <div className="font-bold my-1">{t("user:bio")}</div>
-                        <div className="px-6 italic">
-                            {student.bio || t("user:no-bio")}
-                        </div>
-                        <Divider/>
-                        <div className="font-bold my-1">{t("user:clubs")}</div>
-                        <div className="flex flex-row flex-wrap">
-                            {
-                                isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
-                                    !clubs.length ?
-                                        <span className="px-6 italic">{t("user:no-clubs")}</span> :
-                                        (clubs.map(cm => {
-                                            return (
-                                                <Tooltip
-                                                    title={cm.club.name}
-                                                    placement="top"
-                                                    key={cm.club.id}>
-                                                    <Link to={`/club/${cm.club.id}`} onClick={() => setVisibility(false)}>
-                                                        <Avatar src={mediaPath(cm.club.logoUrl, AvatarSizes.DEFAULT)}
-                                                            alt={cm.club.name}
-                                                            className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
-                                                        {cm.position}
-                                                    </Link>
-                                                </Tooltip>
-                                            )
-                                        }))
-                            }
-                        </div>
-                        {/*<Divider/>*/}
-                        {/*<div className="font-bold my-1">{t('user:photos')}</div>*/}
-                        {/*{isEmpty(studentPictures) ? t('user:no-photos') : null}*/}
+                    <div className="font-bold my-1">{t("user:clubs")}</div>
+                    <div className="flex flex-row flex-wrap">
+                        {
+                            isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
+                                clubs.length ?
+                                    clubs.map(cm => {
+                                        return (
+                                            <Tooltip
+                                                title={cm.club.name}
+                                                placement="top"
+                                                key={cm.club.id}>
+                                                <Link to={`/club/${cm.club.id}`} onClick={() => setVisibility(false)}>
+                                                    <Avatar src={mediaPath(cm.club.logoUrl, AvatarSizes.DEFAULT)}
+                                                        alt={cm.club.name}
+                                                        className="w-12 h-12 sm:w-24 sm:h-24 m-1 shadow-md hover:shadow-outline"/>
+                                                    {cm.position}
+                                                </Link>
+                                            </Tooltip>
+                                        )
+                                    })
+                                    : <span className="px-6 italic">{t("user:no-clubs")}</span>
+                        }
                     </div>
-                </Drawer>
-                : null}
+                    {/*<Divider/>*/}
+                    {/*<div className="font-bold my-1">{t('user:photos')}</div>*/}
+                    {/*{isEmpty(studentPictures) ? t('user:no-photos') : null}*/}
+                </div>
+            </Drawer>
+            }
         </>
     )
 }
