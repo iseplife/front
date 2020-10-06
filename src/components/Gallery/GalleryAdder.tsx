@@ -11,9 +11,10 @@ import {UploadFile} from "antd/es/upload/interface"
 
 type GalleryAdderProps = {
     gallery: number
+    club: number
     afterUpload: (images: Image[]) => void
 }
-const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload}) => {
+const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club}) => {
     const {t} = useTranslation("gallery")
     const [files, setFiles] = useState<File[]>([])
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -33,6 +34,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload}) => {
             requests.push(
                 createMedia(
                     f,
+                    club,
                     true,
                     false,
                     (e) => setFileList(list => list.map(file => file.fileName === f.name ?

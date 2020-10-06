@@ -12,10 +12,11 @@ import {UploadState} from "../../../data/request.type"
 const UPLOADER_ID = "imgupload"
 
 type GalleryDraggerProps = {
+    club?: number
     canSubmit: boolean
     afterSubmit: (ids: number[]) => void
 }
-const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit}) => {
+const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, club}) => {
     const {t} = useTranslation("gallery")
     const [uploadingState, setUploadingState] = useState<UploadState>(UploadState.OFF)
     const [images, setImages] = useState<File[]>([])
@@ -64,6 +65,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit})
                 requests.push(
                     createMedia(
                         img,
+                        club,
                         true,
                         false,
                         (e) => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.length)))
@@ -77,7 +79,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit})
                 setUploadingState(UploadState.FINISHED)
             }))
             .catch(() => setUploadingState(UploadState.ERROR))
-    }, [afterSubmit, images])
+    }, [afterSubmit, images, club])
 
 
     return (

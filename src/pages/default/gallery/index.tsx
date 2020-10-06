@@ -188,7 +188,7 @@ const Gallery: React.FC = () => {
                             <IconFA name="fa-sign-out-alt" className="ml-2"/>
                         </Button>
                         <div className="flex mt-3">
-                            <GalleryAdder gallery={gallery.id} afterUpload={addNewImages}/>
+                            <GalleryAdder club={gallery.club.id}  gallery={gallery.id} afterUpload={addNewImages}/>
                             <Button className="rounded mx-1" danger onClick={removeSelection}>
                                 {t("delete_selection")}
                                 <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>

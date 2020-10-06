@@ -100,7 +100,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                 </div>
             </div>
             <div className="w-3/4 ">
-                <GalleryDragger canSubmit={isFormValid} afterSubmit={onFilesUploaded}/>
+                <GalleryDragger club={formik.values.club} canSubmit={isFormValid} afterSubmit={onFilesUploaded}/>
             </div>
         </form>
     )
