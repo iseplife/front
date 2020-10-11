@@ -3,6 +3,7 @@
   "offline": "Connexion interrompue",
   "end": "Vous avez tous visionné !",
   "empty": "Rien à afficher",
+  "empty_feed": "Aucun post sur ce feed, revenez plus tard !",
   "filters": "Filtres",
   "administration": "Administration",
   "create_feed": "Créer un feed",

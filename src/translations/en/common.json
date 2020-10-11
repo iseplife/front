@@ -3,6 +3,7 @@
   "offline": "You are now offline",
   "end": "You've reached the end !",
   "empty": "Nothing to display",
+  "empty_feed": "No posts on this feed yet, come back later !",
   "filters": "Filters",
   "create_feed": "Create a feed",
   "administration": "Administration",
