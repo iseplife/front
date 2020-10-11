@@ -9,7 +9,6 @@ import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
 import {
-    BookOutlined,
     CalendarOutlined,
     KeyOutlined,
     SettingOutlined,
@@ -44,18 +43,6 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             <Menu.Item key={0} className="font-bold profile-name">
                 {firstName + " " + lastName}
             </Menu.Item>
-            {isAdmin &&
-            <Menu.Item key={1} className="flex justify-start items-center">
-                <BookOutlined/>
-                <Link to="/feed/new">{t("create_feed")}</Link>
-            </Menu.Item>
-            }
-            {(isAdmin || payload.clubsPublisher.length > 0) &&
-            <Menu.Item key={3} className="flex justify-start items-center">
-                <CalendarOutlined/>
-                <Link to="/event/new">{t("create_event")}</Link>
-            </Menu.Item>
-            }
             {isAdmin &&
             <Menu.Item key={2} className="flex justify-start items-center">
                 <KeyOutlined/>
@@ -155,11 +142,6 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                     {payload.roles.includes(Roles.ADMIN) &&
                     <DrawerItem icon={<KeyOutlined/>} link="/admin">
                         {t("administration")}
-                    </DrawerItem>
-                    }
-                    {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
-                    <DrawerItem icon={<NotificationOutlined/>} link="">
-                        {t("create_event")}
                     </DrawerItem>
                     }
                     <DrawerItem icon={<ExportOutlined/>} link="/logout" className="text-red-600">
