@@ -42,10 +42,8 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
     const {t} = useTranslation("event")
     const [event, setEvent] = useState<Event | undefined>()
     const [loading, setLoading] = useState<boolean>(true)
-    const [start, end] = useMemo(() => (
-        event ?
-            [new Date(event.start), new Date(event.end)] :
-            [new Date(), new Date()]
+    const [start, end] = useMemo((): [Date, Date] => (
+        event ? [event.start, event.end] : [new Date(), new Date()]
     ), [event])
 
     const formatedDates = useMemo(() => {
@@ -54,7 +52,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
             return _format(start, pattern) + " - " + _format(end, pattern)
         }
         return "xx:xx - xx:xx"
-    }, [start, end])
+    }, [event, start, end])
 
     useEffect(() => {
         setLoading(true)

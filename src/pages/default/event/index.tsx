@@ -25,7 +25,7 @@ import GalleryCard from "../../../components/Gallery/GalleryCard"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../../components/Common/IconFA"
-import {toggleSubscription} from "../../../data/feed";
+import {toggleSubscription} from "../../../data/feed"
 
 
 const Event: React.FC = () => {
@@ -96,7 +96,7 @@ const Event: React.FC = () => {
                         className="absolute text-lg text-gray-700 font-bold uppercase mx-3"
                         style={{right: 0, bottom: 5}}
                     >
-                        {format(new Date(event.start), "d MMM") + (event.end ? (" - " + format(new Date(event.end), "d MMM")) : "")}
+                        {format(event.start, "d MMM") + (event.end ? (" - " + format(event.end, "d MMM")) : "")}
                         <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
                             <IconFA name={event.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
                         </span>
@@ -150,7 +150,7 @@ const Event: React.FC = () => {
                                 {event.title}
                             </div>
                             <div className="font-dinotcb text-4xl text-center">
-                                {format(new Date(event.start), "HH:mm") + (event.end ? format(new Date(event.end), " - HH:mm") : "")}
+                                {format(event.start, "HH:mm") + (event.end ? format(event.end, " - HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
                                 {event.location}
