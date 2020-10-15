@@ -19,7 +19,11 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => 
     }, [onSubmit])
     return (
         <>
-            <Button type="default" className="rounded text-gray-600" onClick={() => setVisible(true)}>
+            <Button
+                className="shadow-sm rounded-full px-4 bg-indigo-200 text-indigo-400 font-bold"
+                style={{width: "max-content"}}
+                onClick={() => setVisible(true)}
+            >
                 {t("add")} <IconFA className="ml-2" name="fa-images" type="regular"/>
             </Button>
             <Modal

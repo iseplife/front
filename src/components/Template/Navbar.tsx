@@ -62,7 +62,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
     )
 }
 const Header: React.FC<{ user: Student }> = ({user}) => (
-    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow-md">
+    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-50">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
