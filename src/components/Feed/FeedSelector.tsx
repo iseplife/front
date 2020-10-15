@@ -9,17 +9,17 @@ type Option = {
 }
 
 type FeedSelectorProps = {
+    defaultValues?: number[]
     onChange: (ids: number[]) => void
 }
-const FeedSelector: React.FC<FeedSelectorProps> = ({onChange}) => {
+const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues}) => {
     const feeds = useSelector((state: AppState) => state.feeds)
-    const [values, setValues] = useState<number[]>()
+    const [values, setValues] = useState<number[]>(defaultValues || [])
     const [fetching, setFetching] = useState<boolean>(false)
     const [options, setOptions] = useState<Option[]>(feeds.map(f => ({
         value: f.id,
         label: f.name
     })))
-
 
     return (
         <Select

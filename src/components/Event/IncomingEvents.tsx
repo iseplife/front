@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import {Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
 import {IconFA} from "../Common/IconFA"
-import EventModalForm from "./EventModalForm"
+import EventCreatorModal from "./EventCreatorModal"
 
 type IncomingEventsProps = {
     feed?: number
@@ -49,7 +49,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
             }
             {allowCreate && (
                 <div className="mx-auto">
-                    <EventModalForm onSubmit={fetchEvents}/>
+                    <EventCreatorModal onSubmit={fetchEvents}/>
                 </div>
             )}
         </div>

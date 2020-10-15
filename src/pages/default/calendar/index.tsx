@@ -17,7 +17,7 @@ import {enUS, fr} from "date-fns/locale"
 import {CalendarEventWrapper} from "../../../components/CalendarItem"
 import {useSelector} from "react-redux"
 import {AppState} from "../../../context/action"
-import EventModalForm from "../../../components/Event/EventModalForm"
+import EventCreatorModal from "../../../components/Event/EventCreatorModal"
 
 const initFilter = (): EventFilter => {
     return (
@@ -143,7 +143,7 @@ const Events: React.FC = () => {
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
                         {canCreateEvent &&
-                            <EventModalForm onSubmit={fetchMonthEvents} />
+                            <EventCreatorModal onSubmit={fetchMonthEvents} />
                         }
                     </div>
                     <div>

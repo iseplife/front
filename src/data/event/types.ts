@@ -17,6 +17,7 @@ export type Event = {
     published: Date
     closed: boolean
     subscribed: boolean
+    hasRight: boolean
     club: ClubPreview
     feed: number
 }

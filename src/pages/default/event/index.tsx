@@ -26,6 +26,7 @@ import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../../components/Common/IconFA"
 import {toggleSubscription} from "../../../data/feed"
+import EventEditorModal from "../../../components/Event/EventEditorModal"
 
 
 const Event: React.FC = () => {
@@ -71,7 +72,7 @@ const Event: React.FC = () => {
     }, [id])
 
 
-    return event === undefined ? null :
+    return event ?
         (
             <div className="h-full">
                 <div className="md:h-56 h-24 bg-red-200 relative" style={{
@@ -80,6 +81,12 @@ const Event: React.FC = () => {
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                 }}>
+                    {event.hasRight && (
+                        <div className="absolute" style={{top: 5, right: 5}}>
+                            <EventEditorModal values={event} onSubmit={setEvent}/>
+                        </div>
+                    )}
+
                     <Link
                         to={`/club/${event.club.id}`}
                         className="absolute flex items-center text-gray-700 font-bold"
@@ -209,8 +216,7 @@ const Event: React.FC = () => {
                     <Feed id={event.feed} className="mx-auto my-3 md:w-3/6 w-full"/>
                 </div>
             </div>
-        )
-
+        ) : null
 }
 
 export default Event
