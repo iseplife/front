@@ -1,12 +1,13 @@
 import React, {useState} from "react"
-import EventCreationForm from "./EventCreationForm"
+import EventForm from "./form/EventForm"
 import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
+import EventCreateForm from "./form/EventCreateForm";
 
 type EventModalFormProps = {
     onSubmit: () => void
 }
-const EventModalForm: React.FC<EventModalFormProps> = ({onSubmit}) => {
+const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
     const {t} = useTranslation("event")
     const [open, setOpen] = useState<boolean>(false)
     return (
@@ -26,10 +27,10 @@ const EventModalForm: React.FC<EventModalFormProps> = ({onSubmit}) => {
                 title={<span className="text-gray-800 font-bold text-2xl">{t("create.title")}</span>}
                 onCancel={() => setOpen(false)}
             >
-                <EventCreationForm onSubmit={onSubmit} onClose={() => setOpen(false)}/>
+                <EventCreateForm onSubmit={onSubmit} onClose={() => setOpen(false)} message={t("create.created")}/>
             </Modal>
             }
         </>
     )
 }
-export default EventModalForm
+export default EventCreatorModal

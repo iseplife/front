@@ -8,8 +8,8 @@ export type Event = {
     title: string
     description: string
     image?: string
-    start: number
-    end: number
+    start: Date
+    end: Date
     ticketURL?: string
     price?: number
     location: string
@@ -17,6 +17,7 @@ export type Event = {
     published: Date
     closed: boolean
     subscribed: boolean
+    hasRight: boolean
     club: ClubPreview
     feed: number
 }
@@ -25,8 +26,8 @@ export type EventPreview = {
     id: number
     title: string
     type: EventType
-    start: number
-    end: number
+    start: Date
+    end: Date
     location: string
     cover?: string
     targets: number[]

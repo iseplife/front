@@ -1,4 +1,4 @@
-import React, {useMemo} from "react"
+import React from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
 import {format} from "date-fns"
@@ -9,8 +9,6 @@ type EventProps = {
     size?: "big" | "medium" | "small"
 }
 const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
-    const date = useMemo(() => new Date(event.start), [event.start])
-
     switch (size) {
         case "big":
             return (
@@ -26,10 +24,10 @@ const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
                     <div className="text-gray-700 flex bg-white rounded shadow-md h-16 w-full hover:text-gray-500">
                         <div className="w-1/4 max-w-xs h-full text-center pb-1">
                             <div className="font-bold text-3xl">
-                                {date.getDate()}
+                                {event.start.getDate()}
                             </div>
                             <div className="uppercase text-xs font-semibold">
-                                {format(date, "MMM")}
+                                {format(event.start, "MMM")}
                             </div>
                         </div>
                         <div className="w-3/4 h-full" style={{

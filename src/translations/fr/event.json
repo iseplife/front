@@ -4,6 +4,11 @@
 		"title": "Création d'un nouvel évènement",
 		"created": "Évènement créée !"
 	},
+	"edit": {
+		"button": "Modifier l'évènement",
+		"title": "Modification d'un évènement",
+		"edited": "Évènement modifié !"
+	},
 	"form": {
 		"label": {
 			"name": "Nom",

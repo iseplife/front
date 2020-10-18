@@ -4,6 +4,11 @@
 		"title": "Creation of a new event",
 		"created": "Event created !"
 	},
+	"edit": {
+		"button": "Save modifications",
+		"title": "Edit event",
+		"edited": "Event updated !"
+	},
 	"form": {
 		"label": {
 			"name": "Name",

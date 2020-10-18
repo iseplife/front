@@ -1,18 +1,17 @@
 import axios from "axios"
 import {getCookie} from "./security/cookie"
+import {JSONDateParser} from "../util"
 
 const url = process.env.REACT_APP_API_URL || "localhost:8080"
-const httpProtocol = process.env.REACT_APP_HTTP_PROTOCOL || "http"
-const wsProtocol = process.env.PUBLIC_URL || "ws"
+export const apiURI = `${process.env.REACT_APP_HTTP_PROTOCOL || "http"}://${url}`
+export const swURI = `${process.env.PUBLIC_URL || "ws"}://${url}`
 
-export const apiURI = `${httpProtocol}://${url}`
-export const swURI = `${wsProtocol}://${url}`
-
-export function initializeAxios() {
+export function initializeAxios(): void {
     const token = getCookie("token")
     const refreshToken = getCookie("refreshToken")
 
     axios.defaults.baseURL = apiURI
+    axios.defaults.transformResponse = (response, req) => req["content-type"] === "application/json" ? JSON.parse(response, JSONDateParser): response
     if (token && refreshToken) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
         axios.defaults.headers.common["X-Refresh-Token"] = refreshToken
