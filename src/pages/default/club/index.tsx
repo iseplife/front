@@ -3,7 +3,7 @@ import {useParams} from "react-router"
 import {Club as ClubType} from "../../../data/club/types"
 import {getClub, getClubGalleries, getClubMembers} from "../../../data/club"
 import {Button, message, Skeleton} from "antd"
-import {Gallery, GalleryPreview} from "../../../data/gallery/types"
+import {GalleryPreview} from "../../../data/gallery/types"
 import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../../components/Club/Mobile/ClubNavbar"
 import ClubCover from "../../../components/Club/ClubDescription/ClubCover"
@@ -24,32 +24,7 @@ const Club: React.FC = () => {
     const history = useHistory()
     const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
-    const [galleries, setGalleries] = useState<GalleryPreview[]>([])
-    const [galleriesLoading, setGalleriesLoading] = useState<boolean>(false)
 
-    // Updated function called when respective tab is active
-    const getMembers = (club?: ClubType): void => {
-        if (club) {
-            dispatch({type: ClubActionType.FETCH_MEMBERS})
-            getClubMembers(club.id)
-                .then(res => {
-                    dispatch({type: ClubActionType.GET_MEMBERS, payload: res.data})
-                })
-                .catch(e => message.error(e))
-                //.finally(() => setMembersLoading(false))
-        }
-    }
-    const getGalleries = (club?: ClubType): void => {
-        if (club) {
-            setGalleriesLoading(true)
-            getClubGalleries(club.id)
-                .then(res => {
-                    setGalleries(res.data.content)
-                })
-                .catch(e => message.error(e))
-                .finally(() => setGalleriesLoading(false))
-        }
-    }
 
     /**
      * Club initialisation on mounting
@@ -69,9 +44,17 @@ const Club: React.FC = () => {
     }, [id])
 
 
+    // Updated function called when respective tab is active
     useEffect(() => {
-        getMembers(state.club.data)
-        getGalleries(state.club.data)
+        if (state.club.data) {
+            dispatch({type: ClubActionType.FETCH_MEMBERS})
+            getClubMembers(state.club.data.id)
+                .then(res => {
+                    dispatch({type: ClubActionType.GET_MEMBERS, payload: res.data})
+                })
+                .catch(e => message.error(e))
+            //.finally(() => setMembersLoading(false))
+        }
     }, [state.club.data])
 
     return (
@@ -102,7 +85,7 @@ const Club: React.FC = () => {
                         {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
                         {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
                         {state.club.data.canEdit &&
-                        <Button className="hidden md:block" type="primary" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
+                        <Button className="px-5 hidden md:block rounded-full hover:border-red-400 bg-red-200 text-red-400" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
                             Mode admin
                             <IconFA
                                 className="cursor-pointer ml-2"
