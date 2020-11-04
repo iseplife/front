@@ -82,3 +82,9 @@ abbr[title] {
 }
 
 /********/
+
+.rounded-scroller .ant-select-selector {
+    border-radius: 9999px !important;
+}
+
+/********/

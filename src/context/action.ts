@@ -21,7 +21,7 @@ interface setFullStateAction {
 export type AppState =  {
     user: Student
     payload: TokenPayload
-    feeds: Feed[]
+    feeds: Record<number, Feed>
 }
 
 export type AppAction = setStudentAction | setPayloadAction | setFullStateAction;

@@ -53,41 +53,12 @@ export type EventForm = {
 
 export type Marker = [number, number]
 
-type DayEvent = {
-    [day: number]: EventPreview[]
-}
-type MonthEvent = {
-    [month: number]: DayEvent
-}
-export type EventMap = {
-    [year: number]: MonthEvent
-}
-
-
-
-type ReducerFeedType = {
-    type: "TOGGLE_FEED" | "TOGGLE_TYPE"
-    name: string
-}
-type ReducerToggle = {
-    type: "TOGGLE_PUBLISHED" | "TOGGLE_ADMIN"
-}
-type ReducerUpdate = {
-    type: "ADD_FILTER"
-    feeds: string[]
-}
-type ReducerInit = {
-    type: "INIT_FILTER"
-    events: EventPreview[]
-}
-export type FilterReducerAction = ReducerFeedType | ReducerToggle | ReducerUpdate | ReducerInit;
-
 export type FilterList = {
     [name: string]: boolean
 }
 export type EventFilter = {
-    feeds: FilterList
-    types: FilterList
+    feeds: Record<number, boolean>
+    types: Record<string, boolean>
     publishedOnly: boolean
     adminVision: boolean
 }

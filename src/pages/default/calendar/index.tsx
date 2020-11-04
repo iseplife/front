@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import { Modal, Radio} from "antd"
+import {Modal, Radio} from "antd"
 import {IconFA} from "../../../components/Common/IconFA"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -14,7 +14,7 @@ import {EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
-import {CalendarEventWrapper} from "../../../components/CalendarItem"
+import {CalendarEventWrapper} from "../../../components/Calendar/CalendarItem"
 import {useSelector} from "react-redux"
 import {AppState} from "../../../context/action"
 import EventCreatorModal from "../../../components/Event/EventCreatorModal"
@@ -24,7 +24,7 @@ const initFilter = (): EventFilter => {
         {
             feeds: {
                 // -1 represent public events, those events have an empty targets property
-                [-1]: true
+                //[-1]: true
             },
             types: EventTypes.reduce((acc: FilterList, type) => {
                 if (!acc[type])
@@ -143,7 +143,7 @@ const Events: React.FC = () => {
                         <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
                         <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
                         {canCreateEvent &&
-                            <EventCreatorModal onSubmit={fetchMonthEvents} />
+                        <EventCreatorModal onSubmit={fetchMonthEvents}/>
                         }
                     </div>
                     <div>
@@ -170,17 +170,17 @@ const Events: React.FC = () => {
                     onView={(v) => setView(v)}
                     view={view}
                 />
-                {selectedEvent &&
-                <Modal
-                    className="md:w-1/2 w-4/5"
-                    visible={true}
-                    title={<ModalEventHeader event={selectedEvent}/>}
-                    footer={null}
-                    onCancel={() => setSelectedEvent(null)}
-                >
-                    <ModalEventContent id={selectedEvent.id}/>
-                </Modal>
-                }
+                {selectedEvent && (
+                    <Modal
+                        className="md:w-1/2 w-4/5"
+                        visible={true}
+                        title={<ModalEventHeader event={selectedEvent}/>}
+                        footer={null}
+                        onCancel={() => setSelectedEvent(null)}
+                    >
+                        <ModalEventContent id={selectedEvent.id}/>
+                    </Modal>
+                )}
             </div>
         </div>
     )

@@ -47,6 +47,7 @@
 	"event": "Event",
 	"incoming": "Incoming events",
 	"no_events": "No events incoming...",
+	"feed_filter": "Choose what feeds are visible...",
 	"gallery": "Galleries",
 	"published_only": "Published events only",
 	"admin_view": "Admin view",
