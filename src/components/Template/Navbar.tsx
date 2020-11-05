@@ -9,7 +9,6 @@ import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
 import {
-    BookOutlined,
     CalendarOutlined,
     KeyOutlined,
     SettingOutlined,
@@ -45,18 +44,6 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
-            <Menu.Item key={1} className="flex justify-start items-center">
-                <BookOutlined/>
-                <Link to="/feed/new">{t("create_feed")}</Link>
-            </Menu.Item>
-            }
-            {(isAdmin || payload.clubsPublisher.length > 0) &&
-            <Menu.Item key={3} className="flex justify-start items-center">
-                <CalendarOutlined/>
-                <Link to="/event/new">{t("create_event")}</Link>
-            </Menu.Item>
-            }
-            {isAdmin &&
             <Menu.Item key={2} className="flex justify-start items-center">
                 <KeyOutlined/>
                 <Link to="/admin">{t("administration")}</Link>
@@ -75,7 +62,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
     )
 }
 const Header: React.FC<{ user: Student }> = ({user}) => (
-    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow-md">
+    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-50">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
@@ -155,11 +142,6 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                     {payload.roles.includes(Roles.ADMIN) &&
                     <DrawerItem icon={<KeyOutlined/>} link="/admin">
                         {t("administration")}
-                    </DrawerItem>
-                    }
-                    {(payload.roles.includes(Roles.ADMIN) || payload.clubsPublisher.length > 0) &&
-                    <DrawerItem icon={<NotificationOutlined/>} link="">
-                        {t("create_event")}
                     </DrawerItem>
                     }
                     <DrawerItem icon={<ExportOutlined/>} link="/logout" className="text-red-600">

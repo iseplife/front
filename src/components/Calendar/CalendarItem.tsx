@@ -1,7 +1,7 @@
 import React, {CSSProperties, useMemo} from "react"
 import {EventProps} from "react-big-calendar"
-import {EventPreview} from "../data/event/types"
-import {EventTypeColor} from "../constants/EventType"
+import {EventPreview} from "../../data/event/types"
+import {EventTypeColor} from "../../constants/EventType"
 
 
 // `any` is used here as the typing is incorrect/outdated

@@ -1,47 +1,24 @@
 import React, {useEffect} from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
-import Tag from "../Common/Tag"
 import {useRecoilState} from "recoil/dist"
 import {filterState} from "../../pages/default/calendar"
 import { Checkbox, Switch} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
-import {FilterList} from "../../data/event/types"
 import {isAdmin} from "../../data/security"
 import "./SideCalendar.css"
+import FeedFilter from "../Feed/FeedFilter"
 
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
 };
 const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
-    const feeds = useSelector((state: AppState) => state.feeds)
     const {t, i18n} = useTranslation("event")
     const [filter, setFilter] = useRecoilState(filterState)
-
-    useEffect(() => {
-        setFilter(pf => ({
-            ...pf,
-            feeds: feeds.reduce((acc: FilterList, f) => {
-                if (!acc[f.id])
-                    acc[f.id] = true
-                return acc
-            }, pf.feeds),
-        }))
-    }, [feeds])
 
     const handleChange = (type: string, name: string | number) => {
         setFilter(prev => {
             switch (type) {
-                case "TOGGLE_FEED":
-                    return ({
-                        ...prev,
-                        feeds: {
-                            ...prev.feeds,
-                            [name]: !prev.feeds[name]
-                        }
-                    })
                 case "TOGGLE_TYPE":
                     return ({
                         ...prev,
@@ -90,16 +67,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     }
                     <hr className="my-1"/>
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
-                    <div id="feeds-filter">
-                        <Tag key={-1} selected={filter.feeds[-1]} onClick={() => handleChange("TOGGLE_FEED", -1)}>
-                            Public
-                        </Tag>
-                        {feeds.map(({id, name}) => (
-                            <Tag key={id} selected={filter.feeds[id]} onClick={() => handleChange("TOGGLE_FEED", id)}>
-                                {name}
-                            </Tag>
-                        ))}
-                    </div>
+                    <FeedFilter onChange={() => null} />
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Types :</h3>
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (

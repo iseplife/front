@@ -1,7 +1,8 @@
-import React, {useState} from "react"
-import {Select, Spin, Tag} from "antd"
+import React, {useMemo} from "react"
+import {Select, Tag} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../context/action"
+import {CustomTagProps} from "rc-select/lib/interface/generator"
 
 type Option = {
     label: string
@@ -11,32 +12,29 @@ type Option = {
 type FeedSelectorProps = {
     defaultValues?: number[]
     onChange: (ids: number[]) => void
+    tagRender?: (props: CustomTagProps) => React.ReactElement
 }
-const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues}) => {
+const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tagRender}) => {
     const feeds = useSelector((state: AppState) => state.feeds)
-    const [values, setValues] = useState<number[]>(defaultValues || [])
-    const [fetching, setFetching] = useState<boolean>(false)
-    const [options, setOptions] = useState<Option[]>(feeds.map(f => ({
+    const options = useMemo<Option[]>(() => Object.values(feeds).map(f => ({
         value: f.id,
         label: f.name
-    })))
+    })), [feeds])
+
+    const tagComponent = useMemo(() => (
+        tagRender && ((props: CustomTagProps) => <Tag closable={props.closable} onClose={props.onClose}>{props.label}</Tag>)
+    ), [tagRender])
 
     return (
-        <Select
+        <Select<number[]>
             mode="multiple"
             showSearch
+            defaultValue={defaultValues}
             placeholder="Aucune audience (Evenement public) "
-            value={values}
             showArrow={false}
-            filterOption={false}
-            notFoundContent={fetching ? <Spin size="small"/> : null}
-            onChange={selected => {
-                setValues(selected)
-                setOptions(o => o.filter(i => selected.includes(i.value)))
-                setFetching(false)
-                onChange(selected)
-            }}
-            tagRender={props => <Tag closable={props.closable} onClose={props.onClose}>{props.label}</Tag>}
+            filterOption={(filter, option) => option ? (option as Option).label.includes(filter) : false }
+            onChange={selected => onChange(selected)}
+            tagRender={tagComponent}
             options={options}
             bordered={false}
             className="w-full hover:border-indigo-400"

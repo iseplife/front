@@ -21,12 +21,13 @@ type InfiniteScrollerProps = {
     watch: "UP" | "DOWN" | "BOTH"
     triggerDistance?: number
     callback: ScrollerCallback
+    empty?: boolean
     className?: string
     children: ReactNode
-    loading?: React.ReactNode,
+    loadingComponent?: React.ReactNode,
 }
 
-const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(({watch, callback, triggerDistance = 50, loading, children, className = ""}, ref) => {
+const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(({watch, empty = false,  callback, triggerDistance = 50, loadingComponent, children, className}, ref) => {
     const {t} = useTranslation("common")
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
@@ -129,20 +130,20 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
     }, [downLoader, callback])
 
     return (
-        <div className="relative h-full h-auto">
+        <div className="relative h-auto">
             {(watch !== "DOWN") && (
                 <div className="h-12 mb-3 text-center">
-                    {upLoader.over ? <p>{t("end")}</p> : upLoader.loading && (loading || <Loading size="3x"/>)}
+                    {upLoader.over && !empty ? <p>{t("end")}</p> : upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
             )}
 
-            <div className={`${className}`}>
+            <div className={className}>
                 {children}
             </div>
 
             {(watch !== "UP") && (
                 <div className="h-12 mb-3 text-center">
-                    {downLoader.over ? <p>{t("end")}</p> : downLoader.loading && (loading || <Loading size="3x"/>)}
+                    {downLoader.over && !empty ? <p>{t("end")}</p> : downLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
             )}
         </div>
@@ -150,4 +151,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
 })
 InfiniteScroller.displayName = "InfiniteScroller"
+InfiniteScroller.defaultProps = {
+    className: ""
+}
 export default InfiniteScroller

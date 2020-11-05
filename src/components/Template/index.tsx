@@ -15,6 +15,7 @@ import {createStore} from "redux"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 import {getUserFeed} from "../../data/feed"
+import {AppAction, AppState} from "../../context/action";
 
 
 const Template: React.FC = () => {
@@ -26,7 +27,10 @@ const Template: React.FC = () => {
             setStore(createStore(rootReducer, {
                 user: res[0].data,
                 payload: getUser(),
-                feeds: res[1].data
+                feeds: res[1].data.reduce((acc, feed) => ({
+                    ...acc,
+                    [feed.id]: feed
+                }), {})
             }))
         }).finally(() => setLoading(false))
     }, [])

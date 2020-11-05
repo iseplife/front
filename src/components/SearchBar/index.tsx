@@ -101,7 +101,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
         return (
             searchType === SearchItemType.ALL ?
                 <>
-                    <div className="inline-flex flex-no-wrap p-2 mx-auto items-center">
+                    <div className="inline-flex flex-no-wrap p-2 mx-auto items-center hidden-scroller w-full overflow-x-auto">
                         <CustomCheckbox
                             title={t("student")}
                             filterStatus={filter[SearchItemType.STUDENT]}
