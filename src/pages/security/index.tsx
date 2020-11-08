@@ -16,7 +16,6 @@ interface LoginFormInputs {
 }
 
 const Login: React.FC = () => {
-
     const {t, i18n} = useTranslation(["login", "common"])
     const history = useHistory()
     const location = useLocation()
@@ -28,8 +27,12 @@ const Login: React.FC = () => {
         onSubmit: ({id, password}) => {
             setLoadingStatus(true)
             connect(id, password)
-                .then(() => {
-                    const {from} = (location.state as LocationState) || {from: {pathname: "/"}}
+                .then((token) => {
+                    const {from} = (location.state as LocationState) || {
+                        from: {
+                            pathname: token.lastConnection ? "/": "/discovery"
+                        }
+                    }
                     history.replace(from)
                 })
                 .catch(e => {

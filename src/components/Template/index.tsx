@@ -2,7 +2,7 @@ import React, {useLayoutEffect, useState} from "react"
 import {
     Redirect,
     Route,
-    Switch,
+    Switch, useHistory,
 } from "react-router-dom"
 import Interceptor from "./Interceptor"
 import {getLoggedUser} from "../../data/student"
@@ -15,7 +15,6 @@ import {createStore} from "redux"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 import {getUserFeed} from "../../data/feed"
-import {AppAction, AppState} from "../../context/action";
 
 
 const Template: React.FC = () => {

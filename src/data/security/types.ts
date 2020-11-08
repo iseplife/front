@@ -23,6 +23,7 @@ export interface TokenPayload {
     feeds: Array<number>
     clubsAdmin: Array<number>
     clubsPublisher: Array<number>
+    lastConnection?: Date
 }
 
 export type Role = {
