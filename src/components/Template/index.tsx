@@ -15,6 +15,7 @@ import {createStore} from "redux"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 import {getUserFeed} from "../../data/feed"
+import LoadingPage from "../../pages/LoadingPage";
 
 
 const Template: React.FC = () => {
@@ -35,7 +36,7 @@ const Template: React.FC = () => {
     }, [])
 
     return loading ?
-        <Loading/>
+        <LoadingPage />
         :
         <Provider store={store}>
             <Interceptor/>

@@ -1,22 +1,22 @@
 {
   "welcome": "Welcome on iseplife !",
-  "welcome_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "welcome_description": "Iseplife aimed to regroup all ISEP's student's life in a single platform. whether is about BDE (Student Union) last party or an association's meeting, you should be able to find any information related to ISEP.\n You got ideas to propose or bugs to report. Get involved into the project by joining us on GitHub.",
   "purposes": [
     {
       "title": "Share",
-      "description": "bla bla bla"
+      "description": "Share and find all your best memories and photos of ISEP's event (Party, Afterwork, ...). You can also educate yourself with the supports or documents of formations/workshops (in the case where the organisers share them)"
     },
     {
       "title": "Gather",
-      "description": "bla bla bla"
+      "description": "Find or discover all ISEP's students, whatever are their graduation year (alumni, students, ...). If it's to stalk (nobody's perfect) or to grow your network (because why not \uD83E\uDD37\u200D♂), you got all ISEP at your finger tips."
     },
     {
       "title": "Inform",
-      "description": "bla bla bla"
+      "description": "Stay in touch with all last updates about ISEP student's life, whether it is about an event, a club or anything related to ISEP. Subscribe to feeds which interest you in order to not miss anything"
     }
   ],
   "placeholder_search": "Search a friend...",
-  "promotions": "Classes",
+  "promotions": "Choose graduation",
   "yearbook_title": "Students yearbook",
   "associations": "Associations"
 }

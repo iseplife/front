@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useRef, useState} from "react"
+import React, {useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState} from "react"
 import InfiniteScroller, {InfiniteScrollerRef, loaderCallback} from "../Common/InfiniteScroller"
 import {searchStudents} from "../../data/student"
 import {useTranslation} from "react-i18next"
@@ -65,9 +65,9 @@ const YearBook: React.FC = () => {
 
     const scrollerRef = useRef<InfiniteScrollerRef>(null)
     const switchSorting = useCallback(() => {
+        setFilter({type: "TOGGLE_SORT"})
         setStudents(s => s.clear())
         setFilteredStudents([])
-        scrollerRef!.current!.resetData()
     }, [scrollerRef])
 
     const filterFn = useCallback((s: StudentPreview) => (
@@ -85,14 +85,15 @@ const YearBook: React.FC = () => {
             return res.data.last
         }
         return false
-    }, [filter, students])
+    }, [filter.atoz, filter.name, filter.promos, students])
 
     /**
      * Filter Update
      */
     useEffect(() => {
         setFilteredStudents(students.filter(filterFn))
-    }, [filterFn, filter.promos.length, filter.name])
+    }, [filterFn])
+
     return (
         <div className="container mx-auto text-center mt-10 mb-20">
             <div className="font-bold text-indigo-400 py-3 text-4xl">
