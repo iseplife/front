@@ -1,22 +1,22 @@
 {
   "welcome": "Bienvenue sur iseplife !",
-  "welcome_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "welcome_description": "Iseplife a pour vocation de regrouper toute la vie étudiante de l'ISEP sur une seule et même plateforme. Qu'il s'agisse de la dernière soirée du BDE, ou d'une réunion de ton association, tu devrais pouvoir retrouver toutes les informations de la vie isépienne.\n Des idées à proposer ou des bugs à relever ? Tu peux prendre part au projet en nous rejoignant sur GitHub. ",
   "purposes": [
     {
       "title": "Partager",
-      "description": "bla bla bla"
+      "description": "Partage et retrouve tes meilleurs photos et souvenirs des évènements ISEP (soirée, afterwork). Sinon cultive-toi avec les supports et les présentations de formation/workshop (si les organisateurs les partagent). "
     },
     {
       "title": "Rassembler",
-      "description": "bla bla bla"
+      "description": "Retrouve tous les étudiants de l'ISEP, quelque soit la promotion (étudiant et alumnis). Que ce soit pour stalker (personne n'est parfait) ou pour te faire un réseau (on sait jamais \uD83E\uDD37\u200D♂), tu as l'ISEP à portée de main."
     },
     {
       "title": "Informer",
-      "description": "bla bla bla"
+      "description": "Reste au courant des dernières informations sur toutes la vie de l'ISEP, qu'il s'agisse d'un évènement, d'un club ou tout ce qui peut-être relié à l'ISEP. Abonne-toi aux feed qui t'intéresse pour ne pas en perdre une miette"
     }
   ],
   "placeholder_search": "Rechercher un(e) ami(e)...",
-  "promotions": "Promotions",
+  "promotions": "Choisir une promotion",
   "yearbook_title": "Annuaire des élèves",
   "associations": "Associations"
 }

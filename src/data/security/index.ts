@@ -2,7 +2,7 @@ import {Role, Roles, Token, TokenPayload, TokenSet} from "./types"
 import axios, {AxiosPromise} from "axios"
 import {getCookie, removeCookie, setCookie} from "./cookie"
 
-export const connect = (username: string, password: string): Promise<void> => {
+export const connect = (username: string, password: string): Promise<TokenPayload> => {
     logout()
     return axios
         .post("/auth", {
@@ -10,12 +10,13 @@ export const connect = (username: string, password: string): Promise<void> => {
             password,
         }).then(res => {
             setTokens(res.data)
+            return getUser()
         })
 }
 
 export const getRoles = (): AxiosPromise<Role[]> => axios.get("auth/roles")
 
-export const setTokens = (tokenSet: TokenSet): void => {
+export const setTokens = (tokenSet: TokenSet) => {
     setCookie("token", tokenSet.token , {
         "max-age": 600      //10 min
     })
