@@ -1,6 +1,6 @@
 {
   "welcome": "Bienvenue sur iseplife !",
-  "welcome_description": "Iseplife a pour vocation de regrouper toute la vie étudiante de l'ISEP sur une seul et même plateforme. Qu'il s'agisse de la dernière soirée du BDE, ou d'une réunion de ton association, tu devrais pouvoir retrouver toutes les informations de la vie isépienne.\n Des idées à proposer ou des bugs à relever ? Tu peux prendre part au projet en nous rejoignant sur github. ",
+  "welcome_description": "Iseplife a pour vocation de regrouper toute la vie étudiante de l'ISEP sur une seule et même plateforme. Qu'il s'agisse de la dernière soirée du BDE, ou d'une réunion de ton association, tu devrais pouvoir retrouver toutes les informations de la vie isépienne.\n Des idées à proposer ou des bugs à relever ? Tu peux prendre part au projet en nous rejoignant sur GitHub. ",
   "purposes": [
     {
       "title": "Partager",
