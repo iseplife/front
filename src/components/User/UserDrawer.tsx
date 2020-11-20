@@ -111,7 +111,7 @@ const UserDrawer: React.FC = () => {
                     </div>
                     <Divider/>
                     <div className="font-bold my-1">{t("user:clubs")}</div>
-                    <div className="flex flex-row flex-wrap">
+                    <div className="flex flex-row hidden-scroller overflow-x-auto">
                         {
                             isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
                                 clubs.length ?

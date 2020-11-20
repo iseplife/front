@@ -1,6 +1,8 @@
 import i18n from "i18next"
 import {initReactI18next} from "react-i18next"
 import translations from "./translations/translations"
+import {updateSettings} from "./data/student"
+import {message} from "antd"
 
 export const SUPPORTED_LANGUAGES = Object.keys(translations)
 
@@ -19,6 +21,11 @@ i18n
         }
     })
 
-i18n.on("languageChanged", (lng) => localStorage.setItem("lng", lng))
+i18n.on("languageChanged", (lng) => {
+    localStorage.setItem("lng", lng)
+    updateSettings({
+        language: lng
+    }).catch(() => message.error(i18n.t("error")))
+})
 
 export default i18n

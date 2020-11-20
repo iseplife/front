@@ -6,6 +6,7 @@ import {message, Modal} from "antd"
 import Galleries from "../Club/Galleries"
 import {getClubGalleries} from "../../data/club"
 import {ClubContext} from "../../context/club/context"
+import {IconFA} from "../Common/IconFA";
 
 const GalleriesPreview: React.FC = () => {
     const {t} = useTranslation("gallery")
@@ -32,9 +33,16 @@ const GalleriesPreview: React.FC = () => {
             {galleriesPreview.map(g => (
                 <GalleryCard key={g.id} gallery={g}/>
             ))}
-            <div className="hover:text-indigo-400 cursor-pointer" onClick={() => setVisible(true)}>
-                {t("see_all")}
-            </div>
+            {galleriesPreview.length > 0 ?
+                <div className="hover:text-indigo-400 cursor-pointer" onClick={() => setVisible(true)}>
+                    {t("see_all")}
+                </div>
+                :
+                <div className="text-center text-gray-400">
+                    <IconFA name="fa-camera-retro"  size="4x" className="block" />
+                    {t("no_gallery")}
+                </div>
+            }
             <Modal
                 title={<h1 className="text-gray-800 font-bold text-xl m-0">{t("galleries")}</h1>}
                 visible={visible}

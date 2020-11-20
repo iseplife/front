@@ -4,13 +4,17 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin
+    StudentPreviewAdmin, StudentSettings
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 
-export const getLoggedUser = (): AxiosPromise<Student> => axios.get("/student/me")
+export const getLoggedUser = (): AxiosPromise<StudentPreview> => axios.get("/student/me")
+
+export const updateSettings = (settings: Partial<StudentSettings>): AxiosPromise<Student> => axios.patch("/student/me/setting", settings)
+
+export const getCompleteLoggedUser = (): AxiosPromise<Student> => axios.get("/student/me/full")
 
 export const getStudent = (id: number): AxiosPromise<Student> => axios.get(`/student/${id}`)
 

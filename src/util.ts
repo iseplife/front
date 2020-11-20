@@ -16,7 +16,6 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/
 const reMsAjax = /^\/Date\((d|-|.*)\)[/|\\]$/
-
 export const JSONDateParser = (key: string, value: unknown): Date|unknown => {
     if (typeof value === "string") {
         let a = reISO.exec(value)

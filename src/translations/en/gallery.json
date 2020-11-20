@@ -26,6 +26,7 @@
   "add_img": "Add images",
   "delete_selection": "Delete selected images",
   "selection_delete": "Images successfully removed",
+  "no_gallery": "No galleries around here...",
   "empty": "This gallery is empty...",
   "created": "Gallery successfully created !",
   "see_all": "See all galleries"

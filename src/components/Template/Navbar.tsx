@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import {useSelector} from "react-redux"
 import {AppState} from "../../context/action"
-import {Student} from "../../data/student/types"
+import {Student, StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
@@ -15,7 +15,6 @@ import {
     UserOutlined,
     BellOutlined,
     HomeOutlined,
-    NotificationOutlined,
     ExportOutlined,
     CompassOutlined
 } from "@ant-design/icons"
@@ -52,7 +51,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
                 <SettingOutlined/>
-                <Link to="/parameters"><span>{t("setting")}</span></Link>
+                <Link to="/setting"><span>{t("setting")}</span></Link>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={5} className="profile-logout">
@@ -61,7 +60,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
         </Menu>
     )
 }
-const Header: React.FC<{ user: Student }> = ({user}) => (
+const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
     <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-50">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
@@ -112,7 +111,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
         </div>
     </Link>
 )
-const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
+const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const payload = useSelector((state: AppState) => state.payload)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
@@ -144,6 +143,9 @@ const MobileFooter: React.FC<{ user: Student }> = ({user}) => {
                         {t("administration")}
                     </DrawerItem>
                     }
+                    <DrawerItem icon={<SettingOutlined/>} link="/setting" className="text-red-600">
+                        {t("parameter")}
+                    </DrawerItem>
                     <DrawerItem icon={<ExportOutlined/>} link="/logout" className="text-red-600">
                         {t("logout")}
                     </DrawerItem>

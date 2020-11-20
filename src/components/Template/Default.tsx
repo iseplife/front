@@ -14,6 +14,7 @@ import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
 import NotFound from "../../pages/errors/NotFound"
 import UserDrawer from "../User/UserDrawer"
+import Setting from "../../pages/default/setting"
 
 
 const DefaultTemplate: React.FC = () => {
@@ -30,6 +31,7 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/club/:id" component={Club}/>
                         <Route path="/group/:id" component={Group}/>
                         <Route path="/gallery/:id" component={Gallery}/>
+                        <Route path="/setting" component={Setting}/>
                         <Route path="/logout" component={Logout}/>
                         <Route path="/" strict component={Home}/>
                         <Route path="*" component={NotFound}/>

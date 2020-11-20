@@ -1,4 +1,4 @@
-import {Student} from "../data/student/types"
+import {Student, StudentPreview} from "../data/student/types"
 import {TokenPayload} from "../data/security/types"
 import {Feed} from "../data/feed/types"
 
@@ -19,7 +19,7 @@ interface setFullStateAction {
 }
 
 export type AppState =  {
-    user: Student
+    user: StudentPreview
     payload: TokenPayload
     feeds: Record<number, Feed>
 }

@@ -1,0 +1,18 @@
+{
+	"last_connection": "Dernière connexion",
+	"first_time": "première fois que vous vous connectez",
+	"image-uploader": "Photo de profil",
+	"default": "défaut",
+	"recognition": {
+		"title": "Identification automatique",
+		"enable": "Autoriser l'identification automatique sur les photos",
+		"disable": "Désactiver l'identification automatique sur les photos",
+		"more": "La reconnaissance automatique se base sur votre photo étudiante pour vous retrouvez sur les photos publiés sur iseplife. Vous serez notifié à chaque nouvelle identification, vous pouvez aussi à tout moment supprimer une de vos identification. Attention désactiver l'identification automatique ne supprime pas les identifications précédemment trouvées par celle-ci "
+	},
+	"notification": {
+		"title": "Notifications",
+		"enable": "Autoriser iseplife à vous envoyer des notifications push",
+		"disable": "Ne plus autoriser iseplife à vous envoyer des notifications push"
+	},
+	"language": "Langue"
+}

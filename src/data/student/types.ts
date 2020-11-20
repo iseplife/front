@@ -7,7 +7,8 @@ export interface Student {
     mail?: string
     birthDate?: number
     archivedAt?: string
-    allowNotifications: boolean
+    notification: boolean
+    recognition: boolean
 
     facebook?: string
     twitter?: string
@@ -17,6 +18,7 @@ export interface Student {
     picture?: string
     bio?: string
     archived: boolean
+    lastConnection: Date
 }
 export interface StudentPreview {
     id: number
@@ -38,6 +40,11 @@ export interface StudentPreviewAdmin extends StudentPreview {
 }
 
 
+export type StudentSettings = {
+    language: string
+    recognition: boolean
+    notification: boolean
+}
 
 export type StudentAdminForm = {
     id: number
