@@ -1,3 +1,7 @@
+export type StudentPicture = {
+    original?: string
+    custom?: string
+}
 
 export interface Student {
     id: number
@@ -15,7 +19,7 @@ export interface Student {
     instagram?: string
     snapchat?: string
 
-    picture?: string
+    pictures: StudentPicture
     bio?: string
     archived: boolean
     lastConnection: Date
@@ -40,6 +44,17 @@ export interface StudentPreviewAdmin extends StudentPreview {
 }
 
 
+export type StudentOverview = StudentPreview & {
+    bio?: string
+    mail?: string
+    archived: boolean
+
+    facebook?: string
+    twitter?: string
+    instagram?: string
+    snapchat?: string
+}
+
 export type StudentSettings = {
     language: string
     recognition: boolean
@@ -54,7 +69,6 @@ export type StudentAdminForm = {
     lastName: string
     birthDate?: Date
     mail?: string
-    picture?: File,
     resetPicture?: boolean
 }
 

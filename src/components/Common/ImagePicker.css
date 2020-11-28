@@ -6,6 +6,14 @@
     border-radius: 9999px !important;
 }
 
+.avatar-squared div.ant-upload {
+    display: flex !important;
+    height: 130px !important;
+    width: 130px !important;
+    overflow: hidden;
+    border-radius: 0.25rem !important;
+}
+
 .cover-uploader div.ant-upload {
     margin-right: 0 !important;
     display: flex !important;

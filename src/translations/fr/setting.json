@@ -14,5 +14,12 @@
 		"enable": "Autoriser iseplife à vous envoyer des notifications push",
 		"disable": "Ne plus autoriser iseplife à vous envoyer des notifications push"
 	},
+	"nsfw": {
+		"title": "NSFW",
+		"enable": "Cacher par défaut les images marquées comme nsfw",
+		"disable": "Voir les images marquées comme nsfw"
+	},
+	"add_picture": "Ajouter une nouvelle photo",
+	"picture_updated": "Photo de profile mise à jour",
 	"language": "Langue"
 }

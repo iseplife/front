@@ -40,7 +40,11 @@ export const randomBackgroundColors = (): string => {
     return `bg-${randomColor}-${randomOpacity}`
 }
 
-export const getInitials = (student: Student): string => {
+interface NamedPerson {
+    firstName: string
+    lastName: string
+}
+export const getInitials = (student: NamedPerson): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
 }
 
