@@ -16,9 +16,19 @@ export const getCompleteLoggedUser = (): AxiosPromise<Student> => axios.get("/st
 
 export const updateSettings = (settings: Partial<StudentSettings>): AxiosPromise<Student> => axios.patch("/student/me/setting", settings)
 
-export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPicture> => axios.put("/student/me/picture", image)
+export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPicture> => {
+    const fd = new FormData()
+    fd.append("file", image as Blob)
 
-export const updateOriginalPicture = (id: number, image: File): AxiosPromise<StudentPicture> => axios.put(`/student/${id}/picture/original`, image)
+    return axios.post("/student/me/picture", fd)
+}
+
+export const updateOriginalPicture = (id: number, image: File): AxiosPromise<StudentPicture> => {
+    const fd = new FormData()
+    fd.append("file", image as Blob)
+
+    return axios.put(`/student/${id}/picture/original`, fd)
+}
 
 
 export const getStudent = (id: number): AxiosPromise<StudentOverview> => axios.get(`/student/${id}`)

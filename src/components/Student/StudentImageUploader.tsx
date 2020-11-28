@@ -8,6 +8,8 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import {IconFA} from "../Common/IconFA"
 import {updateCustomPicture} from "../../data/student"
 import {StudentPicture} from "../../data/student/types"
+import {useDispatch} from "react-redux"
+import {ContextReducerType} from "../../context/reducer"
 
 type StudentImageUploaderProps = {
     original?: string
@@ -17,6 +19,7 @@ type StudentImageUploaderProps = {
 
 const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, custom, onUpdate}) => {
     const {t} = useTranslation(["setting", "common"])
+    const dispatch = useDispatch<ContextReducerType>()
     const [file, setFile] = useState<File | null>()
     const [fileStr, setFileStr] = useState<string>()
 
@@ -40,15 +43,13 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
         if(file !== undefined){
             updateCustomPicture(file).then(res => {
                 message.success(t("picture_updated"))
-                onUpdate && onUpdate(res.data)
-            })
+                dispatch({ type: "SET_PICTURE", payload: res.data })
+                setFile(undefined)
+            }).catch(() => message.error((t("common:error"))))
         }else{
-            message.error((t("error")))
+            message.error((t("common:error")))
         }
-
     }, [file])
-
-    console.log(mediaPath(custom, AvatarSizes.DEFAULT))
 
     return (
         <div className="flex flex-col items-center justify-between p-8 border-dashed border-2 border-gray-400 rounded-lg h-64 relative">
@@ -74,7 +75,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                     </div>
 
                     {file !== undefined && (
-                        <Button className="bg-green-400 font-dinot text-green-600 hover:text-green-800 rounded-lg" onClick={handleSubmit}>
+                        <Button className="bg-green-400 font-dinot text-green-700 hover:text-green-800 rounded-lg" onClick={handleSubmit}>
                             {t("common:save")} <IconFA className="ml-2" name="fa-save" type="regular" />
                         </Button>
                     )}

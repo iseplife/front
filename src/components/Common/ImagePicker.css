@@ -1,5 +1,4 @@
 .avatar-uploader div.ant-upload {
-    display: flex !important;
     height: 130px !important;
     width: 130px !important;
     overflow: hidden;
@@ -7,7 +6,6 @@
 }
 
 .avatar-squared div.ant-upload {
-    display: flex !important;
     height: 130px !important;
     width: 130px !important;
     overflow: hidden;
@@ -16,7 +14,6 @@
 
 .cover-uploader div.ant-upload {
     margin-right: 0 !important;
-    display: flex !important;
     height: 100% !important;
     width: 100% !important;
     overflow: hidden;

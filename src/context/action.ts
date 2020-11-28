@@ -1,10 +1,12 @@
-import {Student, StudentPreview} from "../data/student/types"
+import {Student, StudentPicture, StudentPreview} from "../data/student/types"
 import {TokenPayload} from "../data/security/types"
 import {Feed} from "../data/feed/types"
 
 const SET_STUDENT= "SET_STUDENT"
 const SET_PAYLOAD= "SET_PAYLOAD"
 const SET_STATE= "SET_STATE"
+const SET_PICTURE= "SET_PICTURE"
+
 interface setStudentAction {
     type: typeof SET_STUDENT,
     user: Student
@@ -12,6 +14,10 @@ interface setStudentAction {
 interface setPayloadAction {
     type: typeof SET_PAYLOAD,
     payload: TokenPayload
+}
+interface setPictureStateAction {
+    type: typeof SET_PICTURE,
+    payload: StudentPicture
 }
 interface setFullStateAction {
     type: typeof SET_STATE,
@@ -24,6 +30,6 @@ export type AppState =  {
     feeds: Record<number, Feed>
 }
 
-export type AppAction = setStudentAction | setPayloadAction | setFullStateAction;
+export type AppAction = setStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction;
 
 
