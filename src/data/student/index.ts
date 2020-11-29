@@ -4,15 +4,34 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin
+    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 
-export const getLoggedUser = (): AxiosPromise<Student> => axios.get("/student/me")
+export const getLoggedUser = (): AxiosPromise<StudentPreview> => axios.get("/student/me")
 
-export const getStudent = (id: number): AxiosPromise<Student> => axios.get(`/student/${id}`)
+export const getCompleteLoggedUser = (): AxiosPromise<Student> => axios.get("/student/me/full")
+
+export const updateSettings = (settings: Partial<StudentSettings>): AxiosPromise<Student> => axios.patch("/student/me/setting", settings)
+
+export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPicture> => {
+    const fd = new FormData()
+    fd.append("file", image as Blob)
+
+    return axios.post("/student/me/picture", fd)
+}
+
+export const updateOriginalPicture = (id: number, image: File): AxiosPromise<StudentPicture> => {
+    const fd = new FormData()
+    fd.append("file", image as Blob)
+
+    return axios.put(`/student/${id}/picture/original`, fd)
+}
+
+
+export const getStudent = (id: number): AxiosPromise<StudentOverview> => axios.get(`/student/${id}`)
 
 export const getStudentAdmin = (id: number): AxiosPromise<StudentAdmin> => axios.get(`/student/${id}/admin`)
 
@@ -39,26 +58,10 @@ export const getAllStudents = (page = 0): AxiosPromise<Page<StudentPreview>> => 
 
 export const getAllStudentsAdmin = (page = 0): AxiosPromise<Page<StudentPreviewAdmin>> => axios.get("/student/admin", {params: {page}})
 
-export const createStudent = (student: StudentAdminForm): AxiosPromise<StudentAdmin> => {
-    const fd = new FormData()
-    fd.append("file", student.picture as Blob)
+export const createStudent = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => axios.post("/student", form)
 
-    delete student.picture
-    delete student.resetPicture
-    fd.append("form", JSON.stringify(student))
+export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => axios.put("/student/admin", form)
 
-    return axios.post("/student", fd)
-}
-
-export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => {
-    const fd = new FormData()
-    fd.append("file", form.picture as Blob)
-
-    delete form.picture
-    fd.append("form", JSON.stringify(form))
-
-    return axios.put("/student/admin", fd)
-}
 
 export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => axios.put(`/student/${id}/archive`)
 

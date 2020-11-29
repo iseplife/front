@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useState} from "react"
+import React, { useCallback,    useState} from "react"
 import {Upload} from "antd"
 import "./ImagePicker.css"
 import {EditOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, UndoOutlined} from "@ant-design/icons"
 
-const DEFAULT_IMAGE = "img/static/default-cover.png"
+const DEFAULT_IMAGE = "img/empty-image.svg"
 
 type ImagePickerProps = {
     className?: string
@@ -42,7 +42,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                 {image ?
                     <div className="image-display relative w-full h-full">
                         <div
-                            className="w-full h-full"
+                            className="w-full h-full bg-white"
                             style={{
                                 backgroundImage: `url("${image}")`,
                                 backgroundRepeat: "no-repeat",

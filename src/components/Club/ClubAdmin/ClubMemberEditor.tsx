@@ -4,9 +4,9 @@ import {Avatar, Button, Input, message, Modal, Select} from "antd"
 import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, UserOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {useFormik} from "formik"
-import {removeClubMember, updateClubMember} from "../../../data/club";
-import {ClubContext} from "../../../context/club/context";
-import {ClubActionType} from "../../../context/club/action";
+import {removeClubMember, updateClubMember} from "../../../data/club"
+import {ClubContext} from "../../../context/club/context"
+import {ClubActionType} from "../../../context/club/action"
 
 const {Option} = Select
 

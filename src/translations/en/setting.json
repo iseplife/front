@@ -1,0 +1,25 @@
+{
+	"last_connection": "Last connection",
+	"first_time": "first time that you are logged in",
+	"image-uploader": "Profile picture",
+	"default": "default",
+	"recognition": {
+		"title": "Automatic tagging",
+		"enable": "Allow iseplife to automatically recognise you of photos",
+		"disable": "Disable iseplife automatic recognition on photos",
+		"more": "La reconnaissance automatique se base sur votre photo étudiante pour vous retrouvez sur les photos publiés sur iseplife. Vous serez notifié à chaque nouvelle identification, vous pouvez aussi à tout moment supprimer une de vos identification. Attention désactiver l'identification automatique ne supprime pas les identifications précédemment trouvées par celle-ci "
+	},
+	"notification": {
+		"title": "Notifications",
+		"enable": "Enable push notifications from iseplife",
+		"disable": "Disable push notifications from iseplife"
+	},
+	"nsfw": {
+		"title": "NSFW",
+		"enable": "Cacher par défaut les images marquées comme nsfw",
+		"disable": "Voir les images marquées comme nsfw"
+	},
+	"add_picture": "Upload new picture",
+	"picture_updated": "Profile picture updated",
+	"language": "Language"
+}

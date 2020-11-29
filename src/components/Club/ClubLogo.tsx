@@ -56,7 +56,7 @@ const ClubLogo: React.FC = () => {
             </Button>
             }
         </div> :
-        <Avatar src={imagePath} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md">
+        <Avatar src={imagePath} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white">
             {loading && <IconFA name="fa-circle-notch" spin size="2x" type="solid" className="text-white mt-6"/>}
         </Avatar>
 

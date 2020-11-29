@@ -9,6 +9,7 @@ import discovery_en from "./en/discovery.json"
 import club_en from "./en/club.json"
 import group_en from "./en/group.json"
 import home_en from "./en/home.json"
+import setting_en from "./en/setting.json"
 
 import login_fr from "./fr/login.json"
 import date_fr from "./fr/date.json"
@@ -21,6 +22,7 @@ import discovery_fr from "./fr/discovery.json"
 import club_fr from "./fr/club.json"
 import group_fr from "./fr/group.json"
 import home_fr from "./fr/home.json"
+import setting_fr from "./fr/setting.json"
 
 export const en = {
     login: login_en,
@@ -33,7 +35,8 @@ export const en = {
     club: club_en,
     group: group_en,
     search: search_en,
-    home: home_en
+    home: home_en,
+    setting: setting_en
 }
 export const fr = {
     login: login_fr,
@@ -46,7 +49,8 @@ export const fr = {
     club: club_fr,
     group: group_fr,
     search: search_fr,
-    home: home_fr
+    home: home_fr,
+    setting: setting_fr
 }
 
 const translations = {en, fr}

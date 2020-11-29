@@ -16,7 +16,6 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/
 const reMsAjax = /^\/Date\((d|-|.*)\)[/|\\]$/
-
 export const JSONDateParser = (key: string, value: unknown): Date|unknown => {
     if (typeof value === "string") {
         let a = reISO.exec(value)
@@ -41,7 +40,11 @@ export const randomBackgroundColors = (): string => {
     return `bg-${randomColor}-${randomOpacity}`
 }
 
-export const getInitials = (student: Student): string => {
+interface NamedPerson {
+    firstName: string
+    lastName: string
+}
+export const getInitials = (student: NamedPerson): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
 }
 

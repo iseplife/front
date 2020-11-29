@@ -1,5 +1,5 @@
 import ClubType from "../../constants/ClubType"
-import {Student} from "../student/types"
+import {Student, StudentPreview} from "../student/types"
 
 export enum ClubRole {
     MEMBER = "MEMBER",
@@ -38,7 +38,7 @@ export type ClubMember = {
     id: number
     role: ClubRole
     position: string
-    student: Student
+    student: StudentPreview
     parent: number
 }
 

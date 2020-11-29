@@ -3,7 +3,7 @@ import {useHistory, Link} from "react-router-dom"
 import {getClubsForStudent, getStudent} from "../../data/student"
 import {Avatar, Divider, Drawer, Tooltip} from "antd"
 import {useTranslation} from "react-i18next"
-import {Student} from "../../data/student/types"
+import {Student, StudentOverview} from "../../data/student/types"
 import {IconFA} from "../Common/IconFA"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 import {ClubMemberPreview} from "../../data/club/types"
@@ -16,7 +16,7 @@ const UserDrawer: React.FC = () => {
     const {t} = useTranslation()
     const isMobile = useDeviceDetect()
     const [userId, setUserId] = useState<number>()
-    const [student, setStudent] = useState<Student>({} as Student)
+    const [student, setStudent] = useState<StudentOverview>({} as Student)
     const [clubs, setClubs] = useState<ClubMemberPreview[]>([])
     const [visibility, setVisibility] = useState<boolean>(false)
     const [isStudentLoading, setIsStudentLoading] = useState<boolean>(true)
@@ -111,7 +111,7 @@ const UserDrawer: React.FC = () => {
                     </div>
                     <Divider/>
                     <div className="font-bold my-1">{t("user:clubs")}</div>
-                    <div className="flex flex-row flex-wrap">
+                    <div className="flex flex-row hidden-scroller overflow-x-auto">
                         {
                             isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
                                 clubs.length ?
