@@ -9,6 +9,10 @@ cache:
     - .yarn
     - node_modules/
 
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
+
 
 stages:
   - test
@@ -42,9 +46,6 @@ react-build:
 
 docker-build:
   stage: package
-  before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
   script:
     - echo "=== BUILDING DOCKER IMAGES ==="
     - docker build -t $CI_REGISTRY_IMAGE:$FRONT_VERSION -t $CI_REGISTRY_IMAGE:latest .
