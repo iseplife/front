@@ -42,9 +42,11 @@ react-build:
 
 docker-build:
   stage: package
+  before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
   script:
     - echo "=== BUILDING DOCKER IMAGES ==="
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$FRONT_VERSION -t $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$FRONT_VERSION
     - docker push $CI_REGISTRY_IMAGE:latest
