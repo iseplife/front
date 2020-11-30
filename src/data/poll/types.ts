@@ -1,4 +1,10 @@
-import {EmbedEnumType} from "../post/types"
+
+export type PollCreation = {
+    title: string
+    options: string[]
+    multiple: boolean
+    anonymous: boolean
+}
 
 export type Poll = {
     id: number
@@ -6,5 +12,4 @@ export type Poll = {
     results: number[]
     multiple: boolean
     anonymous: boolean
-    embedType: EmbedEnumType.POLL
 }

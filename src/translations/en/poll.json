@@ -1,0 +1,8 @@
+{
+	"poll": "Poll",
+	"subject": "Poll's subject",
+	"option": "Answer",
+	"add_choice": "Add an answer",
+	"anonymous_poll": "Anonymous answer",
+	"multiple_choice_poll": "Allow multiple answers"
+}

@@ -4,6 +4,8 @@ import {FormValues} from "../PostForm"
 import {DeleteOutlined} from "@ant-design/icons"
 import {EmbedEnumType} from "../../../data/post/types"
 import ImageForm from "./ImageForm"
+import PollForm from "./PollForm"
+import {Modal} from "antd"
 
 export type FileStore = {
     file: File,
@@ -22,7 +24,7 @@ const EmbedForm: React.FC<EmbedFormProps> = ({files, setFiles}) => {
             case EmbedEnumType.GALLERY:
                 return null
             case EmbedEnumType.POLL:
-                return null
+                return <PollForm />
             case EmbedEnumType.VIDEO:
             case EmbedEnumType.DOCUMENT:
                 return (

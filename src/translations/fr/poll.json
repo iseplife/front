@@ -1,0 +1,8 @@
+{
+	"poll": "Sondage",
+	"subject": "Sujet du sondage",
+	"option": "Réponse",
+	"add_choice": "Ajouter une réponse",
+	"anonymous_poll": "Réponses anonymes",
+	"multiple_choice_poll": "Autoriser plusieurs réponses"
+}
