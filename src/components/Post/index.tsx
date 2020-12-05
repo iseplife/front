@@ -5,11 +5,9 @@ import {Avatar, Divider, message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
-import {useFormik} from "formik"
 import CommentList from "../Comment/CommentList"
 import {
     LockOutlined,
-    UnlockOutlined,
     HeartFilled,
     HeartOutlined,
     DeleteOutlined,
@@ -18,6 +16,7 @@ import {
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import PostEditForm from "./PostEditForm"
 
 type PostProps = {
     data: PostType
@@ -26,99 +25,6 @@ type PostProps = {
     onEdit: (id: number) => void
     onUpdate: (id: number, postUpdate: PostUpdate) => Promise<boolean>
 }
-
-type UpdatePostFormProps = {
-    isPrivate: boolean
-    publicationDate: number
-    description: string
-    onClose: () => void
-    onUpdate: (updates: PostUpdate) => void
-}
-
-const UpdatePostForm: React.FC<UpdatePostFormProps> = ({isPrivate, publicationDate, description, onClose, onUpdate}) => {
-    const {t} = useTranslation()
-    const [lockPost, setLockPost] = useState<boolean>(isPrivate)
-    const formik = useFormik({
-        initialValues: {
-            private: isPrivate,
-            publicationDate: new Date(publicationDate),
-            description,
-        },
-        onSubmit: values => {
-            onUpdate(values)
-        },
-    })
-
-    return (
-        <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-row justify-end items-center">
-                <div className="mx-2">
-                    <span className="mx-2 text-xs">{t("published_at")} </span>
-                    <input
-                        type="time" name="publication-time"
-                        defaultValue={format(formik.values.publicationDate, "HH:mm")}
-                        onChange={(e) => {
-                            const val = e.target.valueAsDate
-                            if (val) {
-                                formik.values.publicationDate.setHours(val.getHours())
-                                formik.values.publicationDate.setMinutes(val.getMinutes())
-                            }
-                        }}
-                    />
-                    <input
-                        type="date" name="publication-date"
-                        defaultValue={format(formik.values.publicationDate, "yyyy-MM-dd")}
-                        onChange={(e) => {
-                            const val = e.target.valueAsDate
-                            if (val) {
-                                formik.values.publicationDate.setFullYear(val.getFullYear())
-                                formik.values.publicationDate.setMonth(val.getMonth())
-                                formik.values.publicationDate.setDate(val.getDate())
-                            }
-                        }}
-                    />
-                </div>
-
-                <div className="flex">
-                    {lockPost
-                        ? <LockOutlined onClick={() => setLockPost(false)}/>
-                        : <UnlockOutlined onClick={() => setLockPost(true)}/>
-                    }
-
-                    <input
-                        className="hidden"
-                        name="private"
-                        type="checkbox"
-                        onChange={formik.handleChange}
-                        checked={lockPost}
-                    />
-                </div>
-            </div>
-            <div>
-                <textarea
-                    name="description"
-                    className="w-full resize-none"
-                    autoFocus
-                    onChange={formik.handleChange}
-                    value={formik.values.description}
-                />
-                {/*<Embed embed={po}/>*/}
-            </div>
-            <div className="text-right">
-                <button className="px-2 py-1 mx-1 rounded bg-green-500 text-white hover:bg-green-700" type="submit">
-                    {t("save")}
-                </button>
-                <button
-                    className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </button>
-            </div>
-        </form>
-    )
-}
-
 
 const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit}) => {
     const {t} = useTranslation()
@@ -163,9 +69,9 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 
 
     return (
-        <div className="flex flex-col rounded bg-white shadow my-5 p-4">
+        <div className="flex flex-col rounded-lg bg-white my-5 p-4 max-w-4xl">
             {editMode ?
-                <UpdatePostForm
+                <PostEditForm
                     description={data.description}
                     isPrivate={data.private}
                     publicationDate={data.publicationDate}
@@ -189,17 +95,17 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     </div>
                 </>
             }
-            <div className="flex flex-row justify-between mt-2">
+            <div className="flex flex-row text-gray-600 justify-between mt-2">
                 <Avatar icon="user" src={mediaPath(data.author.thumbnail, AvatarSizes.THUMBNAIL)}/>
                 <div className="flex items-center">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
-                        {data.nbComments} <MessageOutlined className="ml-1"/>
+                        {data.nbComments > 0 && data.nbComments} <MessageOutlined className="ml-1"/>
                     </span>
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
-                        {likes}
+                        {likes > 0 && likes}
                         {liked
-                            ? <HeartFilled className="ml-1" onClick={() => toggleLike(data.thread)}/>
-                            : <HeartOutlined className="ml-1" onClick={() => toggleLike(data.thread)}/>
+                            ? <HeartFilled className="ml-1 text-red-600" onClick={() => toggleLike(data.thread)}/>
+                            : <HeartOutlined className="ml-1 hover:text-red-600" onClick={() => toggleLike(data.thread)}/>
                         }
                     </span>
                     {data.hasWriteAccess &&
