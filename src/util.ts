@@ -1,8 +1,7 @@
 import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
-import {format} from "date-fns"
+import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
-import {Student} from "./data/student/types"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -12,6 +11,12 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
     format(date, formatStr, {
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
+
+export const _formatDistance = (date: Date | number, baseDate: Date | number): string =>
+    formatDistance(date, baseDate, {
+        locale: locales[localStorage.getItem("lng") || "fr"]
+    })
+
 
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/

@@ -34,10 +34,10 @@ const PollForm: React.FC = () => {
             />
 
             <FieldArray
-                name="embed.data.options"
+                name="embed.data.choices"
                 render={arrayHelpers => (
                     <div className="flex flex-col p-3 overflow-y-auto" style={{maxHeight: "10rem"}}>
-                        {poll.data.options.map((option, index) => (
+                        {poll.data.choices.map((option, index) => (
                             <div
                                 key={index}
                                 className="flex items-center rounded-lg border border-solid border-gray-200 focus-within:border-indigo-400 focus-within:border-2 w-full py-1 px-2 my-1"
@@ -46,9 +46,9 @@ const PollForm: React.FC = () => {
                                 <Field
                                     className="text-gray-700 flex-grow focus:outline-none"
                                     validate={optionValidate}
-                                    name={`embed.data.options.${index}`} placeholder={t("option") + " " + index}
+                                    name={`embed.data.choices.${index}`} placeholder={t("option") + " " + index}
                                 />
-                                {poll.data.options.length > 1 && (
+                                {poll.data.choices.length > 1 && (
                                     <IconFA className="cursor-pointer hover:text-red-400" name="fa-times" onClick={() => arrayHelpers.remove(index)}/>
                                 )}
                             </div>

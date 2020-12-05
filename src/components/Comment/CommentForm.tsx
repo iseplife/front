@@ -25,7 +25,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
     })
 
     return (
-        <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-200 flex px-2 py-1 mt-3">
+        <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 mt-3">
             <AvatarPicker callback={(id) => {}} compact/>
             <input id="message"
                 placeholder={t("write_comment")}

@@ -4,5 +4,10 @@
 	"option": "Answer",
 	"add_choice": "Add an answer",
 	"anonymous_poll": "Anonymous answer",
-	"multiple_choice_poll": "Allow multiple answers"
+	"multiple_choice_poll": "Allow multiple answers",
+	"allow_multiple": "Multiple answer possible",
+	"poll_finished": "Poll finished, vote not possible anymore",
+	"vote_updated": "Vote updated",
+	"poll_end": "Poll ends in",
+	"poll_ended": "Poll ended for"
 }

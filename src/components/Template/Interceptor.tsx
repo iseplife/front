@@ -51,8 +51,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     axiosResponseInterceptor = (response: AxiosResponse) => {
         // Do something with response data
         if (response.headers) {
-            const token = response.headers["authorization"]
-            const refreshToken = response.headers["x-refresh-token"]
+            const token = response.headers["Authorization"]
+            const refreshToken = response.headers["X-Refresh-Token"]
             if (token && refreshToken) {
                 setTokens({token, refreshToken})
             }

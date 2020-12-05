@@ -73,7 +73,7 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                             type: EmbedEnumType.POLL,
                             data: {
                                 title: "",
-                                options: [""],
+                                choices: [""],
                                 multiple: false,
                                 anonymous: true
                             }
@@ -111,7 +111,7 @@ const PostForm = withFormik<PostFormProps, FormValues>({
             description: "",
             feed: props.feedId,
             private: true,
-            draft: true
+            draft: false
         }
     },
 
