@@ -69,7 +69,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 
 
     return (
-        <div className="flex flex-col rounded-lg bg-white my-5 p-4">
+        <div className="flex flex-col rounded-lg bg-white my-5 p-4 max-w-4xl">
             {editMode ?
                 <PostEditForm
                     description={data.description}

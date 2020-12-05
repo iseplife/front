@@ -4,13 +4,17 @@ import {FormValues} from "../PostForm"
 import {EmbedPollCreation} from "../../../data/post/types"
 import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
-import {Divider, Switch} from "antd"
+import {DatePicker, Divider, Switch} from "antd"
+import moment from "moment"
+import {isPast} from "date-fns"
 
 
 const PollForm: React.FC = () => {
     const {t} = useTranslation("poll")
-    const {values, errors} = useFormikContext<FormValues>()
+    const {values, errors, setFieldValue} = useFormikContext<FormValues>()
     const poll = values.embed as EmbedPollCreation
+
+    const disabledDate = useCallback(current => isPast(current), [])
 
     const optionValidate = useCallback((value) => {
         let errorMessage
@@ -23,15 +27,33 @@ const PollForm: React.FC = () => {
     return (
         <div className="w-full">
             <Divider className="m-2"/>
-            <h3 className="font-dinotcb text-gray-700">
-                {t("poll")}
-            </h3>
-            <Field
-                required
-                placeholder={t("subject")}
-                className="text-gray-700 border-b border-solid border-gray-200 w-full max-w-xs focus:outline-none"
-                name="embed.data.title"
-            />
+            <div className="flex justify-between">
+                <h3 className="font-dinotcb text-gray-700">
+                    {t("poll")}
+                </h3>
+                <IconFA className="cursor-pointer hover:text-gray-400" name="fa-times" onClick={() => setFieldValue("embed", null)}/>
+            </div>
+            <div className="flex justify-between">
+                <Field
+                    required
+                    placeholder={t("subject")}
+                    className="text-gray-700 border-b border-solid border-gray-200 w-full focus:outline-none"
+                    style={{maxWidth: "16rem"}}
+                    name="embed.data.title"
+                />
+                <DatePicker
+                    format="DD/MM/YYYY HH:mm"
+                    showTime
+                    value={poll.data.endsAt ? moment(poll.data.endsAt): null}
+                    disabledDate={c => isPast(c.toDate())}
+                    onChange={date => setFieldValue("embed.data.endsAt", date ? date.toDate() : new Date())}
+                    bordered={false}
+                    placeholder={t("ends_at")}
+                    className="hover:border-indigo-400 text-gray-500 border-gray-200"
+                    style={{borderBottom: "1px solid #d9d9d9"}}
+                />
+            </div>
+
 
             <FieldArray
                 name="embed.data.choices"

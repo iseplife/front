@@ -4,6 +4,7 @@ export type PollCreation = {
     choices: string[]
     multiple: boolean
     anonymous: boolean
+    endsAt: Date
 }
 
 

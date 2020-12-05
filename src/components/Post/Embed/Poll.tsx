@@ -52,15 +52,17 @@ const Poll: React.FC<PollProps> = ({data}) => {
                     {dateText}
                 </span>
             </div>
-            {poll.choices.map(choice => (
-                <PollChoice
-                    key={choice.id}
-                    total={total}
-                    data={choice}
-                    onClick={handleVote}
-                    disabled={isPast(poll.endsAt)}
-                />
-            ))}
+            <div className="flex flex-col items-center mx-5">
+                {poll.choices.map(choice => (
+                    <PollChoice
+                        key={choice.id}
+                        total={total}
+                        data={choice}
+                        onClick={handleVote}
+                        disabled={isPast(poll.endsAt)}
+                    />
+                ))}
+            </div>
 
             <span className="text-gray-500 font-dinotl text-xs lowercase">
                 {poll.multiple && (t("allow_multiple") + ", ")} {poll.anonymous && t("anonymous_poll")}
