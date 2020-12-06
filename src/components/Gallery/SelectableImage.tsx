@@ -2,6 +2,7 @@ import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {IconFA} from "../Common/IconFA"
 import {SelectablePhoto} from "../../pages/default/gallery"
+import BlurryImage from "../Common/BlurryImage";
 
 const imgStyle = {
     transition: "transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s"
@@ -37,7 +38,8 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
             className={`relative cursor-pointer overflow-hidden ${selectable && "hover:shadow-outline focus:bg-blue-100"}`}
         >
             <IconFA className={photo.selected ? "absolute z-10" : "hidden"} name="fa-check-circle" type="regular" style={{left: "4px", top: "4px"}}/>
-            <img
+            <BlurryImage
+                nsfw={photo.nsfw}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}
                 src={photo.src}
                 height={photo.height}

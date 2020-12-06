@@ -16,20 +16,21 @@ import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType} from "../../../data/media/types"
 import {mediaPath} from "../../../util"
 
-export type SelectablePhoto = { selected: boolean }
+export type SelectablePhoto = { selected: boolean, nsfw: boolean }
 
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps<SelectablePhoto>[]> => {
     return await Promise.all(
-        gallery.images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(img => parsePhoto(img.name, String(img.id)))
+        gallery.images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(img => parsePhoto(img.name, String(img.id), img.NSFW))
     )
 }
-const parsePhoto = (imgUrl: string, key: string): Promise<PhotoProps<SelectablePhoto>> => {
+const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
         image.src = mediaPath(imgUrl, GallerySizes.THUMBNAIL) as string
         image.onerror = reject
         image.onload = () => resolve({
+            nsfw,
             selected: false,
             src: image.src,
             width: image.width,
@@ -84,7 +85,7 @@ const Gallery: React.FC = () => {
     }, [])
 
     const addNewImages = useCallback((images: ImageType[]) => {
-        Promise.all(images.map(img => parsePhoto(img.name, String(img.id)))).then(photos => {
+        Promise.all(images.map(img => parsePhoto(img.name, String(img.id), img.NSFW))).then(photos => {
             setPhotos(prevState => [...prevState, ...photos])
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
