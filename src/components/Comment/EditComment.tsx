@@ -7,7 +7,7 @@ interface EditCommentProps {
     disableEditMode: () => void
 }
 
-const EditComment: React.FC<EditCommentProps> = ({value, uploadEdit, disableEditMode}) => {
+const EditComment: React.FC<EditCommentProps> = ({value = "", uploadEdit, disableEditMode}) => {
     const [isSubmitting, setSubmitting] = useState<boolean>(false)
     const [editedMessage, setEditedMessage] = useState<string>(value)
 
@@ -15,7 +15,6 @@ const EditComment: React.FC<EditCommentProps> = ({value, uploadEdit, disableEdit
         <div className="flex">
             <textarea
                 autoFocus
-                defaultValue={editedMessage}
                 value={editedMessage}
                 className="bg-transparent w-full focus"
                 onChange={(e) => setEditedMessage(e.target.value)}
@@ -28,9 +27,10 @@ const EditComment: React.FC<EditCommentProps> = ({value, uploadEdit, disableEdit
                 >
                     <IconFA name="fa-times" size="lg"/>
                 </button>
-                <button type="submit"
+                <button
+                    type="submit"
                     className="flex items-center cursor-pointer text-gray-500 hover:text-green-400 px-2"
-                    disabled={isSubmitting || editedMessage.length === 0}
+                    disabled={isSubmitting || !editedMessage}
                     onClick={() => {
                         setSubmitting(true)
                         uploadEdit(editedMessage).then(res => {

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {Comment as CommentType} from "../../data/thread/types"
+import {Comment as CommentType, CommentForm as CommentFormType} from "../../data/thread/types"
 import Comment from "./index"
 import {commentThread, deleteThreadComment, editThreadComment, getThreadComments} from "../../data/thread"
 import Loading from "../Common/Loading"
@@ -17,8 +17,8 @@ const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true,
     const [loading, setLoading] = useState<boolean>(loadComment)
     const [error, setError] = useState<string>()
 
-    const sendComment = useCallback(async (message: string) => {
-        const res = await commentThread(id, message)
+    const sendComment = useCallback(async (comment: CommentFormType) => {
+        const res = await commentThread(id, comment)
         if (res.status === 200) {
             setComments(comments => [...comments, res.data])
         }
