@@ -16,10 +16,13 @@ type GalleryDraggerProps = {
     canSubmit: boolean
     afterSubmit: (ids: number[]) => void
 }
+
+type ExtendedImage = {file: File, nsfw: boolean}
 const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, club}) => {
     const {t} = useTranslation("gallery")
     const [uploadingState, setUploadingState] = useState<UploadState>(UploadState.OFF)
     const [images, setImages] = useState<File[]>([])
+    const [extendedImages, setExtendedImages] = useState<ExtendedImage[]>([])
     const [progression, setProgression] = useState<number>(0)
     const [inDropZone, setInDropZone] = useState<boolean>(false)
 
@@ -29,6 +32,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
 
         // @ts-ignore
         setImages(prevState => [...prevState, e.dataTransfer.files])
+        // @ts-ignore
+        setExtendedImages(prevState => [...prevState,e.dataTransfer.files.map(f => ({file:f, nsfw: false}))])
         setInDropZone(false)
     }, [])
 
@@ -51,23 +56,31 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
     const handleManualSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         // @ts-ignore
         setImages(prevState => [...prevState, ...e.target.files])
+        // @ts-ignore
+        setExtendedImages(prevState => [...prevState,e.dataTransfer.files.map(f => ({file:f, nsfw: false}))])
+
     }, [])
 
     const deleteImage = useCallback((index: number) => {
         setImages(prevState => prevState.filter((_, i) => i !== index))
+        setExtendedImages(prevState => prevState.filter((_, i) => i !== index))
     }, [])
+
+    const toggleNSFW = (id: number) => {
+        setExtendedImages(extendedImages.map((img, i) => id == i ? {...img, nsfw: !img.nsfw} : img))
+    }
 
     const uploadImages = useCallback(() => {
         const requests: AxiosPromise<Media>[] = []
         setUploadingState(UploadState.UPLOADING)
-        images.forEach(img => {
+        images.forEach((img, i) => {
             if (isFileImage(img)) {
                 requests.push(
                     createMedia(
                         img,
                         club,
                         true,
-                        false,
+                        extendedImages[i].nsfw,
                         (e) => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.length)))
                     )
                 )
@@ -96,7 +109,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                 className={`flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 ${inDropZone ? "border-gray-600" : "border-gray-400"}`}
             >
                 {images.length ?
-                    images.map((img, i) => <PictureCard key={i} index={i} file={img} onDelete={deleteImage}/>) :
+                    images.map((img, i) => <PictureCard key={i} index={i} file={img} onDelete={deleteImage}  toggleNsfw={toggleNSFW}/>) :
                     <div className="flex flex-col justify-center h-full w-full items-center text-center">
                         <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
                         <p className="text-5xl">

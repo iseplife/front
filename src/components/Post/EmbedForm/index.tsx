@@ -10,6 +10,7 @@ import {Modal} from "antd"
 export type FileStore = {
     file: File,
     preview?: string
+    nsfw?: boolean
 }[]
 
 

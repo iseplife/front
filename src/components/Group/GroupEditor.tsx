@@ -67,7 +67,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     if (res.status === 200) {
                         group.cover = res.data
                     } else {
-                        message.error("Un problème lors de l'envoie de la couverture a été rencontré.")
+                        message.error("Un problème lors de l'envoi de la couverture a été rencontré.")
                     }
                 }
             } else {
