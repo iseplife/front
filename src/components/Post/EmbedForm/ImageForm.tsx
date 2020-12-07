@@ -17,10 +17,15 @@ const ImageForm: React.FC<ImageFormProps> = ({files, setFiles}) => {
         setFiles(store => store.filter((_, pos) => index !== pos))
     }, [setFiles, files.length])
 
+    const toggleNSFW = (id: number) => {
+        setFiles(files.map((file, i) => id == i ? {...file, nsfw: !file.nsfw} : file))
+    }
+
+
     return (
         <div className="flex">
             {files.map((f, i) =>
-                <PictureCard key={i} index={i} file={f.file} onDelete={handleDelete} className="rounded mx-2"/>
+                <PictureCard key={i} index={i} file={f.file} onDelete={handleDelete} className="rounded mx-2" toggleNsfw={toggleNSFW}/>
             )}
         </div>
     )

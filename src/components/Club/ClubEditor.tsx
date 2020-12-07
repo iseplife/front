@@ -61,7 +61,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     if (res.status === 200) {
                         club.logoUrl = res.data
                     } else {
-                        message.error("Un problème lors de l'envoie du logo a été rencontré.")
+                        message.error("Un problème lors de l'envoi du logo a été rencontré.")
                     }
                 }
             } else {

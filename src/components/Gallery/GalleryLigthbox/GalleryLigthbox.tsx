@@ -14,6 +14,7 @@ import {
 import {Image} from "../../../data/media/types"
 import {GallerySizes} from "../../../constants/MediaSizes"
 import {mediaPath} from "../../../util"
+import SafeImage from "../../Common/SafeImage";
 
 // Carousel slide move
 const slideLeft = (carouselRef: RefObject<Carousel>): void => {
@@ -133,7 +134,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, sizes, current
                         {photos.map((photo: Image, index: number) => (
                             <div key={photo.name + "/" + index}>
                                 <div className={style.carouselContent}>
-                                    <img src={mediaPath(photo.name, sizes?.LIGHTBOX)} className={style.carouselImage}/>
+                                    <SafeImage src={mediaPath(photo.name, sizes?.LIGHTBOX)} className={style.carouselImage} nsfw={photo.NSFW}/>
                                 </div>
                             </div>
                         ))}

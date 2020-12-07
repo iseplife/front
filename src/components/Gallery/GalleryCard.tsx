@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next"
 import {IconFA} from "../Common/IconFA"
 import {mediaPath} from "../../util"
 import {GallerySizes} from "../../constants/MediaSizes"
+import SafeImage from "../Common/SafeImage";
 
 const PREVIEW_GALLERY_COUNT = 5
 
@@ -15,7 +16,6 @@ type GalleryCardProps = {
 const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
     const {t} = useTranslation("gallery")
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
-
     return (
         <div className={`my-1 ${className}`}>
             <Link to={`/gallery/${gallery.id}`}><h3 className="font-dinotcb text-gray-600 m-0">{gallery.name}</h3></Link>
@@ -28,7 +28,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 to={`/gallery/${gallery.id}`} className="w-1/4 p-1 block" style={{height: "50%"}}
                             >
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <img className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.PREVIEW)}/>
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.NSFW} hide/>
                                     <IconFA name="fa-plus" className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
@@ -40,7 +40,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >
                                 <div className="hover:bg-black rounded h-full w-full">
-                                    <img className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75 " src={mediaPath(img.name, GallerySizes.PREVIEW)}/>
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75 " src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.NSFW} />
                                 </div>
                             </Link>
                     )) :

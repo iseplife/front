@@ -20,7 +20,7 @@
     ],
     "create": "Créer"
   },
-  "upload_failed":  "Envoie des images a échoué",
+  "upload_failed":  "Envoi des images a échoué",
   "upload_success": "Images ajoutées avec succès !",
   "select_img": "Sélectionner vos photos",
   "add_img": "Ajouter",
