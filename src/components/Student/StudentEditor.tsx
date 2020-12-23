@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {
-    createStudent,
+    createStudent, deleteCustomPicture,
     deleteStudent, getStudentAdmin,
     toggleStudentArchiveStatus,
     updateStudentAdmin
 } from "../../data/student"
-import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
+import {Avatar, Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
 import Loading from "../Common/Loading"
 import {useFormik} from "formik"
 import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types"
@@ -19,7 +19,7 @@ import {
     CloseCircleOutlined,
     SaveOutlined,
     AuditOutlined,
-    DeleteOutlined
+    DeleteOutlined, UserOutlined
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
@@ -117,6 +117,28 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
         }
     }, [id])
 
+    const deleteCustom = useCallback(() =>
+        Modal.confirm({
+            title: t("remove_item.title"),
+            content: t("remove_item.content"),
+            okText: "Ok",
+            cancelText: t("cancel"),
+            onOk: async () => {
+                const id = (student as Student).id
+                const res = await deleteCustomPicture(id)
+                if (res.status === 200) {
+                    message.info(t("remove_item.complete"))
+                    setStudent({
+                        ...(student as StudentAdmin),
+                        pictures: {
+                            custom: undefined,
+                            original: (student as StudentAdmin).pictures.original
+                        }
+                    })
+                }
+            }
+        }), [onDelete, student])
+
 
     const remove = useCallback(() =>
         Modal.confirm({
@@ -186,18 +208,35 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </Link>
                     }
 
-                    {/*
-                    <ImagePicker onChange={handleImage} defaultImage={mediaPath(student?.picture, AvatarSizes.DEFAULT)}  className="avatar-uploader"/>
-                    */}
+                    <ImagePicker
+                        onChange={handleImage}
+                        defaultImage={mediaPath(student?.pictures.original, AvatarSizes.DEFAULT)}
+                        className="avatar-uploader"
+                    />
 
-                    <div className="mb-1 w-24">
-                        <label className="font-dinotcb">promo</label>
-                        <InputNumber
-                            className="w-full"
-                            name="promo"
-                            value={formik.values.promo}
-                            onChange={(val) => formik.setFieldValue("promo", val)}
-                        />
+                    <div className="flex mb-1 items-end justify-between">
+                        <div className=" w-24">
+                            <label className="font-dinotcb">promo</label>
+                            <InputNumber
+                                className="w-full"
+                                name="promo"
+                                value={formik.values.promo}
+                                onChange={(val) => formik.setFieldValue("promo", val)}
+                            />
+                        </div>
+                        {student?.pictures.custom && (
+                            <div className="text-center">
+                                <Avatar
+                                    icon={<UserOutlined/>}
+                                    src={mediaPath(student?.pictures.custom, AvatarSizes.DEFAULT)}
+                                    size="default"
+                                    className="mr-3"
+                                />
+                                <span className="block text-red-600 font-dinot cursor-pointer" onClick={deleteCustom}>
+                                    Supprimer photo perso
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <div className="flex flex-row">
                         <div className="mr-2 w-1/2">
@@ -240,7 +279,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     <div className="my-1 flex justify-between">
                         <div className="mr-1">
                             <label className="font-dinotcb">email</label>
-                            <Input placeholder="dieudonne.abboud@isep.fr"
+                            <Input
+                                placeholder="dieudonne.abboud@isep.fr"
                                 name="mail"
                                 value={formik.values.mail}
                                 onChange={formik.handleChange}
@@ -260,8 +300,12 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" className="mt-5"
-                            icon={<SaveOutlined/>}>
+                        <Button
+                            htmlType="submit"
+                            type="primary"
+                            className="mt-5"
+                            icon={<SaveOutlined/>}
+                        >
                             Enregistrer
                         </Button>
                         {student &&

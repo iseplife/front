@@ -23,6 +23,9 @@ export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPic
     return axios.post("/student/me/picture", fd)
 }
 
+export const deleteCustomPicture = (student: number): AxiosPromise<StudentPicture> => axios.delete(`/student/${student}/admin/picture/custom`)
+
+
 export const updateOriginalPicture = (id: number, image: File): AxiosPromise<StudentPicture> => {
     const fd = new FormData()
     fd.append("file", image as Blob)

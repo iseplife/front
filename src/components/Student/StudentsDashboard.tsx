@@ -55,10 +55,10 @@ const StudentsDashboard: React.FC = () => {
     }, [page.current])
     
     return (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/3">
                 <Table
-                    className=""
+                    className="overflow-x-auto"
                     loading={loading}
                     data={students}
                     page={page}
