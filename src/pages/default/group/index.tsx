@@ -6,8 +6,8 @@ import Feed from "../../../components/Feed"
 import {Divider} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
-import {toggleSubscription} from "../../../data/feed";
-import {IconFA} from "../../../components/Common/IconFA";
+import {toggleSubscription} from "../../../data/feed"
+import {IconFA} from "../../../components/Common/IconFA"
 
 const Group: React.FC = () => {
     const {id} = useParams()
@@ -49,7 +49,7 @@ const Group: React.FC = () => {
 
                 <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
                 <Divider/>
-                <GroupMembers group={group?.id} members={group?.members}/>
+                <GroupMembers group={id} hasRight={group?.hasRight}/>
             </div>
             <div className="flex-grow">
                 {group && <Feed id={group.feed}/>}

@@ -13,8 +13,9 @@ type MemberListProps = {
     className?: string
     members: GroupMember[]
     actions: (id: number) => ReactElement
+    actionsTrigger?: number
 }
-const MemberList: React.FC<MemberListProps> = ({members, className, actions}) => {
+const MemberList: React.FC<MemberListProps> = ({members, className, actions, actionsTrigger = 1}) => {
     const {t} = useTranslation("group")
     const [viewAll, setViewAll] = useState<boolean>(false)
     const [preview, leftovers] = useMemo(() => [members.slice(0, MEMBER_PREVIEW_COUNT), members.slice(MEMBER_PREVIEW_COUNT)], [members])
@@ -33,7 +34,7 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions}) =>
                             />
                             {student.firstName + " " + student.lastName}
                         </Link>
-                        {members.length > 1 && actions(id)}
+                        {members.length > actionsTrigger && actions(id)}
                     </span>
                 ))}
 

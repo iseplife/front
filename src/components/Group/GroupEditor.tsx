@@ -2,14 +2,14 @@ import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Button, Divider, Input, message, Modal, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
-import {Group, GroupForm} from "../../data/group/types"
+import {Group, GroupAdmin, GroupForm} from "../../data/group/types"
 import {useFormik} from "formik"
 import Loading from "../Common/Loading"
 import ImagePicker from "../Common/ImagePicker"
 import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import HelperIcon from "../Common/HelperIcon"
-import {createGroup, deleteGroup, getGroup, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
+import {createGroup, deleteGroup, getGroupAdmin, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
 import {StudentPreview} from "../../data/student/types"
 import {
     CloseCircleOutlined,
@@ -26,9 +26,9 @@ import {mediaPath} from "../../util"
 type GroupEditorProps = {
     id?: string,
     onDelete: (id: number) => void
-    onArchive: (feed: Group) => void
-    onCreate: (feed: Group) => void
-    onUpdate: (feed: Group) => void
+    onArchive: (feed: GroupAdmin) => void
+    onCreate: (feed: GroupAdmin) => void
+    onUpdate: (feed: GroupAdmin) => void
 }
 
 const DEFAULT_GROUP = {
@@ -42,8 +42,8 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
     const {t} = useTranslation()
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(false)
-    const [group, setGroup] = useState<Group>()
-    const admins = useMemo(() => group?.members.reduce((acc: StudentPreview[], curr) => {
+    const [group, setGroup] = useState<GroupAdmin>()
+    const admins = useMemo(() => group?.admins.reduce((acc: StudentPreview[], curr) => {
         if(curr.admin)
             acc.push(curr.student)
         return acc
@@ -98,13 +98,13 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
         if (id !== undefined) {
             if (+id) {
                 setLoading(true)
-                getGroup(+id).then(res => {
+                getGroupAdmin(+id).then(res => {
                     if (res.status === 200) {
                         setGroup(res.data)
                         formik.setValues({
                             name: res.data.name,
                             restricted: res.data.restricted,
-                            admins: res.data.members.reduce((acc: number[], curr) => {
+                            admins: res.data.admins.reduce((acc: number[], curr) => {
                                 if(curr.admin)
                                     acc.push(curr.student.id)
                                 return acc
@@ -209,6 +209,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     <div className="mx-3 mb-5">
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
+                            placeholder="Aucun administrateur (déconseillé)"
                             defaultValues={admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />
