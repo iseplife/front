@@ -23,10 +23,10 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
     const [fileStore, setFileStore] = useState<FileStore>([])
 
     const handleFile = useCallback((type: EmbedEnumType) => (file: File, files: File[]) => {
-        if (values.embed?.type !== type)
-            setFileStore([])
-
         if (type === EmbedEnumType.IMAGE) {
+            if (values.embed?.type !== type)
+                setFileStore([])
+            
             if (files.length > 5) {
                 setFieldError("attachments", "Vous ne pouvez pas publier plus de 3 photos")
                 return false
@@ -43,11 +43,11 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
             reader.readAsDataURL(file)
             setFieldValue("embed", {type, data: files})
         } else {
-            setFileStore([{file: files[0]}])
-            setFieldValue("embed", {type, data: files[0]})
+            setFileStore([{file}])
+            setFieldValue("embed", {type, data: [file]})
         }
         return false
-    }, [setFieldError, setFieldValue])
+    }, [setFieldError, setFieldValue, values.embed?.type])
 
     return (
         <Form className="flex flex-col items-center text-gray-500">
@@ -63,8 +63,11 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                 )}
                 <div className="flex justify-between">
                     <div className="flex items-center">
-                        <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)}>
+                        <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)} accept=".png,.jpg,.jpeg,.gif">
                             <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        </Upload>
+                        <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.VIDEO)} accept=".mp4,.webm">
+                            <IconFA name="fa-video" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                         </Upload>
                         <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
                             <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>

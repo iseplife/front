@@ -72,6 +72,7 @@ type EmbedMediaCreation = {
     type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
     data: File[]
 }
+
 export type EmbedPollCreation = {
     type: EmbedEnumType.POLL
     data: PollCreation
