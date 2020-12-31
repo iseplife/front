@@ -236,6 +236,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     <div className="mx-3">
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
+                            placeholder="Aucun administrateur (déconseillé) "
                             defaultValues={admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />

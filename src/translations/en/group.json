@@ -4,6 +4,10 @@
 	"admins": "Administrators",
 	"see_all": "See all members +",
 	"see_less": "See less members -",
+	"add_member": "Add member",
+	"confirm_add": "Add",
+	"member_added": "Member added to group !",
 	"promote_member": "Member promoted",
+	"member_removed": "Membre removed from group",
 	"demote_member": "Member removed from admins"
 }

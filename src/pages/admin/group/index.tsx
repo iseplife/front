@@ -4,13 +4,13 @@ import Table, {ColumnType, RowProps} from "../../../components/Common/TableAdmin
 import AvatarList from "../../../components/Common/AvatarList"
 import {IconFA} from "../../../components/Common/IconFA"
 import {PageStatus} from "../student"
-import {Group} from "../../../data/group/types"
+import {GroupAdmin} from "../../../data/group/types"
 import GroupEditor from "../../../components/Group/GroupEditor"
 import {getAllGroup} from "../../../data/group"
 import Pills from "../../../components/Common/Pills"
 import {StudentPreview} from "../../../data/student/types"
 
-const tableConfig: ColumnType<Group>[] = [
+const tableConfig: ColumnType<GroupAdmin>[] = [
     {title: "id"},
     {title: "", className: ""},
     {title: "Nom", className: "w-2/5"},
@@ -27,7 +27,7 @@ const tableConfig: ColumnType<Group>[] = [
 
 const GroupPanel: React.FC = () => {
     const {id} = useParams()
-    const [groups, setGroups] = useState<Group[]>([])
+    const [groups, setGroups] = useState<GroupAdmin[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<PageStatus>({current: 0})
 
@@ -80,12 +80,12 @@ const GroupPanel: React.FC = () => {
     )
 }
 
-const TableRow: React.FC<RowProps<Group>> = ({data: f}) => {
-    const admins = useMemo(() => f.members.reduce((acc: StudentPreview[], curr) => {
+const TableRow: React.FC<RowProps<GroupAdmin>> = ({data: f}) => {
+    const admins = useMemo(() => f.admins.reduce((acc: StudentPreview[], curr) => {
         if(curr.admin)
             acc.push(curr.student)
         return acc
-    }, []), [f.members])
+    }, []), [f.admins])
     return (
         <tr key={f.id}>
             <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>

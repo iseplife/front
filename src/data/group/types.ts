@@ -12,11 +12,14 @@ export type Group = {
     cover?: string
     restricted: boolean
     archived: boolean
-    locked: boolean
     feed: number
     hasRight: boolean
     subscribed: boolean
-    members: GroupMember[]
+}
+
+export type GroupAdmin = Omit<Group, "subscribed" | "hasRight" | "feed"> & {
+    locked: boolean
+    admins: GroupMember[]
 }
 
 export type GroupMember = {

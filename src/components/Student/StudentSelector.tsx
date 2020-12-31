@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react"
+import React, {CSSProperties, useCallback, useState} from "react"
 import {Avatar, Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
@@ -16,8 +16,11 @@ type Option = {
 type StudentSelectorProps = {
     onChange: (id: number[]) => void
     defaultValues?: StudentPreview[]
+    className?: string
+    placeholder?: string
+    style?: CSSProperties
 }
-const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValues = []}) => {
+const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValues = [], className = "", style, placeholder= "N/A"}) => {
     const [values, setValues] = useState<number[]>(defaultValues.map(v => v.id))
     const [options, setOptions] = useState<Option[]>(defaultValues.map(v => ({
         value: v.id,
@@ -55,7 +58,7 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
         <Select
             mode="multiple"
             showSearch
-            placeholder="Aucun administrateur (déconseillé) "
+            placeholder={placeholder}
             value={values}
             showArrow={false}
             filterOption={false}
@@ -67,10 +70,10 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
                 setFetching(false)
                 onChange(selected)
             }}
-            tagRender={props => <Tag closable={props.closable} onClose={props.onClose}>{props.label}</Tag>}
+            tagRender={props => <Tag closable={props.closable} onClose={props.onClose} className="rounded-lg">{props.label}</Tag>}
             options={options}
-            className="w-full "
-
+            className={className}
+            style={style}
         />
     )
 }
