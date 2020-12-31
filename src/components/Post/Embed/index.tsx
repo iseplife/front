@@ -4,7 +4,8 @@ import {mediaPath} from "../../../util"
 import {PostSizes} from "../../../constants/MediaSizes"
 import EmbedGallery from "./EmbedGallery"
 import Poll from "./Poll"
-import SafeImage from "../../Common/SafeImage";
+import SafeImage from "../../Common/SafeImage"
+import Video from "./Video"
 
 
 type EmbedProps = {
@@ -15,7 +16,7 @@ const Embed: React.FC<EmbedProps> = ({embed}) => {
         case EmbedEnumType.DOCUMENT:
             return null
         case EmbedEnumType.VIDEO:
-            return null
+            return <Video data={embed} />
         case EmbedEnumType.POLL:
             return <Poll data={embed} />
         case EmbedEnumType.GALLERY:

@@ -1,6 +1,6 @@
 import {Club} from "../club/types"
 import {Author} from "../request.type"
-import {GalleryPreForm, GalleryPreview} from "../gallery/types"
+import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document} from "../media/types"
 import {Poll, PollCreation} from "../poll/types"
 
