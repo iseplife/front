@@ -5,8 +5,9 @@ export const GallerySizes = {
 }
 
 export const AvatarSizes = {
-    THUMBNAIL: "50x50",
-    DEFAULT: "140x140"
+    THUMBNAIL: "90x90",
+    DEFAULT: "200x200",
+    FULL: "300x300"
 }
 
 export const PostSizes = {
