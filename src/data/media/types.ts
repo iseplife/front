@@ -4,7 +4,7 @@ export interface Media {
     id: number
     creation: Date
     name: string
-    NSFW: boolean
+    nsfw: boolean
 }
 
 export type Image = Media & {

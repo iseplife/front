@@ -45,7 +45,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                             <SafeImage
                                 className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-50"
                                 src={mediaPath(img.name, PostSizes.PREVIEW)}
-                                nsfw={img.NSFW}
+                                nsfw={img.nsfw}
                             />
                         </div>
                     </div>
@@ -71,11 +71,11 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                         >
                             {i === previewLength - 1 ?
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.THUMBNAIL)} nsfw={img.NSFW}/>
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.THUMBNAIL)} nsfw={img.nsfw}/>
                                     <IconFA name="fa-plus" size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
                                 </div> :
                                 <div className="hover:bg-black rounded h-full w-full">
-                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75" src={mediaPath(img.name, GallerySizes.THUMBNAIL)} nsfw={img.NSFW}/>
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75" src={mediaPath(img.name, GallerySizes.THUMBNAIL)} nsfw={img.nsfw}/>
                                 </div>
                             }
                         </Link>

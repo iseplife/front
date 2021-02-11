@@ -22,7 +22,7 @@ const Embed: React.FC<EmbedProps> = ({embed}) => {
         case EmbedEnumType.GALLERY:
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
-            return <SafeImage src={mediaPath(embed.name, PostSizes.PREVIEW)} nsfw={embed.NSFW}/>
+            return <SafeImage src={mediaPath(embed.name, PostSizes.PREVIEW)} nsfw={embed.nsfw}/>
         default:
             return null
     }

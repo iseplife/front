@@ -134,7 +134,7 @@ const GalleryLigthbox: React.FC<GalleryLigthboxProps> = ({photos, sizes, current
                         {photos.map((photo: Image, index: number) => (
                             <div key={photo.name + "/" + index}>
                                 <div className={style.carouselContent}>
-                                    <SafeImage src={mediaPath(photo.name, sizes?.LIGHTBOX)} className={style.carouselImage} nsfw={photo.NSFW}/>
+                                    <SafeImage src={mediaPath(photo.name, sizes?.LIGHTBOX)} className={style.carouselImage} nsfw={photo.nsfw}/>
                                 </div>
                             </div>
                         ))}

@@ -31,7 +31,6 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
         width: photo.width
     }), [direction, left, margin, photo.height, photo.width, top])
 
-
     return (
         <div
             style={container}

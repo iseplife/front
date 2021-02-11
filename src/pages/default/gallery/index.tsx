@@ -21,7 +21,7 @@ export type SelectablePhoto = { selected: boolean, nsfw: boolean }
 /* We should create a GalleryService with them */
 const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps<SelectablePhoto>[]> => {
     return await Promise.all(
-        gallery.images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(img => parsePhoto(img.name, String(img.id), img.NSFW))
+        gallery.images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(img => parsePhoto(img.name, String(img.id), img.nsfw))
     )
 }
 const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
@@ -85,7 +85,7 @@ const Gallery: React.FC = () => {
     }, [])
 
     const addNewImages = useCallback((images: ImageType[]) => {
-        Promise.all(images.map(img => parsePhoto(img.name, String(img.id), img.NSFW))).then(photos => {
+        Promise.all(images.map(img => parsePhoto(img.name, String(img.id), img.nsfw))).then(photos => {
             setPhotos(prevState => [...prevState, ...photos])
         }).catch(e => message.error("Error while parsing...", e))
     }, [])

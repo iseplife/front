@@ -19,7 +19,6 @@ type MemberCardProps = {
 }
 const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showRole = false}) => {
     const history = useHistory()
-    console.log(history.location)
     const handleClick = useMemo(() => (onClick ?
         () => onClick(id) :
         () => history.replace(`${history.location.pathname}/student/${m.student.id}`)

@@ -108,7 +108,6 @@ const Login: React.FC = () => {
                             alt={lng + " flag"}/>
                     ))}
                 </div>
-                <span>{t("common:switch_lang")}</span>
             </div>
         </div>
     )

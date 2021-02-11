@@ -18,7 +18,7 @@ const PollForm: React.FC = () => {
 
     const optionValidate = useCallback((value) => {
         let errorMessage
-        if (value.length == 0 || value.length > 200) {
+        if (value.length === 0 || value.length > 200) {
             errorMessage = "Field required"
         }
         return errorMessage
