@@ -11,10 +11,8 @@ import {isPast} from "date-fns"
 
 const PollForm: React.FC = () => {
     const {t} = useTranslation("poll")
-    const {values, errors, setFieldValue} = useFormikContext<FormValues>()
+    const {values, setFieldValue} = useFormikContext<FormValues>()
     const poll = values.embed as EmbedPollCreation
-
-    const disabledDate = useCallback(current => isPast(current), [])
 
     const optionValidate = useCallback((value) => {
         let errorMessage

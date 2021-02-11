@@ -12,7 +12,7 @@ import {
     HeartOutlined,
     DeleteOutlined,
     EditOutlined,
-    MessageOutlined
+    MessageOutlined, UserOutlined
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
@@ -96,7 +96,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 </>
             }
             <div className="flex flex-row text-gray-600 justify-between mt-2">
-                <Avatar icon="user" src={mediaPath(data.author.thumbnail, AvatarSizes.THUMBNAIL)}/>
+                <Avatar icon={<UserOutlined />} src={mediaPath(data.author.thumbnail, AvatarSizes.THUMBNAIL)}/>
                 <div className="flex items-center">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
                         {data.nbComments > 0 && data.nbComments} <MessageOutlined className="ml-1"/>

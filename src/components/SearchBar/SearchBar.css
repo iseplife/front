@@ -1,3 +1,7 @@
+.search-bar .ant-select-selection-placeholder {
+    color: rgb(199, 210, 254);
+}
+
 .search-bar > .ant-select-selector {
     border-radius: 9999px !important;
     border: none !important;
