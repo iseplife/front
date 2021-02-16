@@ -70,9 +70,9 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
                 setFetching(false)
                 onChange(selected)
             }}
-            tagRender={props => <Tag closable={props.closable} onClose={props.onClose} className="rounded-lg">{props.label}</Tag>}
+            tagRender={props => <Tag closable={props.closable} onClose={props.onClose} className="rounded-full my-1 flex items-center">{props.label}</Tag>}
             options={options}
-            className={className}
+            className={`${className}`}
             style={style}
         />
     )

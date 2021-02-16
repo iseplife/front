@@ -38,8 +38,8 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
     const {t} = useTranslation()
     const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
     return (
-        <Menu>
-            <Menu.Item key={0} className="font-bold profile-name">
+        <Menu className="text-gray-700 rounded shadow-sm">
+            <Menu.Item key={0} className="text-center font-dinotcb text-lg">
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
@@ -51,11 +51,11 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
                 <SettingOutlined/>
-                <Link to="/setting"><span>{t("setting")}</span></Link>
+                <Link to="/setting">{t("setting")}</Link>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={5} className="profile-logout">
-                <Link to="/logout">{t("logout")}</Link>
+            <Menu.Item key={5} className="font-dinot text-center">
+                <Link to="/logout" className="text-red-500" >{t("logout")}</Link>
             </Menu.Item>
         </Menu>
     )

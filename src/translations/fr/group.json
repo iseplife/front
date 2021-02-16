@@ -2,6 +2,8 @@
 	"group": "Groupe",
 	"members": "Membres",
 	"admins": "Administrateurs",
+	"restricted": "Groupe privé",
+	"public": "Groupe public",
 	"see_all": "Voir tous les membres +",
 	"see_less": "Voir moins de membres -",
 	"add_member": "Ajouter un membre",

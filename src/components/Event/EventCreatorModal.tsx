@@ -1,8 +1,7 @@
 import React, {useState} from "react"
-import EventForm from "./form/EventForm"
 import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
-import EventCreateForm from "./form/EventCreateForm";
+import EventCreateForm from "./form/EventCreateForm"
 
 type EventModalFormProps = {
     onSubmit: () => void

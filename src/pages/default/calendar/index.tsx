@@ -134,17 +134,17 @@ const Events: React.FC = () => {
     return (
         <div className="h-full flex flex-row flex-wrap bg-gray-100">
             <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
-            <div className="flex flex-col md:w-4/5 w-full p-3">
+            <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 ">
                 <div className="h-16 w-full flex justify-between items-center">
-                    <div className="flex items-center">
-                        <h1 className="text-2xl font-extrabold my-auto text-gray-800">
+                    <div className="flex items-center text-gray-700">
+                        <h1 className="text-2xl font-dinotcb font-extrabold my-auto text-current">
                             {dateTitle}
                         </h1>
-                        <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={decrementDate}/>
-                        <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer text-gray-600" onClick={incrementDate}/>
-                        {canCreateEvent &&
-                        <EventCreatorModal onSubmit={fetchMonthEvents}/>
-                        }
+                        <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer" onClick={decrementDate}/>
+                        <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer" onClick={incrementDate}/>
+                        {canCreateEvent && (
+                            <EventCreatorModal onSubmit={fetchMonthEvents}/>
+                        )}
                     </div>
                     <div>
                         <IconFA name="fa-sync-alt" className="my-auto mx-3 cursor-pointer text-gray-500" onClick={fetchMonthEvents} spin={loading}/>

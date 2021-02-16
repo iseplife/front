@@ -17,6 +17,7 @@ import {
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import PostEditForm from "./PostEditForm"
+import {IconFA} from "../Common/IconFA";
 
 type PostProps = {
     data: PostType
@@ -69,7 +70,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
 
 
     return (
-        <div className="flex flex-col rounded-lg bg-white my-5 p-4 max-w-4xl">
+        <div className="flex flex-col shadow rounded-lg bg-white my-5 p-4 max-w-4xl">
             {editMode ?
                 <PostEditForm
                     description={data.description}
@@ -85,7 +86,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                             {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
                         </span>
                         }
-                        {data.private && <LockOutlined/>}
+                        {data.private && <IconFA name="fa-lock" className="text-gray-300"/>}
                     </div>
                     <div>
                         <p>

@@ -32,7 +32,7 @@ export type PostUpdate = {
 export type Post = {
     id: number
     description: string
-    publicationDate: number
+    publicationDate: Date
     creationDate: number
     private: boolean
     pinned: boolean

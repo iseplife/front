@@ -1,6 +1,6 @@
 {
 	"create": {
-		"button": "Create event",
+		"button": "New event",
 		"title": "Creation of a new event",
 		"created": "Event created !"
 	},

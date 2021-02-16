@@ -1,85 +1,72 @@
-import {PostUpdate} from "../../data/post/types"
-import React, {useState} from "react"
+import {EmbedCreation, EmbedEnumType, EmbedPollCreation, PostCreation, PostUpdate} from "../../data/post/types"
+import React from "react"
 import {useTranslation} from "react-i18next"
-import {useFormik} from "formik"
+import {Field, Form, FormikErrors, FormikProps,  withFormik} from "formik"
 import {format} from "date-fns"
-import {LockOutlined, UnlockOutlined} from "@ant-design/icons"
+import {IconFA} from "../Common/IconFA"
 
 type PostEditFormProps = {
     isPrivate: boolean
-    publicationDate: number
+    publicationDate: Date
     description: string
     onClose: () => void
     onUpdate: (updates: PostUpdate) => void
 }
 
-const PostEditForm: React.FC<PostEditFormProps> = ({isPrivate, publicationDate, description, onClose, onUpdate}) => {
+
+type FormValues = {
+    publicationDate: Date,
+    description: string
+    private: boolean
+}
+const EditForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const {t} = useTranslation()
-    const [lockPost, setLockPost] = useState<boolean>(isPrivate)
-    const formik = useFormik({
-        initialValues: {
-            private: isPrivate,
-            publicationDate: new Date(publicationDate),
-            description,
-        },
-        onSubmit: values => {
-            onUpdate(values)
-        },
-    })
 
     return (
-        <form onSubmit={formik.handleSubmit}>
+        <Form>
             <div className="flex flex-row justify-end items-center">
                 <div className="mx-2">
                     <span className="mx-2 text-xs">{t("published_at")} </span>
                     <input
                         type="time" name="publication-time"
-                        defaultValue={format(formik.values.publicationDate, "HH:mm")}
+                        defaultValue={format(values.publicationDate, "HH:mm")}
                         onChange={(e) => {
                             const val = e.target.valueAsDate
                             if (val) {
-                                formik.values.publicationDate.setHours(val.getHours())
-                                formik.values.publicationDate.setMinutes(val.getMinutes())
+                                values.publicationDate.setHours(val.getHours())
+                                values.publicationDate.setMinutes(val.getMinutes())
                             }
                         }}
                     />
                     <input
                         type="date" name="publication-date"
-                        defaultValue={format(formik.values.publicationDate, "yyyy-MM-dd")}
+                        defaultValue={format(values.publicationDate, "yyyy-MM-dd")}
                         onChange={(e) => {
                             const val = e.target.valueAsDate
                             if (val) {
-                                formik.values.publicationDate.setFullYear(val.getFullYear())
-                                formik.values.publicationDate.setMonth(val.getMonth())
-                                formik.values.publicationDate.setDate(val.getDate())
+                                values.publicationDate.setFullYear(val.getFullYear())
+                                values.publicationDate.setMonth(val.getMonth())
+                                values.publicationDate.setDate(val.getDate())
                             }
                         }}
                     />
                 </div>
 
-                <div className="flex">
-                    {lockPost
-                        ? <LockOutlined onClick={() => setLockPost(false)}/>
-                        : <UnlockOutlined onClick={() => setLockPost(true)}/>
+                <div>
+                    {values.private ?
+                        <IconFA name="fa-lock" onClick={() => setFieldValue("private",false)}/> :
+                        <IconFA name="fa-lock-open" onClick={() => setFieldValue("private", true)}/>
                     }
-
-                    <input
-                        className="hidden"
-                        name="private"
-                        type="checkbox"
-                        onChange={formik.handleChange}
-                        checked={lockPost}
-                    />
                 </div>
             </div>
             <div>
-                <textarea
+                <Field
+                    type="textarea"
                     name="description"
-                    className="w-full resize-none"
-                    autoFocus
-                    onChange={formik.handleChange}
-                    value={formik.values.description}
+                    placeholder="What's on your mind ?"
+                    className="text-gray-800 w-full resize-none"
                 />
+
                 {/*<Embed embed={po}/>*/}
             </div>
             <div className="text-right">
@@ -88,13 +75,37 @@ const PostEditForm: React.FC<PostEditFormProps> = ({isPrivate, publicationDate, 
                 </button>
                 <button
                     className="px-2 py-1 mr-3 rounded bg-red-500 text-white hover:bg-red-700" type="button"
-                    onClick={onClose}
+                    onClick={() => console.log("exit")}
                 >
                     {t("cancel")}
                 </button>
             </div>
-        </form>
+        </Form>
     )
 }
+
+const PostEditForm = withFormik<PostEditFormProps, FormValues>({
+    mapPropsToValues: (props) => {
+        return {
+            publicationDate: props.publicationDate,
+            description: props.description,
+            private: props.isPrivate
+        }
+    },
+
+    validate: (values: FormValues) => {
+        const errors: FormikErrors<any> = {}
+        if (!values.description.length) {
+            errors.description = "Required"
+        }
+        return errors
+    },
+
+
+    handleSubmit: async (values, {props, resetForm}) => {
+        console.log("submit ")
+
+    },
+})(EditForm)
 
 export default PostEditForm

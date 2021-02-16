@@ -3,7 +3,7 @@ import React from "react"
 type TagProps = {
     className?: string
     selected: boolean
-    onClick: () => void
+    onClick?: () => void
 }
 
 const Tag: React.FC<TagProps> = ({children, className, selected, onClick}) => {

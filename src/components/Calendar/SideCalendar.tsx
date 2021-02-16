@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
 import {useRecoilState} from "recoil/dist"
@@ -67,7 +67,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     }
                     <hr className="my-1"/>
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
-                    <FeedFilter onChange={() => null} />
+                    <FeedFilter />
                     <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Types :</h3>
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (

@@ -6,6 +6,7 @@ import {connect, isLoggedIn} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {LocationState} from "../../data/request.type"
+import {Input} from "antd";
 
 
 const initialValues: LoginFormInputs = {id: "", password: ""}
@@ -60,28 +61,29 @@ const Login: React.FC = () => {
     return (
         <div className="h-full flex flex-col justify-end items-center overflow-y-auto">
             <div className="flex-grow flex items-center">
-                <div className="bg-white rounded-b shadow-lg p-4 flex flex-col">
+                <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col">
                     {isLoggedIn() && <Redirect to="/"/>}
                     {error &&
                     <div className="text-center">
                         <h6 className="text-red-600">{error}</h6>
                     </div>
                     }
-                    <form className="flex justify-center flex-col" onSubmit={formik.handleSubmit}>
-                        <input
-                            id="id" name="id" type="text" onChange={formik.handleChange}
+                    <form className="flex flex-col justify-center " onSubmit={formik.handleSubmit}>
+                        <Input
+                            name="id" type="text" onChange={formik.handleChange}
                             required
                             placeholder={t("id")}
                             value={formik.values.id}
-                            className="text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
                         />
-                        <input
+                        <Input
                             id="password" name="password" type="password" onChange={formik.handleChange}
                             required
                             placeholder={t("password")}
                             value={formik.values.password}
-                            className="text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
                         />
+
                         <button
                             type="submit"
                             disabled={loading}

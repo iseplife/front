@@ -49,7 +49,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                 {
                     ...p,
                     description: postUpdate.description,
-                    publicationDate: postUpdate.publicationDate.getTime(),
+                    publicationDate: postUpdate.publicationDate,
                     private: postUpdate.private
                 }
                 : p
@@ -62,7 +62,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
     return (
         <div className={`${className} max-w-4xl`} style={style}>
-            <Divider className="font-dinotcb text-gray-500 text-lg" orientation="left">Publications</Divider>
+            <Divider className="font-dinotcb text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
                 <PostForm feedId={id} onPost={post => setPosts(prevPosts => [post, ...prevPosts])}/>
             )}

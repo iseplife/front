@@ -12,7 +12,7 @@ const CardTextSkeleton: React.FC<CardTextSkeletonProps> = ({loading, number, cla
         const cardTextSkeletonArray = []
         for (let i = 0; i < number; i++) {
             cardTextSkeletonArray.push(
-                <Card key={i} className={className}>
+                <Card key={i} className={`${className} shadow rounded-lg bg-white `}>
                     <Skeleton
                         loading={loading}
                         avatar

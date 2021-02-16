@@ -9,8 +9,8 @@ import {Student} from "../../../data/student/types"
 import Loading from "../../../components/Common/Loading"
 import Error from "../../../components/Common/Error"
 import StudentSettings from "../../../components/Student/StudentSettings"
-import {Avatar} from "antd";
-import {UserOutlined} from "@ant-design/icons";
+import {Avatar} from "antd"
+import {UserOutlined} from "@ant-design/icons"
 
 const Setting: React.FC = () => {
     const {t} = useTranslation("setting")
@@ -27,7 +27,7 @@ const Setting: React.FC = () => {
 
     return (
         <div className="container mx-auto h-full flex flex-col">
-            <div className="flex bg-white rounded-lg p-5 m-5 h-32 shadow">
+            <div className="flex bg-white text-gray-700 rounded-lg p-5 m-5 h-32 shadow">
                 <div>
                     <Avatar
                         src={mediaPath(user.picture, AvatarSizes.DEFAULT)} icon={<UserOutlined/>}
@@ -36,7 +36,7 @@ const Setting: React.FC = () => {
                     />
                 </div>
                 <div className="flex flex-col font-dinotcb flex-grow min-w-0">
-                    <h3 className="text-gray-800 text-2xl truncate">{user.firstName + " " + user.lastName}</h3>
+                    <h3 className="text-2xl truncate">{user.firstName + " " + user.lastName}</h3>
                     <p className="-mt-4">Promo {user.promo} - n°{user.id}</p>
                 </div>
                 <div className="font-dinot text-xs hidden md:block">

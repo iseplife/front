@@ -19,7 +19,7 @@ export type FormValues = {
     linkedClub?: number
     embed?: EmbedCreation
 }
-const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldValue, setValues, values, errors, setFieldError}) => {
+const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const [fileStore, setFileStore] = useState<FileStore>([])
 
     const handleFile = useCallback((type: EmbedEnumType) => (file: File, files: File[]) => {
@@ -85,7 +85,10 @@ const InnerForm: React.FC<FormikProps<FormValues>> = ({isSubmitting, setFieldVal
                         </div>
                     </div>
                     <div className="flex-1 flex justify-end items-center">
-                        <AvatarPicker callback={(id) => setValues({...values, linkedClub: id})} className="mr-3 rounded hover:bg-gray-100"/>
+                        <AvatarPicker
+                            callback={(id) => setValues({...values, linkedClub: id})}
+                            className="mr-3 text-gray-700 rounded hover:bg-gray-100"
+                        />
                         <Divider type="vertical"/>
                     </div>
                     <div className="flex items-center">

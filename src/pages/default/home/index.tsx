@@ -14,14 +14,14 @@ const Home: React.FC = () => {
     return (
         <div className="mt-5 px-3 flex justify-center flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4">
-                <div className="flex p-1 mb-5 font-dinot">
+                <div className="flex p-1 mb-5 font-dinot items-center ">
                     <Avatar
                         icon={<UserOutlined/>}
                         src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}
-                        size="default"
+                        size="large"
                     />
                     <div >
-                        <h3 className="mx-2 mb-0 text-lg text-gray-800">{user.firstName + " " + user.lastName}</h3>
+                        <h3 className="font-dinotcb mx-2 mb-0 text-2xl text-gray-700">{user.firstName + " " + user.lastName}</h3>
                         <h6 className="mx-2 -mt-1 uppercase text-sm font-bold text-gray-600">{`Promo ${user.promo}`}</h6>
                     </div>
                 </div>

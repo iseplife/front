@@ -23,6 +23,7 @@ import {
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {IconFA} from "../Common/IconFA";
 
 const {Option} = Select
 
@@ -183,7 +184,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
             {loading ?
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col" onSubmit={formik.handleSubmit}>
-
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
                         <div className="flex items-center text-red-600 font-bold">
@@ -200,13 +200,11 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             onChange={(val) => formik.setFieldValue("id", val)}
                         />
                     </div>
-                    {student &&
-                    <Link to="/admin/user">
-                        <div className="text-right absolute right-0 top-0 w-16">
-                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
-                        </div>
-                    </Link>
-                    }
+                    {student && (
+                        <Link to="/admin/user" className="absolute -right-3 -top-3">
+                            <IconFA name="fa-times" size="sm"/>
+                        </Link>
+                    )}
 
                     <ImagePicker
                         onChange={handleImage}
@@ -302,18 +300,17 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     <div className="self-end flex flex-wrap justify-around w-full">
                         <Button
                             htmlType="submit"
-                            type="primary"
-                            className="mt-5"
+                            className="mt-5 text-white rounded border-green-500 bg-green-500"
                             icon={<SaveOutlined/>}
                         >
                             Enregistrer
                         </Button>
                         {student &&
                         <>
-                            <Button type="primary" className="mt-5" icon={<AuditOutlined/>} onClick={archive}>
+                            <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<AuditOutlined/>} onClick={archive}>
                                 {student.archived ? "Désarchiver" : "Archiver"}
                             </Button>
-                            <Button className="mt-5" icon={<DeleteOutlined/>} onClick={remove} danger>
+                            <Button className="mt-5 rounded" icon={<DeleteOutlined/>} onClick={remove} danger>
                                 Supprimer
                             </Button>
                         </>
