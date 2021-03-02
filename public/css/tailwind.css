@@ -24,6 +24,29 @@
 }
 
 /********/
+.rbc-calendar > div {
+    border-radius: 0.5rem !important;
+}
+
+.rbc-event {
+    color: #1F2937 !important;
+    padding: 0.1rem 0.5rem 0.1rem 10px !important;
+    background: none !important;
+    position: relative;
+}
+
+.rbc-event:first-child::before {
+    display: inline-block;
+    content: "";
+    width: 3px;
+    height: 20px;
+    background-color: inherit;
+    position: absolute;
+    left: 2px;
+    border-color: inherit;
+    border-radius: 0.25rem;
+    border-width: 2px;
+}
 
 .side-calendar {
     position: sticky;
@@ -34,6 +57,7 @@
 abbr[title] {
     text-decoration: none;
 }
+
 
 /********/
 
@@ -86,5 +110,4 @@ abbr[title] {
 .rounded-scroller .ant-select-selector {
     border-radius: 9999px !important;
 }
-
 /********/

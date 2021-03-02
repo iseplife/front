@@ -5,14 +5,15 @@ import EventCreateForm from "./form/EventCreateForm"
 
 type EventModalFormProps = {
     onSubmit: () => void
+    className?: string
 }
-const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
+const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit, className = ""}) => {
     const {t} = useTranslation("event")
     const [open, setOpen] = useState<boolean>(false)
     return (
         <>
             <Button
-                className="shadow-sm rounded-full px-3 items-end bg-indigo-200 text-indigo-400 font-bold"
+                className={`shadow-md rounded-full px-3 h-auto bg-indigo-200 text-indigo-400 text-md font-bold ${className}`}
                 style={{width: "max-content"}}
                 onClick={() => setOpen(true)}
             >

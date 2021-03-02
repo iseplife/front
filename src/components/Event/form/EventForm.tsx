@@ -55,7 +55,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
             </div>
             <div className="flex flex-wrap justify-between items-end">
-                <div className="lg:w-3/5 w-full">
+                <div className="lg:w-1/2 w-full">
                     <label className="font-dinotcb">{t("form.label.name")}*</label>
                     <Input
                         required
@@ -68,7 +68,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
-                <div className="lg:w-2/5 w-full">
+                <div className="lg:w-1/2 w-full">
                     <label className="font-dinotcb">Dates*</label>
                     <RangePicker
                         className="ml-4"

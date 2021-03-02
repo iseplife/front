@@ -5,7 +5,6 @@ import {DeleteOutlined} from "@ant-design/icons"
 import {EmbedEnumType} from "../../../data/post/types"
 import ImageForm from "./ImageForm"
 import PollForm from "./PollForm"
-import {Modal} from "antd"
 
 export type FileStore = {
     file: File,
