@@ -10,7 +10,7 @@ type ClubCardProps = {
 
 const ClubCard: React.FC<ClubCardProps> = ({club}) => (
     <div className="my-2 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6">
-        <div className="mx-1 rounded-lg shadow-md hover:shadow-xl">
+        <div className="mx-1 bg-white rounded-lg shadow-md hover:shadow-xl">
             <div className="h-48">
                 <Link to={`/club/${club.id}`}>
                     <div

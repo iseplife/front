@@ -18,11 +18,8 @@ import {ClubActionType} from "../../../context/club/action"
 
 const Club: React.FC = () => {
     const {id} = useParams()
-
     const history = useHistory()
     const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
-
-
 
     /**
      * Club initialisation on mounting
