@@ -1,11 +1,7 @@
 import React, {useMemo, useState} from "react"
 import {GroupPreview} from "../../data/group/types"
 import {Link} from "react-router-dom"
-import {Avatar} from "antd";
-import {UserOutlined} from "@ant-design/icons";
-import {mediaPath} from "../../util";
-import {AvatarSizes} from "../../constants/MediaSizes";
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next"
 
 const GROUP_PREVIEW_COUNT = 15
 

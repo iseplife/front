@@ -23,6 +23,7 @@
     ],
     "rules": {
         "no-var": "warn",
+        "@typescript-eslint/ban-ts-comment": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": [
             "warn",
@@ -30,6 +31,7 @@
                 "additionalHooks": "useRecoilCallback"
             }
         ],
+        "react/no-unescaped-entities": "off",
         "react/prop-types": "off",
         "indent": [
             "error", 4, {"SwitchCase": 1}

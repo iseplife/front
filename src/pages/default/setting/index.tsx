@@ -14,7 +14,7 @@ import {UserOutlined} from "@ant-design/icons"
 
 const Setting: React.FC = () => {
     const {t} = useTranslation("setting")
-    const [user, lastConnection] = useSelector((state: AppState) => [state.user, state.payload.lastConnection])
+    const {user, lastConnection} = useSelector((state: AppState) => ({user: state.user, lastConnection: state.payload.lastConnection}))
     const [loading, setLoading] = useState<boolean>(false)
     const [student, setStudent] = useState<Student>()
 

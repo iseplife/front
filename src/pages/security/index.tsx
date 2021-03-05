@@ -6,7 +6,7 @@ import {connect, isLoggedIn} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {LocationState} from "../../data/request.type"
-import {Input} from "antd";
+import {Input} from "antd"
 
 
 const initialValues: LoginFormInputs = {id: "", password: ""}

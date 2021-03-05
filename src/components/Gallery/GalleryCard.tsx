@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import {IconFA} from "../Common/IconFA"
 import {mediaPath} from "../../util"
 import {GallerySizes} from "../../constants/MediaSizes"
-import SafeImage from "../Common/SafeImage";
+import SafeImage from "../Common/SafeImage"
 
 const PREVIEW_GALLERY_COUNT = 5
 

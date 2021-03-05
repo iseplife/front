@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from "react"
+import React, {useMemo} from "react"
 import {ClubMember, ClubRole} from "../../data/club/types"
 import {Avatar, Tooltip} from "antd"
 import {useHistory} from "react-router-dom"

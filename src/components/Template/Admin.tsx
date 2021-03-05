@@ -27,7 +27,7 @@ const AdminTemplate: React.FC = () => {
                         <Route path="/admin/group" exact component={GroupPanel}/>
                         <Route path="/admin/survey" exact component={SurveyPanel}/>
                         <Route path="/admin" exact component={Dashboard}/>
-                        <Route path="*" componen t={NotFound}/>
+                        <Route path="*" component={NotFound}/>
                     </Switch>
                 </div>
             </main>

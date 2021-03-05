@@ -1,16 +1,10 @@
 import React from "react"
 import {withRouter, RouteComponentProps} from "react-router"
 import axios, {AxiosError, AxiosResponse} from "axios"
-import {removeTokens, setTokens} from "../../data/security"
+import {refresh, removeTokens, setTokens} from "../../data/security"
 import {message} from "antd"
 import {WithTranslation, withTranslation} from "react-i18next"
 import {apiClient} from "../../index"
-
-const errorMessages = [
-    "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupent 👊 !",
-    "Désolé, nous ne sommes pas disponible pour le moment ! 🙀",
-    "Revenez d'ici 5 min, il est possible que nous soyons en train de faire de la maintenance ! 🔧",
-]
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
@@ -62,22 +56,38 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
-        console.log(error)
         if(axios.isCancel(error)){
             console.log("Request canceled", error.message)
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             return new Promise(() => {})
         }
 
+        const originalRequest = error.config
         if (error.response) {
             switch (error.response.status) {
                 case 404:
                     props.history.push("/404")
                     break
                 case 403:
-                    removeTokens()
-                    props.history.push("/login")
-                    message.error("Vous avez été déconnecté !")
+                    // @ts-ignore
+                    if(originalRequest.headers["x-refresh-token"] && !error.config._retry) {
+
+                        // @ts-ignore
+                        error.config._retry = true
+                        return refresh({
+                            token: originalRequest.headers["authorization"],
+                            refreshToken: originalRequest.headers["x-refresh-token"]
+                        }).then(res => {
+                            setTokens(res.data)
+
+                            return axios(originalRequest)
+                        })
+
+                    }else {
+                        removeTokens()
+                        props.history.push("/login")
+                        message.error("Vous avez été déconnecté !")
+                    }
                     break
                 case 500:
                 case 400:
@@ -88,8 +98,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     message.error("Serveur indisponible")
                     break
                 default:
-                    throw error
-                    break
+                    return Promise.reject(error)
             }
         }
         return <p>Dommage</p>

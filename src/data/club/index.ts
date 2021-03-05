@@ -3,7 +3,7 @@ import {Club, ClubAdminForm, ClubForm, ClubMember, ClubMemberForm, ClubPreview} 
 import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
 import {GalleryPreview} from "../gallery/types"
-import {apiClient} from "../../index";
+import {apiClient} from "../../index"
 
 
 export const getAllClubs = (): AxiosPromise<ClubPreview[]> => apiClient.get("/club")

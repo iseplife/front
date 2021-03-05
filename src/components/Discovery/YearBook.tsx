@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState} from "react"
+import React, {useCallback, useEffect, useReducer, useRef, useState} from "react"
 import InfiniteScroller, {InfiniteScrollerRef, loaderCallback} from "../Common/InfiniteScroller"
 import {searchStudents} from "../../data/student"
 import {useTranslation} from "react-i18next"

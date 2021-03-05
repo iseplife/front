@@ -12,7 +12,7 @@ import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import {StudentPreview} from "../../data/student/types"
 import {format} from "date-fns"
-import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, AuditOutlined} from "@ant-design/icons"
+import {DeleteOutlined, SaveOutlined, AuditOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 

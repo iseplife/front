@@ -68,10 +68,10 @@ export const filteredEventsState = selector<EventPreview[]>({
 
         return events.filter(e =>
             (e.published || !filter.publishedOnly) &&
-            filter.adminVision || (
+            (filter.adminVision || (
                 filter.types[e.type] && // vv broke here vv
                 ((e.targets.length === 0 ) || (e.targets.some(t => filter.feeds[t])))
-            ))
+            )))
     }
 })
 

@@ -29,7 +29,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         setPosts(posts => [...posts, ...res.data.content])
         setFetching(false)
 
-        if(count == 0 && res.data.content.length == 0)
+        if(count === 0 && res.data.content.length === 0)
             setEmpty(true)
 
         return res.data.last

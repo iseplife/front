@@ -21,8 +21,11 @@ const tableConfig = [
     {title: "", className: "w-24"}
 ]
 
+interface ParamTypes {
+    id?: string
+}
 const StudentsDashboard: React.FC = () => {
-    const {id} = useParams()
+    const {id} = useParams<ParamTypes>()
     const [page, setPage] = useState<PageStatus>({current: 0})
     const [students, setStudents] = useState<StudentPreviewAdmin[]>([])
     const [roles, setRoles] = useState<Role[]>()

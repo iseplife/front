@@ -1,7 +1,7 @@
 import {Role, Roles, Token, TokenPayload, TokenSet} from "./types"
-import axios, {AxiosPromise} from "axios"
+import  {AxiosPromise} from "axios"
 import {getCookie, removeCookie, setCookie} from "./cookie"
-import {apiClient} from "../../index";
+import {apiClient} from "../../index"
 
 export const connect = (username: string, password: string): Promise<TokenPayload> => {
     logout()
@@ -14,6 +14,8 @@ export const connect = (username: string, password: string): Promise<TokenPayloa
             return getUser()
         })
 }
+
+export const refresh = (tokenSet: TokenSet): AxiosPromise<TokenSet> => apiClient.post("/auth/refresh", tokenSet)
 
 export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
 

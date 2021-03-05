@@ -2,11 +2,10 @@ import React, {useLayoutEffect, useState} from "react"
 import {
     Redirect,
     Route,
-    Switch, useHistory,
+    Switch,
 } from "react-router-dom"
 import Interceptor from "./Interceptor"
 import {getLoggedUser} from "../../data/student"
-import Loading from "../Common/Loading"
 import {Provider} from "react-redux"
 import {getUser, isAdmin} from "../../data/security"
 
@@ -15,11 +14,11 @@ import {createStore} from "redux"
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 import {getUserFeed} from "../../data/feed"
-import LoadingPage from "../../pages/LoadingPage";
+import LoadingPage from "../../pages/LoadingPage"
 
 
 const Template: React.FC = () => {
-    const [store, setStore] = useState()
+    const [store, setStore] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
 
     useLayoutEffect(() => {

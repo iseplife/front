@@ -12,7 +12,6 @@ import HelperIcon from "../Common/HelperIcon"
 import {createGroup, deleteGroup, getGroupAdmin, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
 import {StudentPreview} from "../../data/student/types"
 import {
-    CloseCircleOutlined,
     AuditOutlined,
     DeleteOutlined,
     SaveOutlined

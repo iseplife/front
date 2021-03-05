@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useCallback, useMemo, useState} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import {Select} from "antd"
 import {useSelector} from "react-redux"
 import {AppState} from "../../context/action"

@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import ImagePicker from "../../Common/ImagePicker"
 import {uploadCover} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
-import {mediaPath} from "../../../util";
+import {mediaPath} from "../../../util"
 
 const ClubCover: React.FC = () => {
     const {t} = useTranslation()

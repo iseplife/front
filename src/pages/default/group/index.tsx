@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams} from "react-router-dom"
 import {Group as GroupType} from "../../../data/group/types"
 import {getGroup} from "../../../data/group"
@@ -10,14 +10,18 @@ import {toggleSubscription} from "../../../data/feed"
 import {IconFA} from "../../../components/Common/IconFA"
 import {useTranslation} from "react-i18next"
 
+interface ParamTypes {
+    id?: string
+}
 const Group: React.FC = () => {
     const {t} = useTranslation("group")
-    const {id} = useParams()
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        if (!isNaN(id)) {
+        if (!isNaN(+id)) {
             setLoading(true)
             getGroup(id).then(res => {
                 setGroup(res.data)

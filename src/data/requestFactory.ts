@@ -15,9 +15,9 @@ export function initializeAPIClient(): AxiosInstance {
         baseURL: apiURI,
         headers: {
             common: {
-                ["Authorization"]: `Bearer ${token}`,
-                ["X-Refresh-Token"]: refreshToken,
-                ["Access-Control-Max-Age"]: "3600"
+                "Authorization": `Bearer ${token}`,
+                "X-Refresh-Token": refreshToken,
+                "Access-Control-Max-Age": "3600"
             }
         },
         transformResponse: (response, req) => req["content-type"] === "application/json" ? JSON.parse(response, JSONDateParser): response

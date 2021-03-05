@@ -28,9 +28,11 @@ import {IconFA} from "../../../components/Common/IconFA"
 import {toggleSubscription} from "../../../data/feed"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 
-
+interface ParamTypes {
+    id?: string
+}
 const Event: React.FC = () => {
-    const {id} = useParams()
+    const {id} = useParams<ParamTypes>()
     const {t} = useTranslation("event")
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
@@ -112,7 +114,7 @@ const Event: React.FC = () => {
                 <div className="mx-auto p-3 w-full">
                     <div className="flex md:flex-row flex-col ">
                         <div className="md:w-1/6 w-full md:order-1 order-3">
-                            {subevents.length != 0 &&
+                            {subevents.length !== 0 &&
                             <div className="mt-5 text-center">
                                 <div
                                     className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"

@@ -2,7 +2,7 @@ import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {IconFA} from "../Common/IconFA"
 import {SelectablePhoto} from "../../pages/default/gallery"
-import SafeImage from "../Common/SafeImage";
+import SafeImage from "../Common/SafeImage"
 
 const imgStyle = {
     transition: "transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s"

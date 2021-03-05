@@ -7,7 +7,6 @@ import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
 import CommentList from "../Comment/CommentList"
 import {
-    LockOutlined,
     HeartFilled,
     HeartOutlined,
     DeleteOutlined,
@@ -17,7 +16,7 @@ import {
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import PostEditForm from "./PostEditForm"
-import {IconFA} from "../Common/IconFA";
+import {IconFA} from "../Common/IconFA"
 
 type PostProps = {
     data: PostType

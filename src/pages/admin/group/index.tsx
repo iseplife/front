@@ -23,9 +23,11 @@ const tableConfig: ColumnType<GroupPreview>[] = [
     )
 ]
 
-
+interface ParamTypes {
+    id?: string
+}
 const GroupPanel: React.FC = () => {
-    const {id} = useParams()
+    const {id} = useParams<ParamTypes>()
     const [groups, setGroups] = useState<GroupPreview[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<PageStatus>({current: 0})

@@ -40,10 +40,14 @@ const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoPr
     })
 }
 
+interface ParamTypes {
+    id?: string
+    picture?: string
+}
 const Gallery: React.FC = () => {
     const {t} = useTranslation(["gallery", "common"])
     const history = useHistory()
-    const {id, picture} = useParams()
+    const {id, picture} = useParams<ParamTypes>()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -64,7 +68,7 @@ const Gallery: React.FC = () => {
                         .then(photos => {
                             setPhotos(photos)
                             if (picture) {
-                                setCurrentPhoto(res.data.images.find(img => img.id === picture))
+                                setCurrentPhoto(res.data.images.find(img => img.id === parseInt(picture)))
                                 setOpenLigthbox(true)
                             }
                         })

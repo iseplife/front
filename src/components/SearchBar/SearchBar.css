@@ -6,9 +6,6 @@
     border-radius: 9999px !important;
     border: none !important;
     color: white !important;
-    --bg-opacity: 1 !important;
-    background-color: #7f9cf5 !important;
-    background-color: rgba(127, 156, 245, var(--bg-opacity)) !important;
 }
 
 .pills:checked + .label-pills {

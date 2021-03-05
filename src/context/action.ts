@@ -30,6 +30,6 @@ export type AppState =  {
     feeds: Record<number, Feed>
 }
 
-export type AppAction = setStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction;
+export type AppAction = setStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction
 
 

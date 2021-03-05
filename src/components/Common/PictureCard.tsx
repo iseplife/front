@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {DeleteOutlined} from "@ant-design/icons"
 import ImageOverlay from "./ImageOverlay"
-import {IconFA} from "./IconFA";
+import {IconFA} from "./IconFA"
 
 type PictureCardProps = {
     index: number
@@ -11,7 +11,7 @@ type PictureCardProps = {
     toggleNsfw: (id: number) => void
 }
 const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDelete, className, toggleNsfw}) => {
-    const [image, setImage] = useState()
+    const [image, setImage] = useState<string>()
 
     useEffect(() => {
         const reader = new FileReader()

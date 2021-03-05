@@ -10,8 +10,8 @@ type Loader = {
     fetch: boolean
 }
 
-export type loaderCallback = (count: number, ...param: any) => Promise<boolean>;
-export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
+export type loaderCallback = (count: number, ...param: any) => Promise<boolean>
+export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback]
 
 export type InfiniteScrollerRef = {
     resetData: () => void

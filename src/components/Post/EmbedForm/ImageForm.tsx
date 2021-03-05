@@ -18,7 +18,7 @@ const ImageForm: React.FC<ImageFormProps> = ({files, setFiles}) => {
     }, [setFiles, files.length])
 
     const toggleNSFW = (id: number) => {
-        setFiles(files.map((file, i) => id == i ? {...file, nsfw: !file.nsfw} : file))
+        setFiles(files.map((file, i) => id === i ? {...file, nsfw: !file.nsfw} : file))
     }
 
 

@@ -16,14 +16,13 @@ import ImagePicker from "../Common/ImagePicker"
 import {Role} from "../../data/security/types"
 import {
     LockOutlined,
-    CloseCircleOutlined,
     SaveOutlined,
     AuditOutlined,
     DeleteOutlined, UserOutlined
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {IconFA} from "../Common/IconFA";
+import {IconFA} from "../Common/IconFA"
 
 const {Option} = Select
 

@@ -14,8 +14,8 @@ import {
     HeartOutlined,
     HeartFilled
 } from "@ant-design/icons"
-import {mediaPath} from "../../util";
-import {AvatarSizes} from "../../constants/MediaSizes";
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 
 interface CommentProps {

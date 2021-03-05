@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next"
 import {EmbedGallery as EmbedGalleryType} from "../../../data/post/types"
 import GalleryLigthbox from "../../Gallery/GalleryLigthbox/GalleryLigthbox"
 import {Image} from "../../../data/media/types"
-import SafeImage from "../../Common/SafeImage";
+import SafeImage from "../../Common/SafeImage"
 
 const PREVIEW_GALLERY_COUNT = 5
 

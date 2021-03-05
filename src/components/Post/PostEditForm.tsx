@@ -1,4 +1,4 @@
-import {EmbedCreation, EmbedEnumType, EmbedPollCreation, PostCreation, PostUpdate} from "../../data/post/types"
+import {PostUpdate} from "../../data/post/types"
 import React from "react"
 import {useTranslation} from "react-i18next"
 import {Field, Form, FormikErrors, FormikProps,  withFormik} from "formik"

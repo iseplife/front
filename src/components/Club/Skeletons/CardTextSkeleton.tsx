@@ -2,9 +2,9 @@ import React, {useMemo} from "react"
 import {Card, Skeleton} from "antd"
 
 interface CardTextSkeletonProps {
-    loading: boolean;
-    number: number;
-    className: string;
+    loading: boolean
+    number: number
+    className: string
 }
 
 const CardTextSkeleton: React.FC<CardTextSkeletonProps> = ({loading, number, className}) => {

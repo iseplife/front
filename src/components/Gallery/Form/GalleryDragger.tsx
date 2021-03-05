@@ -67,7 +67,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
     }, [])
 
     const toggleNSFW = (id: number) => {
-        setExtendedImages(extendedImages.map((img, i) => id == i ? {...img, nsfw: !img.nsfw} : img))
+        setExtendedImages(extendedImages.map((img, i) => id === i ? {...img, nsfw: !img.nsfw} : img))
     }
 
     const uploadImages = useCallback(() => {

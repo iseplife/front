@@ -3,7 +3,7 @@ import {EventForm as EventFormType} from "../../../data/event/types"
 import {createEvent} from "../../../data/event"
 import {message} from "antd"
 import EventForm from "./EventForm"
-import EventType from "../../../constants/EventType";
+import EventType from "../../../constants/EventType"
 
 
 const DEFAULT_EVENT: EventFormType = {

@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from "react"
+import React, {useEffect, useMemo, useReducer} from "react"
 import {useParams} from "react-router"
 import {getClub, getClubMembers} from "../../../data/club"
 import {Button, message, Skeleton} from "antd"
@@ -16,8 +16,12 @@ import {clubContextReducer} from "../../../context/club/reducer"
 import {ClubContext, DEFAULT_STATE} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 
+interface ParamTypes {
+    id?: string
+}
 const Club: React.FC = () => {
-    const {id} = useParams()
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
     const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 

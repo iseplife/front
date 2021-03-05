@@ -45,7 +45,7 @@ export type Post = {
     nbLikes: number
     liked: boolean
     hasWriteAccess: boolean
-};
+}
 
 export type EmbedPoll = Poll & {
     embedType: EmbedEnumType.POLL
