@@ -4,6 +4,7 @@ import axios, {AxiosError, AxiosResponse} from "axios"
 import {removeTokens, setTokens} from "../../data/security"
 import {message} from "antd"
 import {WithTranslation, withTranslation} from "react-i18next"
+import {apiClient} from "../../index"
 
 const errorMessages = [
     "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupent 👊 !",
@@ -23,7 +24,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     intercept?: number;
 
     componentDidMount() {
-        this.intercept = axios.interceptors.response.use(
+        this.intercept = apiClient.interceptors.response.use(
             this.axiosResponseInterceptor,
             this.axiosErrorInterceptor,
         )
@@ -34,7 +35,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     componentWillUnmount() {
         if (this.intercept)
-            axios.interceptors.response.eject(this.intercept)
+            apiClient.interceptors.response.eject(this.intercept)
 
         window.removeEventListener("offline", this.handleOffline)
         window.removeEventListener("online", this.handleOnline)
@@ -49,18 +50,19 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosResponseInterceptor = (response: AxiosResponse) => {
-        // Do something with response data
         if (response.headers) {
-            const token = response.headers["Authorization"]
-            const refreshToken = response.headers["X-Refresh-Token"]
+            const token = response.headers["authorization"]
+            const refreshToken = response.headers["x-refresh-token"]
             if (token && refreshToken) {
                 setTokens({token, refreshToken})
             }
         }
+
         return response
     }
 
     axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
+        console.log(error)
         if(axios.isCancel(error)){
             console.log("Request canceled", error.message)
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -91,11 +93,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
             }
         }
         return <p>Dommage</p>
-    }
-
-    selectRandom(messages: string[]) {
-        const rnd = Math.round(Math.random() * (messages.length - 1))
-        return messages[rnd]
     }
 
     render() {

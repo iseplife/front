@@ -8,13 +8,13 @@ import {
     Switch,
     Redirect
 } from "react-router-dom"
-import {initializeAxios} from "./data/requestFactory"
+import {initializeAPIClient} from "./data/requestFactory"
 import Login from "./pages/security"
 import {isLoggedIn} from "./data/security"
 import Template from "./components/Template"
 import {RecoilRoot} from "recoil/dist"
 
-initializeAxios()
+export const apiClient = initializeAPIClient()
 
 const App: React.FC = () => (
     <RecoilRoot>

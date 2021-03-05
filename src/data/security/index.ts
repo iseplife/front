@@ -1,10 +1,11 @@
 import {Role, Roles, Token, TokenPayload, TokenSet} from "./types"
 import axios, {AxiosPromise} from "axios"
 import {getCookie, removeCookie, setCookie} from "./cookie"
+import {apiClient} from "../../index";
 
 export const connect = (username: string, password: string): Promise<TokenPayload> => {
     logout()
-    return axios
+    return apiClient
         .post("/auth", {
             username,
             password,
@@ -14,23 +15,23 @@ export const connect = (username: string, password: string): Promise<TokenPayloa
         })
 }
 
-export const getRoles = (): AxiosPromise<Role[]> => axios.get("auth/roles")
+export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
 
-export const setTokens = (tokenSet: TokenSet) => {
+export const setTokens = (tokenSet: TokenSet): void => {
     setCookie("token", tokenSet.token , {
         "max-age": 600      //10 min
     })
-    setCookie("refreshToken", tokenSet.refreshToken, {
+    setCookie("refresh-token", tokenSet.refreshToken, {
         "max-age": 604800  //7 days
     })
-    axios.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
-    axios.defaults.headers.common["X-Refresh-Token"] = tokenSet.refreshToken
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
+    apiClient.defaults.headers.common["X-Refresh-Token"] = tokenSet.refreshToken
 }
 export const removeTokens = (): void => {
     removeCookie("token")
-    removeCookie("refreshToken")
-    delete axios.defaults.headers.common["Authorization"]
-    delete axios.defaults.headers.common["X-Refresh-Token"]
+    removeCookie("refresh-token")
+    delete apiClient.defaults.headers.common["Authorization"]
+    delete apiClient.defaults.headers.common["X-Refresh-Token"]
 }
 
 export const getUser = (): TokenPayload => {
