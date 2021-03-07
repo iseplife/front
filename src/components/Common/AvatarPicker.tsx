@@ -1,8 +1,6 @@
-import React, {CSSProperties, useCallback, useEffect, useMemo, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {getAuthorsThumbnail} from "../../data/post"
 import {Avatar, Select} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
 import {Author} from "../../data/request.type"
 import Loading from "./Loading"
 import {UserOutlined} from "@ant-design/icons"
@@ -10,6 +8,7 @@ import {UserOutlined} from "@ant-design/icons"
 import "./AvatarPicker.css"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {AppContext} from "../../context/app/context"
 
 
 const {Option} = Select
@@ -25,7 +24,7 @@ interface AvatarPickerProps {
 }
 
 const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, compact, clubOnly, className, placeholder, style}) => {
-    const userThumb = useSelector((state: AppState) => state.user.picture)
+    const {state: {user: {picture}}} = useContext(AppContext)
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [loading, setLoading] = useState<boolean>(true)
     const [publishers, setPublishers] = useState<Author[]>([])
@@ -59,8 +58,8 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
             style={style}
         >
             {!clubOnly &&
-                <Option key={0} value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/>}>
-                    <Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/> moi
+                <Option key={0} value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(picture, AvatarSizes.THUMBNAIL)} size="small"/>}>
+                    <Avatar icon={<UserOutlined/>} src={mediaPath(picture, AvatarSizes.THUMBNAIL)} size="small"/> moi
                 </Option>
             }
             {loading ?

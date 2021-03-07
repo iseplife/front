@@ -7,11 +7,12 @@ const url = process.env.REACT_APP_API_URL || "localhost:8080"
 export const apiURI = `${process.env.REACT_APP_HTTP_PROTOCOL || "http"}://${url}`
 export const swURI = `${process.env.PUBLIC_URL || "ws"}://${url}`
 
+export let apiClient: AxiosInstance
 export function initializeAPIClient(): AxiosInstance {
     const token = getCookie("token")
     const refreshToken = getCookie("refresh-token")
 
-    return axios.create({
+    return apiClient = axios.create({
         baseURL: apiURI,
         headers: {
             common: {

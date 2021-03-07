@@ -2,7 +2,7 @@ import {EventPreview, Event, EventForm} from "./types"
 import {AxiosPromise} from "axios"
 import {GalleryPreview} from "../gallery/types"
 import {Page} from "../request.type"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const getEvent = (id: number): AxiosPromise<Event> => apiClient.get(`/event/${id}`)
 

@@ -1,7 +1,7 @@
 import {AxiosPromise} from "axios"
 import {Page} from "../request.type"
 import {Group, GroupAdmin, GroupForm, GroupMember, GroupPreview} from "./types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const getAllGroup = (page = 0): AxiosPromise<Page<GroupPreview>> =>
     apiClient.get("/group", {

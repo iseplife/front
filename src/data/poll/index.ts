@@ -1,6 +1,6 @@
 import {AxiosPromise} from "axios"
 import {Poll, PollChoice, PollCreation} from "./types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 
 export const createPoll = (form: PollCreation): AxiosPromise<Poll> => apiClient.post("/poll", form)

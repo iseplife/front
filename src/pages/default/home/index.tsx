@@ -1,16 +1,15 @@
-import React from "react"
+import React, {useContext} from "react"
 import Feed from "../../../components/Feed"
 import UserGroups from "../../../components/Group/UserGroups"
 import {Avatar,} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../../context/action"
 import {UserOutlined,} from "@ant-design/icons"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
+import {AppContext} from "../../../context/app/context"
 
 const Home: React.FC = () => {
-    const user = useSelector((state: AppState) => state.user)
+    const {state: {user}} = useContext(AppContext)
     return (
         <div className="mt-5 px-3 flex justify-center flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4">

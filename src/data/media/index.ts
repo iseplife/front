@@ -1,6 +1,6 @@
 import {AxiosPromise} from "axios"
 import {Media} from "./types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const createMedia = (file: File, club?: number, gallery = false, nsfw = false, progressListener?: (progressEvent: any) => void): AxiosPromise<Media> => {
     const fd = new FormData()

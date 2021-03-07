@@ -1,7 +1,7 @@
 import {AxiosPromise, CancelToken} from "axios"
 import {Page} from "../request.type"
 import {SearchItem} from "./types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const searchClub = (name: string, page: number): AxiosPromise<Page<SearchItem>> => apiClient.get("/search/club", {params: {name: name, page: page}})
 

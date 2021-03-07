@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from "react"
-import {useSelector} from "react-redux"
-import {AppState} from "../../../context/action"
+import React, {useContext, useEffect, useState} from "react"
 import {_format, mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {useTranslation} from "react-i18next"
@@ -11,10 +9,11 @@ import Error from "../../../components/Common/Error"
 import StudentSettings from "../../../components/Student/StudentSettings"
 import {Avatar} from "antd"
 import {UserOutlined} from "@ant-design/icons"
+import {AppContext} from "../../../context/app/context"
 
 const Setting: React.FC = () => {
     const {t} = useTranslation("setting")
-    const {user, lastConnection} = useSelector((state: AppState) => ({user: state.user, lastConnection: state.payload.lastConnection}))
+    const {state: {user, payload: {lastConnection}}} = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(false)
     const [student, setStudent] = useState<Student>()
 
@@ -52,7 +51,6 @@ const Setting: React.FC = () => {
                     ) : <Error/>
                 }
             </div>
-
         </div>
     )
 }

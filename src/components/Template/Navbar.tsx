@@ -1,10 +1,8 @@
-import React, {useMemo, useState} from "react"
+import React, {useContext, useMemo, useState} from "react"
 import {Avatar, Button, Drawer, Dropdown, Menu} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
-import {Student, StudentPreview} from "../../data/student/types"
+import {StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
@@ -20,6 +18,7 @@ import {
 } from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {AppContext} from "../../context/app/context"
 
 type IconButtonProps = {
     icon: React.ReactNode
@@ -34,7 +33,7 @@ const IconButton: React.FC<IconButtonProps> = ({icon}) => {
 }
 
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
-    const payload = useSelector((state: AppState) => state.payload)
+    const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
     return (
@@ -112,7 +111,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
     </Link>
 )
 const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
-    const payload = useSelector((state: AppState) => state.payload)
+    const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
     return (
@@ -157,7 +156,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
 
 
 const Navbar: React.FC = ({children}) => {
-    const user = useSelector((state: AppState) => state.user)
+    const {state: {user}} = useContext(AppContext)
     return (
         <>
             <Header user={user}/>

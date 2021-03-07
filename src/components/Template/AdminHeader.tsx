@@ -1,14 +1,13 @@
-import React, {useState} from "react"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
+import React, {useContext, useState} from "react"
 import {Avatar, Button} from "antd"
 import {Link} from "react-router-dom"
 import {ExportOutlined, UserOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {AppContext} from "../../context/app/context"
 
 const AdminHeader: React.FC = () => {
-    const user = useSelector((state: AppState) => state.user)
+    const {state: {user}} = useContext(AppContext)
     const [open, setOpen] = useState<boolean>(false)
 
     return (

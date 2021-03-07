@@ -1,7 +1,7 @@
 import React from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
-import {useRecoilState} from "recoil/dist"
+import {useRecoilState} from "recoil"
 import {filterState} from "../../pages/default/calendar"
 import { Checkbox, Switch} from "antd"
 import {isAdmin} from "../../data/security"
@@ -11,7 +11,7 @@ import FeedFilter from "../Feed/FeedFilter"
 type SideCalendarProps = {
     date: Date
     handleDate: (d: Date) => void
-};
+}
 const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     const {t, i18n} = useTranslation("event")
     const [filter, setFilter] = useRecoilState(filterState)

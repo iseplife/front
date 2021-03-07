@@ -9,7 +9,7 @@ import {
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const getLoggedUser = (): AxiosPromise<StudentPreview> => apiClient.get("/student/me")
 

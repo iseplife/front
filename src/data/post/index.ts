@@ -1,7 +1,7 @@
 import {AxiosPromise} from "axios"
 import {Post, PostCreation, PostUpdate} from "./types"
 import {Author} from "../request.type"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const createPost = (post: PostCreation): AxiosPromise<Post> =>  apiClient.post("/post", post)
 

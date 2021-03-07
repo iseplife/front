@@ -1,6 +1,6 @@
 import  {AxiosPromise} from "axios"
 import {Gallery, GalleryForm} from "./types"
-import {apiClient} from "../../index"
+import {apiClient} from "../http"
 
 export const getGallery = (id: string): AxiosPromise<Gallery> => apiClient.get(`/gallery/${id}`)
 
