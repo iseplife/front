@@ -31,7 +31,7 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
             <div className="w-4/5" style={{maxWidth: 1000}}>
                 <Input
                     placeholder={t("placeholder_search")}
-                    className="text-sm sm:text-lg rounded-full sm:w-full mx-auto sm:mx-0 px-3"
+                    className="border-none text-sm sm:text-lg shadow rounded-full sm:w-full mx-auto sm:mx-0 px-3"
                     onChange={value => onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value})}
                 />
             </div>
@@ -40,8 +40,8 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
                     defaultValue={[]}
                     mode="multiple"
                     bordered={false}
-                    className="w-48 mx-2 rounded"
-                    style={{borderBottom: "1px solid #d9d9d9"}}
+                    className="w-48 mx-2 text-gray-400"
+                    style={{borderBottom: "1px solid rgb(156, 163, 175)"}}
                     placeholder={t("promotions")}
                     onSelect={(promo: number) => onFilterUpdate({type: "ADD_PROMO", promo: +promo})}
                     onDeselect={(promo: number) => onFilterUpdate({type: "REMOVE_PROMO", promo: +promo})}

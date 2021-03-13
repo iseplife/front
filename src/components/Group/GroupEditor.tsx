@@ -215,27 +215,21 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     <div className="self-end flex flex-wrap justify-around w-full">
                         <Button
                             htmlType="submit"
-                            className="mt-5 text-white rounded bg-green-500"
-                            icon={<SaveOutlined/>}
+                            className="mt-5 text-white rounded border-green-500 bg-green-500"
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
-                        {(group && !group.locked) &&
-                        <>
-                            <Button
-                                className="mt-5 text-white rounded bg-yellow-500" icon={<AuditOutlined/>}
-                                onClick={archive}
-                            >
-                                {group.archived ? "Désarchiver" : "Archiver"}
-                            </Button>
-                            <Button
-                                className="mt-5 rounded" icon={<DeleteOutlined/>} onClick={remove}
-                                danger
-                            >
-                                Supprimer
-                            </Button>
-                        </>
-                        }
+                        {group && (
+                            <>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                    {group.archived ? "Désarchiver" : "Archiver"}
+                                </Button>
+                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                    Supprimer
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </form>
             }

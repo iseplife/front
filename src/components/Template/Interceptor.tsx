@@ -19,18 +19,7 @@ const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
 
     const handleOffline = () => message.error(t("offline"))
     const handleOnline = () => message.info(t("online"))
-    const isRefreshing = () => refreshing
-
-    const axiosRequestInterceptor = (request: AxiosRequestConfig) => {
-        if(isRefreshing() && request.url !== REFRESH_URL){
-            while (isRefreshing()) {
-                console.log("holding")
-            }
-            request.headers["X-Refresh-Token"] = getCookie("refresh-token")
-            request.headers["Authorization"] = getCookie("refresh-token")
-        }
-        return request
-    }
+    const axiosRequestInterceptor = (request: AxiosRequestConfig) => request
 
     const axiosResponseInterceptor = (response: AxiosResponse) => response
 
@@ -59,7 +48,6 @@ const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
                                 return apiClient(originalRequest)
                             }).finally(() => dispatch({type: AppActionType.SET_REFRESHING, refreshing: false}))
                     } else {
-                        console.log("cleaning tokens")
                         removeTokens()
                         history.push("/login")
 

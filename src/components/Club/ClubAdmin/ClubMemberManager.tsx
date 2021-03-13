@@ -15,7 +15,7 @@ const ClubMemberManager: React.FC= () => {
     }, [members])
 
     return (
-        <div className="flex m-2 rounded shadow bg-white p-3">
+        <div className="flex m-2 rounded-lg shadow bg-white p-3">
             <div className="md:w-1/2 w-full">
                 {selectedMember ?
                     <ClubMemberEditor member={selectedMember} onCancel={() => setSelectedMember(undefined)}/> :

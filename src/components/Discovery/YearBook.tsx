@@ -8,6 +8,7 @@ import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
 import {EntitySet} from "../../util"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
+import {IconFA} from "../Common/IconFA"
 
 export type StudentFilter = {
     promos: number[]
@@ -53,8 +54,7 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
             picture: r.thumbURL,
             promo: +r.description || -1
         })
-    }
-    )
+    })
 }
 
 const YearBook: React.FC = () => {
@@ -71,13 +71,13 @@ const YearBook: React.FC = () => {
     }, [scrollerRef])
 
     const filterFn = useCallback((s: StudentPreview) => (
-        (!filter.promos.length || filter.promos.includes(s.promo)) && (!filter.name || new RegExp(filter.name, "i").test(s.firstName+" "+s.lastName))
+        (!filter.promos.length || filter.promos.includes(s.promo)) && (!filter.name || new RegExp(filter.name, "i").test(s.firstName + " " + s.lastName))
     ), [filter.promos.length, filter.name])
-    
+
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
         const res = await searchStudents(page, filter.name, filter.promos.toString(), filter.atoz)
-        if(res.status === 200) {
+        if (res.status === 200) {
             const parsedResults = parseSearchResults(res.data.content)
 
             setStudents(stds => stds.addAll(parsedResults))
@@ -95,7 +95,7 @@ const YearBook: React.FC = () => {
     }, [filterFn])
 
     return (
-        <div className="container mx-auto text-center mt-10 mb-20">
+        <div className="container mx-auto text-center mt-10 mb-20" style={{minHeight: "calc(100vh - 8rem)"}}>
             <div className="font-bold text-indigo-400 py-3 text-4xl">
                 {t("yearbook_title")}
             </div>
@@ -107,19 +107,25 @@ const YearBook: React.FC = () => {
             {/* List of students */}
             <InfiniteScroller
                 ref={scrollerRef}
+                empty={filteredStudent.length == 0}
                 watch="DOWN"
                 callback={getNextStudents}
                 className="flex flex-wrap justify-start"
             >
-                {filteredStudent.map((s, i) =>
-                    <StudentCard
-                        key={i}
-                        id={s.id}
-                        picture={s.picture}
-                        promo={s.promo}
-                        fullname={s.firstName+ " " + s.lastName}
-                    />
-                )}
+                {filteredStudent.length == 0 ?
+                    <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
+                        <IconFA type="solid" name="fa-user-astronaut" size="8x" className="block"/>
+                        <span className="text-center mt-5">{t("no_student")}</span>
+                    </div> :
+                    filteredStudent.map((s, i) =>
+                        <StudentCard
+                            key={i}
+                            id={s.id}
+                            picture={s.picture}
+                            promo={s.promo}
+                            fullname={s.firstName + " " + s.lastName}
+                        />
+                    )}
             </InfiniteScroller>
         </div>
     )

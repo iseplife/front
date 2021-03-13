@@ -16,7 +16,6 @@ import ImagePicker from "../Common/ImagePicker"
 import {Role} from "../../data/security/types"
 import {
     LockOutlined,
-    SaveOutlined,
     AuditOutlined,
     DeleteOutlined, UserOutlined
 } from "@ant-design/icons"
@@ -300,20 +299,20 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         <Button
                             htmlType="submit"
                             className="mt-5 text-white rounded border-green-500 bg-green-500"
-                            icon={<SaveOutlined/>}
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
-                        {student &&
-                        <>
-                            <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<AuditOutlined/>} onClick={archive}>
-                                {student.archived ? "Désarchiver" : "Archiver"}
-                            </Button>
-                            <Button className="mt-5 rounded" icon={<DeleteOutlined/>} onClick={remove} danger>
-                                Supprimer
-                            </Button>
-                        </>
-                        }
+                        {student && (
+                            <>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                    {student.archived ? "Désarchiver" : "Archiver"}
+                                </Button>
+                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                    Supprimer
+                                </Button>
+                            </>
+                        )}
                     </div>
 
                 </form>

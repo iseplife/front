@@ -19,6 +19,7 @@ import {ClubActionType} from "../../../context/club/action"
 interface ParamTypes {
     id?: string
 }
+
 const Club: React.FC = () => {
     const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
@@ -36,7 +37,7 @@ const Club: React.FC = () => {
                     dispatch({type: ClubActionType.GET_CLUB, payload: res.data})
                 })
                 .catch(e => message.error(e))
-                //.finally(() => setClubLoading(false))
+            //.finally(() => setClubLoading(false))
         } else {
             history.push("404")
         }
@@ -57,12 +58,12 @@ const Club: React.FC = () => {
     }, [state.club.data])
 
     return (
-        <ClubContext.Provider value={{ state, dispatch }}>
+        <ClubContext.Provider value={{state, dispatch}}>
             <div className="w-full h-full ">
-                <ClubCover />
+                <ClubCover/>
                 <div className="flex justify-between container p-3 mx-auto">
                     <div className="flex">
-                        <ClubLogo />
+                        <ClubLogo/>
                         <div className="flex flex-col ml-4 md:mt-0 -mt-4">
                             {state.club.loading || !state.club.data ?
                                 <>
@@ -83,15 +84,16 @@ const Club: React.FC = () => {
                         {state.club.data.facebook && <SocialIcon type="fa-facebook" url={state.club.data.facebook}/>}
                         {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
                         {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
-                        {state.club.data.canEdit &&
-                        <Button className="px-5 hidden md:block rounded-full hover:border-red-400 bg-red-200 text-red-400" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
-                            Mode admin
-                            <IconFA
-                                className="cursor-pointer ml-2"
-                                name={state.adminMode ? "fa-sign-out-alt" : "fa-tools"}
-                            />
-                        </Button>
-                        }
+                        {state.club.data.canEdit && (
+                            <span className="cursor-pointer font-bold mt-5 mr-5 hover:text-gray-400" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
+                                Administration
+                                <IconFA
+                                    size="lg"
+                                    className="ml-3"
+                                    name={state.adminMode ? "fa-sign-out-alt" : "fa-tools"}
+                                />
+                            </span>
+                        )}
                     </div>
                     }
                 </div>
@@ -99,16 +101,16 @@ const Club: React.FC = () => {
 
                 <div key="desktop-display" className="hidden md:flex flex-row -mt-10 pt-10 px-5">
                     {state.adminMode && state.club.data ?
-                        <ClubAdmin /> :
+                        <ClubAdmin/> :
                         <>
-                            <ClubPresentation />
+                            <ClubPresentation/>
                             <div className="flex-grow">
                                 {state.club.data &&
                                 <Feed id={state.club.data.feed} allowPublication={false} className="m-4 hidden md:block"/>
                                 }
                             </div>
 
-                            <SidePanelMembers />
+                            <SidePanelMembers/>
                         </>
                     }
                 </div>

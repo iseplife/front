@@ -270,19 +270,24 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button type="primary" className="text-white rounded border-green-500 bg-green-500" icon={<SaveOutlined/>}>
+                        <Button
+                            htmlType="submit"
+                            className="mt-5 text-white rounded border-green-500 bg-green-500"
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                        >
                             Enregistrer
                         </Button>
                         {club && (
                             <>
-                                <Button className="text-white rounded border-yellow-500 bg-yellow-500" icon={<AuditOutlined/>} onClick={archive}>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
                                     {club.archived ? "Désarchiver" : "Archiver"}
                                 </Button>
-                                <Button danger className="rounded" icon={<DeleteOutlined/>} onClick={remove}>
+                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
                                     Supprimer
                                 </Button>
                             </>
                         )}
+
                     </div>
                 </form>
             }

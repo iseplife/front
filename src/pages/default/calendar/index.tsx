@@ -91,13 +91,12 @@ const Events: React.FC = () => {
     const [view, setView] = useState<View>("week")
     const {t, i18n} = useTranslation("event")
 
-    const currentMonth = date.getMonth()
     const fetchMonthEvents = useCallback(() => {
         setLoading(true)
         getMonthEvents(date.getTime()).then(r => {
             setEvents(r.data)
         }).finally(() => setLoading(false))
-    }, [currentMonth])
+    }, [date])
 
     useEffect(() => {
         fetchMonthEvents()
@@ -167,7 +166,7 @@ const Events: React.FC = () => {
                         </div>
                         <div>
                             <IconFA name="fa-sync-alt" className="my-auto mx-3 cursor-pointer text-gray-500" onClick={fetchMonthEvents} spin={loading}/>
-                            <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
+                            <Radio.Group value={view}  onChange={(e) => setView(e.target.value)}>
                                 <Radio.Button value="day">{t("day")}</Radio.Button>
                                 <Radio.Button value="week">{t("week")}</Radio.Button>
                                 <Radio.Button value="month">{t("month")}</Radio.Button>
