@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {DeleteOutlined} from "@ant-design/icons"
 import ImageOverlay from "./ImageOverlay"
 import {IconFA} from "./IconFA"
 
@@ -28,15 +27,22 @@ const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDele
         onDelete(index)
     }, [onDelete, index])
 
+    const handleNSFW = useCallback((e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        toggleNsfw(index)
+    }, [toggleNsfw, index])
+
 
     return (
         <div className={`h-20 w-20 m-2 ${className}`}>
-            {image &&
-            <ImageOverlay src={image} className="h-full w-full rounded">
-                <DeleteOutlined className="mx-1 px-1 hover:text-red-400" onClick={handleDelete}/>
-                <IconFA name="fas fa-low-vision" size="lg" type="regular" className=" hover:text-orange-400" onClick={() => toggleNsfw(index)}/>
-            </ImageOverlay>
-            }
+            {image && (
+                <ImageOverlay src={image} className="h-full w-full rounded">
+                    <IconFA name="fa-low-vision" size="lg" type="solid" className="mx-1 text-white hover:text-yellow-400" onClick={handleNSFW}/>
+                    <IconFA name="fa-trash-alt" size="lg" type="regular" className="mx-1 text-white hover:text-red-400" onClick={handleDelete}/>
+                </ImageOverlay>
+            )}
         </div>
     )
 })

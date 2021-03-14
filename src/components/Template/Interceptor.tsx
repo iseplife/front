@@ -1,30 +1,76 @@
-import React, {useContext, useEffect, useState} from "react"
-import {RouteComponentProps, withRouter} from "react-router"
-import {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios"
-import {refresh, removeTokens, setTokens} from "../../data/security"
-import {message} from "antd"
-import {WithTranslation, withTranslation} from "react-i18next"
-
-import {getCookie} from "../../data/security/cookie"
+import React from "react"
 import {apiClient} from "../../data/http"
+import {message} from "antd"
+import {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios"
+import {RouteComponentProps, withRouter} from "react-router"
+import {WithTranslation, withTranslation} from "react-i18next"
+import {refresh, removeTokens, setTokens} from "../../data/security"
+import {getCookie} from "../../data/security/cookie"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 
-const REFRESH_URL = "/auth/refresh"
-
 type InterceptorProps = WithTranslation & RouteComponentProps
-const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
-    const {state: {refreshing}, dispatch} = useContext(AppContext)
-    const [error, setError] = useState<string>()
+type InterceptState = {
+    error: string;
+};
 
-    const handleOffline = () => message.error(t("offline"))
-    const handleOnline = () => message.info(t("online"))
-    const axiosRequestInterceptor = (request: AxiosRequestConfig) => request
+class Interceptor extends React.Component<InterceptorProps, InterceptState> {
+    context!: React.ContextType<typeof AppContext>;
+    intercept?: number[];
 
-    const axiosResponseInterceptor = (response: AxiosResponse) => response
+    state: InterceptState = {
+        error: "",
+    };
 
-    const axiosResponseErrorInterceptor = (error: AxiosError) => {
-        console.log(error)
+    componentDidMount() {
+        this.intercept = [
+            apiClient.interceptors.request.use(
+                this.axiosRequestInterceptor, e => Promise.reject(e)
+            ),
+            apiClient.interceptors.response.use(
+                this.axiosResponseInterceptor,
+                this.axiosResponseErrorInterceptor,
+            )
+        ]
+
+        window.addEventListener("offline", this.handleOffline)
+        window.addEventListener("online", this.handleOnline)
+    }
+
+    componentWillUnmount() {
+        if (this.intercept) {
+            apiClient.interceptors.request.eject(this.intercept[0])
+            apiClient.interceptors.response.eject(this.intercept[1])
+        }
+
+        window.removeEventListener("offline", this.handleOffline)
+        window.removeEventListener("online", this.handleOnline)
+    }
+
+    handleOffline = () => {
+        message.error(this.props.t("offline"))
+    };
+
+    handleOnline = () => {
+        message.info(this.props.t("online"))
+    };
+
+    axiosRequestInterceptor = (request: AxiosRequestConfig) => {
+        /**
+        if(this.context.state.refreshing && request.url !== "/auth/refresh"){
+            while (this.context.state.refreshing){
+                console.log("holding")
+            }
+            request.headers["X-Refresh-Token"] = getCookie("refresh-token")
+            request.headers["Authorization"] = getCookie("token")
+        }
+         **/
+        return request
+    }
+
+    axiosResponseInterceptor = (response: AxiosResponse) => response
+
+    axiosResponseErrorInterceptor = (error: AxiosError) => {
         const originalRequest = error.config
         if (error.response) {
             switch (error.response.status) {
@@ -34,7 +80,7 @@ const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
                 case 403:
                     // @ts-ignore
                     if (originalRequest.headers["X-Refresh-Token"] && !originalRequest._retry) {
-                        dispatch({type: AppActionType.SET_REFRESHING, refreshing: true})
+                        this.context.dispatch({type: AppActionType.SET_REFRESHING, refreshing: true})
                         // @ts-ignore
                         originalRequest._retry = true
                         delete apiClient.defaults.headers.common["Authorization"]
@@ -46,10 +92,10 @@ const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
                                 originalRequest.headers["X-Refresh-Token"] = res.data.refreshToken
                                 originalRequest.headers["Authorization"] = `Bearer ${res.data.token}`
                                 return apiClient(originalRequest)
-                            }).finally(() => dispatch({type: AppActionType.SET_REFRESHING, refreshing: false}))
+                            }).finally(() => this.context.dispatch({type: AppActionType.SET_REFRESHING, refreshing: false}))
                     } else {
                         removeTokens()
-                        history.push("/login")
+                        this.props.history.push("/login")
 
                         message.error("Vous avez été déconnecté !")
                     }
@@ -70,43 +116,18 @@ const Interceptor: React.FC<InterceptorProps> = ({t, history}) => {
         return Promise.reject(error)
     }
 
-
-    useEffect(() => {
-        const intercept = [
-            apiClient.interceptors.request.use(
-                axiosRequestInterceptor,
-                (e) => Promise.reject(e)
-            ),
-            apiClient.interceptors.response.use(
-                axiosResponseInterceptor,
-                axiosResponseErrorInterceptor,
+    render() {
+        if (this.state.error) {
+            return (
+                <div>
+                    aie aie aie
+                </div>
             )
-        ]
-
-        window.addEventListener("offline", handleOffline)
-        window.addEventListener("online", handleOnline)
-
-        return () => {
-            if (intercept){
-                apiClient.interceptors.request.eject(intercept[0])
-                apiClient.interceptors.response.eject(intercept[1])
-            }
-
-            window.removeEventListener("offline", handleOffline)
-            window.removeEventListener("online", handleOnline)
         }
-    })
-
-
-    if (error) {
-        return (
-            <div>
-                aie aie aie
-            </div>
-        )
+        return null
     }
-    return null
 }
 
+Interceptor.contextType = AppContext
 
 export default withRouter(withTranslation()(Interceptor))

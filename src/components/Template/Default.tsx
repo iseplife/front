@@ -1,8 +1,5 @@
 import React from "react"
-import {
-    Route,
-    Switch,
-} from "react-router-dom"
+import {Route, Switch,} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
