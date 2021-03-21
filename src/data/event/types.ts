@@ -12,7 +12,8 @@ export type Event = {
     end: Date
     ticketURL?: string
     price?: number
-    location: string
+    location?: string
+    coordinates?: Marker
     targets: Feed[]
     published: Date
     closed: boolean

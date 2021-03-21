@@ -1,21 +1,13 @@
 import React, {useCallback, useMemo, useState} from "react"
 import {Comment as CommentType} from "../../data/thread/types"
-import {Avatar} from "antd"
 import {toggleThreadLike} from "../../data/thread"
 import CommentList from "./CommentList"
 import EditComment from "./EditComment"
 import {useTranslation} from "react-i18next"
 import {format, isToday} from "date-fns"
-import {
-    EditOutlined,
-    DeleteOutlined,
-    MessageOutlined,
-    UserOutlined,
-    HeartOutlined,
-    HeartFilled
-} from "@ant-design/icons"
-import {mediaPath} from "../../util"
+import {DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined, MessageOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import StudentAvatar from "../Student/StudentAvatar"
 
 
 interface CommentProps {
@@ -59,11 +51,14 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
         <div className="flex flex-col my-3">
             <div className="flex flex-col justify-between bg-gray-100 rounded p-2">
                 <div className="flex justify-between items-center">
-                    <Avatar
-                        icon={<UserOutlined/>}
-                        src={mediaPath(data.author.thumbnail, AvatarSizes.THUMBNAIL)}
+                    <StudentAvatar
+                        id={data.author.id}
+                        name={data.author.name}
+                        picture={data.author.thumbnail}
+                        pictureSize={AvatarSizes.THUMBNAIL}
                         size="small"
                         className="mr-3"
+                        showPreview
                     />
                     <span className="text-xs flex-1 text-right mr-3">{publicationDate}</span>
                     {data.hasWriteAccess &&

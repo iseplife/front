@@ -28,11 +28,11 @@ const EventEditorModal: React.FC<EventEditorModalProps> = ({values, onSubmit}) =
     return (
         <>
             <Button
-                className="rounded px-2 self-center md:self-end bg-transparent hover:text-gray-600 text-gray-900 border-none shadow-none"
+                className="rounded px-2 self-center md:self-end bg-transparent hover:text-gray-600 text-gray-700 border-none shadow-none"
                 style={{width: "max-content"}}
                 onClick={() => setOpen(true)}
             >
-                {t("edit.button")} <IconFA className="ml-2" name="fa-edit" />
+                <IconFA className="ml-2" name="fa-edit" />
             </Button>
             {open && (
                 <Modal

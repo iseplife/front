@@ -10,7 +10,7 @@ import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
 import NotFound from "../../pages/errors/NotFound"
-import UserDrawer from "../User/UserDrawer"
+import StudentDrawer from "../Student/StudentDrawer"
 import Setting from "../../pages/default/setting"
 
 
@@ -35,7 +35,7 @@ const DefaultTemplate: React.FC = () => {
                     </Switch>
                 </div>
             </Navbar>
-            <UserDrawer/>
+            <StudentDrawer/>
         </div>
     )
 }

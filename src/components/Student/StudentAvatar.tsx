@@ -1,43 +1,54 @@
-import React, {memo} from "react"
+import React, {memo, ReactNode, useMemo} from "react"
 import {Avatar} from "antd"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {IconFA} from "../Common/IconFA"
 import {Link} from "react-router-dom"
-import {StudentPreview} from "../../data/student/types"
 import {AvatarSize} from "antd/lib/avatar/SizeContext"
 
 
+const BasicWrapper: React.FC = (props) => <span {...props}/>
+
+
 type StudentAvatarProps = {
-    student: StudentPreview
-    pictureSize: AvatarSizes
-    size: AvatarSize
+    id: number
+    name: string
+    picture?: string
+    pictureSize?: AvatarSizes
+    size?: AvatarSize
+    showPreview?: boolean
     className?: string
     style?: CSSStyleSheet
+    children?: ReactNode
 }
-const StudentAvatar: React.FC<StudentAvatarProps> = ({student, pictureSize = AvatarSizes.DEFAULT, size}) => (
-    <Link
-        className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/5 text-center cursor-pointer no-underline text-gray-700 my-2"
-        to={{pathname: `/discovery/student/${student.id}`}}
-    >
-        <Avatar
-            src={mediaPath(student.picture, pictureSize)}
-            icon={<IconFA name="fa-user" type="regular"/>}
-            alt={student.firstName + " " + student.lastName}
-            size={size}
-            className="shadow-xl hover:shadow-outline "
-        />
-        <div className="font-bold sm:text-xl">
-            <p className="-mb-2">{student.firstName + " " + student.lastName}</p>
-            <span className="italic text-xs sm:text-sm">
-                {"Promo " + student.promo}
-            </span>
-        </div>
-    </Link>
-)
+const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, pictureSize = AvatarSizes.DEFAULT, size, children, className, showPreview = false}) => {
+    const Wrapper = useMemo(() => showPreview ? Link : BasicWrapper, [showPreview])
+    const wrapperProps = useMemo(() => showPreview ?
+        {
+            className: `text-center no-underline cursor-pointer ${className}`,
+            to: (location: Location) => `${location.pathname}/student/${id}`
+        } :
+        {
+            className: `text-center no-underline ${className}`
+        }, [showPreview])
 
 
-export default memo(
-    StudentAvatar,
-    (prevProps, nextProps) => prevProps.student.id === nextProps.student.id
-)
+    return (
+        <Wrapper {...wrapperProps as any}>
+            <Avatar
+                src={mediaPath(picture, pictureSize)}
+                icon={<IconFA name="fa-user" type="regular"/>}
+                alt={name}
+                size={size}
+                className="shadow-xl hover:shadow-outline "
+            />
+            {children}
+        </Wrapper>
+    )
+}
+StudentAvatar.defaultProps = {
+    className: ""
+}
+
+
+export default memo(StudentAvatar)

@@ -1,22 +1,22 @@
 import React, {useContext} from "react"
 import Feed from "../../../components/Feed"
 import UserGroups from "../../../components/Group/UserGroups"
-import {Avatar,} from "antd"
-import {UserOutlined,} from "@ant-design/icons"
-import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
+import StudentAvatar from "../../../components/Student/StudentAvatar"
 
 const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
     return (
         <div className="mt-5 px-3 flex justify-center flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4">
-                <div className="flex p-1 mb-5 font-dinot items-center ">
-                    <Avatar
-                        icon={<UserOutlined/>}
-                        src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}
+                <div className="flex p-1 mb-5 font-dinot items-center">
+                    <StudentAvatar
+                        id={user.id}
+                        name={user.firstName + " " + user.lastName}
+                        picture={user.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
                         size="large"
                     />
                     <div >

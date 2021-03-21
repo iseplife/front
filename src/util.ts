@@ -2,9 +2,6 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
-import {Tooltip} from "antd";
-import {IconFA} from "./components/Common/IconFA";
-import React from "react";
 
 const locales: { [id: string]: Locale } = {
     en: enUS,

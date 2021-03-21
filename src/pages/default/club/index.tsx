@@ -71,12 +71,12 @@ const Club: React.FC = () => {
                                     <Skeleton className="w-32" active title paragraph={false}/>
                                 </> :
                                 <>
-                                    <h1 className="text-3xl mb-0 font-bold">{state.club.data.name}</h1>
-                                    <h4 className="text-md italic">{new Date(state.club.data.creation).toLocaleDateString()}</h4>
+                                    <h1 className="text-gray-700 text-3xl mb-0 font-bold">{state.club.data.name}</h1>
+                                    <h4 className="text-gray-500 text-md italic">{new Date(state.club.data.creation).toLocaleDateString()}</h4>
                                 </>
                             }
                         </div>
-                        {state.adminMode && <h1 className="ml-5 my-auto font-dinotcb text-2xl text-gray-600">Panel administration</h1>}
+                        {state.adminMode && <h1 className="ml-5 my-auto font-dinotcb text-2xl text-gray-700">Panel administration</h1>}
                     </div>
                     {state.club.data &&
                     <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
@@ -85,7 +85,7 @@ const Club: React.FC = () => {
                         {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
                         {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
                         {state.club.data.canEdit && (
-                            <span className="cursor-pointer font-bold mt-5 mr-5 hover:text-gray-400" onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
+                            <span className="text-gray-700 hover:text-gray-500 cursor-pointer font-bold mt-5 mr-5 " onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
                                 Administration
                                 <IconFA
                                     size="lg"

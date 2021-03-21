@@ -111,3 +111,15 @@ abbr[title] {
     border-radius: 9999px !important;
 }
 /********/
+
+.user-drawer .ant-drawer-content{
+    border-top-left-radius: 0.5rem !important;
+    border-bottom-left-radius: 0.5rem !important;
+}
+
+.user-drawer-mobile .ant-drawer-content {
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+}
+
+/********/

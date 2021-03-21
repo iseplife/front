@@ -1,12 +1,14 @@
 import React, {useCallback, useContext} from "react"
 import {ClubMember, ClubMemberForm, ClubRoles} from "../../../data/club/types"
-import {Avatar, Button, Input, message, Modal, Select} from "antd"
-import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, UserOutlined} from "@ant-design/icons"
+import {Button, Input, message, Modal, Select} from "antd"
+import {CloseCircleOutlined, DeleteOutlined, SaveOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {useFormik} from "formik"
 import {removeClubMember, updateClubMember} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
+import {AvatarSizes} from "../../../constants/MediaSizes"
+import StudentAvatar from "../../Student/StudentAvatar"
 
 const {Option} = Select
 
@@ -57,7 +59,12 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
 
             <form className="flex flex-col items-center -mt-3 p-3 h-full" onSubmit={formik.handleSubmit}>
                 <div className="text-center">
-                    <Avatar src={member.student.picture} icon={<UserOutlined/>}/>
+                    <StudentAvatar
+                        id={member.student.id}
+                        name={member.student.firstName + "" + member.student.lastName}
+                        picture={member.student.picture}
+                        className="h-16 w-16 md:h-12 md:w-12 m-3"
+                    />
                     <h3 className="font-dinotcb text-xl text-gray-500">{member.student.firstName + " " + member.student.lastName}</h3>
                 </div>
 

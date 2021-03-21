@@ -1,22 +1,16 @@
 import React, {useCallback, useState} from "react"
 import {Post as PostType, PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
-import {Avatar, Divider, message, Modal} from "antd"
+import {Divider, message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
 import CommentList from "../Comment/CommentList"
-import {
-    HeartFilled,
-    HeartOutlined,
-    DeleteOutlined,
-    EditOutlined,
-    MessageOutlined, UserOutlined
-} from "@ant-design/icons"
-import {mediaPath} from "../../util"
+import {DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined, MessageOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import PostEditForm from "./PostEditForm"
 import {IconFA} from "../Common/IconFA"
+import StudentAvatar from "../Student/StudentAvatar"
 
 type PostProps = {
     data: PostType
@@ -96,7 +90,13 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 </>
             }
             <div className="flex flex-row text-gray-600 justify-between mt-2">
-                <Avatar icon={<UserOutlined />} src={mediaPath(data.author.thumbnail, AvatarSizes.THUMBNAIL)}/>
+                <StudentAvatar
+                    id={data.author.id}
+                    name={data.author.name}
+                    picture={data.author.thumbnail}
+                    pictureSize={AvatarSizes.THUMBNAIL}
+                    showPreview
+                />
                 <div className="flex items-center">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
                         {data.nbComments > 0 && data.nbComments} <MessageOutlined className="ml-1"/>

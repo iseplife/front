@@ -59,6 +59,7 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
 
 const YearBook: React.FC = () => {
     const {t} = useTranslation("discovery")
+    const [empty, setEmpty] = useState<boolean>(false)
     const [students, setStudents] = useState<EntitySet<StudentPreview>>(new EntitySet())
     const [filteredStudent, setFilteredStudents] = useState<StudentPreview[]>([])
     const [filter, setFilter] = useReducer(reducer, DEFAULT_FILTER)
@@ -82,10 +83,17 @@ const YearBook: React.FC = () => {
 
             setStudents(stds => stds.addAll(parsedResults))
             setFilteredStudents(students.filter(filterFn))
+
+            if (page === 0 && res.data.content.length === 0)
+                setEmpty(true)
+
+            if (res.data.content.length !== 0 && empty)
+                setEmpty(false)
+
             return res.data.last
         }
         return false
-    }, [filter.atoz, filter.name, filter.promos, students])
+    }, [filter.atoz, filter.name, filter.promos, students, empty])
 
     /**
      * Filter Update
@@ -107,7 +115,7 @@ const YearBook: React.FC = () => {
             {/* List of students */}
             <InfiniteScroller
                 ref={scrollerRef}
-                empty={filteredStudent.length == 0}
+                empty={empty}
                 watch="DOWN"
                 callback={getNextStudents}
                 className="flex flex-wrap justify-start"

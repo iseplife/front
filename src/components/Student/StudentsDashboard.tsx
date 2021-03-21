@@ -7,11 +7,10 @@ import {Role} from "../../data/security/types"
 import {getRoles} from "../../data/security"
 import {PageStatus} from "../../pages/admin/student"
 import {getAllStudentsAdmin} from "../../data/student"
-import {Avatar} from "antd"
-import {UserOutlined} from "@ant-design/icons"
-import {getEducationYear, mediaPath} from "../../util"
+import {getEducationYear} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import Pills from "../Common/Pills"
+import StudentAvatar from "./StudentAvatar"
 
 const tableConfig = [
     {title: "Nom", className: "w-64"},
@@ -88,7 +87,12 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
         <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
             <div className="flex items-center">
                 <div className="flex-shrink-0 h-10 w-10">
-                    <Avatar icon={<UserOutlined/>} src={mediaPath(s.picture, AvatarSizes.THUMBNAIL)}/>
+                    <StudentAvatar
+                        id={s.id}
+                        name={s.firstName + " " + s.lastName}
+                        picture={s.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
+                    />
                 </div>
                 <div className="ml-4 overflow-hidden">
                     <Link to={`/admin/user/${s.id}`}>

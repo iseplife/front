@@ -31,6 +31,7 @@ import EventEditorModal from "../../../components/Event/EventEditorModal"
 interface ParamTypes {
     id?: string
 }
+
 const Event: React.FC = () => {
     const {id} = useParams<ParamTypes>()
     const {t} = useTranslation("event")
@@ -77,8 +78,8 @@ const Event: React.FC = () => {
     return event ?
         (
             <div className="h-full">
-                <div className="md:h-56 h-24 bg-red-200 relative" style={{
-                    backgroundImage: `linear-gradient(to bottom, rgba(247, 250, 252, 0.3), rgba(247, 250, 252)), url(${mediaPath(event.image || "img/static/default-cover.png")})`,
+                <div className="md:h-56 h-24 relative" style={{
+                    backgroundImage: `linear-gradient(to bottom, rgba(243, 244, 246, 0.3), rgba(243, 244, 246)), url(${mediaPath(event.image || "img/static/default-cover.png")})`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "top",
@@ -139,7 +140,7 @@ const Event: React.FC = () => {
                             }
                             {galleries &&
                             <div className="mt-5 ml-2">
-                                <span className="font-dinotcb text-gray-500 text-lg ">
+                                <span className="font-dinotcb text-gray-700 text-lg ">
                                     {t("gallery")}
                                 </span>
                                 <div className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
@@ -153,12 +154,12 @@ const Event: React.FC = () => {
 
                         </div>
 
-                        <div className="flex items-center md:w-4/6 w-full flex-col md:order-2 order-1">
+                        <div className="flex items-center md:w-4/6 w-full flex-col md:order-2 order-1 px-3">
                             <div
                                 className="z-10 leading-none event-title md:bg-white md:shadow-md md:p-5 rounded-full uppercase font-bold text-center font-dinotcb">
                                 {event.title}
                             </div>
-                            <div className="font-dinotcb text-4xl text-center">
+                            <div className="font-dinotcb text-4xl text-center text-gray-700">
                                 {format(event.start, "HH:mm") + (event.end ? format(event.end, " - HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">
@@ -169,20 +170,23 @@ const Event: React.FC = () => {
                                 className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
                                 onClick={() => {
                                     if (descriptionRef.current) {
-                                        setDescVisible(!descriptionRef.current?.classList.toggle("h-32"))
+                                        setDescVisible(descriptionRef.current?.classList.toggle("h-0"))
                                     }
                                 }}
                             >
-                                <div ref={descriptionRef} className="h-32 overflow-hidden">
+                                <h3 className=" font-dinotcb text-center text-lg text-gray-700">
+                                    {t("form.label.description")}
+                                </h3>
+                                <div ref={descriptionRef} className="overflow-hidden">
                                     {event.description && event.description.split("\n").map((s, idx) =>
                                         <span key={idx}>{s} <br/></span>
                                     )}
                                 </div>
-                                {descVisible ? <UpOutlined className="mx-auto"/> : <DownOutlined className="mx-auto"/>}
+                                {descVisible ? <DownOutlined className="mx-auto"/> : <UpOutlined className="mx-auto"/>}
                             </div>
+                            <Feed id={event.feed} className="w-full mx-auto my-3"/>
                         </div>
-                        <div
-                            className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
+                        <div className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
                             <div className="flex items-baseline justify-around text-lg font-bold">
                                 <div
                                     className="flex items-center"
@@ -199,23 +203,18 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
 
-                            <Map
-                                className="mt-5 rounded md:h-64 h-48"
-                                center={[51.505, -0.09]}
-                                zoom={13}
-                            >
+                            <Map className="mt-5 rounded md:h-64 h-48" center={event.coordinates} zoom={13}>
                                 <TileLayer
-                                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                                     id="mapbox/streets-v11"
                                     accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                                 />
-                                <Marker position={[51.505, -0.09]}/>
+                                {event.coordinates && (
+                                    <Marker position={event.coordinates}/>
+                                )}
                             </Map>
                         </div>
                     </div>
-
-                    <Feed id={event.feed} className="mx-auto my-3 md:w-3/6 w-full"/>
                 </div>
             </div>
         ) : null

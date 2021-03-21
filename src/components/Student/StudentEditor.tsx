@@ -5,7 +5,7 @@ import {
     toggleStudentArchiveStatus,
     updateStudentAdmin
 } from "../../data/student"
-import {Avatar, Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
+import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
 import Loading from "../Common/Loading"
 import {useFormik} from "formik"
 import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types"
@@ -14,14 +14,11 @@ import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
 import ImagePicker from "../Common/ImagePicker"
 import {Role} from "../../data/security/types"
-import {
-    LockOutlined,
-    AuditOutlined,
-    DeleteOutlined, UserOutlined
-} from "@ant-design/icons"
+import {LockOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {IconFA} from "../Common/IconFA"
+import StudentAvatar from "./StudentAvatar"
 
 const {Option} = Select
 
@@ -222,9 +219,10 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         </div>
                         {student?.pictures.custom && (
                             <div className="text-center">
-                                <Avatar
-                                    icon={<UserOutlined/>}
-                                    src={mediaPath(student?.pictures.custom, AvatarSizes.DEFAULT)}
+                                <StudentAvatar
+                                    id={student.id}
+                                    name={student.firstName + " " + student.lastName}
+                                    picture={student.pictures.custom}
                                     size="default"
                                     className="mr-3"
                                 />

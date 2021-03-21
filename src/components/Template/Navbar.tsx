@@ -1,24 +1,15 @@
 import React, {useContext, useMemo, useState} from "react"
-import {Avatar, Button, Drawer, Dropdown, Menu} from "antd"
+import {Button, Drawer, Dropdown, Menu} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import {StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
-import {
-    CalendarOutlined,
-    KeyOutlined,
-    SettingOutlined,
-    UserOutlined,
-    BellOutlined,
-    HomeOutlined,
-    ExportOutlined,
-    CompassOutlined
-} from "@ant-design/icons"
-import {mediaPath} from "../../util"
+import {BellOutlined, CalendarOutlined, CompassOutlined, ExportOutlined, HomeOutlined, KeyOutlined, SettingOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
+import StudentAvatar from "../Student/StudentAvatar"
 
 type IconButtonProps = {
     icon: React.ReactNode
@@ -83,11 +74,12 @@ const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
                 placement="bottomRight"
             >
                 <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
-                    <Avatar
-                        icon={<UserOutlined/>}
-                        src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}
+                    <StudentAvatar
+                        id={user.id}
+                        name={user.firstName + " " + user.lastName}
+                        picture={user.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
                         size="small"
-                        className="cursor-pointer"
                     />
                     <span className="mx-2 ">{user.firstName}</span>
                 </div>
@@ -124,8 +116,13 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                     <Button shape="circle" icon={<CalendarOutlined/>} className="border-0"/>
                 </Link>
                 <Button shape="circle" icon={<BellOutlined/>} className="border-0"/>
-                <div onClick={() => setVisible(true)}>
-                    <Avatar icon={<UserOutlined/>} src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)} className="cursor-pointer"/>
+                <div className="cursor-pointer" onClick={() => setVisible(true)}>
+                    <StudentAvatar
+                        id={user.id}
+                        name={user.firstName + " " + user.lastName}
+                        picture={user.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
+                    />
                 </div>
             </div>
             <Drawer

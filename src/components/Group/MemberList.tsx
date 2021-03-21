@@ -1,11 +1,8 @@
 import React, {ReactElement, useMemo, useState} from "react"
-import {Avatar} from "antd"
-import {Link} from "react-router-dom"
-import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {UserOutlined,} from "@ant-design/icons"
 import {GroupMember} from "../../data/group/types"
 import {useTranslation} from "react-i18next"
+import StudentAvatar from "../Student/StudentAvatar"
 
 const MEMBER_PREVIEW_COUNT = 10
 
@@ -25,30 +22,34 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
             <div className={`${className} flex flex-col overflow-y-auto`} style={{maxHeight: 400}}>
                 {preview.map(({id, student}) => (
                     <span key={student.id} className="my-1">
-                        <Link to="" className="text-gray-600">
-                            <Avatar
-                                className="mr-2"
-                                icon={<UserOutlined/>}
-                                src={mediaPath(student.picture, AvatarSizes.THUMBNAIL)}
-                                size="default"
-                            />
+                        <StudentAvatar
+                            id={student.id}
+                            name={student.firstName + " " + student.lastName}
+                            picture={student.picture}
+                            pictureSize={AvatarSizes.THUMBNAIL}
+                            size="default"
+                            className="mr-2 text-gray-600"
+                            showPreview
+                        >
                             {student.firstName + " " + student.lastName}
-                        </Link>
+                        </StudentAvatar>
                         {members.length > actionsTrigger && actions(id)}
                     </span>
                 ))}
 
                 {viewAll && leftovers.map(({id, student}) => (
                     <span key={student.id} className="my-1">
-                        <Link to="" className="text-gray-600">
-                            <Avatar
-                                className="mr-2"
-                                icon={<UserOutlined/>}
-                                src={mediaPath(student.picture, AvatarSizes.THUMBNAIL)}
-                                size="default"
-                            />
+                        <StudentAvatar
+                            id={student.id}
+                            name={student.firstName + " " + student.lastName}
+                            picture={student.picture}
+                            pictureSize={AvatarSizes.THUMBNAIL}
+                            size="default"
+                            className="mr-2 text-gray-600"
+                            showPreview
+                        >
                             {student.firstName + " " + student.lastName}
-                        </Link>
+                        </StudentAvatar>
                         {members.length > 1 && actions(id)}
                     </span>
                 ))}
