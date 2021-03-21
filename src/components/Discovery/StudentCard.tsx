@@ -4,6 +4,7 @@ import React from "react"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {UserOutlined} from "@ant-design/icons"
+import {IconFA} from "../Common/IconFA"
 
 type StudentCardProps = {
     id: number
@@ -19,10 +20,10 @@ const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, pictu
     >
         <Avatar
             src={mediaPath(picture, AvatarSizes.DEFAULT)}
-            icon={<UserOutlined/>}
+            icon={<IconFA name="fa-user" type="regular"/>}
             alt={fullname}
             size={150}
-            className="shadow-xl hover:shadow-outline text-3xl sm:text-5xl md:text-5xl xl:text-6xl"
+            className="shadow-xl hover:shadow-outline "
         />
         <div className="font-bold sm:text-xl">
             <p className="-mb-2">{fullname}</p>

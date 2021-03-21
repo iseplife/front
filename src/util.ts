@@ -2,6 +2,9 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
+import {Tooltip} from "antd";
+import {IconFA} from "./components/Common/IconFA";
+import React from "react";
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -18,15 +21,14 @@ export const _formatDistance = (date: Date | number, baseDate: Date | number): s
     })
 
 
-
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/
 const reMsAjax = /^\/Date\((d|-|.*)\)[/|\\]$/
-export const JSONDateParser = (key: string, value: unknown): Date|unknown => {
+export const JSONDateParser = (key: string, value: unknown): Date | unknown => {
     if (typeof value === "string") {
         let a = reISO.exec(value)
         if (a)
             return new Date(value)
-        
+
         a = reMsAjax.exec(value)
         if (a) {
             const b = a[1].split(/[-+,.]/)
