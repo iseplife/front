@@ -10,7 +10,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
     return (
-        <div className="image-display relative bg-gray-400 h-full w-full rounded-lg overflow-hidden">
+        <div className={`${props.className} image-display relative bg-gray-400 overflow-hidden`}>
             <div className="overflow-hidden h-full w-full">
                 <img
                     {...imgProps}

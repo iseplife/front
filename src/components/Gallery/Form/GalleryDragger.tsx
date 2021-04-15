@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react"
-import axios, {AxiosPromise} from "axios"
-import {Badge, Button, Progress} from "antd"
+import axios, {AxiosPromise, AxiosResponse} from "axios"
+import {Badge, Button, message, Progress} from "antd"
 import PictureCard from "../../Common/PictureCard"
 import {InboxOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
@@ -74,28 +74,32 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
 
     }
 
-    const uploadImages = useCallback(() => {
-        const requests: AxiosPromise<Media>[] = []
+    const uploadImages = useCallback(async () => {
+        const responses: AxiosResponse<Media>[] = []
         setUploadingState(UploadState.UPLOADING)
-        images.forEach(img => {
-            if (isFileImage(img.file)) {
-                requests.push(
-                    createMedia(
+
+        let res: AxiosResponse<Media>
+        for (const img of images) {
+            try {
+                if (isFileImage(img.file)) {
+                    res = await createMedia(
                         img.file,
                         club,
                         true,
                         img.nsfw,
-                        (e) => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.length)))
+                        e => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.length)))
                     )
-                )
+                    responses.push(res)
+                }
+            }catch (e){
+                setUploadingState(UploadState.ERROR)
+                message.error(e.message)
+                break
             }
-        })
-        axios.all(requests)
-            .then(axios.spread((...res) => {
-                afterSubmit(res.map(r => r.data.id))
-                setUploadingState(UploadState.FINISHED)
-            }))
-            .catch(() => setUploadingState(UploadState.ERROR))
+        }
+
+        afterSubmit(responses.map(r => r.data.id))
+        setUploadingState(UploadState.FINISHED)
     }, [afterSubmit, images, club])
 
 

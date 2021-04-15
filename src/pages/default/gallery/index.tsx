@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
@@ -27,7 +27,7 @@ const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps<Selectab
 const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.THUMBNAIL) as string
+        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
         image.onerror = reject
         image.onload = () => resolve({
             nsfw,
@@ -42,12 +42,13 @@ const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoPr
 
 interface ParamTypes {
     id?: string
-    picture?: string
 }
+
 const Gallery: React.FC = () => {
     const {t} = useTranslation(["gallery", "common"])
     const history = useHistory()
-    const {id, picture} = useParams<ParamTypes>()
+    const {id} = useParams<ParamTypes>()
+    const picture = useMemo(() => new URLSearchParams(window.location.search).get("p"), [window.location.search])
 
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -107,11 +108,11 @@ const Gallery: React.FC = () => {
                         if (p.selected)
                             ids.push(+(p.key as string))
                     })
-                    if(ids.length === photos.length){
+                    if (ids.length === photos.length) {
                         deleteGallery(gallery.id).then(() =>
                             message.info(t("common:remove_item.complete"))
                         )
-                    }else {
+                    } else {
                         deleteGalleryImages(gallery.id, ids)
                             .then(() => {
                                 message.success(t("selection_delete"))
@@ -130,9 +131,14 @@ const Gallery: React.FC = () => {
         if (photo && gallery) {
             setCurrentPhoto(gallery.images.find(img => img.id === photo.index))
             setOpenLigthbox(true)
-            history.push(`/gallery/${id}/picture/${photo.index}`)
+            history.push(`/gallery/${id}?p=${photo.index}`)
         }
     }, [id, gallery])
+
+    const exitEditMode = useCallback(() => {
+        setEditMode(false)
+        setPhotos(prevState => prevState.map(photo => ({...photo, selected: false}) ))
+    }, [])
 
     const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
         <SelectableImage
@@ -151,7 +157,7 @@ const Gallery: React.FC = () => {
 
     const onCurrentPhotoChange = useCallback((photo: ImageType) => {
         setCurrentPhoto(photo)
-        history.push(`/gallery/${id}/picture/${photo.id}`)
+        history.push(`/gallery/${id}?p=${photo.id}`)
     }, [id, photos])
 
     const closeLightbox = useCallback(() => {
@@ -176,77 +182,84 @@ const Gallery: React.FC = () => {
 
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
-            <div className="flex justify-between m-2">
+            <div className="flex flex-col sm:flex-row justify-between m-2">
                 <div>
                     {loading && !gallery ?
                         <Skeleton loading={true} active paragraph={false} className="w-48 mr-2"/> :
                         <>
-                            <div className="font-bold text-xl text-blue-900 ">{gallery?.name}</div>
-                            <span className="ml-2 text-xs">{`${gallery?.images.length} ${t("pictures")}`}</span>
+                            <div className="font-bold text-4xl text-gray-700">{gallery?.name}</div>
+                            <span className="text-xs text-gray-600">{`${gallery?.images.length} ${t("pictures")}`}</span>
                         </>
                     }
                 </div>
-                {gallery?.hasRight && editMode ?
-                    <div className="flex flex-col items-end">
-                        <Button type="primary" className="rounded mx-1" style={{width: "max-content"}} onClick={() => setEditMode(false)}>
-                            {t("common:back")}
-                            <IconFA name="fa-sign-out-alt" className="ml-2"/>
-                        </Button>
-                        <div className="flex mt-3">
-                            <GalleryAdder club={gallery.club.id}  gallery={gallery.id} afterUpload={addNewImages}/>
-                            <Button className="rounded mx-1" danger onClick={removeSelection}>
-                                {t("delete_selection")}
+                <div>
+                    {loading ?
+                        <div className="flex flex-row items-center w-fit-content mt-2 h-16 mb-8 ml-auto">
+                            <Skeleton loading={loading} active paragraph={false} className="mr-2 w-48"/>
+                            <Skeleton avatar={true} loading={loading} active paragraph={false} title={false}/>
+                        </div> :
+                        <div className="mb-2 w-full text-right mr-2">
+                            <span className="text-xs text-gray-600">
+                                {`${t("posted_date")} ${gallery && new Date(gallery.creation).toLocaleDateString()} ${t("by")}`}
+                            </span>
+                            <Tooltip title={gallery?.club.name}>
+                                <Link to={"/club/1"}>
+                                    <Avatar
+                                        src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                        shape="circle"
+                                        className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
+                                        icon={<UserOutlined/>}
+                                    />
+                                </Link>
+                            </Tooltip>
+                        </div>
+                    }
+                    {gallery?.hasRight && editMode ?
+                        <div className="flex flex-col items-end">
+                            <Button type="primary" className="shadow-md rounded mx-1" style={{width: "max-content"}} onClick={exitEditMode}>
+                                {t("common:back")}
+                                <IconFA name="fa-sign-out-alt" className="ml-2"/>
+                            </Button>
+                            <div className="flex mt-3">
+                                <GalleryAdder club={gallery.club.id} gallery={gallery.id} afterUpload={addNewImages}/>
+                                <Button className="rounded mx-1" danger onClick={removeSelection}>
+                                    {t("delete_selection")}
+                                    <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
+                                </Button>
+                            </div>
+                        </div> :
+                        <div className="flex justify-end">
+                            <Button type="primary" className="shadow-md rounded mx-1" onClick={() => setEditMode(true)}>
+                                {t("common:edit")}
+                                <IconFA name="fa-edit" className="ml-2" type="regular"/>
+                            </Button>
+                            <Button type="primary" className="shadow-md rounded mx-1" danger onClick={removeGallery}>
+                                {t("common:delete")}
                                 <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
                             </Button>
-
                         </div>
-                    </div> :
-                    <div className="flex ">
-                        <Button type="primary" className="rounded mx-1" onClick={() => setEditMode(true)}>
-                            {t("common:edit")}
-                            <IconFA name="fa-edit" className="ml-2" type="regular"/>
-                        </Button>
-                        <Button type="primary" className="rounded mx-1" danger onClick={removeGallery}>
-                            {t("common:delete")}
-                            <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
-                        </Button>
-                    </div>
-                }
+                    }
+                </div>
             </div>
             <div className="p-1">
                 {loading ?
                     <LoadingGallery/> :
-                    <PhotoGallery photos={photos} direction="row" renderImage={imageRenderer}/>
+                    <PhotoGallery
+                        renderImage={imageRenderer}
+                        targetRowHeight={200}
+                        photos={photos}
+                        direction="row"
+                    />
                 }
             </div>
-            {loading ?
-                <div className="flex flex-row items-center w-fit-content mt-2 h-16 mb-8 ml-auto">
-                    <Skeleton loading={loading} active paragraph={false} className="mr-2 w-48"/>
-                    <Skeleton avatar={true} loading={loading} active paragraph={false} title={false}/>
-                </div> :
-                <div className="h-16 mt-2 mb-4 w-full text-right mr-2">
-                    {`${t("posted_date")} ${gallery && new Date(gallery.creation).toLocaleDateString()} ${t("by")}`}
-                    <Tooltip title={gallery?.club.name}>
-                        <Link to={"/club/1"}>
-                            <Avatar
-                                src={gallery?.club.logoUrl && mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
-                                shape="circle"
-                                className="w-12 h-12 ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                icon={<UserOutlined/>}
-                                size="large"
-                            />
-                        </Link>
-                    </Tooltip>
-                </div>
-            }
-            {isOpeningLigthbox &&
-            <GalleryLigthbox
-                photos={gallery?.images || []}
-                current={currentPhoto}
-                onCurrentPhotoChange={onCurrentPhotoChange}
-                onClose={closeLightbox}
-            />
-            }
+            {isOpeningLigthbox && (
+                <GalleryLigthbox
+                    photos={gallery?.images || []}
+                    current={currentPhoto}
+                    onCurrentPhotoChange={onCurrentPhotoChange}
+                    onClose={closeLightbox}
+                />
+            )}
         </div>
     )
 }

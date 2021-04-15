@@ -27,6 +27,7 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import {IconFA} from "../../../components/Common/IconFA"
 import {toggleSubscription} from "../../../data/feed"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
+import EventDescription from "../../../components/Event/EventDescription"
 
 interface ParamTypes {
     id?: string
@@ -43,9 +44,6 @@ const Event: React.FC = () => {
     const [eventsVisible, setEventVisible] = useState<boolean>(false)
 
     const [galleries, setGalleries] = useState<GalleryPreview[]>([])
-
-    const descriptionRef = useRef<HTMLInputElement>(null)
-    const [descVisible, setDescVisible] = useState<boolean>(false)
 
     const handleSubscription = useCallback(() => {
         if (event) {
@@ -166,24 +164,8 @@ const Event: React.FC = () => {
                                 {event.location}
                             </div>
 
-                            <div
-                                className="flex flex-col justify-center mt-5 text-xs text-gray-600 cursor-pointer"
-                                onClick={() => {
-                                    if (descriptionRef.current) {
-                                        setDescVisible(descriptionRef.current?.classList.toggle("h-0"))
-                                    }
-                                }}
-                            >
-                                <h3 className=" font-dinotcb text-center text-lg text-gray-700">
-                                    {t("form.label.description")}
-                                </h3>
-                                <div ref={descriptionRef} className="overflow-hidden">
-                                    {event.description && event.description.split("\n").map((s, idx) =>
-                                        <span key={idx}>{s} <br/></span>
-                                    )}
-                                </div>
-                                {descVisible ? <DownOutlined className="mx-auto"/> : <UpOutlined className="mx-auto"/>}
-                            </div>
+                            <EventDescription description={event.description}/>
+
                             <Feed id={event.feed} className="w-full mx-auto my-3"/>
                         </div>
                         <div className="h-32 md:w-1/6 w-full h-full md:order-3 order-2 bg-white rounded shadow p-2 mt-3">
@@ -203,7 +185,7 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
 
-                            <Map className="mt-5 rounded md:h-64 h-48" center={event.coordinates} zoom={13}>
+                            <Map className="mt-5 rounded md:h-64 h-48" center={event.coordinates || [48.8453227,2.3280245]} zoom={13}>
                                 <TileLayer
                                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                                     id="mapbox/streets-v11"

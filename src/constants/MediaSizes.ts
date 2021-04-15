@@ -1,6 +1,6 @@
 export enum GallerySizes {
-    PREVIEW = "autox140",
-    THUMBNAIL = "autox200",
+    THUMBNAIL = "autox140",
+    PREVIEW = "autox400",
     LIGHTBOX = "1280xauto"
 }
 
@@ -11,6 +11,7 @@ export enum AvatarSizes {
 }
 
 export enum PostSizes {
-    PREVIEW = "autox300",
+    THUMBNAIL = "autox400",
+    PREVIEW = "autox400",
     LIGHTBOX = "1280xauto"
 }
