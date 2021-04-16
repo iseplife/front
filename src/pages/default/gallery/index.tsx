@@ -3,7 +3,6 @@ import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
-import GalleryLigthbox from "../../../components/Gallery/GalleryLigthbox/GalleryLigthbox"
 import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gallery"
 import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
@@ -15,13 +14,17 @@ import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType} from "../../../data/media/types"
 import {mediaPath} from "../../../util"
+import Lightbox from "lightbox-react"
+import "lightbox-react/style.css"
 
 export type SelectablePhoto = { selected: boolean, nsfw: boolean }
 
 /* We should create a GalleryService with them */
-const getPhotosAsync = async (gallery: GalleryType): Promise<PhotoProps<SelectablePhoto>[]> => {
+const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<SelectablePhoto>[]> => {
     return await Promise.all(
-        gallery.images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(img => parsePhoto(img.name, String(img.id), img.nsfw))
+        images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(
+            (img, index) => parsePhoto(img.name, String(index), img.nsfw)
+        )
     )
 }
 const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
@@ -48,14 +51,14 @@ const Gallery: React.FC = () => {
     const {t} = useTranslation(["gallery", "common"])
     const history = useHistory()
     const {id} = useParams<ParamTypes>()
-    const picture = useMemo(() => new URLSearchParams(window.location.search).get("p"), [window.location.search])
+    const picture = useMemo<string | null>(() => new URLSearchParams(window.location.search).get("p"), [window.location.search])
 
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [gallery, setGallery] = useState<GalleryType>()
     const [photos, setPhotos] = useState<PhotoProps<SelectablePhoto>[]>([])
-    const [isOpeningLigthbox, setOpenLigthbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<ImageType>()
+
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>()
 
     /**
      * Get Gallery and parse photos on first load
@@ -65,13 +68,11 @@ const Gallery: React.FC = () => {
             getGallery(id).then(res => {
                 if (res.data) {
                     setGallery(res.data)
-                    getPhotosAsync(res.data)
+                    getPhotosAsync(res.data.images)
                         .then(photos => {
                             setPhotos(photos)
-                            if (picture) {
-                                setCurrentPhoto(res.data.images.find(img => img.id === parseInt(picture)))
-                                setOpenLigthbox(true)
-                            }
+                            if (picture)
+                                setCurrentPhotoIndex(+picture)
                         })
                         .catch(e => {
                             message.error("Error while parsing...")
@@ -81,16 +82,18 @@ const Gallery: React.FC = () => {
                 }
             }).catch(e => message.error(`Get this gallery failed ,${e}`))
         }
-    }, [id, picture])
+    }, [id])
 
     const handleSelect = useCallback((key: string) => {
-        setPhotos(prevState => prevState.map(photo => ((photo.key as string) === key) ?
-            ({...photo, selected: !photo.selected}) : photo
+        setPhotos(prevState => prevState.map(photo => (
+            (photo.key as string) === key) ?
+            ({...photo, selected: !photo.selected}) :
+            photo
         ))
     }, [])
 
     const addNewImages = useCallback((images: ImageType[]) => {
-        Promise.all(images.map(img => parsePhoto(img.name, String(img.id), img.nsfw))).then(photos => {
+        Promise.all(images.map((img, i) => parsePhoto(img.name, String(i), img.nsfw))).then(photos => {
             setPhotos(prevState => [...prevState, ...photos])
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
@@ -129,39 +132,18 @@ const Gallery: React.FC = () => {
 
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
         if (photo && gallery) {
-            setCurrentPhoto(gallery.images.find(img => img.id === photo.index))
-            setOpenLigthbox(true)
+            setCurrentPhotoIndex(photo.index)
             history.push(`/gallery/${id}?p=${photo.index}`)
         }
     }, [id, gallery])
 
     const exitEditMode = useCallback(() => {
         setEditMode(false)
-        setPhotos(prevState => prevState.map(photo => ({...photo, selected: false}) ))
+        setPhotos(prevState => prevState.map(photo => ({...photo, selected: false})))
     }, [])
 
-    const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
-        <SelectableImage
-            key={key}
-            selectable={editMode}
-            margin={"2px"}
-            index={index}
-            photo={photo}
-            left={left}
-            top={top}
-            direction="row"
-            onSelect={handleSelect}
-            onClick={openLightbox}
-        />
-    ), [editMode, handleSelect, openLightbox])
-
-    const onCurrentPhotoChange = useCallback((photo: ImageType) => {
-        setCurrentPhoto(photo)
-        history.push(`/gallery/${id}?p=${photo.id}`)
-    }, [id, photos])
-
     const closeLightbox = useCallback(() => {
-        setOpenLigthbox(false)
+        setCurrentPhotoIndex(undefined)
         history.push(`/gallery/${id}`)
     }, [id])
 
@@ -180,6 +162,22 @@ const Gallery: React.FC = () => {
             }
         }), [gallery])
 
+    const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
+        <SelectableImage
+            key={key}
+            selectable={editMode}
+            margin={"2px"}
+            index={index}
+            photo={photo}
+            left={left}
+            top={top}
+            direction="row"
+            onSelect={handleSelect}
+            onClick={openLightbox}
+        />
+    ), [editMode, handleSelect, openLightbox])
+
+
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
             <div className="flex flex-col sm:flex-row justify-between m-2">
@@ -187,18 +185,18 @@ const Gallery: React.FC = () => {
                     {loading && !gallery ?
                         <Skeleton loading={true} active paragraph={false} className="w-48 mr-2"/> :
                         <>
-                            <div className="font-bold text-4xl text-gray-700">{gallery?.name}</div>
+                            <h1 className="font-bold text-4xl text-gray-700 mb-0">{gallery?.name}</h1>
                             <span className="text-xs text-gray-600">{`${gallery?.images.length} ${t("pictures")}`}</span>
                         </>
                     }
                 </div>
-                <div>
+                <div className="flex flex-col justify-end">
                     {loading ?
                         <div className="flex flex-row items-center w-fit-content mt-2 h-16 mb-8 ml-auto">
                             <Skeleton loading={loading} active paragraph={false} className="mr-2 w-48"/>
                             <Skeleton avatar={true} loading={loading} active paragraph={false} title={false}/>
                         </div> :
-                        <div className="mb-2 w-full text-right mr-2">
+                        <div className="mb-2 w-full text-right">
                             <span className="text-xs text-gray-600">
                                 {`${t("posted_date")} ${gallery && new Date(gallery.creation).toLocaleDateString()} ${t("by")}`}
                             </span>
@@ -252,12 +250,18 @@ const Gallery: React.FC = () => {
                     />
                 }
             </div>
-            {isOpeningLigthbox && (
-                <GalleryLigthbox
-                    photos={gallery?.images || []}
-                    current={currentPhoto}
-                    onCurrentPhotoChange={onCurrentPhotoChange}
-                    onClose={closeLightbox}
+            {currentPhotoIndex != undefined && gallery && (
+                <Lightbox
+                    mainSrc={mediaPath(gallery.images[currentPhotoIndex].name, GallerySizes.LIGHTBOX) as string}
+                    nextSrc={
+                        mediaPath(gallery.images[(currentPhotoIndex + 1) % gallery.images.length].name, GallerySizes.LIGHTBOX)
+                    }
+                    prevSrc={
+                        mediaPath(gallery.images[(currentPhotoIndex + gallery.images.length - 1) % gallery.images.length].name, GallerySizes.LIGHTBOX)
+                    }
+                    onMovePrevRequest={() => setCurrentPhotoIndex((currentPhotoIndex + gallery.images.length - 1) % gallery.images.length)}
+                    onMoveNextRequest={() => setCurrentPhotoIndex((currentPhotoIndex + 1) % gallery.images.length)}
+                    onCloseRequest={closeLightbox}
                 />
             )}
         </div>

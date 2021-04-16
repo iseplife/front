@@ -21,6 +21,7 @@
     "leaflet": "^1.6.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
+    "lightbox-react": "^0.3.8",
     "postcss": "^8.2.6",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.5",

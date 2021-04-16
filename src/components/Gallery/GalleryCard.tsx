@@ -25,22 +25,22 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                         i === previewLength - 1 ?
                             <Link
                                 key={img.id}
-                                to={`/gallery/${gallery.id}`} className="w-1/4 p-1 block" style={{height: "50%"}}
+                                to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
                             >
-                                <div className="relative h-full w-full rounded-lg bg-black text-gray-400 hover:text-white">
-                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50 rounded-lg" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
+                                <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50 rounded" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
                                     <IconFA name="fa-plus" className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
                             :
                             <Link
                                 key={img.id}
-                                to={`/gallery/${gallery.id}?p=${img.id}`}
-                                className={`p-1 block ${i === 0 ? "w-1/2" : "w-1/4"}`}
+                                to={`/gallery/${gallery.id}?p=${i}`}
+                                className={`p-0.5 block ${i === 0 ? "w-1/2" : "w-1/4"}`}
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >
-                                <div className="hover:bg-black rounded h-full w-full rounded-lg">
-                                    <SafeImage hide className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded-lg" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} />
+                                <div className="hover:bg-black rounded h-full w-full">
+                                    <SafeImage hide className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} />
                                 </div>
                             </Link>
                     )) :
