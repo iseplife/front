@@ -1,4 +1,4 @@
-import {Student, StudentPicture, StudentPreview} from "../../data/student/types"
+import {StudentPicture, StudentPreview} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextState} from "./context"
 
@@ -8,7 +8,7 @@ export enum AppActionType {
     SET_PAYLOAD,
     SET_STATE,
     SET_PICTURE,
-    SET_REFRESHING,
+    SET_TOKEN_EXPIRATION,
 }
 
 
@@ -32,11 +32,11 @@ interface setFullStateAction {
     state: AppContextState
 }
 
-interface setRefreshingAction {
-    type: AppActionType.SET_REFRESHING,
-    refreshing: boolean
+interface setTokenExpirationAction {
+    type: AppActionType.SET_TOKEN_EXPIRATION,
+    token_expiration: number
 }
 
-export type AppContextAction = setLoggedStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction | setRefreshingAction
+export type AppContextAction = setLoggedStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction | setTokenExpirationAction
 
 

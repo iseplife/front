@@ -4,7 +4,7 @@ import {TokenPayload} from "../../data/security/types"
 import {AppContextAction} from "./action"
 
 export const DEFAULT_STATE: AppContextState = {
-    refreshing: false,
+    token_expiration: 628021800000,
 } as AppContextState
 
 
@@ -12,7 +12,7 @@ export const DEFAULT_STATE: AppContextState = {
 export type AppContextState =  {
     user: StudentPreview
     payload: TokenPayload
-    refreshing: boolean
+    token_expiration: number
 }
 
 

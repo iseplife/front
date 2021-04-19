@@ -4,7 +4,7 @@ import {message} from "antd"
 import {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
-import {refresh, removeTokens, setTokens} from "../../data/security"
+import {getToken, refresh, removeTokens, setTokens} from "../../data/security"
 import {getCookie} from "../../data/security/cookie"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
@@ -55,50 +55,44 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         message.info(this.props.t("online"))
     };
 
-    axiosRequestInterceptor = (request: AxiosRequestConfig) => {
-        /**
-        if(this.context.state.refreshing && request.url !== "/auth/refresh"){
-            while (this.context.state.refreshing){
-                console.log("holding")
-            }
-            request.headers["X-Refresh-Token"] = getCookie("refresh-token")
-            request.headers["Authorization"] = getCookie("token")
+    axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
+        if (this.context.state.token_expiration > new Date().getTime() && request.url !== "/auth/refresh") {
+            delete apiClient.defaults.headers.common["Authorization"]
+            delete apiClient.defaults.headers.common["X-Refresh-Token"]
+
+            const refreshToken = getCookie("refresh-token") || request.headers["X-Refresh-Token"]
+            await refresh(refreshToken).then(res => {
+                setTokens(res.data)
+                try {
+                    this.context.dispatch({
+                        type: AppActionType.SET_TOKEN_EXPIRATION,
+                        token_expiration: getToken().exp
+                    })
+                } catch (e) {
+                    throw new Error("JWT cookie unreadable")
+                }
+
+                request.headers["X-Refresh-Token"] = res.data.refreshToken
+                request.headers["Authorization"] = `Bearer ${res.data.token}`
+            })
         }
-         **/
+
         return request
     }
 
     axiosResponseInterceptor = (response: AxiosResponse) => response
 
     axiosResponseErrorInterceptor = (error: AxiosError) => {
-        const originalRequest = error.config
         if (error.response) {
             switch (error.response.status) {
                 case 404:
                     //this.props.history.push("/404")
                     break
                 case 403:
-                    // @ts-ignore
-                    if (originalRequest.headers["X-Refresh-Token"] && !originalRequest._retry) {
-                        this.context.dispatch({type: AppActionType.SET_REFRESHING, refreshing: true})
-                        // @ts-ignore
-                        originalRequest._retry = true
-                        delete apiClient.defaults.headers.common["Authorization"]
-                        delete apiClient.defaults.headers.common["X-Refresh-Token"]
-                        return refresh(getCookie("refresh-token") || originalRequest.headers["X-Refresh-Token"])
-                            .then(res => {
-                                setTokens(res.data)
+                    removeTokens()
+                    this.props.history.push("/login")
 
-                                originalRequest.headers["X-Refresh-Token"] = res.data.refreshToken
-                                originalRequest.headers["Authorization"] = `Bearer ${res.data.token}`
-                                return apiClient(originalRequest)
-                            }).finally(() => this.context.dispatch({type: AppActionType.SET_REFRESHING, refreshing: false}))
-                    } else {
-                        removeTokens()
-                        this.props.history.push("/login")
-
-                        message.error("Vous avez été déconnecté !")
-                    }
+                    message.error("Vous avez été déconnecté !")
                     break
                 case 500:
                 case 400:

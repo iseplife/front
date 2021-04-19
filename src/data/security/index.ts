@@ -22,7 +22,7 @@ export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
 export const setTokens = (tokenSet: TokenSet): void => {
     setCookie("token", tokenSet.token , {
         "samesite": "Strict",
-        "max-age": 604800      //10 min
+        "max-age": 600      //10 min
     })
     setCookie("refresh-token", tokenSet.refreshToken, {
         "samesite": "Strict",
@@ -38,14 +38,13 @@ export const removeTokens = (): void => {
     delete apiClient.defaults.headers.common["X-Refresh-Token"]
 }
 
-export const getUser = (): TokenPayload => {
+export const getToken = (): Token  => {
     const token = getCookie("token")
     let rawdata = ""
     if (token) {
         rawdata = token.split(".")[1]
         try {
-            const tokenJson = JSON.parse(atob(rawdata)) as Token
-            return JSON.parse(tokenJson.payload) as TokenPayload
+            return JSON.parse(atob(rawdata)) as Token
         } catch (e) {
             throw new Error("Auth cookies unreadable")
         }
@@ -53,6 +52,8 @@ export const getUser = (): TokenPayload => {
     window.location.assign("/login")
     throw new Error("Auth cookies missing")
 }
+
+export const getUser = (): TokenPayload => JSON.parse(getToken().payload) as TokenPayload
 
 export const isAdmin = (): boolean => hasRole([Roles.ADMIN])
 
@@ -62,7 +63,7 @@ export const hasRole = (roles: Array<Roles>): boolean =>  {
 }
 
 export const isLoggedIn = (): boolean => {
-    return !!getCookie("token") && !!getCookie("refresh-token")
+    return !!getCookie("refresh-token")
 }
 
 export const logout = (): void => removeTokens()

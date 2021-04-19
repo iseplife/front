@@ -14,8 +14,8 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 user: action.payload.user,
                 payload: action.payload.payload
             }
-        case AppActionType.SET_REFRESHING:
-            return {...state, refreshing: action.refreshing}
+        case AppActionType.SET_TOKEN_EXPIRATION:
+            return {...state, token_expiration: action.token_expiration}
         case AppActionType.SET_PICTURE:
             return {
                 ...state,
