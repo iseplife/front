@@ -6,7 +6,6 @@ import {useTranslation} from "react-i18next"
 import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
 import CommentList from "../Comment/CommentList"
-import {DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined, MessageOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import PostEditForm from "./PostEditForm"
 import {IconFA} from "../Common/IconFA"
@@ -79,6 +78,21 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                             {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
                         </span>
                         }
+                        {data.hasWriteAccess && (
+                            <>
+                                <IconFA
+                                    name="fa-pen"
+                                    className="mr-3 cursor-pointer text-gray-300 hover:text-indigo-400"
+                                    onClick={() => onEdit(data.id)}
+                                />
+                                <IconFA
+                                    name="fa-trash-alt"
+                                    type="regular"
+                                    className="mr-3 cursor-pointer text-gray-300 hover:text-red-600"
+                                    onClick={confirmDeletion}
+                                />
+                            </>
+                        )}
                         {data.private && <IconFA name="fa-lock" className="text-gray-300"/>}
                     </div>
                     <div>
@@ -99,21 +113,24 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                 />
                 <div className="flex items-center">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
-                        {data.nbComments > 0 && data.nbComments} <MessageOutlined className="ml-1"/>
+                        {data.nbComments > 0 && data.nbComments}
+                        <IconFA
+                            name="fa-comment"
+                            size="sm"
+                            type="regular"
+                            className="ml-1"
+                        />
                     </span>
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
                         {likes > 0 && likes}
-                        {liked
-                            ? <HeartFilled className="ml-1 text-red-600" onClick={() => toggleLike(data.thread)}/>
-                            : <HeartOutlined className="ml-1 hover:text-red-600" onClick={() => toggleLike(data.thread)}/>
-                        }
+                        <IconFA
+                            name="fa-heart" type={liked ? "solid" : "regular"}
+                            size="sm"
+                            className={`${liked ? "text-red-600":"hover:text-red-600"}`}
+                            onClick={() => toggleLike(data.thread)}
+                        />
                     </span>
-                    {data.hasWriteAccess &&
-                    <>
-                        <EditOutlined className="mr-3 cursor-pointer hover:text-indigo-400" onClick={() => onEdit(data.id)}/>
-                        <DeleteOutlined className="mr-3 cursor-pointer hover:text-red-600" onClick={confirmDeletion}/>
-                    </>
-                    }
+
                 </div>
             </div>
             {showComments && (
