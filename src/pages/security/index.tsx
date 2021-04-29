@@ -1,12 +1,14 @@
-import React, {useState} from "react"
+import React, {useContext, useState} from "react"
 import {Redirect, useHistory, useLocation} from "react-router-dom"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
-import {connect, isLoggedIn} from "../../data/security"
+import {connect, getToken, isLoggedIn} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {LocationState} from "../../data/request.type"
 import {Input} from "antd"
+import {AppContext} from "../../context/app/context"
+import {AppActionType} from "../../context/app/action"
 
 
 const initialValues: LoginFormInputs = {id: "", password: ""}
@@ -19,6 +21,7 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
     const {t, i18n} = useTranslation(["login", "common"])
     const history = useHistory()
+    const app = useContext(AppContext)
     const location = useLocation()
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
@@ -29,9 +32,14 @@ const Login: React.FC = () => {
             setLoadingStatus(true)
             connect(id, password)
                 .then((token) => {
+                    app.dispatch({
+                        type: AppActionType.SET_TOKEN_EXPIRATION,
+                        token_expiration: getToken().exp
+                    })
+
                     const {from} = (location.state as LocationState) || {
                         from: {
-                            pathname: token.lastConnection ? "/": "/discovery"
+                            pathname: token.lastConnection ? "/" : "/discovery"
                         }
                     }
                     history.replace(from)
@@ -63,11 +71,11 @@ const Login: React.FC = () => {
             <div className="flex-grow flex items-center">
                 <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col">
                     {isLoggedIn() && <Redirect to="/"/>}
-                    {error &&
-                    <div className="text-center">
-                        <h6 className="text-red-600">{error}</h6>
-                    </div>
-                    }
+                    {error && (
+                        <div className="text-center">
+                            <h6 className="text-red-600">{error}</h6>
+                        </div>
+                    )}
                     <form className="flex flex-col justify-center " onSubmit={formik.handleSubmit}>
                         <Input
                             name="id" type="text" onChange={formik.handleChange}
@@ -98,7 +106,7 @@ const Login: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col items-center mb-2">
+            <div className="flex flex-col items-center my-2">
                 <div className="flex flex-row">
                     {SUPPORTED_LANGUAGES.map(lng => (
                         <img
