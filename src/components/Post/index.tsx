@@ -111,7 +111,7 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                     pictureSize={AvatarSizes.THUMBNAIL}
                     showPreview
                 />
-                <div className="flex items-center">
+                <div className="flex items-center text-gray-400">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
                         {data.nbComments > 0 && data.nbComments}
                         <IconFA
@@ -121,16 +121,15 @@ const Post: React.FC<PostProps> = ({data, editMode, onDelete, onUpdate, onEdit})
                             className="ml-1"
                         />
                     </span>
-                    <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3">
+                    <span className="flex items-center cursor-pointer mr-3">
                         {likes > 0 && likes}
                         <IconFA
                             name="fa-heart" type={liked ? "solid" : "regular"}
                             size="sm"
-                            className={`${liked ? "text-red-600":"hover:text-red-600"}`}
+                            className={`${liked ? "text-red-400":"hover:text-red-600"} ml-1`}
                             onClick={() => toggleLike(data.thread)}
                         />
                     </span>
-
                 </div>
             </div>
             {showComments && (

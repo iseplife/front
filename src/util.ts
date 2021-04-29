@@ -12,10 +12,15 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
 
-export const _formatDistance = (date: Date | number, baseDate: Date | number): string =>
-    formatDistance(date, baseDate, {
-        locale: locales[localStorage.getItem("lng") || "fr"]
-    })
+
+export const _formatDistance = (date: Date | number, baseDate: Date | number, options?: {
+    includeSeconds?: boolean
+    addSuffix?: boolean
+    locale?: Locale
+}): string => formatDistance(date, baseDate, {
+    locale: locales[localStorage.getItem("lng") || "fr"],
+    ...options
+})
 
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/
@@ -48,6 +53,7 @@ interface NamedPerson {
     firstName: string
     lastName: string
 }
+
 export const getInitials = (student: NamedPerson): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
 }
@@ -68,7 +74,7 @@ export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation()
 export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
 
 export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
-    if(fullPath){
+    if (fullPath) {
         const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
         if (size) {
             const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
