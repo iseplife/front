@@ -7,6 +7,7 @@ import {StudentPreview} from "../../data/student/types"
 import {importStudent} from "../../data/student"
 import ImportedAvatar from "../Common/ImportedAvatar"
 import {RcFile} from "antd/es/upload"
+import {IconFA} from "../Common/IconFA"
 
 const importTableConfig = [
     {title: "Photo", dataIndex: "picture", className: "w-16"},
@@ -21,8 +22,9 @@ type StudentStore = {
     file?: Blob
 }
 
+const DEFAULT_PAGE_SIZE = 10
 const StudentsImport: React.FC = () => {
-    const [pageImport, setPageImport] = useState<PageStatus>({current: 0})
+    const [pageImport, setPageImport] = useState<PageStatus>({current: 0, size: DEFAULT_PAGE_SIZE})
 
     const [hideUploadDiv, setHideUploadDiv] = useState<boolean>(false)
     const [importedStudents, setImportedStudents] = useState<StudentStore[]>([])
@@ -38,11 +40,17 @@ const StudentsImport: React.FC = () => {
         const reader = new FileReader()
         reader.onload = () => {
             const text = reader.result as string
-            setImportedStudents(readCSVToObject(text))
+            const students = readCSVToObject(text)
+            setImportedStudents(students)
+            setPageImport({
+                current: 0,
+                size: DEFAULT_PAGE_SIZE,
+                total: students.length
+            })
+            setLoadingImport(false)
         }
         reader.readAsText(file)
         setHideUploadDiv(true)
-        setLoadingImport(false)
         return false
     }, [])
 
@@ -74,29 +82,36 @@ const StudentsImport: React.FC = () => {
     const readCSVToObject = (csv: string) => {
         const result: StudentStore[] = []
         csv.split("\n").forEach(line => {
-            const column = line.split(",")
-            result.push({
-                student: {
-                    id: +column[0],
-                    firstName: column[1],
-                    lastName: column[2],
-                    promo: +column[3]
-                }
-            })
+            if (line.length !== 0) {
+                const column = line.split(",")
+                result.push({
+                    student: {
+                        id: +column[0],
+                        firstName: column[1],
+                        lastName: column[2],
+                        promo: +column[3]
+                    }
+                })
+            }
         })
         return result
     }
 
-    const uploadStudents = () => {
+    const uploadStudents = useCallback(() => {
         importedStudents.forEach(({student, file}) => {
             importStudent(student, file).then(res => console.log(res))
         })
-    }
+    }, [importedStudents])
+
+    const reset = useCallback(() => {
+        setImportedStudents([])
+        setHideUploadDiv(false)
+    }, [])
 
     return (
         <div>
             <div className={`flex flex-col items-center ${hideUploadDiv ? "hidden" : "block"}`}>
-                <h3 className="font-bold text-gray-700">Information  :</h3>
+                <h3 className="font-bold text-gray-700">Information :</h3>
                 <p className="text-gray-700 text-center">
                     le fichier doit être un CSV (séparation virgule) suivant le pattern : <br/>
                     <strong>numéro étudiant, prénom, nom, année de promotion</strong>
@@ -115,24 +130,38 @@ const StudentsImport: React.FC = () => {
                         className="overflow-hidden absolute opacity-0 z-0 w-1 h-1 "
                         onChange={uploadImages}
                     />
-                    <UploadOutlined className="px-2"/>
+                    <IconFA name="fa-upload" className="px-2"/>
                     Upload Student Images
                 </label>
+
+
                 <Button
                     type="primary"
-                    className={`${hideUploadDiv ? "block" : "hidden"} shadow-md ml-12 rounded`}
+                    className={`${hideUploadDiv ? "block" : "hidden"} shadow-md mx-4 rounded`}
                     onClick={uploadStudents}
                 >
                     Enregistrer
                 </Button>
+                <Button
+                    type="primary"
+                    className="shadow-md py-1 px-2 text-white rounded border-yellow-500 bg-yellow-500"
+                    onClick={reset}
+                >
+                    <IconFA name="fa-sync-alt" className="pr-2"/>
+                    Reset
+                </Button>
             </div>
+
             <Table
-                className={`${hideUploadDiv ? "block" : "hidden"} w-11/12 mx-auto`}
+                className={`${hideUploadDiv ? "block" : "hidden"} w-min mx-auto`}
                 columns={importTableConfig}
-                data={importedStudents}
+                data={importedStudents.slice(
+                    pageImport.current * (pageImport.size || DEFAULT_PAGE_SIZE), (pageImport.current + 1) * (pageImport.size || DEFAULT_PAGE_SIZE)
+                )}
                 loading={loadingImport}
                 page={pageImport}
                 onPageChange={(page) => setPageImport(prevState => ({...prevState, current: page}))}
+                onSizeChange={(current, size) => setPageImport(p => ({...p, size}))}
                 row={TableImportRow}
             />
         </div>
@@ -141,13 +170,13 @@ const StudentsImport: React.FC = () => {
 
 const TableImportRow: React.FC<RowProps<StudentStore>> = ({data: {student, file}}) => (
     <tr key={student.id}>
-        <td className="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+        <td className="px-6 py-1 whitespace-no-wrap border-b border-gray-200">
             <ImportedAvatar file={file}/>
         </td>
-        <td className="px-6 font-bold border-b border-gray-200 whitespace-no-wrap">{student.firstName}</td>
-        <td className="px-6 font-bold border-b border-gray-200 whitespace-no-wrap">{student.lastName}</td>
-        <td className="px-6 font-bold border-b border-gray-200 whitespace-no-wrap">{student.id}</td>
-        <td className="px-6 font-bold border-b border-gray-200 whitespace-no-wrap">{student.promo}</td>
+        <td className="px-6 font-semibold font-medium text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.firstName}</td>
+        <td className="px-6 font-semibold font-medium text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.lastName}</td>
+        <td className="px-6 border-b border-gray-200 whitespace-no-wrap">n°{student.id}</td>
+        <td className="px-6 border-b border-gray-200 whitespace-no-wrap">{student.promo}</td>
     </tr>
 )
 

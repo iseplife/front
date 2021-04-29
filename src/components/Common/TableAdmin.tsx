@@ -4,10 +4,12 @@ import Loading from "../Common/Loading"
 import {PageStatus} from "../../pages/admin/student"
 
 type ColumnComponent<T> = React.FC<TableProps<T>>
+
 interface Column {
     title: string,
     className?: string
 }
+
 export type ColumnType<T> = (Column | ColumnComponent<T>)
 
 export type TableProps<T> = {
@@ -18,6 +20,7 @@ export type TableProps<T> = {
     data: T[]
     loading: boolean
     onPageChange: (page: number) => void
+    onSizeChange?: (current: number, size:number) => void
     columns: ColumnType<T>[]
     row: React.FC<RowProps<T>>
 }
@@ -41,7 +44,7 @@ const Table = <T, >(props: TableProps<T>) => {
                 (typeof c === "function") ?
                     <th className="w-min border-b border-gray-200" key={i}>
                         {(c as ColumnComponent<T>)(props)}
-                    </th>:
+                    </th> :
                     <TableHeader key={i} className={(c as Column).className}>
                         {(c as Column).title}
                     </TableHeader>
@@ -54,32 +57,34 @@ const Table = <T, >(props: TableProps<T>) => {
             <div>
 
             </div>
-            <div className="flex flex-col items-center justify-between w-full shadow rounded-lg border-b bg-white"
-                style={{minHeight: "16rem"}}>
+            <div
+                className="flex flex-col items-center justify-between w-full shadow rounded-lg border-b bg-white"
+                style={{minHeight: "16rem"}}
+            >
                 {props.loading ?
                     <div className="flex flex-1 w-full"><Loading size="4x" className="m-auto"/></div> :
                     <table className="table-fixed w-full">
                         <thead className="text-gray-600">
-                            <tr>
-                                {Headers}
-                            </tr>
+                            <tr>{Headers}</tr>
                         </thead>
                         <tbody className="bg-white">
-                            {props.data.map((d,i) => (
+                            {props.data.map((d, i) => (
                                 <CustomRow key={i} data={d}/>
                             ))}
                         </tbody>
                     </table>
                 }
-                {(props.page.total || 1) > 1 &&
-                <Pagination
-                    className="text-center my-3"
-                    onChange={props.onPageChange}
-                    defaultCurrent={props.page.current + 1}
-                    pageSize={props.page.size}
-                    total={props.page.total}
-                />
-                }
+                {(props.page.total || 1) > 1 && (
+                    <Pagination
+                        className="text-center my-3"
+                        onChange={props.onPageChange}
+                        defaultCurrent={props.page.current + 1}
+                        onShowSizeChange={props.onSizeChange}
+                        showSizeChanger={props.onSizeChange != null}
+                        pageSize={props.page.size}
+                        total={props.page.total}
+                    />
+                )}
             </div>
         </div>
     )
