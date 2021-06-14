@@ -2,6 +2,7 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
+import axios from "axios"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -21,6 +22,13 @@ export const _formatDistance = (date: Date | number, baseDate: Date | number, op
     locale: locales[localStorage.getItem("lng") || "fr"],
     ...options
 })
+
+
+export const handleRequestCancellation = (e: Error): void | Error => {
+    if (axios.isCancel(e))
+        console.debug(e.message)
+    else throw new Error(e.message)
+}
 
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/

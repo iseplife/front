@@ -10,6 +10,7 @@ import AvatarSearchType from "./AvatarSearchType"
 import Pills from "../Common/Pills"
 import Loading from "../Common/Loading"
 import Axios, {CancelTokenSource} from "axios"
+import {handleRequestCancellation} from "../../util"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -58,41 +59,52 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             if (source)
                 source.cancel("Operation canceled due to new request.")
 
-            const tmp = Axios.CancelToken.source()
-            setSource(tmp)
+            const tokenSource = Axios.CancelToken.source()
+            setSource(tokenSource)
             setFetching(true)
             switch (searchType) {
                 case SearchItemType.STUDENT:
-                    searchStudent(currentValue, "", 0).then(res => {
-                        setData(res.data.content)
-                    }).finally(() => setFetching(false))
-                    break
-                case SearchItemType.EVENT:
-                    searchEvent(currentValue, 0).then(res => {
-                        setData(res.data.content)
-                    }).finally(() => setFetching(false))
-                    break
-                case SearchItemType.CLUB:
-                    searchClub(currentValue, 0)
+                    searchStudent(currentValue, "", 0, tokenSource.token)
                         .then(res => {
                             setData(res.data.content)
-                        }).finally(() => setFetching(false))
+                        })
+                        .catch(handleRequestCancellation)
+                        .finally(() => setFetching(false))
+                    break
+                case SearchItemType.EVENT:
+                    searchEvent(currentValue, 0, tokenSource.token)
+                        .then(res => {
+                            setData(res.data.content)
+                        })
+                        .catch(handleRequestCancellation)
+                        .finally(() => setFetching(false))
+                    break
+                case SearchItemType.CLUB:
+                    searchClub(currentValue, 0, tokenSource.token)
+                        .then(res => {
+                            setData(res.data.content)
+                        })
+                        .catch(handleRequestCancellation)
+                        .finally(() => setFetching(false))
                     break
                 case SearchItemType.ALL:
                 default:
-                    globalSearch(currentValue, 0, tmp?.token).then(res => {
-                        if(res.data)
-                            setData(res.data.content)
-                    }).finally(() => setFetching(false))
+                    globalSearch(currentValue, 0, tokenSource.token)
+                        .then(res => {
+                            if (res.data)
+                                setData(res.data.content)
+                        })
+                        .catch(handleRequestCancellation)
+                        .finally(() => setFetching(false))
                     break
             }
+
         } else {
             setData([])
         }
 
         return () => {
-            if (source)
-                source.cancel("Operation canceled due to an unmounting component.")
+            if (source) source.cancel("Operation canceled due to an unmounting component.")
         }
     }, [currentValue, searchType])
 
