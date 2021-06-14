@@ -15,7 +15,7 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 payload: action.payload.payload
             }
         case AppActionType.SET_TOKEN_EXPIRATION:
-            return {...state, token_expiration: action.token_expiration}
+            return {...state, token_expiration: action.token_expiration * 1000} // convert secondes in ms
         case AppActionType.SET_PICTURE:
             return {
                 ...state,

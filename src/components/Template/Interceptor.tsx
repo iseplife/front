@@ -56,7 +56,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
-        if (this.context.state.token_expiration <= new Date().getTime()/1000 && request.url !== "/auth/refresh") {
+        if (this.context.state.token_expiration <= new Date().getTime() && request.url !== "/auth/refresh") {
             delete apiClient.defaults.headers.common["Authorization"]
             delete apiClient.defaults.headers.common["X-Refresh-Token"]
 
