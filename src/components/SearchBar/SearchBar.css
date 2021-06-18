@@ -5,7 +5,7 @@
 .search-bar > .ant-select-selector {
     border-radius: 9999px !important;
     border: none !important;
-    color: white !important;
+    color: #4c51bf !important;
 }
 
 .pills:checked + .label-pills {

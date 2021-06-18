@@ -56,6 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      */
     useEffect(() => {
         if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
+            // We cancel the previous request to avoid any memory leaking
             if (source)
                 source.cancel("Operation canceled due to new request.")
 
