@@ -1,12 +1,13 @@
-import React from "react"
+import React, {useContext, useMemo} from "react"
 import Calendar from "react-calendar"
 import {useTranslation} from "react-i18next"
 import {useRecoilState} from "recoil"
 import {filterState} from "../../pages/default/calendar"
 import { Checkbox, Switch} from "antd"
-import {isAdmin} from "../../data/security"
 import "./SideCalendar.css"
 import FeedFilter from "../Feed/FeedFilter"
+import {AppContext} from "../../context/app/context"
+import {Roles} from "../../data/security/types"
 
 type SideCalendarProps = {
     date: Date
@@ -14,7 +15,9 @@ type SideCalendarProps = {
 }
 const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     const {t, i18n} = useTranslation("event")
+    const {state} = useContext(AppContext)
     const [filter, setFilter] = useRecoilState(filterState)
+    const isAdmin = useMemo(() => state.payload.roles.includes(Roles.ADMIN), [])
 
     const handleChange = (type: string, name: string | number) => {
         setFilter(prev => {
@@ -53,7 +56,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                 />
                 <hr className="my-1"/>
                 <div className="mt-2">
-                    {isAdmin() &&
+                    {isAdmin &&
                     <>
                         <div className="flex items-center">
                             <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("admin_view")} :</h3>

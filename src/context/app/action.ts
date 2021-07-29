@@ -1,10 +1,11 @@
 import {StudentPicture, StudentPreview} from "../../data/student/types"
-import {TokenPayload} from "../../data/security/types"
+import {ParsedToken, TokenPayload} from "../../data/security/types"
 import {AppContextState} from "./context"
 
 export enum AppActionType {
     SET_LOGGED_USER,
     SET_STUDENT,
+    SET_TOKEN,
     SET_PAYLOAD,
     SET_STATE,
     SET_PICTURE,
@@ -14,19 +15,19 @@ export enum AppActionType {
 
 interface setLoggedStudentAction {
     type: AppActionType.SET_LOGGED_USER,
-    payload: {
-        user: StudentPreview,
-        payload: TokenPayload
-    }
+    user: StudentPreview
 }
+
 interface setPayloadAction {
     type: AppActionType.SET_PAYLOAD,
     payload: TokenPayload
 }
+
 interface setPictureStateAction {
     type: AppActionType.SET_PICTURE,
     payload: StudentPicture
 }
+
 interface setFullStateAction {
     type: AppActionType.SET_STATE,
     state: AppContextState
@@ -37,6 +38,11 @@ interface setTokenExpirationAction {
     token_expiration: number
 }
 
-export type AppContextAction = setLoggedStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction | setTokenExpirationAction
+interface setTokenAction {
+    type: AppActionType.SET_TOKEN,
+    token: ParsedToken
+}
+
+export type AppContextAction = setLoggedStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction | setTokenExpirationAction | setTokenAction
 
 

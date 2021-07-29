@@ -11,8 +11,13 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
         case AppActionType.SET_LOGGED_USER:
             return {
                 ...state,
-                user: action.payload.user,
-                payload: action.payload.payload
+                user: action.user,
+            }
+        case AppActionType.SET_TOKEN:
+            return {
+                ...state,
+                payload: action.token.payload,
+                token_expiration: action.token.exp * 1000 // convert secondes in ms
             }
         case AppActionType.SET_TOKEN_EXPIRATION:
             return {...state, token_expiration: action.token_expiration * 1000} // convert secondes in ms

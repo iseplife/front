@@ -4,8 +4,7 @@ import {message} from "antd"
 import {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
-import {getToken, refresh, removeTokens, setTokens} from "../../data/security"
-import {getCookie} from "../../data/security/cookie"
+import {logout, parseToken, refresh, setToken} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 
@@ -56,27 +55,25 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
-        if (this.context.state.token_expiration <= new Date().getTime() && request.url !== "/auth/refresh") {
+        if (this.context.state.token_expiration <= new Date().getTime() && !request.url?.startsWith("/auth")) {
             delete apiClient.defaults.headers.common["Authorization"]
-            delete apiClient.defaults.headers.common["X-Refresh-Token"]
 
-            const refreshToken = getCookie("refresh-token") || request.headers["X-Refresh-Token"]
-            await refresh(refreshToken).then(res => {
-                setTokens(res.data)
+            refresh().then(res => {
                 try {
+                    setToken(res.data)
                     this.context.dispatch({
-                        type: AppActionType.SET_TOKEN_EXPIRATION,
-                        token_expiration: getToken().exp
+                        type: AppActionType.SET_TOKEN,
+                        token: parseToken(res.data.token)
                     })
                 } catch (e) {
                     throw new Error("JWT cookie unreadable")
                 }
-
-                request.headers["X-Refresh-Token"] = res.data.refreshToken
                 request.headers["Authorization"] = `Bearer ${res.data.token}`
+            }).catch(() => {
+                this.props.history.push("/login")
+                message.error("Vous avez été déconnecté !")
             })
         }
-
         return request
     }
 
@@ -86,14 +83,18 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         if (error.response) {
             switch (error.response.status) {
                 case 403:
+                    message.error("Permission insuffisante")
+                    break
                 case 404:
                     this.props.history.push("/404")
                     break
                 case 401:
-                    removeTokens()
-                    this.props.history.push("/login")
-
-                    message.error("Vous avez été déconnecté !")
+                    if (error.request.url != "/auth") {
+                        logout()
+                        //this.context.dispatch()
+                        this.props.history.push("/login")
+                        message.error("Vous avez été déconnecté !")
+                    }
                     break
                 case 500:
                 case 400:

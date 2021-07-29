@@ -5,25 +5,24 @@ import {
     Switch,
 } from "react-router-dom"
 import {getLoggedUser} from "../../data/student"
-import {getUser, isAdmin} from "../../data/security"
 
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
 import LoadingPage from "../../pages/LoadingPage"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
+import {Roles} from "../../data/security/types"
 
 
 const Template: React.FC = () => {
-    const {dispatch} = useContext(AppContext)
+    const {state, dispatch} = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(true)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     useLayoutEffect(() => {
         getLoggedUser().then(res => {
-            dispatch({type: AppActionType.SET_LOGGED_USER, payload: {
-                user: res.data,
-                payload: getUser(),
-            }})
+            dispatch({type: AppActionType.SET_LOGGED_USER, user: res.data})
+            setIsAdmin(state.payload.roles.includes(Roles.ADMIN))
         }).finally(() => setLoading(false))
     }, [])
 
@@ -33,7 +32,7 @@ const Template: React.FC = () => {
         <Switch>
             <Route path="/admin" render={({location}) =>
                 (
-                    isAdmin() ?
+                    isAdmin ?
                         <AdminTemplate/> :
                         <Redirect
                             to={{
