@@ -2,7 +2,7 @@ import {Club} from "../club/types"
 import {Author} from "../request.type"
 import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
-import {Poll, PollCreation, PollEdition} from "../poll/types"
+import {Poll, PollForm} from "../poll/types"
 
 
 export enum EmbedEnumType {
@@ -21,7 +21,6 @@ export type BasicPostCreation = {
 
 
 export type PostCreation = BasicPostCreation & {
-    draft: boolean
     linkedClub?: number
     publicationDate?: Date
     attachements:  { [type: string]: number }
@@ -33,6 +32,7 @@ export type PostUpdate = {
     publicationDate: Date
     linkedClub?: number
     removeEmbed?: boolean
+    attachements?:  { [type: string]: number }
 }
 
 
@@ -44,7 +44,7 @@ export type Post = {
     private: boolean
     pinned: boolean
     author: Author
-    embed: Embed
+    embed?: Embed
     thread: number
     linkedClub?: Club
 
@@ -90,11 +90,11 @@ export type EmbedMediaEdition = {
     data:  Array<MediaEditionNSFW | MediaUploadNSFW>
 }
 
-export type EmbedPollCreation = {
+export type EmbedPollForm = {
     type: EmbedEnumType.POLL
-    data: PollCreation
+    data: PollForm
 }
-export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation
+export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollForm
 
 export type EmbedGalleryEdition = {
     type: EmbedEnumType.GALLERY
@@ -102,11 +102,7 @@ export type EmbedGalleryEdition = {
 }
 
 
-export type EmbedPollEdition = {
-    type: EmbedEnumType.POLL
-    data: PollEdition
-}
-export type EmbedEdition = EmbedMediaEdition | EmbedGalleryEdition | EmbedPollEdition
+export type EmbedEdition = EmbedMediaEdition | EmbedGalleryEdition | EmbedPollForm
 
 export interface EmbedForm {
     type: EmbedEnumType,

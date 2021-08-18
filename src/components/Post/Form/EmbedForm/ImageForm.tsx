@@ -4,18 +4,18 @@ import {useFormikContext} from "formik"
 import {PostFormValues} from "../PostForm"
 import {Upload} from "antd"
 import {PlusOutlined} from "@ant-design/icons"
-import {MediaUploadNSFW} from "../../../../data/media/types"
+import {MediaEditionNSFW, MediaUploadNSFW} from "../../../../data/media/types"
 import {ACCEPTED_FILETYPE, EmbedCreation, EmbedEnumType, EmbedForm, EmbedMediaCreation, EmbedMediaEdition} from "../../../../data/post/types"
 
 import "./ReducedUploader.css"
-import { useTranslation } from "react-i18next"
-
+import {useTranslation} from "react-i18next"
+import {toggleMediaNSFW} from "../../../../data/media"
 
 
 const ImageForm: React.FC = () => {
     const {t} = useTranslation("post")
     const {setFieldValue, setFieldError, values} = useFormikContext<PostFormValues<EmbedForm>>()
-    const images = (values.embed as EmbedMediaEdition | EmbedMediaCreation ).data
+    const images = (values.embed as EmbedMediaEdition | EmbedMediaCreation).data
 
     console.log(images)
 
@@ -39,10 +39,19 @@ const ImageForm: React.FC = () => {
     }, [images])
 
     const toggleNSFW = useCallback((index: number) => {
-        setFieldValue("embed", {
-            type: EmbedEnumType.IMAGE,
-            data: (images as MediaUploadNSFW[]).map((img, i) => index === i ? {...img, nsfw: !img.nsfw} : img)
-        })
+        if ("id" in images[index]) {
+            toggleMediaNSFW((images[index] as MediaEditionNSFW).id).then((isNSFW) => {
+                setFieldValue("embed", {
+                    type: EmbedEnumType.IMAGE,
+                    data: (images as MediaUploadNSFW[]).map((img, i) => index === i ? {...img, nsfw: isNSFW} : img)
+                })
+            })
+        } else {
+            setFieldValue("embed", {
+                type: EmbedEnumType.IMAGE,
+                data: (images as MediaUploadNSFW[]).map((img, i) => index === i ? {...img, nsfw: !img.nsfw} : img)
+            })
+        }
     }, [images])
 
     return (

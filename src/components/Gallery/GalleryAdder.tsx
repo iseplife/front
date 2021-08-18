@@ -30,14 +30,13 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
     const uploadImages = useCallback(() => {
         setUploading(true)
         const requests: AxiosPromise<Media>[] = []
-        files.forEach(f => {
+        files.forEach(img => {
             requests.push(
                 createMedia(
-                    f,
+                    img,
                     club,
                     true,
-                    false,
-                    (e) => setFileList(list => list.map(file => file.fileName === f.file.name ?
+                    (e) => setFileList(list => list.map(file => file.fileName === img.file.name ?
                         {...file, percent: Math.round(e.loaded * 100 / e.total)}:
                         file
                     ))
