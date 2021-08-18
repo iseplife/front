@@ -1,14 +1,15 @@
 import React, {CSSProperties, useCallback, useState} from "react"
-import {Post as PostType, PostUpdate} from "../../data/post/types"
+import {EmbedEnumType, Post as PostType} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
 import Post from "../Post"
-import PostForm from "../Post/PostForm"
-import {deletePost, updatePost} from "../../data/post"
-import {Divider} from "antd"
+import {deletePost} from "../../data/post"
+import {Divider, Modal} from "antd"
 import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton"
 import {IconFA} from "../Common/IconFA"
 import {useTranslation} from "react-i18next"
+import BasicPostForm from "../Post/Form/BasicPostForm"
+import PostCreateForm from "../Post/Form/PostCreateForm"
 
 type FeedProps = {
     id: number
@@ -17,11 +18,12 @@ type FeedProps = {
     className?: string
 }
 const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => {
-    const {t} = useTranslation()
+    const {t} = useTranslation(["common", "post"])
     const [posts, setPosts] = useState<PostType[]>([])
     const [editPost, setEditPost] = useState<number>(0)
     const [empty, setEmpty] = useState<boolean>(false)
     const [fetching, setFetching] = useState<boolean>(false)
+    const [completeFormType, setCompleteFormType] = useState<EmbedEnumType | undefined>()
 
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
         setFetching(true)
@@ -35,36 +37,53 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         return res.data.last
     }, [id])
 
-    const removePost = async (id: number) => {
+    const onPostCreation = useCallback((post) => (
+        setPosts(prevPosts => [post, ...prevPosts])
+    ), [])
+
+    const onPostRemoval = async (id: number) => {
         const res = await deletePost(id)
         if (res.status === 200) {
             setPosts(posts => posts.filter(p => p.id !== id))
         }
     }
 
-    const handlePostUpdate = async (id: number, postUpdate: PostUpdate) => {
-        const res = await updatePost(id, postUpdate)
-        if (res.status === 200) {
-            setPosts(posts => posts.map(p => p.id === id ?
-                {
-                    ...p,
-                    description: postUpdate.description,
-                    publicationDate: postUpdate.publicationDate,
-                    private: postUpdate.private
-                }
-                : p
-            ))
-            return true
-        }
-        return false
-    }
-
+    const onPostUpdate = useCallback((id: number, postUpdate: PostType) => {
+        setPosts(posts => posts.map(p => p.id === id ? {...postUpdate} : p))
+        setEditPost(0)
+    }, [])
 
     return (
-        <div className={`${className} max-w-4xl`} style={style}>
+        <div className={`${className}`} style={style}>
             <Divider className="font-dinotcb text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
-                <PostForm feedId={id} onPost={post => setPosts(prevPosts => [post, ...prevPosts])}/>
+                <BasicPostForm feedId={id} onPost={onPostCreation}>
+                    <div className="flex items-center">
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}>
+                            <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        </div>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}>
+                            <IconFA name="fa-video" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        </div>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}>
+                            <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        </div>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)}>
+                            <IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/>
+                        </div>
+                        {completeFormType && (
+                            <Modal
+                                className="md:w-1/2 w-4/5"
+                                visible={true}
+                                footer={null}
+                                title={<span className="text-gray-800 font-bold text-2xl">{t("post:create")}</span>}
+                                onCancel={() => setCompleteFormType(undefined)}
+                            >
+                                <PostCreateForm type={completeFormType} feed={id} onSubmit={onPostCreation} onClose={() => setCompleteFormType(undefined)}/>
+                            </Modal>
+                        )}
+                    </div>
+                </BasicPostForm>
             )}
 
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
@@ -76,10 +95,10 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                     : posts.map((p) => (
                         <Post
                             key={p.id} data={p}
-                            onDelete={removePost}
-                            onUpdate={handlePostUpdate}
-                            onEdit={setEditPost}
-                            editMode={editPost === p.id}
+                            onDelete={onPostRemoval}
+                            onUpdate={onPostUpdate}
+                            toggleEdition={(toggle) => setEditPost(toggle ? p.id: 0)}
+                            isEdited={editPost === p.id}
                         />
                     ))}
             </InfiniteScroller>

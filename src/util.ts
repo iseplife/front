@@ -3,6 +3,10 @@ import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
 import axios from "axios"
+import {Image as ImageType} from "./data/media/types"
+import {PhotoProps} from "react-photo-gallery"
+import {GallerySizes} from "./constants/MediaSizes"
+import {SelectablePhoto} from "./pages/default/gallery"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -79,7 +83,7 @@ export const getEducationYear = (graduationYear: number): string => {
 export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation().search)
 
 
-export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
+export const isFileImage = (file: string): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file)
 
 export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
     if (fullPath) {
@@ -93,6 +97,29 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     }
     return fullPath
 }
+
+export const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<any>[]> => {
+    return await Promise.all(
+        images.map<PromiseLike<PhotoProps<any>>>((img, index) => parsePhoto(img.name, String(index), img.nsfw)
+        )
+    )
+}
+export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
+    return new Promise((resolve, reject) => {
+        const image = new Image()
+        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
+        image.onerror = reject
+        image.onload = () => resolve({
+            nsfw,
+            selected: false,
+            src: image.src,
+            width: image.width,
+            height: image.height,
+            key
+        })
+    })
+}
+
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>

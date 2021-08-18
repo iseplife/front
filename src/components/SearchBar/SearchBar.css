@@ -1,11 +1,16 @@
 .search-bar .ant-select-selection-placeholder {
-    color: rgb(199, 210, 254);
+    color: rgb(165, 180, 252);
 }
 
 .search-bar > .ant-select-selector {
+    background-color: rgb(224, 231, 255) !important;
     border-radius: 9999px !important;
     border: none !important;
     color: #4c51bf !important;
+}
+
+.search-bar > .ant-select-selector:focus > {
+    background-color:  #fff !important;
 }
 
 .pills:checked + .label-pills {

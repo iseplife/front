@@ -33,6 +33,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
 
     return (
         <div
+            key={index}
             style={container}
             className={`relative cursor-pointer overflow-hidden ${selectable && "hover:shadow-outline focus:bg-blue-100"}`}
         >

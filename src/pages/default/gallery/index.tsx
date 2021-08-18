@@ -13,35 +13,11 @@ import {IconFA} from "../../../components/Common/IconFA"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType} from "../../../data/media/types"
-import {mediaPath} from "../../../util"
+import {getPhotosAsync, mediaPath, parsePhoto} from "../../../util"
 import Lightbox from "lightbox-react"
 import "lightbox-react/style.css"
 
 export type SelectablePhoto = { selected: boolean, nsfw: boolean }
-
-/* We should create a GalleryService with them */
-const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<SelectablePhoto>[]> => {
-    return await Promise.all(
-        images.map<PromiseLike<PhotoProps<SelectablePhoto>>>(
-            (img, index) => parsePhoto(img.name, String(index), img.nsfw)
-        )
-    )
-}
-const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
-    return new Promise((resolve, reject) => {
-        const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
-        image.onerror = reject
-        image.onload = () => resolve({
-            nsfw,
-            selected: false,
-            src: image.src,
-            width: image.width,
-            height: image.height,
-            key
-        })
-    })
-}
 
 interface ParamTypes {
     id?: string

@@ -1,7 +1,20 @@
 
+type ChoiceForm = {
+    id?: number
+    content: string
+}
+
 export type PollCreation = {
     title: string
-    choices: string[]
+    choices: Array<ChoiceForm>
+    multiple: boolean
+    anonymous: boolean
+    endsAt: Date
+}
+
+export type PollEdition = {
+    title: string
+    choices: Array<ChoiceForm>
     multiple: boolean
     anonymous: boolean
     endsAt: Date

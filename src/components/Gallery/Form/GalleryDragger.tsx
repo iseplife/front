@@ -6,7 +6,7 @@ import {InboxOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
-import {Media} from "../../../data/media/types"
+import {Media, MediaUploadNSFW} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
 import {IconFA} from "../../Common/IconFA"
 
@@ -17,12 +17,11 @@ type GalleryDraggerProps = {
     canSubmit: boolean
     afterSubmit: (ids: number[]) => void
 }
-type NSFWImage = { file: File, nsfw: boolean }
 
 const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, club}) => {
     const {t} = useTranslation("gallery")
     const [uploadingState, setUploadingState] = useState<UploadState>(UploadState.OFF)
-    const [images, setImages] = useState<NSFWImage[]>([])
+    const [images, setImages] = useState<MediaUploadNSFW[]>([])
     const [progression, setProgression] = useState<number>(0)
     const [inDropZone, setInDropZone] = useState<boolean>(false)
 
@@ -81,9 +80,9 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
         let res: AxiosResponse<Media>
         for (const img of images) {
             try {
-                if (isFileImage(img.file)) {
+                if (isFileImage(img.file.type)) {
                     res = await createMedia(
-                        img.file,
+                        img,
                         club,
                         true,
                         img.nsfw,
@@ -91,7 +90,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                     )
                     responses.push(res)
                 }
-            }catch (e){
+            } catch (e) {
                 setUploadingState(UploadState.ERROR)
                 message.error(e.message)
                 break
@@ -118,9 +117,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
             >
                 {images.length ?
                     images.map((img, i) => (
-                        <Badge key={i} count={img.nsfw ? <IconFA name="fa-eye-slash" className="bg-white p-0.5 rounded-full text-red-600 top-2 right-2"/> : 0}>
-                            <PictureCard index={i} file={img.file} onDelete={deleteImage} toggleNsfw={toggleNSFW}/>
-                        </Badge>
+                        <PictureCard key={i} index={i} file={img.file} onDelete={deleteImage} nsfw={img.nsfw} toggleNsfw={toggleNSFW}/>
                     )) :
                     <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
                         <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>

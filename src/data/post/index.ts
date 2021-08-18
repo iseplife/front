@@ -1,11 +1,11 @@
 import {AxiosPromise} from "axios"
-import {Post, PostCreation, PostUpdate} from "./types"
+import {BasicPostCreation, Post, PostCreation, PostUpdate} from "./types"
 import {Author} from "../request.type"
 import {apiClient} from "../http"
 
-export const createPost = (post: PostCreation): AxiosPromise<Post> =>  apiClient.post("/post", post)
+export const createPost = (post: BasicPostCreation | PostCreation): AxiosPromise<Post> =>  apiClient.post("/post", post)
 
-export const updatePost = (id: number, update: PostUpdate): AxiosPromise<void> => apiClient.put(`/post/${id}`, update)
+export const updatePost = (id: number, update: PostUpdate): AxiosPromise<Post> => apiClient.put(`/post/${id}`, update)
 
 export const deletePost = (id: number): AxiosPromise<void> => apiClient.delete(`/post/${id}`)
 

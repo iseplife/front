@@ -3,7 +3,7 @@ import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {Event, EventForm as EventFormType} from "../../data/event/types"
 import {IconFA} from "../Common/IconFA"
-import EventEditForm from "./form/EventEditForm"
+import EventEditForm from "./Form/EventEditForm"
 
 
 type EventEditorModalProps = {

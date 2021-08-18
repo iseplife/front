@@ -1,4 +1,14 @@
-import {EmbedEnumType} from "../post/types"
+export type MediaUploadNSFW = {
+    file: File
+    nsfw: boolean
+}
+
+export type MediaEditionNSFW = {
+    id: number
+    file: string
+    nsfw: boolean
+}
+
 
 export interface Media {
     id: number
@@ -9,17 +19,14 @@ export interface Media {
 
 export type Image = Media & {
     thread: number
-    embedType: EmbedEnumType.IMAGE
 }
 
 export type Video = Media & {
     title: string
     thumbnail: string
     views: number
-    embedType: EmbedEnumType.VIDEO
 }
 
 export type Document = Media & {
     title: string
-    embedType: EmbedEnumType.DOCUMENT
 }
