@@ -1,7 +1,7 @@
 import {FormikErrors, withFormik} from "formik"
 import {message} from "antd"
 import PostForm, {PostFormValues} from "./PostForm"
-import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, EmbedPollCreation, Post, PostCreation} from "../../../data/post/types"
+import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, Post, PostCreation} from "../../../data/post/types"
 import {AxiosResponse} from "axios"
 import {createMedia} from "../../../data/media"
 import {createGallery} from "../../../data/gallery"
@@ -21,7 +21,6 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         publicationDate: new Date(),
         embed: DEFAULT_EMBED[type],
         private: true,
-        draft: false
     }),
 
     validate: (values) => {
@@ -58,7 +57,7 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                         res = await createMedia(embed.data[0])
                         break
                     case EmbedEnumType.POLL:
-                        res = await createPoll((values.embed as EmbedPollCreation).data)
+                        res = await createPoll(embed.data)
                         break
                     case EmbedEnumType.GALLERY:
                     default: {

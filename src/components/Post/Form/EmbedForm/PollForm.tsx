@@ -1,7 +1,7 @@
 import React, {useCallback} from "react"
 import {Field, FieldArray, useFormikContext} from "formik"
 import {PostFormValues} from "../PostForm"
-import {EmbedForm, EmbedPollCreation, EmbedPollEdition} from "../../../../data/post/types"
+import {EmbedForm, EmbedPollForm} from "../../../../data/post/types"
 import {IconFA} from "../../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {DatePicker, Switch} from "antd"
@@ -12,7 +12,7 @@ import {isPast} from "date-fns"
 const PollForm: React.FC = () => {
     const {t} = useTranslation("poll")
     const {values, setFieldValue} = useFormikContext<PostFormValues<EmbedForm>>()
-    const poll = (values.embed as EmbedPollCreation | EmbedPollEdition).data
+    const poll = (values.embed as EmbedPollForm).data
 
     const optionValidation = useCallback(value => {
         if(value)

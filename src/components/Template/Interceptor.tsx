@@ -99,9 +99,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     this.props.history.push("/404")
                     break
                 case 401:
-                    if (error.request.url != "/auth") {
+                    if (error.request.url.startsWith("/auth")) {
                         logout()
-                        //this.context.dispatch()
                         this.props.history.push("/login")
                         message.error("Vous avez été déconnecté !")
                     }
@@ -118,8 +117,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     return Promise.reject(error)
             }
         }
-
-        return Promise.reject(error)
     }
 
     render() {

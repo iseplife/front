@@ -60,7 +60,6 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
             description: "",
             feed: props.feedId,
             private: true,
-            draft: false
         }
     },
 

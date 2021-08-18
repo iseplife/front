@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react"
-import axios, {AxiosPromise, AxiosResponse} from "axios"
-import {Badge, Button, message, Progress} from "antd"
+import {AxiosResponse} from "axios"
+import {Button, message, Progress} from "antd"
 import PictureCard from "../../Common/PictureCard"
 import {InboxOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
@@ -8,7 +8,6 @@ import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
 import {Media, MediaUploadNSFW} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
-import {IconFA} from "../../Common/IconFA"
 
 const UPLOADER_ID = "imgupload"
 
@@ -85,7 +84,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                         img,
                         club,
                         true,
-                        img.nsfw,
                         e => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.length)))
                     )
                     responses.push(res)

@@ -8,7 +8,7 @@ export const connect = (username: string, password: string): AxiosPromise<TokenS
     return apiClient.post("/auth", {username, password})
 }
 
-export const refresh = (): AxiosPromise<TokenSet> => apiClient.post("/auth/refresh", {}, )
+export const refresh = (): AxiosPromise<TokenSet> => apiClient.post("/auth/refresh")
 
 export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
 

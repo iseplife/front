@@ -13,7 +13,6 @@ export type PostFormValues<T extends EmbedFormType> = {
     id?: number
     description: string
     private: boolean
-    draft: boolean
     embed?: T
     publicationDate: Date
     linkedClub?: number
