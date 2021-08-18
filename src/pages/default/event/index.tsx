@@ -24,10 +24,11 @@ import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
-import {IconFA} from "../../../components/Common/IconFA"
 import {toggleSubscription} from "../../../data/feed"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 import EventDescription from "../../../components/Event/EventDescription"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faBell, faBellSlash} from "@fortawesome/free-regular-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -106,7 +107,7 @@ const Event: React.FC = () => {
                     >
                         {format(event.start, "d MMM") + (event.end ? (" - " + format(event.end, "d MMM")) : "")}
                         <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
-                            <IconFA name={event.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
+                            <FontAwesomeIcon icon={event.subscribed ? faBellSlash: faBell} />
                         </span>
                     </div>
                 </div>

@@ -7,7 +7,8 @@ import {StudentPreview} from "../../data/student/types"
 import {importStudent} from "../../data/student"
 import ImportedAvatar from "../Common/ImportedAvatar"
 import {RcFile} from "antd/es/upload"
-import {IconFA} from "../Common/IconFA"
+import {faSyncAlt, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const importTableConfig = [
     {title: "Photo", dataIndex: "picture", className: "w-16"},
@@ -130,7 +131,7 @@ const StudentsImport: React.FC = () => {
                         className="overflow-hidden absolute opacity-0 z-0 w-1 h-1 "
                         onChange={uploadImages}
                     />
-                    <IconFA name="fa-upload" className="px-2"/>
+                    <FontAwesomeIcon icon={faUpload} className="px-2"/>
                     Upload Student Images
                 </label>
 
@@ -147,7 +148,7 @@ const StudentsImport: React.FC = () => {
                     className="shadow-md py-1 px-2 text-white rounded border-yellow-500 bg-yellow-500"
                     onClick={reset}
                 >
-                    <IconFA name="fa-sync-alt" className="pr-2"/>
+                    <FontAwesomeIcon icon={faSyncAlt} className="pr-2"/>
                     Reset
                 </Button>
             </div>

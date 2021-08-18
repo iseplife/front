@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from "react"
 import {Button, message, Modal, Upload} from "antd"
-import {IconFA} from "../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../util"
 import {createMedia} from "../../data/media"
@@ -8,6 +7,8 @@ import axios, {AxiosPromise} from "axios"
 import {Image, Media, MediaUploadNSFW} from "../../data/media/types"
 import {addGalleryImages} from "../../data/gallery"
 import {UploadFile} from "antd/es/upload/interface"
+import {faFileUpload} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 type GalleryAdderProps = {
     gallery: number
@@ -78,7 +79,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
                     >
                         <Button>
                             {t("select_img")}
-                            <IconFA name="fa-file-upload" className="ml-2"/>
+                            <FontAwesomeIcon icon={faFileUpload} className="ml-2"/>
                         </Button>
                     </Upload>
                     {files.length > 0 &&

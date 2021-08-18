@@ -1,6 +1,7 @@
 import React from "react"
 import {Popover} from "antd"
-import {IconFA} from "./IconFA"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faQuestionCircle} from "@fortawesome/free-solid-svg-icons"
 
 type HelperIconProps = {
     text: string
@@ -12,7 +13,9 @@ const HelperIcon: React.FC<HelperIconProps> = ({text}) => (
         trigger="hover"
         content={<p className="font-dinotl text-xs">{text}</p>}
     >
-        <span className="ml-2 cursor-pointer"><IconFA name="fa-question-circle"/></span>
+        <span className="ml-2 cursor-pointer">
+            <FontAwesomeIcon icon={faQuestionCircle}/>
+        </span>
     </Popover>
 )
 

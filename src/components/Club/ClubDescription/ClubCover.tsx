@@ -1,11 +1,12 @@
 import React, {useCallback, useContext, useState} from "react"
 import {Button,} from "antd"
-import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import ImagePicker from "../../Common/ImagePicker"
 import {uploadCover} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {mediaPath} from "../../../util"
+import {faSave} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const ClubCover: React.FC = () => {
     const {t} = useTranslation()
@@ -42,7 +43,7 @@ const ClubCover: React.FC = () => {
                             className="mx-1 rounded"
                             onClick={updateCover}
                         >
-                            {t("save")} <IconFA className="ml-1" name="fa-save"/>
+                            {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
                         </Button>
                     </div>
                     }

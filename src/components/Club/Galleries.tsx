@@ -4,7 +4,8 @@ import {useTranslation} from "react-i18next"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
 import {getEventGalleries} from "../../data/event"
 import GalleryCard from "../Gallery/GalleryCard"
-import {IconFA} from "../Common/IconFA"
+import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 
 const Galleries: React.FC = () => {
@@ -34,7 +35,7 @@ const Galleries: React.FC = () => {
             >
                 {empty ?
                     <div className="w-full self-center text-center text-gray-400 my-10">
-                        <IconFA name="fa-camera-retro" size="4x" className="block"/>
+                        <FontAwesomeIcon icon={faCameraRetro} size="4x" className="block"/>
                         {t("no_gallery")}
                     </div> :
                     galleries.map(g =>

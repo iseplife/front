@@ -12,10 +12,11 @@ import {
 } from "@ant-design/icons"
 import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
-import {IconFA} from "../Common/IconFA"
 import {EventTypeColor} from "../../constants/EventType"
 import {Link} from "react-router-dom"
 import {Avatar} from "antd"
+import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 type ModalEventHeaderProps = {
     event: EventPreview
@@ -113,7 +114,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         {event.ticketURL &&
                         <li className="lowercase text-sm">
                             <a href={event.ticketURL} target="_blank" rel="noopener noreferrer">
-                                {t("ticket_url")} <IconFA name="fa-sign-out-alt"/>
+                                {t("ticket_url")} <FontAwesomeIcon icon={faSignOutAlt}/>
                             </a>
                         </li>
                         }

@@ -8,7 +8,8 @@ import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
 import {EntitySet} from "../../util"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
-import {IconFA} from "../Common/IconFA"
+import {faUserAstronaut} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 export type StudentFilter = {
     promos: number[]
@@ -122,7 +123,7 @@ const YearBook: React.FC = () => {
             >
                 {filteredStudent.length == 0 ?
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
-                        <IconFA type="solid" name="fa-user-astronaut" size="8x" className="block"/>
+                        <FontAwesomeIcon icon={faUserAstronaut} size="8x" className="block"/>
                         <span className="text-center mt-5">{t("no_student")}</span>
                     </div> :
                     filteredStudent.map((s, i) =>

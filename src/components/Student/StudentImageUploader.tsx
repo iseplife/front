@@ -5,11 +5,13 @@ import {Avatar, Button, message, Upload} from "antd"
 import {UserOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {IconFA} from "../Common/IconFA"
 import {updateCustomPicture} from "../../data/student"
 import {StudentPicture} from "../../data/student/types"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
+import {faUpload} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faSave} from "@fortawesome/free-regular-svg-icons"
 
 type StudentImageUploaderProps = {
     original?: string
@@ -76,7 +78,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
 
                     {file !== undefined && (
                         <Button className="bg-green-400 font-dinot text-green-700 hover:text-green-800 rounded-lg" onClick={handleSubmit}>
-                            {t("common:save")} <IconFA className="ml-2" name="fa-save" type="regular" />
+                            {t("common:save")} <FontAwesomeIcon icon={faSave} className="ml-2" />
                         </Button>
                     )}
                 </> :
@@ -91,7 +93,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                             style={{width: "max-content"}}
                             className="rounded-lg font-dinot border-2 border-gray-600 text-gray-600 hover:text-gray-600"
                         >
-                            {t("add_picture")} <IconFA className="ml-2" name="fa-upload"/>
+                            {t("add_picture")} <FontAwesomeIcon icon={faUpload} className="ml-2"/>
                         </Button>
                     </Upload>
                 </>

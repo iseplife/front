@@ -4,7 +4,6 @@ import {getClubsForStudent, getStudent} from "../../data/student"
 import {Avatar, Divider, Drawer, Tooltip} from "antd"
 import {useTranslation} from "react-i18next"
 import {Student, StudentOverview} from "../../data/student/types"
-import {IconFA} from "../Common/IconFA"
 import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 import {ClubMemberPreview} from "../../data/club/types"
 import {mediaPath} from "../../util"
@@ -13,6 +12,9 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import SocialUserIcon from "../Common/SocialUserIcon"
 import StudentAvatar from "./StudentAvatar"
 import Loading from "../Common/Loading"
+import {faCircleNotch} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faFacebook, faInstagram, faSnapchat, faTwitter} from "@fortawesome/free-brands-svg-icons"
 
 const StudentDrawer: React.FC = () => {
     const history = useHistory()
@@ -94,10 +96,10 @@ const StudentDrawer: React.FC = () => {
                                     t("user:no-mail")}
                             </div>
                             <div className="mt-3 sm:mt-10 mx-auto">
-                                {student.facebook && <SocialUserIcon profile={student.facebook} type="fa-facebook"/>}
-                                {student.twitter && <SocialUserIcon profile={student.twitter} type="fa-twitter"/>}
-                                {student.instagram && <SocialUserIcon profile={student.instagram} type="fa-instagram"/>}
-                                {student.snapchat && <SocialUserIcon profile={student.snapchat} type="fa-snapchat"/>}
+                                {student.facebook && <SocialUserIcon profile={student.facebook} icon={faFacebook} />}
+                                {student.twitter && <SocialUserIcon profile={student.twitter} icon={faTwitter} />}
+                                {student.instagram && <SocialUserIcon profile={student.instagram} icon={faInstagram} />}
+                                {student.snapchat && <SocialUserIcon profile={student.snapchat} icon={faSnapchat} />}
                             </div>
                         </div>
                     </div>
@@ -111,7 +113,7 @@ const StudentDrawer: React.FC = () => {
                         <div className="text-gray-700 font-bold my-1">{t("user:clubs")}</div>
                         <div className="flex flex-row hidden-scroller overflow-x-auto">
                             {
-                                isClubLoading ? <IconFA name="fa-circle-notch fa-spin" size="4x" className="mx-auto"/> :
+                                isClubLoading ? <FontAwesomeIcon icon={faCircleNotch} spin size="4x" className="mx-auto"/> :
                                     clubs.length ?
                                         clubs.map(cm => {
                                             return (

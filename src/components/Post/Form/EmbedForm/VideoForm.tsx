@@ -3,7 +3,8 @@ import {useFormikContext} from "formik"
 import {PostFormValues} from "../PostForm"
 import {Upload} from "antd"
 import {ACCEPTED_FILETYPE, EmbedCreation, EmbedEnumType, EmbedForm, EmbedMediaCreation, EmbedMediaEdition} from "../../../../data/post/types"
-import {IconFA} from "../../../Common/IconFA"
+import {faTrashAlt} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 const VideoForm: React.FC = () => {
@@ -26,9 +27,8 @@ const VideoForm: React.FC = () => {
                     <span className="text-gray-500">Ajouter une vidéo +</span>
                 </Upload> :
                 <span>
-                    <IconFA
-                        name="fa-trash-alt"
-                        type="regular"
+                    <FontAwesomeIcon
+                        icon={faTrashAlt}
                         className="mx-1 px-1 hover:text-red-400"
                         onClick={() => setFieldValue("embed", undefined)}
                     />

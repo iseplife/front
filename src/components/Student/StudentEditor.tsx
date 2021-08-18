@@ -17,8 +17,10 @@ import {Role} from "../../data/security/types"
 import {LockOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {IconFA} from "../Common/IconFA"
 import StudentAvatar from "./StudentAvatar"
+import {faArchive, faPaperclip, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 const {Option} = Select
 
@@ -197,7 +199,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </div>
                     {student && (
                         <Link to="/admin/user" className="absolute -right-3 -top-3">
-                            <IconFA name="fa-times" size="sm"/>
+                            <FontAwesomeIcon icon={faTimes} size="sm" />
                         </Link>
                     )}
 
@@ -297,16 +299,16 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         <Button
                             htmlType="submit"
                             className="mt-5 text-white rounded border-green-500 bg-green-500"
-                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                            icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
                         {student && (
                             <>
-                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<FontAwesomeIcon icon={faArchive} className="mr-2"/>} onClick={archive}>
                                     {student.archived ? "Désarchiver" : "Archiver"}
                                 </Button>
-                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                <Button className="mt-5 rounded" icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>} onClick={remove} danger>
                                     Supprimer
                                 </Button>
                             </>

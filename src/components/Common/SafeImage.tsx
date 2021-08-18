@@ -1,5 +1,6 @@
 import React, {ImgHTMLAttributes, useState} from "react"
-import {IconFA} from "./IconFA"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 
 
 type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & { nsfw: boolean, hide?: boolean }
@@ -21,7 +22,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
             {hidden && !hide && (
                 <div className="cursor-pointer" style={{left: "50%", top: "50%", position: "absolute", transform: "translate(-50%, -50%)"}}>
                     <span className="flex flex-col justify-center items-center text-indigo-400" onClick={() => setHidden(false)}>
-                        <IconFA name="fa-eye-slash" size="lg" type="regular"/> NSFW
+                        <FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW
                     </span>
                 </div>
             )}

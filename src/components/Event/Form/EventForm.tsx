@@ -5,12 +5,14 @@ import EventType, {EventTypes} from "../../../constants/EventType"
 import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Map, Marker, TileLayer} from "react-leaflet"
-import {IconFA} from "../../Common/IconFA"
 import Locker from "../../Common/Locker"
 import AvatarPicker from "../../Common/AvatarPicker"
 import FeedSelector from "../../Feed/FeedSelector"
 import HelperIcon from "../../Common/HelperIcon"
 import moment from "moment"
+import {faEuroSign, faExternalLinkAlt, faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSave} from "@fortawesome/free-regular-svg-icons"
 
 const {RangePicker} = DatePicker
 const {TextArea} = Input
@@ -105,7 +107,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         <label className="font-dinotcb">{t("form.label.location")}</label>
                         <Input
                             name="location"
-                            prefix={<IconFA name="fa-map-marker-alt"/>}
+                            prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
                             placeholder={t("form.placeholder.location")}
                             value={values.location}
                             onChange={handleChange}
@@ -119,7 +121,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                             <label className="font-dinotcb">{t("form.label.price")}</label>
                             <Input
                                 name="price"
-                                suffix={<IconFA name="fa-euro-sign"/>}
+                                suffix={<FontAwesomeIcon icon={faEuroSign} />}
                                 placeholder="80.00"
                                 value={values.price}
                                 onChange={handleChange}
@@ -132,7 +134,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                             <label className="font-dinotcb">{t("form.label.ticket_url")}</label>
                             <Input
                                 name="ticketURL"
-                                suffix={<IconFA name="fa-external-link-alt"/>}
+                                suffix={<FontAwesomeIcon icon={faExternalLinkAlt} />}
                                 placeholder="linkedin.com/in/pvenard/"
                                 value={values.ticketURL}
                                 onChange={handleChange}
@@ -177,7 +179,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         <Button
                             htmlType="submit"
                             type="primary"
-                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                            icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
                             disabled={isSubmitting}
                             className={isValid ? "cursor-pointer hover:text-gray-700 rounded" : "cursor-default text-gray-300 rounded"}
                         >

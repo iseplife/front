@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react"
-import {Post as PostType, PostUpdate} from "../../data/post/types"
+import {Post as PostType} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
@@ -7,9 +7,11 @@ import {toggleThreadLike} from "../../data/thread"
 import {format, isPast} from "date-fns"
 import CommentList from "../Comment/CommentList"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {IconFA} from "../Common/IconFA"
 import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
+import {faPen, faLock, faComment, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
+import {faTrashAlt, faHeart} from "@fortawesome/free-regular-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 type PostProps = {
     data: PostType
@@ -74,20 +76,19 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                 )}
                 {data.hasWriteAccess && (
                     <>
-                        <IconFA
-                            name="fa-pen"
+                        <FontAwesomeIcon
+                            icon={faPen}
                             className="mr-3 cursor-pointer text-gray-300 hover:text-indigo-400"
                             onClick={() => toggleEdition(true)}
                         />
-                        <IconFA
-                            name="fa-trash-alt"
-                            type="regular"
+                        <FontAwesomeIcon
+                            icon={faTrashAlt}
                             className="mr-3 cursor-pointer text-gray-300 hover:text-red-600"
                             onClick={confirmDeletion}
                         />
                     </>
                 )}
-                {data.private && <IconFA name="fa-lock" className="text-gray-300"/>}
+                {data.private && <FontAwesomeIcon icon={faLock} className="text-gray-300"/>}
             </div>
             <div>
                 <p>{data.description}</p>
@@ -104,20 +105,19 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                 <div className="flex items-center text-gray-400">
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mr-3" onClick={() => setShowComments(!showComments)}>
                         {data.nbComments > 0 && data.nbComments}
-                        <IconFA
-                            name="fa-comment"
-                            size="sm"
-                            type="regular"
+                        <FontAwesomeIcon
+                            icon={faComment}
                             className="ml-1"
+                            size="sm"
                         />
                     </span>
                     <span className="flex items-center cursor-pointer mr-3">
                         {likes > 0 && likes}
-                        <IconFA
-                            name="fa-heart" type={liked ? "solid" : "regular"}
-                            size="sm"
+                        <FontAwesomeIcon
+                            icon={liked ? faSolidHeart: faHeart}
                             className={`${liked ? "text-red-400" : "hover:text-red-600"} ml-1`}
                             onClick={() => toggleLike(data.thread)}
+                            size="sm"
                         />
                     </span>
                 </div>

@@ -9,13 +9,16 @@ import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
 import {UserOutlined} from "@ant-design/icons"
 import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
-import {IconFA} from "../../../components/Common/IconFA"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType} from "../../../data/media/types"
 import {getPhotosAsync, mediaPath, parsePhoto} from "../../../util"
 import Lightbox from "lightbox-react"
 import "lightbox-react/style.css"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
+import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+
 
 export type SelectablePhoto = { selected: boolean, nsfw: boolean }
 
@@ -192,24 +195,36 @@ const Gallery: React.FC = () => {
                         <div className="flex flex-col items-end">
                             <Button type="primary" className="shadow-md rounded mx-1" style={{width: "max-content"}} onClick={exitEditMode}>
                                 {t("common:back")}
-                                <IconFA name="fa-sign-out-alt" className="ml-2"/>
+                                <FontAwesomeIcon
+                                    icon={faSignOutAlt}
+                                    className="ml-2"
+                                />
                             </Button>
                             <div className="flex mt-3">
                                 <GalleryAdder club={gallery.club.id} gallery={gallery.id} afterUpload={addNewImages}/>
                                 <Button className="rounded mx-1" danger onClick={removeSelection}>
                                     {t("delete_selection")}
-                                    <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
+                                    <FontAwesomeIcon
+                                        icon={faTrashAlt}
+                                        className="ml-2"
+                                    />
                                 </Button>
                             </div>
                         </div> :
                         <div className="flex justify-end">
                             <Button type="primary" className="shadow-md rounded mx-1" onClick={() => setEditMode(true)}>
                                 {t("common:edit")}
-                                <IconFA name="fa-edit" className="ml-2" type="regular"/>
+                                <FontAwesomeIcon
+                                    icon={faEdit}
+                                    className="ml-2"
+                                />
                             </Button>
                             <Button type="primary" className="shadow-md rounded mx-1" danger onClick={removeGallery}>
                                 {t("common:delete")}
-                                <IconFA name="fa-trash-alt" className="ml-2" type="regular"/>
+                                <FontAwesomeIcon
+                                    icon={faTrashAlt}
+                                    className="ml-2"
+                                />
                             </Button>
                         </div>
                     }

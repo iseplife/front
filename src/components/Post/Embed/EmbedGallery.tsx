@@ -2,11 +2,12 @@ import React, {CSSProperties, useMemo} from "react"
 import {Link} from "react-router-dom"
 import {mediaPath} from "../../../util"
 import {GallerySizes} from "../../../constants/MediaSizes"
-import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {EmbedGallery as EmbedGalleryType} from "../../../data/post/types"
 import SafeImage from "../../Common/SafeImage"
 import "lightbox-react/style.css"
+import {faImages, faPlus} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const PREVIEW_GALLERY_COUNT = 5
 
@@ -53,7 +54,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     nsfw={img.nsfw}
                                 />
-                                <IconFA name="fa-plus" size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
+                                <FontAwesomeIcon icon={faPlus} size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
                             </div> :
                             <div className="hover:bg-black rounded h-full w-full">
                                 <SafeImage
@@ -68,7 +69,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
             </div>
         </div> :
         <div className="h-full w-full flex flex-col items-center rounded text-sm text-gray-400 ">
-            <IconFA name="fa-images" size="3x"/>
+            <FontAwesomeIcon icon={faImages} size="3x"/>
             <p className="text-gray-600">{t("empty")}</p>
         </div>
 }

@@ -1,13 +1,14 @@
 import {Tooltip} from "antd"
-import {IconFA} from "./IconFA"
 import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {IconDefinition} from "@fortawesome/free-brands-svg-icons"
 
 type SocialUserIconProps = {
-    type: string
+    icon: IconDefinition
     profile: string
 }
-const SocialUserIcon: React.FC<SocialUserIconProps> = ({type, profile}) => {
-    const urlType = type.substr(3)
+const SocialUserIcon: React.FC<SocialUserIconProps> = ({icon, profile}) => {
+    const urlType = icon.iconName
     if (urlType === "snapchat")
         profile = "add/" + profile
 
@@ -18,7 +19,7 @@ const SocialUserIcon: React.FC<SocialUserIconProps> = ({type, profile}) => {
                 rel="noopener noreferrer"
                 className="mx-2 text-indigo-500"
             >
-                <IconFA type="brands" name={type} className="text-2xl sm:text-4xl"/>
+                <FontAwesomeIcon icon={icon} className="text-2xl sm:text-4xl"/>
             </a>
         </Tooltip>
     )

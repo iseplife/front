@@ -1,12 +1,14 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import Table, {ColumnType, RowProps} from "../../../components/Common/TableAdmin"
-import {IconFA} from "../../../components/Common/IconFA"
 import {PageStatus} from "../student"
 import {GroupPreview} from "../../../data/group/types"
 import GroupEditor from "../../../components/Group/GroupEditor"
 import {getAllGroup} from "../../../data/group"
 import Pills from "../../../components/Common/Pills"
+import {faLock, faRedo} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faEdit} from "@fortawesome/free-regular-svg-icons"
 
 const tableConfig: ColumnType<GroupPreview>[] = [
     {title: "id", className:"w-min"},
@@ -18,7 +20,7 @@ const tableConfig: ColumnType<GroupPreview>[] = [
             className="cursor-pointer rounded text-center m-1 py-1 w-8"
             onClick={() => props.refresh && props.refresh()}
         >
-            <IconFA name="fa-redo" className="text-gray-500 hover:text-gray-600"/>
+            <FontAwesomeIcon icon={faRedo} className="text-gray-500 hover:text-gray-600"/>
         </div>
     )
 ]
@@ -84,7 +86,7 @@ const TableRow: React.FC<RowProps<GroupPreview>> = ({data: f}) => (
     <tr key={f.id}>
         <td className="border-b border-gray-200 text-sm leading-5 font-bold px-6 py-2">{f.id}</td>
         <td className="text-gray-400 border-b border-gray-200 text-sm leading-5 font-medium p-2">
-            {f.restricted && <IconFA name="fa-lock"/> }
+            {f.restricted && <FontAwesomeIcon icon={faLock} /> }
         </td>
         <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
             <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
@@ -99,7 +101,7 @@ const TableRow: React.FC<RowProps<GroupPreview>> = ({data: f}) => (
                 to={`/admin/group/${f.id}`}
                 className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
             >
-                <IconFA name="fa-edit" type="regular"/>
+                <FontAwesomeIcon icon={faEdit} />
             </Link>
         </td>
     </tr>

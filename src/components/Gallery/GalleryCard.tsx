@@ -2,10 +2,11 @@ import React, {useMemo} from "react"
 import {GalleryPreview} from "../../data/gallery/types"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import {IconFA} from "../Common/IconFA"
 import {mediaPath} from "../../util"
 import {GallerySizes} from "../../constants/MediaSizes"
 import SafeImage from "../Common/SafeImage"
+import {faImages, faPlus} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const PREVIEW_GALLERY_COUNT = 5
 
@@ -29,7 +30,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                             >
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
                                     <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50 rounded" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
-                                    <IconFA name="fa-plus" className="absolute z-10" style={{top: "30%", left: "43%"}}/>
+                                    <FontAwesomeIcon icon={faPlus} className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
                             :
@@ -45,7 +46,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                             </Link>
                     )) :
                     <div className="h-full w-full flex flex-col items-center rounded text-sm text-gray-400 ">
-                        <IconFA name="fa-images" size="3x"/>
+                        <FontAwesomeIcon icon={faImages} size="3x"/>
                         <p className="text-gray-600">{t("empty")}</p>
                     </div>
                 }

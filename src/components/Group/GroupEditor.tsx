@@ -6,19 +6,15 @@ import {GroupAdmin, GroupForm} from "../../data/group/types"
 import {useFormik} from "formik"
 import Loading from "../Common/Loading"
 import ImagePicker from "../Common/ImagePicker"
-import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import HelperIcon from "../Common/HelperIcon"
 import {createGroup, deleteGroup, getGroupAdmin, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
 import {StudentPreview} from "../../data/student/types"
-import {
-    AuditOutlined,
-    DeleteOutlined,
-    SaveOutlined
-} from "@ant-design/icons"
-
 import "./GroupEditor.css"
 import {mediaPath} from "../../util"
+import {faArchive, faLock, faTimes, faUnlock} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 
 type GroupEditorProps = {
@@ -168,7 +164,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
                     {group && (
                         <Link to="/admin/group" className="absolute -right-3 -top-3">
-                            <IconFA name="fa-times" size="sm"/>
+                            <FontAwesomeIcon icon={faTimes} size="sm" />
                         </Link>
                     )}
 
@@ -183,8 +179,8 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                             </label>
                             <Switch
                                 className="m-auto"
-                                checkedChildren={<IconFA name="fa-lock"/>}
-                                unCheckedChildren={<IconFA name="fa-unlock"/>}
+                                checkedChildren={<FontAwesomeIcon icon={faLock}/>}
+                                unCheckedChildren={<FontAwesomeIcon icon={faUnlock} />}
                                 checked={formik.values.restricted}
                                 onChange={(val) => formik.setFieldValue("restricted", val)}
                             />
@@ -216,16 +212,16 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                         <Button
                             htmlType="submit"
                             className="mt-5 text-white rounded border-green-500 bg-green-500"
-                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                            icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
                         {group && (
                             <>
-                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<FontAwesomeIcon icon={faArchive} className="mr-2"/>} onClick={archive}>
                                     {group.archived ? "Désarchiver" : "Archiver"}
                                 </Button>
-                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                <Button className="mt-5 rounded" icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>} onClick={remove} danger>
                                     Supprimer
                                 </Button>
                             </>

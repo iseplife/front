@@ -1,12 +1,13 @@
 import React from "react"
-import {IconFA} from "./IconFA"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 
 type SocialIconProps = {
-    type: string
+    icon: IconDefinition
     url: string
     className?: string
 }
-const SocialIcon: React.FC<SocialIconProps> = ({type, url, className}) => {
+const SocialIcon: React.FC<SocialIconProps> = ({icon, url, className}) => {
     return (
         <a
             href={url}
@@ -14,7 +15,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({type, url, className}) => {
             rel="noopener noreferrer"
             className={`mx-2 hover:text-indigo-300 text-indigo-500 text-${className}`}
         >
-            <IconFA type="brands" name={type} className="text-2xl sm:text-4xl"/>
+            <FontAwesomeIcon icon={icon} className="text-2xl sm:text-4xl"/>
         </a>
     )
 }

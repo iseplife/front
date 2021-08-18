@@ -1,10 +1,11 @@
 import React from "react"
-import {IconFA} from "../../Common/IconFA"
 import {BasicPostCreation, Post} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
 import AvatarPicker from "../../Common/AvatarPicker"
 import {createPost} from "../../../data/post"
+import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 export type BasicPostFormValues = {
@@ -41,7 +42,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({children, isSubm
                         disabled={isSubmitting || !values.description.length}
                         className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
                     >
-                        <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"}/>
+                        <FontAwesomeIcon icon={isSubmitting ? faCircleNotch: faPaperPlane} spin={isSubmitting} />
                     </button>
                 </div>
             </div>

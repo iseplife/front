@@ -1,11 +1,10 @@
 import React, {useEffect, useMemo, useReducer} from "react"
 import {useParams} from "react-router"
 import {getClub, getClubMembers} from "../../../data/club"
-import {Button, message, Skeleton} from "antd"
+import {message, Skeleton} from "antd"
 import {useHistory} from "react-router-dom"
 import ClubNavbar from "../../../components/Club/Mobile/ClubNavbar"
 import ClubCover from "../../../components/Club/ClubDescription/ClubCover"
-import {IconFA} from "../../../components/Common/IconFA"
 import SocialIcon from "../../../components/Common/SocialIcon"
 import SidePanelMembers from "../../../components/Club/Desktop/SidePanelMembers"
 import Feed from "../../../components/Feed"
@@ -15,6 +14,9 @@ import ClubLogo from "../../../components/Club/ClubLogo"
 import {clubContextReducer} from "../../../context/club/reducer"
 import {ClubContext, DEFAULT_STATE} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
+import {faSignOutAlt, faTools} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faFacebook, faFirefox, faInstagram, faSnapchat} from "@fortawesome/free-brands-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -80,17 +82,17 @@ const Club: React.FC = () => {
                     </div>
                     {state.club.data &&
                     <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
-                        {state.club.data.website && <SocialIcon type="fa-firefox" url={state.club.data.website}/>}
-                        {state.club.data.facebook && <SocialIcon type="fa-facebook" url={state.club.data.facebook}/>}
-                        {state.club.data.instagram && <SocialIcon type="fa-instagram" url={state.club.data.instagram}/>}
-                        {state.club.data.snapchat && <SocialIcon type="fa-snapchat" url={state.club.data.snapchat}/>}
+                        {state.club.data.website && <SocialIcon icon={faFirefox} url={state.club.data.website}/>}
+                        {state.club.data.facebook && <SocialIcon  icon={faFacebook} url={state.club.data.facebook}/>}
+                        {state.club.data.instagram && <SocialIcon  icon={faInstagram} url={state.club.data.instagram}/>}
+                        {state.club.data.snapchat && <SocialIcon  icon={faSnapchat} url={state.club.data.snapchat}/>}
                         {state.club.data.canEdit && (
                             <span className="text-gray-700 hover:text-gray-500 cursor-pointer font-bold mt-5 mr-5 " onClick={() => dispatch({type: ClubActionType.TOGGLE_ADMIN_MODE})}>
                                 Administration
-                                <IconFA
+                                <FontAwesomeIcon
+                                    icon={state.adminMode ? faSignOutAlt: faTools}
                                     size="lg"
                                     className="ml-3"
-                                    name={state.adminMode ? "fa-sign-out-alt" : "fa-tools"}
                                 />
                             </span>
                         )}

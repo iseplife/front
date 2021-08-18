@@ -6,7 +6,8 @@ import {message, Modal} from "antd"
 import Galleries from "../Club/Galleries"
 import {getClubGalleries} from "../../data/club"
 import {ClubContext} from "../../context/club/context"
-import {IconFA} from "../Common/IconFA"
+import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const GalleriesPreview: React.FC = () => {
     const {t} = useTranslation("gallery")
@@ -39,7 +40,7 @@ const GalleriesPreview: React.FC = () => {
                 </div>
                 :
                 <div className="text-center text-gray-400">
-                    <IconFA name="fa-camera-retro"  size="4x" className="block" />
+                    <FontAwesomeIcon icon={faCameraRetro} size="4x" className="block" />
                     {t("no_gallery")}
                 </div>
             }

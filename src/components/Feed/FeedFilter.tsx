@@ -1,11 +1,12 @@
 import React, {useCallback, useContext, useMemo, useState} from "react"
 import {Select} from "antd"
 import Tag from "../Common/Tag"
-import {IconFA} from "../Common/IconFA"
 import {useRecoilState} from "recoil"
 import {filterState} from "../../pages/default/calendar"
 import {useTranslation} from "react-i18next"
 import {FeedsContext} from "../../context/feed/context"
+import {faTimes} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const {Option} = Select
 
@@ -29,17 +30,17 @@ const FeedFilter: React.FC = () => {
             [id]: !f.feeds[id]
         }
     })), [])
-    
+
     const selectedFeeds = useMemo(() => {
         return (
             Object.entries(filter.feeds).map(([k, v]) => v && (
                 <Tag key={k} selected={true} onClick={() => toggleFeed(+k)}>
-                    {feeds[+k]} <IconFA name="fa-times" className="hover:text-red-500"/>
+                    {feeds[+k]} <FontAwesomeIcon icon={faTimes} className="hover:text-red-500"/>
                 </Tag>
             ))
         )
     }, [feeds, filter.feeds, toggleFeed])
-    
+
 
     return (
         <div id="feeds-filter">

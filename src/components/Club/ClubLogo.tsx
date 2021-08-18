@@ -1,12 +1,13 @@
 import React, {useCallback, useContext, useMemo, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {Avatar, Button, message} from "antd"
-import {IconFA} from "../Common/IconFA"
 import {uploadClubLogo} from "../../data/club"
 import {useTranslation} from "react-i18next"
 import {ClubContext} from "../../context/club/context"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {faCircleNotch, faSave} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 const ClubLogo: React.FC = () => {
@@ -52,12 +53,12 @@ const ClubLogo: React.FC = () => {
                 className="rounded mt-2"
                 onClick={updateLogo}
             >
-                {t("save")} <IconFA className="ml-1" name="fa-save"/>
+                {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
             </Button>
             }
         </div> :
         <Avatar src={imagePath} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white">
-            {loading && <IconFA name="fa-circle-notch" spin size="2x" type="solid" className="text-white mt-6"/>}
+            {loading && <FontAwesomeIcon icon={faCircleNotch} spin size="2x" className="text-white mt-6"/>}
         </Avatar>
 
 }
