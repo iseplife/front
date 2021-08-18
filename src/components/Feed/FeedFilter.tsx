@@ -1,12 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {useCallback, useContext, useMemo, useState} from "react"
 import {Select} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
 import Tag from "../Common/Tag"
 import {IconFA} from "../Common/IconFA"
 import {useRecoilState} from "recoil"
 import {filterState} from "../../pages/default/calendar"
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next"
+import {FeedsContext} from "../../context/feed/context"
 
 const {Option} = Select
 
@@ -15,20 +14,13 @@ type OptionType = {
     value: number
 }
 
-type FeedSelectorProps = {
-    onChange: (ids: number[]) => void
-}
-const FeedFilter: React.FC<FeedSelectorProps> = ({onChange}) => {
+
+//TODO: rework how filter is handle, it's overcomplicated.
+const FeedFilter: React.FC = () => {
     const {t} = useTranslation("event")
     const [value, setValue] = useState()
-    const feeds = useSelector((state: AppState) => state.feeds)
+    const feeds = useContext(FeedsContext)
     const [filter, setFilter] = useRecoilState(filterState)
-
-    const options = useMemo<OptionType[]>(() => Object.values(feeds).map(f => ({
-        value: f.id,
-        label: f.name
-    })), [feeds])
-
 
     const toggleFeed = useCallback((id: number) => setFilter(f => ({
         ...f,
@@ -38,13 +30,15 @@ const FeedFilter: React.FC<FeedSelectorProps> = ({onChange}) => {
         }
     })), [])
     
-    const selectedFeeds = useMemo(() => (
-        Object.entries(filter.feeds).map(([k, v]) => v && (
-            <Tag key={k} selected={true} onClick={() => toggleFeed(+k)}>
-                {feeds[+k].name} <IconFA name="fa-times" className="hover:text-red-500"/>
-            </Tag>
-        ))
-    ), [feeds, filter.feeds, toggleFeed])
+    const selectedFeeds = useMemo(() => {
+        return (
+            Object.entries(filter.feeds).map(([k, v]) => v && (
+                <Tag key={k} selected={true} onClick={() => toggleFeed(+k)}>
+                    {feeds[+k]} <IconFA name="fa-times" className="hover:text-red-500"/>
+                </Tag>
+            ))
+        )
+    }, [feeds, filter.feeds, toggleFeed])
     
 
     return (
@@ -61,19 +55,19 @@ const FeedFilter: React.FC<FeedSelectorProps> = ({onChange}) => {
                 }}
                 className="rounded-scroller w-full hover:border-indigo-400"
             >
-                {Object.values(feeds).map(f => (
-                    <Option key={f.id} value={f.id} disabled={filter.feeds[f.id]}>
-                        {f.name}
+                {Object.entries(feeds).map(([id, name])=> (
+                    <Option key={id} value={id} disabled={filter.feeds[+id]}>
+                        {name}
                     </Option>
                 ))}
             </Select>
 
             <div className="my-2 flex flex-wrap justify-center">
-                {selectedFeeds.length == 0 ?
-                    <Tag selected={true} onClick={() => null}>
+                {selectedFeeds.length === 0 ?
+                    <Tag selected={true} onClick={undefined}>
                         Tous les feeds sont visibles
-                    </Tag>
-                    : selectedFeeds
+                    </Tag> :
+                    selectedFeeds
                 }
             </div>
         </div>

@@ -15,7 +15,7 @@
 		"disable": "Ne plus autoriser iseplife à vous envoyer des notifications push"
 	},
 	"nsfw": {
-		"title": "NSFW",
+		"title": "Safe Mode",
 		"enable": "Cacher par défaut les images marquées comme nsfw",
 		"disable": "Voir les images marquées comme nsfw"
 	},

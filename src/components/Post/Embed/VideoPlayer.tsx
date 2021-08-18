@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react"
+import React, {useRef} from "react"
 import {mediaPath} from "../../../util"
 
 type VideoPlayerProps = {
@@ -7,7 +7,6 @@ type VideoPlayerProps = {
 }
 const VideoPlayer: React.FC<VideoPlayerProps> = ({src, thumbnail}) => {
     const videoRef = useRef(null)
-    const [playing, setPlaying] = useState<boolean>(false)
 
     return (
         <div>

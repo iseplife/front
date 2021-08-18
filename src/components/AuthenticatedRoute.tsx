@@ -3,7 +3,7 @@ import {Route, Redirect, RouteProps} from "react-router"
 
 
 interface AuthenticatedRouteProps extends RouteProps {
-    roles: string[];
+    roles: string[]
 }
 
 const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({

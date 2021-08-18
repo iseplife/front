@@ -1,15 +1,13 @@
 import React from "react"
-import {withRouter, RouteComponentProps} from "react-router"
-import axios, {AxiosError, AxiosResponse} from "axios"
-import {removeTokens, setTokens} from "../../data/security"
+import {apiClient} from "../../data/http"
 import {message} from "antd"
+import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
+import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
-
-const errorMessages = [
-    "Whoops nos serveurs ne répondent plus, nos techniciens s'en occupent 👊 !",
-    "Désolé, nous ne sommes pas disponible pour le moment ! 🙀",
-    "Revenez d'ici 5 min, il est possible que nous soyons en train de faire de la maintenance ! 🔧",
-]
+import {logout, parseToken, refresh, setToken} from "../../data/security"
+import {AppContext} from "../../context/app/context"
+import {AppActionType} from "../../context/app/action"
+import { TokenSet } from "../../data/security/types"
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
@@ -17,24 +15,35 @@ type InterceptState = {
 };
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
+    context!: React.ContextType<typeof AppContext>;
+    intercept?: number[];
+
     state: InterceptState = {
         error: "",
     };
-    intercept?: number;
+
+    refreshingPromise?: AxiosPromise<TokenSet>;
 
     componentDidMount() {
-        this.intercept = axios.interceptors.response.use(
-            this.axiosResponseInterceptor,
-            this.axiosErrorInterceptor,
-        )
+        this.intercept = [
+            apiClient.interceptors.request.use(
+                this.axiosRequestInterceptor, e => Promise.reject(e)
+            ),
+            apiClient.interceptors.response.use(
+                this.axiosResponseInterceptor,
+                this.axiosResponseErrorInterceptor,
+            )
+        ]
 
         window.addEventListener("offline", this.handleOffline)
         window.addEventListener("online", this.handleOnline)
     }
 
     componentWillUnmount() {
-        if (this.intercept)
-            axios.interceptors.response.eject(this.intercept)
+        if (this.intercept) {
+            apiClient.interceptors.request.eject(this.intercept[0])
+            apiClient.interceptors.response.eject(this.intercept[1])
+        }
 
         window.removeEventListener("offline", this.handleOffline)
         window.removeEventListener("online", this.handleOnline)
@@ -48,34 +57,54 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         message.info(this.props.t("online"))
     };
 
-    axiosResponseInterceptor = (response: AxiosResponse) => {
-        // Do something with response data
-        if (response.headers) {
-            const token = response.headers["Authorization"]
-            const refreshToken = response.headers["X-Refresh-Token"]
-            if (token && refreshToken) {
-                setTokens({token, refreshToken})
-            }
+    axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
+        if (this.context.state.token_expiration - 25_000 <= new Date().getTime() && !request.url?.startsWith("/auth")) {
+            delete apiClient.defaults.headers.common["Authorization"]
+
+            if (!this.refreshingPromise)
+                (this.refreshingPromise = refresh()).then(res => {
+                    try {
+                        setToken(res.data)
+                        this.context.dispatch({
+                            type: AppActionType.SET_TOKEN,
+                            token: parseToken(res.data.token)
+                        })
+                    } catch (e) {
+                        throw new Error("JWT cookie unreadable")
+                    }
+
+                    this.refreshingPromise = undefined
+                }).catch(() => {
+                    this.props.history.push("/login")
+                    message.error("Vous avez été déconnecté !")
+                    this.refreshingPromise = undefined
+                })
+            
+            this.refreshingPromise.then(res =>
+                request.headers["Authorization"] = `Bearer ${res.data.token}`
+            )
         }
-        return response
+        return request
     }
 
-    axiosErrorInterceptor = (props: RouteComponentProps) => (error: AxiosError) => {
-        if(axios.isCancel(error)){
-            console.log("Request canceled", error.message)
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return new Promise(() => {})
-        }
+    axiosResponseInterceptor = (response: AxiosResponse) => response
 
+    axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
             switch (error.response.status) {
-                case 404:
-                    props.history.push("/404")
-                    break
                 case 403:
-                    removeTokens()
-                    props.history.push("/login")
-                    message.error("Vous avez été déconnecté !")
+                    message.error("Permission insuffisante")
+                    break
+                case 404:
+                    this.props.history.push("/404")
+                    break
+                case 401:
+                    if (error.request.url != "/auth") {
+                        logout()
+                        //this.context.dispatch()
+                        this.props.history.push("/login")
+                        message.error("Vous avez été déconnecté !")
+                    }
                     break
                 case 500:
                 case 400:
@@ -86,16 +115,11 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     message.error("Serveur indisponible")
                     break
                 default:
-                    throw error
-                    break
+                    return Promise.reject(error)
             }
         }
-        return <p>Dommage</p>
-    }
 
-    selectRandom(messages: string[]) {
-        const rnd = Math.round(Math.random() * (messages.length - 1))
-        return messages[rnd]
+        return Promise.reject(error)
     }
 
     render() {
@@ -109,5 +133,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         return null
     }
 }
+
+Interceptor.contextType = AppContext
 
 export default withRouter(withTranslation()(Interceptor))

@@ -1,11 +1,14 @@
-import axios, {AxiosPromise} from "axios"
-import {Poll, PollChoice, PollCreation} from "./types"
+import {AxiosPromise} from "axios"
+import {Poll, PollChoice, PollCreation, PollEdition} from "./types"
+import {apiClient} from "../http"
 
 
-export const createPoll = (form: PollCreation): AxiosPromise<Poll> => axios.post("/poll", form)
+export const createPoll = (form: PollCreation): AxiosPromise<Poll> => apiClient.post("/poll", form)
 
-export const getPollVotes = (poll: number): AxiosPromise<PollChoice[]> => axios.get(`/poll/${poll}/vote`)
+export const updatePoll = (form: PollEdition): AxiosPromise<Poll> => apiClient.put("/poll", form)
 
-export const addVote = (poll: number, choice: number): AxiosPromise<void> => axios.post(`/poll/${poll}/choice/${choice}`)
+export const getPollVotes = (poll: number): AxiosPromise<PollChoice[]> => apiClient.get(`/poll/${poll}/vote`)
 
-export const removeVote = (poll: number, choice: number): AxiosPromise<void> => axios.delete(`/poll/${poll}/choice/${choice}`)
+export const addVote = (poll: number, choice: number): AxiosPromise<void> => apiClient.post(`/poll/${poll}/choice/${choice}`)
+
+export const removeVote = (poll: number, choice: number): AxiosPromise<void> => apiClient.delete(`/poll/${poll}/choice/${choice}`)

@@ -1,8 +1,5 @@
 import React from "react"
-import {
-    Route,
-    Switch,
-} from "react-router-dom"
+import {Route, Switch,} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -13,7 +10,7 @@ import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
 import NotFound from "../../pages/errors/NotFound"
-import UserDrawer from "../User/UserDrawer"
+import StudentDrawer from "../Student/StudentDrawer"
 import Setting from "../../pages/default/setting"
 
 
@@ -38,7 +35,7 @@ const DefaultTemplate: React.FC = () => {
                     </Switch>
                 </div>
             </Navbar>
-            <UserDrawer/>
+            <StudentDrawer/>
         </div>
     )
 }

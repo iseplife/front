@@ -13,7 +13,7 @@ export type IconFAProps = {
 export const IconFA: React.FC<IconFAProps> = ({name, spin, size, type, className, onClick, style}) => {
     return (
         <i
-            className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size}`}
+            className={`${className} ${"fa" + type?.charAt(0)} ${spin ? "fa-spin" : ""} ${name} fa-${size} ${onClick ? "cursor-pointer": ""} `}
             onClick={onClick}
             style={style}
         />

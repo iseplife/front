@@ -1,5 +1,5 @@
 import ClubType from "../../constants/ClubType"
-import {Student, StudentPreview} from "../student/types"
+import { StudentPreview} from "../student/types"
 
 export enum ClubRole {
     MEMBER = "MEMBER",

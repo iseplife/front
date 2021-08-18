@@ -1,11 +1,9 @@
 import React from "react"
 import {Embed as EmbedType, EmbedEnumType} from "../../../data/post/types"
-import {mediaPath} from "../../../util"
-import {PostSizes} from "../../../constants/MediaSizes"
 import EmbedGallery from "./EmbedGallery"
 import Poll from "./Poll"
-import SafeImage from "../../Common/SafeImage"
 import Video from "./Video"
+import EmbedImages from "./EmbedImages"
 
 
 type EmbedProps = {
@@ -22,7 +20,7 @@ const Embed: React.FC<EmbedProps> = ({embed}) => {
         case EmbedEnumType.GALLERY:
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
-            return <SafeImage src={mediaPath(embed.name, PostSizes.PREVIEW)} nsfw={embed.NSFW}/>
+            return <EmbedImages images={embed.images}/>
         default:
             return null
     }

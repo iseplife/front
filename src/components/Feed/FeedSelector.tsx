@@ -1,8 +1,7 @@
-import React, {useMemo} from "react"
+import React, {useContext, useMemo} from "react"
 import {Select, Tag} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
 import {CustomTagProps} from "rc-select/lib/interface/generator"
+import {FeedsContext} from "../../context/feed/context"
 
 type Option = {
     label: string
@@ -15,10 +14,10 @@ type FeedSelectorProps = {
     tagRender?: (props: CustomTagProps) => React.ReactElement
 }
 const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tagRender}) => {
-    const feeds = useSelector((state: AppState) => state.feeds)
-    const options = useMemo<Option[]>(() => Object.values(feeds).map(f => ({
-        value: f.id,
-        label: f.name
+    const feeds = useContext(FeedsContext)
+    const options = useMemo<Option[]>(() => Object.entries(feeds).map(([id, name]) => ({
+        value: +id,
+        label: name
     })), [feeds])
 
     const tagComponent = useMemo(() => (

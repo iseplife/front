@@ -1,15 +1,12 @@
-import React, {CSSProperties, useCallback, useEffect, useMemo, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {getAuthorsThumbnail} from "../../data/post"
-import {Avatar, Select} from "antd"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
+import {Select} from "antd"
 import {Author} from "../../data/request.type"
 import Loading from "./Loading"
-import {UserOutlined} from "@ant-design/icons"
-
 import "./AvatarPicker.css"
-import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {AppContext} from "../../context/app/context"
+import StudentAvatar from "../Student/StudentAvatar"
 
 
 const {Option} = Select
@@ -25,7 +22,7 @@ interface AvatarPickerProps {
 }
 
 const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, compact, clubOnly, className, placeholder, style}) => {
-    const userThumb = useSelector((state: AppState) => state.user.picture)
+    const {state: {user: {picture}}} = useContext(AppContext)
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [loading, setLoading] = useState<boolean>(true)
     const [publishers, setPublishers] = useState<Author[]>([])
@@ -59,8 +56,18 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
             style={style}
         >
             {!clubOnly &&
-                <Option key={0} value={0} label={<Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/>}>
-                    <Avatar icon={<UserOutlined/>} src={mediaPath(userThumb, AvatarSizes.THUMBNAIL)} size="small"/> moi
+                <Option
+                    key={0}
+                    value={0}
+                    label={<StudentAvatar id={0} name="moi" size="small" picture={picture} pictureSize={AvatarSizes.THUMBNAIL}/>}
+                >
+                    <StudentAvatar
+                        id={0}
+                        name="moi"
+                        size="small"
+                        picture={picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
+                    /> moi
                 </Option>
             }
             {loading ?
@@ -69,9 +76,15 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
                     <Option
                         key={i + 1}
                         value={p.id}
-                        label={<Avatar icon={<UserOutlined/>} src={mediaPath(p.thumbnail, AvatarSizes.THUMBNAIL)} size="small"/>}
+                        label={<StudentAvatar id={p.id} name={p.name} size="small" picture={p.thumbnail} pictureSize={AvatarSizes.THUMBNAIL}/>}
                     >
-                        <Avatar icon={<UserOutlined/>} src={mediaPath(p.thumbnail, AvatarSizes.THUMBNAIL)} size="small"/> {p.name}
+                        <StudentAvatar
+                            id={p.id}
+                            name={p.name}
+                            size="small"
+                            picture={p.thumbnail}
+                            pictureSize={AvatarSizes.THUMBNAIL}
+                        /> {p.name}
                     </Option>
                 ))
             }

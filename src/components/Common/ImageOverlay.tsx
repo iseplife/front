@@ -18,7 +18,7 @@ const ImageOverlay: React.FC<ImageOverlayProps> = ({src, className, children}) =
                     backgroundPosition: "center",
                 }}
             />
-            <span className="image-options absolute text-gray-400 z-10 whitespace-no-wrap">
+            <span className="flex justify-center image-options absolute text-gray-400 z-10 whitespace-no-wrap">
                 {children}
             </span>
 

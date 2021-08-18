@@ -112,7 +112,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         }
                         {event.ticketURL &&
                         <li className="lowercase text-sm">
-                            <a href={event.ticketURL} target="_blank" rel="noreferrer">
+                            <a href={event.ticketURL} target="_blank" rel="noopener noreferrer">
                                 {t("ticket_url")} <IconFA name="fa-sign-out-alt"/>
                             </a>
                         </li>

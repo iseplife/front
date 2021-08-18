@@ -6,8 +6,11 @@ import {getAllClubs} from "../../../data/club"
 import Loading from "../../../components/Common/Loading"
 import ClubCard from "../../../components/Club/ClubCard"
 
+interface ParamTypes {
+    id?: string
+}
 const ClubPanel: React.FC = () => {
-    const {id} = useParams()
+    const {id} = useParams<ParamTypes>()
     const [clubs, setClubs] = useState<ClubPreview[]>([])
     const [loading, setLoading] = useState<boolean>(false)
 

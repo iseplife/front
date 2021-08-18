@@ -1,46 +1,40 @@
-import {Role, Roles, Token, TokenPayload, TokenSet} from "./types"
-import axios, {AxiosPromise} from "axios"
-import {getCookie, removeCookie, setCookie} from "./cookie"
+import {ParsedToken, Role, Token, TokenSet} from "./types"
+import {AxiosPromise} from "axios"
+import {getCookie} from "./cookie"
+import {apiClient} from "../http"
 
-export const connect = (username: string, password: string): Promise<TokenPayload> => {
+export const connect = (username: string, password: string): AxiosPromise<TokenSet> => {
     logout()
-    return axios
-        .post("/auth", {
-            username,
-            password,
-        }).then(res => {
-            setTokens(res.data)
-            return getUser()
-        })
+    return apiClient.post("/auth", {username, password})
 }
 
-export const getRoles = (): AxiosPromise<Role[]> => axios.get("auth/roles")
+export const refresh = (): AxiosPromise<TokenSet> => apiClient.post("/auth/refresh", {}, )
 
-export const setTokens = (tokenSet: TokenSet) => {
-    setCookie("token", tokenSet.token , {
-        "max-age": 600      //10 min
-    })
-    setCookie("refreshToken", tokenSet.refreshToken, {
-        "max-age": 604800  //7 days
-    })
-    axios.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
-    axios.defaults.headers.common["X-Refresh-Token"] = tokenSet.refreshToken
-}
-export const removeTokens = (): void => {
-    removeCookie("token")
-    removeCookie("refreshToken")
-    delete axios.defaults.headers.common["Authorization"]
-    delete axios.defaults.headers.common["X-Refresh-Token"]
+export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
+
+export const setToken = (tokenSet: TokenSet): void => {
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
 }
 
-export const getUser = (): TokenPayload => {
+export const parseToken = (token: string): ParsedToken => {
+    try {
+        const rawdata = JSON.parse(atob(token.split(".")[1])) as Token
+        return {
+            ...rawdata,
+            payload: JSON.parse(rawdata.payload)
+        }
+    } catch (e) {
+        throw new Error("Auth cookies unreadable")
+    }
+}
+
+export const getToken = (): Token => {
     const token = getCookie("token")
     let rawdata = ""
     if (token) {
         rawdata = token.split(".")[1]
         try {
-            const tokenJson = JSON.parse(atob(rawdata)) as Token
-            return JSON.parse(tokenJson.payload) as TokenPayload
+            return JSON.parse(atob(rawdata)) as Token
         } catch (e) {
             throw new Error("Auth cookies unreadable")
         }
@@ -49,13 +43,10 @@ export const getUser = (): TokenPayload => {
     throw new Error("Auth cookies missing")
 }
 
-export const isAdmin = (): boolean => hasRole([Roles.ADMIN])
-
-export const hasRole = (roles: Array<Roles>): boolean =>  {
-    const user = getUser()
-    return Boolean(user && roles.filter(r => user.roles.includes(r)).length > 0)
+export const isLoggedIn = (): boolean => {
+    return false
 }
 
-export const isLoggedIn = (): boolean => !!getCookie("token")
-
-export const logout = (): void => removeTokens()
+export const logout = (): void => {
+    delete apiClient.defaults.headers.common["Authorization"]
+}

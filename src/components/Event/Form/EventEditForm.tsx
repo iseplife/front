@@ -1,8 +1,8 @@
 import {withFormik} from "formik"
 import {EventForm as EventFormType, Event as EventType} from "../../../data/event/types"
-import EventForm from "./EventForm"
 import {editEvent} from "../../../data/event"
 import {message} from "antd"
+import EventForm from "./EventForm"
 
 
 type EventEditFormProps = {

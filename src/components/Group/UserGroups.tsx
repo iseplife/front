@@ -20,7 +20,7 @@ const UserGroups: React.FC = () => {
 
     return (
         <div className="">
-            <h3 className="font-dinotcb text-gray-800 text-lg">{t("group") + "s"}</h3>
+            <h3 className="font-dinotcb text-gray-700 text-lg">{t("group") + "s"}</h3>
             {loading ?
                 <>
                     <Skeleton title paragraph={{rows: 0}}/>

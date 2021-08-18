@@ -84,4 +84,4 @@ type ReducerSearchUpdate = {
 type NoActionReduction = {
     type: "TOGGLE_SORT" | "INIT_FILTER",
 }
-export type FilterReducerAction = NoActionReduction | ReducerPromoToggle | ReducerSearchUpdate;
+export type FilterReducerAction = NoActionReduction | ReducerPromoToggle | ReducerSearchUpdate

@@ -9,7 +9,7 @@ const Discovery: React.FC = () => {
     return (
         <div>
             <h1 className="text-center text-5xl font-bold text-indigo-500">{t("welcome")}</h1>
-            <div className="w-10/12 sm:w-2/3 max-w-6xl mx-auto my-8 text-lg font-bold text-center">
+            <div className="w-10/12 sm:w-2/3 max-w-6xl mx-auto my-8 text-lg font-bold text-center leading-8">
                 {t("welcome_description")}
             </div>
             <div className="mt-16 mb-10 px-3 flex flex-wrap sm:justify-around justify-center">

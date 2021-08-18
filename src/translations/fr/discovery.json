@@ -18,5 +18,6 @@
   "placeholder_search": "Rechercher un(e) ami(e)...",
   "promotions": "Choisir une promotion",
   "yearbook_title": "Annuaire des élèves",
-  "associations": "Associations"
+  "associations": "Associations",
+  "no_student": "Aucun élève, t'es parti trop loin"
 }

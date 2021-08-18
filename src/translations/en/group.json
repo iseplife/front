@@ -2,6 +2,8 @@
 	"group": "Group",
 	"members": "Members",
 	"admins": "Administrators",
+	"restricted": "Group restricted",
+	"public": "Group public",
 	"see_all": "See all members +",
 	"see_less": "See less members -",
 	"add_member": "Add member",

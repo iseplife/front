@@ -10,8 +10,8 @@ type Loader = {
     fetch: boolean
 }
 
-export type loaderCallback = (count: number, ...param: any) => Promise<boolean>;
-export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback];
+export type loaderCallback = (count: number, ...param: any) => Promise<boolean>
+export type ScrollerCallback = loaderCallback | [loaderCallback, loaderCallback]
 
 export type InfiniteScrollerRef = {
     resetData: () => void
@@ -27,8 +27,9 @@ type InfiniteScrollerProps = {
     loadingComponent?: React.ReactNode,
 }
 
-const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(({watch, empty = false,  callback, triggerDistance = 50, loadingComponent, children, className}, ref) => {
+const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>((props, ref) => {
     const {t} = useTranslation("common")
+    const {watch, empty = false,  callback, triggerDistance = 50, loadingComponent, children, className} = props
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
@@ -133,7 +134,9 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
         <div className="relative h-auto">
             {(watch !== "DOWN") && (
                 <div className="h-12 mb-3 text-center">
-                    {upLoader.over && !empty ? <p>{t("end")}</p> : upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
+                    { upLoader.over && !empty ?
+                        <p>{t("end")}</p> :
+                        upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
             )}
 
@@ -143,7 +146,10 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
             {(watch !== "UP") && (
                 <div className="h-12 mb-3 text-center">
-                    {downLoader.over && !empty ? <p>{t("end")}</p> : downLoader.loading && (loadingComponent || <Loading size="3x"/>)}
+                    { downLoader.over && !empty ?
+                        <p>{t("end")}</p>:
+                        downLoader.loading && (loadingComponent || <Loading size="3x"/>)
+                    }
                 </div>
             )}
         </div>

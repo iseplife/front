@@ -1,5 +1,6 @@
 import {IconFA} from "../Common/IconFA"
 import React, {useState} from "react"
+import TextArea from "antd/lib/input/TextArea"
 
 interface EditCommentProps {
     value: string,
@@ -12,11 +13,11 @@ const EditComment: React.FC<EditCommentProps> = ({value = "", uploadEdit, disabl
     const [editedMessage, setEditedMessage] = useState<string>(value)
 
     return (
-        <div className="flex">
-            <textarea
+        <div>
+            <TextArea
                 autoFocus
                 value={editedMessage}
-                className="bg-transparent w-full focus"
+                className="bg-transparent border-none focus mb-2"
                 onChange={(e) => setEditedMessage(e.target.value)}
             />
             <div className="flex items-center justify-end self-end">

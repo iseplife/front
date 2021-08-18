@@ -1,0 +1,6 @@
+{
+	"create": "Create a new post",
+	"edit": "Edit post",
+	"publication_date": "Publication date",
+	"max_image_reached": "You can't publish more than 5 images"
+}

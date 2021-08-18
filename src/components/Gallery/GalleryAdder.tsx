@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../util"
 import {createMedia} from "../../data/media"
 import axios, {AxiosPromise} from "axios"
-import {Image, Media} from "../../data/media/types"
+import {Image, Media, MediaUploadNSFW} from "../../data/media/types"
 import {addGalleryImages} from "../../data/gallery"
 import {UploadFile} from "antd/es/upload/interface"
 
@@ -16,14 +16,14 @@ type GalleryAdderProps = {
 }
 const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club}) => {
     const {t} = useTranslation("gallery")
-    const [files, setFiles] = useState<File[]>([])
+    const [files, setFiles] = useState<MediaUploadNSFW[]>([])
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [uploading, setUploading] = useState<boolean>(false)
 
     const handleFiles = useCallback((file: File) => {
-        if (isFileImage(file))
-            setFiles(prevState => [...prevState, file])
+        if (isFileImage(file.type))
+            setFiles(prevState => [...prevState, {file, nsfw: false}])
         return false
     }, [gallery])
 
@@ -37,7 +37,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
                     club,
                     true,
                     false,
-                    (e) => setFileList(list => list.map(file => file.fileName === f.name ?
+                    (e) => setFileList(list => list.map(file => file.fileName === f.file.name ?
                         {...file, percent: Math.round(e.loaded * 100 / e.total)}:
                         file
                     ))
@@ -74,7 +74,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
                         multiple
                         beforeUpload={handleFiles}
                         fileList={fileList}
-                        onChange={({fileList}) => setFileList(fileList.filter(f => isFileImage(f)))}
+                        onChange={({fileList}) => setFileList(fileList.filter(f => isFileImage(f.type || "")))}
                         className="flex flex-col items-center"
                     >
                         <Button>

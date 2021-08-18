@@ -1,14 +1,15 @@
-import React, {useState} from "react"
-import {Redirect, useHistory, useLocation} from "react-router-dom"
+import React, {useContext, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
-import {connect, isLoggedIn} from "../../data/security"
+import {connect, parseToken, setToken} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {LocationState} from "../../data/request.type"
+import {Input} from "antd"
+import {AppContext} from "../../context/app/context"
+import {AppActionType} from "../../context/app/action"
 
-
-const initialValues: LoginFormInputs = {id: "", password: ""}
 
 interface LoginFormInputs {
     id: string,
@@ -18,23 +19,30 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
     const {t, i18n} = useTranslation(["login", "common"])
     const history = useHistory()
+    const {dispatch} = useContext(AppContext)
     const location = useLocation()
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
     const formik = useFormik<LoginFormInputs>({
-        initialValues,
+        initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
             setLoadingStatus(true)
-            connect(id, password)
-                .then((token) => {
-                    const {from} = (location.state as LocationState) || {
-                        from: {
-                            pathname: token.lastConnection ? "/": "/discovery"
-                        }
-                    }
-                    history.replace(from)
+            connect(id, password).then((res) => {
+                const parsedToken = parseToken(res.data.token)
+                setToken(res.data)
+                dispatch({
+                    type: AppActionType.SET_TOKEN,
+                    token: parsedToken
                 })
+
+                const {from} = (location.state as LocationState) || {
+                    from: {
+                        pathname: parsedToken.payload.lastConnection ? "/" : "/discovery"
+                    }
+                }
+                history.replace(from)
+            })
                 .catch(e => {
                     setLoadingStatus(false)
                     let msg
@@ -60,28 +68,29 @@ const Login: React.FC = () => {
     return (
         <div className="h-full flex flex-col justify-end items-center overflow-y-auto">
             <div className="flex-grow flex items-center">
-                <div className="bg-white rounded-b shadow-lg p-4 flex flex-col">
-                    {isLoggedIn() && <Redirect to="/"/>}
-                    {error &&
-                    <div className="text-center">
-                        <h6 className="text-red-600">{error}</h6>
-                    </div>
-                    }
-                    <form className="flex justify-center flex-col" onSubmit={formik.handleSubmit}>
-                        <input
-                            id="id" name="id" type="text" onChange={formik.handleChange}
+                <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col">
+
+                    {error && (
+                        <div className="text-center">
+                            <h6 className="text-red-600">{error}</h6>
+                        </div>
+                    )}
+                    <form className="flex flex-col justify-center " onSubmit={formik.handleSubmit}>
+                        <Input
+                            name="id" type="text" onChange={formik.handleChange}
                             required
                             placeholder={t("id")}
                             value={formik.values.id}
-                            className="text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
                         />
-                        <input
+                        <Input
                             id="password" name="password" type="password" onChange={formik.handleChange}
                             required
                             placeholder={t("password")}
                             value={formik.values.password}
-                            className="text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
                         />
+
                         <button
                             type="submit"
                             disabled={loading}
@@ -96,7 +105,7 @@ const Login: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col items-center mb-2">
+            <div className="flex flex-col items-center my-2">
                 <div className="flex flex-row">
                     {SUPPORTED_LANGUAGES.map(lng => (
                         <img
@@ -108,7 +117,6 @@ const Login: React.FC = () => {
                             alt={lng + " flag"}/>
                     ))}
                 </div>
-                <span>{t("common:switch_lang")}</span>
             </div>
         </div>
     )

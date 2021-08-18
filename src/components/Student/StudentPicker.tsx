@@ -1,7 +1,8 @@
 import React, {useCallback, useState} from "react"
-import {Avatar, Select, Spin, Tag} from "antd"
+import {Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
-import {UserOutlined} from "@ant-design/icons"
+import StudentAvatar from "./StudentAvatar"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 const TRIGGER_LENGTH = 2
 type Option = {
@@ -28,7 +29,14 @@ const StudentPicker: React.FC<StudentPickerProps> = ({onChange, className}) => {
                         value: o.id,
                         label: (
                             <>
-                                <Avatar icon={<UserOutlined/>} src={o.thumbURL} size={18} className="mr-2 my-1 box-border"/>
+                                <StudentAvatar
+                                    id={o.id}
+                                    name={o.name}
+                                    size={18}
+                                    picture={o.thumbURL}
+                                    pictureSize={AvatarSizes.THUMBNAIL}
+                                    className="mr-2 my-1 box-border"
+                                />
                                 {o.name}
                             </>
                         )

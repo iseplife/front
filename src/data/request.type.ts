@@ -6,7 +6,7 @@ export type Page<T> = {
     size: number
     totalPages: number
     totalElements: number
-};
+}
 
 export type Author = {
     id: number

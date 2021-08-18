@@ -12,7 +12,6 @@ import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import {StudentPreview} from "../../data/student/types"
 import {format} from "date-fns"
-import {CloseCircleOutlined, DeleteOutlined, SaveOutlined, AuditOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 
@@ -174,9 +173,11 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
 
-                    <div className="flex flex-col absolute left-0 top-0 w-32">
+                    <div className="flex flex-col absolute left-0 top-0 w-28">
                         <label className="font-dinotcb">Type</label>
                         <Select
+                            bordered={false}
+                            className="border-none"
                             value={t(`club_type.${formik.values.type.valueOf()}`)}
                             onChange={(value: ClubType) => formik.setFieldValue("type", value)}
                         >
@@ -187,13 +188,11 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                             ))}
                         </Select>
                     </div>
-                    {club &&
-                    <Link to="/admin/club">
-                        <div className="text-right absolute right-0 top-0 w-16">
-                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
-                        </div>
-                    </Link>
-                    }
+                    {club && (
+                        <Link to="/admin/club" className="absolute -right-3 -top-3">
+                            <IconFA name="fa-times" size="sm"/>
+                        </Link>
+                    )}
 
                     <ImagePicker onChange={handleImage} defaultImage={mediaPath(club?.logoUrl, AvatarSizes.DEFAULT)} className="mt-5 avatar-uploader"/>
 
@@ -236,7 +235,8 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     <div className="mx-3">
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
-                            placeholder="Aucun administrateur (déconseillé) "
+                            placeholder="Aucun administrateur (déconseillé)"
+                            className="w-full"
                             defaultValues={admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />
@@ -269,19 +269,24 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
 
                     <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button htmlType="submit" type="primary" icon={<SaveOutlined/>}>
+                        <Button
+                            htmlType="submit"
+                            className="mt-5 text-white rounded border-green-500 bg-green-500"
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                        >
                             Enregistrer
                         </Button>
-                        {club &&
-                        <>
-                            <Button type="primary" icon={<AuditOutlined/>} onClick={archive}>
-                                {club.archived ? "Désarchiver" : "Archiver"}
-                            </Button>
-                            <Button danger icon={<DeleteOutlined/>} onClick={remove}>
-                                Supprimer
-                            </Button>
-                        </>
-                        }
+                        {club && (
+                            <>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                    {club.archived ? "Désarchiver" : "Archiver"}
+                                </Button>
+                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                    Supprimer
+                                </Button>
+                            </>
+                        )}
+
                     </div>
                 </form>
             }

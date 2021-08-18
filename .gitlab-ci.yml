@@ -21,7 +21,7 @@ test:
   script:
     - npm upgrade --global yarn
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build:dev
+    - yarn run build:prod
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
 
@@ -35,7 +35,7 @@ react-build:
   script:
     - echo "=== BUILDING REACT PROD ==="
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build:dev
+    - yarn run build:prod
   retry: 2
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'

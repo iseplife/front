@@ -6,7 +6,7 @@ import {message, Modal} from "antd"
 import Galleries from "../Club/Galleries"
 import {getClubGalleries} from "../../data/club"
 import {ClubContext} from "../../context/club/context"
-import {IconFA} from "../Common/IconFA";
+import {IconFA} from "../Common/IconFA"
 
 const GalleriesPreview: React.FC = () => {
     const {t} = useTranslation("gallery")

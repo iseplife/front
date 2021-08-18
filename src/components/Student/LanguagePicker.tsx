@@ -1,8 +1,6 @@
-import React, {useCallback} from "react"
+import React from "react"
 import {useTranslation} from "react-i18next"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
-import {updateSettings} from "../../data/student"
-import {message} from "antd"
 
 
 const LanguagePicker: React.FC = () => {

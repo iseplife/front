@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams} from "react-router-dom"
 import {Group as GroupType} from "../../../data/group/types"
 import {getGroup} from "../../../data/group"
@@ -8,14 +8,20 @@ import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
 import {toggleSubscription} from "../../../data/feed"
 import {IconFA} from "../../../components/Common/IconFA"
+import {useTranslation} from "react-i18next"
 
+interface ParamTypes {
+    id?: string
+}
 const Group: React.FC = () => {
-    const {id} = useParams()
+    const {t} = useTranslation("group")
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        if (!isNaN(id)) {
+        if (!isNaN(+id)) {
             setLoading(true)
             getGroup(id).then(res => {
                 setGroup(res.data)
@@ -38,14 +44,19 @@ const Group: React.FC = () => {
     return (
         <div className="mt-5 px-3 flex flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4 ">
-                <h1 className="mx-2 text-xl p-1 mb-5 font-dinot text-gray-800">
-                    {group?.name}
-                    {group && (
-                        <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
-                            <IconFA name={group.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
-                        </span>
-                    )}
-                </h1>
+                {group && (
+                    <div className="flex p-1 mb-5 font-dinot items-center ">
+                        <div>
+                            <h3 className="font-dinotcb mx-2 mb-0 text-2xl text-gray-700">
+                                {group.name}
+                                <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
+                                    <IconFA name={group.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
+                                </span>
+                            </h3>
+                            <h6 className="mx-2 -mt-1 uppercase text-sm font-bold text-gray-600">{t(group.restricted ? "restricted": "public")}</h6>
+                        </div>
+                    </div>
+                )}
 
                 <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
                 <Divider/>

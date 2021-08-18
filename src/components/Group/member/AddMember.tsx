@@ -19,10 +19,12 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
 
     return (
         <div className="flex no-wrap items-center">
-            <StudentSelector onChange={setValues} className="w-40 rounded-scroller mx-1" placeholder={t("add_member")} />
-            <Button disabled={values.length === 0} onClick={handleClick} className="mx-1 rounded-lg" size="small">
-                {t("confirm_add")}
-            </Button>
+            <StudentSelector onChange={setValues} className="w-44 rounded-scroller mx-1" placeholder={t("add_member")} />
+            {values.length !== 0 && (
+                <Button onClick={handleClick} className="mx-1 rounded" size="small">
+                    {t("confirm_add")}
+                </Button>
+            )}
         </div>
     )
 }

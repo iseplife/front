@@ -1,8 +1,8 @@
 import {Club} from "../club/types"
 import {Author} from "../request.type"
 import {GalleryPreForm} from "../gallery/types"
-import {Image, Video, Document} from "../media/types"
-import {Poll, PollCreation} from "../poll/types"
+import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
+import {Poll, PollCreation, PollEdition} from "../poll/types"
 
 
 export enum EmbedEnumType {
@@ -13,12 +13,17 @@ export enum EmbedEnumType {
     IMAGE = "image",
 }
 
-export type PostCreation = {
+export type BasicPostCreation = {
     description: string
     private: boolean
-    draft: boolean
     feed: number
+}
+
+
+export type PostCreation = BasicPostCreation & {
+    draft: boolean
     linkedClub?: number
+    publicationDate?: Date
     attachements:  { [type: string]: number }
 }
 
@@ -26,13 +31,15 @@ export type PostUpdate = {
     description: string
     private: boolean
     publicationDate: Date
+    linkedClub?: number
+    removeEmbed?: boolean
 }
 
 
 export type Post = {
     id: number
     description: string
-    publicationDate: number
+    publicationDate: Date
     creationDate: number
     private: boolean
     pinned: boolean
@@ -45,7 +52,7 @@ export type Post = {
     nbLikes: number
     liked: boolean
     hasWriteAccess: boolean
-};
+}
 
 export type EmbedPoll = Poll & {
     embedType: EmbedEnumType.POLL
@@ -54,23 +61,33 @@ export type EmbedPoll = Poll & {
 export type EmbedGallery = {
     id: number
     name: string
-    preview: Image[]
+    preview: Array<Image>
     pseudo: boolean
     embedType: EmbedEnumType.GALLERY
 }
-type EmbedMedia = Image | Video | Document
+export type EmbedPseudoGallery = {
+    id: number
+    images: Array<Image>
+    embedType: EmbedEnumType.IMAGE
+}
 
-export type Embed = EmbedGallery | EmbedMedia | EmbedPoll
+export type EmbedMedia = Video & {embedType: EmbedEnumType.VIDEO}
+    | Document  & {embedType: EmbedEnumType.DOCUMENT}
 
+export type Embed = EmbedGallery | EmbedPseudoGallery | EmbedMedia | EmbedPoll
 
-
-type EmbedGalleryCreation = {
+export type EmbedGalleryCreation = {
     type: EmbedEnumType.GALLERY
     data: GalleryPreForm
 }
-type EmbedMediaCreation = {
+export type EmbedMediaCreation = {
     type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
-    data: File[]
+    data: Array<MediaUploadNSFW>
+}
+
+export type EmbedMediaEdition = {
+    type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
+    data:  Array<MediaEditionNSFW | MediaUploadNSFW>
 }
 
 export type EmbedPollCreation = {
@@ -78,3 +95,62 @@ export type EmbedPollCreation = {
     data: PollCreation
 }
 export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollCreation
+
+export type EmbedGalleryEdition = {
+    type: EmbedEnumType.GALLERY
+    data: GalleryPreForm
+}
+
+
+export type EmbedPollEdition = {
+    type: EmbedEnumType.POLL
+    data: PollEdition
+}
+export type EmbedEdition = EmbedMediaEdition | EmbedGalleryEdition | EmbedPollEdition
+
+export interface EmbedForm {
+    type: EmbedEnumType,
+    data: any
+}
+
+export const ACCEPTED_FILETYPE: Record<EmbedEnumType, string> = {
+    [EmbedEnumType.IMAGE]: ".png,.jpg,.jpeg,.gif",
+    [EmbedEnumType.VIDEO]: ".mp4,.webm",
+    [EmbedEnumType.DOCUMENT]: "*",
+    [EmbedEnumType.GALLERY]: "*",
+    [EmbedEnumType.POLL]: "*"
+}
+
+export const DEFAULT_EMBED: Record<EmbedEnumType, EmbedCreation> = {
+    [EmbedEnumType.GALLERY]: {
+        type: EmbedEnumType.GALLERY,
+        data: {
+            name: "",
+            feed: 1,
+            pseudo: false,
+            images: []
+        }
+    },
+    [EmbedEnumType.DOCUMENT]: {
+        type: EmbedEnumType.DOCUMENT,
+        data: []
+    },
+    [EmbedEnumType.POLL]: {
+        type: EmbedEnumType.POLL,
+        data: {
+            title: "",
+            choices: [{content: ""}],
+            multiple: false,
+            anonymous: true,
+            endsAt: new Date(Date.now() + (6.048e+8)) // One week from now
+        }
+    },
+    [EmbedEnumType.IMAGE]: {
+        type: EmbedEnumType.IMAGE,
+        data: []
+    },
+    [EmbedEnumType.VIDEO]: {
+        type: EmbedEnumType.VIDEO,
+        data: []
+    },
+}

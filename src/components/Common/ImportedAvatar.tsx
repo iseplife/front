@@ -15,7 +15,7 @@ const ImportedAvatar: React.FC<{ file: Blob | undefined }> = ({file}) => {
     }, [file])
 
     return (
-        <Avatar icon={<UserOutlined/>} src={preview} className="h-10 w-10"/>
+        <Avatar icon={<UserOutlined/>} src={preview} size="small"/>
     )
 }
 

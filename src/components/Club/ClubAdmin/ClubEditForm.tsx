@@ -15,7 +15,7 @@ const {TextArea} = Input
 
 const ClubEditForm: React.FC = () => {
     const {t} = useTranslation(["club", "common"])
-    const {state: {club: {data} } , dispatch} = useContext(ClubContext)
+    const {state: {club: {data}}, dispatch} = useContext(ClubContext)
     const club = data as Club
 
     const formik = useFormik<ClubForm>({
@@ -29,7 +29,7 @@ const ClubEditForm: React.FC = () => {
         },
         onSubmit: values => {
             updateClub(club.id, values).then(res => {
-                if(res.status === 200){
+                if (res.status === 200) {
                     message.success(t("common:update_item.complete"))
                     dispatch({type: ClubActionType.UPDATE_CLUB, payload: res.data})
                 }
@@ -38,7 +38,7 @@ const ClubEditForm: React.FC = () => {
     })
 
     return (
-        <form className="rounded shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>
+        <form className="rounded-lg shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>
             <div className="flex">
                 <div className="w-2/3">
                     <label className="font-dinotcb">{t("form.name")}</label>
@@ -116,14 +116,15 @@ const ClubEditForm: React.FC = () => {
             </div>
 
             <div className="self-end flex flex-wrap justify-end w-full">
-                {formik.isSubmitting ?
-                    <Button type="primary" disabled>
-                        <IconFA className="mr-2" name="fa-circle-notch fa-spin" size="lg"/> Loading
-                    </Button>:
-                    <Button htmlType="submit" type="primary">
-                        <SaveOutlined /> {t("common:save")}
-                    </Button>
-                }
+                <Button
+                    htmlType="submit"
+                    type="primary"
+                    icon={formik.isSubmitting ? <IconFA name="fa-circle-notch fa-spin" type="regular" className="mr-2"/> : <IconFA name="fa-save" type="regular" className="mr-2"/>}
+                    disabled={formik.isSubmitting}
+                    className="border-green-500 bg-green-500  rounded"
+                >
+                    {t("common:save")}
+                </Button>
             </div>
         </form>
     )

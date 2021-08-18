@@ -3,15 +3,15 @@ export interface TokenSet {
     refreshToken: string
 }
 
-export interface Token {
-    payload: string
+export type ParsedToken = {
+    payload: TokenPayload
     iss: string
     exp: number
     iat: number
 }
 
-export interface RefreshToken {
-    userID: number
+export type Token = {
+    payload: string
     iss: string
     exp: number
     iat: number

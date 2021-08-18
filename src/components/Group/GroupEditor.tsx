@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Button, Divider, Input, message, Modal, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import {Link, useHistory} from "react-router-dom"
-import {Group, GroupAdmin, GroupForm} from "../../data/group/types"
+import {GroupAdmin, GroupForm} from "../../data/group/types"
 import {useFormik} from "formik"
 import Loading from "../Common/Loading"
 import ImagePicker from "../Common/ImagePicker"
@@ -12,7 +12,6 @@ import HelperIcon from "../Common/HelperIcon"
 import {createGroup, deleteGroup, getGroupAdmin, toggleGroupArchiveStatus, updateGroup, uploadGroupCover} from "../../data/group"
 import {StudentPreview} from "../../data/student/types"
 import {
-    CloseCircleOutlined,
     AuditOutlined,
     DeleteOutlined,
     SaveOutlined
@@ -20,7 +19,6 @@ import {
 
 import "./GroupEditor.css"
 import {mediaPath} from "../../util"
-
 
 
 type GroupEditorProps = {
@@ -44,7 +42,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
     const [loading, setLoading] = useState<boolean>(false)
     const [group, setGroup] = useState<GroupAdmin>()
     const admins = useMemo(() => group?.admins.reduce((acc: StudentPreview[], curr) => {
-        if(curr.admin)
+        if (curr.admin)
             acc.push(curr.student)
         return acc
     }, []), [group])
@@ -105,7 +103,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                             name: res.data.name,
                             restricted: res.data.restricted,
                             admins: res.data.admins.reduce((acc: number[], curr) => {
-                                if(curr.admin)
+                                if (curr.admin)
                                     acc.push(curr.student.id)
                                 return acc
                             }, [])
@@ -168,13 +166,11 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
             {loading ?
                 <Loading size="4x"/> :
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
-                    {group &&
-                    <Link to="/admin/group">
-                        <div className="text-right absolute right-0 top-0 w-16">
-                            <CloseCircleOutlined style={{fontSize: "26px"}}/>
-                        </div>
-                    </Link>
-                    }
+                    {group && (
+                        <Link to="/admin/group" className="absolute -right-3 -top-3">
+                            <IconFA name="fa-times" size="sm"/>
+                        </Link>
+                    )}
 
                     <ImagePicker className="cover-selector" onChange={file => formik.setFieldValue("cover", file)} defaultImage={mediaPath(group?.cover)}/>
 
@@ -210,6 +206,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                         <label className="font-dinotcb">Administrateurs</label>
                         <StudentSelector
                             placeholder="Aucun administrateur (déconseillé)"
+                            className="w-full"
                             defaultValues={admins}
                             onChange={(ids) => formik.setFieldValue("admins", ids)}
                         />
@@ -218,28 +215,21 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     <div className="self-end flex flex-wrap justify-around w-full">
                         <Button
                             htmlType="submit"
-                            type="primary"
-                            className="mt-5"
-                            icon={<SaveOutlined/>}
+                            className="mt-5 text-white rounded border-green-500 bg-green-500"
+                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
-                        {(group && !group.locked) &&
-                        <>
-                            <Button
-                                type="primary" className="mt-5" icon={<AuditOutlined/>}
-                                onClick={archive}
-                            >
-                                {group.archived ? "Désarchiver" : "Archiver"}
-                            </Button>
-                            <Button
-                                className="mt-5" icon={<DeleteOutlined/>} onClick={remove}
-                                danger
-                            >
-                                Supprimer
-                            </Button>
-                        </>
-                        }
+                        {group && (
+                            <>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                    {group.archived ? "Désarchiver" : "Archiver"}
+                                </Button>
+                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                    Supprimer
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </form>
             }

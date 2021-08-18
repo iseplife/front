@@ -1,25 +1,15 @@
-import React, {useMemo, useState} from "react"
-import {Avatar, Button, Drawer, Dropdown, Menu} from "antd"
+import React, {useContext, useMemo, useState} from "react"
+import {Button, Drawer, Dropdown, Menu} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import {useSelector} from "react-redux"
-import {AppState} from "../../context/action"
-import {Student, StudentPreview} from "../../data/student/types"
+import {StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
-import {
-    CalendarOutlined,
-    KeyOutlined,
-    SettingOutlined,
-    UserOutlined,
-    BellOutlined,
-    HomeOutlined,
-    ExportOutlined,
-    CompassOutlined
-} from "@ant-design/icons"
-import {mediaPath} from "../../util"
+import {BellOutlined, CalendarOutlined, CompassOutlined, ExportOutlined, HomeOutlined, KeyOutlined, SettingOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {AppContext} from "../../context/app/context"
+import StudentAvatar from "../Student/StudentAvatar"
 
 type IconButtonProps = {
     icon: React.ReactNode
@@ -34,12 +24,12 @@ const IconButton: React.FC<IconButtonProps> = ({icon}) => {
 }
 
 const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstName, lastName}) => {
-    const payload = useSelector((state: AppState) => state.payload)
+    const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
     return (
-        <Menu>
-            <Menu.Item key={0} className="font-bold profile-name">
+        <Menu className="text-gray-700 rounded shadow-sm">
+            <Menu.Item key={0} className="text-center font-dinotcb text-lg">
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
@@ -51,17 +41,17 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
             {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
             <Menu.Item key={4} className="flex justify-start items-center">
                 <SettingOutlined/>
-                <Link to="/setting"><span>{t("setting")}</span></Link>
+                <Link to="/setting">{t("setting")}</Link>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={5} className="profile-logout">
-                <Link to="/logout">{t("logout")}</Link>
+            <Menu.Item key={5} className="font-dinot text-center">
+                <Link to="/logout" className="text-red-500" >{t("logout")}</Link>
             </Menu.Item>
         </Menu>
     )
 }
 const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
-    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-50">
+    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-30">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
@@ -84,11 +74,12 @@ const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
                 placement="bottomRight"
             >
                 <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
-                    <Avatar
-                        icon={<UserOutlined/>}
-                        src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)}
+                    <StudentAvatar
+                        id={user.id}
+                        name={user.firstName + " " + user.lastName}
+                        picture={user.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
                         size="small"
-                        className="cursor-pointer"
                     />
                     <span className="mx-2 ">{user.firstName}</span>
                 </div>
@@ -112,7 +103,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
     </Link>
 )
 const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
-    const payload = useSelector((state: AppState) => state.payload)
+    const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
     return (
@@ -125,8 +116,13 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                     <Button shape="circle" icon={<CalendarOutlined/>} className="border-0"/>
                 </Link>
                 <Button shape="circle" icon={<BellOutlined/>} className="border-0"/>
-                <div onClick={() => setVisible(true)}>
-                    <Avatar icon={<UserOutlined/>} src={mediaPath(user.picture, AvatarSizes.THUMBNAIL)} className="cursor-pointer"/>
+                <div className="cursor-pointer" onClick={() => setVisible(true)}>
+                    <StudentAvatar
+                        id={user.id}
+                        name={user.firstName + " " + user.lastName}
+                        picture={user.picture}
+                        pictureSize={AvatarSizes.THUMBNAIL}
+                    />
                 </div>
             </div>
             <Drawer
@@ -157,7 +153,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
 
 
 const Navbar: React.FC = ({children}) => {
-    const user = useSelector((state: AppState) => state.user)
+    const {state: {user}} = useContext(AppContext)
     return (
         <>
             <Header user={user}/>

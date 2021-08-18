@@ -1,8 +1,7 @@
-import React, {useMemo} from "react"
+import React, {useContext, useMemo} from "react"
 import {Checkbox} from "antd"
 import {PollChoice as PollChoiceType} from "../../../data/poll/types"
-import {useSelector} from "react-redux"
-import {AppState} from "../../../context/action"
+import {AppContext} from "../../../context/app/context"
 
 type PollChoiceProps = {
     data: PollChoiceType
@@ -11,7 +10,7 @@ type PollChoiceProps = {
     onClick: (choice: number, voted: boolean) => void
 }
 const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled}) => {
-    const id = useSelector((state: AppState) => state.payload.id)
+    const {state: {payload: {id}}} = useContext(AppContext)
 
     const hasVoted = useMemo(() => (data.voters || []).includes(id), [data.voters, id])
     const percent = useMemo(() => (

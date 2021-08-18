@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useContext, useEffect, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {useTranslation} from "react-i18next"
 import {Avatar, Button, message, Upload} from "antd"
@@ -8,8 +8,8 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import {IconFA} from "../Common/IconFA"
 import {updateCustomPicture} from "../../data/student"
 import {StudentPicture} from "../../data/student/types"
-import {useDispatch} from "react-redux"
-import {ContextReducerType} from "../../context/reducer"
+import {AppContext} from "../../context/app/context"
+import {AppActionType} from "../../context/app/action"
 
 type StudentImageUploaderProps = {
     original?: string
@@ -19,7 +19,7 @@ type StudentImageUploaderProps = {
 
 const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, custom, onUpdate}) => {
     const {t} = useTranslation(["setting", "common"])
-    const dispatch = useDispatch<ContextReducerType>()
+    const {dispatch} = useContext(AppContext)
     const [file, setFile] = useState<File | null>()
     const [fileStr, setFileStr] = useState<string>()
 
@@ -43,7 +43,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
         if(file !== undefined){
             updateCustomPicture(file).then(res => {
                 message.success(t("picture_updated"))
-                dispatch({ type: "SET_PICTURE", payload: res.data })
+                dispatch({ type: AppActionType.SET_PICTURE, payload: res.data })
                 setFile(undefined)
             }).catch(() => message.error((t("common:error"))))
         }else{

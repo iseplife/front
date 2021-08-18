@@ -3,7 +3,8 @@ import {StudentPreview} from "../student/types"
 export type GroupPreview = {
     id: number,
     name: string,
-    cover?: string
+    restricted: boolean
+    archived: boolean
 }
 
 export type Group = {

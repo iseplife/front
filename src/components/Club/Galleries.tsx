@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
 import {getEventGalleries} from "../../data/event"
 import GalleryCard from "../Gallery/GalleryCard"
-import {IconFA} from "../Common/IconFA";
+import {IconFA} from "../Common/IconFA"
 
 
 const Galleries: React.FC = () => {
@@ -15,7 +15,7 @@ const Galleries: React.FC = () => {
     const getFollowingGalleries: loaderCallback = useCallback(async (page: number) => {
         const res = await getEventGalleries(1, page)
         if (res.status === 200) {
-            if (page == 0 && res.data.content.length == 0)
+            if (page === 0 && res.data.content.length === 0)
                 setEmpty(true)
 
             setGalleries(prevState => [...prevState, ...res.data.content])

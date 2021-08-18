@@ -1,15 +1,17 @@
-export const GallerySizes = {
-    PREVIEW: "autox140",
-    THUMBNAIL: "autox200",
-    LIGHTBOX: "1280xauto"
+export enum GallerySizes {
+    THUMBNAIL = "autox140",
+    PREVIEW = "autox400",
+    LIGHTBOX = "1280xauto"
 }
 
-export const AvatarSizes = {
-    THUMBNAIL: "50x50",
-    DEFAULT: "140x140"
+export enum AvatarSizes {
+    THUMBNAIL = "90x90",
+    DEFAULT = "200x200",
+    FULL = "300x300"
 }
 
-export const PostSizes = {
-    PREVIEW: "autox300",
-    LIGHTBOX: "1280xauto"
+export enum PostSizes {
+    THUMBNAIL = "autox400",
+    PREVIEW = "autox400",
+    LIGHTBOX = "1280xauto"
 }

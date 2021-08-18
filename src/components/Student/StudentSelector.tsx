@@ -1,10 +1,9 @@
 import React, {CSSProperties, useCallback, useState} from "react"
-import {Avatar, Select, Spin, Tag} from "antd"
+import {Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {StudentPreview} from "../../data/student/types"
-import {UserOutlined} from "@ant-design/icons"
-import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import StudentAvatar from "./StudentAvatar"
 
 const TRIGGER_LENGTH = 2
 type Option = {
@@ -26,7 +25,14 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
         value: v.id,
         label: (
             <>
-                <Avatar icon={<UserOutlined/>} src={mediaPath(v.picture, AvatarSizes.THUMBNAIL)} size={18} className="mr-2 my-1 box-border"/>
+                <StudentAvatar
+                    id={v.id}
+                    name={v.firstName + " " + v.lastName}
+                    size={18}
+                    picture={v.picture}
+                    pictureSize={AvatarSizes.THUMBNAIL}
+                    className="mr-2 my-1 box-border"
+                />
                 {v.firstName + " " + v.lastName}
             </>
         )
@@ -42,7 +48,13 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
                         value: o.id,
                         label: (
                             <>
-                                <Avatar icon={<UserOutlined/>} src={mediaPath(o.thumbURL, AvatarSizes.THUMBNAIL)} size={18} className="mr-2 my-1 box-border"/>
+                                <StudentAvatar
+                                    id={o.id}
+                                    name={o.name}
+                                    picture={o.thumbURL}
+                                    pictureSize={AvatarSizes.THUMBNAIL}
+                                    className="mr-2 my-1 box-border"
+                                />
                                 {o.name}
                             </>
                         )
@@ -70,9 +82,9 @@ const StudentSelector: React.FC<StudentSelectorProps> = ({onChange, defaultValue
                 setFetching(false)
                 onChange(selected)
             }}
-            tagRender={props => <Tag closable={props.closable} onClose={props.onClose} className="rounded-lg">{props.label}</Tag>}
+            tagRender={props => <Tag closable={props.closable} onClose={props.onClose} className="rounded-full my-1 flex items-center">{props.label}</Tag>}
             options={options}
-            className={className}
+            className={`${className}`}
             style={style}
         />
     )

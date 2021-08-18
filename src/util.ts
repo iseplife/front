@@ -2,6 +2,11 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
+import axios from "axios"
+import {Image as ImageType} from "./data/media/types"
+import {PhotoProps} from "react-photo-gallery"
+import {GallerySizes} from "./constants/MediaSizes"
+import {SelectablePhoto} from "./pages/default/gallery"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -12,21 +17,32 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
 
-export const _formatDistance = (date: Date | number, baseDate: Date | number): string =>
-    formatDistance(date, baseDate, {
-        locale: locales[localStorage.getItem("lng") || "fr"]
-    })
 
+export const _formatDistance = (date: Date | number, baseDate: Date | number, options?: {
+    includeSeconds?: boolean
+    addSuffix?: boolean
+    locale?: Locale
+}): string => formatDistance(date, baseDate, {
+    locale: locales[localStorage.getItem("lng") || "fr"],
+    ...options
+})
+
+
+export const handleRequestCancellation = (e: Error): void | Error => {
+    if (axios.isCancel(e))
+        console.debug(e.message)
+    else throw new Error(e.message)
+}
 
 
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|([+-])([\d|:]*))?$/
 const reMsAjax = /^\/Date\((d|-|.*)\)[/|\\]$/
-export const JSONDateParser = (key: string, value: unknown): Date|unknown => {
+export const JSONDateParser = (key: string, value: unknown): Date | unknown => {
     if (typeof value === "string") {
         let a = reISO.exec(value)
         if (a)
             return new Date(value)
-        
+
         a = reMsAjax.exec(value)
         if (a) {
             const b = a[1].split(/[-+,.]/)
@@ -49,6 +65,7 @@ interface NamedPerson {
     firstName: string
     lastName: string
 }
+
 export const getInitials = (student: NamedPerson): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
 }
@@ -66,10 +83,10 @@ export const getEducationYear = (graduationYear: number): string => {
 export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation().search)
 
 
-export const isFileImage = (file: { type: string }): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file.type)
+export const isFileImage = (file: string): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file)
 
 export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
-    if(fullPath){
+    if (fullPath) {
         const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
         if (size) {
             const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
@@ -80,6 +97,29 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     }
     return fullPath
 }
+
+export const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<any>[]> => {
+    return await Promise.all(
+        images.map<PromiseLike<PhotoProps<any>>>((img, index) => parsePhoto(img.name, String(index), img.nsfw)
+        )
+    )
+}
+export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
+    return new Promise((resolve, reject) => {
+        const image = new Image()
+        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
+        image.onerror = reject
+        image.onload = () => resolve({
+            nsfw,
+            selected: false,
+            src: image.src,
+            width: image.width,
+            height: image.height,
+            key
+        })
+    })
+}
+
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>

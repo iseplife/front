@@ -24,7 +24,7 @@ export type ClubContextState = {
 }
 
 type ClubContext = {
-    state: ClubContextState;
-    dispatch: Dispatch<ClubContextAction>;
+    state: ClubContextState
+    dispatch: Dispatch<ClubContextAction>
 }
 export const ClubContext = React.createContext<ClubContext>({} as ClubContext)
