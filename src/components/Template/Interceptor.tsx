@@ -1,12 +1,13 @@
 import React from "react"
 import {apiClient} from "../../data/http"
 import {message} from "antd"
-import {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios"
+import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
 import {logout, parseToken, refresh, setToken} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
+import { TokenSet } from "../../data/security/types"
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
@@ -20,6 +21,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     state: InterceptState = {
         error: "",
     };
+
+    refreshingPromise?: AxiosPromise<TokenSet>;
 
     componentDidMount() {
         this.intercept = [
@@ -55,24 +58,31 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
-        if (this.context.state.token_expiration <= new Date().getTime() && !request.url?.startsWith("/auth")) {
+        if (this.context.state.token_expiration - 25_000 <= new Date().getTime() && !request.url?.startsWith("/auth")) {
             delete apiClient.defaults.headers.common["Authorization"]
 
-            refresh().then(res => {
-                try {
-                    setToken(res.data)
-                    this.context.dispatch({
-                        type: AppActionType.SET_TOKEN,
-                        token: parseToken(res.data.token)
-                    })
-                } catch (e) {
-                    throw new Error("JWT cookie unreadable")
-                }
+            if (!this.refreshingPromise)
+                (this.refreshingPromise = refresh()).then(res => {
+                    try {
+                        setToken(res.data)
+                        this.context.dispatch({
+                            type: AppActionType.SET_TOKEN,
+                            token: parseToken(res.data.token)
+                        })
+                    } catch (e) {
+                        throw new Error("JWT cookie unreadable")
+                    }
+
+                    this.refreshingPromise = undefined
+                }).catch(() => {
+                    this.props.history.push("/login")
+                    message.error("Vous avez été déconnecté !")
+                    this.refreshingPromise = undefined
+                })
+            
+            this.refreshingPromise.then(res =>
                 request.headers["Authorization"] = `Bearer ${res.data.token}`
-            }).catch(() => {
-                this.props.history.push("/login")
-                message.error("Vous avez été déconnecté !")
-            })
+            )
         }
         return request
     }
