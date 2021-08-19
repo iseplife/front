@@ -1,6 +1,7 @@
-import {IconFA} from "../Common/IconFA"
 import React, {useState} from "react"
 import TextArea from "antd/lib/input/TextArea"
+import {faCircleNotch, faSave, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 interface EditCommentProps {
     value: string,
@@ -26,7 +27,7 @@ const EditComment: React.FC<EditCommentProps> = ({value = "", uploadEdit, disabl
                     disabled={isSubmitting}
                     onClick={disableEditMode}
                 >
-                    <IconFA name="fa-times" size="lg"/>
+                    <FontAwesomeIcon icon={faTimes} size="lg"/>
                 </button>
                 <button
                     type="submit"
@@ -34,12 +35,12 @@ const EditComment: React.FC<EditCommentProps> = ({value = "", uploadEdit, disabl
                     disabled={isSubmitting || !editedMessage}
                     onClick={() => {
                         setSubmitting(true)
-                        uploadEdit(editedMessage).then(res => {
+                        uploadEdit(editedMessage).then(() => {
                             disableEditMode()
                         }).finally(() => setSubmitting(false))
                     }}
                 >
-                    <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-save"} size="lg"/>
+                    <FontAwesomeIcon icon={isSubmitting ? faCircleNotch: faSave} spin={isSubmitting} size="lg"/>
                 </button>
             </div>
         </div>

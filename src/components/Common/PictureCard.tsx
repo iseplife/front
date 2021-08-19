@@ -1,7 +1,9 @@
 import React, {useCallback, useEffect, useState} from "react"
 import ImageOverlay from "./ImageOverlay"
-import {IconFA} from "./IconFA"
 import {Badge} from "antd"
+import {faEyeSlash, faLowVision} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 type PictureCardProps = {
     index: number
@@ -26,14 +28,14 @@ const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDele
         }
     }, [file])
 
-    const handleDelete = useCallback((e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const handleDelete = useCallback((e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         e.preventDefault()
         e.stopPropagation()
 
         onDelete(index)
     }, [onDelete, index])
 
-    const handleNSFW = useCallback((e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const handleNSFW = useCallback((e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         e.preventDefault()
         e.stopPropagation()
 
@@ -42,12 +44,12 @@ const PictureCard: React.FC<PictureCardProps> = React.memo(({index, file, onDele
 
 
     return (
-        <Badge count={nsfw ? <IconFA name="fa-eye-slash" className="bg-white p-0.5 rounded-full text-red-600 top-2 right-2"/> : 0}>
+        <Badge count={nsfw ? <FontAwesomeIcon icon={faEyeSlash} className="bg-white p-0.5 rounded-full text-red-600 top-2 right-2"/> : 0}>
             <div className={`h-20 w-20 m-2 ${className}`}>
                 {image && (
                     <ImageOverlay src={image} className="h-full w-full rounded">
-                        <IconFA name="fa-low-vision" size="lg" type="solid" className="mx-1 text-white hover:text-yellow-400" onClick={handleNSFW}/>
-                        <IconFA name="fa-trash-alt" size="lg" type="regular" className="mx-1 text-white hover:text-red-400" onClick={handleDelete}/>
+                        <FontAwesomeIcon icon={faLowVision} size="lg" className="mx-1 text-white hover:text-yellow-400" onClick={handleNSFW}/>
+                        <FontAwesomeIcon icon={faTrashAlt} size="lg" className="mx-1 text-white hover:text-red-400" onClick={handleDelete}/>
                     </ImageOverlay>
                 )}
             </div>

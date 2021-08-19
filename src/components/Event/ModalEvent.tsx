@@ -2,20 +2,17 @@ import React, {useEffect, useMemo, useState} from "react"
 import {getEvent} from "../../data/event"
 import {Event, EventPreview} from "../../data/event/types"
 import Loading from "../Common/Loading"
-import {Map, Marker, TileLayer} from "react-leaflet"
+import {MapContainer, Marker, TileLayer} from "react-leaflet"
 import {differenceInDays} from "date-fns"
 import {_format} from "../../util"
-import {
-    UserOutlined,
-    ClockCircleOutlined,
-    EuroOutlined
-} from "@ant-design/icons"
 import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
-import {IconFA} from "../Common/IconFA"
 import {EventTypeColor} from "../../constants/EventType"
 import {Link} from "react-router-dom"
 import {Avatar} from "antd"
+import {faEuroSign, faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faClock, faUser} from "@fortawesome/free-regular-svg-icons"
 
 type ModalEventHeaderProps = {
     event: EventPreview
@@ -93,7 +90,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             className="flex items-center text-gray-700 font-bold"
                         >
                             <Avatar
-                                icon={<UserOutlined/>}
+                                icon={<FontAwesomeIcon icon={faUser}/>}
                                 src={event.club.logoUrl}
                                 className="cursor-pointer mr-1 -ml-2"
                             />
@@ -101,24 +98,24 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         </Link>
                         }
                         <li className="flex items-center ">
-                            <ClockCircleOutlined className="mr-2"/>
+                            <FontAwesomeIcon icon={faClock} className="mr-2"/>
                             {formatedDates}
                         </li>
                         {event.price &&
                         <li className="flex items-center">
-                            <EuroOutlined className="mr-2"/>
+                            <FontAwesomeIcon icon={faEuroSign} className="mr-2"/>
                             {event.price.toFixed(2)} €
                         </li>
                         }
                         {event.ticketURL &&
                         <li className="lowercase text-sm">
                             <a href={event.ticketURL} target="_blank" rel="noopener noreferrer">
-                                {t("ticket_url")} <IconFA name="fa-sign-out-alt"/>
+                                {t("ticket_url")} <FontAwesomeIcon icon={faSignOutAlt}/>
                             </a>
                         </li>
                         }
                     </ul>
-                    <Map
+                    <MapContainer
                         className="mt-5 rounded h-32"
                         center={[51.505, -0.09]}
                         zoom={13}
@@ -130,7 +127,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                         />
                         <Marker position={[51.505, -0.09]}/>
-                    </Map>
+                    </MapContainer>
                 </div>
             </div>
             : <p>Erreur de chargement...</p>

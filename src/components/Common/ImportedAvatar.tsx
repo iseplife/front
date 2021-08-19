@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Avatar} from "antd"
-import {UserOutlined} from "@ant-design/icons"
+import {faUser} from "@fortawesome/free-regular-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const ImportedAvatar: React.FC<{ file: Blob | undefined }> = ({file}) => {
     const [preview, setPreview] = useState<string>()
@@ -15,7 +16,7 @@ const ImportedAvatar: React.FC<{ file: Blob | undefined }> = ({file}) => {
     }, [file])
 
     return (
-        <Avatar icon={<UserOutlined/>} src={preview} size="small"/>
+        <Avatar icon={<FontAwesomeIcon icon={faUser}/>} src={preview} size="small"/>
     )
 }
 

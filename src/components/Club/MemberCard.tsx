@@ -2,13 +2,14 @@ import React, {useMemo} from "react"
 import {ClubMember, ClubRole} from "../../data/club/types"
 import {Tooltip} from "antd"
 import {useHistory} from "react-router-dom"
-import {IconFA} from "../Common/IconFA"
-import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
+import {faEdit, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 
-const ClubRoleIcon: { [role: string]: string } = {
-    [ClubRole.ADMIN]: "fa-user-shield",
-    [ClubRole.PUBLISHER]: "fa-edit",
+const ClubRoleIcon: { [role: string]: IconDefinition } = {
+    [ClubRole.ADMIN]: faUserShield,
+    [ClubRole.PUBLISHER]: faEdit,
 }
 
 type MemberCardProps = {
@@ -39,7 +40,7 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
                 <Tooltip title={`${m.student.firstName} ${m.student.lastName}`}>
                     <div className="text-lg md:text-sm lg:text-sm xl:text-sm font-bold truncate w-40 xl:w-32 lg:w-32 md:w-32">{m.student.firstName} {m.student.lastName}</div>
                 </Tooltip>
-                <div className="italic">{m.position} {showRole && <IconFA className="ml-2" name={ClubRoleIcon[m.role]}/>}</div>
+                <div className="italic">{m.position} {showRole && <FontAwesomeIcon className="ml-2" icon={ClubRoleIcon[m.role]}/>}</div>
             </div>
         </div>
     )

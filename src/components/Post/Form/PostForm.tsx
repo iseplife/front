@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef} from "react"
-import {IconFA} from "../../Common/IconFA"
 import {ACCEPTED_FILETYPE, DEFAULT_EMBED, EmbedCreation, EmbedEnumType, EmbedForm as EmbedFormType,} from "../../../data/post/types"
 import {Field, Form, FormikProps,} from "formik"
 import {DatePicker, Divider, Upload} from "antd"
@@ -8,6 +7,16 @@ import EmbedForm from "./EmbedForm"
 import moment from "moment"
 import {isPast} from "date-fns"
 import {useTranslation} from "react-i18next"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {
+    faChartBar,
+    faCircleNotch,
+    faImages,
+    faLock,
+    faLockOpen,
+    faPaperclip, faPaperPlane,
+    faVideo
+} from "@fortawesome/free-solid-svg-icons"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -53,9 +62,9 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
         <Form className="flex flex-col items-center text-gray-500">
             <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 overflow-y-auto" style={{minHeight: "5rem"}}>
                 <div className="flex justify-between items-center mb-2">
-                    {values.private
-                        ? <IconFA name="fa-lock" className="text-gray-500" onClick={() => setFieldValue("private", false)}/>
-                        : <IconFA name="fa-lock-open" className="text-gray-500" onClick={() => setFieldValue("private", true)}/>
+                    {values.private ?
+                        <FontAwesomeIcon icon={faLock} className="text-gray-500" onClick={() => setFieldValue("private", false)}/>:
+                        <FontAwesomeIcon icon={faLockOpen} className="text-gray-500" onClick={() => setFieldValue("private", true)}/>
                     }
                     <DatePicker
                         format="DD/MM/YYYY HH:mm"
@@ -94,16 +103,16 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     {!values.embed && (
                         <div className="flex items-center">
                             <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)} accept=".png,.jpg,.jpeg,.gif">
-                                <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
                             <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.VIDEO)} accept=".mp4,.webm">
-                                <IconFA name="fa-video" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
                             <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
-                                <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </Upload>
                             <div onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}>
-                                <IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/>
+                                <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                             </div>
                         </div>
                     )}
@@ -120,7 +129,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             disabled={isSubmitting || !values.description.length}
                             className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
                         >
-                            <IconFA name={isSubmitting ? "fa-circle-notch fa-spin" : "fa-paper-plane"}/>
+                            <FontAwesomeIcon icon={isSubmitting ? faCircleNotch: faPaperPlane} spin={isSubmitting}/>
                         </button>
                     </div>
                 </div>

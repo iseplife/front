@@ -4,11 +4,13 @@ import {Club, ClubForm} from "../../../data/club/types"
 import {Button, Input, message} from "antd"
 import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
-import {IconFA} from "../../Common/IconFA"
-import {SaveOutlined} from "@ant-design/icons"
 import {updateClub} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
+import {faCircleNotch, faLink} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faFacebookF, faInstagram} from "@fortawesome/free-brands-svg-icons"
+import {faSave} from "@fortawesome/free-regular-svg-icons"
 
 const {TextArea} = Input
 
@@ -85,7 +87,7 @@ const ClubEditForm: React.FC = () => {
                     <Input
                         name="website"
                         placeholder="Lien site internet"
-                        suffix={<IconFA name="fa-link"/>}
+                        suffix={<FontAwesomeIcon icon={faLink}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
                         style={{borderBottom: "1px solid #d9d9d9"}}
@@ -96,7 +98,7 @@ const ClubEditForm: React.FC = () => {
                     <Input
                         name="instagram"
                         placeholder="Lien Instagram"
-                        suffix={<IconFA type="brands" name="fa-instagram"/>}
+                        suffix={<FontAwesomeIcon icon={faInstagram}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
                         style={{borderBottom: "1px solid #d9d9d9"}}
@@ -107,7 +109,7 @@ const ClubEditForm: React.FC = () => {
                     <Input
                         name="facebook"
                         placeholder="Lien Facebook"
-                        suffix={<IconFA type="brands" name="fa-facebook-f"/>}
+                        suffix={<FontAwesomeIcon icon={faFacebookF}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
                         style={{borderBottom: "1px solid #d9d9d9"}}
@@ -119,7 +121,10 @@ const ClubEditForm: React.FC = () => {
                 <Button
                     htmlType="submit"
                     type="primary"
-                    icon={formik.isSubmitting ? <IconFA name="fa-circle-notch fa-spin" type="regular" className="mr-2"/> : <IconFA name="fa-save" type="regular" className="mr-2"/>}
+                    icon={formik.isSubmitting ?
+                        <FontAwesomeIcon icon={faCircleNotch} spin className="mr-2"/> :
+                        <FontAwesomeIcon icon={faSave} className="mr-2"/>
+                    }
                     disabled={formik.isSubmitting}
                     className="border-green-500 bg-green-500  rounded"
                 >

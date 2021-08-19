@@ -6,8 +6,10 @@ import EditComment from "./EditComment"
 import {useTranslation} from "react-i18next"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
-import {IconFA} from "../Common/IconFA"
 import {_formatDistance} from "../../util"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faHeart as faSolidHeart, faPen} from "@fortawesome/free-solid-svg-icons"
+import {faComment, faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 
 interface CommentProps {
@@ -54,14 +56,13 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     <span className="text-xs flex-1 text-right mr-3 text-gray-400">{publicationDate}</span>
                     {data.hasWriteAccess && (
                         <div className="flex items-center">
-                            <IconFA
-                                name="fa-pen"
+                            <FontAwesomeIcon
+                                icon={faPen}
                                 className="mr-3 text-gray-400 cursor-pointer hover:text-indigo-400"
                                 onClick={() => setEditMode(true)}
                             />
-                            <IconFA
-                                name="fa-trash-alt"
-                                type="regular"
+                            <FontAwesomeIcon
+                                icon={faTrashAlt}
                                 className="mr-3 text-gray-400 cursor-pointer hover:text-red-600"
                                 onClick={() => handleDeletion(data.id)}
                             />
@@ -85,10 +86,9 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 {allowReplies && (
                     <span className="flex items-center cursor-pointer hover:text-indigo-400 mx-1" onClick={() => setShowComments(!showComments)}>
                         {data.comments !== 0 && data.comments}
-                        <IconFA
-                            name="fa-comment"
+                        <FontAwesomeIcon
+                            icon={faComment}
                             size="sm"
-                            type="regular"
                             className="ml-1"
                             onClick={() => setShowComments(!showComments)}
                         />
@@ -96,11 +96,11 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 )}
                 <span className="flex items-center cursor-pointer mx-1">
                     {likes > 0 && likes}
-                    <IconFA
-                        name="fa-heart" type={liked ? "solid" : "regular"}
-                        size="sm"
+                    <FontAwesomeIcon
+                        icon={liked ? faSolidHeart: faHeart}
                         className={`${liked ? "text-red-400" : "hover:text-red-600"} ml-1`}
                         onClick={() => toggleLike(data.thread)}
+                        size="sm"
                     />
                 </span>
             </div>

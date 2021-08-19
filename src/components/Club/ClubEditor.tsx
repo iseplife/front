@@ -8,12 +8,15 @@ import {createClub, deleteClub, getClub, getClubAdmins, toggleClubArchiveStatus,
 import ClubType, {ClubTypeArray} from "../../constants/ClubType"
 import ImagePicker from "../Common/ImagePicker"
 import Loading from "../Common/Loading"
-import {IconFA} from "../Common/IconFA"
 import StudentSelector from "../Student/StudentSelector"
 import {StudentPreview} from "../../data/student/types"
 import {format} from "date-fns"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {faArchive, faLink, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faFacebookF, faInstagram} from "@fortawesome/free-brands-svg-icons"
 
 type ClubEditorProps = {
     id?: string
@@ -190,7 +193,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
                     {club && (
                         <Link to="/admin/club" className="absolute -right-3 -top-3">
-                            <IconFA name="fa-times" size="sm"/>
+                            <FontAwesomeIcon icon={faTimes} size="sm"/>
                         </Link>
                     )}
 
@@ -249,21 +252,21 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                             <Input
                                 name="website"
                                 placeholder="Lien site internet"
-                                suffix={<IconFA name="fa-link"/>}/>
+                                suffix={<FontAwesomeIcon icon={faLink}/>}/>
                         </div>
                         <div className="flex-1 mx-1">
                             <label className="font-dinotcb">Instagram</label>
                             <Input
                                 name="instagram"
                                 placeholder="Lien Instagram"
-                                suffix={<IconFA type="brands" name="fa-instagram"/>}/>
+                                suffix={<FontAwesomeIcon icon={faInstagram}/>}/>
                         </div>
                         <div className="flex-1 mx-1">
                             <label className="font-dinotcb">Facebook</label>
                             <Input
                                 name="facebook"
                                 placeholder="Lien Facebook"
-                                suffix={<IconFA type="brands" name="fa-facebook-f"/>}
+                                suffix={<FontAwesomeIcon icon={faFacebookF}/>}
                             />
                         </div>
                     </div>
@@ -272,16 +275,16 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                         <Button
                             htmlType="submit"
                             className="mt-5 text-white rounded border-green-500 bg-green-500"
-                            icon={<IconFA name="fa-save" type="regular" className="mr-2"/>}
+                            icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
                         >
                             Enregistrer
                         </Button>
                         {club && (
                             <>
-                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<IconFA name="fa-archive" className="mr-2"/>} onClick={archive}>
+                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<FontAwesomeIcon icon={faArchive} className="mr-2"/>} onClick={archive}>
                                     {club.archived ? "Désarchiver" : "Archiver"}
                                 </Button>
-                                <Button className="mt-5 rounded" icon={<IconFA name="fa-trash-alt" type="regular" className="mr-2"/>} onClick={remove} danger>
+                                <Button className="mt-5 rounded" icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>} onClick={remove} danger>
                                     Supprimer
                                 </Button>
                             </>

@@ -6,10 +6,12 @@ import Post from "../Post"
 import {deletePost} from "../../data/post"
 import {Divider, Modal} from "antd"
 import CardTextSkeleton from "../Club/Skeletons/CardTextSkeleton"
-import {IconFA} from "../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import BasicPostForm from "../Post/Form/BasicPostForm"
 import PostCreateForm from "../Post/Form/PostCreateForm"
+import {faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
 
 type FeedProps = {
     id: number
@@ -60,16 +62,16 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                 <BasicPostForm feedId={id} onPost={onPostCreation}>
                     <div className="flex items-center">
                         <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}>
-                            <IconFA name="fa-images" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                            <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                         </div>
                         <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}>
-                            <IconFA name="fa-video" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                            <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                         </div>
                         <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}>
-                            <IconFA name="fa-paperclip" type="solid" className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                            <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                         </div>
                         <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)}>
-                            <IconFA name="fa-chart-bar" className="cursor-pointer mx-1 hover:text-gray-700"/>
+                            <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
                         </div>
                         {completeFormType && (
                             <Modal
@@ -89,7 +91,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
                 {empty ?
                     <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
-                        <IconFA type="regular" name="fa-newspaper" size="8x" className="block"/>
+                        <FontAwesomeIcon icon={faNewspaper} size="8x" className="block" />
                         <span className="text-center">{t("empty_feed")}</span>
                     </div>
                     : posts.map((p) => (

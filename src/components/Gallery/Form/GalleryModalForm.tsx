@@ -1,9 +1,10 @@
 import React, {useCallback, useState} from "react"
 import {Button, Modal} from "antd"
 import GalleryForm from "./GalleryForm"
-import {IconFA} from "../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {GalleryPreview} from "../../../data/gallery/types"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faImages} from "@fortawesome/free-regular-svg-icons"
 
 type GalleryModalFormProps = {
     feed: number
@@ -24,7 +25,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => 
                 style={{width: "max-content"}}
                 onClick={() => setVisible(true)}
             >
-                {t("add")} <IconFA className="ml-2" name="fa-images" type="regular"/>
+                {t("add")} <FontAwesomeIcon icon={faImages} className="ml-2"/>
             </Button>
             <Modal
                 className="w-11/12 no-padding-modal"

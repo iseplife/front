@@ -1,6 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, {useRef, useState} from "react"
-import {DownOutlined, UpOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
+import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons"
 
 
 type EventDescriptionProps = {
@@ -28,7 +29,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description}) => {
                     <span key={idx}>{s} <br/></span>
                 )}
             </div>
-            {descVisible ? <DownOutlined className="mx-auto"/> : <UpOutlined className="mx-auto"/>}
+            {descVisible ? <FontAwesomeIcon icon={faChevronDown} className="mx-auto"/> : <FontAwesomeIcon icon={faChevronUp} className="mx-auto"/>}
         </div>
     )
 }

@@ -7,8 +7,9 @@ import {Divider} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
 import {toggleSubscription} from "../../../data/feed"
-import {IconFA} from "../../../components/Common/IconFA"
 import {useTranslation} from "react-i18next"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faBell, faBellSlash} from "@fortawesome/free-regular-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -50,7 +51,7 @@ const Group: React.FC = () => {
                             <h3 className="font-dinotcb mx-2 mb-0 text-2xl text-gray-700">
                                 {group.name}
                                 <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
-                                    <IconFA name={group.subscribed ? "fa-bell-slash" : "fa-bell"} type="regular"/>
+                                    <FontAwesomeIcon icon={group.subscribed ? faBellSlash: faBell}/>
                                 </span>
                             </h3>
                             <h6 className="mx-2 -mt-1 uppercase text-sm font-bold text-gray-600">{t(group.restricted ? "restricted": "public")}</h6>

@@ -2,12 +2,13 @@ import React, {useCallback, useState} from "react"
 import {AxiosResponse} from "axios"
 import {Button, message, Progress} from "antd"
 import PictureCard from "../../Common/PictureCard"
-import {InboxOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
 import {Media, MediaUploadNSFW} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
+import {faInbox} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const UPLOADER_ID = "imgupload"
 
@@ -120,7 +121,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                     <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
                         <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
                         <p className="text-5xl">
-                            <InboxOutlined/>
+                            <FontAwesomeIcon icon={faInbox} />
                         </p>
                         <p className="text-xs" style={{width: "30rem"}}>
                             {t("form.draganddrop.1")}

@@ -2,9 +2,10 @@ import React, {memo, ReactNode, useMemo} from "react"
 import {Avatar} from "antd"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {IconFA} from "../Common/IconFA"
 import {Link} from "react-router-dom"
 import {AvatarSize} from "antd/lib/avatar/SizeContext"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUser} from "@fortawesome/free-regular-svg-icons"
 
 
 const BasicWrapper: React.FC = (props) => <span {...props}/>
@@ -37,7 +38,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
         <Wrapper {...wrapperProps as any}>
             <Avatar
                 src={mediaPath(picture, pictureSize)}
-                icon={<IconFA name="fa-user" type="regular"/>}
+                icon={<FontAwesomeIcon icon={faUser} />}
                 alt={name}
                 size={size}
                 className="shadow-xl hover:shadow-outline "

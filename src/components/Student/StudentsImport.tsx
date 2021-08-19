@@ -1,13 +1,13 @@
 import React, {useCallback, useState} from "react"
 import {Button, message, Upload} from "antd"
-import {UploadOutlined} from "@ant-design/icons"
 import Table, {RowProps} from "../Common/TableAdmin"
 import {PageStatus} from "../../pages/admin/student"
 import {StudentPreview} from "../../data/student/types"
 import {importStudent} from "../../data/student"
 import ImportedAvatar from "../Common/ImportedAvatar"
 import {RcFile} from "antd/es/upload"
-import {IconFA} from "../Common/IconFA"
+import {faSyncAlt, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const importTableConfig = [
     {title: "Photo", dataIndex: "picture", className: "w-16"},
@@ -117,7 +117,7 @@ const StudentsImport: React.FC = () => {
                     <strong>numéro étudiant, prénom, nom, année de promotion</strong>
                 </p>
                 <Upload name="csv" beforeUpload={uploadCSVFile} multiple={false} accept=".csv">
-                    <Button icon={<UploadOutlined/>} className="rounded">Importer des étudiants</Button>
+                    <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded">Importer des étudiants</Button>
                 </Upload>
             </div>
             <div className={`${hideUploadDiv ? "block" : "hidden"} flex justify-center mb-4`}>
@@ -130,7 +130,7 @@ const StudentsImport: React.FC = () => {
                         className="overflow-hidden absolute opacity-0 z-0 w-1 h-1 "
                         onChange={uploadImages}
                     />
-                    <IconFA name="fa-upload" className="px-2"/>
+                    <FontAwesomeIcon icon={faUpload} className="px-2"/>
                     Upload Student Images
                 </label>
 
@@ -147,7 +147,7 @@ const StudentsImport: React.FC = () => {
                     className="shadow-md py-1 px-2 text-white rounded border-yellow-500 bg-yellow-500"
                     onClick={reset}
                 >
-                    <IconFA name="fa-sync-alt" className="pr-2"/>
+                    <FontAwesomeIcon icon={faSyncAlt} className="pr-2"/>
                     Reset
                 </Button>
             </div>

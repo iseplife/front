@@ -2,8 +2,9 @@ import React, {useMemo, useState} from "react"
 import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {Event, EventForm as EventFormType} from "../../data/event/types"
-import {IconFA} from "../Common/IconFA"
 import EventEditForm from "./Form/EventEditForm"
+import {faEdit} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 type EventEditorModalProps = {
@@ -32,7 +33,7 @@ const EventEditorModal: React.FC<EventEditorModalProps> = ({values, onSubmit}) =
                 style={{width: "max-content"}}
                 onClick={() => setOpen(true)}
             >
-                <IconFA className="ml-2" name="fa-edit" />
+                <FontAwesomeIcon icon={faEdit} className="ml-2"/>
             </Button>
             {open && (
                 <Modal

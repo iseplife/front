@@ -2,11 +2,12 @@ import React, {useCallback} from "react"
 import {Field, FieldArray, useFormikContext} from "formik"
 import {PostFormValues} from "../PostForm"
 import {EmbedForm, EmbedPollForm} from "../../../../data/post/types"
-import {IconFA} from "../../../Common/IconFA"
 import {useTranslation} from "react-i18next"
 import {DatePicker, Switch} from "antd"
 import moment from "moment"
 import {isPast} from "date-fns"
+import {faTimes} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 const PollForm: React.FC = () => {
@@ -26,9 +27,9 @@ const PollForm: React.FC = () => {
                     {t("poll")}
                 </h3>
 
-                <IconFA
+                <FontAwesomeIcon
                     className="cursor-pointer hover:text-red-400"
-                    name="fa-times"
+                    icon={faTimes}
                     onClick={() => setFieldValue("embed", undefined)}
                 />
             </div>
@@ -70,7 +71,11 @@ const PollForm: React.FC = () => {
                                     name={`embed.data.choices.${index}.content`} placeholder={t("option") + " " + index}
                                 />
                                 {poll.choices.length > 1 && (
-                                    <IconFA className="cursor-pointer hover:text-red-400" name="fa-times" onClick={() => arrayHelpers.remove(index)}/>
+                                    <FontAwesomeIcon
+                                        icon={faTimes}
+                                        onClick={() => arrayHelpers.remove(index)}
+                                        className="cursor-pointer hover:text-red-400"
+                                    />
                                 )}
                             </div>
 

@@ -1,7 +1,6 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
 import {Modal, Radio} from "antd"
-import {IconFA} from "../../../components/Common/IconFA"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
@@ -19,6 +18,8 @@ import EventCreatorModal from "../../../components/Event/EventCreatorModal"
 import {FeedsContext, FeedsContextType} from "../../../context/feed/context"
 import {getUserFeed} from "../../../data/feed"
 import {AppContext} from "../../../context/app/context"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faArrowLeft, faArrowRight, faSyncAlt} from "@fortawesome/free-solid-svg-icons"
 
 const initFilter = (): EventFilter => {
     return (
@@ -158,14 +159,19 @@ const Events: React.FC = () => {
                             <h1 className="text-2xl font-dinotcb font-extrabold my-auto text-current">
                                 {dateTitle}
                             </h1>
-                            <IconFA name="fa-arrow-left" className="my-auto mx-2 cursor-pointer" onClick={decrementDate}/>
-                            <IconFA name="fa-arrow-right" className="my-auto mx-2 cursor-pointer" onClick={incrementDate}/>
+                            <FontAwesomeIcon icon={faArrowLeft} className="my-auto mx-2 cursor-pointer" onClick={decrementDate}/>
+                            <FontAwesomeIcon icon={faArrowRight} className="my-auto mx-2 cursor-pointer" onClick={incrementDate}/>
                             {canCreateEvent && (
                                 <EventCreatorModal onSubmit={fetchMonthEvents} className="fixed bottom-8 right-8 z-10 py-2"/>
                             )}
                         </div>
                         <div>
-                            <IconFA name="fa-sync-alt" className="my-auto mx-3 cursor-pointer text-gray-500" onClick={fetchMonthEvents} spin={loading}/>
+                            <FontAwesomeIcon
+                                icon={faSyncAlt}
+                                spin={loading}
+                                className="my-auto mx-3 cursor-pointer text-gray-500"
+                                onClick={fetchMonthEvents}
+                            />
                             <Radio.Group value={view}  onChange={(e) => setView(e.target.value)}>
                                 <Radio.Button value="day">{t("day")}</Radio.Button>
                                 <Radio.Button value="week">{t("week")}</Radio.Button>

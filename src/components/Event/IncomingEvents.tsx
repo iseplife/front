@@ -4,8 +4,9 @@ import {getIncomingEvents} from "../../data/event"
 import {useTranslation} from "react-i18next"
 import {Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
-import {IconFA} from "../Common/IconFA"
 import EventCreatorModal from "./EventCreatorModal"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSadCry } from "@fortawesome/free-regular-svg-icons"
 
 type IncomingEventsProps = {
     feed?: number
@@ -43,7 +44,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
                 events.length ?
                     <EventPreviewList events={events}/> :
                     <div className="text-gray-500 mt-3 text-center text-xs">
-                        <IconFA className="block" name="fa-sad-cry" type="regular" size="4x"/>
+                        <FontAwesomeIcon icon={faSadCry} size="4x"/>
                         <p>{t("no_events")}</p>
                     </div>
             }
