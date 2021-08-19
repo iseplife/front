@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from "react"
 import {getEvent} from "../../data/event"
 import {Event, EventPreview} from "../../data/event/types"
 import Loading from "../Common/Loading"
-import {MapContainer, Marker, TileLayer} from "react-leaflet"
+import {Map, Marker, TileLayer} from "react-leaflet"
 import {differenceInDays} from "date-fns"
 import {_format} from "../../util"
 import Tag from "../Common/Tag"
@@ -115,7 +115,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         </li>
                         }
                     </ul>
-                    <MapContainer
+                    <Map
                         className="mt-5 rounded h-32"
                         center={[51.505, -0.09]}
                         zoom={13}
@@ -127,7 +127,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                         />
                         <Marker position={[51.505, -0.09]}/>
-                    </MapContainer>
+                    </Map>
                 </div>
             </div>
             : <p>Erreur de chargement...</p>
