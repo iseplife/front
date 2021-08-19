@@ -1,7 +1,10 @@
 import React, { useCallback,    useState} from "react"
 import {Upload} from "antd"
 import "./ImagePicker.css"
-import {EditOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, UndoOutlined} from "@ant-design/icons"
+import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faPlus, faUndo} from "@fortawesome/free-solid-svg-icons"
+import Loading from "./Loading"
 
 const DEFAULT_IMAGE = "img/empty-image.svg"
 
@@ -51,18 +54,22 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                             }}
                         />
                         <span className="image-options absolute text-gray-400">
-                            <EditOutlined className="mx-1 px-1 hover:text-white"/>
+                            <FontAwesomeIcon icon={faEdit} size="2x" className="px-2 hover:text-white"/>
                             {image === defaultImage ?
-                                <DeleteOutlined
-                                    className="mx-1 px-1 hover:text-red-400"
-                                    onClick={(e) => {
+                                <FontAwesomeIcon
+                                    icon={faTrashAlt}
+                                    size="2x"
+                                    className="px-2 hover:text-red-400"
+                                    onClick={e => {
                                         e.stopPropagation()
                                         setImage(DEFAULT_IMAGE)
                                         onChange(null)
                                     }}
                                 /> :
-                                <UndoOutlined
-                                    className="mx-1 px-1 hover:text-red-400"
+                                <FontAwesomeIcon
+                                    icon={faUndo}
+                                    size="2x"
+                                    className="px-2 hover:text-red-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         setImage(defaultImage)
@@ -74,7 +81,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                     </div>
                     :
                     <div>
-                        {loading ? <LoadingOutlined/> : <PlusOutlined/>}
+                        {loading ? <Loading /> : <FontAwesomeIcon icon={faPlus}/>}
                         <div className="ant-upload-text">Upload</div>
                     </div>
                 }

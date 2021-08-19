@@ -40,8 +40,8 @@ const GalleriesPreview: React.FC = () => {
                 </div>
                 :
                 <div className="text-center text-gray-400">
-                    <FontAwesomeIcon icon={faCameraRetro} size="4x" className="block" />
-                    {t("no_gallery")}
+                    <FontAwesomeIcon icon={faCameraRetro} size="4x" />
+                    <p>{t("no_gallery")}</p>
                 </div>
             }
             <Modal

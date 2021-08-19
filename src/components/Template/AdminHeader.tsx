@@ -1,10 +1,11 @@
 import React, {useContext, useState} from "react"
 import {Button} from "antd"
 import {Link} from "react-router-dom"
-import {ExportOutlined, CloseOutlined, MenuOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
+import {faBars, faSignOutAlt, faTimes} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const AdminHeader: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
@@ -49,13 +50,13 @@ const AdminHeader: React.FC = () => {
                         size="small"
                     />
                     <Link to="/">
-                        <ExportOutlined className="hover:text-gray-300 text-gray-500 ml-3 p-3"/>
+                        <FontAwesomeIcon icon={faSignOutAlt} className="hover:text-gray-300 text-gray-500 ml-2" size="lg"/>
                     </Link>
                 </div>
                 <div className="block md:hidden">
                     <Button
                         shape="circle"
-                        icon={open ? <CloseOutlined/> : <MenuOutlined/>}
+                        icon={open ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars}/>}
                         className="border-none" onClick={() => setOpen(!open)}
                     />
                 </div>
@@ -112,6 +113,13 @@ const AdminHeader: React.FC = () => {
                             role="menuitem"
                         >
                             Votes
+                        </Link>
+                        <Link
+                            to="/"
+                            className="block px-3 py-2 rounded text-right text-base font-medium text-gray-700 hover:text-gray-500 hover:bg-gray-2000 focus:bg-gray-200"
+                            role="menuitem"
+                        >
+                            Retour site <FontAwesomeIcon icon={faSignOutAlt} className="ml-2"/>
                         </Link>
                     </div>
                 </div>

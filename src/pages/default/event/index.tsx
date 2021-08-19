@@ -10,15 +10,6 @@ import {Avatar} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
 import EventPreview from "../../../components/Event/EventPreview"
-import {
-    TeamOutlined,
-    EuroOutlined,
-    UserOutlined,
-    UpOutlined,
-    DownOutlined,
-    LockOutlined,
-    UnlockOutlined
-} from "@ant-design/icons"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import {GalleryPreview} from "../../../data/gallery/types"
 import GalleryCard from "../../../components/Gallery/GalleryCard"
@@ -28,7 +19,8 @@ import {toggleSubscription} from "../../../data/feed"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 import EventDescription from "../../../components/Event/EventDescription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faBell, faBellSlash} from "@fortawesome/free-regular-svg-icons"
+import {faBell, faBellSlash, faUser} from "@fortawesome/free-regular-svg-icons"
+import {faChevronDown, faChevronUp, faEuroSign, faLock, faUnlock, faUsers} from "@fortawesome/free-solid-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -95,7 +87,7 @@ const Event: React.FC = () => {
                         style={{left: 0, bottom: 5}}
                     >
                         <Avatar
-                            icon={<UserOutlined/>}
+                            icon={<FontAwesomeIcon icon={faUser}/>}
                             src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
                             className="cursor-pointer mx-3"
                         />
@@ -126,8 +118,8 @@ const Event: React.FC = () => {
                                     }}>
                                     <span>{t("event") + "s"}</span>
                                     {eventsVisible
-                                        ? <UpOutlined className="md:hidden block mx-2"/>
-                                        : <DownOutlined className="md:hidden block mx-2"/>
+                                        ? <FontAwesomeIcon icon={faChevronUp} className="md:hidden block mx-2"/>
+                                        : <FontAwesomeIcon icon={faChevronDown} className="md:hidden block mx-2"/>
                                     }
                                 </div>
                                 <div ref={eventsRef} className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
@@ -175,13 +167,13 @@ const Event: React.FC = () => {
                                     className="flex items-center"
                                     title={event.closed ? "Evenement ouvert" : "Evenement privé"}
                                 >
-                                    {event.closed ? <LockOutlined/> : <UnlockOutlined/>}
+                                    {event.closed ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faUnlock} />}
                                 </div>
                                 <div className="flex items-center">
-                                    <TeamOutlined className="mr-2"/> 14
+                                    <FontAwesomeIcon icon={faUsers} className="mr-2" /> ??
                                 </div>
                                 <div className="flex items-center">
-                                    <EuroOutlined className="mr-2"/>
+                                    <FontAwesomeIcon icon={faEuroSign} className="mr-2"/>
                                     {event.price ? event.price.toFixed(2) : t("free")}
                                 </div>
                             </div>

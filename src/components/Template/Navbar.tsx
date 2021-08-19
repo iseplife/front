@@ -6,19 +6,22 @@ import {StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
-import {BellOutlined, CalendarOutlined, CompassOutlined, ExportOutlined, HomeOutlined, KeyOutlined, SettingOutlined} from "@ant-design/icons"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
+import {faCogs, faHome, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
+import {faBell, faCalendarAlt, faCompass} from "@fortawesome/free-regular-svg-icons"
 
 type IconButtonProps = {
-    icon: React.ReactNode
+    icon: IconDefinition
 }
 const IconButton: React.FC<IconButtonProps> = ({icon}) => {
     return (
         <div
             className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
-            {icon}
+            <FontAwesomeIcon icon={icon}/>
         </div>
     )
 }
@@ -33,19 +36,18 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
-            <Menu.Item key={2} className="flex justify-start items-center">
-                <KeyOutlined/>
+            <Menu.Item key={2}>
                 <Link to="/admin">{t("administration")}</Link>
+                <FontAwesomeIcon icon={faUserShield} className="ml-2"/>
             </Menu.Item>
             }
-            {/*TODO Determine how to handle language switch (modal, button, drawer, ...?)*/}
-            <Menu.Item key={4} className="flex justify-start items-center">
-                <SettingOutlined/>
+            <Menu.Item key={4}>
                 <Link to="/setting">{t("setting")}</Link>
+                <FontAwesomeIcon icon={faCogs} className="ml-2"/>
             </Menu.Item>
             <Menu.Divider/>
             <Menu.Item key={5} className="font-dinot text-center">
-                <Link to="/logout" className="text-red-500" >{t("logout")}</Link>
+                <Link to="/logout" className="text-red-500">{t("logout")}</Link>
             </Menu.Item>
         </Menu>
     )
@@ -61,19 +63,20 @@ const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
         <div className="hidden md:flex justify-end items-center py-5">
             <div className="flex justify-around items-center mr-4">
                 <Link to="/discovery">
-                    <IconButton icon={<CompassOutlined/>}/>
+                    <IconButton icon={faCompass}/>
                 </Link>
                 <Link to="/calendar">
-                    <IconButton icon={<CalendarOutlined/>}/>
+                    <IconButton icon={faCalendarAlt}/>
                 </Link>
-                <IconButton icon={<BellOutlined/>}/>
+                <IconButton icon={faBell}/>
             </div>
             <Dropdown
                 overlay={<ProfileList firstName={user.firstName} lastName={user.lastName}/>}
                 trigger={["click"]}
                 placement="bottomRight"
             >
-                <div className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                <div
+                    className="cursor-pointer flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
                     <StudentAvatar
                         id={user.id}
                         name={user.firstName + " " + user.lastName}
@@ -90,14 +93,14 @@ const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
 
 
 type DrawerItemProps = {
-    icon: React.ReactNode
+    icon: IconDefinition
     className?: string
     link: string
 }
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
     <Link to={link}>
         <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
-            {icon}
+            <FontAwesomeIcon icon={icon}/>
             <span className="nav-footer-text">{children}</span>
         </div>
     </Link>
@@ -110,12 +113,12 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
         <>
             <div className="md:hidden flex justify-around items-center shadow-md w-full h-10 bg-white">
                 <Link to="/">
-                    <Button shape="circle" icon={<HomeOutlined/>} className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faHome} />} className="border-0"/>
                 </Link>
                 <Link to="/calendar">
-                    <Button shape="circle" icon={<CalendarOutlined/>} className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt}/> } className="border-0"/>
                 </Link>
-                <Button shape="circle" icon={<BellOutlined/>} className="border-0"/>
+                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} />} className="border-0"/>
                 <div className="cursor-pointer" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}
@@ -134,15 +137,15 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 visible={visible}
             >
                 <div className="flex justify-around">
-                    {payload.roles.includes(Roles.ADMIN) &&
-                    <DrawerItem icon={<KeyOutlined/>} link="/admin">
-                        {t("administration")}
-                    </DrawerItem>
-                    }
-                    <DrawerItem icon={<SettingOutlined/>} link="/setting" className="text-red-600">
+                    {payload.roles.includes(Roles.ADMIN) && (
+                        <DrawerItem icon={faUserShield} link="/admin">
+                            {t("administration")}
+                        </DrawerItem>
+                    )}
+                    <DrawerItem icon={faCogs} link="/setting" className="text-red-600">
                         {t("parameter")}
                     </DrawerItem>
-                    <DrawerItem icon={<ExportOutlined/>} link="/logout" className="text-red-600">
+                    <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
                         {t("logout")}
                     </DrawerItem>
                 </div>

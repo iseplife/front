@@ -7,7 +7,6 @@ import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gall
 import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
 import {useHistory} from "react-router-dom"
-import {UserOutlined} from "@ant-design/icons"
 import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
@@ -17,7 +16,7 @@ import Lightbox from "lightbox-react"
 import "lightbox-react/style.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
-import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {faEdit, faTrashAlt, faUser} from "@fortawesome/free-regular-svg-icons"
 
 
 export type SelectablePhoto = { selected: boolean, nsfw: boolean }
@@ -185,7 +184,7 @@ const Gallery: React.FC = () => {
                                         src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
                                         shape="circle"
                                         className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                        icon={<UserOutlined/>}
+                                        icon={<FontAwesomeIcon icon={faUser}/>}
                                     />
                                 </Link>
                             </Tooltip>

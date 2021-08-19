@@ -2,7 +2,6 @@ import React, {useCallback, useContext, useEffect, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {useTranslation} from "react-i18next"
 import {Avatar, Button, message, Upload} from "antd"
-import {UserOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {updateCustomPicture} from "../../data/student"
@@ -11,7 +10,7 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {faUpload} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {faSave} from "@fortawesome/free-regular-svg-icons"
+import {faSave, faUser} from "@fortawesome/free-regular-svg-icons"
 
 type StudentImageUploaderProps = {
     original?: string
@@ -71,7 +70,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                         {t("default")}
                         <Avatar
                             src={mediaPath(original, AvatarSizes.DEFAULT)}
-                            icon={<UserOutlined/>}
+                            icon={<FontAwesomeIcon icon={faUser}/>}
                             className="rounded"
                         />
                     </div>
@@ -84,7 +83,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                 </> :
                 <>
                     <Avatar
-                        src={mediaPath(original, AvatarSizes.DEFAULT)} icon={<UserOutlined/>}
+                        src={mediaPath(original, AvatarSizes.DEFAULT)} icon={<FontAwesomeIcon icon={faUser}/>}
                         className="rounded"
                         size={135}
                     />

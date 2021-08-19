@@ -5,18 +5,14 @@ import Loading from "../Common/Loading"
 import {Map, Marker, TileLayer} from "react-leaflet"
 import {differenceInDays} from "date-fns"
 import {_format} from "../../util"
-import {
-    UserOutlined,
-    ClockCircleOutlined,
-    EuroOutlined
-} from "@ant-design/icons"
 import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
 import {EventTypeColor} from "../../constants/EventType"
 import {Link} from "react-router-dom"
 import {Avatar} from "antd"
-import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
+import {faEuroSign, faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faClock, faUser} from "@fortawesome/free-regular-svg-icons"
 
 type ModalEventHeaderProps = {
     event: EventPreview
@@ -94,7 +90,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             className="flex items-center text-gray-700 font-bold"
                         >
                             <Avatar
-                                icon={<UserOutlined/>}
+                                icon={<FontAwesomeIcon icon={faUser}/>}
                                 src={event.club.logoUrl}
                                 className="cursor-pointer mr-1 -ml-2"
                             />
@@ -102,12 +98,12 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                         </Link>
                         }
                         <li className="flex items-center ">
-                            <ClockCircleOutlined className="mr-2"/>
+                            <FontAwesomeIcon icon={faClock} className="mr-2"/>
                             {formatedDates}
                         </li>
                         {event.price &&
                         <li className="flex items-center">
-                            <EuroOutlined className="mr-2"/>
+                            <FontAwesomeIcon icon={faEuroSign} className="mr-2"/>
                             {event.price.toFixed(2)} €
                         </li>
                         }

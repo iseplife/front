@@ -3,10 +3,11 @@ import {Club, ClubMember} from "../../../data/club/types"
 import {useTranslation} from "react-i18next"
 import StudentPicker from "../../Student/StudentPicker"
 import {Button} from "antd"
-import {PlusSquareOutlined} from "@ant-design/icons"
 import {addClubMember} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faPlus} from "@fortawesome/free-solid-svg-icons"
 
 type ClubMemberAdderProps = {
     onAdd: (cm: ClubMember) => void
@@ -36,7 +37,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({onAdd}) => {
 
             {student &&
             <Button className="rounded mt-5" type="primary" onClick={addMember}>
-                {t("add")} <PlusSquareOutlined className="align-baseline"/>
+                {t("add")} <FontAwesomeIcon icon={faPlus} className="ml-2"/>
             </Button>
             }
         </div>

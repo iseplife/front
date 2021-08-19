@@ -3,13 +3,14 @@ import PictureCard from "../../../Common/PictureCard"
 import {useFormikContext} from "formik"
 import {PostFormValues} from "../PostForm"
 import {Upload} from "antd"
-import {PlusOutlined} from "@ant-design/icons"
 import {MediaEditionNSFW, MediaUploadNSFW} from "../../../../data/media/types"
 import {ACCEPTED_FILETYPE, EmbedCreation, EmbedEnumType, EmbedForm, EmbedMediaCreation, EmbedMediaEdition} from "../../../../data/post/types"
 
 import "./ReducedUploader.css"
 import {useTranslation} from "react-i18next"
 import {toggleMediaNSFW} from "../../../../data/media"
+import {faPlus} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 
 const ImageForm: React.FC = () => {
@@ -70,7 +71,7 @@ const ImageForm: React.FC = () => {
                 {images.length >= 5 ?
                     null :
                     <div>
-                        <PlusOutlined/>
+                        <FontAwesomeIcon icon={faPlus}/>
                         <div style={{marginTop: 8}}>Upload</div>
                     </div>
                 }

@@ -1,9 +1,10 @@
 import React from "react"
 import {Collapse} from "antd"
-import {RightOutlined} from "@ant-design/icons"
 import About from "../About"
 import {useTranslation} from "react-i18next"
 import GalleriesPreview from "../../Gallery/GalleriesPreview"
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const {Panel} = Collapse
 
@@ -17,7 +18,7 @@ const ClubPresentation: React.FC = () => {
                 bordered={false}
                 expandIconPosition="right"
                 expandIcon={({isActive}) =>
-                    <RightOutlined className="text-gray-600 font-bold text-sm" rotate={isActive ? 90 : 0}/>
+                    <FontAwesomeIcon icon={faChevronRight} className="text-gray-600 font-bold text-sm" transform={{ rotate: isActive ? 90: 0 }}/>
                 }
             >
                 <Panel

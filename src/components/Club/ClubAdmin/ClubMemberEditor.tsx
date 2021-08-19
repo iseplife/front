@@ -1,14 +1,15 @@
 import React, {useCallback, useContext} from "react"
 import {ClubMember, ClubMemberForm, ClubRoles} from "../../../data/club/types"
 import {Button, Input, message, Modal, Select} from "antd"
-import {CloseCircleOutlined, DeleteOutlined, SaveOutlined} from "@ant-design/icons"
 import {useTranslation} from "react-i18next"
 import {useFormik} from "formik"
 import {removeClubMember, updateClubMember} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
-import {AvatarSizes} from "../../../constants/MediaSizes"
 import StudentAvatar from "../../Student/StudentAvatar"
+import {faTimes} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 const {Option} = Select
 
@@ -54,7 +55,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
         <div className="h-full">
             <div className="w-full flex justify-between items-center">
                 <h1 className="font-dinotcb text-xl text-gray-600 uppercase">{t("edit_member")}</h1>
-                <CloseCircleOutlined className="text-gray-600 hover:text-gray-400" onClick={onCancel}/>
+                <FontAwesomeIcon icon={faTimes} className="text-gray-600 hover:text-gray-400 cursor-pointer" onClick={onCancel}/>
             </div>
 
             <form className="flex flex-col items-center -mt-3 p-3 h-full" onSubmit={formik.handleSubmit}>
@@ -82,10 +83,20 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
                 </div>
 
                 <div className="self-end flex flex-wrap justify-around w-full mt-4">
-                    <Button htmlType="submit" type="primary" icon={<SaveOutlined/>}>
+                    <Button
+                        htmlType="submit"
+                        type="primary"
+                        className="rounded"
+                        icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
+                    >
                         {t("common:save")}
                     </Button>
-                    <Button danger icon={<DeleteOutlined/>} onClick={remove}>
+                    <Button
+                        danger
+                        className="rounded"
+                        icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>}
+                        onClick={remove}
+                    >
                         {t("common:delete")}
                     </Button>
                 </div>

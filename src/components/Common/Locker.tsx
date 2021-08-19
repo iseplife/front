@@ -1,9 +1,8 @@
 import React, {useCallback, useState} from "react"
-import {
-    LockOutlined,
-    UnlockOutlined,
-} from "@ant-design/icons"
+import {faLock, faUnlock} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
+//TODO use more this component (and create same one with bell subscription)
 type LockerProps = {
     className?: string
     defaultValue?: boolean
@@ -18,7 +17,7 @@ const Locker: React.FC<LockerProps> = ({defaultValue = true, onChange, className
 
     return (
         <span onClick={handleClick} className={`cursor-pointer ${className}`}>
-            {value ? <LockOutlined/> : <UnlockOutlined/>}
+            {value ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faUnlock} />}
         </span>
     )
 }

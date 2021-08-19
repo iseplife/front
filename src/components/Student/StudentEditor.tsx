@@ -14,11 +14,10 @@ import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
 import ImagePicker from "../Common/ImagePicker"
 import {Role} from "../../data/security/types"
-import {LockOutlined} from "@ant-design/icons"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "./StudentAvatar"
-import {faArchive, faPaperclip, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {faArchive, faLock, faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
@@ -184,7 +183,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
                         <div className="flex items-center text-red-600 font-bold">
-                            <LockOutlined className="mr-1"/> ARCHIVÉ
+                            <FontAwesomeIcon icon={faLock} className="mr-1"/> ARCHIVÉ
                         </div>
                         }
                         <label className="font-dinotcb">numéro élève</label>
