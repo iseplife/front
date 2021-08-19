@@ -4,7 +4,7 @@ import {EventForm as EventFormType, Marker as MarkerType} from "../../../data/ev
 import EventType, {EventTypes} from "../../../constants/EventType"
 import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
-import {Map, Marker, TileLayer} from "react-leaflet"
+import {Marker, TileLayer, MapContainer} from "react-leaflet"
 import Locker from "../../Common/Locker"
 import AvatarPicker from "../../Common/AvatarPicker"
 import FeedSelector from "../../Feed/FeedSelector"
@@ -145,7 +145,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         </div>
                     </div>
                 </div>
-                <Map
+                <MapContainer
                     className="mt-5 rounded h-32"
                     center={[48.857, 2.348]}
                     onClick={handleMarkerChange}
@@ -158,7 +158,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
                     {marker && <Marker position={marker}/>}
-                </Map>
+                </MapContainer>
             </div>
             <div className="flex flex-wrap justify-between items-end mt-2">
                 <div className="lg:w-1/2 w-full">

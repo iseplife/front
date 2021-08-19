@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
 import {useParams, useHistory, Link} from "react-router-dom"
 import {format} from "date-fns"
-import {Map, Marker, TileLayer} from "react-leaflet"
+import {Marker, TileLayer, MapContainer} from "react-leaflet"
 import {getEvent, getEventChildren, getEventGalleries} from "../../../data/event"
 
 import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types"
@@ -178,7 +178,7 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
 
-                            <Map className="mt-5 rounded md:h-64 h-48" center={event.coordinates || [48.8453227,2.3280245]} zoom={13}>
+                            <MapContainer className="mt-5 rounded md:h-64 h-48" center={event.coordinates || [48.8453227,2.3280245]} zoom={13}>
                                 <TileLayer
                                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                                     id="mapbox/streets-v11"
@@ -187,7 +187,7 @@ const Event: React.FC = () => {
                                 {event.coordinates && (
                                     <Marker position={event.coordinates}/>
                                 )}
-                            </Map>
+                            </MapContainer>
                         </div>
                     </div>
                 </div>
