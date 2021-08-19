@@ -12,6 +12,9 @@ import LoadingPage from "../../pages/LoadingPage"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
+import {wsURI} from "../../data/http"
+import { getJWT } from "../../data/security"
+import { initWebSocket } from "../../realtime/websocket/WSServerClient"
 
 
 const Template: React.FC = () => {
@@ -21,8 +24,12 @@ const Template: React.FC = () => {
 
     useLayoutEffect(() => {
         getLoggedUser().then(res => {
+            const socket = initWebSocket(wsURI)
+
             dispatch({type: AppActionType.SET_LOGGED_USER, user: res.data})
             setIsAdmin(state.payload.roles.includes(Roles.ADMIN))
+
+            socket.connect(getJWT())
         }).finally(() => setLoading(false))
     }, [])
 
