@@ -1,12 +1,17 @@
 .search-bar .ant-select-selection-placeholder {
-    color: rgb(165, 180, 252);
+    padding: 0 5px !important;
+    color: #6e6e6e;
 }
 
 .search-bar > .ant-select-selector {
-    background-color: rgb(224, 231, 255) !important;
+    background-color: #f0f1f6 !important;
     border-radius: 9999px !important;
     border: none !important;
     color: #4c51bf !important;
+}
+
+.search-bar .ant-select-selection-search-input {
+    padding: 0 5px !important;
 }
 
 .search-bar > .ant-select-selector:focus > {
