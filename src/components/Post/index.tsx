@@ -16,6 +16,7 @@ import { getWSService } from "../../realtime/services/WSService"
 import WSPostsService from "../../realtime/services/WSPostsService"
 import { fr } from "date-fns/locale"
 import { formatWithOptions } from "date-fns/fp"
+import { formatDate } from "../../util"
 
 type PostProps = {
     data: PostType
@@ -85,33 +86,16 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
     const [formattedDate, setFormattedDate] = useState<string>("")
 
     useEffect(() => {
-        const now = new Date()
-        const date = data.publicationDate
-        console.log(date)
-
-        const timezoneOffset = now.getTimezoneOffset() * -60_000
-
-        const nowS = (now.getTime() + timezoneOffset) / 1000
-        const dateS = (date.getTime() + timezoneOffset) / 1000
-
-        const nowDay = Math.floor(nowS / 60 / 60 / 24)
-        const dateDay = Math.floor(dateS / 60 / 60 / 24)
-        
-        const diff = nowS - dateS
-        if (diff / 60 / 60 < 24) {//Less than 24h ago
-            if(diff < 60 * 1.5)//Less than 1.5 min ago
-                setFormattedDate(t("just_now"))
-            else if (diff / 60 < 60)// Less than 1 hour ago
-                setFormattedDate(`${Math.floor(diff / 60)} min`)
-            else
-                setFormattedDate(`${Math.floor(diff / 60 / 60)} h`)
-        } else if (nowDay == dateDay + 1)//Yesterday
-            setFormattedDate(`${t("yesterday")} ${format(date, "HH:mm")}`)
-        else if(now.getFullYear() == date.getFullYear())//This year
-            setFormattedDate(formatWithOptions({ locale: fr }, "d MMMM, HH:MM")(date))
-        else
-            setFormattedDate(formatWithOptions({ locale: fr }, "d MMMM YYYY, HH:MM")(date))
-    }, [data.creationDate])
+        let timeoutId: number
+        const updateDate = () => {
+            const [date, wait] = formatDate(data.publicationDate, t)
+            setFormattedDate(date)
+            if(wait > 0)
+                timeoutId = window.setTimeout(() => updateDate(), wait)
+        }
+        updateDate()
+        return () => window.clearTimeout(timeoutId)
+    }, [data.publicationDate])
 
     useEffect(() => {
         if (showEditMenu) {
