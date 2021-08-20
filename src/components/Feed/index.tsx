@@ -67,18 +67,18 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
             <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
                 <BasicPostForm feedId={id} onPost={onPostCreation}>
-                    <div className="flex items-center">
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}>
-                            <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                    <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faImages} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}>
-                            <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faVideo} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}>
-                            <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faPaperclip} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)}>
-                            <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faChartBar} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
                         {completeFormType && (
                             <Modal

@@ -35,7 +35,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
 
 
     return (
-        <Wrapper {...wrapperProps as any} className="my-auto">
+        <Wrapper {...wrapperProps as any} className="my-auto flex">
             <Avatar
                 src={mediaPath(picture, pictureSize)}
                 icon={<FontAwesomeIcon icon={faUser} />}
