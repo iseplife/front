@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useState} from "react"
+import React, {CSSProperties, useCallback, useEffect, useState} from "react"
 import {EmbedEnumType, Post as PostType} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
@@ -12,6 +12,8 @@ import PostCreateForm from "../Post/Form/PostCreateForm"
 import {faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
+import { getWSService } from "../../realtime/services/WSService"
+import WSFeedService from "../../realtime/services/WSFeedService"
 
 type FeedProps = {
     id: number
@@ -55,6 +57,11 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         setEditPost(0)
     }, [])
 
+    useEffect(() => {
+        getWSService(WSFeedService).subscribe(id)
+        return () => getWSService(WSFeedService).unsubscribe(id)
+    }, [id])
+
     return (
         <div className={`${className}`} style={style}>
             <Divider className="font-dinotcb text-gray-700 text-lg" orientation="left">Publications</Divider>
@@ -87,6 +94,10 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                     </div>
                 </BasicPostForm>
             )}
+
+            <div className="mx-auto w-10/12 h-5 mt-6 flex flex-col shadow rounded-lg my-5 p-4 bg-white justify-center items-center cursor-pointer hover:bg-gray-50 transition-colors">
+                3 nouveaux posts
+            </div>
 
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
                 {empty ?

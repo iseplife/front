@@ -1,4 +1,6 @@
 import Protocol from "../Protocol"
+import WSPCFeedSubscriptionUpdate from "./packets/client/WSPCFeedSubscriptionUpdate"
+import WSPCPostsSubscriptionUpdate from "./packets/client/WSPCPostsSubscriptionUpdate"
 import WSPSConnected from "./packets/server/WSPSConnected"
 
 class ProtocolV1 implements Protocol {
@@ -23,6 +25,7 @@ class ProtocolV1 implements Protocol {
         packetsServer.push(WSPSConnected)
         const packetsClient: any[] = []
         packetsClient.push(WSPCPostsSubscriptionUpdate)
+        packetsClient.push(WSPCFeedSubscriptionUpdate)
 
         for (const packet of packetsServer) {
             packet.prototype.id = this.registerPacketServer(packet)
