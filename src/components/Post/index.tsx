@@ -188,7 +188,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                     </div>
                 </div>
                 <div>
-                    <p>{data.description}</p>
+                    <label>{data.description}</label>
                     {data.embed && <Embed embed={data.embed}/>}
                 </div>
                 <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
