@@ -28,7 +28,7 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
 
             {/* Desktop View */}
             <div className="hidden md:block">
-                <div className=" flex flex-col overflow-y-auto" style={{maxHeight: 520}}>
+                <div className=" flex flex-col overflow-y-auto" style={{maxHeight: 720}}>
                     {preview.map((g) => (
                         <div key={g.id} className="bg-gray-400 md:bg-transparent">
                             <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600 flex hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2">
