@@ -22,6 +22,7 @@ class ProtocolV1 implements Protocol {
         const packetsServer: any[] = []
         packetsServer.push(WSPSConnected)
         const packetsClient: any[] = []
+        packetsClient.push(WSPCPostsSubscriptionUpdate)
 
         for (const packet of packetsServer) {
             packet.prototype.id = this.registerPacketServer(packet)
