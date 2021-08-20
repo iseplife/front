@@ -41,7 +41,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
                 icon={<FontAwesomeIcon icon={faUser} />}
                 alt={name}
                 size={size}
-                className="shadow-xl hover:shadow-outline "
+                className="hover:shadow-outline "
             />
             {children}
         </Wrapper>
