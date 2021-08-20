@@ -151,7 +151,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                             <div className="text-xs">{ formattedDate }</div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-1">
+                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
                         {!isPast(data.publicationDate) && (
                             <span className="mx-2 text-xs">
                                 {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
@@ -159,7 +159,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                         )}
                         {data.hasWriteAccess && (
                             <div className="relative">
-                                <div className="cursor-pointer group rounded-full hover:bg-indigo-700 hover:bg-opacity-10 transition-colors mr-5 md:mr-4 w-7 h-7 items-center flex justify-center"
+                                <div className="cursor-pointer group rounded-full hover:bg-indigo-700 hover:bg-opacity-10 transition-colors mr-3 md:mr-4 w-9 h-9 items-center flex justify-center"
                                     onClick={() => setShowEditMenu(!showEditMenu)}>
                                     <FontAwesomeIcon
                                         icon={faEllipsisH}
