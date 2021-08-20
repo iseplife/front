@@ -59,19 +59,19 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     {isAdmin &&
                     <>
                         <div className="flex items-center">
-                            <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("admin_view")} :</h3>
+                            <h3 className="text-gray-600 uppercase mb-0">{t("admin_view")} :</h3>
                             <Switch className="ml-4" size="small" checked={filter.adminVision} onChange={() => handleChange("TOGGLE_ADMIN", "")}/>
                         </div>
                         <div className="flex items-center">
-                            <h3 className="text-gray-600 font-dinotcb uppercase mb-0">{t("published_only")} :</h3>
+                            <h3 className="text-gray-600 uppercase mb-0">{t("published_only")} :</h3>
                             <Switch className="ml-4" size="small" checked={filter.publishedOnly} onChange={() => handleChange("TOGGLE_PUBLISHED", "")}/>
                         </div>
                     </>
                     }
                     <hr className="my-1"/>
-                    <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Feed :</h3>
+                    <h3 className="text-gray-600 uppercase mt-2">Feed :</h3>
                     <FeedFilter />
-                    <h3 className="text-gray-600 font-dinotcb uppercase mt-2">Types :</h3>
+                    <h3 className="text-gray-600 uppercase mt-2">Types :</h3>
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (
                             <Checkbox className="mx-0 text-black whitespace-no-wrap" style={{minWidth: "50%"}} key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>

@@ -22,7 +22,7 @@ export const ModalEventHeader: React.FC<ModalEventHeaderProps> = ({event}) => {
     return (
         <Link to={`/event/${event.id}`} className="text-gray-700 font-bold text-2xl m-0 mx-auto flex items-center">
             <span
-                className="text-white inline-block rounded shadow m-1 px-2 py-1 text-xs font-dinot font-semibold"
+                className="text-white inline-block rounded shadow m-1 px-2 py-1 text-xs font-semibold"
                 style={{backgroundColor: EventTypeColor[event.type]}}>
                 {t(`type.${event.type}`)}
             </span>

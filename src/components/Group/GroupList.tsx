@@ -19,7 +19,7 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
             <div className="block md:hidden flex md:flex-col flex-row hidden-scroller whitespace-no-wrap w-full overflow-x-auto m-0 md:ml-2 ">
                 {groups.map(g => (
                     <div key={g.id} className="m-1 px-2 rounded-full bg-gray-400 md:bg-transparent">
-                        <Link to={`/group/${g.id}`} className="font-dinot text-white md:text-gray-500 hover:text-gray-600">
+                        <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600">
                             {g.name}
                         </Link>
                     </div>
@@ -31,14 +31,14 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
                 <div className=" flex flex-col overflow-y-auto" style={{maxHeight: 480}}>
                     {preview.map((g) => (
                         <div key={g.id} className="m-1 px-2 rounded-full bg-gray-400 md:bg-transparent">
-                            <Link to={`/group/${g.id}`} className="font-dinot text-white md:text-gray-500 hover:text-gray-600">
+                            <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600">
                                 {g.name}
                             </Link>
                         </div>
                     ))}
                     {viewAll && leftovers.map((g) => (
                         <div key={g.id} className="m-1 px-2 rounded-full bg-gray-400 md:bg-transparent">
-                            <Link to={`/group/${g.id}`} className="font-dinot text-white md:text-gray-500 hover:text-gray-600">
+                            <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600">
                                 {g.name}
                             </Link>
                         </div>

@@ -58,7 +58,7 @@ const GroupPanel: React.FC = () => {
 
     return (
         <div>
-            <h1 className="font-dinotcb text-2xl text-gray-600">Groupes</h1>
+            <h1 className="text-2xl text-gray-600">Groupes</h1>
             <div className="flex">
                 <Table
                     className="w-full md:w-1/2"

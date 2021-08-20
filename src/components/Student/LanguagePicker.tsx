@@ -8,7 +8,7 @@ const LanguagePicker: React.FC = () => {
 
     return (
         <div>
-            <h4 className="text-gray-700 font-dinotcb text-lg">{t("language")}</h4>
+            <h4 className="text-gray-700 text-lg">{t("language")}</h4>
             <div className="flex ">
                 {SUPPORTED_LANGUAGES.map(lng => (
                     <img

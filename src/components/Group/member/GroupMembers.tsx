@@ -90,13 +90,13 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, members, hasRight = f
                 <Skeleton avatar paragraph={{rows: 0}}/>
             </> :
             <div>
-                <h3 className="font-dinotcb text-gray-800 text-lg mt-3">{t("admins")}</h3>
+                <h3 className="text-gray-800 text-lg mt-3">{t("admins")}</h3>
                 <MemberList
                     members={orga[0]}
                     actions={id => <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/>}
                 />
 
-                <h3 className="font-dinotcb text-gray-800 text-lg mt-3">{t("members")}</h3>
+                <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
                 {hasRight && <AddMember onAdd={onAdd}/>}
                 <MemberList
                     members={orga[1]}

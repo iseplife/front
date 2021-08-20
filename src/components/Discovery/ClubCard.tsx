@@ -25,7 +25,7 @@ const ClubCard: React.FC<ClubCardProps> = ({club}) => (
                 </Link>
             </div>
             <div className="h-12">
-                <h1 className="text-2xl uppercase font-dinotcb">{club.name}</h1>
+                <h1 className="text-2xl uppercase">{club.name}</h1>
             </div>
         </div>
     </div>

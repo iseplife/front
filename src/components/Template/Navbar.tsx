@@ -32,7 +32,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
     const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
     return (
         <Menu className="text-gray-700 rounded shadow-sm">
-            <Menu.Item key={0} className="text-center font-dinotcb text-lg">
+            <Menu.Item key={0} className="text-center text-lg">
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
@@ -46,7 +46,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 <FontAwesomeIcon icon={faCogs} className="ml-2"/>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={5} className="font-dinot text-center">
+            <Menu.Item key={5} className="text-center">
                 <Link to="/logout" className="text-red-500">{t("logout")}</Link>
             </Menu.Item>
         </Menu>

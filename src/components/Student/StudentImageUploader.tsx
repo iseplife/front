@@ -64,7 +64,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
 
                     />
                     <div
-                        className="absolute h-16 w-16 font-dinot text-center"
+                        className="absolute h-16 w-16 text-center"
                         style={{bottom: 5, right: 5}}
                     >
                         {t("default")}
@@ -76,7 +76,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                     </div>
 
                     {file !== undefined && (
-                        <Button className="bg-green-400 font-dinot text-green-700 hover:text-green-800 rounded-lg" onClick={handleSubmit}>
+                        <Button className="bg-green-400 text-green-700 hover:text-green-800 rounded-lg" onClick={handleSubmit}>
                             {t("common:save")} <FontAwesomeIcon icon={faSave} className="ml-2" />
                         </Button>
                     )}
@@ -90,7 +90,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                     <Upload beforeUpload={handleImage}>
                         <Button
                             style={{width: "max-content"}}
-                            className="rounded-lg font-dinot border-2 border-gray-600 text-gray-600 hover:text-gray-600"
+                            className="rounded-lg border-2 border-gray-600 text-gray-600 hover:text-gray-600"
                         >
                             {t("add_picture")} <FontAwesomeIcon icon={faUpload} className="ml-2"/>
                         </Button>

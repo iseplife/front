@@ -13,7 +13,7 @@ const ParameterSwitch: React.FC<ParameterSwitchProps> = ({name, value, onChange}
 
     return (
         <div className="my-5">
-            <h4 className="text-gray-700 font-dinotcb text-lg">{t(`${name}.title`)}</h4>
+            <h4 className="text-gray-700 text-lg">{t(`${name}.title`)}</h4>
             <div className="flex items-center">
                 <Switch className="mr-2" defaultChecked={value} onChange={onChange}/> <span>{t(`${name}.${state}`)}</span>
             </div>

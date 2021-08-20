@@ -43,7 +43,7 @@ const ClubEditForm: React.FC = () => {
         <form className="rounded-lg shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>
             <div className="flex">
                 <div className="w-2/3">
-                    <label className="font-dinotcb">{t("form.name")}</label>
+                    <label >{t("form.name")}</label>
                     <Input
                         name="name"
                         placeholder="Nom"
@@ -56,7 +56,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="w-1/3">
-                    <label className="font-dinotcb">{t("form.creation")}</label>
+                    <label >{t("form.creation")}</label>
                     <Input
                         type="date"
                         bordered={false}
@@ -67,7 +67,7 @@ const ClubEditForm: React.FC = () => {
             </div>
 
             <div className="mt-3">
-                <label className="font-dinotcb">{t("form.description")}</label>
+                <label >{t("form.description")}</label>
                 <TextArea
                     name="description"
                     placeholder="Décrivez l'association en quelques lignes..."
@@ -83,7 +83,7 @@ const ClubEditForm: React.FC = () => {
 
             <div className="flex mt-5 mb-3">
                 <div className="flex-1 mx-1">
-                    <label className="font-dinotcb">{t("form.website")}</label>
+                    <label >{t("form.website")}</label>
                     <Input
                         name="website"
                         placeholder="Lien site internet"
@@ -94,7 +94,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 mx-1">
-                    <label className="font-dinotcb">Instagram</label>
+                    <label >Instagram</label>
                     <Input
                         name="instagram"
                         placeholder="Lien Instagram"
@@ -105,7 +105,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 mx-1">
-                    <label className="font-dinotcb">Facebook</label>
+                    <label >Facebook</label>
                     <Input
                         name="facebook"
                         placeholder="Lien Facebook"

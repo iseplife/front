@@ -21,7 +21,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description}) => {
                 }
             }}
         >
-            <h3 className=" font-dinotcb text-center text-lg text-gray-700">
+            <h3 className=" text-center text-lg text-gray-700">
                 {t("form.label.description")}
             </h3>
             <div ref={descriptionRef} className="overflow-hidden max-w-4xl">

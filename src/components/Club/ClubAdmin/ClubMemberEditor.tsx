@@ -54,7 +54,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
     return (
         <div className="h-full">
             <div className="w-full flex justify-between items-center">
-                <h1 className="font-dinotcb text-xl text-gray-600 uppercase">{t("edit_member")}</h1>
+                <h1 className="text-xl text-gray-600 uppercase">{t("edit_member")}</h1>
                 <FontAwesomeIcon icon={faTimes} className="text-gray-600 hover:text-gray-400 cursor-pointer" onClick={onCancel}/>
             </div>
 
@@ -66,11 +66,11 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
                         picture={member.student.picture}
                         className="h-16 w-16 md:h-12 md:w-12 m-3"
                     />
-                    <h3 className="font-dinotcb text-xl text-gray-500">{member.student.firstName + " " + member.student.lastName}</h3>
+                    <h3 className="text-xl text-gray-500">{member.student.firstName + " " + member.student.lastName}</h3>
                 </div>
 
                 <div className="flex flex-col items-center mb-3">
-                    <label className="font-dinotcb">{t("form.role")}</label>
+                    <label >{t("form.role")}</label>
                     <Select value={formik.values.role} className="w-32" onChange={(value) => formik.setFieldValue("role", value)}>
                         {ClubRoles.map(r =>
                             <Option key={r} value={r}>{t("role." + r)}</Option>
@@ -78,7 +78,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) =
                     </Select>
                 </div>
                 <div>
-                    <label className="font-dinotcb">{t("form.position")}</label>
+                    <label >{t("form.position")}</label>
                     <Input name="position" value={formik.values.position} onChange={formik.handleChange}/>
                 </div>
 

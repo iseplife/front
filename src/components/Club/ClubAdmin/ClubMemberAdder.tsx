@@ -31,7 +31,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({onAdd}) => {
     }, [student, club.id, onAdd])
     return (
         <div className="h-64 flex flex-col items-center">
-            <h1 className="font-dinotcb text-xl text-gray-600 uppercase self-start">{t("add_member")}</h1>
+            <h1 className="text-xl text-gray-600 uppercase self-start">{t("add_member")}</h1>
 
             <StudentPicker className="w-64 my-10" onChange={(id) => setStudent(id)}/>
 

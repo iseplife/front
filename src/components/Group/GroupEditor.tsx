@@ -172,7 +172,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
 
                     <div className="flex mt-5">
                         <div className="flex flex-col mx-3">
-                            <label className="font-dinotcb">Groupe privé
+                            <label >Groupe privé
                                 <HelperIcon
                                     text="Un groupe privé n'est visible et accessible que par les personnes faisant parti de celui-ci"
                                 />
@@ -187,7 +187,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
 
                         </div>
                         <div className="flex-1 mx-3">
-                            <label className="font-dinotcb">Nom du groupe</label>
+                            <label >Nom du groupe</label>
                             <Input
                                 required
                                 placeholder="Entrez un nom pour votre groupe"
@@ -199,7 +199,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     </div>
                     <Divider/>
                     <div className="mx-3 mb-5">
-                        <label className="font-dinotcb">Administrateurs</label>
+                        <label >Administrateurs</label>
                         <StudentSelector
                             placeholder="Aucun administrateur (déconseillé)"
                             className="w-full"

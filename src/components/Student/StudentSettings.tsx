@@ -22,7 +22,7 @@ const StudentSettings: React.FC<StudentSettingsProps> = ({info}) => {
     return (
         <>
             <div className="md:w-1/2 w-full py-5 px-10">
-                <h4 className="text-gray-700 font-dinotcb text-lg">{t("image-uploader")}: </h4>
+                <h4 className="text-gray-700 text-lg">{t("image-uploader")}: </h4>
                 <StudentImageUploader {...info.pictures}/>
             </div>
             <div className="md:w-1/2 w-full">

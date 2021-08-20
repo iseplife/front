@@ -29,7 +29,7 @@ const ClubPanel: React.FC = () => {
         <div>
             <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-2/3">
-                    <h1 className="font-dinotcb text-2xl text-gray-600">Utilisateurs</h1>
+                    <h1 className="text-2xl text-gray-600">Utilisateurs</h1>
                     <div className="flex flex-no-wrap justify-center md:justify-start md:flex-wrap ">
                         {loading ?
                             <div className="h-full w-full text-center">

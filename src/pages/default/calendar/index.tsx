@@ -156,7 +156,7 @@ const Events: React.FC = () => {
                 <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 ">
                     <div className="h-16 w-full flex justify-between items-center">
                         <div className="flex items-center text-gray-700">
-                            <h1 className="text-2xl font-dinotcb font-extrabold my-auto text-current">
+                            <h1 className="text-2xl font-extrabold my-auto text-current">
                                 {dateTitle}
                             </h1>
                             <FontAwesomeIcon icon={faArrowLeft} className="my-auto mx-2 cursor-pointer" onClick={decrementDate}/>

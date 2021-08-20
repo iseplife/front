@@ -23,7 +23,7 @@ const PollForm: React.FC = () => {
     return (
         <div className="w-full">
             <div className="flex justify-between">
-                <h3 className="font-dinotcb text-gray-500">
+                <h3 className="text-gray-500">
                     {t("poll")}
                 </h3>
 
@@ -80,7 +80,7 @@ const PollForm: React.FC = () => {
                             </div>
 
                         ))}
-                        <div className="cursor-pointer font-dinot mt-2" onClick={() => arrayHelpers.push("")}>
+                        <div className="cursor-pointer mt-2" onClick={() => arrayHelpers.push("")}>
                             {t("add_choice")} +
                         </div>
                     </div>

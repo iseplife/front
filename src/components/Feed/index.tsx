@@ -64,7 +64,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
     return (
         <div className={`${className}`} style={style}>
-            <Divider className="font-dinotcb text-gray-700 text-lg" orientation="left">Publications</Divider>
+            <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
                 <BasicPostForm feedId={id} onPost={onPostCreation}>
                     <div className="flex items-center">
@@ -101,7 +101,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
                 {empty ?
-                    <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
+                    <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
                         <FontAwesomeIcon icon={faNewspaper} size="8x" className="block" />
                         <span className="text-center">{t("empty_feed")}</span>
                     </div>

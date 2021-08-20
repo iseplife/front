@@ -22,7 +22,7 @@ const ClubCard: React.FC<ClubCardProps> = ({club, className = ""}) => (
                 />
             </div>
             <div title={club.name} className="bg-white px-3" style={{height: "20%"}}>
-                <h1 className="truncate text-xl text-center uppercase font-dinotcb">
+                <h1 className="truncate text-xl text-center uppercase">
                     {club.name}
                 </h1>
             </div>
