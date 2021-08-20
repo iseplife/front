@@ -94,11 +94,11 @@ const Login: React.FC = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-indigo-500 text-white hover:text-indigo-200 shadow-lg text-xl font-dinotcb`}
+                            className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-indigo-500 text-white hover:text-indigo-200 transition-colors shadow-lg text-xl font-semibold`}
                         >
                             {loading ?
                                 <Loading/> :
-                                "let's go !"
+                                "Se connecter"
                             }
                         </button>
                     </form>
