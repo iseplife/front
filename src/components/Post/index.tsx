@@ -167,7 +167,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                                     />
                                 </div>
                                 {showEditMenu &&
-                                    <div className="select-none edit-menu absolute top-8 right-4 rounded bg-white border-gray-300 border-opacity-70 border w-32 text-base font-medium">
+                                    <div className="select-none edit-menu absolute top-10 right-4 rounded bg-white border-gray-300 border-opacity-70 border w-32 text-base font-medium">
                                         <div onClick={confirmDeletion} className="flex items-center w-full text-red-600 px-3 py-2 cursor-pointer hover:bg-red-50 transition-colors">
                                             <FontAwesomeIcon
                                                 icon={faTrashAlt}
