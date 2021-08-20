@@ -17,8 +17,8 @@ export type BasicPostFormValues = {
 
 
 const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({children, isSubmitting, setValues, values}) => (
-    <Form className="flex flex-col items-center text-gray-500">
-        <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 px-4 overflow-y-auto" style={{minHeight: "5rem"}}>
+    <Form className="flex flex-col items-center text-gray-500 rounded-lg shadow bg-white">
+        <div className="flex flex-col w-full py-3 px-4 overflow-y-auto" style={{minHeight: "5rem"}}>
             <Field
                 type="textarea"
                 name="description"

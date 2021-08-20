@@ -95,8 +95,8 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                 </BasicPostForm>
             )}
 
-            <div className="mx-auto w-10/12 h-5 mt-6 flex flex-col shadow rounded-lg my-5 p-4 bg-white justify-center items-center cursor-pointer hover:bg-gray-50 transition-colors">
-                3 nouveaux posts
+            <div className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
+                <div className="ant-divider-inner-text">3 nouveaux posts</div>
             </div>
 
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
