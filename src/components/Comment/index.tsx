@@ -121,7 +121,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     || (!!data.comments &&
                         <div className="ml-2 mt-1 flex group cursor-pointer"
                             onClick={() => setShowComments(true)}>
-                            <img src="/img/icons/following-arrow-2.svg" className="w-4 h-4 mr-2" />
+                            <img src="/img/icons/following-arrow.svg" className="w-4 h-4 mr-2" />
                             <label className="-mt-0.5 font-semibold group-hover:underline pointer-events-none">{`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}</label>
                         </div>
                     )}
