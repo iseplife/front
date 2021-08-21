@@ -23,12 +23,14 @@ interface CommentProps {
 }
 
 const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, handleEdit}) => {
-    const {t} = useTranslation()
+    const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [showComments, setShowComments] = useState<boolean>(false)
     const [likes, setLikes] = useState<number>(data.likes)
     const [formattedDate, setFormattedDate] = useState<string>("")
+
+    const [respond, setRespond] = useState<boolean>(false)
 
     useEffect(() => {
         let timeoutId: number
@@ -51,7 +53,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     }, [])
 
     return (
-        <div className="flex my-3">
+        <div className="flex my-1">
             <div className="mr-2">
                 <StudentAvatar
                     id={data.author.id}
@@ -93,19 +95,8 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     </div>
 
                 </div>
-                <div className="flex items-center text-gray-400 mt-1">
-                    {allowReplies && (
-                        <span className="flex items-center cursor-pointer hover:text-indigo-400 mx-1" onClick={() => setShowComments(!showComments)}>
-                            {data.comments !== 0 && data.comments}
-                            <FontAwesomeIcon
-                                icon={faCommentAlt}
-                                size="sm"
-                                className="ml-1"
-                                onClick={() => setShowComments(!showComments)}
-                            />
-                        </span>
-                    )}
-                    <span className="flex items-center cursor-pointer mx-2.5">
+                <div className="flex items-center text-gray-400 mt-0.5">
+                    <span className="flex items-center cursor-pointer ml-0.5 mr-2.5">
                         {likes > 0 && likes}
                         <FontAwesomeIcon
                             icon={liked ? faSolidHeart: faHeart}
@@ -113,19 +104,29 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                             onClick={() => toggleLike(data.thread)}
                             size="sm"
                         />
-                    </span>· &nbsp;{formattedDate}
-                </div>
-                <div className="flex ">
-                    {showComments &&
-                    <>
-                        <div className="border border-1 border-gray-200 ml-5 my-4"/>
-                        <CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} className="flex-1"/>
-                    </>
+                    </span>
+                    {allowReplies &&
+                        <>
+                        · &nbsp;<label className="font-semibold hover:underline cursor-pointer text-gray-500" onClick={() => {setShowComments(true); setRespond(true)}}>{t("post:respond")}</label>&nbsp;&nbsp;
+                        </>
                     }
+                    · &nbsp;{formattedDate}
+                </div>
+                <div className="flex">
+                    {showComments &&
+                        <>
+                            <div className="border border-1 border-gray-200 ml-5 my-4"/>
+                            <CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} showInput={respond} className="flex-1" bottomInput={true} />
+                        </>
+                    || (!!data.comments &&
+                        <div className="ml-2 mt-1 flex group cursor-pointer"
+                            onClick={() => setShowComments(true)}>
+                            <img src="/img/icons/following-arrow-2.svg" className="w-4 h-4 mr-2" />
+                            <label className="-mt-0.5 font-semibold group-hover:underline pointer-events-none">{`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}</label>
+                        </div>
+                    )}
                 </div>
             </div>
-
-
         </div>
     )
 }

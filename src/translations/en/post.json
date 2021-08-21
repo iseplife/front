@@ -3,5 +3,7 @@
 	"whatsup": "What's up",
 	"edit": "Edit post",
 	"publication_date": "Publication date",
-	"max_image_reached": "You can't publish more than 5 images"
+	"max_image_reached": "You can't publish more than 5 images",
+	"response": "response",
+	"respond": "Respond"
 }

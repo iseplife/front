@@ -206,7 +206,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                 </div>
                 {showComments && (
                     <>
-                        <Divider className="mb-0" />
+                        <Divider className="mb-0 mt-4" />
                         <CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
                     </>
                 )}

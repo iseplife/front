@@ -3,5 +3,7 @@
 	"whatsup": "Quoi de neuf",
 	"edit": "Modification d'une publication",
 	"publication_date": "Date de publication",
-	"max_image_reached": "Vous ne pouvez pas publier plus de 5 photos"
+	"max_image_reached": "Vous ne pouvez pas publier plus de 5 photos",
+	"response": "réponse",
+	"respond": "Répondre"
 }

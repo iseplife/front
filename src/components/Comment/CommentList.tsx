@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {createRef, useCallback, useEffect, useState} from "react"
 import {Comment as CommentType, CommentForm as CommentFormType} from "../../data/thread/types"
 import Comment from "./index"
 import {commentThread, deleteThreadComment, editThreadComment, getThreadComments} from "../../data/thread"
@@ -9,13 +9,18 @@ interface CommentListProps {
     id: number
     depth: number
     loadComment?: boolean
+    showInput?: boolean
+    bottomInput?: boolean
+    showOne?: boolean
     className?: string
 }
 
-const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true, className}) => {
+const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true, showInput = true, bottomInput, showOne, className}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment)
     const [error, setError] = useState<string>()
+
+    //TODO showOne
 
     const sendComment = useCallback(async (comment: CommentFormType) => {
         const res = await commentThread(id, comment)
@@ -61,7 +66,7 @@ const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true,
         }
         return (
             <div className={`ml-4 ${className}`}>
-                <CommentForm handleUpload={sendComment}/>
+                {showInput && !bottomInput && <CommentForm handleUpload={sendComment} focus={showInput}/>}
                 {comments.map(c =>
                     <Comment
                         key={c.id}
@@ -71,6 +76,7 @@ const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true,
                         handleEdit={editComment}
                     />
                 )}
+                {showInput && bottomInput && <CommentForm handleUpload={sendComment}/>}
             </div>
         )
     }

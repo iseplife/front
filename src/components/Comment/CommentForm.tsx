@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {createRef, useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
 import AvatarPicker from "../Common/AvatarPicker"
@@ -8,11 +8,19 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>
+    focus?: boolean
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
+const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
     const {t} = useTranslation()
     const [isSubmitting, setSubmitting] = useState<boolean>(false)
+
+    const inputRef = createRef<HTMLInputElement>()
+
+    useEffect(() => {
+        inputRef.current?.focus()
+        inputRef.current?.scrollTo({behavior: "auto"})
+    }, [focus])
 
     const formik = useFormik<CommentFormType>({
         initialValues: {
@@ -28,7 +36,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
     })
 
     return (
-        <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 mt-3">
+        <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 my-3">
             <AvatarPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
             <input
                 id="message"
@@ -37,6 +45,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload}) => {
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.message}
+                ref={inputRef}
             />
             <button type="submit" className="cursor-pointer text-gray-500 hover:text-gray-700 px-2" disabled={isSubmitting}>
                 <FontAwesomeIcon icon={isSubmitting ? faCircleNotch : faPaperPlane} spin={isSubmitting}/>
