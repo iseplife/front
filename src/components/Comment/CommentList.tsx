@@ -11,11 +11,12 @@ interface CommentListProps {
     loadComment?: boolean
     showInput?: boolean
     bottomInput?: boolean
+    autofocusInput?: boolean
     showOne?: boolean
     className?: string
 }
 
-const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true, showInput = true, bottomInput, showOne, className}) => {
+const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment)
     const [error, setError] = useState<string>()
@@ -66,7 +67,7 @@ const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true,
         }
         return (
             <div className={`ml-4 ${className}`}>
-                {showInput && !bottomInput && <CommentForm handleUpload={sendComment} focus={showInput}/>}
+                {showInput && !bottomInput && <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
                 {comments.map(c =>
                     <Comment
                         key={c.id}
@@ -76,7 +77,7 @@ const CommentList: React.FC<CommentListProps> = ({id, depth, loadComment = true,
                         handleEdit={editComment}
                     />
                 )}
-                {showInput && bottomInput && <CommentForm handleUpload={sendComment}/>}
+                {showInput && bottomInput && <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
             </div>
         )
     }

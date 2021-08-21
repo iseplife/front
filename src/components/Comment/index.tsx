@@ -114,9 +114,10 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 </div>
                 <div className="flex">
                     {showComments &&
+                        //TODO faire passer le panneau de droite au dessus lors du passage en lg ou xl (qd ça commence à wrap des noms de groupe / prénom-nom)
                         <>
                             <div className="border border-1 border-gray-200 ml-5 my-4"/>
-                            <CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} showInput={respond} className="flex-1" bottomInput={true} />
+                            <CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} showInput={respond} className="flex-1" bottomInput={true} autofocusInput={true} />
                         </>
                     || (!!data.comments &&
                         <div className="ml-2 mt-1 flex group cursor-pointer"
