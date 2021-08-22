@@ -27,7 +27,9 @@ const PostImageLightbox: React.FC<LightboxProps> = ({ post, photos, currentPhoto
         const handleResize = () => {
             const ratio = currentPhoto.width / currentPhoto.height
 
-            const { width: rpWidth, height: lbHeight } = rightPanel.getBoundingClientRect()!
+            let { width: rpWidth, height: lbHeight } = rightPanel.getBoundingClientRect()!
+            lbHeight = lbHeight || window.innerHeight
+            rpWidth = rpWidth ?? 0
 
             const lbWidth = window.innerWidth - rpWidth
             
@@ -80,7 +82,7 @@ const PostImageLightbox: React.FC<LightboxProps> = ({ post, photos, currentPhoto
                     }
                 </div>
                 
-                <div className="bg-gray-100 flex-shrink-0 w-96 rounded-tl-md rounded-bl-md overflow-auto " ref={element => rightPanel = element ?? rightPanel}>
+                <div className="bg-gray-100 flex-shrink-0 w-96 rounded-tl-md rounded-bl-md overflow-auto hidden md:block" ref={element => rightPanel = element ?? rightPanel}>
                     <Post data={post} isEdited={false} embeded={true}></Post>
                 </div>
             </div>
