@@ -14,19 +14,18 @@ import {faTrashAlt, faHeart, faCommentAlt, faCommentDots} from "@fortawesome/fre
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { getWSService } from "../../realtime/services/WSService"
 import WSPostsService from "../../realtime/services/WSPostsService"
-import { fr } from "date-fns/locale"
-import { formatWithOptions } from "date-fns/fp"
 import { formatDate } from "../../util"
 
 type PostProps = {
     data: PostType
     isEdited: boolean
-    toggleEdition: (toggle: boolean) => void
-    onDelete: (id: number) => Promise<void>
-    onUpdate: (id: number, postUpdate: PostType) => void
+    embeded?: boolean
+    toggleEdition?: (toggle: boolean) => void
+    onDelete?: (id: number) => Promise<void>
+    onUpdate?: (id: number, postUpdate: PostType) => void
 }
 
-const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({data, isEdited, embeded, onDelete, onUpdate, toggleEdition}) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
@@ -41,15 +40,14 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: () => {
-
-                onDelete(data.id).then(() => message.info(t("remove_item.complete")))
+                onDelete?.(data.id).then(() => message.info(t("remove_item.complete")))
             }
         })
     }, [data.id, t, onDelete])
 
     const confirmUpdate = useCallback((updatedPost: PostType) => {
         message.info(t("update_item.complete")).then(() =>
-            onUpdate(data.id, updatedPost)
+            onUpdate?.(data.id, updatedPost)
         )
     }, [data.id, t, onUpdate])
 
@@ -115,13 +113,13 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                     visible={true}
                     footer={null}
                     title={<span className="text-gray-800 font-bold text-2xl">{t("post:edit")}</span>}
-                    onCancel={() => toggleEdition(false)}
+                    onCancel={() => toggleEdition?.(false)}
                 >
-                    <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
+                    <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition?.(false)}/>
                 </Modal>
             )}
-            <div className="flex flex-col shadow-sm rounded-lg bg-white my-5 p-4 max-w-4xl" ref={ele => { post = ele ?? post }}>
-                <div className="w-full grid grid-cols-2 mb-1">
+            <div className={"flex flex-col p-4 " + (embeded || "shadow-sm rounded-lg bg-white my-5")} ref={ele => { post = ele ?? post }}>
+                <div className="w-full flex justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
                             id={data.author.id}
@@ -129,10 +127,11 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                             picture={data.author.thumbnail}
                             pictureSize={AvatarSizes.THUMBNAIL}
                             showPreview
+                            size={embeded ? "large" : "default"}
                         />
-                        <div className="items-center ml-2">
-                            <div className="font-bold -mb-0.5 -mt-0.5">{data.author.name}</div>
-                            <div className="text-xs">{ formattedDate }</div>
+                        <div className={"items-center ml-2 " + (embeded && "ml-3")}>
+                            <div className={"font-bold -mb-0.5 " + ((embeded && "text-base") || "-mt-0.5")}>{data.author.name}</div>
+                            <div className={(embeded && "text-md") || "text-xs"}>{ formattedDate }</div>
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4">
@@ -158,12 +157,14 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                                                 className="mr-2.5"
                                             /> Supprimer
                                         </div>
-                                        <div onClick={() => toggleEdition(true)} className="flex items-center w-full text-gray-500 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 transition-colors">
-                                            <FontAwesomeIcon
-                                                icon={faPen}
-                                                className="mr-2.5"
-                                            /> Modifier
-                                        </div>
+                                        {toggleEdition &&
+                                            <div onClick={() => toggleEdition?.(true)} className="flex items-center w-full text-gray-500 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 transition-colors">
+                                                <FontAwesomeIcon
+                                                    icon={faPen}
+                                                    className="mr-2.5"
+                                                /> Modifier
+                                            </div>
+                                        }
                                     </div>
                                 }
                             </div>
@@ -172,8 +173,8 @@ const Post: React.FC<PostProps> = ({data, isEdited, onDelete, onUpdate, toggleEd
                     </div>
                 </div>
                 <div>
-                    <label>{data.description}</label>
-                    {data.embed && <div className="mt-2"><Embed embed={data.embed}/></div>}
+                    <label className={embeded ? "text-base" : ""}>{data.description}</label>
+                    {data.embed && !embeded && <div className="mt-2"><Embed embed={data.embed} post={data}/></div>}
                 </div>
                 <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
                     <div className="items-center text-gray-400 grid grid-cols-2 w-full mr-5 text-center">

@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 
 
-type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & { nsfw: boolean, hide?: boolean }
+type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & { nsfw: boolean, hide?: boolean, clickable?: boolean }
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
     const {nsfw, hide, ...imgProps} = props
@@ -11,7 +11,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
     return (
-        <div className={`${props.className} image-display relative bg-gray-400 overflow-hidden m-auto w-max rounded`}>
+        <div className={`${props.className} ${(props.clickable ?? true) && "image-display"} relative bg-gray-400 overflow-hidden m-auto w-max rounded`}>
             <div className="overflow-hidden h-full w-full">
                 <img
                     {...imgProps}
