@@ -83,7 +83,7 @@ const PostImageLightbox: React.FC<LightboxProps> = ({ post, photos, currentPhoto
                 </div>
                 
                 <div className="bg-gray-100 flex-shrink-0 w-96 rounded-tl-md rounded-bl-md overflow-auto hidden md:block" ref={element => rightPanel = element ?? rightPanel}>
-                    <Post data={post} isEdited={false} embeded={true}></Post>
+                    <Post data={post} isEdited={false} embeded={true} forceShowComments={true}></Post>
                 </div>
             </div>
         </div>

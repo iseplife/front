@@ -20,16 +20,17 @@ type PostProps = {
     data: PostType
     isEdited: boolean
     embeded?: boolean
+    forceShowComments?: boolean
     toggleEdition?: (toggle: boolean) => void
     onDelete?: (id: number) => Promise<void>
     onUpdate?: (id: number, postUpdate: PostType) => void
 }
 
-const Post: React.FC<PostProps> = ({data, isEdited, embeded, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments, onDelete, onUpdate, toggleEdition }) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
-    const [showComments, setShowComments] = useState<boolean>(false)
+    const [showComments, setShowComments] = useState<boolean>(!!forceShowComments)
 
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
 
