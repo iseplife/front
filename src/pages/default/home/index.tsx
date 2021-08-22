@@ -10,7 +10,7 @@ const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
     return (
         <div className="mt-5 flex justify-center flex-wrap container mx-auto">
-            <div className="flex-1">
+            <div className="flex-1 ml-4">
                 <div className="flex p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer">
                     <StudentAvatar
                         id={user.id}
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
                 <UserGroups/>
             </div>
             <Feed id={1} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
-            <div className="flex-1 md:block hidden">
+            <div className="flex-1 md:block hidden mr-4">
                 <IncomingEvents allowCreate={false} />
             </div>
         </div>
