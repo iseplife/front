@@ -1,7 +1,9 @@
 import React, {useMemo, useState} from "react"
 import {GroupPreview} from "../../data/group/types"
 import {Link} from "react-router-dom"
-import {useTranslation} from "react-i18next"
+import { useTranslation } from "react-i18next"
+//@ts-ignore
+import { getPastelColor } from "pastel-color"
 
 const GROUP_PREVIEW_COUNT = 13
 
@@ -18,9 +20,9 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
             {/* Mobile View */}
             <div className="md:hidden flex md:flex-col flex-row hidden-scroller whitespace-no-wrap w-full overflow-x-auto m-0 md:ml-2 ">
                 {groups.map(g => (
-                    <div key={g.id} className="m-1 px-2 rounded-full bg-gray-400 md:bg-transparent">
+                    <div key={g.id} className="m-1 px-2 rounded-lg h-20 w-20 text-xs font-semibold relative" style={{ backgroundColor: getPastelColor(g.name).hex }}>
                         <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600">
-                            {g.name}
+                            <div className="absolute bottom-1 box-border w-full pr-4 break-words">{g.name}</div>
                         </Link>
                     </div>
                 ))}

@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     return (
         <div className="mt-5 flex justify-center flex-wrap container mx-auto">
             <div className="flex-1 ml-4">
-                <div className="flex p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer">
+                <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex">
                     <StudentAvatar
                         id={user.id}
                         name={user.firstName + " " + user.lastName}
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
                     </div>
                 </div>
                 <IncomingEvents className="md:hidden block" />
-                <div className="ant-divider ant-devider-horizontal mb-3 grid self-center"></div>
+                <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <UserGroups/>
             </div>
             <Feed id={1} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>

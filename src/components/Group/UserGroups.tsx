@@ -3,7 +3,7 @@ import {getUserGroups} from "../../data/group"
 import {GroupPreview} from "../../data/group/types"
 import {useTranslation} from "react-i18next"
 import GroupList from "./GroupList"
-import {Skeleton} from "antd"
+import {Divider, Skeleton} from "antd"
 
 
 const UserGroups: React.FC = () => {
@@ -20,7 +20,8 @@ const UserGroups: React.FC = () => {
 
     return (
         <div className="">
-            <h3 className="text-gray-700 text-lg">{t("group") + "s"}</h3>
+            <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("group") + "s"}</Divider>
+            <h3 className="text-gray-700 text-lg hidden sm:block">{t("group") + "s"}</h3>
             {loading ?
                 <>
                     <Skeleton title paragraph={{rows: 0}}/>
