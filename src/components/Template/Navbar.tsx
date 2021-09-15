@@ -111,14 +111,14 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const [visible, setVisible] = useState<boolean>(false)
     return (
         <>
-            <div className="md:hidden flex justify-around items-center shadow-md w-full h-10 bg-white">
+            <div className="md:hidden flex justify-around items-center shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
                 <Link to="/">
-                    <Button shape="circle" icon={<FontAwesomeIcon icon={faHome} />} className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faHome} className="text-xl" />} className="border-0"/>
                 </Link>
                 <Link to="/calendar">
-                    <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt}/> } className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt} className="text-xl" /> } className="border-0"/>
                 </Link>
-                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} />} className="border-0"/>
+                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
                 <div className="cursor-pointer" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}
