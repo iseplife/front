@@ -59,6 +59,7 @@ const Group: React.FC = () => {
                     </div>
                 )}
 
+                {/* TODO: retirer ce menu quandn il n'y a aucun évènement à venir et qu'on est en sm (vue téléphone) */}
                 <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
                 <Divider/>
                 <GroupMembers group={id} hasRight={group?.hasRight}/>
