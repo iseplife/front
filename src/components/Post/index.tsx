@@ -30,9 +30,11 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
-    const [showComments, setShowComments] = useState<boolean>(!!forceShowComments)
+    const [showComments, setShowComments] = useState<boolean>(!!(forceShowComments || (data.nbComments == 1 && data.trendingComment)))
 
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
+
+    const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
@@ -105,6 +107,17 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
             }
         }
     }, [showEditMenu])
+
+    const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (!showComments && alreadyMore)
+            setNoTrendingComment(true)
+        else if (showComments) {
+            setAlreadyMore(true)
+            setShowComments(true)
+        }
+    }, [showComments])
 
     return (
         <div>
@@ -206,10 +219,10 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
                         </span>
                     </div>
                 </div>
-                {showComments && (
+                {((data.trendingComment && !noTrendingComment) || showComments) && (
                     <>
                         <Divider className="mb-0 mt-4" />
-                        <CommentList id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
+                        <CommentList showMoreComments={() => setShowComments(true)} showComments={showComments} trendingComment={noTrendingComment ? undefined : data.trendingComment} numberComments={data.nbComments} id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
                     </>
                 )}
             </div>

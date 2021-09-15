@@ -3,6 +3,7 @@ import {Author} from "../request.type"
 import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
 import {Poll, PollForm} from "../poll/types"
+import { Comment } from "../thread/types"
 
 
 export enum EmbedEnumType {
@@ -46,6 +47,7 @@ export type Post = {
     author: Author
     embed?: Embed
     thread: number
+    trendingComment: Comment
     linkedClub?: Club
 
     nbComments: number
