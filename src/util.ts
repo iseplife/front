@@ -87,7 +87,7 @@ export const isFileImage = (file: string): boolean => ["image/gif", "image/jpeg"
 
 export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
     if (fullPath) {
-        const storageUrl = process.env.STORAGE_URL || "https://iseplife.s3.eu-west-3.amazonaws.com"
+        const storageUrl = process.env.STORAGE_URL || "https://iseplife-dev.s3.eu-west-3.amazonaws.com"
         if (size) {
             const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
             fullPath = `${path}/${size}/${filename}`
@@ -100,11 +100,12 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
 
 export const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<any>[]> => {
     return await Promise.all(
-        images.map<PromiseLike<PhotoProps<any>>>((img, index) => parsePhoto(img.name, String(index), img.nsfw)
+        images.map<PromiseLike<PhotoProps<any>>>(
+            (img) => parsePhoto(img.name, String(img.id), img.nsfw)
         )
     )
 }
-export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<SelectablePhoto>> => {
+export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<any>> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
         image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
