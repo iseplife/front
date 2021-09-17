@@ -3,7 +3,7 @@ import {Avatar} from "antd"
 import {faUser} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
-const ImportedAvatar: React.FC<{ file: Blob | undefined }> = ({file}) => {
+const ImportedAvatar: React.FC<{ file: Blob | undefined, large?:boolean }> = ({file, large}) => {
     const [preview, setPreview] = useState<string>()
     useEffect(() => {
         if (file) {
@@ -16,7 +16,7 @@ const ImportedAvatar: React.FC<{ file: Blob | undefined }> = ({file}) => {
     }, [file])
 
     return (
-        <Avatar icon={<FontAwesomeIcon icon={faUser}/>} src={preview} size="small"/>
+        <Avatar icon={<FontAwesomeIcon icon={faUser}/>} src={preview} size={ large ? "large" : "small"} />
     )
 }
 
