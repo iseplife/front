@@ -32,6 +32,10 @@ export interface StudentPreview {
     picture?: string
 }
 
+export interface StudentsImportData {
+    student: StudentPreview, 
+    file?: Blob
+}
 
 export type StudentAdmin = Student & {
     roles: string[]

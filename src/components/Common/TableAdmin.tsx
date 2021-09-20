@@ -63,7 +63,7 @@ const Table = <T, >(props: TableProps<T>) => {
             >
                 {props.loading ?
                     <div className="flex flex-1 w-full"><Loading size="4x" className="m-auto"/></div> :
-                    <table className="table-fixed w-full">
+                    <table className="table-fixed w-full overflow-auto">
                         <thead className="text-gray-600">
                             <tr>{Headers}</tr>
                         </thead>
@@ -78,7 +78,7 @@ const Table = <T, >(props: TableProps<T>) => {
                     <Pagination
                         className="text-center my-3"
                         onChange={props.onPageChange}
-                        defaultCurrent={props.page.current + 1}
+                        defaultCurrent={props.page.current}
                         onShowSizeChange={props.onSizeChange}
                         showSizeChanger={props.onSizeChange != null}
                         pageSize={props.page.size}

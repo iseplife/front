@@ -64,7 +64,7 @@ const StudentsDashboard: React.FC = () => {
                     loading={loading}
                     data={students}
                     page={page}
-                    onPageChange={(page) => setPage(prevState => ({...prevState, current: page}))}
+                    onPageChange={(page) => setPage(prevState => ({...prevState, current: page-1}))}
                     columns={tableConfig}
                     row={TableRow}
                 />

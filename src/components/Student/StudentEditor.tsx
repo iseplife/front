@@ -47,6 +47,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
     const [loading, setLoading] = useState<boolean>(false)
     const [student, setStudent] = useState<StudentAdmin>()
 
+
     const formik = useFormik<StudentAdminForm>({
         initialValues: DEFAULT_USER,
         onSubmit: async (values) => {
@@ -58,7 +59,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     onUpdate(res.data)
                     setStudent(res.data)
                     message.success("Modifications enregistrées !")
-                }
+                } 
             } else {
                 res = await createStudent(values)
                 if (res.status === 200) {
@@ -186,16 +187,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             <FontAwesomeIcon icon={faLock} className="mr-1"/> ARCHIVÉ
                         </div>
                         }
-                        <label className="font-dinotcb">numéro élève</label>
-                        <InputNumber
-                            required
-                            name="id"
-                            className="border-none pl-1"
-                            formatter={(val = 0) => val.toString().padStart(4, "0")}
-                            value={formik.values.id}
-                            onChange={(val) => formik.setFieldValue("id", val)}
-                        />
-                    </div>
+                        
+                    </div>                    
                     {student && (
                         <Link to="/admin/user" className="absolute -right-3 -top-3">
                             <FontAwesomeIcon icon={faTimes} size="sm" />
@@ -208,34 +201,47 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                         className="avatar-uploader"
                     />
 
-                    <div className="flex mb-1 items-end justify-between">
-                        <div className=" w-24">
-                            <label className="font-dinotcb">promo</label>
-                            <InputNumber
-                                className="w-full"
-                                name="promo"
-                                value={formik.values.promo}
-                                onChange={(val) => formik.setFieldValue("promo", val)}
+                    {student?.pictures.custom && (
+                        <div className="text-center">
+                            <StudentAvatar
+                                id={student.id}
+                                name={student.firstName + " " + student.lastName}
+                                picture={student.pictures.custom}
+                                size="default"
+                                className="mr-3"
                             />
+                            <span className="block text-red-600 font-dinot cursor-pointer" onClick={deleteCustom}>
+                                Supprimer photo perso
+                            </span>
                         </div>
-                        {student?.pictures.custom && (
-                            <div className="text-center">
-                                <StudentAvatar
-                                    id={student.id}
-                                    name={student.firstName + " " + student.lastName}
-                                    picture={student.pictures.custom}
-                                    size="default"
-                                    className="mr-3"
-                                />
-                                <span className="block text-red-600 font-dinot cursor-pointer" onClick={deleteCustom}>
-                                    Supprimer photo perso
-                                </span>
-                            </div>
-                        )}
+                    )}
+
+                    <div className="flex justify-between mb-2 mt-4">
+                        <label className="font-semibold">Numéro étudiant :</label>
+                        <InputNumber
+                            required
+                            name="id"
+                            className="border-none pl-1"
+                            formatter={(val = 0) => val.toString().padStart(4, "0")}
+                            value={formik.values.id}
+                            onChange={(val) => formik.setFieldValue("id", val)}
+                        />
                     </div>
-                    <div className="flex flex-row">
+
+                    <div className="flex justify-between mb-4">
+                        
+                        <label className="font-semibold">Promotion :</label>
+                        <InputNumber
+                            className="border-none pl-1"
+                            name="promo"                              
+                            value={formik.values.promo}
+                            onChange={(val) => formik.setFieldValue("promo", val)}
+                        />
+                    </div>
+
+                    <div className="flex flex-row mb-4">
                         <div className="mr-2 w-1/2">
-                            <label className="font-dinotcb">prénom</label>
+                            <label className="font-semibold">Prénom</label>
                             <Input
                                 required
                                 placeholder="Dieudonné"
@@ -245,7 +251,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             />
                         </div>
                         <div className="ml-2 w-1/2">
-                            <label className="font-dinotcb">nom</label>
+                            <label className="font-semibold">Nom</label>
                             <Input
                                 required
                                 placeholder="Abboud"
@@ -255,8 +261,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             />
                         </div>
                     </div>
-                    <div className="mt-1">
-                        <label className="font-dinotcb">roles</label>
+                    <div>
+                        <label className="font-semibold">Roles</label>
                         <Select
                             className="w-full"
                             mode="multiple"
@@ -269,11 +275,12 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                             ))}
                         </Select>
                     </div>
+
                     <Divider/>
 
-                    <div className="my-1 flex justify-between">
+                    <div className="flex justify-between mb-4">
                         <div className="mr-1">
-                            <label className="font-dinotcb">email</label>
+                            <label className="font-semibold">Email</label>
                             <Input
                                 placeholder="dieudonne.abboud@isep.fr"
                                 name="mail"
@@ -284,7 +291,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                     </div>
 
                     <div className="mb-5">
-                        <label className="font-dinotcb">date de naissance</label>
+                        <label className="font-semibold">Date de naissance</label>
                         <Input
                             placeholder="29/01/1968"
                             name="birthDate"
