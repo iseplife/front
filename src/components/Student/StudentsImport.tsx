@@ -2,13 +2,14 @@ import React, {useCallback, useState} from "react"
 import {Button, message, Upload, Input} from "antd"
 import Table, {RowProps} from "../Common/TableAdmin"
 import {PageStatus} from "../../pages/admin/student"
-import {StudentPreview} from "../../data/student/types"
-import {importStudent} from "../../data/student"
+import {StudentPreview, StudentsImportData} from "../../data/student/types"
+import {importStudents} from "../../data/student"
 import ImportedAvatar from "../Common/ImportedAvatar"
 import {RcFile} from "antd/es/upload"
 import {faArrowLeft, faSearch, faSyncAlt, faUpload} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons"
+import { ChangeEvent } from "react-router/node_modules/@types/react"
 
 const importTableConfig = [
     {title: "Photo", dataIndex: "picture", className: "w-16"},
@@ -18,10 +19,7 @@ const importTableConfig = [
     {title: "Promotion", dataIndex: "promo", className: "w-32"}
 ]
 
-type StudentStore = {
-    student: StudentPreview,
-    file?: Blob
-}
+
 
 type ImportInfo = {
     lastStudent: StudentPreview,
@@ -40,8 +38,8 @@ const DEFAULT_PAGE_SIZE = 10
 const StudentsImport: React.FC = () => {
     const [pageImport, setPageImport] = useState<PageStatus>({current: 0, size: DEFAULT_PAGE_SIZE})
 
-    const [importedStudents, setImportedStudents] = useState<StudentStore[]>([])
-    const [importedStudentsDisplayed, setImportedStudentsDisplayed] = useState<StudentStore[]>([])
+    const [importedStudents, setImportedStudents] = useState<StudentsImportData[]>([])
+    const [importedStudentsDisplayed, setImportedStudentsDisplayed] = useState<StudentsImportData[]>([])
 
     const [loadingImport, setLoadingImport] = useState<boolean>(false)
     const [importInfo, setImportInfo] = useState<ImportInfo | undefined>(undefined)
@@ -77,10 +75,10 @@ const StudentsImport: React.FC = () => {
         
         if (!event.target.files || event.target.files.length === 0) return
 
-        const importedStudentsWithFile: StudentStore[] = []
+        const importedStudentsWithFile: StudentsImportData[] = []
         Array.from(event.target.files).forEach(file => {
             const id = file.name.split(".")[0]
-            const studentWithFileImported = importedStudents.find((i: StudentStore) => i.student.id.toString() === id)
+            const studentWithFileImported = importedStudents.find((i: StudentsImportData) => i.student.id.toString() === id)
 
             if (studentWithFileImported) {
                 studentWithFileImported.file = file
@@ -100,7 +98,7 @@ const StudentsImport: React.FC = () => {
 
 
     const readCSVToObject = (csv: string) => {
-        const result: StudentStore[] = []
+        const result: StudentsImportData[] = []
         csv.split("\n").forEach(line => {
             if (line.length !== 0) {
                 const column = line.split(",")
@@ -134,21 +132,22 @@ const StudentsImport: React.FC = () => {
 
         setImportInfo(initImportData)
 
-        for(const student of importedStudents){
-            const resp = await importStudent(student.student, student.file)
-            
-            const studentData:StudentPreview = resp.data
+        //Import students 5 by 5
+
+        for(let x = 0;x<importedStudents.length/5;x++){
+            const uploadStudents = importedStudents.slice(x*5, (x+1)*5)
+            await importStudents(uploadStudents)
 
             const updateImportData:ImportInfo = { 
-                currentImported: importedStudents.indexOf(student)+1,
+                currentImported: x*5 + uploadStudents.length,
                 totalImport: importedStudents.length, 
-                lastStudent: studentData,
-                blobStudent: student.file
+                lastStudent: importedStudents[x*5].student,
+                blobStudent: importedStudents[x*5].file
             }
 
             setImportInfo(updateImportData)
-
         }
+
 
     }, [importedStudents])
 
@@ -159,10 +158,10 @@ const StudentsImport: React.FC = () => {
     }, [])
 
 
-    const handleSearchStudent = (e:any) => {
+    const handleSearchStudent = (e:ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
         
-        if(e.target.value == ""){
+        if(val == ""){
             setImportedStudentsDisplayed(importedStudents)
         } else {
             setImportedStudentsDisplayed(importedStudents.filter(s => ((s.student.firstName + s.student.lastName).toLocaleLowerCase() + s.student.id.toString() + s.student.promo.toString()).includes(val.toLocaleLowerCase().replaceAll(" ", ""))))
@@ -184,7 +183,7 @@ const StudentsImport: React.FC = () => {
                     <strong>numéro étudiant, prénom, nom, année de promotion</strong>
                 </p>
                 <Upload name="csv" beforeUpload={uploadCSVFile} multiple={false} accept=".csv" showUploadList={false}>
-                    <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded">Importer des étudiants</Button>
+                    <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded space-x-2">Importer des étudiants</Button>
                 </Upload>
             </div>
             <div className={`${displayPage == DisplayPage.StudentTable ? "block" : "hidden"} mb-4 px-4`}>
@@ -198,7 +197,7 @@ const StudentsImport: React.FC = () => {
                             className="overflow-hidden absolute opacity-0 z-0 w-1 h-1 "
                             onChange={uploadImages}
                         />
-                        Upload Student Images
+                        Importer les images
                     </label>
 
 
@@ -215,7 +214,7 @@ const StudentsImport: React.FC = () => {
                         onClick={reset}
                     >
                         <FontAwesomeIcon icon={faSyncAlt} className="pr-2"/>
-                        Reset
+                        Réinitialiser
                     </Button>
                 </div>
                 
@@ -282,7 +281,7 @@ const StudentsImport: React.FC = () => {
     )
 }
 
-const TableImportRow: React.FC<RowProps<StudentStore>> = ({data: {student, file}}) => (
+const TableImportRow: React.FC<RowProps<StudentsImportData>> = ({data: {student, file}}) => (
     <tr key={student.id}>
         <td className="px-6 py-1 whitespace-no-wrap border-b border-gray-200">
             <ImportedAvatar file={file}/>

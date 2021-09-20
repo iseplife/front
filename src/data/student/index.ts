@@ -4,7 +4,7 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview
+    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, StudentsImportData
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
@@ -84,4 +84,19 @@ export const importStudent = (student: StudentPreview, file: Blob | undefined): 
     if (file)
         fd.append("file", file)
     return apiClient.post("/student/import", fd)
+}
+
+export const importStudents = (students: StudentsImportData[]): AxiosPromise => {
+    const fd = new FormData()
+    for(const student of students){
+        fd.append("firstName[]", student.student.firstName)
+        fd.append("lastName[]", student.student.lastName)
+        fd.append("id[]", student.student.id.toString())
+        fd.append("promo[]", student.student.promo.toString())
+        fd.append("hasFile[]", (!!student.file).toString())
+        if(student.file)
+            fd.append("file[]", student.file)
+    }
+
+    return apiClient.post("/student/import/multiple", fd)
 }
