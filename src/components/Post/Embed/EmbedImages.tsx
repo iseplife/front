@@ -1,22 +1,18 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {getPhotosAsync, mediaPath} from "../../../util"
-import {PostSizes} from "../../../constants/MediaSizes"
+import {getPhotosAsync, PostPhoto } from "../../../util"
 import SafeImage from "../../Common/SafeImage"
-import Lightbox from "lightbox-react"
-import "lightbox-react/style.css"
 import {Image} from "../../../data/media/types"
-import PhotoGallery, {PhotoProps} from "react-photo-gallery"
+import PhotoGallery from "react-photo-gallery"
 import {message} from "antd"
 import PostImageLightbox from "./PostImageLightbox"
 import { Post } from "../../../data/post/types"
-
 
 type EmbedImagesProps = {
     images: Array<Image>
     post: Post
 }
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
-    const [photos, setPhotos] = useState<PhotoProps<{ nsfw: boolean }>[]>([])
+    const [photos, setPhotos] = useState<PostPhoto[]>([])
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>()
     const [loading, setLoading] = useState(true)
 

@@ -127,17 +127,19 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<any>[]> => {
+export const getPhotosAsync = async (images: ImageType[]): Promise<PostPhoto[]> => {
     return await Promise.all(
-        images.map<PromiseLike<PhotoProps<any>>>(
+        images.map(
             (img) => parsePhoto(img.name, String(img.id), img.nsfw)
         )
     )
 }
-export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<any>> => {
+export type PostPhoto = PhotoProps<{ hdSrc: string, nsfw: boolean, selected: boolean }>
+
+export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PostPhoto> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
+        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW)!
         image.onerror = reject
         image.onload = () => resolve({
             nsfw,
@@ -145,7 +147,9 @@ export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<
             src: image.src,
             width: image.width,
             height: image.height,
-            key
+            key,
+            srcSet: imgUrl,
+            hdSrc: mediaPath(imgUrl, GallerySizes.LIGHTBOX)!
         })
     })
 }

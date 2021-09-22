@@ -1,23 +1,18 @@
-import { faArrowRight, faTimes } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { createRef, useEffect, useMemo, useState } from "react"
-import { PhotoProps } from "react-photo-gallery"
+import React, { useEffect, useMemo, useState } from "react"
 import Post from ".."
-import { Image } from "../../../data/media/types"
 import { Post as PostData } from "../../../data/post/types"
-import { _formatDistance } from "../../../util"
+import { PostPhoto, _formatDistance } from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 
 type LightboxProps = {
     post: PostData,
-    photos: PhotoProps<{ nsfw: boolean }>[]
+    photos: PostPhoto[]
     currentPhotoIndex: number
     closeCallback: () => void,
     setCurrentPhotoIndex: (index: number) => void,
 }
 const PostImageLightbox: React.FC<LightboxProps> = ({ post, photos, currentPhotoIndex, closeCallback, setCurrentPhotoIndex }) => {
     const currentPhoto = useMemo(() => photos[currentPhotoIndex], [currentPhotoIndex, photos])
-
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
 
@@ -61,7 +56,7 @@ const PostImageLightbox: React.FC<LightboxProps> = ({ post, photos, currentPhoto
                         <SafeImage
                             key={currentPhotoIndex}
                             nsfw={currentPhoto.nsfw}
-                            src={currentPhoto.src}
+                            src={currentPhoto.hdSrc}
                             alt={currentPhoto.alt}
                             width={width}
                             height={height}
