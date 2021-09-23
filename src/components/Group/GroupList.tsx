@@ -20,11 +20,11 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
             {/* Mobile View */}
             <div className="md:hidden flex md:flex-col flex-row hidden-scroller whitespace-no-wrap w-full overflow-x-auto m-0 md:ml-2 ">
                 {groups.map(g => (
-                    <div key={g.id} className="m-1 px-2 rounded-lg h-20 w-20 text-xs font-semibold relative" style={{ backgroundColor: getPastelColor(g.name).hex }}>
-                        <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600">
+                    <Link key={g.id} to={`/group/${g.id}`} className="text-white hover:opacity-80 transition-opacity">
+                        <div className="m-1 px-2 rounded-lg h-20 w-20 text-xs font-semibold relative" style={{ backgroundColor: getPastelColor(g.name).hex }}>
                             <div className="absolute bottom-1 box-border w-full pr-4 break-words">{g.name}</div>
-                        </Link>
-                    </div>
+                        </div>
+                    </Link>
                 ))}
             </div>
 
