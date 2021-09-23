@@ -34,7 +34,7 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
                     {preview.map((g) => (
                         <div key={g.id} className="bg-gray-400 md:bg-transparent">
                             <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600 flex hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2">
-                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5">
+                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto">
                                     <img src="/img/icons/user-group.svg" className="w-4 h-4" />
                                 </div>
                                 {g.name}
@@ -44,8 +44,8 @@ const GroupList: React.FC<GroupListProps> = ({groups}) => {
                     {viewAll && leftovers.map((g) => (
                         <div key={g.id} className="rounded-full bg-gray-400 md:bg-transparent">
                             <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600 flex hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2">
-                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5">
-                                    <img src="/img/icons/user-group.svg" className="w-4 h-4" />
+                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto">
+                                    <img src="/img/icons/user-group.svg" className="w-4 h-4 max-h-4" />
                                 </div>
                                 {g.name}
                             </Link>
