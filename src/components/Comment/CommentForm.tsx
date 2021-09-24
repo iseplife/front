@@ -18,9 +18,9 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
     const inputRef = createRef<HTMLInputElement>()
 
     useEffect(() => {
-        if (focus) {
-            inputRef.current?.focus()
-            inputRef.current?.scrollTo({behavior: "auto"})
+        if (focus && inputRef.current) {
+            inputRef.current.focus()
+            inputRef.current.scrollTo({behavior: "auto"})
         }
     }, [focus])
 
