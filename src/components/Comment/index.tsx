@@ -6,13 +6,10 @@ import EditComment from "./EditComment"
 import {useTranslation} from "react-i18next"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
-import {formatDate, _formatDistance} from "../../util"
+import {formatDate} from "../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faHeart as faSolidHeart, faPen} from "@fortawesome/free-solid-svg-icons"
-import {faComment, faCommentAlt, faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
-import { formatWithOptions } from "date-fns/fp"
-import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 
 
 interface CommentProps {
@@ -124,7 +121,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                             onClick={() => setShowComments(true)}>
                             <img src="/img/icons/following-arrow.svg" className="w-4 h-4 mr-2" />
                             <label className="-mt-0.5 font-semibold group-hover:underline pointer-events-none">
-                                 {`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}
+                                {`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}
                             </label>
                         </div>
                     )}
