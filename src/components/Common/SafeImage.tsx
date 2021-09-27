@@ -11,7 +11,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
     return (
-        <div className={`${props.className} ${(props.clickable ?? true) && "image-display"} relative bg-gray-400 overflow-hidden m-auto w-max rounded`}>
+        <div className={`${props.className} ${props.clickable && "image-display"} relative bg-gray-400 overflow-hidden m-auto w-max rounded`}>
             <div className="overflow-hidden h-full w-full">
                 <img
                     {...imgProps}
@@ -32,7 +32,8 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
 
 SafeImage.defaultProps = {
     nsfw: false,
-    className: ""
+    className: "",
+    clickable: true
 }
 
 export default SafeImage
