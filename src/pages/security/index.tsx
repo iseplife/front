@@ -98,7 +98,7 @@ const Login: React.FC = () => {
                         >
                             {loading ?
                                 <Loading/> :
-                                "Se connecter"
+                                t("login:submit")
                             }
                         </button>
                     </form>
