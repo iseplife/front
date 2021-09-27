@@ -36,6 +36,8 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
 
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
 
+    const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
+
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
             title: t("remove_item.title"),
@@ -107,8 +109,6 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
             }
         }
     }, [showEditMenu])
-
-    const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
 
     useEffect(() => {
         if (!showComments && alreadyMore)
