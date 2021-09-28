@@ -222,7 +222,14 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
                 {((data.trendingComment && !noTrendingComment) || showComments) && (
                     <>
                         <Divider className="mb-0 mt-4" />
-                        <CommentList showMoreComments={() => setShowComments(true)} showComments={showComments} trendingComment={noTrendingComment ? undefined : data.trendingComment} numberComments={data.nbComments} id={data.thread} depth={0} loadComment={data.nbComments !== 0}/>
+                        <CommentList
+                            showMoreComments={() => setShowComments(true)}
+                            showComments={showComments}
+                            trendingComment={noTrendingComment ? undefined : data.trendingComment}
+                            numberComments={data.nbComments}
+                            id={data.thread}
+                            depth={0}
+                            loadComment={data.nbComments !== 0} />
                     </>
                 )}
             </div>
