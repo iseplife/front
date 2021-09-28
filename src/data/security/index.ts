@@ -15,7 +15,6 @@ let token: Token
 let jwt: string
 
 export const setToken = (tokenSet: TokenSet): void => {
-    localStorage.refreshToken = tokenSet.refreshToken
     token = JSON.parse(atob(tokenSet.token.split(".")[1]))
     jwt = tokenSet.token
     apiClient.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
