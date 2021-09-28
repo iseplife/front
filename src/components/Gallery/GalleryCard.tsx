@@ -19,7 +19,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
     return (
         <div className={`my-1 ${className}`}>
-            <Link to={`/gallery/${gallery.id}`}><h3 className="font-dinotcb text-gray-600 m-0">{gallery.name}</h3></Link>
+            <Link to={`/gallery/${gallery.id}`}><h3 className="text-gray-600 m-0">{gallery.name}</h3></Link>
             <div className="flex flex-col flex-wrap content-start h-20 w-full">
                 {previewLength ?
                     gallery.preview.slice(0, previewLength).map((img, i) => (

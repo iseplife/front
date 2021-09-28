@@ -39,7 +39,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
 
     return previewLength ?
         <div>
-            <Link to={`/gallery/${gallery.id}`}><h3 className="font-dinotcb text-xl text-gray-600 m-0">{gallery.name}</h3></Link>
+            <Link to={`/gallery/${gallery.id}`}><h3 className="text-xl text-gray-600 m-0">{gallery.name}</h3></Link>
             <div className="flex flex-col flex-wrap w-full" style={{height: 300}}>
                 {gallery.preview.slice(0, previewLength).map((img, i) => (
                     <Link

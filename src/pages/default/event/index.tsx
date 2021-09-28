@@ -109,7 +109,7 @@ const Event: React.FC = () => {
                             {subevents.length !== 0 &&
                             <div className="mt-5 text-center">
                                 <div
-                                    className="flex flex-row items-baseline md:justify-start justify-center font-dinotcb text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
+                                    className="flex flex-row items-baseline md:justify-start justify-center text-gray-500 text-lg ml-2 md:text-left text-center md:cursor-default cursor-pointer"
                                     style={{marginBottom: -5}}
                                     onClick={() => {
                                         if (eventsRef.current) {
@@ -131,7 +131,7 @@ const Event: React.FC = () => {
                             }
                             {galleries &&
                             <div className="mt-5 ml-2">
-                                <span className="font-dinotcb text-gray-700 text-lg ">
+                                <span className="text-gray-700 text-lg ">
                                     {t("gallery")}
                                 </span>
                                 <div className="flex flex-col md:h-auto h-0 overflow-hidden mt-2">
@@ -147,10 +147,10 @@ const Event: React.FC = () => {
 
                         <div className="flex items-center md:w-4/6 w-full flex-col md:order-2 order-1 px-3">
                             <div
-                                className="z-10 leading-none event-title md:bg-white md:shadow-md md:p-5 rounded-full uppercase font-bold text-center font-dinotcb">
+                                className="z-10 leading-none event-title md:bg-white md:shadow-md md:p-5 rounded-full uppercase font-bold text-center">
                                 {event.title}
                             </div>
-                            <div className="font-dinotcb text-4xl text-center text-gray-700">
+                            <div className="text-4xl text-center text-gray-700">
                                 {format(event.start, "HH:mm") + (event.end ? format(event.end, " - HH:mm") : "")}
                             </div>
                             <div className="text-xs text-gray-600 text-center">

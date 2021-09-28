@@ -66,5 +66,8 @@
     "status_archived": "Archivé",
     "status_passed": "Passé",
     "status_active": "Actif"
-  }
+  },
+	"yesterday": "hier, à",
+	"just_now": "À l'instant",
+  "me": "moi"
 }

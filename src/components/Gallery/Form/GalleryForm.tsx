@@ -53,7 +53,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                 <div className="my-2">
                     <h1 className="text-gray-800 font-bold text-xl mb-6">{t("form.title")}</h1>
 
-                    <label className="font-dinotcb">{t("form.name")}*</label>
+                    <label >{t("form.name")}*</label>
                     <Input
                         name="name"
                         required
@@ -66,7 +66,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                 </div>
 
                 <div className="mt-4">
-                    <label className="font-dinotcb">{t("form.description")}</label>
+                    <label >{t("form.description")}</label>
                     <TextArea
                         name="description"
                         required
@@ -79,7 +79,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                     />
                 </div>
                 <div className="mt-1 mb-2">
-                    <label className="font-dinotcb mr-2">
+                    <label className="mr-2">
                         {t("form.generate_post")}
                         <HelperIcon text={t("form.generate_post_help")}/>
                     </label>
@@ -90,7 +90,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                 </div>
 
                 <div className="flex-grow flex flex-col justify-end">
-                    <label className="font-dinotcb">{t("form.author")}</label>
+                    <label >{t("form.author")}</label>
                     <AvatarPicker
                         className="max-w-full w-64 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #e2e8f0"}}

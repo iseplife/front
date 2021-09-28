@@ -7,6 +7,7 @@ import "./AvatarPicker.css"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
+import { useTranslation } from "react-i18next"
 
 
 const {Option} = Select
@@ -26,6 +27,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [loading, setLoading] = useState<boolean>(true)
     const [publishers, setPublishers] = useState<Author[]>([])
+    const [t] = useTranslation("common")
 
     const handleChange = useCallback((v: number) => callback(v || undefined), [callback])
 
@@ -59,15 +61,18 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
                 <Option
                     key={0}
                     value={0}
-                    label={<StudentAvatar id={0} name="moi" size="small" picture={picture} pictureSize={AvatarSizes.THUMBNAIL}/>}
+                    label={<StudentAvatar id={0} name={t("me")} size="small" picture={picture} pictureSize={AvatarSizes.THUMBNAIL} />}
                 >
-                    <StudentAvatar
-                        id={0}
-                        name="moi"
-                        size="small"
-                        picture={picture}
-                        pictureSize={AvatarSizes.THUMBNAIL}
-                    /> moi
+                    <div className="flex items-center">
+                        <StudentAvatar
+                            id={0}
+                            name={t("me")}
+                            size="small"
+                            picture={picture}
+                            pictureSize={AvatarSizes.THUMBNAIL}
+                        />
+                        <label className="ml-2 text-black text-opacity-75 font-medium pointer-events-none">{t("me")}</label>
+                    </div>
                 </Option>
             }
             {loading ?
@@ -76,15 +81,19 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
                     <Option
                         key={i + 1}
                         value={p.id}
-                        label={<StudentAvatar id={p.id} name={p.name} size="small" picture={p.thumbnail} pictureSize={AvatarSizes.THUMBNAIL}/>}
+                        label={<StudentAvatar id={p.id} name={p.name} size="small" picture={p.thumbnail} pictureSize={AvatarSizes.THUMBNAIL} />}
+                        className="flex"
                     >
-                        <StudentAvatar
-                            id={p.id}
-                            name={p.name}
-                            size="small"
-                            picture={p.thumbnail}
-                            pictureSize={AvatarSizes.THUMBNAIL}
-                        /> {p.name}
+                        <div className="flex items-center">
+                            <StudentAvatar
+                                id={p.id}
+                                name={p.name}
+                                size="small"
+                                picture={p.thumbnail}
+                                pictureSize={AvatarSizes.THUMBNAIL}
+                            />
+                            <div className="ml-2 text-black text-opacity-75 font-medium pointer-events-none">{p.name}</div >
+                        </div>
                     </Option>
                 ))
             }

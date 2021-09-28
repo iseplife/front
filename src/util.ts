@@ -7,6 +7,8 @@ import {Image as ImageType} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
 import {SelectablePhoto} from "./pages/default/gallery"
+import { TFunction } from "i18next"
+import { formatWithOptions } from "date-fns/fp"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -16,6 +18,33 @@ export const _format = (date: Date | number, formatStr = "PP"): string =>
     format(date, formatStr, {
         locale: locales[localStorage.getItem("lng") || "fr"]
     })
+
+export const formatDate = (date: Date, t: TFunction): [string, number] => {
+    const now = new Date()
+
+    const timezoneOffset = now.getTimezoneOffset() * -60_000
+
+    const nowS = (now.getTime() + timezoneOffset) / 1000
+    const dateS = (date.getTime() + timezoneOffset) / 1000
+
+    const nowDay = Math.floor(nowS / 60 / 60 / 24)
+    const dateDay = Math.floor(dateS / 60 / 60 / 24)
+        
+    const diff = nowS - dateS
+    if (diff / 60 / 60 < 24) {//Less than 24h ago
+        if(diff < 60 * 1.5)//Less than 1.5 min ago
+            return [t("just_now"), (60 * 1.5 - diff) * 1_000]
+        else if (diff / 60 < 60)// Less than 1 hour ago
+            return [`${Math.floor(diff / 60)} min`, (60 - diff % 60) * 1_000]
+        else
+            return [`${Math.floor(diff / 60 / 60)} h`, (60*60 - diff % (60*60)) * 1_000]
+    } else if (nowDay == dateDay + 1)//Yesterday
+        return [`${t("yesterday")} ${format(date, "HH:mm")}`, (60 * 60 * 24 - dateS % (60 * 60 * 24)) * 1_000]
+    else if (now.getFullYear() == date.getFullYear())//This year
+        return [formatWithOptions({ locale: fr }, "d MMMM, HH:MM")(date), -1]
+    else
+        return [formatWithOptions({ locale: fr }, "d MMMM YYYY, HH:MM")(date), -1]
+}
 
 
 export const _formatDistance = (date: Date | number, baseDate: Date | number, options?: {
@@ -98,17 +127,19 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export const getPhotosAsync = async (images: ImageType[]): Promise<PhotoProps<any>[]> => {
+export const getPhotosAsync = async (images: ImageType[]): Promise<PostPhoto[]> => {
     return await Promise.all(
-        images.map<PromiseLike<PhotoProps<any>>>(
+        images.map(
             (img) => parsePhoto(img.name, String(img.id), img.nsfw)
         )
     )
 }
-export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PhotoProps<any>> => {
+export type PostPhoto = PhotoProps<{ hdSrc: string, nsfw: boolean, selected: boolean }>
+
+export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PostPhoto> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW) as string
+        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW)!
         image.onerror = reject
         image.onload = () => resolve({
             nsfw,
@@ -116,7 +147,9 @@ export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<
             src: image.src,
             width: image.width,
             height: image.height,
-            key
+            key,
+            srcSet: imgUrl,
+            hdSrc: mediaPath(imgUrl, GallerySizes.LIGHTBOX)!
         })
     })
 }

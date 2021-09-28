@@ -177,7 +177,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 <form className="relative flex flex-col w-full" onSubmit={formik.handleSubmit}>
 
                     <div className="flex flex-col absolute left-0 top-0 w-28">
-                        <label className="font-dinotcb">Type</label>
+                        <label >Type</label>
                         <Select
                             bordered={false}
                             className="border-none"
@@ -201,7 +201,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
 
                     <div className="flex justify-between mx-3">
                         <div className="w-1/2">
-                            <label className="font-dinotcb">Nom de l'association</label>
+                            <label >Nom de l'association</label>
                             <Input
                                 required
                                 placeholder="Nom"
@@ -211,7 +211,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                             />
                         </div>
                         <div className="w-2/5">
-                            <label className="font-dinotcb">Date de création</label>
+                            <label >Date de création</label>
                             <Input
                                 name="creation"
                                 type="date"
@@ -222,7 +222,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     </div>
 
                     <div className="flex-1 mx-3 ">
-                        <label className="font-dinotcb">Description</label>
+                        <label >Description</label>
                         <Input.TextArea
                             required
                             rows={4}
@@ -236,7 +236,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     <Divider/>
                     {admins &&
                     <div className="mx-3">
-                        <label className="font-dinotcb">Administrateurs</label>
+                        <label >Administrateurs</label>
                         <StudentSelector
                             placeholder="Aucun administrateur (déconseillé)"
                             className="w-full"
@@ -248,21 +248,21 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
 
                     <div className="flex mx-3 mt-3 mb-5">
                         <div className="flex-1 mx-1">
-                            <label className="font-dinotcb">Site Internet</label>
+                            <label >Site Internet</label>
                             <Input
                                 name="website"
                                 placeholder="Lien site internet"
                                 suffix={<FontAwesomeIcon icon={faLink}/>}/>
                         </div>
                         <div className="flex-1 mx-1">
-                            <label className="font-dinotcb">Instagram</label>
+                            <label >Instagram</label>
                             <Input
                                 name="instagram"
                                 placeholder="Lien Instagram"
                                 suffix={<FontAwesomeIcon icon={faInstagram}/>}/>
                         </div>
                         <div className="flex-1 mx-1">
-                            <label className="font-dinotcb">Facebook</label>
+                            <label >Facebook</label>
                             <Input
                                 name="facebook"
                                 placeholder="Lien Facebook"

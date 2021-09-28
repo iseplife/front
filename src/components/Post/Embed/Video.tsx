@@ -10,7 +10,7 @@ const Video: React.FC<VideoProps> = ({data}) => {
     return (
         <div>
             <div className="flex justify-between items-baseline">
-                <h3 className="font-dinotcb text-gray-700">
+                <h3 className="text-gray-700">
                     {data.title}
                 </h3>
             </div>

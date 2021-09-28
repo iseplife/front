@@ -32,7 +32,7 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
     const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
     return (
         <Menu className="text-gray-700 rounded shadow-sm">
-            <Menu.Item key={0} className="text-center font-dinotcb text-lg">
+            <Menu.Item key={0} className="text-center text-lg">
                 {firstName + " " + lastName}
             </Menu.Item>
             {isAdmin &&
@@ -46,14 +46,14 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
                 <FontAwesomeIcon icon={faCogs} className="ml-2"/>
             </Menu.Item>
             <Menu.Divider/>
-            <Menu.Item key={5} className="font-dinot text-center">
+            <Menu.Item key={5} className="text-center">
                 <Link to="/logout" className="text-red-500">{t("logout")}</Link>
             </Menu.Item>
         </Menu>
     )
 }
 const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
-    <div className="flex justify-between px-5 bg-indigo-500 h-12 shadow z-30">
+    <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
         </Link>
@@ -111,14 +111,14 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const [visible, setVisible] = useState<boolean>(false)
     return (
         <>
-            <div className="md:hidden flex justify-around items-center shadow-md w-full h-10 bg-white">
+            <div className="md:hidden flex justify-around items-center shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
                 <Link to="/">
-                    <Button shape="circle" icon={<FontAwesomeIcon icon={faHome} />} className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faHome} className="text-xl" />} className="border-0"/>
                 </Link>
                 <Link to="/calendar">
-                    <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt}/> } className="border-0"/>
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt} className="text-xl" /> } className="border-0"/>
                 </Link>
-                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} />} className="border-0"/>
+                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
                 <div className="cursor-pointer" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}

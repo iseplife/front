@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useState} from "react"
+import React, {CSSProperties, useCallback, useEffect, useState} from "react"
 import {EmbedEnumType, Post as PostType} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
@@ -12,6 +12,8 @@ import PostCreateForm from "../Post/Form/PostCreateForm"
 import {faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
+import { getWSService } from "../../realtime/services/WSService"
+import WSFeedService from "../../realtime/services/WSFeedService"
 
 type FeedProps = {
     id: number
@@ -55,23 +57,28 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         setEditPost(0)
     }, [])
 
+    useEffect(() => {
+        getWSService(WSFeedService).subscribe(id)
+        return () => getWSService(WSFeedService).unsubscribe(id)
+    }, [id])
+
     return (
         <div className={`${className}`} style={style}>
-            <Divider className="font-dinotcb text-gray-700 text-lg" orientation="left">Publications</Divider>
+            <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
                 <BasicPostForm feedId={id} onPost={onPostCreation}>
-                    <div className="flex items-center">
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}>
-                            <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                    <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faImages} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}>
-                            <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faVideo} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}>
-                            <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faPaperclip} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
-                        <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)}>
-                            <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                        <div onClick={() => setCompleteFormType(EmbedEnumType.POLL)} className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <FontAwesomeIcon icon={faChartBar} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"/>
                         </div>
                         {completeFormType && (
                             <Modal
@@ -88,9 +95,13 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                 </BasicPostForm>
             )}
 
+            <div className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
+                <div className="ant-divider-inner-text">3 nouveaux posts</div>
+            </div>
+
             <InfiniteScroller watch="DOWN" callback={loadMorePost} empty={empty} loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3" />}>
                 {empty ?
-                    <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
+                    <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
                         <FontAwesomeIcon icon={faNewspaper} size="8x" className="block" />
                         <span className="text-center">{t("empty_feed")}</span>
                     </div>

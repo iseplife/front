@@ -122,7 +122,7 @@ const YearBook: React.FC = () => {
                 className="flex flex-wrap justify-start"
             >
                 {filteredStudent.length == 0 ?
-                    <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl font-dinot text-gray-400">
+                    <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">
                         <FontAwesomeIcon icon={faUserAstronaut} size="8x" className="block"/>
                         <span className="text-center mt-5">{t("no_student")}</span>
                     </div> :

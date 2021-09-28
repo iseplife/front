@@ -38,7 +38,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </Select>
                 <div className="flex items-center">
                     <div>
-                        <label className="font-dinotcb mr-2">
+                        <label className="mr-2">
                             {t("form.label.published")}
                             <HelperIcon text={t("form.label.published_help")}/>
                         </label>
@@ -58,7 +58,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             </div>
             <div className="flex flex-wrap justify-between items-end">
                 <div className="lg:w-1/2 w-full">
-                    <label className="font-dinotcb">{t("form.label.name")}*</label>
+                    <label >{t("form.label.name")}*</label>
                     <Input
                         required
                         name="title"
@@ -71,7 +71,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     />
                 </div>
                 <div className="lg:w-1/2 w-full">
-                    <label className="font-dinotcb">Dates*</label>
+                    <label >Dates*</label>
                     <RangePicker
                         className="ml-4"
                         defaultValue={[moment(values.start), moment(values.end)]}
@@ -87,7 +87,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
             </div>
             <div className="my-4 w-full">
-                <label className="font-dinotcb">{t("form.label.description")}*</label>
+                <label >{t("form.label.description")}*</label>
                 <TextArea
                     required
                     name="description"
@@ -104,7 +104,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             <div className="w-full">
                 <div className="flex justify-between flex-wrap">
                     <div className="lg:w-40 w-full">
-                        <label className="font-dinotcb">{t("form.label.location")}</label>
+                        <label >{t("form.label.location")}</label>
                         <Input
                             name="location"
                             prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
@@ -118,7 +118,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     </div>
                     <div className="flex">
                         <div className="w-24 mr-2">
-                            <label className="font-dinotcb">{t("form.label.price")}</label>
+                            <label >{t("form.label.price")}</label>
                             <Input
                                 name="price"
                                 suffix={<FontAwesomeIcon icon={faEuroSign} />}
@@ -131,7 +131,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                             />
                         </div>
                         <div>
-                            <label className="font-dinotcb">{t("form.label.ticket_url")}</label>
+                            <label >{t("form.label.ticket_url")}</label>
                             <Input
                                 name="ticketURL"
                                 suffix={<FontAwesomeIcon icon={faExternalLinkAlt} />}
@@ -162,7 +162,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             </div>
             <div className="flex flex-wrap justify-between items-end mt-2">
                 <div className="lg:w-1/2 w-full">
-                    <label className="font-dinotcb">{t("form.label.target")}</label>
+                    <label >{t("form.label.target")}</label>
                     <FeedSelector defaultValues={values.targets} onChange={targets => setFieldValue("targets", targets)}/>
                 </div>
 

@@ -78,7 +78,7 @@ const Club: React.FC = () => {
                                 </>
                             }
                         </div>
-                        {state.adminMode && <h1 className="ml-5 my-auto font-dinotcb text-2xl text-gray-700">Panel administration</h1>}
+                        {state.adminMode && <h1 className="ml-5 my-auto text-2xl text-gray-700">Panel administration</h1>}
                     </div>
                     {state.club.data &&
                     <div className="flex flex-wrap items-center" style={{height: "min-content"}}>

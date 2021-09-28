@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react"
 import {EventPreview} from "../../data/event/types"
 import {getIncomingEvents} from "../../data/event"
 import {useTranslation} from "react-i18next"
-import {Skeleton} from "antd"
+import {Divider, Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
 import EventCreatorModal from "./EventCreatorModal"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -33,8 +33,9 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
     }, [fetchEvents])
 
     return (
-        <div className={`${className} flex flex-col justify-center text-left md:text-center`}>
-            <h3 className="font-dinotcb text-gray-700 text-lg mx-3">{t("incoming")}</h3>
+        <div className={`${className} flex flex-col justify-center text-left lg:text-center`}>
+            <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("incoming")}</Divider>
+            <h3 className="text-gray-700 text-lg lg:mx-3 hidden sm:block">{t("incoming")}</h3>
             {wait || loading ?
                 <>
                     <Skeleton.Input className="w-full rounded my-1" active size="large"/>
@@ -43,9 +44,9 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
                 </> :
                 events.length ?
                     <EventPreviewList events={events}/> :
-                    <div className="text-gray-500 mt-3 text-center text-xs">
-                        <FontAwesomeIcon icon={faSadCry} size="4x"/>
-                        <p>{t("no_events")}</p>
+                    <div className="text-gray-500 sm:my-2 text-center text-base sm:text-lg">
+                        <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
+                        <div className="text-xs sm:mb-1">{t("no_events")}</div>
                     </div>
             }
             {allowCreate && (

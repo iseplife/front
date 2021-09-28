@@ -8720,6 +8720,11 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+pastel-color@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/pastel-color/-/pastel-color-1.0.3.tgz#4a08364831439861e76a88a213c56f989452e5a2"
+  integrity sha512-VtKzbIgQUc+U0JBFcuNqcCPYfnPYZaf0VPpdqaRUaHYBwMTh3nT9ncq3gsQccqtmhlNdw1aNqZnefVvPE6dtmg==
+
 path-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/path-browserify/-/path-browserify-0.0.1.tgz#e6c4ddd7ed3aa27c68a20cc4e50e1a4ee83bbc4a"

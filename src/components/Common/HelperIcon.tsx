@@ -11,7 +11,7 @@ const HelperIcon: React.FC<HelperIconProps> = ({text}) => (
     <Popover
         title=""
         trigger="hover"
-        content={<p className="font-dinotl text-xs">{text}</p>}
+        content={<p className="text-xs">{text}</p>}
     >
         <span className="ml-2 cursor-pointer">
             <FontAwesomeIcon icon={faQuestionCircle}/>

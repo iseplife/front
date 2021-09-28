@@ -1,5 +1,5 @@
 import React from "react"
-import {Embed as EmbedType, EmbedEnumType} from "../../../data/post/types"
+import {Embed as EmbedType, EmbedEnumType, Post} from "../../../data/post/types"
 import EmbedGallery from "./EmbedGallery"
 import Poll from "./Poll"
 import Video from "./Video"
@@ -8,8 +8,10 @@ import EmbedImages from "./EmbedImages"
 
 type EmbedProps = {
     embed: EmbedType
+    post: Post
 }
-const Embed: React.FC<EmbedProps> = ({embed}) => {
+const Embed: React.FC<EmbedProps> = ({embed, post}) => {
+    
     switch (embed.embedType) {
         case EmbedEnumType.DOCUMENT:
             return null
@@ -20,7 +22,7 @@ const Embed: React.FC<EmbedProps> = ({embed}) => {
         case EmbedEnumType.GALLERY:
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
-            return <EmbedImages images={embed.images}/>
+            return <EmbedImages images={embed.images} post={post}/>
         default:
             return null
     }

@@ -46,9 +46,9 @@ const Group: React.FC = () => {
         <div className="mt-5 px-3 flex flex-wrap">
             <div className="w-full md:w-64 lg:w-1/4 ">
                 {group && (
-                    <div className="flex p-1 mb-5 font-dinot items-center ">
+                    <div className="flex p-1 mb-5 items-center ">
                         <div>
-                            <h3 className="font-dinotcb mx-2 mb-0 text-2xl text-gray-700">
+                            <h3 className="mx-2 mb-0 text-2xl text-gray-700">
                                 {group.name}
                                 <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
                                     <FontAwesomeIcon icon={group.subscribed ? faBellSlash: faBell}/>
@@ -59,6 +59,7 @@ const Group: React.FC = () => {
                     </div>
                 )}
 
+                {/* TODO: retirer ce menu quandn il n'y a aucun évènement à venir et qu'on est en sm (vue téléphone) */}
                 <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
                 <Divider/>
                 <GroupMembers group={id} hasRight={group?.hasRight}/>

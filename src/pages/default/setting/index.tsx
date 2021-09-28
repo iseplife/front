@@ -35,11 +35,11 @@ const Setting: React.FC = () => {
                         size={80}
                     />
                 </div>
-                <div className="flex flex-col font-dinotcb flex-grow min-w-0">
+                <div className="flex flex-col flex-grow min-w-0">
                     <h3 className="text-2xl truncate">{user.firstName + " " + user.lastName}</h3>
                     <p className="-mt-4">Promo {user.promo} - n°{user.id}</p>
                 </div>
-                <div className="font-dinot text-xs hidden md:block">
+                <div className="text-xs hidden md:block">
                     <span className="font-bold ">{t("last_connection")}: </span>
                     {lastConnection ? _format(lastConnection, "HH:mm dd/MM/yyyy") : t("first_time")}
                 </div>

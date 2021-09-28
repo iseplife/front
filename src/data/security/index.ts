@@ -1,6 +1,5 @@
 import {ParsedToken, Role, Token, TokenSet} from "./types"
 import {AxiosPromise} from "axios"
-import {getCookie} from "./cookie"
 import {apiClient} from "../http"
 
 export const connect = (username: string, password: string): AxiosPromise<TokenSet> => {
@@ -12,7 +11,12 @@ export const refresh = (): AxiosPromise<TokenSet> => apiClient.post("/auth/refre
 
 export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
 
+let token: Token
+let jwt: string
+
 export const setToken = (tokenSet: TokenSet): void => {
+    token = JSON.parse(atob(tokenSet.token.split(".")[1]))
+    jwt = tokenSet.token
     apiClient.defaults.headers.common["Authorization"] = `Bearer ${tokenSet.token}`
 }
 
@@ -29,18 +33,11 @@ export const parseToken = (token: string): ParsedToken => {
 }
 
 export const getToken = (): Token => {
-    const token = getCookie("token")
-    let rawdata = ""
-    if (token) {
-        rawdata = token.split(".")[1]
-        try {
-            return JSON.parse(atob(rawdata)) as Token
-        } catch (e) {
-            throw new Error("Auth cookies unreadable")
-        }
-    }
-    window.location.assign("/login")
-    throw new Error("Auth cookies missing")
+    return token
+}
+    
+export const getJWT = (): string => {
+    return jwt
 }
 
 export const isLoggedIn = (): boolean => {
