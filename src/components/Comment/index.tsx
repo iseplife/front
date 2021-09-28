@@ -104,10 +104,10 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     </span>
                     {allowReplies &&
                         <>
-                        · &nbsp;<label className="font-semibold hover:underline cursor-pointer text-gray-500" onClick={() => {setShowComments(true); setRespond(true)}}>{t("post:respond")}</label>&nbsp;&nbsp;
+                        ·<label className="mx-2 font-semibold hover:underline cursor-pointer text-gray-500" onClick={() => {setShowComments(true); setRespond(true)}}>{t("post:respond")}</label>
                         </>
                     }
-                    · &nbsp;{formattedDate}
+                    ·<label className="ml-2">{formattedDate}</label>
                 </div>
                 <div className="flex">
                     {showComments &&
