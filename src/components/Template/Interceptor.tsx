@@ -4,7 +4,7 @@ import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
-import {logout, refresh} from "../../data/security"
+import {refresh} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import { TokenSet } from "../../data/security/types"
@@ -99,7 +99,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     break
                 case 401:
                     if (error.request.url.startsWith("/auth")) {
-                        logout()
+                        this.context.dispatch({
+                            type: AppActionType.SET_LOGGED_OUT
+                        })
                         this.props.history.push("/login")
                         message.error("Vous avez été déconnecté !")
                     }

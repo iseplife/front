@@ -1,7 +1,7 @@
 import {AppContextState} from "./context"
 import {AppActionType, AppContextAction} from "./action"
-import {parseToken} from "../../data/security";
-import {apiClient} from "../../data/http";
+import {parseToken} from "../../data/security"
+import {apiClient} from "../../data/http"
 
 
 export const appContextReducer = (state: AppContextState, action: AppContextAction): AppContextState => {
@@ -15,6 +15,9 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 ...state,
                 user: action.user,
             }
+        case AppActionType.SET_LOGGED_OUT:
+            delete apiClient.defaults.headers.common["Authorization"]
+            return {} as AppContextState
         case AppActionType.SET_TOKEN: {
             const parsedToken = parseToken(action.token)
 
