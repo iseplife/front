@@ -10,7 +10,7 @@ import {
 } from "react-router-dom"
 import {initializeAPIClient} from "./data/http"
 import Login from "./pages/security"
-import {getToken, refresh, setToken} from "./data/security"
+import {refresh} from "./data/security"
 import Template from "./components/Template"
 import {RecoilRoot} from "recoil"
 import {AppContext, DEFAULT_STATE} from "./context/app/context"
@@ -29,10 +29,9 @@ const App: React.FC = () => {
             setIsLoggedIn(true)
         } else {
             refresh().then(res => {
-                setToken(res.data)
                 dispatch({
-                    type: AppActionType.SET_TOKEN_EXPIRATION,
-                    token_expiration: getToken().exp
+                    type: AppActionType.SET_TOKEN,
+                    token: res.data.token
                 })
                 setIsLoggedIn(true)
             }).catch(e => {

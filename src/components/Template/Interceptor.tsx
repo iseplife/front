@@ -4,7 +4,7 @@ import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
 import {WithTranslation, withTranslation} from "react-i18next"
-import {logout, parseToken, refresh, setToken} from "../../data/security"
+import {logout, refresh} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import { TokenSet } from "../../data/security/types"
@@ -64,10 +64,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
             if (!this.refreshingPromise)
                 (this.refreshingPromise = refresh()).then(res => {
                     try {
-                        setToken(res.data)
                         this.context.dispatch({
                             type: AppActionType.SET_TOKEN,
-                            token: parseToken(res.data.token)
+                            token: res.data.token
                         })
                     } catch (e) {
                         throw new Error("JWT cookie unreadable")
@@ -79,7 +78,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     message.error("Vous avez été déconnecté !")
                     this.refreshingPromise = undefined
                 })
-            
+
             this.refreshingPromise.then(res =>
                 request.headers["Authorization"] = `Bearer ${res.data.token}`
             )

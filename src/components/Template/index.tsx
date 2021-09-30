@@ -13,7 +13,6 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
-import { getJWT } from "../../data/security"
 import { initWebSocket } from "../../realtime/websocket/WSServerClient"
 
 
@@ -29,7 +28,7 @@ const Template: React.FC = () => {
             dispatch({type: AppActionType.SET_LOGGED_USER, user: res.data})
             setIsAdmin(state.payload.roles.includes(Roles.ADMIN))
 
-            socket.connect(getJWT())
+            socket.connect(state.jwt)
         }).finally(() => setLoading(false))
     }, [])
 

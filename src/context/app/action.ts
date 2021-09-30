@@ -40,7 +40,7 @@ interface setTokenExpirationAction {
 
 interface setTokenAction {
     type: AppActionType.SET_TOKEN,
-    token: ParsedToken
+    token: string
 }
 
 export type AppContextAction = setLoggedStudentAction | setPayloadAction | setFullStateAction | setPictureStateAction | setTokenExpirationAction | setTokenAction

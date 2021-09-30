@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react"
 import {useHistory, useLocation} from "react-router-dom"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
-import {connect, parseToken, setToken} from "../../data/security"
+import {connect, parseToken} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {LocationState} from "../../data/request.type"
@@ -29,16 +29,14 @@ const Login: React.FC = () => {
         onSubmit: ({id, password}) => {
             setLoadingStatus(true)
             connect(id, password).then((res) => {
-                const parsedToken = parseToken(res.data.token)
-                setToken(res.data)
                 dispatch({
                     type: AppActionType.SET_TOKEN,
-                    token: parsedToken
+                    token: res.data.token
                 })
 
                 const {from} = (location.state as LocationState) || {
                     from: {
-                        pathname: parsedToken.payload.lastConnection ? "/" : "/discovery"
+                        pathname: parseToken(res.data.token).payload.lastConnection ? "/" : "/discovery"
                     }
                 }
                 history.replace(from)
