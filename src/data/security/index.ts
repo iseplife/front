@@ -4,6 +4,8 @@ import {apiClient} from "../http"
 
 export const connect = (username: string, password: string): AxiosPromise<TokenSet> => apiClient.post("/auth", {username, password})
 
+export const logout = (): AxiosPromise<TokenSet> => apiClient.put("/auth/logout")
+
 export const refresh = (): AxiosPromise<TokenSet> => apiClient.post("/auth/refresh")
 
 export const getRoles = (): AxiosPromise<Role[]> => apiClient.get("auth/roles")
