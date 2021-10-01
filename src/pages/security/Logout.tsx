@@ -10,7 +10,7 @@ const Logout: React.FC = () => {
         dispatch({type: AppActionType.SET_LOGGED_OUT})
     }, [])
 
-    return <Redirect to={"/login"} />
+    return <Redirect to="/login" />
 }
 
 export default Logout

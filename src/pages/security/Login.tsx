@@ -18,12 +18,12 @@ interface LoginFormInputs {
 
 const Login: React.FC = () => {
     const {t, i18n} = useTranslation(["login", "common"])
-    const history = useHistory()
     const {dispatch} = useContext(AppContext)
-    const location = useLocation()
+    const history = useHistory()
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
+
     const formik = useFormik<LoginFormInputs>({
         initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
@@ -33,8 +33,9 @@ const Login: React.FC = () => {
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
+                localStorage.setItem("logged", "1")
 
-                const {from} = (location.state as LocationState) || {
+                const {from} = (history.location.state as LocationState) || {
                     from: {
                         pathname: parseToken(res.data.token).payload.lastConnection ? "/" : "/discovery"
                     }
@@ -59,7 +60,7 @@ const Login: React.FC = () => {
                         msg = "Serveur indisponible"
                     }
                     setError(msg)
-                })
+                }).finally(() => setLoadingStatus(false))
         }
     })
 
