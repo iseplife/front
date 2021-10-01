@@ -17,11 +17,12 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
             }
         case AppActionType.SET_LOGGED_OUT:
             delete apiClient.defaults.headers.common["Authorization"]
+            localStorage.removeItem("logged")
             return {} as AppContextState
         case AppActionType.SET_TOKEN: {
             const parsedToken = parseToken(action.token)
 
-            apiClient.defaults.headers.common["Authorization"] = `Bearer ${action. token}`
+            apiClient.defaults.headers.common["Authorization"] = `Bearer ${action.token}`
             return {
                 ...state,
                 jwt: action.token,

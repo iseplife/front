@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import ReactDOM from "react-dom"
 import * as serviceWorker from "./serviceWorker"
 import "./i18n"
@@ -9,7 +9,7 @@ import {
     Redirect
 } from "react-router-dom"
 import {initializeAPIClient} from "./data/http"
-import Login from "./pages/security"
+import Login from "./pages/security/Login"
 import {refresh} from "./data/security"
 import Template from "./components/Template"
 import {RecoilRoot} from "recoil"
@@ -17,29 +17,43 @@ import {AppContext, DEFAULT_STATE} from "./context/app/context"
 import {appContextReducer} from "./context/app/reducer"
 import Interceptor from "./components/Template/Interceptor"
 import {AppActionType} from "./context/app/action"
+import {RouteComponentProps} from "react-router"
 
 initializeAPIClient()
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>()
+    const [isLoggedIn, setLoggedIn] = useState<boolean>()
+    const renderTemplate = useCallback(({location}: RouteComponentProps) => (
+        isLoggedIn ?
+            <Template/> :
+            <Redirect
+                to={{
+                    pathname: "/login",
+                    state: {from: location}
+                }}
+            />
+    ), [isLoggedIn])
+
 
     // Check user's state (logged in or not)
     useEffect(() => {
         if (state.payload && state.token_expiration >= new Date().getTime()) {
-            setIsLoggedIn(true)
-        } else {
+            setLoggedIn(true)
+        } else if(localStorage.getItem("logged")) {
             refresh().then(res => {
                 dispatch({
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
-                setIsLoggedIn(true)
+                setLoggedIn(true)
             }).catch(e => {
+                setLoggedIn(false)
                 console.error(e)    // Token refreshing failed
-                setIsLoggedIn(false)
             })
+        }else {
+            setLoggedIn(false)
         }
-    }, [state.token_expiration])
+    }, [state.payload, state.token_expiration])
 
     return (
         <AppContext.Provider value={{state, dispatch}}>
@@ -49,17 +63,7 @@ const App: React.FC = () => {
                         <Interceptor/>
                         <Switch>
                             <Route path="/login" component={Login}/>
-                            <Route path="/" render={({location}) => (
-                                isLoggedIn ?
-                                    <Template/> :
-                                    <Redirect
-                                        to={{
-                                            pathname: "/login",
-                                            state: {from: location}
-                                        }}
-                                    />
-                            )}
-                            />
+                            <Route path="/" render={renderTemplate}/>
                         </Switch>
                     </Router>
                 )}

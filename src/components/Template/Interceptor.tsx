@@ -16,13 +16,14 @@ type InterceptState = {
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     context!: React.ContextType<typeof AppContext>;
+    refreshingPromise?: AxiosPromise<TokenSet>;
     intercept?: number[];
 
     state: InterceptState = {
         error: "",
     };
 
-    refreshingPromise?: AxiosPromise<TokenSet>;
+
 
     componentDidMount() {
         this.intercept = [
@@ -58,7 +59,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
-        if (this.context.state.token_expiration - 25_000 <= new Date().getTime() && !request.url?.startsWith("/auth")) {
+        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - 25_000 <= new Date().getTime()) {
             delete apiClient.defaults.headers.common["Authorization"]
 
             if (!this.refreshingPromise)
@@ -74,9 +75,10 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
                     this.refreshingPromise = undefined
                 }).catch(() => {
-                    this.props.history.push("/login")
-                    message.error("Vous avez été déconnecté !")
+                    this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
                     this.refreshingPromise = undefined
+
+                    message.error("Vous avez été déconnecté !")
                 })
 
             this.refreshingPromise.then(res =>
@@ -98,11 +100,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     this.props.history.push("/404")
                     break
                 case 401:
-                    if (error.request.url.startsWith("/auth")) {
-                        this.context.dispatch({
-                            type: AppActionType.SET_LOGGED_OUT
-                        })
-                        this.props.history.push("/login")
+                    if (!error.request.url.startsWith("/auth")) {
+                        this.props.history.push("/logout")
                         message.error("Vous avez été déconnecté !")
                     }
                     break
