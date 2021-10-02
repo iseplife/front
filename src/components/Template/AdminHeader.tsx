@@ -41,7 +41,7 @@ const AdminHeader: React.FC = () => {
                         Votes
                     </Link>
                 </div>
-                <div className="flex justify-between items-center hidden md:block">
+                <div className="hidden md:flex flex-row justify-end items-center ">
                     <StudentAvatar
                         id={user.id}
                         name={user.firstName + " " + user.lastName}

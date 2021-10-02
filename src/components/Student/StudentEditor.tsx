@@ -1,84 +1,33 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {
-    createStudent, deleteCustomPicture,
+    deleteCustomPicture,
     deleteStudent, getStudentAdmin,
     toggleStudentArchiveStatus,
-    updateStudentAdmin
 } from "../../data/student"
-import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
+import {message, Modal,} from "antd"
 import Loading from "../Common/Loading"
-import {useFormik} from "formik"
-import {Student, StudentAdminForm, StudentAdmin} from "../../data/student/types"
+import {Student, StudentAdmin} from "../../data/student/types"
 import {Link, useHistory} from "react-router-dom"
-import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
-import ImagePicker from "../Common/ImagePicker"
-import {Role} from "../../data/security/types"
-import {mediaPath} from "../../util"
-import {AvatarSizes} from "../../constants/MediaSizes"
-import StudentAvatar from "./StudentAvatar"
 import {faArchive, faLock, faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import StudentEditorForm from "./StudentEditorForm"
 
-const {Option} = Select
 
 type StudentEditorProps = {
     id?: string
-    roles?: Role[]
     onDelete: (id: number) => void
     onArchive: (student: StudentAdmin) => void
     onCreate: (student: StudentAdmin) => void
     onUpdate: (student: StudentAdmin) => void
 }
 
-const DEFAULT_USER = {
-    id: 0,
-    roles: ["ROLE_STUDENT"],
-    promo: new Date().getFullYear(),
-    firstName: "",
-    lastName: "",
-}
-
-
-const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, onCreate, onArchive, roles}) => {
+const StudentEditor: React.FC<StudentEditorProps> = ({id, onDelete, onArchive, onCreate, onUpdate}) => {
     const {t} = useTranslation()
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(false)
     const [student, setStudent] = useState<StudentAdmin>()
-
-
-    const formik = useFormik<StudentAdminForm>({
-        initialValues: DEFAULT_USER,
-        onSubmit: async (values) => {
-            // If student is defined then we are editing an user, otherwise we are creating an user
-            let res
-            if (student) {
-                res = await updateStudentAdmin(values)
-                if (res.status === 200) {
-                    onUpdate(res.data)
-                    setStudent(res.data)
-                    message.success("Modifications enregistrées !")
-                } 
-            } else {
-                res = await createStudent(values)
-                if (res.status === 200) {
-                    onCreate(res.data)
-                    setStudent(res.data)
-                    history.push(`/admin/user/${res.data.id}`)
-
-                    message.success("Élève créé !")
-                }
-            }
-        },
-    })
-
-    const handleImage = (file: File | null) => {
-        formik.setFieldValue("picture", file)
-        if (!file) {
-            formik.setFieldValue("resetPicture", true)
-        }
-    }
 
     /**
      * Get student information according with the id props,
@@ -91,15 +40,6 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
                 getStudentAdmin(+id).then(res => {
                     if (res.status === 200) {
                         setStudent(res.data)
-                        formik.setValues({
-                            id: res.data.id,
-                            roles: res.data.roles,
-                            promo: res.data.promo,
-                            firstName: res.data.firstName,
-                            lastName: res.data.lastName,
-                            mail: res.data.mail,
-                            birthDate: res.data.birthDate ? new Date(res.data.birthDate) : undefined
-                        })
                     } else {
                         message.error("Utilisateur inconnu: " + id)
                         history.push("/admin/user")
@@ -111,31 +51,8 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
             }
         } else {
             setStudent(undefined)
-            formik.resetForm()
         }
     }, [id])
-
-    const deleteCustom = useCallback(() =>
-        Modal.confirm({
-            title: t("remove_item.title"),
-            content: t("remove_item.content"),
-            okText: "Ok",
-            cancelText: t("cancel"),
-            onOk: async () => {
-                const id = (student as Student).id
-                const res = await deleteCustomPicture(id)
-                if (res.status === 200) {
-                    message.info(t("remove_item.complete"))
-                    setStudent({
-                        ...(student as StudentAdmin),
-                        pictures: {
-                            custom: undefined,
-                            original: (student as StudentAdmin).pictures.original
-                        }
-                    })
-                }
-            }
-        }), [onDelete, student])
 
 
     const remove = useCallback(() =>
@@ -180,148 +97,34 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onUpdate, onDelete, on
         >
             {loading ?
                 <Loading size="4x"/> :
-                <form className="relative flex flex-col" onSubmit={formik.handleSubmit}>
+                <div className="relative flex flex-col">
                     <div className="absolute left-0 top-0 w-16">
                         {student?.archived &&
                         <div className="flex items-center text-red-600 font-bold">
                             <FontAwesomeIcon icon={faLock} className="mr-1"/> ARCHIVÉ
                         </div>
                         }
-                        
-                    </div>                    
+
+                    </div>
                     {student && (
-                        <Link to="/admin/user" className="absolute -right-3 -top-3">
-                            <FontAwesomeIcon icon={faTimes} size="sm" />
-                        </Link>
-                    )}
-
-                    <ImagePicker
-                        onChange={handleImage}
-                        defaultImage={mediaPath(student?.pictures.original, AvatarSizes.DEFAULT)}
-                        className="avatar-uploader"
-                    />
-
-                    {student?.pictures.custom && (
-                        <div className="text-center">
-                            <StudentAvatar
-                                id={student.id}
-                                name={student.firstName + " " + student.lastName}
-                                picture={student.pictures.custom}
-                                size="default"
-                                className="mr-3"
+                        <div className="absolute -right-3 -top-3">
+                            <FontAwesomeIcon
+                                icon={faArchive}
+                                className="cursor-pointer mx-2 text-yellow-500 hover:text-yellow-300"
+                                onClick={archive}
                             />
-                            <span className="block text-red-600 font-dinot cursor-pointer" onClick={deleteCustom}>
-                                Supprimer photo perso
-                            </span>
+                            <FontAwesomeIcon
+                                icon={faTrashAlt}
+                                className="cursor-pointer mr-4 text-red-500 hover:text-red-300"
+                                onClick={remove}
+                            />
+                            <Link to="/admin/user">
+                                <FontAwesomeIcon icon={faTimes} size="sm"/>
+                            </Link>
                         </div>
                     )}
-
-                    <div className="flex justify-between mb-2 mt-4">
-                        <label className="font-semibold">Numéro étudiant :</label>
-                        <InputNumber
-                            required
-                            name="id"
-                            className="border-none pl-1"
-                            formatter={(val = 0) => val.toString().padStart(4, "0")}
-                            value={formik.values.id}
-                            onChange={(val) => formik.setFieldValue("id", val)}
-                        />
-                    </div>
-
-                    <div className="flex justify-between mb-4">
-                        
-                        <label className="font-semibold">Promotion :</label>
-                        <InputNumber
-                            className="border-none pl-1"
-                            name="promo"                              
-                            value={formik.values.promo}
-                            onChange={(val) => formik.setFieldValue("promo", val)}
-                        />
-                    </div>
-
-                    <div className="flex flex-row mb-4">
-                        <div className="mr-2 w-1/2">
-                            <label className="font-semibold">Prénom</label>
-                            <Input
-                                required
-                                placeholder="Dieudonné"
-                                name="firstName"
-                                value={formik.values.firstName}
-                                onChange={formik.handleChange}
-                            />
-                        </div>
-                        <div className="ml-2 w-1/2">
-                            <label className="font-semibold">Nom</label>
-                            <Input
-                                required
-                                placeholder="Abboud"
-                                name="lastName"
-                                value={formik.values.lastName}
-                                onChange={formik.handleChange}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="font-semibold">Roles</label>
-                        <Select
-                            className="w-full"
-                            mode="multiple"
-                            value={formik.values.roles}
-                            notFoundContent={roles ? <Loading size="sm"/> : null}
-                            onChange={(val: string[]) => formik.setFieldValue("roles", val)}
-                        >
-                            {roles && roles.map(r => (
-                                <Option key={r.id} value={r.role}>{r.role}</Option>
-                            ))}
-                        </Select>
-                    </div>
-
-                    <Divider/>
-
-                    <div className="flex justify-between mb-4">
-                        <div className="mr-1">
-                            <label className="font-semibold">Email</label>
-                            <Input
-                                placeholder="dieudonne.abboud@isep.fr"
-                                name="mail"
-                                value={formik.values.mail}
-                                onChange={formik.handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="mb-5">
-                        <label className="font-semibold">Date de naissance</label>
-                        <Input
-                            placeholder="29/01/1968"
-                            name="birthDate"
-                            type="date"
-                            value={formik.values.birthDate && format(formik.values.birthDate, "yyyy-MM-dd")}
-                            onChange={(e) => formik.setFieldValue("birthDate", e.target.valueAsDate)}
-                        />
-                    </div>
-
-                    <div className="self-end flex flex-wrap justify-around w-full">
-                        <Button
-                            htmlType="submit"
-                            className="mt-5 text-white rounded border-green-500 bg-green-500"
-                            icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
-                        >
-                            Enregistrer
-                        </Button>
-                        {student && (
-                            <>
-                                <Button className="mt-5 text-white rounded border-yellow-500 bg-yellow-500" icon={<FontAwesomeIcon icon={faArchive} className="mr-2"/>} onClick={archive}>
-                                    {student.archived ? "Désarchiver" : "Archiver"}
-                                </Button>
-                                <Button className="mt-5 rounded" icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>} onClick={remove} danger>
-                                    Supprimer
-                                </Button>
-                            </>
-                        )}
-                    </div>
-
-                </form>
+                    <StudentEditorForm student={student} onSubmit={student ? onCreate : onUpdate}/>
+                </div>
             }
         </div>
     )

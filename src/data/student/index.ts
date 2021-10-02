@@ -27,11 +27,11 @@ export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPic
 export const deleteCustomPicture = (student: number): AxiosPromise<StudentPicture> => apiClient.delete(`/student/${student}/admin/picture/custom`)
 
 
-export const updateOriginalPicture = (id: number, image: File): AxiosPromise<StudentPicture> => {
+export const updateOriginalPicture = (id: number, image?: File): AxiosPromise<StudentPicture> => {
     const fd = new FormData()
     fd.append("file", image as Blob)
 
-    return apiClient.put(`/student/${id}/picture/original`, fd)
+    return apiClient.put(`/student/${id}/admin/picture/original`, fd)
 }
 
 
@@ -65,7 +65,6 @@ export const getAllStudentsAdmin = (page = 0): AxiosPromise<Page<StudentPreviewA
 export const createStudent = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => apiClient.post("/student", form)
 
 export const updateStudentAdmin = (form: StudentAdminForm): AxiosPromise<StudentAdmin> => apiClient.put("/student/admin", form)
-
 
 export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> => apiClient.put(`/student/${id}/archive`)
 

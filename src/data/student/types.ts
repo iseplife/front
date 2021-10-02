@@ -33,7 +33,7 @@ export interface StudentPreview {
 }
 
 export interface StudentsImportData {
-    student: StudentPreview, 
+    student: StudentPreview,
     file?: Blob
 }
 
@@ -73,7 +73,6 @@ export type StudentAdminForm = {
     lastName: string
     birthDate?: Date
     mail?: string
-    resetPicture?: boolean
 }
 
 type ReducerPromoToggle = {
