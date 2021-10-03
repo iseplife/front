@@ -36,7 +36,11 @@ export const deleteClub = (id: number): AxiosPromise<void> => apiClient.delete(`
 
 export const getClubAdmins = (id: number): AxiosPromise<StudentPreview[]> => apiClient.get(`/club/${id}/admins`)
 
-export const getClubMembers = (id: number): AxiosPromise<ClubMember[]> => apiClient.get(`/club/${id}/member`)
+export const getClubSchoolSessions = (id: number): AxiosPromise<number[]> => apiClient.get(`/club/${id}/school-sessions`)
+
+export const getMembers = (id: number, year ?: number): AxiosPromise<ClubMember[]> => apiClient.get(`/club/${id}/member`, {
+    params: {y: year}
+})
 
 export const getClubGalleries = (id: number): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/club/${id}/galleries`)
 

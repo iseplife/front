@@ -19,10 +19,9 @@ export interface Entity {
     id: number
 }
 
-export type LazyLoad<T> = {
-    loading: boolean
-    data?: T
-}
+export type LazyLoad<T> =
+    { loading: true, data: undefined } |
+    { loading: false, data: T }
 
 export enum UploadState {
     OFF,

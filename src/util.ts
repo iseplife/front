@@ -2,13 +2,12 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
-import axios from "axios"
 import {Image as ImageType} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
-import {SelectablePhoto} from "./pages/default/gallery"
 import { TFunction } from "i18next"
 import { formatWithOptions } from "date-fns/fp"
+import axios from "axios"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -29,7 +28,7 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
 
     const nowDay = Math.floor(nowS / 60 / 60 / 24)
     const dateDay = Math.floor(dateS / 60 / 60 / 24)
-        
+
     const diff = nowS - dateS
     if (diff / 60 / 60 < 24) {//Less than 24h ago
         if(diff < 60 * 1.5)//Less than 1.5 min ago
@@ -97,6 +96,14 @@ interface NamedPerson {
 
 export const getInitials = (student: NamedPerson): string => {
     return (student.firstName.substring(0, 1) + student.lastName.substring(0, 1)).toUpperCase()
+}
+
+const SEPTEMBER_MONTH = 8
+export const getCurrentSchoolYear = (): number => {
+    const currentDate = new Date()
+    return currentDate.getMonth() >= SEPTEMBER_MONTH ?
+        currentDate.getFullYear() :
+        currentDate.getFullYear() - 1
 }
 
 export const getEducationYear = (graduationYear: number): string => {

@@ -1,4 +1,4 @@
-import {Club, ClubMember} from "../../data/club/types"
+import {Club} from "../../data/club/types"
 
 export enum ClubActionType {
     FETCH_CLUB,
@@ -25,30 +25,6 @@ interface UpdateClubAction {
     payload: Club
 }
 
-interface FetchMembersAction {
-    type: ClubActionType.FETCH_MEMBERS,
-}
-interface GetMembersAction {
-    type: ClubActionType.GET_MEMBERS,
-    payload: ClubMember[]
-}
-
-
-interface AddClubMember {
-    type: ClubActionType.ADD_MEMBER,
-    payload: ClubMember
-}
-
-interface UpdateClubMember {
-    type: ClubActionType.UPDATE_MEMBER,
-    payload: ClubMember
-}
-
-interface RemoveClubMember {
-    type: ClubActionType.REMOVE_MEMBER,
-    payload: number
-}
-
 interface ToggleAdminMode {
     type: ClubActionType.TOGGLE_ADMIN_MODE
 }
@@ -57,11 +33,6 @@ interface ToggleAdminMode {
 export type ClubContextAction = FetchClubAction
     | GetClubAction
     | UpdateClubAction
-    | FetchMembersAction
-    | GetMembersAction
-    | AddClubMember
-    | UpdateClubMember
-    | RemoveClubMember
     | ToggleAdminMode
 
 

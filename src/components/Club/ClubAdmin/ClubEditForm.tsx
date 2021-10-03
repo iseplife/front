@@ -24,7 +24,6 @@ const ClubEditForm: React.FC = () => {
         initialValues: {
             name: club.name,
             description: club.description,
-
             facebook: club.facebook,
             instagram: club.instagram,
             website: club.website
