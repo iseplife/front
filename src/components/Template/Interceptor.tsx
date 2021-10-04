@@ -58,32 +58,37 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         message.info(this.props.t("online"))
     };
 
-    axiosRequestInterceptor = async (request: AxiosRequestConfig) => {
+    axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - 25_000 <= new Date().getTime()) {
-            delete apiClient.defaults.headers.common["Authorization"]
+            return new Promise((execute, reject) => {
+                delete apiClient.defaults.headers.common["Authorization"]
 
-            if (!this.refreshingPromise)
-                (this.refreshingPromise = refresh()).then(res => {
-                    try {
-                        this.context.dispatch({
-                            type: AppActionType.SET_TOKEN,
-                            token: res.data.token
-                        })
-                    } catch (e) {
-                        throw new Error("JWT cookie unreadable")
-                    }
+                if (!this.refreshingPromise)
+                    (this.refreshingPromise = refresh()).then(res => {
+                        try {
+                            this.context.dispatch({
+                                type: AppActionType.SET_TOKEN,
+                                token: res.data.token
+                            })
+                        } catch (e) {
+                            reject(new Error("JWT cookie unreadable"))
+                        }
 
-                    this.refreshingPromise = undefined
-                }).catch(() => {
-                    this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
-                    this.refreshingPromise = undefined
+                        this.refreshingPromise = undefined
+                    }).catch((err) => {
+                        reject(err)
 
-                    message.error("Vous avez été déconnecté !")
+                        this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
+                        this.refreshingPromise = undefined
+
+                        message.error("Vous avez été déconnecté !")
+                    })
+
+                this.refreshingPromise.then(res => {
+                    request.headers["Authorization"] = `Bearer ${res.data.token}`
+                    execute(request)
                 })
-
-            this.refreshingPromise.then(res =>
-                request.headers["Authorization"] = `Bearer ${res.data.token}`
-            )
+            })
         }
         return request
     }
