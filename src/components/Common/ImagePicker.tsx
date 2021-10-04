@@ -5,6 +5,7 @@ import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faPlus, faUndo} from "@fortawesome/free-solid-svg-icons"
 import Loading from "./Loading"
+import {RcFile} from "antd/es/upload"
 
 const DEFAULT_IMAGE = "img/empty-image.svg"
 
@@ -19,10 +20,10 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
     const [loading, setLoading] = useState<boolean>()
 
 
-    const handleImage = useCallback((file: File) => {
+    const handleImage = useCallback((file: RcFile) => {
         setLoading(true)
         const reader = new FileReader()
-        reader.onload = e => {
+        reader.onload = () => {
             setImage(reader.result as string)
             setLoading(false)
         }
@@ -53,13 +54,12 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                                 backgroundPosition: "center",
                             }}
                         />
-                        <span className="image-options absolute text-gray-400">
-                            <FontAwesomeIcon icon={faEdit} size="2x" className="px-2 hover:text-white"/>
+                        <span className="image-options absolute text-gray-400 text-2xl">
+                            <FontAwesomeIcon icon={faEdit} className="pr-2 hover:text-white"/>
                             {image === defaultImage ?
                                 <FontAwesomeIcon
                                     icon={faTrashAlt}
-                                    size="2x"
-                                    className="px-2 hover:text-red-400"
+                                    className="pl-2 hover:text-red-400 "
                                     onClick={e => {
                                         e.stopPropagation()
                                         setImage(DEFAULT_IMAGE)
@@ -68,8 +68,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
                                 /> :
                                 <FontAwesomeIcon
                                     icon={faUndo}
-                                    size="2x"
-                                    className="px-2 hover:text-red-400"
+                                    className="pl-2 hover:text-red-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         setImage(defaultImage)
@@ -91,7 +90,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({className, defaultImage, onCha
 }
 ImagePicker.defaultProps = {
     className: "",
-    defaultImage: DEFAULT_IMAGE
 }
 
 export default ImagePicker

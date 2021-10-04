@@ -3,8 +3,6 @@ import Table, {RowProps} from "../Common/TableAdmin"
 import StudentEditor from "./StudentEditor"
 import {Link, useParams} from "react-router-dom"
 import {StudentPreviewAdmin} from "../../data/student/types"
-import {Role} from "../../data/security/types"
-import {getRoles} from "../../data/security"
 import {PageStatus} from "../../pages/admin/student"
 import {getAllStudentsAdmin} from "../../data/student"
 import {getEducationYear} from "../../util"
@@ -27,16 +25,7 @@ const StudentsDashboard: React.FC = () => {
     const {id} = useParams<ParamTypes>()
     const [page, setPage] = useState<PageStatus>({current: 0})
     const [students, setStudents] = useState<StudentPreviewAdmin[]>([])
-    const [roles, setRoles] = useState<Role[]>()
     const [loading, setLoading] = useState<boolean>(false)
-
-    useEffect(() => {
-        getRoles().then(res => {
-            if (res.status) {
-                setRoles(res.data)
-            }
-        })
-    }, [])
 
     /**
      * Fetch students first page on first load
@@ -55,7 +44,7 @@ const StudentsDashboard: React.FC = () => {
             }
         }).finally(() => setLoading(false))
     }, [page.current])
-    
+
     return (
         <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/3">
@@ -71,14 +60,13 @@ const StudentsDashboard: React.FC = () => {
             </div>
             <StudentEditor
                 id={id}
-                roles={roles}
                 onDelete={id => setStudents(students => students.filter(s => s.id !== id))}
                 onCreate={student => setStudents(students => [...students, student])}
                 onUpdate={student => setStudents(students => students.map(s => s.id === student.id ? student : s))}
                 onArchive={student => setStudents(students => students.map(s => s.id === student.id ? student : s))}
             />
         </div>
-        
+
     )
 }
 
