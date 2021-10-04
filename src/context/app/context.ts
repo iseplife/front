@@ -12,6 +12,7 @@ export const DEFAULT_STATE: AppContextState = {
 export type AppContextState =  {
     user: StudentPreview
     payload: TokenPayload
+    jwt: string
     token_expiration: number
 }
 

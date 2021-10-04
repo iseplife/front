@@ -1,8 +1,8 @@
-import React, {useContext, useLayoutEffect, useState} from "react"
+import React, {useContext, useLayoutEffect, useMemo, useState} from "react"
 import {
     Redirect,
     Route,
-    Switch,
+    Switch
 } from "react-router-dom"
 import {getLoggedUser} from "../../data/student"
 
@@ -13,29 +13,32 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
-import { getJWT } from "../../data/security"
-import { initWebSocket } from "../../realtime/websocket/WSServerClient"
+import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
 
 
 const Template: React.FC = () => {
     const {state, dispatch} = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(true)
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const isAdmin = useMemo(() => (
+        state.payload.roles.includes(Roles.ADMIN)
+    ), [state.payload])
 
     useLayoutEffect(() => {
         getLoggedUser().then(res => {
             const socket = initWebSocket(wsURI)
+            dispatch({
+                type: AppActionType.SET_LOGGED_USER,
+                user: res.data
+            })
 
-            dispatch({type: AppActionType.SET_LOGGED_USER, user: res.data})
-            setIsAdmin(state.payload.roles.includes(Roles.ADMIN))
-
-            socket.connect(getJWT())
+            socket.connect(state.jwt)
         }).finally(() => setLoading(false))
+
+        return () => getWebSocket() && getWebSocket().disconnect()
     }, [])
 
     return loading ?
-        <LoadingPage/>
-        :
+        <LoadingPage/> :
         <Switch>
             <Route path="/admin" render={({location}) =>
                 (

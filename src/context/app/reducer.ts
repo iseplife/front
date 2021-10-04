@@ -1,5 +1,7 @@
 import {AppContextState} from "./context"
 import {AppActionType, AppContextAction} from "./action"
+import {parseToken} from "../../data/security"
+import {apiClient} from "../../data/http"
 
 
 export const appContextReducer = (state: AppContextState, action: AppContextAction): AppContextState => {
@@ -13,12 +15,21 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 ...state,
                 user: action.user,
             }
-        case AppActionType.SET_TOKEN:
+        case AppActionType.SET_LOGGED_OUT:
+            delete apiClient.defaults.headers.common["Authorization"]
+            localStorage.removeItem("logged")
+            return {} as AppContextState
+        case AppActionType.SET_TOKEN: {
+            const parsedToken = parseToken(action.token)
+
+            apiClient.defaults.headers.common["Authorization"] = `Bearer ${action.token}`
             return {
                 ...state,
-                payload: action.token.payload,
-                token_expiration: action.token.exp * 1000 // convert secondes in ms
+                jwt: action.token,
+                payload: parsedToken.payload,
+                token_expiration: parsedToken.exp * 1000 // convert seconds in ms
             }
+        }
         case AppActionType.SET_TOKEN_EXPIRATION:
             return {...state, token_expiration: action.token_expiration * 1000} // convert secondes in ms
         case AppActionType.SET_PICTURE:
