@@ -1,5 +1,5 @@
 import React from "react"
-import {apiClient} from "../../data/http"
+import {apiClient, axiosTimeout} from "../../data/http"
 import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
@@ -59,7 +59,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - 60_000 <= new Date().getTime()) {
+        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - axiosTimeout - 10_000 <= new Date().getTime()) {
             return new Promise((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
