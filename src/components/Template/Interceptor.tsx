@@ -59,38 +59,41 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - 25_000 <= new Date().getTime()) {
+        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - 60_000 <= new Date().getTime()) {
             return new Promise((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
-                if (!this.refreshingPromise)
-                    (this.refreshingPromise = refresh()).then(res => {
-                        try {
-                            this.context.dispatch({
-                                type: AppActionType.SET_TOKEN,
-                                token: res.data.token
-                            })
-                        } catch (e) {
-                            reject(new Error("JWT cookie unreadable"))
-                        }
-
-                        this.refreshingPromise = undefined
-                    }).catch((err) => {
-                        reject(err)
-
-                        this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
-                        this.refreshingPromise = undefined
-
-                        message.error("Vous avez été déconnecté !")
-                    })
-
-                this.refreshingPromise.then(res => {
+                this.refreshToken(reject).then(res => {
                     request.headers["Authorization"] = `Bearer ${res.data.token}`
                     execute(request)
                 })
             })
         }
         return request
+    }
+
+    refreshToken(reject: (e: Error)=>void): AxiosPromise<TokenSet> {
+        if (!this.refreshingPromise)
+            (this.refreshingPromise = refresh()).then(res => {
+                try {
+                    this.context.dispatch({
+                        type: AppActionType.SET_TOKEN,
+                        token: res.data.token
+                    })
+                } catch (e) {
+                    reject(new Error("JWT cookie unreadable"))
+                }
+
+                this.refreshingPromise = undefined
+            }).catch((err) => {
+                reject(err)
+
+                this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
+                this.refreshingPromise = undefined
+
+                message.error("Vous avez été déconnecté !")
+            })
+        return this.refreshingPromise
     }
 
     axiosResponseInterceptor = (response: AxiosResponse) => response
