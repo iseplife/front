@@ -10,7 +10,7 @@ import {ClubActionType} from "../../../context/club/action"
 import {faCircleNotch, faLink} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faFacebookF, faInstagram} from "@fortawesome/free-brands-svg-icons"
-import {faSave} from "@fortawesome/free-regular-svg-icons"
+import {faSave} from "@fortawesome/free-solid-svg-icons"
 
 const {TextArea} = Input
 
@@ -39,10 +39,11 @@ const ClubEditForm: React.FC = () => {
     })
 
     return (
-        <form className="rounded-lg shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>
-            <div className="flex">
+        <form className="flex flex-col rounded-lg shadow bg-white p-3 m-2" onSubmit={formik.handleSubmit}>
+            <h3 className="font-bold text-xl text-gray-600 self-start">Edition information</h3>
+            <div className="flex flex-grow p-2">
                 <div className="w-2/3">
-                    <label >{t("form.name")}</label>
+                    <label>{t("form.name")}</label>
                     <Input
                         name="name"
                         placeholder="Nom"
@@ -55,7 +56,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="w-1/3">
-                    <label >{t("form.creation")}</label>
+                    <label>{t("form.creation")}</label>
                     <Input
                         type="date"
                         bordered={false}
@@ -66,7 +67,7 @@ const ClubEditForm: React.FC = () => {
             </div>
 
             <div className="mt-3">
-                <label >{t("form.description")}</label>
+                <label>{t("form.description")}</label>
                 <TextArea
                     name="description"
                     placeholder="Décrivez l'association en quelques lignes..."
@@ -82,7 +83,7 @@ const ClubEditForm: React.FC = () => {
 
             <div className="flex mt-5 mb-3">
                 <div className="flex-1 mx-1">
-                    <label >{t("form.website")}</label>
+                    <label>{t("form.website")}</label>
                     <Input
                         name="website"
                         placeholder="Lien site internet"
@@ -93,7 +94,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 mx-1">
-                    <label >Instagram</label>
+                    <label>Instagram</label>
                     <Input
                         name="instagram"
                         placeholder="Lien Instagram"
@@ -104,7 +105,7 @@ const ClubEditForm: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 mx-1">
-                    <label >Facebook</label>
+                    <label>Facebook</label>
                     <Input
                         name="facebook"
                         placeholder="Lien Facebook"
@@ -114,20 +115,20 @@ const ClubEditForm: React.FC = () => {
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
+
             </div>
 
-            <div className="self-end flex flex-wrap justify-end w-full">
+            <div className="w-full text-right">
                 <Button
                     htmlType="submit"
-                    type="primary"
-                    icon={formik.isSubmitting ?
-                        <FontAwesomeIcon icon={faCircleNotch} spin className="mr-2"/> :
-                        <FontAwesomeIcon icon={faSave} className="mr-2"/>
-                    }
+                    className="text-white rounded border-green-500 bg-green-500"
                     disabled={formik.isSubmitting}
-                    className="border-green-500 bg-green-500  rounded"
                 >
                     {t("common:save")}
+                    {formik.isSubmitting ?
+                        <FontAwesomeIcon icon={faCircleNotch} spin className="ml-2"/> :
+                        <FontAwesomeIcon icon={faSave} className="ml-2"/>
+                    }
                 </Button>
             </div>
         </form>

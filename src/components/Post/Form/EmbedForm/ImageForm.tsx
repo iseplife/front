@@ -18,8 +18,6 @@ const ImageForm: React.FC = () => {
     const {setFieldValue, setFieldError, values} = useFormikContext<PostFormValues<EmbedForm>>()
     const images = (values.embed as EmbedMediaEdition | EmbedMediaCreation).data
 
-    console.log(images)
-
     const handleDelete = useCallback((index) => {
         if (images.length - 1 === 0) {
             setFieldValue("embed", undefined)

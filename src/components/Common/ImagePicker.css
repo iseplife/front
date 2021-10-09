@@ -5,6 +5,13 @@
     border-radius: 9999px !important;
 }
 
+.avatar-uploader-large div.ant-upload {
+    height: 200px !important;
+    width: 200px !important;
+    overflow: hidden;
+    border-radius: 9999px !important;
+}
+
 .avatar-squared div.ant-upload {
     height: 130px !important;
     width: 130px !important;
