@@ -1,5 +1,7 @@
 import ClubType from "../../constants/ClubType"
 import { StudentPreview} from "../student/types"
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
+import {faPenNib, faUser, faUserShield} from "@fortawesome/free-solid-svg-icons"
 
 export enum ClubRole {
     MEMBER = "MEMBER",
@@ -7,6 +9,11 @@ export enum ClubRole {
     ADMIN = "ADMIN",
 }
 export const ClubRoles = [ClubRole.MEMBER, ClubRole.PUBLISHER, ClubRole.ADMIN]
+export const ClubRoleIcon: { [role: string]: IconDefinition } = {
+    [ClubRole.ADMIN]: faUserShield,
+    [ClubRole.PUBLISHER]: faPenNib,
+    [ClubRole.MEMBER]: faUser,
+}
 
 export type Club = {
     id: number

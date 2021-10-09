@@ -1,17 +1,11 @@
 import React, {useMemo} from "react"
-import {ClubMember, ClubRole} from "../../../data/club/types"
+import {ClubMember, ClubRoleIcon} from "../../../data/club/types"
 import {Avatar} from "antd"
 import {useHistory} from "react-router-dom"
-import {faEdit, faUserShield} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 
-const ClubRoleIcon: { [role: string]: IconDefinition } = {
-    [ClubRole.ADMIN]: faUserShield,
-    [ClubRole.PUBLISHER]: faEdit,
-}
 
 type MemberCardProps = {
     id: number

@@ -15,7 +15,7 @@
     "role": "Role"
   },
   "edit_member": "Manage member",
-  "add_member": "Add a new member",
+  "add_member": "Add member",
   "remove_member": {
     "title": "Do you want to remove this member ?",
     "content": "Removing a member is permanent and cannot be undone",

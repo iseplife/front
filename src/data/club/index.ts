@@ -48,4 +48,4 @@ export const addClubMember = (id: number, student: number): AxiosPromise<ClubMem
 
 export const updateClubMember = (member: number, form: ClubMemberForm): AxiosPromise<ClubMember> => apiClient.put(`club/member/${member}`, form)
 
-export const removeClubMember = (member: number): AxiosPromise<ClubMember> => apiClient.delete(`club/member/${member}`)
+export const deleteClubMember = (member: number): AxiosPromise<ClubMember> => apiClient.delete(`club/member/${member}`)

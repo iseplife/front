@@ -15,7 +15,7 @@
     "role": "Rôle"
   },
   "edit_member": "Modifier membre",
-  "add_member": "Ajouter un nouveau membre",
+  "add_member": "Ajouter membre",
   "remove_member": {
     "title": "Voulez-vous supprimez ce membre ?",
     "content": "Attention, la suppression d'un membre est irréversible",
