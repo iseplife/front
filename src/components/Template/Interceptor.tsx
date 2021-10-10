@@ -1,5 +1,5 @@
 import React from "react"
-import {apiClient, axiosTimeout} from "../../data/http"
+import {apiClient, AXIOS_TIMEOUT} from "../../data/http"
 import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router"
@@ -15,15 +15,13 @@ type InterceptState = {
 };
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
-    context!: React.ContextType<typeof AppContext>;
     refreshingPromise?: AxiosPromise<TokenSet>;
     intercept?: number[];
 
+    context!: React.ContextType<typeof AppContext>;
     state: InterceptState = {
         error: "",
     };
-
-
 
     componentDidMount() {
         this.intercept = [
@@ -59,7 +57,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     };
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - axiosTimeout - 10_000 <= new Date().getTime()) {
+        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
             return new Promise((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
@@ -125,6 +123,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     return Promise.reject(error)
             }
         }
+        return Promise.reject(error)
     }
 
     render() {
