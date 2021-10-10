@@ -27,5 +27,7 @@
     "ADMIN": "Administrator",
     "PUBLISHER": "Publisher",
     "MEMBER": "Member"
-  }
+  },
+  "member_created": "Member created",
+  "member_updated": "Member updated"
 }

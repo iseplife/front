@@ -1,5 +1,13 @@
 import {AxiosPromise} from "axios"
-import {Club, ClubAdminForm, ClubForm, ClubMember, ClubMemberForm, ClubPreview} from "./types"
+import {
+    Club,
+    ClubAdminForm,
+    ClubForm,
+    ClubMember,
+    ClubMemberCreationForm,
+    ClubMemberUpdateForm,
+    ClubPreview
+} from "./types"
 import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
 import {GalleryPreview} from "../gallery/types"
@@ -44,8 +52,8 @@ export const getMembers = (id: number, year ?: number): AxiosPromise<ClubMember[
 
 export const getClubGalleries = (id: number): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/club/${id}/galleries`)
 
-export const addClubMember = (id: number, student: number): AxiosPromise<ClubMember> => apiClient.put(`club/${id}/member/${student}`)
+export const addClubMember = (id: number, member: ClubMemberCreationForm): AxiosPromise<ClubMember> => apiClient.post(`club/${id}/member`, member)
 
-export const updateClubMember = (member: number, form: ClubMemberForm): AxiosPromise<ClubMember> => apiClient.put(`club/member/${member}`, form)
+export const updateClubMember = (member: number, form: ClubMemberUpdateForm): AxiosPromise<ClubMember> => apiClient.put(`club/member/${member}`, form)
 
 export const deleteClubMember = (member: number): AxiosPromise<ClubMember> => apiClient.delete(`club/member/${member}`)

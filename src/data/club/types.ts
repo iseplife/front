@@ -55,7 +55,15 @@ export type ClubMemberPreview = {
     club: ClubPreview
 }
 
-export type ClubMemberForm = {
+export type ClubMemberCreationForm = {
+    student: number
+    role: ClubRole
+    position: string
+    year: number
+}
+
+
+export type ClubMemberUpdateForm = {
     role: ClubRole
     position: string
 }

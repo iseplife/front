@@ -3,14 +3,16 @@ import {Avatar, Badge, message, Modal, Select} from "antd"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {ClubMember, ClubMemberForm, ClubRoleIcon, ClubRoles} from "../../../data/club/types"
-import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {ClubMember, ClubMemberUpdateForm, ClubRoleIcon, ClubRoles} from "../../../data/club/types"
 import {useTranslation} from "react-i18next"
 import {deleteClubMember, updateClubMember} from "../../../data/club"
-import {faCheck, faUndo} from "@fortawesome/free-solid-svg-icons"
 import {Field, Form, Formik} from "formik"
+import MemberCardToolbar from "./MemberCardToolbar"
 
 const {Option} = Select
+const isValuesUpdated = (a: ClubMemberUpdateForm, b: ClubMemberUpdateForm): boolean => {
+    return !(a.role === b.role && a.position === b.position)
+}
 
 type ClubMemberEditorProps = {
     m: ClubMember
@@ -19,7 +21,7 @@ type ClubMemberEditorProps = {
 }
 const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelete}) => {
     const {t} = useTranslation(["common", "club"])
-    const initialValues: ClubMemberForm = useMemo(() => ({
+    const initialValues: ClubMemberUpdateForm = useMemo(() => ({
         position: m.position,
         role: m.role
     }), [m.role, m.position])
@@ -34,44 +36,23 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                 const res = await deleteClubMember(m.id)
                 if (res.status === 200) {
                     onDelete(m.id)
-                    message.info(t("remove_item.complete"))
+                    message.success(t("remove_item.complete"))
                 }
             }
         })
     }, [m.id, onDelete])
 
-    const updateMember = useCallback((values: ClubMemberForm) => {
+    const updateMember = useCallback((values: ClubMemberUpdateForm) => {
         updateClubMember(m.id, values).then(res => {
             onUpdate(res.data)
+            message.success(t("club:member_updated"))
         })
     }, [m.id, onUpdate])
 
     return (
         <Formik onSubmit={updateMember} initialValues={initialValues}>
-            {({values, resetForm, setFieldValue, setSubmitting}) => (
-                <Badge count={
-                    <span className="top-1 right-5">
-                        {values == initialValues ?
-                            <FontAwesomeIcon
-                                onClick={confirmDelete}
-                                icon={faTrashAlt}
-                                className="cursor-pointer shadow-md bg-red-600 hover:bg-red-700 p-1.5 rounded-full text-white h-6 w-6"
-                            /> :
-                            <>
-                                <FontAwesomeIcon
-                                    onClick={() => resetForm({values: initialValues})}
-                                    icon={faUndo}
-                                    className="cursor-pointer shadow-md bg-white hover:bg-gray-300 p-1.5 mr-1 rounded-full text-gray-600 h-6 w-6"
-                                />
-                                <FontAwesomeIcon
-                                    onClick={() => setSubmitting(true)}
-                                    icon={faCheck}
-                                    className="cursor-pointer shadow-md bg-green-600 hover:bg-green-700 p-1.5 rounded-full text-white h-6 w-6"
-                                />
-                            </>
-                        }
-                    </span>
-                }>
+            {({values, setFieldValue}) => (
+                <MemberCardToolbar isEdited={isValuesUpdated(values, initialValues)} onDelete={confirmDelete}>
                     <div
                         title={m.student.firstName + " " + m.student.lastName}
                         className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden"
@@ -92,7 +73,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                                     className="w-3/5 mr-1 font-bold focus:text-gray-600 focus:outline-none border-b"
                                 />
                                 <Select
-                                    defaultValue={values.role}
+                                    value={values.role}
                                     onChange={value => setFieldValue("role", value)}
                                 >
                                     {ClubRoles.map(r =>
@@ -108,7 +89,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                             </Form>
                         </div>
                     </div>
-                </Badge>
+                </MemberCardToolbar>
             )}
         </Formik>
     )
