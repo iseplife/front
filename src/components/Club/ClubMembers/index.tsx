@@ -30,10 +30,7 @@ const ClubMembers: React.FC<ClubMembersProps> = ({club, hasRight}) => {
     }, [])
 
     const onAdd = useCallback((newMember: ClubMember) => {
-        setMembers(prevMembers => {
-            prevMembers.push(newMember)
-            return prevMembers
-        })
+        setMembers(prevMembers => [...prevMembers, newMember])
     }, [])
 
     useEffect(() => {
@@ -73,9 +70,7 @@ const ClubMembers: React.FC<ClubMembersProps> = ({club, hasRight}) => {
                         <MemberCard key={m.id} id={m.id} m={m} showRole={hasRight}/>
                     )
                 }
-                {editionMode && (
-                    <ClubMemberAdder club={club} onAdd={onAdd} />
-                )}
+                {editionMode && <ClubMemberAdder club={club} year={selectedYear} onAdd={onAdd}/>}
             </div>
         </div>
     )

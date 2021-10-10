@@ -1,16 +1,22 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import {faCheck, faSpinner, faUndo} from "@fortawesome/free-solid-svg-icons"
-import React from "react"
+import React, {useCallback} from "react"
 import {useFormikContext} from "formik"
 
 type MemberCardToolbarProps = {
     isEdited: boolean
+    onUndo?: () => void
     onDelete?: () => void
     visible?: boolean
 }
-const MemberCardToolbar: React.FC<MemberCardToolbarProps> = ({children, visible = true, onDelete, isEdited}) => {
+const MemberCardToolbar: React.FC<MemberCardToolbarProps> = ({visible = true, onUndo, onDelete, isEdited, children}) => {
     const {resetForm, isSubmitting, initialValues, submitForm} = useFormikContext()
+    const undo = useCallback(() => {
+        onUndo && onUndo()
+        resetForm({values: initialValues})
+    }, [onUndo])
+
     return (
         <span className="relative">
             {visible && (
@@ -18,7 +24,7 @@ const MemberCardToolbar: React.FC<MemberCardToolbarProps> = ({children, visible 
                     {isEdited ?
                         <>
                             <FontAwesomeIcon
-                                onClick={() => resetForm({values: initialValues})}
+                                onClick={undo}
                                 icon={faUndo}
                                 className="cursor-pointer shadow-md bg-white hover:bg-gray-300 p-1.5 mr-1 rounded-full text-gray-600 h-6 w-6"
                             />

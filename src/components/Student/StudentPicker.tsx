@@ -1,8 +1,12 @@
 import React, {useCallback, useState} from "react"
-import {Select, Spin, Tag} from "antd"
+import {Avatar, Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
-import StudentAvatar from "./StudentAvatar"
 import {AvatarSizes} from "../../constants/MediaSizes"
+import {mediaPath} from "../../util"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUser} from "@fortawesome/free-regular-svg-icons"
+import {SearchItem} from "../../data/searchbar/types"
+import {useTranslation} from "react-i18next"
 
 const TRIGGER_LENGTH = 2
 type Option = {
@@ -12,59 +16,75 @@ type Option = {
 
 
 type StudentPickerProps = {
-    onChange: (id: number) => void
+    onChange: (id: number, metadata: SearchItem) => void
+    multiple?: boolean
     className?: string
 }
-const StudentPicker: React.FC<StudentPickerProps> = ({onChange, className}) => {
+const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false, className}) => {
+    const {t} = useTranslation("search")
     const [value, setValue] = useState<number>()
-    const [options, setOptions] = useState<Option[]>()
+    const [options, setOptions] = useState<Option[]>([])
     const [fetching, setFetching] = useState<boolean>(false)
+    const [metadata, setMetadata] = useState<Map<number, SearchItem>>(new Map())
 
     const handleSearch = useCallback((value: string) => {
         if (value.length > TRIGGER_LENGTH) {
             setFetching(true)
             searchAllStudents(value).then(res => {
                 if (res.status === 200) {
+                    setMetadata(mt => {
+                        mt.clear()
+                        res.data.forEach(item => mt.set(item.id, item))
+                        return mt
+                    })
                     setOptions(res.data.map(o => ({
                         value: o.id,
                         label: (
-                            <>
-                                <StudentAvatar
-                                    id={o.id}
-                                    name={o.name}
+                            <span className="truncate flex flex-row items-center">
+                                <Avatar
+                                    src={mediaPath(o.thumbURL, AvatarSizes.THUMBNAIL)}
+                                    icon={<FontAwesomeIcon icon={faUser} />}
+                                    alt={o.name}
                                     size={18}
-                                    picture={o.thumbURL}
-                                    pictureSize={AvatarSizes.THUMBNAIL}
-                                    className="mr-2 my-1 box-border"
+                                    className="hover:shadow-outline mr-2"
                                 />
                                 {o.name}
-                            </>
+                            </span>
                         )
                     })))
                 }
             }).finally(() => setFetching(false))
         } else {
             setOptions([])
+            setMetadata(i => {
+                i.clear()
+                return i
+            })
         }
     }, [])
 
+
     return (
         <Select
+            placeholder={t("search_student")}
+            mode={multiple ? "multiple": undefined}
+            allowClear={!multiple}
             showSearch
-            placeholder="Search for a student"
             value={value}
             showArrow={false}
             filterOption={false}
+            autoClearSearchValue={false}
+            loading={fetching}
             notFoundContent={fetching ? <Spin size="small"/> : null}
             onSearch={handleSearch}
             onChange={selected => {
                 setValue(selected)
                 setFetching(false)
-                onChange(selected)
+                onChange(selected, metadata.get(selected) as SearchItem)
             }}
-            tagRender={props => <Tag closable={props.closable} onClose={props.onClose}>{props.label}</Tag>}
-            options={options}
+            tagRender={props => <Tag className="overflow-hidden" closable={props.closable} onClose={props.onClose}>{props.label}</Tag>}
             className={className}
+            options={options}
         />
     )
 }
