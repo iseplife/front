@@ -19,9 +19,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     intercept?: number[];
 
     context!: React.ContextType<typeof AppContext>;
-    state: InterceptState = {
-        error: "",
-    };
+    state: InterceptState = {};
 
     componentDidMount() {
         this.intercept = [
@@ -98,24 +96,25 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
-            /* We handle special error which required specific behavior, otherwise display error message */
+            const {t} = this.props
+
+            /* We handle only special error which required specific behavior, otherwise display error message */
             switch (error.response.status) {
                 case 503:
-                    message.error("Serveur indisponible")
+                    message.error(t("server_disconnected"))
                     break
                 case 401:
                     if (!error.request.url.startsWith("/auth")) {
                         this.props.history.push("/logout")
-                        message.error(this.props.t("disconnected"))
+                        message.error(t("user_disconnected"))
                     }
                     break
                 case 500:
                     message.error("Un probleme a été rencontré")
-                    message.error(this.props.t(error.message))
-                    console.debug(`[${error.code}] ${error.message}`)
+                    message.error(t(error.message))
                     break
                 default:
-                    message.error(this.props.t(error.message))
+                    message.error(t(error.message))
 
                     console.debug(`[${error.code}] ${error.message}`)
                     return Promise.reject(error)
@@ -125,17 +124,10 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     render() {
-        if (this.state.error) {
-            return (
-                <div>
-                    aie aie aie
-                </div>
-            )
-        }
         return null
     }
 }
 
 Interceptor.contextType = AppContext
 
-export default withRouter(withTranslation()(Interceptor))
+export default withRouter(withTranslation("error")(Interceptor))
