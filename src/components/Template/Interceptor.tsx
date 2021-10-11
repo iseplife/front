@@ -98,28 +98,26 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
+            /* We handle special error which required specific behavior, otherwise display error message */
             switch (error.response.status) {
-                case 403:
-                    message.error("Permission insuffisante")
-                    break
-                case 404:
-                    this.props.history.push("/404")
+                case 503:
+                    message.error("Serveur indisponible")
                     break
                 case 401:
                     if (!error.request.url.startsWith("/auth")) {
                         this.props.history.push("/logout")
-                        message.error("Vous avez été déconnecté !")
+                        message.error(this.props.t("disconnected"))
                     }
                     break
                 case 500:
-                case 400:
                     message.error("Un probleme a été rencontré")
-                    console.error(`[${error.code}] ${error.message}`)
-                    break
-                case 503:
-                    message.error("Serveur indisponible")
+                    message.error(this.props.t(error.message))
+                    console.debug(`[${error.code}] ${error.message}`)
                     break
                 default:
+                    message.error(this.props.t(error.message))
+
+                    console.debug(`[${error.code}] ${error.message}`)
                     return Promise.reject(error)
             }
         }

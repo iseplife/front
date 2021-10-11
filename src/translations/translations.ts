@@ -12,6 +12,7 @@ import home_en from "./en/home.json"
 import setting_en from "./en/setting.json"
 import poll_en from "./en/poll.json"
 import post_en from "./en/post.json"
+import error_en from "./en/error.json"
 
 import login_fr from "./fr/login.json"
 import date_fr from "./fr/date.json"
@@ -27,6 +28,7 @@ import home_fr from "./fr/home.json"
 import setting_fr from "./fr/setting.json"
 import poll_fr from "./fr/poll.json"
 import post_fr from "./fr/post.json"
+import error_fr from "./fr/error.json"
 
 export const en = {
     login: login_en,
@@ -42,7 +44,8 @@ export const en = {
     home: home_en,
     setting: setting_en,
     poll: poll_en,
-    post: post_en
+    post: post_en,
+    error: error_en
 }
 export const fr = {
     login: login_fr,
@@ -58,7 +61,8 @@ export const fr = {
     home: home_fr,
     setting: setting_fr,
     poll: poll_fr,
-    post: post_fr
+    post: post_fr,
+    error: error_fr
 }
 
 const translations = {en, fr}
