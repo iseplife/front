@@ -3,12 +3,12 @@ import {Button, message, Upload, Input} from "antd"
 import Table, {RowProps} from "../Common/TableAdmin"
 import {PageStatus} from "../../pages/admin/student"
 import {StudentPreview, StudentsImportData} from "../../data/student/types"
-import {importStudents} from "../../data/student"
+import {importStudent, importStudents} from "../../data/student"
 import ImportedAvatar from "../Common/ImportedAvatar"
 import {RcFile} from "antd/es/upload"
-import {faArrowLeft, faSearch, faSyncAlt, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {faArrowCircleUp, faCheck, faSearch, faSyncAlt, faTrash, faUpload} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons"
+import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { ChangeEvent } from "react-router/node_modules/@types/react"
 
 const importTableConfig = [
@@ -16,7 +16,8 @@ const importTableConfig = [
     {title: "Prénom", dataIndex: "firstName", className: "w-32"},
     {title: "Nom", dataIndex: "lastName", className: "w-32"},
     {title: "N°étudiant", dataIndex: "id", className: "w-32"},
-    {title: "Promotion", dataIndex: "promo", className: "w-32"}
+    {title: "Promotion", dataIndex: "promo", className: "w-32"},
+    {title: "Status", dataIndex: "status", className: "w-32"}
 ]
 
 
@@ -30,8 +31,7 @@ type ImportInfo = {
 
 enum DisplayPage {
     AddCSV = 0,
-    StudentTable = 1,
-    Importing = 2
+    StudentTable = 1
   }
 
 const DEFAULT_PAGE_SIZE = 10
@@ -43,6 +43,7 @@ const StudentsImport: React.FC = () => {
 
     const [loadingImport, setLoadingImport] = useState<boolean>(false)
     const [importInfo, setImportInfo] = useState<ImportInfo | undefined>(undefined)
+
     
     const [displayPage, setDisplayPage] = useState<DisplayPage>(DisplayPage.AddCSV)
 
@@ -65,6 +66,7 @@ const StudentsImport: React.FC = () => {
                 total: students.length
             })
             setLoadingImport(false)
+
         }
         reader.readAsText(file)
         setDisplayPage(DisplayPage.StudentTable)
@@ -108,19 +110,18 @@ const StudentsImport: React.FC = () => {
                         firstName: column[1],
                         lastName: column[2],
                         promo: +column[3]
-                    }
+                    },
+                    status: "NOT_IMPORTED"
                 })
             }
         })
         return result
     }
 
-    const uploadStudents = useCallback(async () =>  {
-        setDisplayPage(DisplayPage.Importing)
-
+    const resetImportInfo = useCallback(() => {
         const initImportData:ImportInfo = { 
             currentImported:0, 
-            totalImport: importedStudents.length, 
+            totalImport: importedStudents.filter( stu => stu.status != "IMPORTED").length, 
             lastStudent: {
                 firstName: "", 
                 lastName: "", 
@@ -129,34 +130,56 @@ const StudentsImport: React.FC = () => {
             },
             blobStudent: undefined
         }
-
         setImportInfo(initImportData)
+    }, [importedStudents])
+
+    const uploadStudents = useCallback(async () =>  {
+
+        resetImportInfo()
+
+        const studentsToImport = importedStudents.filter( stu => stu.status != "IMPORTED")
+
+        for(const stu of studentsToImport){
+            stu.status = "IMPORTING"
+        }
 
         //Import students 5 by 5
 
-        for(let x = 0;x<importedStudents.length/5;x++){
-            const uploadStudents = importedStudents.slice(x*5, (x+1)*5)
+        for(let x = 0;x<studentsToImport.length/5;x++){
+            const uploadStudents = studentsToImport.slice(x*5, (x+1)*5)
+
             await importStudents(uploadStudents)
 
             const updateImportData:ImportInfo = { 
                 currentImported: x*5 + uploadStudents.length,
-                totalImport: importedStudents.length, 
+                totalImport: studentsToImport.length, 
                 lastStudent: importedStudents[x*5].student,
                 blobStudent: importedStudents[x*5].file
+            }
+
+            for(const stu of uploadStudents){
+                stu.status = "IMPORTED"
             }
 
             setImportInfo(updateImportData)
         }
 
 
-    }, [importedStudents])
+    }, [importedStudents, resetImportInfo])
 
-    const reset = useCallback(() => {
-        setImportedStudents([])
-        setImportedStudentsDisplayed([])
-        setDisplayPage(DisplayPage.AddCSV)
-    }, [])
+    const uploadStudent = useCallback(async (studentId: number) => {
+        const student = importedStudents.filter(student => student.student.id == studentId && student.status != "IMPORTED")[0]     
+        student.status = "IMPORTING"
+        await importStudent(student.student, student.file)
+        student.status = "IMPORTED"  
+        resetImportInfo()
+    }, [importedStudents, resetImportInfo])
 
+    
+    const removeStudent = useCallback(async (studentId: number) => {    
+        setImportedStudents(importedStudents.filter(student => student.student.id != studentId))
+        setImportedStudentsDisplayed(importedStudentsDisplayed.filter(student => student.student.id != studentId))
+    }, [importedStudents, importedStudentsDisplayed])
 
     const handleSearchStudent = (e:ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
@@ -173,6 +196,50 @@ const StudentsImport: React.FC = () => {
             total: importedStudentsDisplayed.length
         })
     }
+
+    
+
+    const reset = useCallback(() => {
+        setImportedStudents([])
+        setImportedStudentsDisplayed([])
+        setDisplayPage(DisplayPage.AddCSV)
+        resetImportInfo()
+    }, [resetImportInfo])
+
+    const TableImportRow: React.FC<RowProps<StudentsImportData>> = ({data: {student, file, status}}) => (
+        <tr key={student.id}>
+            <td className="px-6 py-1 whitespace-no-wrap border-b border-gray-200">
+                <ImportedAvatar file={file}/>
+            </td>
+            <td className="px-6 font-semibold text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.firstName}</td>
+            <td className="px-6 font-semibold text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.lastName}</td>
+            <td className="px-6 border-b border-gray-200 whitespace-no-wrap">n°{student.id}</td>
+            <td className="px-6 border-b border-gray-200 whitespace-no-wrap">{student.promo}</td>
+            <td className="px-6 border-b border-gray-200 whitespace-no-wrap space-x-1">
+                <Button
+                    type="primary"
+                    className="shadow-md py-1 px-2 text-white rounded-lg "
+                    onClick={ () => uploadStudent(student.id) }
+                    hidden={status != "NOT_IMPORTED"}
+                >
+                    <FontAwesomeIcon icon={faArrowCircleUp} />               
+                </Button>
+
+                <Button
+                    type="primary"
+                    className="shadow-md py-1 px-2 text-white rounded-lg bg-red-500 border-red-500 hover:opacity-70"
+                    onClick={ () => removeStudent(student.id) }
+                    hidden={status != "NOT_IMPORTED"}
+                >
+                    <FontAwesomeIcon icon={faTrash} />               
+                </Button>
+    
+    
+                <FontAwesomeIcon size="1x" icon={faClock} className={`${status == "IMPORTING" ? "" : "hidden"}`} />
+                <FontAwesomeIcon size="1x" icon={faCheck} className={`${status == "IMPORTED" ? "" : "hidden"} text-green-500`} />
+            </td>
+        </tr>
+    )
 
     return (
         <div>
@@ -227,70 +294,47 @@ const StudentsImport: React.FC = () => {
 
                 <div className="w-full sm:w-1/2 mx-auto mb-8">
                     <ul>
-                        <li><span className="font-semibold">Nombre d'étudiants à importer :</span> {importedStudents.length}</li>
+                        <li><span className="font-semibold">Nombre d'étudiants :</span> {importedStudents.length}</li>
                         <li><span className="font-semibold">Nombre d'étudiants affichés :</span> {importedStudentsDisplayed.length}</li>
                     </ul>
                 </div>
             </div>
+            <div className={`${displayPage == DisplayPage.StudentTable ? "block" : "hidden"}`}>
 
-           
-
-            <Table
-                className={`${displayPage == DisplayPage.StudentTable ? "block" : "hidden"} w-min mx-auto`}
-                columns={importTableConfig}
-                data={importedStudentsDisplayed.slice(
-                    (pageImport.current)* (pageImport.size || DEFAULT_PAGE_SIZE), (pageImport.current +1) * (pageImport.size || DEFAULT_PAGE_SIZE)
-                )}
-                loading={loadingImport}
-                page={pageImport}
-                onPageChange={(page) => setPageImport(prevState => ({...prevState, current: page-1}))}
-                onSizeChange={(current, size) => setPageImport(p => ({...p, size}))}
-                row={TableImportRow}
-            />
-
-            <div className={`${displayPage == DisplayPage.Importing ? "block" : "hidden"}  mb-4 mx-auto w-1/2 bg-white shadow rounded-lg p-6 sticky`}>
-                <div className={`${importInfo?.currentImported != importInfo?.totalImport ? "block" : "hidden"} flex flex-col justify-center items-center`}>
-                    <h3 className="text-lg">Importation en cours</h3>
-                    <div className="w-full text-center mt-6 mb-4">
-                        <ImportedAvatar file={importInfo?.blobStudent} large/>
-                    </div>
-
-                    <p className="text-md">{importInfo?.lastStudent.lastName.toUpperCase() + " " + importInfo?.lastStudent.firstName}</p>
-                    <p className="mt-8">{ importInfo?.currentImported} / {importInfo?.totalImport}</p>
-                    <div className="relative pt-1 w-full">
-                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
-                            <div style={{"width" : (importInfo?.currentImported ?? 0)/(importInfo?.totalImport ?? 1)*100 + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"></div>
-                        </div>
+                <h3 className={`${importInfo?.currentImported == importInfo?.totalImport && importInfo?.currentImported != 0 && importInfo ? "block" : "hidden"} text-lg w-full sm:w-1/2 m-auto mb-4 text-green-500`}>
+                    <FontAwesomeIcon icon={faCheck} className="pr-2 text-green-500" size="lg"/>
+                    Importation terminée !
+                </h3>
+                <div className={`${importInfo?.currentImported != importInfo?.totalImport && importInfo?.currentImported != 0 ? "block" : "hidden"} relative w-full sm:w-1/2 mx-auto`}>
+                    <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
+                        <div style={{"width" : (importInfo?.currentImported ?? 0)/(importInfo?.totalImport ?? 1)*100 + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500"></div>
                     </div>
                 </div>
-                <div className={`${importInfo?.currentImported == importInfo?.totalImport ? "block" : "hidden"} flex flex-col justify-center items-center`}>
-                    <h3 className="text-lg">Importation terminée !</h3>
-                    <FontAwesomeIcon icon={faCheckCircle} className="mt-2 text-green-500" size="4x"/>
-                    <Button
-                        type="primary"
-                        className="shadow-md py-1 px-2 text-white rounded border-yellow-500 bg-yellow-500 mt-8"
-                        onClick={reset}
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} className="pr-2" size="lg"/>
-                        Retour
-                    </Button>
-                    
-                </div>
+
+                <Table
+                    className="w-min mx-auto"
+                    columns={importTableConfig}
+                    data={importedStudentsDisplayed.slice(
+                        (pageImport.current)* (pageImport.size || DEFAULT_PAGE_SIZE), (pageImport.current +1) * (pageImport.size || DEFAULT_PAGE_SIZE)
+                    )}
+                    loading={loadingImport}
+                    page={pageImport}
+                    onPageChange={(page) => setPageImport(prevState => ({...prevState, current: page-1}))}
+                    onSizeChange={(current, size) => setPageImport(p => ({...p, size}))}
+                    row={TableImportRow}
+                />
+
             </div>
+
         </div>
+
+        
     )
+
+    
 }
 
-const TableImportRow: React.FC<RowProps<StudentsImportData>> = ({data: {student, file}}) => (
-    <tr key={student.id}>
-        <td className="px-6 py-1 whitespace-no-wrap border-b border-gray-200">
-            <ImportedAvatar file={file}/>
-        </td>
-        <td className="px-6 font-semibold text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.firstName}</td>
-        <td className="px-6 font-semibold text-gray-900 border-b border-gray-200 whitespace-no-wrap">{student.lastName}</td>
-        <td className="px-6 border-b border-gray-200 whitespace-no-wrap">n°{student.id}</td>
-        <td className="px-6 border-b border-gray-200 whitespace-no-wrap">{student.promo}</td>
-    </tr>
-)
+
+
 
 export default StudentsImport

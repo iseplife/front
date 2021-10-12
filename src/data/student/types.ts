@@ -24,6 +24,7 @@ export interface Student {
     archived: boolean
     lastConnection: Date
 }
+
 export interface StudentPreview {
     id: number
     promo: number
@@ -33,8 +34,9 @@ export interface StudentPreview {
 }
 
 export interface StudentsImportData {
-    student: StudentPreview,
-    file?: Blob
+    student: StudentPreview, 
+    file?: Blob,
+    status: "NOT_IMPORTED" | "IMPORTING" | "IMPORTED" | "FAILED"
 }
 
 export type StudentAdmin = Student & {
