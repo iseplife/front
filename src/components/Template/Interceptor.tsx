@@ -11,7 +11,7 @@ import { TokenSet } from "../../data/security/types"
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
-    error: string;
+    error?: string;
 };
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {

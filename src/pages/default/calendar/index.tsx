@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
-import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
+import {Calendar, dateFnsLocalizer, Event, View} from "react-big-calendar"
 import {Modal, Radio} from "antd"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -52,17 +52,20 @@ const localizer = dateFnsLocalizer({
     locales,
 })
 
-
+type CalendarEvent = EventPreview & {
+    start: Date
+    end: Date
+}
 export const filterState = atom<EventFilter>({
     key: "filterState",
     default: initFilter()
 })
-export const eventsState = atom<EventPreview[]>({
+export const eventsState = atom<CalendarEvent[]>({
     key: "eventState",
     default: []
 })
 
-export const filteredEventsState = selector<EventPreview[]>({
+export const filteredEventsState = selector<CalendarEvent[]>({
     key: "filteredEventsState",
     get: ({get}) => {
         const events = get(eventsState)
@@ -95,7 +98,7 @@ const Events: React.FC = () => {
     const fetchMonthEvents = useCallback(() => {
         setLoading(true)
         getMonthEvents(date.getTime()).then(r => {
-            setEvents(r.data)
+            setEvents(r.data.map(e => ({...e, end: e.endsAt, start: e.startsAt})))
         }).finally(() => setLoading(false))
     }, [date])
 
