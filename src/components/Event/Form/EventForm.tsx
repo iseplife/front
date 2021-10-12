@@ -74,7 +74,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     <label >Dates*</label>
                     <RangePicker
                         className="ml-4"
-                        defaultValue={[moment(values.start), moment(values.end)]}
+                        defaultValue={[moment(values.startsAt), moment(values.endsAt)]}
                         showTime={{format: "HH:mm"}}
                         format="YYYY-MM-DD HH:mm"
                         placeholder={t("form.placeholder.range")}
