@@ -7,13 +7,12 @@ export const apiURI = `${process.env.REACT_APP_HTTP_PROTOCOL || "http"}://${url}
 export const wsURI = `${process.env.PUBLIC_URL || "ws"}://${url}/ws`
 
 export let apiClient: AxiosInstance
-
-export const axiosTimeout = 35_000
+export const AXIOS_TIMEOUT = 35_000
 
 export function initializeAPIClient(): AxiosInstance {
     return apiClient = axios.create({
         baseURL: apiURI,
-        timeout: axiosTimeout,
+        timeout: AXIOS_TIMEOUT,
         headers: {
             common: {
                 "Access-Control-Max-Age": "3600"
