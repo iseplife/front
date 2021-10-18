@@ -8,23 +8,26 @@ import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {uploadClubLogo} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
+import {ClubActionType} from "../../../context/club/action"
+import {Club} from "../../../data/club/types"
 
 type ClubLogoFormProps = {
 
 }
 const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
-    const {t} = useTranslation()
+    const {t} = useTranslation(["common", "club"])
     const {state: {club: {data}}, dispatch} = useContext(ClubContext)
     const [image, setImage] = useState<File | null>(null)
 
     const updateChange = useCallback(() => {
-        if (data?.id && image !== undefined) {
-            uploadClubLogo(data.id, image).then(res => {
+        const club = data as Club
+        if (club.id && image !== undefined) {
+            uploadClubLogo(club.id, image).then(res => {
                 if (res.status === 200) {
-                    //dispatch({type: ClubActionType.UPDATE_CLUB, })
-                    message.success("logo updated !")
+                    dispatch({type: ClubActionType.UPDATE_CLUB, payload: {...club, logoUrl: res.data}})
+                    message.success(t("logo_updated"))
                 } else {
-                    message.error("logo upload failed")
+                    message.error(t("logo_update_failed"))
                 }
 
             })

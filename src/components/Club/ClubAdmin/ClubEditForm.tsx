@@ -31,8 +31,8 @@ const ClubEditForm: React.FC = () => {
         onSubmit: values => {
             updateClub(club.id, values).then(res => {
                 if (res.status === 200) {
-                    message.success(t("common:update_item.complete"))
                     dispatch({type: ClubActionType.UPDATE_CLUB, payload: res.data})
+                    message.success(t("common:update_item.complete"))
                 }
             })
         }

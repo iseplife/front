@@ -14,6 +14,8 @@
     "position": "Position",
     "role": "Role"
   },
+  "logo_updated": "Logo updated !",
+  "logo_update_failed": "Logo update failed",
   "edit_member": "Manage member",
   "add_member": "Add member",
   "remove_member": {
