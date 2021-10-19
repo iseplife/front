@@ -29,9 +29,11 @@ const ClubEditForm: React.FC = () => {
             instagram: club.instagram,
             website: club.website
         },
-        onSubmit: values => {
+        onSubmit: (values, {setSubmitting}) => {
             updateClub(club.id, values).then(res => {
                 if (res.status === 200) {
+                    setSubmitting(false)
+                    
                     message.success(t("common:update_item.complete"))
                     dispatch({type: ClubActionType.UPDATE_CLUB, payload: res.data})
                 }
@@ -86,7 +88,8 @@ const ClubEditForm: React.FC = () => {
                     <label className="font-dinotcb">{t("form.website")}</label>
                     <Input
                         name="website"
-                        placeholder="Lien site internet"
+                        onChange={formik.handleChange}
+                        placeholder="www.internet.com"
                         suffix={<FontAwesomeIcon icon={faLink}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
@@ -97,7 +100,8 @@ const ClubEditForm: React.FC = () => {
                     <label className="font-dinotcb">Instagram</label>
                     <Input
                         name="instagram"
-                        placeholder="Lien Instagram"
+                        onChange={formik.handleChange}
+                        placeholder="Instagram"
                         suffix={<FontAwesomeIcon icon={faInstagram}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
@@ -108,7 +112,8 @@ const ClubEditForm: React.FC = () => {
                     <label className="font-dinotcb">Facebook</label>
                     <Input
                         name="facebook"
-                        placeholder="Lien Facebook"
+                        onChange={formik.handleChange}
+                        placeholder="Facebook"
                         suffix={<FontAwesomeIcon icon={faFacebookF}/>}
                         bordered={false}
                         className="hover:border-indigo-400"
