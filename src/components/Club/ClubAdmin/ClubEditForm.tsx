@@ -88,6 +88,7 @@ const ClubEditForm: React.FC = () => {
                     <label>{t("form.website")}</label>
                     <Input
                         name="website"
+                        value={formik.values.website}
                         onChange={formik.handleChange}
                         placeholder="www.internet.com"
                         suffix={<FontAwesomeIcon icon={faLink}/>}
@@ -100,6 +101,7 @@ const ClubEditForm: React.FC = () => {
                     <label>Instagram</label>
                     <Input
                         name="instagram"
+                        value={formik.values.instagram}
                         onChange={formik.handleChange}
                         placeholder="Instagram"
                         suffix={<FontAwesomeIcon icon={faInstagram}/>}
@@ -112,6 +114,7 @@ const ClubEditForm: React.FC = () => {
                     <label>Facebook</label>
                     <Input
                         name="facebook"
+                        value={formik.values.facebook}
                         onChange={formik.handleChange}
                         placeholder="Facebook"
                         suffix={<FontAwesomeIcon icon={faFacebookF}/>}
@@ -120,7 +123,6 @@ const ClubEditForm: React.FC = () => {
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
-
             </div>
 
             <div className="w-full text-right">
