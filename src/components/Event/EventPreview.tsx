@@ -2,7 +2,6 @@ import React from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
 import {format} from "date-fns"
-import {mediaPath} from "../../util"
 
 type EventProps = {
     event: PreviewType
@@ -20,9 +19,12 @@ const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
             )
         case "medium":
             return (
-                <Link to={`/event/${event.id}`} className="m-2 w-full max-w-sm">
-                    <div className="text-gray-700 flex bg-white rounded shadow-md h-16 w-full hover:text-gray-500">
-                        <div className="w-1/4 max-w-xs h-full text-center pb-1">
+                <Link to={`/event/${event.id}`} className="w-full max-w-sm text-gray-700 hover:text-gray-500">
+                    <div
+                        title={event.title}
+                        className="flex bg-white rounded shadow-md h-16 w-full px-1"
+                    >
+                        <div className="w-1/5 max-w-xs my-auto text-center pb-1">
                             <div className="font-bold text-3xl">
                                 {event.startsAt.getDate()}
                             </div>
@@ -30,14 +32,9 @@ const EventPreview: React.FC<EventProps> = ({event, size = "medium"}) => {
                                 {format(event.startsAt, "MMM")}
                             </div>
                         </div>
-                        <div className="w-3/4 h-full" style={{
-                            backgroundImage: `url("${mediaPath(event.cover || "img/static/default-cover.png")}")`,
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                        }}>
-
-                        </div>
+                        <span className="flex-1 text-left text-2xl ml-1 my-3 font-bold truncate">
+                            {event.title}
+                        </span>
                     </div>
                 </Link>
             )
