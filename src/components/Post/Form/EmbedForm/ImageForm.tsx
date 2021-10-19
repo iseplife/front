@@ -18,13 +18,13 @@ const ImageForm: React.FC = () => {
     const {setFieldValue, setFieldError, values} = useFormikContext<PostFormValues<EmbedForm>>()
     const images = (values.embed as EmbedMediaEdition | EmbedMediaCreation).data
 
-    const handleDelete = useCallback((index) => {
+    const handleDelete = useCallback((media: string | File) => {
         if (images.length - 1 === 0) {
             setFieldValue("embed", undefined)
         } else {
             setFieldValue("embed", {
                 type: EmbedEnumType.IMAGE,
-                data: images.filter((_, pos) => index !== pos)
+                data: images.filter((img) => img.file !== media)
             } as EmbedCreation)
         }
     }, [images])
@@ -37,12 +37,13 @@ const ImageForm: React.FC = () => {
         return false
     }, [images])
 
-    const toggleNSFW = useCallback((index: number) => {
+    const toggleNSFW = useCallback((media: string | File) => {
+        const index = images.findIndex(img => img.file === media)
         if ("id" in images[index]) {
             toggleMediaNSFW((images[index] as MediaEditionNSFW).id).then((isNSFW) => {
                 setFieldValue("embed", {
                     type: EmbedEnumType.IMAGE,
-                    data: (images as MediaUploadNSFW[]).map((img, i) => index === i ? {...img, nsfw: isNSFW} : img)
+                    data: (images as MediaEditionNSFW[]).map((img, i) => index === i ? {...img, nsfw: isNSFW} : img)
                 })
             })
         } else {
@@ -56,7 +57,14 @@ const ImageForm: React.FC = () => {
     return (
         <div className="flex">
             {(images as MediaUploadNSFW[]).map((f, i) =>
-                <PictureCard key={i} index={i} file={f.file} onDelete={handleDelete} className="rounded mx-2" nsfw={f.nsfw} toggleNsfw={toggleNSFW}/>
+                <PictureCard
+                    key={i}
+                    file={f.file}
+                    onDelete={handleDelete}
+                    nsfw={f.nsfw}
+                    toggleNsfw={toggleNSFW}
+                    className="rounded mx-2"
+                />
             )}
 
             <Upload
