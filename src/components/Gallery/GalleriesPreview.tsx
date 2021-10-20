@@ -8,24 +8,25 @@ import {getClubGalleries} from "../../data/club"
 import {ClubContext} from "../../context/club/context"
 import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import GalleriesPreviewSkeleton from "../Club/Skeleton/GalleriesPreviewSkeleton"
 
 const GalleriesPreview: React.FC = () => {
     const {t} = useTranslation("gallery")
-    const {club} = useContext(ClubContext)
+    const {club: {id}} = useContext(ClubContext)
     const [visible, setVisible] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
 
     useEffect(() => {
         setLoading(true)
-        getClubGalleries(club.id)
+        getClubGalleries(id)
             .then(res => {
                 setGalleriesPreview(res.data.content)
             })
             .catch(e => message.error(e))
             .finally(() => setLoading(false))
 
-    }, [club])
+    }, [id])
 
     return loading ?
         <div>
@@ -47,10 +48,10 @@ const GalleriesPreview: React.FC = () => {
                 onCancel={() => setVisible(false)}
                 footer={null}
             >
-                <ClubGalleries club={club.id}/>
+                <ClubGalleries club={id}/>
             </Modal>
         </div> :
-        <div/>
+        <GalleriesPreviewSkeleton/>
 }
 
 export default GalleriesPreview

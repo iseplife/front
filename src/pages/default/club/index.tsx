@@ -11,6 +11,7 @@ import {ClubContext, DEFAULT_STATE} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 import ClubMembers from "../../../components/Club/ClubMembers"
 import ClubHeader from "../../../components/Club/ClubHeader"
+import ClubSkeleton from "../../../components/Club/Skeleton"
 
 enum ClubTab {
     HOME_TAB,
@@ -46,7 +47,8 @@ const Club: React.FC = () => {
     return (
         <ClubContext.Provider value={{club, dispatch}}>
             <div className="w-full h-full ">
-                {loading && (
+                {loading ?
+                    <ClubSkeleton />:
                     <>
                         <ClubHeader/>
                         <div key="desktop-display" className="flex flex-row -mt-10 pt-10 px-5">
@@ -74,7 +76,7 @@ const Club: React.FC = () => {
                             </Tabs>
                         </div>
                     </>
-                )}
+                }
             </div>
         </ClubContext.Provider>
     )
