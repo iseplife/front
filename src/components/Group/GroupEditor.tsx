@@ -59,7 +59,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                 if (cover) {
                     res = await uploadGroupCover(group.id, cover)
                     if (res.status === 200) {
-                        group.cover = res.data
+                        group.cover = res.data.name
                     } else {
                         message.error("Un problème lors de l'envoi de la couverture a été rencontré.")
                     }
@@ -72,7 +72,7 @@ const GroupEditor: React.FC<GroupEditorProps> = ({id, onCreate, onDelete, onArch
                     const newGroup = res.data
                     if (cover) {
                         res = await uploadGroupCover(newGroup.id, cover)
-                        if (res.status === 200) newGroup.cover = res.data
+                        if (res.status === 200) newGroup.cover = res.data.name
                     }
                     onCreate(newGroup)
                     setGroup(newGroup)

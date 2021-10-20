@@ -3,16 +3,18 @@ import {Button, message} from "antd"
 import {useTranslation} from "react-i18next"
 import {uploadCover} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
-import {faPencilAlt, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
+import {faCircleNotch, faPencilAlt, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import {mediaPath} from "../../../util"
+import {ClubActionType} from "../../../context/club/action"
 
 const ClubCover: React.FC = () => {
     const {t} = useTranslation()
     const [preview, setPreview] = useState<string>()
-    const [image, setImage] = useState<File>()
-    const {state: {club: {data: club}}} = useContext(ClubContext)
+    const [image, setImage] = useState<File | null>(null)
+    const [uploading, setUploading] = useState(false)
+    const {club, dispatch} = useContext(ClubContext)
     const uploadRef = useRef<HTMLInputElement>(null)
 
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,26 +29,28 @@ const ClubCover: React.FC = () => {
     }, [])
 
     const undoChange = useCallback(() => {
-        setImage(undefined)
+        setImage(null)
         setPreview(undefined)
     }, [])
 
     const updateCover = useCallback(() => {
-        if (club?.id && image) {
-            uploadCover(club.id, image).then(() => {
+        if (image) {
+            setUploading(true)
+            uploadCover(club.id, image).then( res => {
+                dispatch({type: ClubActionType.UPDATE_COVER, payload: res.data.name})
                 message.success("image mise à jour")
-            })
+
+                setImage(null)
+            }).finally(() => setUploading(false))
         }
     }, [club, image])
 
     const removeCover = useCallback(() => {
-        if (club?.id) {
-            uploadCover(club.id, null).then(() => {
-                message.success("image supprimé")
-            })
-        }
+        uploadCover(club.id, null).then(() => {
+            dispatch({type: ClubActionType.UPDATE_CLUB, payload: {...club, coverUrl: undefined}})
+            message.success("image supprimé")
+        })
     }, [club])
-
 
 
     return (
@@ -64,7 +68,11 @@ const ClubCover: React.FC = () => {
                         className="mx-1 text-white rounded border-green-500 bg-green-500"
                         onClick={updateCover}
                     >
-                        {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
+                        {t("save")}
+                        {uploading ?
+                            <FontAwesomeIcon icon={faCircleNotch} spin className="ml-1"/> :
+                            <FontAwesomeIcon icon={faSave} className="ml-1"/>
+                        }
                     </Button>
                 </div>
             )}
@@ -77,7 +85,7 @@ const ClubCover: React.FC = () => {
                     backgroundPosition: "center",
                 }}
             />
-            {club?.canEdit && !image && (
+            {club.canEdit && !image && (
                 <div className="absolute top-4 right-4">
                     {club?.coverUrl && (
                         <div
@@ -85,7 +93,7 @@ const ClubCover: React.FC = () => {
                             className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group"
                         >
                             <FontAwesomeIcon
-                                className="cursor-pointer mr-4 text-red-500 hover:text-red-300"
+                                className="cursor-pointer text-red-500 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
                                 icon={faTrashAlt}
                             />
                         </div>

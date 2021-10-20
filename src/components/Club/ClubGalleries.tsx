@@ -2,19 +2,21 @@ import React, {useCallback, useState} from "react"
 import {GalleryPreview} from "../../data/gallery/types"
 import {useTranslation} from "react-i18next"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
-import {getEventGalleries} from "../../data/event"
 import GalleryCard from "../Gallery/GalleryCard"
 import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {getClubGalleries} from "../../data/club"
 
-
-const Galleries: React.FC = () => {
+type ClubGalleriesProps = {
+    club: number
+}
+const ClubGalleries: React.FC<ClubGalleriesProps> = ({club}) => {
     const {t} = useTranslation("gallery")
     const [galleries, setGalleries] = useState<GalleryPreview[]>([])
     const [empty, setEmpty] = useState<boolean>(false)
 
     const getFollowingGalleries: loaderCallback = useCallback(async (page: number) => {
-        const res = await getEventGalleries(1, page)
+        const res = await getClubGalleries(club, page)
         if (res.status === 200) {
             if (page === 0 && res.data.content.length === 0)
                 setEmpty(true)
@@ -52,4 +54,4 @@ const Galleries: React.FC = () => {
     )
 }
 
-export default Galleries
+export default ClubGalleries

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useContext, useEffect, useState} from "react"
 import {ClubMember} from "../../../data/club/types"
 import {getMembers} from "../../../data/club"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -9,12 +9,11 @@ import ClubSchoolSessionsSelect from "./ClubSchoolSessionsSelect"
 import ClubMemberSkeleton from "../../Skeletons/ClubMemberSkeleton"
 import ClubMemberEditor from "../ClubAdmin/ClubMemberEditor"
 import ClubMemberAdder from "../ClubAdmin/ClubMemberAdder"
+import {ClubContext} from "../../../context/club/context"
 
-type ClubMembersProps = {
-    club: number
-    hasRight: boolean
-}
-const ClubMembers: React.FC<ClubMembersProps> = ({club, hasRight}) => {
+
+const ClubMembers: React.FC = () => {
+    const {club: {id, canEdit}} = useContext(ClubContext)
     const [loading, setLoading] = useState(true)
     const [members, setMembers] = useState<ClubMember[]>([])
     const [editionMode, setEditionMode] = useState(false)
@@ -35,16 +34,16 @@ const ClubMembers: React.FC<ClubMembersProps> = ({club, hasRight}) => {
 
     useEffect(() => {
         setLoading(true)
-        getMembers(club, selectedYear).then(res =>
+        getMembers(id, selectedYear).then(res =>
             setMembers(res.data)
         ).finally(() => setLoading(false))
-    }, [club, selectedYear])
+    }, [id, selectedYear])
 
     return (
         <div className="container mx-auto relative h-full py-4">
             <div className="flex justify-end item-center mb-2">
-                <ClubSchoolSessionsSelect club={club} handleChange={setSelectedYear}/>
-                {hasRight && (
+                <ClubSchoolSessionsSelect club={id} handleChange={setSelectedYear}/>
+                {canEdit && (
                     <div
                         onClick={toggleEditionMode}
                         className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group mx-2"
@@ -67,10 +66,10 @@ const ClubMembers: React.FC<ClubMembersProps> = ({club, hasRight}) => {
                             onDelete={onDelete}
                             onUpdate={onUpdate}
                         /> :
-                        <MemberCard key={m.id} id={m.id} m={m} showRole={hasRight}/>
+                        <MemberCard key={m.id} id={m.id} m={m} showRole={canEdit}/>
                     )
                 }
-                {editionMode && <ClubMemberAdder club={club} year={selectedYear} onAdd={onAdd}/>}
+                {editionMode && <ClubMemberAdder club={id} year={selectedYear} onAdd={onAdd}/>}
             </div>
         </div>
     )

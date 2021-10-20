@@ -1,20 +1,13 @@
 import {Club} from "../../data/club/types"
 
 export enum ClubActionType {
-    FETCH_CLUB,
     GET_CLUB,
     UPDATE_CLUB,
-    FETCH_MEMBERS,
-    GET_MEMBERS,
-    ADD_MEMBER,
-    REMOVE_MEMBER,
-    UPDATE_MEMBER,
-    TOGGLE_ADMIN_MODE
+    UPDATE_COVER,
+    UPDATE_LOGO,
 }
 
-interface FetchClubAction {
-    type: ClubActionType.FETCH_CLUB,
-}
+
 interface GetClubAction {
     type: ClubActionType.GET_CLUB,
     payload: Club
@@ -25,15 +18,22 @@ interface UpdateClubAction {
     payload: Club
 }
 
-interface ToggleAdminMode {
-    type: ClubActionType.TOGGLE_ADMIN_MODE
+interface UpdateClubCoverAction {
+    type: ClubActionType.UPDATE_COVER,
+    payload: string
+}
+
+interface UpdateClubLogoAction {
+    type: ClubActionType.UPDATE_LOGO,
+    payload: string
 }
 
 
-export type ClubContextAction = FetchClubAction
-    | GetClubAction
+
+export type ClubContextAction = GetClubAction
     | UpdateClubAction
-    | ToggleAdminMode
+    | UpdateClubCoverAction
+    | UpdateClubLogoAction
 
 
 

@@ -2,35 +2,35 @@ import React, {useCallback, useContext, useState} from "react"
 import ImagePicker from "../../Common/ImagePicker"
 import {Button, message} from "antd"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faSave} from "@fortawesome/free-solid-svg-icons"
+import {faCircleNotch, faSave} from "@fortawesome/free-solid-svg-icons"
 import {useTranslation} from "react-i18next"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {uploadClubLogo} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
-import {Club} from "../../../data/club/types"
 
 type ClubLogoFormProps = {
 
 }
 const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
     const {t} = useTranslation(["common", "club"])
-    const {state: {club: {data}}, dispatch} = useContext(ClubContext)
+    const {club, dispatch} = useContext(ClubContext)
     const [image, setImage] = useState<File | null>(null)
+    const [uploading, setUploading] = useState(false)
 
     const updateChange = useCallback(() => {
-        const club = data as Club
         if (club.id && image !== undefined) {
+            setUploading(true)
             uploadClubLogo(club.id, image).then(res => {
                 if (res.status === 200) {
-                    dispatch({type: ClubActionType.UPDATE_CLUB, payload: {...club, logoUrl: res.data}})
-                    message.success(t("logo_updated"))
+                    dispatch({type: ClubActionType.UPDATE_LOGO, payload: res.data.name})
+                    message.success(t("club:logo_updated"))
                 } else {
-                    message.error(t("logo_update_failed"))
+                    message.error(t("club:logo_update_failed"))
                 }
-
-            })
+                setImage(null)
+            }).finally(() => setUploading(false))
         }
     }, [image])
 
@@ -43,7 +43,7 @@ const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
             <h3 className="font-bold text-xl text-gray-600 self-start">Edition logo</h3>
             <ImagePicker
                 className="avatar-uploader-large mt-5 flex-grow"
-                defaultImage={mediaPath(data?.logoUrl, AvatarSizes.DEFAULT)}
+                defaultImage={mediaPath(club.logoUrl, AvatarSizes.DEFAULT)}
                 onChange={handleChange}
                 onReset={() => setImage(null)}
             />
@@ -51,9 +51,14 @@ const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
                 <div className="w-full text-right">
                     <Button
                         className="text-white rounded border-green-500 bg-green-500"
+                        disabled={uploading}
                         onClick={updateChange}
                     >
-                        {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
+                        {t("save")}
+                        {uploading ?
+                            <FontAwesomeIcon icon={faCircleNotch} spin className="ml-1"/> :
+                            <FontAwesomeIcon icon={faSave} className="ml-1"/>
+                        }
                     </Button>
                 </div>
             )}

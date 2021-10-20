@@ -4,27 +4,20 @@ import {ClubActionType, ClubContextAction} from "./action"
 
 export const clubContextReducer = (state: ClubContextState, action: ClubContextAction): ClubContextState => {
     switch (action.type) {
-        case ClubActionType.TOGGLE_ADMIN_MODE:
+        case ClubActionType.UPDATE_COVER:
             return {
                 ...state,
-                adminMode: !state.adminMode
+                coverUrl: action.payload
             }
-        case ClubActionType.FETCH_CLUB:
+        case ClubActionType.UPDATE_LOGO:
             return {
                 ...state,
-                club: {
-                    loading: true,
-                    data: undefined
-                },
+                logoUrl: action.payload
             }
         case ClubActionType.GET_CLUB:
         case ClubActionType.UPDATE_CLUB:
             return {
-                ...state,
-                club: {
-                    loading: false,
-                    data: action.payload
-                },
+                ...action.payload
             }
     }
     return state

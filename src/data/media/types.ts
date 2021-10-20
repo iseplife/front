@@ -9,13 +9,16 @@ export type MediaEditionNSFW = {
     nsfw: boolean
 }
 
+export interface MediaName {
+    name: string
+}
 
-export interface Media {
+export interface Media extends MediaName {
     id: number
     creation: Date
-    name: string
     nsfw: boolean
 }
+
 
 export type Image = Media & {
     thread: number

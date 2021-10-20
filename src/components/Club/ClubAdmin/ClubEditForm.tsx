@@ -17,8 +17,7 @@ const {TextArea} = Input
 
 const ClubEditForm: React.FC = () => {
     const {t} = useTranslation(["club", "common"])
-    const {state: {club: {data}}, dispatch} = useContext(ClubContext)
-    const club = data as Club
+    const {club, dispatch} = useContext(ClubContext)
 
     const formik = useFormik<ClubForm>({
         initialValues: {
