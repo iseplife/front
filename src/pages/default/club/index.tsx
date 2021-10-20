@@ -24,7 +24,7 @@ const Club: React.FC = () => {
     const {id: idStr} = useParams<{ id?: string }>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
-    const [loading, setLoading] = useState<boolean>()
+    const [loading, setLoading] = useState<boolean>(true)
     const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
     /**
@@ -47,7 +47,7 @@ const Club: React.FC = () => {
     return (
         <ClubContext.Provider value={{club, dispatch}}>
             <div className="w-full h-full ">
-                {loading ?
+                {loading && !club.id ?
                     <ClubSkeleton />:
                     <>
                         <ClubHeader/>

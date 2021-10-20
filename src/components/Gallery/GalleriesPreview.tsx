@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react"
+import React, {useContext, useEffect, useLayoutEffect, useState} from "react"
 import {GalleryPreview} from "../../data/gallery/types"
 import GalleryCard from "./GalleryCard"
 import {useTranslation} from "react-i18next"
@@ -14,7 +14,7 @@ const GalleriesPreview: React.FC = () => {
     const {t} = useTranslation("gallery")
     const {club: {id}} = useContext(ClubContext)
     const [visible, setVisible] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>()
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
 
     useEffect(() => {
@@ -29,6 +29,7 @@ const GalleriesPreview: React.FC = () => {
     }, [id])
 
     return loading ?
+        <GalleriesPreviewSkeleton/> :
         <div>
             {galleriesPreview.map(g => (
                 <GalleryCard key={g.id} gallery={g}/>
@@ -50,8 +51,7 @@ const GalleriesPreview: React.FC = () => {
             >
                 <ClubGalleries club={id}/>
             </Modal>
-        </div> :
-        <GalleriesPreviewSkeleton/>
+        </div>
 }
 
 export default GalleriesPreview
