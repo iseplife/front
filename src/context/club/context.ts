@@ -1,25 +1,18 @@
 import React, {Dispatch} from "react"
 import {LazyLoad} from "../../data/request.type"
-import {Club as ClubType, ClubMember} from "../../data/club/types"
+import {Club as ClubType} from "../../data/club/types"
 import {ClubContextAction} from "./action"
 
 export const DEFAULT_STATE: ClubContextState = {
     club: {
-        loading: false,
-    },
-    members: {
-        loading: false,
-        data: []
+        loading: true,
+        data: undefined
     },
     adminMode: false
 }
 
 export type ClubContextState = {
     club: LazyLoad<ClubType>
-    members: {
-        loading: boolean
-        data: ClubMember[]
-    }
     adminMode: boolean
 }
 

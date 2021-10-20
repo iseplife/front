@@ -1,19 +1,13 @@
 import React from "react"
 import ClubEditForm from "./ClubEditForm"
-import ClubMemberManager from "./ClubMemberManager"
+import ClubLogoForm from "./ClubLogoForm"
 
 
 const ClubAdmin: React.FC = () => {
     return (
-        <div className="container mx-auto">
-            <div className="flex flex-wrap">
-                <div className="md:w-2/5 w-full">
-                    <ClubEditForm/>
-                </div>
-                <div className="md:w-3/5 w-full">
-                    <ClubMemberManager/>
-                </div>
-            </div>
+        <div className="container flex flex-wrap justify-around mx-auto">
+            <ClubLogoForm />
+            <ClubEditForm/>
         </div>
     )
 }

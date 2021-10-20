@@ -14,8 +14,10 @@
     "position": "Position",
     "role": "Rôle"
   },
+  "logo_updated": "Logo modifié !",
+  "logo_update_failed": "Échec de la modification du logo",
   "edit_member": "Modifier membre",
-  "add_member": "Ajouter un nouveau membre",
+  "add_member": "Ajouter membre",
   "remove_member": {
     "title": "Voulez-vous supprimez ce membre ?",
     "content": "Attention, la suppression d'un membre est irréversible",
@@ -27,5 +29,7 @@
     "ADMIN": "Administrateur",
     "PUBLISHER": "Editeur",
     "MEMBER": "Membre"
-  }
+  },
+  "member_created": "Membre ajouté",
+  "member_updated": "Member modifié"
 }

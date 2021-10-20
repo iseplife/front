@@ -11,13 +11,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
 const ClubLogo: React.FC = () => {
-    const {state: {club: {data: club, loading}, adminMode}} = useContext(ClubContext)
     const {t} = useTranslation()
-    const imagePath = useMemo(() =>
+    const {state: {club: {data: club, loading}, adminMode}} = useContext(ClubContext)
+    const imagePath = useMemo(() => (
         club?.logoUrl ?
-            mediaPath(club.logoUrl, AvatarSizes.DEFAULT):
+            mediaPath(club.logoUrl, AvatarSizes.DEFAULT) :
             undefined
-    , [club])
+    ), [club])
     const [logo, setLogo] = useState<File | null>()
     const [logoChanged, setLogoChanged] = useState(false)
 
@@ -46,20 +46,20 @@ const ClubLogo: React.FC = () => {
                 className="avatar-uploader -mt-8 w-auto"
                 defaultImage={imagePath}
                 onChange={handleChange}
-                onReset={() => setLogoChanged(false)}/>
-            {logoChanged &&
-            <Button
-                type="primary"
-                className="rounded mt-2"
-                onClick={updateLogo}
-            >
-                {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
-            </Button>
-            }
+                onReset={() => setLogoChanged(false)}
+            />
+            {logoChanged && (
+                <Button
+                    type="primary"
+                    className="rounded mt-2"
+                    onClick={updateLogo}
+                >
+                    {t("save")} <FontAwesomeIcon icon={faSave} className="ml-1"/>
+                </Button>
+            )}
         </div> :
         <Avatar src={imagePath} shape="circle" className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white">
             {loading && <FontAwesomeIcon icon={faCircleNotch} spin size="2x" className="text-white mt-6"/>}
         </Avatar>
-
 }
 export default ClubLogo

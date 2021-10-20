@@ -1,108 +1,97 @@
-import React, {useCallback, useContext} from "react"
-import {ClubMember, ClubMemberForm, ClubRoles} from "../../../data/club/types"
-import {Button, Input, message, Modal, Select} from "antd"
+import React, {useCallback, useMemo} from "react"
+import {Avatar, Badge, message, Modal, Select} from "antd"
+import {mediaPath} from "../../../util"
+import {AvatarSizes} from "../../../constants/MediaSizes"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {ClubMember, ClubMemberUpdateForm, ClubRoleIcon, ClubRoles} from "../../../data/club/types"
 import {useTranslation} from "react-i18next"
-import {useFormik} from "formik"
-import {removeClubMember, updateClubMember} from "../../../data/club"
-import {ClubContext} from "../../../context/club/context"
-import {ClubActionType} from "../../../context/club/action"
-import StudentAvatar from "../../Student/StudentAvatar"
-import {faTimes} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {faSave, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {deleteClubMember, updateClubMember} from "../../../data/club"
+import {Field, Form, Formik} from "formik"
+import MemberCardToolbar from "./MemberCardToolbar"
 
 const {Option} = Select
+const isValuesUpdated = (a: ClubMemberUpdateForm, b: ClubMemberUpdateForm): boolean => {
+    return !(a.role === b.role && a.position === b.position)
+}
 
 type ClubMemberEditorProps = {
-    member: ClubMember
-    onCancel: () => void
+    m: ClubMember
+    onDelete: (id: number) => void
+    onUpdate: (member: ClubMember) => void
 }
-const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({member, onCancel}) => {
-    const {t} = useTranslation(["club", "common"])
-    const {dispatch} = useContext(ClubContext)
-    const remove = useCallback(() =>
+const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelete}) => {
+    const {t} = useTranslation(["common", "club"])
+    const initialValues: ClubMemberUpdateForm = useMemo(() => ({
+        position: m.position,
+        role: m.role
+    }), [m.role, m.position])
+
+    const confirmDelete = useCallback(() => {
         Modal.confirm({
-            title: t("remove_member.title"),
-            content: t("remove_member.content"),
+            title: t("remove_item.title"),
+            content: t("remove_item.content"),
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: async () => {
-                const res = await removeClubMember(member.id)
-                if (res.status === 200){
-                    message.success(t("remove_member.complete"))
-                    dispatch({type: ClubActionType.REMOVE_MEMBER, payload: member.id})
+                const res = await deleteClubMember(m.id)
+                if (res.status === 200) {
+                    onDelete(m.id)
+                    message.success(t("remove_item.complete"))
                 }
-
             }
-        }), [t, member])
+        })
+    }, [m.id, onDelete])
 
-    const formik = useFormik<ClubMemberForm>({
-        enableReinitialize: true,
-        initialValues: {
-            role: member.role,
-            position: member.position
-        },
-        onSubmit: async (values) => {
-            const res = await updateClubMember(member.id, values)
-            if(res.status === 200){
-                message.success(t("common:update_item.complete"))
-                dispatch({type: ClubActionType.UPDATE_MEMBER, payload: res.data})
-            }
-        }
-    })
+    const updateMember = useCallback((values: ClubMemberUpdateForm) => {
+        updateClubMember(m.id, values).then(res => {
+            onUpdate(res.data)
+            message.success(t("club:member_updated"))
+        })
+    }, [m.id, onUpdate])
 
     return (
-        <div className="h-full">
-            <div className="w-full flex justify-between items-center">
-                <h1 className="text-xl text-gray-600 uppercase">{t("edit_member")}</h1>
-                <FontAwesomeIcon icon={faTimes} className="text-gray-600 hover:text-gray-400 cursor-pointer" onClick={onCancel}/>
-            </div>
-
-            <form className="flex flex-col items-center -mt-3 p-3 h-full" onSubmit={formik.handleSubmit}>
-                <div className="text-center">
-                    <StudentAvatar
-                        id={member.student.id}
-                        name={member.student.firstName + "" + member.student.lastName}
-                        picture={member.student.picture}
-                        className="h-16 w-16 md:h-12 md:w-12 m-3"
-                    />
-                    <h3 className="text-xl text-gray-500">{member.student.firstName + " " + member.student.lastName}</h3>
-                </div>
-
-                <div className="flex flex-col items-center mb-3">
-                    <label >{t("form.role")}</label>
-                    <Select value={formik.values.role} className="w-32" onChange={(value) => formik.setFieldValue("role", value)}>
-                        {ClubRoles.map(r =>
-                            <Option key={r} value={r}>{t("role." + r)}</Option>
-                        )}
-                    </Select>
-                </div>
-                <div>
-                    <label >{t("form.position")}</label>
-                    <Input name="position" value={formik.values.position} onChange={formik.handleChange}/>
-                </div>
-
-                <div className="self-end flex flex-wrap justify-around w-full mt-4">
-                    <Button
-                        htmlType="submit"
-                        type="primary"
-                        className="rounded"
-                        icon={<FontAwesomeIcon icon={faSave} className="mr-2"/>}
+        <Formik onSubmit={updateMember} initialValues={initialValues}>
+            {({values, setFieldValue}) => (
+                <MemberCardToolbar isEdited={isValuesUpdated(values, initialValues)} onDelete={confirmDelete}>
+                    <div
+                        title={m.student.firstName + " " + m.student.lastName}
+                        className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden"
                     >
-                        {t("common:save")}
-                    </Button>
-                    <Button
-                        danger
-                        className="rounded"
-                        icon={<FontAwesomeIcon icon={faTrashAlt} className="mr-2"/>}
-                        onClick={remove}
-                    >
-                        {t("common:delete")}
-                    </Button>
-                </div>
-            </form>
-
-        </div>
+                        <Avatar
+                            src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
+                            alt={m.student.firstName + " " + m.student.lastName}
+                            shape="square"
+                            className="sm:w-full h-full w-1/3 rounded-lg"
+                        />
+                        <div className="sm:text-center text-left mt-0 ml-2 sm:mt-2 sm:ml-0 w-2/3 sm:w-full">
+                            <h5 className="font-bold text-xl mb-0 truncate">
+                                {m.student.firstName + " " + m.student.lastName}
+                            </h5>
+                            <Form className="flex justify-around text-md text-gray-500">
+                                <Field
+                                    name="position"
+                                    className="w-3/5 mr-1 font-bold focus:text-gray-600 focus:outline-none border-b"
+                                />
+                                <Select
+                                    value={values.role}
+                                    onChange={value => setFieldValue("role", value)}
+                                >
+                                    {ClubRoles.map(r =>
+                                        <Option key={r} value={r}>
+                                            <FontAwesomeIcon
+                                                className="ml-1"
+                                                icon={ClubRoleIcon[r]}
+                                                title={t("club:role." + r)}
+                                            />
+                                        </Option>
+                                    )}
+                                </Select>
+                            </Form>
+                        </div>
+                    </div>
+                </MemberCardToolbar>
+            )}
+        </Formik>
     )
 }
 
