@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from "react"
+import React, {useCallback, useContext, useMemo, useState} from "react"
 import ImagePicker from "../../Common/ImagePicker"
 import {Button, message} from "antd"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -18,14 +18,23 @@ const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
     const {club, dispatch} = useContext(ClubContext)
     const [image, setImage] = useState<File | null>(null)
     const [uploading, setUploading] = useState(false)
+    const defaultImage = useMemo(() => (
+        club.logoUrl.startsWith("data:image") ?
+            club.logoUrl :
+            mediaPath(club.logoUrl, AvatarSizes.DEFAULT)
+    ), [club.logoUrl])
 
     const updateChange = useCallback(() => {
-        if (club.id && image !== undefined) {
+        if (image !== null) {
             setUploading(true)
             uploadClubLogo(club.id, image).then(res => {
                 if (res.status === 200) {
-                    dispatch({type: ClubActionType.UPDATE_LOGO, payload: res.data.name})
-                    message.success(t("club:logo_updated"))
+                    const reader = new FileReader()
+                    reader.onload = () => {
+                        dispatch({type: ClubActionType.UPDATE_LOGO, payload: reader.result as string})
+                        message.success(t("club:logo_updated"))
+                    }
+                    reader.readAsDataURL(image)
                 } else {
                     message.error(t("club:logo_update_failed"))
                 }
@@ -43,7 +52,7 @@ const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
             <h3 className="font-bold text-xl text-gray-600 self-start">Edition logo</h3>
             <ImagePicker
                 className="avatar-uploader-large mt-5 flex-grow"
-                defaultImage={mediaPath(club.logoUrl, AvatarSizes.DEFAULT)}
+                defaultImage={defaultImage}
                 onChange={handleChange}
                 onReset={() => setImage(null)}
             />

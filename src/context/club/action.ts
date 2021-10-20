@@ -1,4 +1,4 @@
-import {Club} from "../../data/club/types"
+import {ClubContextState} from "./context"
 
 export enum ClubActionType {
     GET_CLUB,
@@ -10,22 +10,22 @@ export enum ClubActionType {
 
 interface GetClubAction {
     type: ClubActionType.GET_CLUB,
-    payload: Club
+    payload: ClubContextState
 }
 
 interface UpdateClubAction {
     type: ClubActionType.UPDATE_CLUB,
-    payload: Club
+    payload: ClubContextState
 }
 
 interface UpdateClubCoverAction {
     type: ClubActionType.UPDATE_COVER,
-    payload: string
+    payload: ClubContextState["coverUrl"]
 }
 
 interface UpdateClubLogoAction {
     type: ClubActionType.UPDATE_LOGO,
-    payload: string
+    payload: ClubContextState["logoUrl"]
 }
 
 

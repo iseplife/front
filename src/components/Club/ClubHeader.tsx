@@ -1,6 +1,6 @@
 import SocialIcon from "../Common/SocialIcon"
 import {faFacebook, faFirefox, faInstagram, faSnapchat} from "@fortawesome/free-brands-svg-icons"
-import React, {useContext} from "react"
+import React, {useContext, useMemo} from "react"
 import ClubCover from "./ClubDescription/ClubCover"
 import {ClubContext} from "../../context/club/context"
 import {mediaPath} from "../../util"
@@ -9,6 +9,11 @@ import {Avatar} from "antd"
 
 const ClubHeader: React.FC = () => {
     const {club} = useContext(ClubContext)
+    const imageSrc = useMemo(() => (
+        club.logoUrl?.startsWith("data:image") ?
+            club.logoUrl :
+            mediaPath(club.logoUrl, AvatarSizes.DEFAULT)
+    ), [club.logoUrl])
 
     return (
         <>
@@ -16,7 +21,7 @@ const ClubHeader: React.FC = () => {
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
                     <Avatar
-                        src={mediaPath(club.logoUrl, AvatarSizes.DEFAULT)}
+                        src={imageSrc}
                         shape="circle"
                         className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
                     />

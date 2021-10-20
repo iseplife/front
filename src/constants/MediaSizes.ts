@@ -10,6 +10,10 @@ export enum AvatarSizes {
     FULL = "300x300"
 }
 
+export enum CoverSizes {
+    DEFAULT = "1280xauto"
+}
+
 export enum PostSizes {
     THUMBNAIL = "autox400",
     PREVIEW = "autox400",

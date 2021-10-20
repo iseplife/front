@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import {mediaPath} from "../../../util"
 import {ClubActionType} from "../../../context/club/action"
+import {CoverSizes} from "../../../constants/MediaSizes"
 
 const ClubCover: React.FC = () => {
     const {t} = useTranslation()
@@ -79,14 +80,14 @@ const ClubCover: React.FC = () => {
             <div
                 className="w-full h-full"
                 style={{
-                    backgroundImage: `url("${preview || mediaPath(club?.coverUrl || "img/static/default-cover.png")}")`,
+                    backgroundImage: `url("${preview || mediaPath(club.coverUrl, CoverSizes.DEFAULT) || "img/static/default-cover.png"}")`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}
             />
             {club.canEdit && !image && (
-                <div className="absolute top-4 right-4">
+                <div className="absolute flex top-4 right-4">
                     {club?.coverUrl && (
                         <div
                             onClick={removeCover}
