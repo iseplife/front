@@ -8,8 +8,8 @@ export type Event = {
     title: string
     description: string
     image?: string
-    start: Date
-    end: Date
+    startsAt: Date
+    endsAt: Date
     ticketURL?: string
     price?: number
     location?: string
@@ -27,8 +27,8 @@ export type EventPreview = {
     id: number
     title: string
     type: EventType
-    start: Date
-    end: Date
+    startsAt: Date
+    endsAt: Date
     location: string
     cover?: string
     targets: number[]
@@ -40,8 +40,8 @@ export type EventForm = {
     title: string
     description: string
     image?: string
-    start: Date
-    end: Date
+    startsAt: Date
+    endsAt: Date
     ticketURL?: string
     price?: number
     location?: string

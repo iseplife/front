@@ -42,6 +42,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
         formik.setFieldValue("images", ids)
         formik.submitForm().then(r => console.log(r))
     }, [formik])
+    
     const isFormValid = useMemo(() => (
         formik.values.name.length > 3 && formik.values.club !== -1
     ), [formik.values.name, formik.values.club])

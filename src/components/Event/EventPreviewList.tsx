@@ -7,7 +7,7 @@ type EventPreviewListProps = {
 }
 const EventPreviewList: React.FC<EventPreviewListProps> = ({events}) => {
     return (
-        <div className="flex md:flex-col flex-row justify-center items-end hidden-scroller w-full overflow-x-auto">
+        <div className="flex md:flex-col flex-row justify-center items-end hidden-scroller w-full overflow-x-auto p-2">
             {events.map(e => (
                 <EventPreview key={e.id} event={e} />
             ))}

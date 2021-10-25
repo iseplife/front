@@ -26,16 +26,16 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
     const Wrapper = useMemo(() => showPreview ? Link : BasicWrapper, [showPreview])
     const wrapperProps = useMemo(() => showPreview ?
         {
-            className: `text-center no-underline cursor-pointer ${className}`,
+            className: `text-center no-underline cursor-pointer my-auto flex ${className}`,
             to: (location: Location) => `${location.pathname}/student/${id}`
         } :
         {
-            className: `text-center no-underline ${className}`
+            className: `text-center no-underline my-auto flex ${className}`
         }, [showPreview])
 
 
     return (
-        <Wrapper {...wrapperProps as any} className="my-auto flex">
+        <Wrapper {...wrapperProps as any}>
             <Avatar
                 src={mediaPath(picture, pictureSize)}
                 icon={<FontAwesomeIcon icon={faUser} />}

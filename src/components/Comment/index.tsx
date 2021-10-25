@@ -86,8 +86,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                 value={data.message}
                                 uploadEdit={msg => handleEdit(data.id, msg)}
                                 disableEditMode={() => setEditMode(false)}
-                            /> :
-                            <>{data.message}</>
+                            /> : data.message
                         }
                     </div>
 
@@ -102,11 +101,14 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                             size="sm"
                         />
                     </span>
-                    {allowReplies &&
-                        <>
-                        ·<label className="mx-2 font-semibold hover:underline cursor-pointer text-gray-500" onClick={() => {setShowComments(true); setRespond(true)}}>{t("post:respond")}</label>
-                        </>
-                    }
+                    {allowReplies && (
+                        <label
+                            className="mx-2 font-semibold hover:underline cursor-pointer text-gray-500"
+                            onClick={() => {setShowComments(true); setRespond(true)}}
+                        >
+                            {t("post:respond")}
+                        </label>
+                    )}
                     ·<label className="ml-2">{formattedDate}</label>
                 </div>
                 <div className="flex">
@@ -117,10 +119,12 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                             <CommentList id={data.thread} depth={1} loadComment={data.comments !== 0} showInput={respond} className="flex-1" bottomInput={true} autofocusInput={true} />
                         </>
                     || (!!data.comments &&
-                        <div className="ml-2 mt-1 flex group cursor-pointer"
-                            onClick={() => setShowComments(true)}>
-                            <img src="/img/icons/following-arrow.svg" className="w-4 h-4 mr-2" />
-                            <label className="-mt-0.5 font-semibold group-hover:underline pointer-events-none">
+                        <div
+                            className="ml-2 mt-1 flex group cursor-pointer"
+                            onClick={() => setShowComments(true)}
+                        >
+                            <img alt="see_more" src="/img/icons/following-arrow.svg" className="w-4 h-4 mr-2" />
+                            <label className="-mt-0.5 text-gray-500 font-semibold group-hover:underline pointer-events-none">
                                 {`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}
                             </label>
                         </div>

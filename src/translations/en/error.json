@@ -1,0 +1,7 @@
+{
+  "online": "You are back online !",
+  "offline": "You are now offline",
+  "user_disconnected": "You have been disconnected",
+  "server_disconnected": "Server unavailable",
+  "insufficient_rights": "You have insufficient rights"
+}

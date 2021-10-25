@@ -1,0 +1,7 @@
+{
+  "online": "De nouveau connecté !",
+  "offline": "Connexion interrompue",
+  "user_disconnected": "Vous avez été déconnecté",
+  "server_disconnected": "Serveur indisponible",
+  "insufficient_rights": "Vous n'avez pas les droits suffisants"
+}
