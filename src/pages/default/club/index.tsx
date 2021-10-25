@@ -11,6 +11,7 @@ import {ClubContext, DEFAULT_STATE} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 import ClubMembers from "../../../components/Club/ClubMembers"
 import ClubHeader from "../../../components/Club/ClubHeader"
+import ClubSkeleton from "../../../components/Club/Skeleton"
 
 enum ClubTab {
     HOME_TAB,
@@ -23,9 +24,8 @@ const Club: React.FC = () => {
     const {id: idStr} = useParams<{ id?: string }>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
-    const [loading, setLoading] = useState<boolean>()
-    const [tab, setTab] = useState<number>(0)
-    const [state, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
+    const [loading, setLoading] = useState<boolean>(true)
+    const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
     /**
      * Club initialisation on mounting
@@ -45,35 +45,38 @@ const Club: React.FC = () => {
 
 
     return (
-        <ClubContext.Provider value={{state, dispatch}}>
+        <ClubContext.Provider value={{club, dispatch}}>
             <div className="w-full h-full ">
-                <ClubHeader/>
-                {state.club.data && (
-                    <div key="desktop-display" className="flex flex-row -mt-10 pt-10 px-5">
-                        <Tabs centered className="w-full">
-                            <TabPane tab={"Accueil"} key={ClubTab.HOME_TAB}>
-                                <div className="flex flex-row flex-wrap">
-                                    <ClubPresentation/>
-                                    <div className="flex-grow">
-                                        <Feed
-                                            id={state.club.data.feed}
-                                            allowPublication={false}
-                                            className="m-4 hidden md:block"
-                                        />
+                {loading && !club.id ?
+                    <ClubSkeleton />:
+                    <>
+                        <ClubHeader/>
+                        <div key="desktop-display" className="flex flex-row -mt-10 pt-10 px-5">
+                            <Tabs centered className="w-full">
+                                <TabPane tab={"Accueil"} key={ClubTab.HOME_TAB}>
+                                    <div className="flex flex-row flex-wrap">
+                                        <ClubPresentation/>
+                                        <div className="flex-grow">
+                                            <Feed
+                                                id={club.feed}
+                                                allowPublication={false}
+                                                className="m-4 hidden md:block"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </TabPane>
-                            <TabPane tab={"Membres"} className="h-full" key={ClubTab.MEMBERS_TAB}>
-                                <ClubMembers club={state.club.data.id} hasRight={true}/>
-                            </TabPane>
-                            {state.club.data.canEdit && (
-                                <TabPane tab={"Administration"} key={ClubTab.ADMIN_TAB}>
-                                    <ClubAdmin/>
                                 </TabPane>
-                            )}
-                        </Tabs>
-                    </div>
-                )}
+                                <TabPane tab={"Membres"} className="h-full" key={ClubTab.MEMBERS_TAB}>
+                                    <ClubMembers />
+                                </TabPane>
+                                {club.canEdit && (
+                                    <TabPane tab={"Administration"} key={ClubTab.ADMIN_TAB}>
+                                        <ClubAdmin/>
+                                    </TabPane>
+                                )}
+                            </Tabs>
+                        </div>
+                    </>
+                }
             </div>
         </ClubContext.Provider>
     )

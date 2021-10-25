@@ -61,7 +61,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 if (logo) {
                     res = await uploadClubLogo(club.id, logo)
                     if (res.status === 200) {
-                        club.logoUrl = res.data
+                        club.logoUrl = res.data.name
                     } else {
                         message.error("Un problème lors de l'envoi du logo a été rencontré.")
                     }
@@ -74,7 +74,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                     const newClub = res.data
                     if (logo) {
                         res = await uploadClubLogo(res.data.id, logo)
-                        if (res.status === 200) newClub.logoUrl = res.data
+                        if (res.status === 200) newClub.logoUrl = res.data.name
                     }
                     onCreate(newClub)
                     setClub(newClub)

@@ -12,6 +12,7 @@ import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
 import {GalleryPreview} from "../gallery/types"
 import {apiClient} from "../http"
+import {MediaName} from "../media/types"
 
 
 export const getAllClubs = (): AxiosPromise<ClubPreview[]> => apiClient.get("/club")
@@ -26,14 +27,14 @@ export const updateClub = (id: number, form: ClubForm): AxiosPromise<Club> => ap
 
 export const toggleClubArchiveStatus = (id: number): AxiosPromise<boolean> => apiClient.put(`/club/${id}/archive`)
 
-export const uploadClubLogo = (id: number, file: File | null): AxiosPromise<string> => {
+export const uploadClubLogo = (id: number, file: File | null): AxiosPromise<MediaName> => {
     const fd = new FormData()
     fd.append("file", file as Blob)
 
-    return apiClient.post(`/club/${id}/logo`, fd)
+    return apiClient.put(`/club/${id}/logo`, fd)
 }
 
-export const uploadCover = (id: number, file: File | null): AxiosPromise<string> => {
+export const uploadCover = (id: number, file: File | null): AxiosPromise<MediaName> => {
     const fd = new FormData()
     fd.append("file", file as Blob)
 
@@ -50,7 +51,7 @@ export const getMembers = (id: number, year ?: number): AxiosPromise<ClubMember[
     params: {y: year}
 })
 
-export const getClubGalleries = (id: number): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/club/${id}/galleries`)
+export const getClubGalleries = (id: number, page = 0): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/club/${id}/galleries`, {params: {page}})
 
 export const addClubMember = (id: number, member: ClubMemberCreationForm): AxiosPromise<ClubMember> => apiClient.post(`club/${id}/member`, member)
 

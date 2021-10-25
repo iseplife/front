@@ -1,41 +1,41 @@
-import ClubLogo from "./ClubLogo"
-import {Skeleton} from "antd"
 import SocialIcon from "../Common/SocialIcon"
 import {faFacebook, faFirefox, faInstagram, faSnapchat} from "@fortawesome/free-brands-svg-icons"
-import React, {useContext} from "react"
+import React, {useContext, useMemo} from "react"
 import ClubCover from "./ClubDescription/ClubCover"
 import {ClubContext} from "../../context/club/context"
+import {mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
+import {Avatar} from "antd"
 
 const ClubHeader: React.FC = () => {
-    const {state} = useContext(ClubContext)
+    const {club} = useContext(ClubContext)
+    const imageSrc = useMemo(() => (
+        club.logoUrl?.startsWith("data:image") ?
+            club.logoUrl :
+            mediaPath(club.logoUrl, AvatarSizes.DEFAULT)
+    ), [club.logoUrl])
 
     return (
         <>
             <ClubCover/>
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
-                    <ClubLogo/>
+                    <Avatar
+                        src={imageSrc}
+                        shape="circle"
+                        className="-mt-8 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
+                    />
                     <div className="flex flex-col ml-4 md:mt-0 -mt-4">
-                        {state.club.loading || !state.club.data ?
-                            <>
-                                <Skeleton className="w-64" active title paragraph={false}/>
-                                <Skeleton className="w-32" active title paragraph={false}/>
-                            </> :
-                            <>
-                                <h1 className="text-gray-700 text-3xl mb-0 font-bold">{state.club.data.name}</h1>
-                                <h4 className="text-gray-500 text-md italic">{new Date(state.club.data.creation).toLocaleDateString()}</h4>
-                            </>
-                        }
+                        <h1 className="text-gray-700 text-3xl mb-0 font-bold">{club.name}</h1>
+                        <h4 className="text-gray-500 text-md italic">{new Date(club.creation).toLocaleDateString()}</h4>
                     </div>
                 </div>
-                {state.club.data && (
-                    <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
-                        {state.club.data.website && <SocialIcon icon={faFirefox} url={state.club.data.website}/>}
-                        {state.club.data.facebook && <SocialIcon icon={faFacebook} url={state.club.data.facebook}/>}
-                        {state.club.data.instagram && <SocialIcon icon={faInstagram} url={state.club.data.instagram}/>}
-                        {state.club.data.snapchat && <SocialIcon icon={faSnapchat} url={state.club.data.snapchat}/>}
-                    </div>
-                )}
+                <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
+                    {club.website && <SocialIcon icon={faFirefox} url={club.website}/>}
+                    {club.facebook && <SocialIcon icon={faFacebook} url={club.facebook}/>}
+                    {club.instagram && <SocialIcon icon={faInstagram} url={club.instagram}/>}
+                    {club.snapchat && <SocialIcon icon={faSnapchat} url={club.snapchat}/>}
+                </div>
             </div>
         </>
     )

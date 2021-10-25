@@ -1,39 +1,39 @@
-import {Club} from "../../data/club/types"
+import {ClubContextState} from "./context"
 
 export enum ClubActionType {
-    FETCH_CLUB,
     GET_CLUB,
     UPDATE_CLUB,
-    FETCH_MEMBERS,
-    GET_MEMBERS,
-    ADD_MEMBER,
-    REMOVE_MEMBER,
-    UPDATE_MEMBER,
-    TOGGLE_ADMIN_MODE
+    UPDATE_COVER,
+    UPDATE_LOGO,
 }
 
-interface FetchClubAction {
-    type: ClubActionType.FETCH_CLUB,
-}
+
 interface GetClubAction {
     type: ClubActionType.GET_CLUB,
-    payload: Club
+    payload: ClubContextState
 }
 
 interface UpdateClubAction {
     type: ClubActionType.UPDATE_CLUB,
-    payload: Club
+    payload: ClubContextState
 }
 
-interface ToggleAdminMode {
-    type: ClubActionType.TOGGLE_ADMIN_MODE
+interface UpdateClubCoverAction {
+    type: ClubActionType.UPDATE_COVER,
+    payload: ClubContextState["coverUrl"]
+}
+
+interface UpdateClubLogoAction {
+    type: ClubActionType.UPDATE_LOGO,
+    payload: ClubContextState["logoUrl"]
 }
 
 
-export type ClubContextAction = FetchClubAction
-    | GetClubAction
+
+export type ClubContextAction = GetClubAction
     | UpdateClubAction
-    | ToggleAdminMode
+    | UpdateClubCoverAction
+    | UpdateClubLogoAction
 
 
 

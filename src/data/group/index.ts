@@ -2,6 +2,7 @@ import {AxiosPromise} from "axios"
 import {Page} from "../request.type"
 import {Group, GroupAdmin, GroupForm, GroupMember, GroupPreview} from "./types"
 import {apiClient} from "../http"
+import {MediaName} from "../media/types"
 
 export const getAllGroup = (page = 0): AxiosPromise<Page<GroupPreview>> =>
     apiClient.get("/group", {
@@ -22,11 +23,11 @@ export const createGroup = (form: GroupForm): AxiosPromise<GroupAdmin> => apiCli
 
 export const updateGroup = (id: number, form: GroupForm): AxiosPromise<GroupAdmin> => apiClient.put(`/group/${id}`, form)
 
-export const uploadGroupCover = (id: number, file: File | null): AxiosPromise<string> => {
+export const uploadGroupCover = (id: number, file: File | null): AxiosPromise<MediaName> => {
     const fd = new FormData()
     fd.append("file", file as Blob)
 
-    return apiClient.post(`/group/${id}/cover`, fd)
+    return apiClient.put(`/group/${id}/cover`, fd)
 }
 
 export const getGroupMembers = (group: number): AxiosPromise<GroupMember[]> => apiClient.get(`/group/${group}/member`)
