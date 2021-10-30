@@ -13,6 +13,14 @@ export type Comment = {
     hasWriteAccess: boolean
 }
 
+export type CommentUpdate = {
+    id: number
+    thread: number
+    author: Author
+    message: string
+    lastEdition: Date
+}
+
 export type CommentForm = {
     message: string
     asClub?: number
