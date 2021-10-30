@@ -12,8 +12,6 @@ import {
     faChartBar,
     faCircleNotch,
     faImages,
-    faLock,
-    faLockOpen,
     faPaperclip, faPaperPlane,
     faVideo
 } from "@fortawesome/free-solid-svg-icons"
@@ -21,7 +19,6 @@ import {
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
     description: string
-    private: boolean
     embed?: T
     publicationDate: Date
     linkedClub?: number
@@ -62,10 +59,6 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
         <Form className="flex flex-col items-center text-gray-500">
             <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 overflow-y-auto" style={{minHeight: "5rem"}}>
                 <div className="flex justify-between items-center mb-2">
-                    {values.private ?
-                        <FontAwesomeIcon icon={faLock} className="text-gray-500" onClick={() => setFieldValue("private", false)}/>:
-                        <FontAwesomeIcon icon={faLockOpen} className="text-gray-500" onClick={() => setFieldValue("private", true)}/>
-                    }
                     <DatePicker
                         format="DD/MM/YYYY HH:mm"
                         showTime

@@ -1,4 +1,3 @@
-import {Club} from "../club/types"
 import {Author} from "../request.type"
 import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
@@ -16,7 +15,6 @@ export enum EmbedEnumType {
 
 export type BasicPostCreation = {
     description: string
-    private: boolean
     feed: number
 }
 
@@ -27,9 +25,8 @@ export type PostCreation = BasicPostCreation & {
     attachements:  { [type: string]: number }
 }
 
-export type PostUpdate = {
+export type PostUpdateForm = {
     description: string
-    private: boolean
     publicationDate: Date
     linkedClub?: number
     removeEmbed?: boolean
@@ -41,20 +38,29 @@ export type Post = {
     id: number
     description: string
     publicationDate: Date
-    creationDate: number
-    private: boolean
+    creationDate: Date
     pinned: boolean
     author: Author
     embed?: Embed
     thread: number
-    trendingComment: Comment
-    linkedClub?: Club
+    trendingComment?: Comment
 
     nbComments: number
     nbLikes: number
     liked: boolean
     hasWriteAccess: boolean
 }
+
+export type PostUpdate = {
+    id: number
+    author: Author
+    description: string
+    publicationDate: Date
+    thread: number
+    embed?: Embed
+    pinned: boolean
+}
+
 
 export type EmbedPoll = Poll & {
     embedType: EmbedEnumType.POLL
