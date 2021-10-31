@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {Post as PostType} from "../../data/post/types"
+import {Post as PostType, PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
@@ -23,7 +23,7 @@ type PostProps = {
     forceShowComments?: boolean
     toggleEdition?: (toggle: boolean) => void
     onDelete?: (id: number) => Promise<void>
-    onUpdate?: (id: number, postUpdate: PostType) => void
+    onUpdate?: (id: number, postUpdate: PostUpdate) => void
 }
 
 const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments, onDelete, onUpdate, toggleEdition }) => {
@@ -50,7 +50,7 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
         })
     }, [data.id, t, onDelete])
 
-    const confirmUpdate = useCallback((updatedPost: PostType) => {
+    const confirmUpdate = useCallback((updatedPost: PostUpdate) => {
         message.info(t("update_item.complete")).then(() =>
             onUpdate?.(data.id, updatedPost)
         )
@@ -183,7 +183,6 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
                                 }
                             </div>
                         )}
-                        {data.private && <FontAwesomeIcon icon={faLock} className="text-gray-300 text-opacity-80"/>}
                     </div>
                 </div>
                 <div>

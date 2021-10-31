@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import {BasicPostCreation, Post} from "../../../data/post/types"
+import {BasicPostCreation, Post, PostUpdate} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
 import AvatarPicker from "../../Common/AvatarPicker"
@@ -59,7 +59,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
 
 type BasicPostForm = {
     feedId: number
-    onPost: (post: Post) => void
+    onPost: (post: PostUpdate) => void
 }
 const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     mapPropsToValues: (props) => {

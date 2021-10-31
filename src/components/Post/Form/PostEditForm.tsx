@@ -1,6 +1,17 @@
 import {FormikErrors, withFormik} from "formik"
 import PostForm, {PostFormValues} from "./PostForm"
-import {Embed, EmbedCreation, EmbedEdition, EmbedEnumType, EmbedMedia, EmbedPoll, EmbedPseudoGallery, Post, PostUpdate} from "../../../data/post/types"
+import {
+    Embed,
+    EmbedCreation,
+    EmbedEdition,
+    EmbedEnumType,
+    EmbedMedia,
+    EmbedPoll,
+    EmbedPseudoGallery,
+    Post,
+    PostUpdate,
+    PostUpdateForm
+} from "../../../data/post/types"
 import {mediaPath} from "../../../util"
 import {PostSizes} from "../../../constants/MediaSizes"
 import {createPoll, updatePoll} from "../../../data/poll"
@@ -12,7 +23,7 @@ import {MediaUploadNSFW} from "../../../data/media/types"
 
 type PostEditFormProps = {
     post: Post,
-    onEdit: (post: Post) => void
+    onEdit: (post: PostUpdate) => void
     onClose: () => void
 }
 const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition | EmbedCreation>>({
@@ -59,8 +70,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
             id: post.id,
             description: post.description,
             publicationDate: post.publicationDate,
-            embed: embed,
-            private: post.private
+            embed: embed
         }
     },
 
@@ -74,7 +84,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
 
     handleSubmit: async (values, {props}) => {
         const {embed, ...postForm} = values
-        const post = postForm as PostUpdate
+        const post = postForm as PostUpdateForm
 
         if (embed) {
             switch (embed.type) {

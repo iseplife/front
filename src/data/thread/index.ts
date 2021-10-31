@@ -1,5 +1,5 @@
 import {AxiosPromise} from "axios"
-import {Comment, CommentForm} from "./types"
+import {Comment, CommentForm, CommentUpdate} from "./types"
 import {apiClient} from "../http"
 
 export const toggleThreadLike = (id: number): AxiosPromise<boolean> => {
@@ -10,11 +10,11 @@ export const getThreadComments = (id: number): AxiosPromise<Comment[]> => {
     return apiClient.get(`/thread/${id}/comment`)
 }
 
-export const commentThread = (id: number, comment: CommentForm): AxiosPromise<Comment> => {
+export const commentThread = (id: number, comment: CommentForm): AxiosPromise<CommentUpdate> => {
     return apiClient.put(`/thread/${id}/comment`, comment)
 }
 
-export const editThreadComment = (id: number, comID: number, message: string): AxiosPromise<Comment> => {
+export const editThreadComment = (id: number, comID: number, message: string): AxiosPromise<CommentUpdate> => {
     return apiClient.put(`/thread/${id}/comment/${comID}`, {message})
 }
 

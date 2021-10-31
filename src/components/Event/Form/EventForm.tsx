@@ -79,8 +79,8 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         format="YYYY-MM-DD HH:mm"
                         placeholder={t("form.placeholder.range")}
                         onChange={(dates: any) => {
-                            setFieldValue("start", dates[0]._d)
-                            setFieldValue("end", dates[1]._d)
+                            setFieldValue("startsAt", dates[0]._d)
+                            setFieldValue("endsAt", dates[1]._d)
                         }}
                         bordered={false}
                     />

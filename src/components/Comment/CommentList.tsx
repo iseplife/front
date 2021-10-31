@@ -1,10 +1,10 @@
-import React, {createRef, useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {Comment as CommentType, CommentForm as CommentFormType} from "../../data/thread/types"
 import Comment from "./index"
 import {commentThread, deleteThreadComment, editThreadComment, getThreadComments} from "../../data/thread"
 import Loading from "../Common/Loading"
 import CommentForm from "./CommentForm"
-import { useTranslation } from "react-i18next"
+import {useTranslation} from "react-i18next"
 
 interface CommentListProps {
     id: number
@@ -25,7 +25,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
     const [error, setError] = useState<string>()
-    
+
     const [t] = useTranslation(["post"])
 
     useEffect(() => {
@@ -35,7 +35,16 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
     const sendComment = useCallback(async (comment: CommentFormType) => {
         const res = await commentThread(id, comment)
         if (res.status === 200) {
-            setComments(comments => [...comments, res.data])
+            setComments(comments => [...comments,
+                {
+                    ...res.data,
+                    creation: new Date(),
+                    likes: 0,
+                    comments: 0,
+                    liked: false,
+                    hasWriteAccess: true
+                }
+            ])
         }
     }, [id])
 
@@ -49,18 +58,20 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
     const editComment = useCallback(async (comID: number, msg: string) => {
         const res = await editThreadComment(id, comID, msg)
         if (res.status === 200) {
-            setComments(comments => comments.map(c => c.id !== comID ? c: res.data))
+            setComments(comments => comments.map(c => c.id !== comID ?
+                c : {...c, ...res.data}
+            ))
         }
     }, [id])
 
     useEffect(() => {
         if (loadComment && showComments)
-            if(numberComments == 1 && trendingComment)
+            if (numberComments == 1 && trendingComment)
                 setLoading(false)
             else
                 getThreadComments(id).then(r => {
                     if (r.data) {
-                        if(trendingComment)
+                        if (trendingComment)
                             r.data = r.data.filter(comm => comm.id != trendingComment.id)
 
                         setComments(r.data)
@@ -81,7 +92,8 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
         }
         return (
             <div className={`ml-4 ${className}`}>
-                {showInput && !bottomInput && <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput} />}
+                {showInput && !bottomInput &&
+                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
                 {trendingComment && (
                     <>
                         <Comment
@@ -91,19 +103,22 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                             handleDeletion={deleteComment}
                             handleEdit={editComment}
                         />
-                        
-                        {!showComments && numberComments > 1 &&
-                            <div className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline" onClick={showMoreComments}>
+
+                        {!showComments && numberComments > 1 && (
+                            <div
+                                className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline"
+                                onClick={showMoreComments}
+                            >
                                 {t("post:see_more_comments")}
                             </div>
-                        }
+                        )}
                     </>
                 )}
                 {
                     loading &&
-                        <div className="flex-1">
-                            <Loading size="sm"/>
-                        </div>
+                    <div className="flex-1">
+                        <Loading size="sm"/>
+                    </div>
                 }
                 {comments.map(c =>
                     <Comment
@@ -114,7 +129,8 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                         handleEdit={editComment}
                     />
                 )}
-                {showInput && bottomInput && <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
+                {showInput && bottomInput &&
+                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
             </div>
         )
     }

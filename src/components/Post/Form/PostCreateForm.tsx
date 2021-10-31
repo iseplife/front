@@ -1,7 +1,7 @@
 import {FormikErrors, withFormik} from "formik"
 import {message} from "antd"
 import PostForm, {PostFormValues} from "./PostForm"
-import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, Post, PostCreation} from "../../../data/post/types"
+import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, Post, PostCreation, PostUpdate} from "../../../data/post/types"
 import {AxiosResponse} from "axios"
 import {createMedia} from "../../../data/media"
 import {createGallery} from "../../../data/gallery"
@@ -12,7 +12,7 @@ import {createPost} from "../../../data/post"
 type PostCreateFormProps = {
     type: EmbedEnumType
     feed: number
-    onSubmit: (post: Post) => void
+    onSubmit: (post: PostUpdate) => void
     onClose: () => void
 }
 const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreation>>({
