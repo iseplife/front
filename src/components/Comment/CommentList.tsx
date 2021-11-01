@@ -24,8 +24,6 @@ interface CommentListProps {
 const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
-    const [error, setError] = useState<string>()
-
     const [t] = useTranslation(["post"])
 
     useEffect(() => {
@@ -80,60 +78,47 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 })
     }, [id, loadComment, showComments])
 
-    if (loading && !trendingComment) {
-        return (
-            <div className="flex-1">
-                <Loading size="sm"/>
-            </div>
-        )
-    } else {
-        if (error) {
-            return (<div> {error} :( </div>)
-        }
-        return (
-            <div className={`ml-4 ${className}`}>
-                {showInput && !bottomInput &&
-                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
-                {trendingComment && (
-                    <>
-                        <Comment
-                            key={trendingComment.id}
-                            data={trendingComment}
-                            allowReplies={depth === 0}
-                            handleDeletion={deleteComment}
-                            handleEdit={editComment}
-                        />
-
-                        {!showComments && numberComments > 1 && (
-                            <div
-                                className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline"
-                                onClick={showMoreComments}
-                            >
-                                {t("post:see_more_comments")}
-                            </div>
-                        )}
-                    </>
-                )}
-                {
-                    loading &&
-                    <div className="flex-1">
-                        <Loading size="sm"/>
-                    </div>
-                }
-                {comments.map(c =>
+    return loading && !trendingComment ?
+        <div className="flex-1">
+            <Loading size="sm"/>
+        </div> :
+        <div className={`ml-4 ${className}`}>
+            {showInput && !bottomInput &&
+            <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
+            {trendingComment && (
+                <>
                     <Comment
-                        key={c.id}
-                        data={c}
+                        key={trendingComment.id}
+                        data={trendingComment}
                         allowReplies={depth === 0}
                         handleDeletion={deleteComment}
                         handleEdit={editComment}
                     />
-                )}
-                {showInput && bottomInput &&
-                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
-            </div>
-        )
-    }
+
+                    {!showComments && numberComments > 1 && (
+                        <div
+                            className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline"
+                            onClick={showMoreComments}
+                        >
+                            {t("post:see_more_comments")}
+                        </div>
+                    )}
+                </>
+            )}
+            {loading && <div className="flex-1"> <Loading size="sm"/> </div>}
+            {comments.map(c =>
+                <Comment
+                    key={c.id}
+                    data={c}
+                    allowReplies={depth === 0}
+                    handleDeletion={deleteComment}
+                    handleEdit={editComment}
+                />
+            )}
+            {showInput && bottomInput && (
+                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>
+            )}
+        </div>
 }
 
 export default CommentList
