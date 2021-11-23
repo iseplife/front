@@ -26,11 +26,11 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
     const Wrapper = useMemo(() => showPreview ? Link : BasicWrapper, [showPreview])
     const wrapperProps = useMemo(() => showPreview ?
         {
-            className: `text-center no-underline cursor-pointer my-auto flex ${className}`,
+            className: `text-center no-underline cursor-pointer my-auto flex items-center ${className}`,
             to: (location: Location) => `${location.pathname}/student/${id}`
         } :
         {
-            className: `text-center no-underline my-auto flex ${className}`
+            className: `text-center no-underline my-auto flex md:text-gray-500 hover:text-gray-600 flex ${className}`
         }, [showPreview])
 
 
@@ -41,7 +41,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
                 icon={<FontAwesomeIcon icon={faUser} />}
                 alt={name}
                 size={size}
-                className="hover:shadow-outline "
+                className="hover:shadow-outline mr-2"
             />
             {children}
         </Wrapper>

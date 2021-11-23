@@ -27,8 +27,8 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
                             name={student.firstName + " " + student.lastName}
                             picture={student.picture}
                             pictureSize={AvatarSizes.THUMBNAIL}
-                            size="default"
-                            className="mr-2 text-gray-600"
+                            size="small"
+                            className="mr-2 text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
                             showPreview
                         >
                             {student.firstName + " " + student.lastName}
@@ -45,7 +45,7 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
                             picture={student.picture}
                             pictureSize={AvatarSizes.THUMBNAIL}
                             size="default"
-                            className="mr-2 text-gray-600"
+                            className="mr-2 text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
                             showPreview
                         >
                             {student.firstName + " " + student.lastName}

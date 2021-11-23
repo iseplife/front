@@ -43,8 +43,8 @@ const Group: React.FC = () => {
     }, [group])
 
     return (
-        <div className="mt-5 px-3 flex flex-wrap">
-            <div className="w-full md:w-64 lg:w-1/4">
+        <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
+            <div className="flex-1 ml-4">
                 {group && (
                     <div className="flex p-1 mb-5 items-center ">
                         <div>
@@ -60,14 +60,15 @@ const Group: React.FC = () => {
                 )}
 
                 {/* TODO: retirer ce menu quandn il n'y a aucun évènement à venir et qu'on est en sm (vue téléphone) */}
-                <IncomingEvents feed={group?.feed} wait={loading} className="md:hidden block"/>
-                <Divider/>
+
+                <IncomingEvents className="lg:hidden block" />
+                <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <GroupMembers group={id} hasRight={group?.hasRight}/>
             </div>
-            <div className="flex-grow">
+            <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
                 {group && <Feed id={group.feed}/>}
             </div>
-            <div className="w-full md:w-64 lg:w-1/4 pl-4 justify-center md:block hidden">
+            <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>
             </div>
         </div>
