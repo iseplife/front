@@ -1,15 +1,17 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams} from "react-router-dom"
-import {Group as GroupType} from "../../../data/group/types"
-import {getGroup} from "../../../data/group"
+import {Group as GroupType, GroupMember} from "../../../data/group/types"
+import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers} from "../../../data/group"
 import Feed from "../../../components/Feed"
-import {Divider} from "antd"
+import {Divider, message} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
 import {toggleSubscription} from "../../../data/feed"
 import {useTranslation} from "react-i18next"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faBell, faBellSlash} from "@fortawesome/free-regular-svg-icons"
+import { faGlobeEurope, faLock } from "@fortawesome/free-solid-svg-icons"
+import CompressedMembers from "../../../components/Common/CompressedMembers"
 
 interface ParamTypes {
     id?: string
@@ -20,6 +22,7 @@ const Group: React.FC = () => {
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
+    const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
 
     useEffect(() => {
         if (!isNaN(+id)) {
@@ -33,7 +36,7 @@ const Group: React.FC = () => {
 
     const handleSubscription = useCallback(() => {
         if (group) {
-            toggleSubscription(group.feed).then(res => {
+            toggleSubscription(group.feed).then(res => { 
                 setGroup({
                     ...group,
                     subscribed: res.data
@@ -42,28 +45,73 @@ const Group: React.FC = () => {
         }
     }, [group])
 
+    const [orga, setOrga] = useState<GroupMember[][]>([[], []])
+
+    useEffect(() => {
+        setOrgaLoading(true)
+        getGroupMembers(id).then(res =>
+            setOrga((res.data).reduce((acc: GroupMember[][], curr) => {
+                acc[curr.admin ? 0 : 1].push(curr)
+                return acc
+            }, [[], []]))
+        ).finally(() => setOrgaLoading(false))
+    }, [])
+    const onAdd = useCallback((studentId: number) => {
+        addGroupMember(id, studentId).then((res) => {
+            setOrga(org => {
+                return [org[0], [res.data, ...org[1]]]
+            })
+            message.success(t("member_added"))
+        })
+    }, [])
+
+    const onDelete = useCallback((memberId: number) => () => {
+        deleteGroupMember(id, memberId).then(() => {
+            message.success(t("member_removed"))
+            setOrga(org => {
+                return [
+                    org[0],
+                    org[1].filter(m => m.id !== memberId)
+                ]
+            })
+        })
+    }, [])
+
+    const onDemote = useCallback((memberId: number) => () => {
+        demoteGroupMember(id, memberId).then(() => {
+            setOrga(org => {
+                const index = org[0].findIndex(m => m.id === memberId)
+                const member = org[0].splice(index, 1)[0]
+
+                return [[...org[0]], [...org[1], member]]
+            })
+            message.success(t("demote_member"))
+        })
+    }, [])
+
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
             <div className="flex-1 ml-4">
                 {group && (
-                    <div className="flex p-1 mb-5 items-center ">
+                    <div className="flex p-1 mb-1 items-center ">
                         <div>
-                            <h3 className="mx-2 mb-0 text-2xl text-gray-700">
+                            <h3 className="mb-0 text-2xl text-black font-semibold">
                                 {group.name}
-                                <span className="mx-2 hover:text-gray-500 cursor-pointer" onClick={handleSubscription}>
-                                    <FontAwesomeIcon icon={group.subscribed ? faBellSlash: faBell}/>
-                                </span>
                             </h3>
-                            <h6 className="mx-2 -mt-1 uppercase text-sm font-bold text-gray-600">{t(group.restricted ? "restricted": "public")}</h6>
+                            <h6 className="text-base font-normal text-gray-500 flex items-center ml-0.5">
+                                <FontAwesomeIcon className="mr-1.5 text-sm"  icon={group.restricted ? faLock : faGlobeEurope}/>
+                                {t(group.restricted ? "restricted" : "public")}
+                            </h6>
                         </div>
                     </div>
                 )}
 
-                {/* TODO: retirer ce menu quandn il n'y a aucun évènement à venir et qu'on est en sm (vue téléphone) */}
-
+                {!orgaLoading && <CompressedMembers className="sm:hidden w-full cursor-pointer" members={[1, 1, 1, 1, 1, 1, 1, 1, 1].map(_ => orga[0].map(gm => gm.student)[0])} />}
                 <IncomingEvents className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
-                <GroupMembers group={id} hasRight={group?.hasRight}/>
+                <div className="hidden sm:block">
+                    <GroupMembers group={id} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} orga={orga} loading={orgaLoading} />
+                </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
                 {group && <Feed id={group.feed}/>}

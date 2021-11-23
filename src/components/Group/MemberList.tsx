@@ -31,7 +31,7 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
                             className="mr-2 text-gray-500 hover:text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
                             showPreview
                         >
-                            {student.firstName + " " + student.lastName}
+                            <div className="ml-2">{student.firstName + " " + student.lastName}</div>
                         </StudentAvatar>
                         {members.length > actionsTrigger && actions(id)}
                     </span>
