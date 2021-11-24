@@ -3,13 +3,11 @@ import {useParams} from "react-router-dom"
 import {Group as GroupType, GroupMember} from "../../../data/group/types"
 import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers} from "../../../data/group"
 import Feed from "../../../components/Feed"
-import {Divider, message} from "antd"
+import {message} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
-import {toggleSubscription} from "../../../data/feed"
 import {useTranslation} from "react-i18next"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faBell, faBellSlash} from "@fortawesome/free-regular-svg-icons"
 import { faGlobeEurope, faLock } from "@fortawesome/free-solid-svg-icons"
 import CompressedMembers from "../../../components/Common/CompressedMembers"
 
@@ -33,17 +31,6 @@ const Group: React.FC = () => {
             }).finally(() => setLoading(false))
         }
     }, [id])
-
-    const handleSubscription = useCallback(() => {
-        if (group) {
-            toggleSubscription(group.feed).then(res => { 
-                setGroup({
-                    ...group,
-                    subscribed: res.data
-                })
-            })
-        }
-    }, [group])
 
     const [orga, setOrga] = useState<GroupMember[][]>([[], []])
 
