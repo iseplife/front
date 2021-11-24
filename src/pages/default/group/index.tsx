@@ -101,7 +101,7 @@ const Group: React.FC = () => {
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                {group && <Feed id={group.feed}/>}
+                {<Feed id={group?.feed!}/>}
             </div>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>

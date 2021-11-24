@@ -44,7 +44,8 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote
                 {!!orga[1].length &&
                     <>
                         <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
-                        {hasRight && <AddMember onAdd={onAdd} />}<CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[1].map(member => member.student)} />
+                        {hasRight && <AddMember onAdd={onAdd} />}
+                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[1].map(member => member.student)} />
                     </>
                 }
             </div>

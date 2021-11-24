@@ -38,6 +38,9 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
         setFetching(true)
+        if(id === undefined)
+            return new Promise<boolean>(()=>undefined)
+
         const res = await getFeedPost(id, count)
         setPosts(posts => [...posts, ...res.data.content])
         setFetching(false)
@@ -117,8 +120,10 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
     }, [id])
 
     useEffect(() => {
-        getWSService(WSFeedService).subscribe(id ?? -1)
-        return () => getWSService(WSFeedService).unsubscribe(id ?? -1)
+        if(id !== undefined){
+            getWSService(WSFeedService).subscribe(id)
+            return () => getWSService(WSFeedService).unsubscribe(id)
+        }
     }, [id])
 
     return (
