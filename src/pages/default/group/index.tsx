@@ -106,7 +106,7 @@ const Group: React.FC = () => {
                     </div>
                 )}
 
-                {!orgaLoading && <CompressedMembers className="sm:hidden w-full cursor-pointer" members={[1, 1, 1, 1, 1, 1, 1, 1, 1].map(_ => orga[0].map(gm => gm.student)[0])} />}
+                {!orgaLoading && <CompressedMembers className="sm:hidden w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />}
                 <IncomingEvents className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
