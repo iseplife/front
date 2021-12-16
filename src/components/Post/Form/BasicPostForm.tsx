@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import {BasicPostCreation, Post, PostUpdate} from "../../../data/post/types"
+import {BasicPostCreation, PostUpdate} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
 import AvatarPicker from "../../Common/AvatarPicker"
@@ -8,6 +8,8 @@ import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { useTranslation } from "react-i18next"
 import { AppContext } from "../../../context/app/context"
+import { Author } from "../../../data/request.type"
+import { StudentPreview } from "../../../data/student/types"
 
 
 export type BasicPostFormValues = {
@@ -15,6 +17,7 @@ export type BasicPostFormValues = {
     private: boolean
     feed: number
     linkedClub?: number
+    selectedClub?: Author
 }
 
 
@@ -36,7 +39,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
                     {children}
                     <div className="flex-1 flex justify-end items-center mt-1 -mb-1">
                         <AvatarPicker
-                            callback={(id) => setValues({ ...values, linkedClub: id })}
+                            callback={author => setValues({ ...values, selectedClub: author })}
                             className="text-gray-700 rounded-lg hover:bg-gray-100 transition-colors py-1 mt-1"
                         />
                         <Divider type="vertical" className="mr-3 ml-2 mt-0.5 -mb-0.5" />
@@ -58,14 +61,15 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
 
 
 type BasicPostForm = {
-    feedId: number
+    feedId?: number
     onPost: (post: PostUpdate) => void
+    user: StudentPreview
 }
 const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     mapPropsToValues: (props) => {
         return {
             description: "",
-            feed: props.feedId,
+            feed: props.feedId!,
             private: true,
         }
     },
@@ -79,7 +83,9 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     },
 
 
-    handleSubmit: async (values, {props, resetForm}) => {
+    handleSubmit: async (values, { props, resetForm }) => {
+        values.feed = values.feed ?? values.selectedClub?.feedId ?? props.user.feedId
+        values.linkedClub = values.selectedClub?.id
         const res = await createPost(values as BasicPostCreation)
 
         if (res.status === 200) {

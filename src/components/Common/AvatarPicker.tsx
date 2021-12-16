@@ -14,7 +14,7 @@ const {Option} = Select
 
 interface AvatarPickerProps {
     defaultValue?: number
-    callback: (id?: number) => void
+    callback: (author?: Author) => void
     compact?: boolean
     className?: string
     clubOnly?: boolean
@@ -29,7 +29,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
     const [publishers, setPublishers] = useState<Author[]>([])
     const [t] = useTranslation("common")
 
-    const handleChange = useCallback((v: number) => callback(v || undefined), [callback])
+    const handleChange = useCallback((v: number) => callback(publishers.find(author => author.id == v)), [callback])
 
     /**
      * Call on first render to get all publishers thumbnails

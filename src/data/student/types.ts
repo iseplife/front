@@ -5,6 +5,7 @@ export type StudentPicture = {
 
 export interface Student {
     id: number
+    feedId: number
     promo: number
     firstName: string
     lastName: string
@@ -26,6 +27,7 @@ export interface Student {
 }
 export interface StudentPreview {
     id: number
+    feedId: number
     promo: number
     firstName: string
     lastName: string

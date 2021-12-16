@@ -1,17 +1,19 @@
 import {FormikErrors, withFormik} from "formik"
 import {message} from "antd"
 import PostForm, {PostFormValues} from "./PostForm"
-import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, Post, PostCreation, PostUpdate} from "../../../data/post/types"
+import {DEFAULT_EMBED, EmbedCreation, EmbedEnumType, PostCreation, PostUpdate} from "../../../data/post/types"
 import {AxiosResponse} from "axios"
 import {createMedia} from "../../../data/media"
 import {createGallery} from "../../../data/gallery"
 import {createPoll} from "../../../data/poll"
 import {createPost} from "../../../data/post"
+import { StudentPreview } from "../../../data/student/types"
 
 
 type PostCreateFormProps = {
     type: EmbedEnumType
-    feed: number
+    feed?: number
+    user: StudentPreview
     onSubmit: (post: PostUpdate) => void
     onClose: () => void
 }
@@ -31,8 +33,10 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         return errors
     },
 
-    handleSubmit: async (values, {props, resetForm}) => {
-        const {embed, ...post} = values
+    handleSubmit: async (values, { props, resetForm }) => {
+        props = { ...props }
+        const { embed, ...post } = values
+        props.feed = props.feed ?? values.selectedClub?.feedId ?? props.user.feedId
 
         if (embed) {
             try {
@@ -67,11 +71,12 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
 
                 (post as PostCreation).attachements = {[embed.type]: res.data.id}
             } catch (e) {
-                message.error(e.message)
+                message.error((e as Error).message)
             }
         }
 
         (post as PostCreation).feed = props.feed
+        post.linkedClub = post.selectedClub?.id
         const res = await createPost(post as PostCreation)
         if (res.status === 200) {
             props.onSubmit(res.data)

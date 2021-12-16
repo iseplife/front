@@ -29,7 +29,7 @@ const Home: React.FC = () => {
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <UserGroups/>
             </div>
-            <Feed id={1} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
+            <Feed style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents allowCreate={false} />
             </div>

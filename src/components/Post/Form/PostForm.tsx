@@ -15,6 +15,7 @@ import {
     faPaperclip, faPaperPlane,
     faVideo
 } from "@fortawesome/free-solid-svg-icons"
+import { Author } from "../../../data/request.type"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -22,6 +23,7 @@ export type PostFormValues<T extends EmbedFormType> = {
     embed?: T
     publicationDate: Date
     linkedClub?: number
+    selectedClub?: Author
 }
 const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const {t} = useTranslation("post")
@@ -111,7 +113,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     )}
                     <div className="flex-1 flex justify-end items-center">
                         <AvatarPicker
-                            callback={(id) => setValues({...values, linkedClub: id})}
+                            callback={author => setValues({...values, selectedClub: author})} 
                             className="mr-3 text-gray-700 rounded hover:bg-gray-100"
                         />
                         <Divider type="vertical"/>
