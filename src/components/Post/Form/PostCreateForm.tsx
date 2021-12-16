@@ -70,8 +70,8 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                 }
 
                 (post as PostCreation).attachements = {[embed.type]: res.data.id}
-            } catch (e) {
-                message.error((e as Error).message)
+            } catch (e: Error) {
+                message.error(e.message)
             }
         }
 
