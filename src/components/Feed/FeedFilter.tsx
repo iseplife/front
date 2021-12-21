@@ -4,7 +4,7 @@ import Tag from "../Common/Tag"
 import {useRecoilState} from "recoil"
 import {filterState} from "../../pages/default/calendar"
 import {useTranslation} from "react-i18next"
-import {FeedsContext} from "../../context/feed/context"
+import {CalendarContext} from "../../context/calendar/context"
 import {faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
@@ -20,7 +20,7 @@ type OptionType = {
 const FeedFilter: React.FC = () => {
     const {t} = useTranslation("event")
     const [value, setValue] = useState()
-    const feeds = useContext(FeedsContext)
+    const {feeds} = useContext(CalendarContext)
     const [filter, setFilter] = useRecoilState(filterState)
 
     const toggleFeed = useCallback((id: number) => setFilter(f => ({
