@@ -12,9 +12,9 @@ import { useTranslation } from "react-i18next"
 
 const {Option} = Select
 
-interface AvatarPickerProps {
+interface AuthorPickerProps {
     defaultValue?: number
-    callback: (id?: number) => void
+    callback: (author?: Author) => void
     compact?: boolean
     className?: string
     clubOnly?: boolean
@@ -22,14 +22,14 @@ interface AvatarPickerProps {
     style?: CSSProperties
 }
 
-const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, compact, clubOnly, className, placeholder, style}) => {
+const AuthorPicker: React.FC<AuthorPickerProps> = ({defaultValue, callback, compact, clubOnly, className, placeholder, style}) => {
     const {state: {user: {picture}}} = useContext(AppContext)
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [loading, setLoading] = useState<boolean>(true)
-    const [publishers, setPublishers] = useState<Author[]>([])
+    const [authors, setAuthors] = useState<Author[]>([])
     const [t] = useTranslation("common")
 
-    const handleChange = useCallback((v: number) => callback(v || undefined), [callback])
+    const handleChange = useCallback((v: number) => callback(authors.find(author => author.id == v)), [callback])
 
     /**
      * Call on first render to get all publishers thumbnails
@@ -38,7 +38,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
         setLoading(true)
         getAuthorsThumbnail(clubOnly).then(res => {
             if (res.status === 200)
-                setPublishers(res.data)
+                setAuthors(res.data)
         }).finally(() => setLoading(false))
     }, [clubOnly])
 
@@ -77,7 +77,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
             }
             {loading ?
                 <Option value="loading" disabled> <Loading size="lg"/> </Option> :
-                publishers.map((p, i) => (
+                authors.map((p, i) => (
                     <Option
                         key={i + 1}
                         value={p.id}
@@ -101,9 +101,9 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({defaultValue, callback, comp
     )
 }
 
-AvatarPicker.defaultProps = {
+AuthorPicker.defaultProps = {
     className: "",
     compact: false
 }
 
-export default AvatarPicker
+export default AuthorPicker

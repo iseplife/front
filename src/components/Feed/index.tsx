@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useEffect, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPost} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
@@ -14,14 +14,16 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
 import {getWSService} from "../../realtime/services/WSService"
 import WSFeedService from "../../realtime/services/WSFeedService"
+import { AppContext } from "../../context/app/context"
 
 type FeedProps = {
-    id: number
+    id?: number
     allowPublication?: boolean
     style?: CSSProperties
     className?: string
 }
 const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => {
+    const {state: {user}} = useContext(AppContext)
     const {t} = useTranslation(["common", "post"])
     const [posts, setPosts] = useState<PostType[]>([])
     const [editPost, setEditPost] = useState<number>(0)
@@ -69,15 +71,15 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
     }, [])
 
     useEffect(() => {
-        getWSService(WSFeedService).subscribe(id)
-        return () => getWSService(WSFeedService).unsubscribe(id)
+        getWSService(WSFeedService).subscribe(id ?? -1)
+        return () => getWSService(WSFeedService).unsubscribe(id ?? -1)
     }, [id])
 
     return (
         <div className={`${className}`} style={style}>
             <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
             {allowPublication && (
-                <BasicPostForm feedId={id} onPost={onPostCreation}>
+                <BasicPostForm user={user} feedId={id} onPost={onPostCreation}>
                     <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
@@ -126,6 +128,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                                 <PostCreateForm
                                     type={completeFormType}
                                     feed={id}
+                                    user={user}
                                     onSubmit={onPostCreation}
                                     onClose={() => setCompleteFormType(undefined)}
                                 />

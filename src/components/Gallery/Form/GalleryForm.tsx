@@ -5,7 +5,7 @@ import {Input, message, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
-import AvatarPicker from "../../Common/AvatarPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 import HelperIcon from "../../Common/HelperIcon"
 
 const {TextArea} = Input
@@ -92,7 +92,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
 
                 <div className="flex-grow flex flex-col justify-end">
                     <label >{t("form.author")}</label>
-                    <AvatarPicker
+                    <AuthorPicker
                         className="max-w-full w-64 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #e2e8f0"}}
                         clubOnly={true}

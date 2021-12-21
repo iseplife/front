@@ -15,7 +15,7 @@ export enum EmbedEnumType {
 
 export type BasicPostCreation = {
     description: string
-    feed: number
+    feed?: number
 }
 
 

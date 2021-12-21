@@ -6,7 +6,7 @@ import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Marker, TileLayer, Map} from "react-leaflet"
 import Locker from "../../Common/Locker"
-import AvatarPicker from "../../Common/AvatarPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 import FeedSelector from "../../Feed/FeedSelector"
 import HelperIcon from "../../Common/HelperIcon"
 import moment from "moment"
@@ -167,7 +167,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
 
                 <div className="lg:w-1/2 w-full flex mt-2 justify-between">
-                    <AvatarPicker
+                    <AuthorPicker
                         defaultValue={values.club}
                         clubOnly={true}
                         callback={(id) => setFieldValue("club", id)}

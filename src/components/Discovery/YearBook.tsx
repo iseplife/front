@@ -53,7 +53,8 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
             lastName,
             photoUrlThumb: r.thumbURL,
             picture: r.thumbURL,
-            promo: +r.description || -1
+            promo: +r.description || -1,
+            feedId: undefined!
         })
     })
 }
