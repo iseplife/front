@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next"
 import { AppContext } from "../../../context/app/context"
 import { Author } from "../../../data/request.type"
 import { StudentPreview } from "../../../data/student/types"
-import WrapperAuthorPicker from "../WrapperAuthorPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 
 export type BasicPostFormValues = {
@@ -38,7 +38,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
                 <div className="flex justify-between text-xl -mt-2 mb-1">
                     {children}
                     <div className="flex-1 flex justify-end items-center mt-1 -mb-1">
-                        <WrapperAuthorPicker
+                        <AuthorPicker
                             callback={author => setValues({ ...values, selectedClub: author })}
                             className="text-gray-700 rounded-lg hover:bg-gray-100 transition-colors py-1 mt-1"
                         />

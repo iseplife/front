@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next"
 import {CommentForm as CommentFormType} from "../../data/thread/types"
 import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import WrapperAuthorPicker from "../Post/WrapperAuthorPicker"
+import AuthorPicker from "../Common/AuthorPicker"
 
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>
@@ -39,7 +39,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 my-3">
-            <WrapperAuthorPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
+            <AuthorPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
             <input
                 id="message"
                 placeholder={t("write_comment")}

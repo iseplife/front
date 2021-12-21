@@ -15,7 +15,7 @@ import {
     faVideo
 } from "@fortawesome/free-solid-svg-icons"
 import { Author } from "../../../data/request.type"
-import WrapperAuthorPicker from "../WrapperAuthorPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -112,7 +112,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                         </div>
                     )}
                     <div className="flex-1 flex justify-end items-center">
-                        <WrapperAuthorPicker
+                        <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
                             className="mr-3 text-gray-700 rounded hover:bg-gray-100"
                         />

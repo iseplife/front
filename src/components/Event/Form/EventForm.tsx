@@ -12,7 +12,7 @@ import moment from "moment"
 import {faEuroSign, faExternalLinkAlt, faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSave} from "@fortawesome/free-regular-svg-icons"
-import WrapperAuthorPicker from "../../Post/WrapperAuthorPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 const {RangePicker} = DatePicker
 const {TextArea} = Input
@@ -167,7 +167,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
 
                 <div className="lg:w-1/2 w-full flex mt-2 justify-between">
-                    <WrapperAuthorPicker
+                    <AuthorPicker
                         defaultValue={values.club}
                         clubOnly={true}
                         callback={(id) => setFieldValue("club", id)}

@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useMemo} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {Select} from "antd"
 import {Author} from "../../data/request.type"
 import "./AvatarPicker.css"
@@ -6,12 +6,14 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
 import {useTranslation} from "react-i18next"
+import { FeedContext } from "../../context/feed/context"
+import { getAuthorizedAuthors } from "../../data/post"
 
 const {Option} = Select
 
 export type AuthorPickerProps = {
     defaultValue?: number
-    authors: Author[]
+    authors?: Author[]
     callback: (author?: Author) => void
     compact?: boolean
     className?: string
@@ -20,10 +22,22 @@ export type AuthorPickerProps = {
     style?: CSSProperties
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors, defaultValue, callback, compact, clubOnly, ...props}) => {
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors = [], defaultValue, callback, compact, clubOnly, ...props}) => {
     const {state: {user: {picture}}} = useContext(AppContext)
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [t] = useTranslation("common")
+
+    
+    const context = useContext(FeedContext)
+    const [authors, setAuthors] = useState<Author[]>(givenAuthors)
+
+    useEffect(() => {
+        if(!authors?.length)
+            if(context)
+                setAuthors(context.authors)
+            else
+                getAuthorizedAuthors().then(res => setAuthors(res.data))
+    }, [context])
 
     const handleChange = useCallback((v: number) => (
         callback(authors.find(author => author.id == v))
