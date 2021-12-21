@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef} from "react"
 import {ACCEPTED_FILETYPE, DEFAULT_EMBED, EmbedCreation, EmbedEnumType, EmbedForm as EmbedFormType,} from "../../../data/post/types"
 import {Field, Form, FormikProps,} from "formik"
 import {DatePicker, Divider, Upload} from "antd"
-import AvatarPicker from "../../Common/AvatarPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 import EmbedForm from "./EmbedForm"
 import moment from "moment"
 import {isPast} from "date-fns"
@@ -112,7 +112,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                         </div>
                     )}
                     <div className="flex-1 flex justify-end items-center">
-                        <AvatarPicker
+                        <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
                             className="mr-3 text-gray-700 rounded hover:bg-gray-100"
                         />

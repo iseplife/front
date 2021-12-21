@@ -1,7 +1,7 @@
 import React, {createRef, useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
-import AvatarPicker from "../Common/AvatarPicker"
+import AuthorPicker from "../Common/AuthorPicker"
 import {CommentForm as CommentFormType} from "../../data/thread/types"
 import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -39,7 +39,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 my-3">
-            <AvatarPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
+            <AuthorPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
             <input
                 id="message"
                 placeholder={t("write_comment")}

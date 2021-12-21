@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import {BasicPostCreation, PostUpdate} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
-import AvatarPicker from "../../Common/AvatarPicker"
+import AuthorPicker from "../../Common/AuthorPicker"
 import {createPost} from "../../../data/post"
 import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -38,7 +38,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
                 <div className="flex justify-between text-xl -mt-2 mb-1">
                     {children}
                     <div className="flex-1 flex justify-end items-center mt-1 -mb-1">
-                        <AvatarPicker
+                        <AuthorPicker
                             callback={author => setValues({ ...values, selectedClub: author })}
                             className="text-gray-700 rounded-lg hover:bg-gray-100 transition-colors py-1 mt-1"
                         />
