@@ -1,6 +1,10 @@
 import React from "react"
+import {Author} from "../../data/request.type"
 
+export type FeedContextType = {
+    authors: Author[]
+}
 
-export type FeedsContextType = Record<number, string>
-
-export const FeedsContext = React.createContext<FeedsContextType>({})
+export const FeedContext = React.createContext<FeedContextType>({
+    authors: []
+})

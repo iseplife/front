@@ -6,13 +6,13 @@ import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Marker, TileLayer, Map} from "react-leaflet"
 import Locker from "../../Common/Locker"
-import AuthorPicker from "../../Common/AuthorPicker"
 import FeedSelector from "../../Feed/FeedSelector"
 import HelperIcon from "../../Common/HelperIcon"
 import moment from "moment"
 import {faEuroSign, faExternalLinkAlt, faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSave} from "@fortawesome/free-regular-svg-icons"
+import WrapperAuthorPicker from "../../Post/WrapperAuthorPicker"
 
 const {RangePicker} = DatePicker
 const {TextArea} = Input
@@ -167,7 +167,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
 
                 <div className="lg:w-1/2 w-full flex mt-2 justify-between">
-                    <AuthorPicker
+                    <WrapperAuthorPicker
                         defaultValue={values.club}
                         clubOnly={true}
                         callback={(id) => setFieldValue("club", id)}
