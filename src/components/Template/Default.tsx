@@ -13,6 +13,7 @@ import NotFound from "../../pages/errors/NotFound"
 import StudentDrawer from "../Student/StudentDrawer"
 import Setting from "../../pages/default/setting"
 import NotificationsCenter from "../Notification/NotificationsCenter"
+import NotificationsPage from "../../pages/default/notifications"
 
 
 const DefaultTemplate: React.FC = () => {
@@ -41,6 +42,7 @@ const DefaultTemplate: React.FC = () => {
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
+                        <Route path="/notifications" strict component={NotificationsPage}/>
                         <Route path="/discovery" component={Discovery}/>
                         <Route path="/calendar" component={Events}/>
                         <Route path="/event/:id" component={Event}/>
@@ -54,7 +56,7 @@ const DefaultTemplate: React.FC = () => {
                     </Switch>
                 </div>
             </Navbar>
-            {notifsCenterOpen && <NotificationsCenter />}
+            {notifsCenterOpen && <NotificationsCenter className="hidden md:block" />}
             <StudentDrawer/>
         </div>
     )

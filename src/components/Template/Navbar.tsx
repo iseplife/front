@@ -124,7 +124,9 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 <Link to="/calendar">
                     <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt} className="text-xl" /> } className="border-0"/>
                 </Link>
-                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
+                <Link to="/notifications">
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
+                </Link>
                 <div className="cursor-pointer" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}

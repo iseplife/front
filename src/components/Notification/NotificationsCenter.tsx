@@ -10,7 +10,7 @@ import { Divider } from "antd"
 import { useTranslation } from "react-i18next"
 import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
 
-const NotificationsCenter: React.FC = () => {
+const NotificationsCenter: React.FC<{ className?: string }> = ({className}) => {
     const { t } = useTranslation("notifications")
     const { state: { user }, dispatch } = useContext(AppContext)
     
@@ -42,7 +42,7 @@ const NotificationsCenter: React.FC = () => {
     }, [])
 
     return (
-        <div className="notif_center fixed top-16 right-6 rounded-lg shadow-lg w-80 max-h-[calc(100vh-4rem-1rem)] bg-white pb-2 overflow-auto scrollbar-thin text-neutral-800">
+        <div className={className + " notif_center md:fixed top-16 right-6 md:rounded-lg md:shadow-lg md:w-80 md:max-h-[calc(100vh-4rem-1rem)] md:bg-white md:pb-2 md:overflow-auto md:scrollbar-thin text-neutral-800"}>
             <div className="font-bold text-2xl px-4 py-2.5 text-black">{t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
             {<NotificationSkeleton amount={Math.min(user.totalNotifications, 15)} loading={true} className={(showSkeleton ? "opacity-100 " : "opacity-0 ") + "delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute ")}></NotificationSkeleton>}
             {newNotifications.map(notif =>
