@@ -17,7 +17,9 @@ import {AppContext, DEFAULT_STATE} from "./context/app/context"
 import {appContextReducer} from "./context/app/reducer"
 import Interceptor from "./components/Template/Interceptor"
 import {AppActionType} from "./context/app/action"
-import {RouteComponentProps} from "react-router"
+import { RouteComponentProps } from "react-router"
+import "./index.css"
+import "antd/dist/antd.min.css"
 
 initializeAPIClient()
 const App: React.FC = () => {

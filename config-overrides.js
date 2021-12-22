@@ -1,4 +1,4 @@
-const {override, fixBabelImports, addLessLoader} = require("customize-cra")
+const {override, fixBabelImports, addLessLoader, addPostcssPlugins} = require("customize-cra")
 
 module.exports = override(
     fixBabelImports("import", {
@@ -9,5 +9,5 @@ module.exports = override(
     addLessLoader({
         javascriptEnabled: true,
         modifyVars: {"@primary-color": "#667eea"},
-    })
+    }),
 )

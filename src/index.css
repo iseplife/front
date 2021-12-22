@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: DinotCB;
-    src: url(../fonts/DINOT-CondBold.otf)
-}
-@font-face {
-    font-family: DinotCL;
-    src: url(../fonts/DINOT-CondLight.otf)
-}
-@font-face {
-    font-family: DinotL;
-    src: url(../fonts/DINOT-Light.otf)
-}
-@font-face {
-    font-family: Dinot;
-    src: url(../fonts/DINOT-Regular.otf)
-}
-@font-face {
-    font-family: DinotM;
-    src: url(../fonts/DINOT-Medium.otf)
-}
-
 /********/
 .rbc-calendar > div {
     border-radius: 0.5rem !important;

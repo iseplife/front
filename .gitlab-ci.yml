@@ -17,9 +17,7 @@ stages:
 
 test:
   stage: test
-  image: node:12.13.1
-  before_script:
-    - npm upgrade --global yarn
+  image: node:16.13.1-alpine
   script:
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
     - yarn run build:prod
@@ -29,12 +27,10 @@ test:
 
 react-build:
   stage: build
-  image: node:12.13.1
+  image: node:16.13.1-alpine
   artifacts:
     paths:
       - build/
-  before_script:
-    - npm upgrade --global yarn
   script:
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
     - yarn run build:prod

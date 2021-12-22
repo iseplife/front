@@ -1,10 +1,11 @@
 module.exports = {
     important: true,
+    content: [
+      "./src/**/*.{js,jsx,ts,tsx}",
+    ],
     theme: {
-        extend: {},
+      extend: {},
     },
-    variants: {
-        backgroundColor: ["responsive", "hover", "focus", "active"],
-        textColor: ["responsive", "hover", "focus", "active"]
-    },
-}
+    plugins: [],
+  }
+  

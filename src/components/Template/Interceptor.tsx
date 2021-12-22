@@ -11,15 +11,15 @@ import { TokenSet } from "../../data/security/types"
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
-    error?: string;
-};
+    error?: string
+}
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
-    refreshingPromise?: AxiosPromise<TokenSet>;
-    intercept?: number[];
+    refreshingPromise?: AxiosPromise<TokenSet>
+    intercept?: number[]
 
-    context!: React.ContextType<typeof AppContext>;
-    state: InterceptState = {};
+    context!: React.ContextType<typeof AppContext>
+    state: InterceptState = {}
 
     componentDidMount() {
         this.intercept = [
@@ -48,11 +48,11 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     handleOffline = () => {
         message.error(this.props.t("offline"))
-    };
+    }
 
     handleOnline = () => {
         message.info(this.props.t("online"))
-    };
+    }
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {

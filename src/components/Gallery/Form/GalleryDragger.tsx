@@ -108,7 +108,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                     )
                     responses.push(res)
                 }
-            } catch (e) {
+            } catch (e: any) {
                 setUploadingState(UploadState.ERROR)
                 message.error(e.message)
                 break
