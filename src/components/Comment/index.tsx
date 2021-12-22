@@ -5,7 +5,7 @@ import CommentList from "./CommentList"
 import {useTranslation} from "react-i18next"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
-import {formatDate} from "../../util"
+import {formatDateWithTimer} from "../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCircleNotch, faHeart as faSolidHeart, faPen, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
@@ -32,17 +32,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 
     const [respond, setRespond] = useState<boolean>(false)
 
-    useEffect(() => {
-        let timeoutId: number
-        const updateDate = () => {
-            const [date, wait] = formatDate(data.creation, t)
-            setFormattedDate(date)
-            if (wait > 0)
-                timeoutId = window.setTimeout(() => updateDate(), wait)
-        }
-        updateDate()
-        return () => window.clearTimeout(timeoutId)
-    }, [data.creation])
+    useEffect(() => formatDateWithTimer(data.creation, t, setFormattedDate), [data.creation])
 
     const onUpdate = useCallback(() => {
         if(!isSubmitting) {

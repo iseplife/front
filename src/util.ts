@@ -45,6 +45,18 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
         return [formatWithOptions({ locale: fr }, "d MMMM YYYY, HH:MM")(date), -1]
 }
 
+export const formatDateWithTimer = (date: Date, t: TFunction, setFormattedDate: (date: string) => void) => {
+    let timeoutId: number
+    const updateDate = () => {
+        const [formattedDate, wait] = formatDate(date, t)
+        setFormattedDate(formattedDate)
+        if (wait > 0)
+            timeoutId = window.setTimeout(() => updateDate(), wait)
+    }
+    updateDate()
+    return () => window.clearTimeout(timeoutId)
+}
+
 
 export const _formatDistance = (date: Date | number, baseDate: Date | number, options?: {
     includeSeconds?: boolean
