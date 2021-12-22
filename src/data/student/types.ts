@@ -26,6 +26,7 @@ export interface Student {
     lastConnection: Date
 
     unwatchedNotifications: number
+    totalNotifications: number;
 }
 export interface StudentPreview {
     id: number
@@ -34,6 +35,7 @@ export interface StudentPreview {
     firstName: string
     lastName: string
     unwatchedNotifications: number
+    totalNotifications: number;
     picture?: string
 }
 

@@ -5,7 +5,6 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
-import NotificationsCenter from "../../../components/Notification/NotificationsCenter"
 
 const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
@@ -34,7 +33,6 @@ const Home: React.FC = () => {
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents allowCreate={false} />
             </div>
-            <NotificationsCenter></NotificationsCenter>
         </div>
     )
 }

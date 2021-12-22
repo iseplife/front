@@ -8,6 +8,7 @@ import { isAfter, isBefore } from "date-fns"
 import moment from "moment"
 import { Divider } from "antd"
 import { useTranslation } from "react-i18next"
+import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
 
 const NotificationsCenter: React.FC = () => {
     const { t } = useTranslation("notifications")
@@ -17,6 +18,9 @@ const NotificationsCenter: React.FC = () => {
 
     const [newNotifications, setNewNotifications] = useState([] as NotificationObject[])
     const [oldNotifications, setOldNotifications] = useState([] as NotificationObject[])
+
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         loadNotifications(0).then(notifs => {
             const oneWeekAgo = moment().add(-1, "week").toDate()
@@ -30,11 +34,14 @@ const NotificationsCenter: React.FC = () => {
                 type: AppActionType.SET_LOGGED_USER,
                 user: { ...user, unwatchedNotifications: user.unwatchedNotifications - unwatched.length }
             })
+            setLoading(false)
         })
     }, [])
+
     return (
-        <div className="fixed top-16 right-6 rounded-lg shadow-lg w-80 max-h-[calc(100vh-4rem-1rem)] bg-white pb-2 overflow-auto scrollbar-thin">
-            <div className="font-bold text-2xl px-4 py-2.5">{t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
+        <div className="notif_center fixed top-16 right-6 rounded-lg shadow-lg w-80 max-h-[calc(100vh-4rem-1rem)] bg-white pb-2 overflow-auto scrollbar-thin text-neutral-800">
+            <div className="font-bold text-2xl px-4 py-2.5 text-black">{t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
+            {<NotificationSkeleton amount={Math.min(user.totalNotifications, 15)} loading={true} className={"opacity-100 delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute")}></NotificationSkeleton>}
             {newNotifications.map(notif =>
                 <Notification {...notif} key={notif.id}></Notification>
             )}
