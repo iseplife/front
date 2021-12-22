@@ -10,10 +10,7 @@ import {uploadClubLogo} from "../../../data/club"
 import {ClubContext} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 
-type ClubLogoFormProps = {
-
-}
-const ClubLogoForm: React.FC<ClubLogoFormProps> = () => {
+const ClubLogoForm: React.FC = () => {
     const {t} = useTranslation(["common", "club"])
     const {club, dispatch} = useContext(ClubContext)
     const [image, setImage] = useState<File | null>(null)
