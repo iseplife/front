@@ -17,7 +17,7 @@ stages:
 
 test:
   stage: test
-  image: node:12.13.1
+  image: node:16.13.1
   before_script:
     - npm upgrade --global yarn
   script:
@@ -29,7 +29,7 @@ test:
 
 react-build:
   stage: build
-  image: node:12.13.1
+  image: node:16.13.1
   artifacts:
     paths:
       - build/
