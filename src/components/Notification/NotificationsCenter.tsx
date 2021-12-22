@@ -7,8 +7,10 @@ import { AppActionType } from "../../context/app/action"
 import { isAfter, isBefore } from "date-fns"
 import moment from "moment"
 import { Divider } from "antd"
+import { useTranslation } from "react-i18next"
 
 const NotificationsCenter: React.FC = () => {
+    const { t } = useTranslation("notifications")
     const { state: { user }, dispatch } = useContext(AppContext)
     
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
@@ -32,11 +34,11 @@ const NotificationsCenter: React.FC = () => {
     }, [])
     return (
         <div className="fixed top-16 right-6 rounded-lg shadow-lg w-80 max-h-[calc(100vh-4rem-1rem)] bg-white pb-2 overflow-auto scrollbar-thin">
-            <div className="font-bold text-2xl px-4 py-2.5">Notifications{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
+            <div className="font-bold text-2xl px-4 py-2.5">{t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
             {newNotifications.map(notif =>
                 <Notification {...notif} key={notif.id}></Notification>
             )}
-            {!!oldNotifications?.length && <Divider className="text-gray-700 text-base" orientation="left">Il y a longtemps</Divider>}
+            {!!oldNotifications?.length && <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
             {oldNotifications.map(notif =>
                 <Notification {...notif} key={notif.id}></Notification>
             )}

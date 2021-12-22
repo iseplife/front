@@ -1,4 +1,6 @@
 {
+  "notifications": "Notifications",
+  "long_ago": "Il y a longtemps",
   "in_menu": {
     "NEW_STUDENT_POST": "<b\b>{{author_name}}</b\b> a posté une nouvelle publication.",
     "NEW_CLUB_POST": "<b\b>{{author_name}}</b\b> a posté une nouvelle publication."

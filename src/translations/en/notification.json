@@ -1,4 +1,6 @@
 {
+  "notifications": "Notifications",
+  "long_ago": "Long ago",
   "in_menu": {
     "NEW_STUDENT_POST": ""
   }
