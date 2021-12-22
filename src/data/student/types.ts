@@ -24,6 +24,8 @@ export interface Student {
     bio?: string
     archived: boolean
     lastConnection: Date
+
+    unwatchedNotifications: number
 }
 export interface StudentPreview {
     id: number
@@ -31,6 +33,7 @@ export interface StudentPreview {
     promo: number
     firstName: string
     lastName: string
+    unwatchedNotifications: number
     picture?: string
 }
 
