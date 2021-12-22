@@ -1,4 +1,4 @@
-import {StudentPicture, StudentPreview} from "../../data/student/types"
+import {LoggedStudentPreview, StudentPicture} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextState} from "./context"
 
@@ -16,7 +16,7 @@ export enum AppActionType {
 
 interface setLoggedStudentAction {
     type: AppActionType.SET_LOGGED_USER,
-    user: StudentPreview
+    user: LoggedStudentPreview
 }
 
 interface setPayloadAction {

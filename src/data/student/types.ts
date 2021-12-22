@@ -34,9 +34,11 @@ export interface StudentPreview {
     promo: number
     firstName: string
     lastName: string
+    picture?: string
+}
+export interface LoggedStudentPreview extends StudentPreview {
     unwatchedNotifications: number
     totalNotifications: number;
-    picture?: string
 }
 
 export interface StudentsImportData {
