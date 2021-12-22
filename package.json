@@ -9,12 +9,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:prod": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-app-rewired start",
-    "build": "yarn run tailwind:css && react-app-rewired build",
-    "build:prod": "yarn run tailwind:css && cross-env GENERATE_SOURCEMAP=false CI=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject",
-    "tailwind:css": "tailwind build public/css/tailwind.css -c tailwind.config.js -o public/css/index.css"
+    "build": "react-scripts build",
+    "build:prod": "cross-env GENERATE_SOURCEMAP=false CI=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
