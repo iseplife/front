@@ -1,7 +1,7 @@
 import React, {useContext, useMemo} from "react"
 import {Select, Tag} from "antd"
 import {CustomTagProps} from "rc-select/lib/interface/generator"
-import {FeedsContext} from "../../context/feed/context"
+import {CalendarContext} from "../../context/calendar/context"
 
 type Option = {
     label: string
@@ -14,7 +14,7 @@ type FeedSelectorProps = {
     tagRender?: (props: CustomTagProps) => React.ReactElement
 }
 const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tagRender}) => {
-    const feeds = useContext(FeedsContext)
+    const {feeds} = useContext(CalendarContext)
     const options = useMemo<Option[]>(() => Object.entries(feeds).map(([id, name]) => ({
         value: +id,
         label: name

@@ -1,10 +1,10 @@
 import React, {createRef, useEffect, useState} from "react"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
-import AuthorPicker from "../Common/AuthorPicker"
 import {CommentForm as CommentFormType} from "../../data/thread/types"
 import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import AuthorPicker from "../Common/AuthorPicker"
 
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>

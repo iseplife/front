@@ -9,4 +9,4 @@ export const updatePost = (id: number, update: PostUpdateForm): AxiosPromise<Pos
 
 export const deletePost = (id: number): AxiosPromise<void> => apiClient.delete(`/post/${id}`)
 
-export const getAuthorsThumbnail = (clubOnly = false): AxiosPromise<Author[]> => apiClient.get("/post/authors", {params: {club: clubOnly}})
+export const getAuthorizedAuthors = (): AxiosPromise<Author[]> => apiClient.get("/post/authors")

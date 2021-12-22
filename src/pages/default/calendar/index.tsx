@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
-import {Calendar, dateFnsLocalizer, Event, View} from "react-big-calendar"
+import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
 import {Modal, Radio} from "antd"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -15,7 +15,7 @@ import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
 import {EventWrapper} from "../../../components/Calendar/CalendarItem"
 import EventCreatorModal from "../../../components/Event/EventCreatorModal"
-import {FeedsContext, FeedsContextType} from "../../../context/feed/context"
+import {CalendarContext, CalendarContextType} from "../../../context/calendar/context"
 import {getUserFeed} from "../../../data/feed"
 import {AppContext} from "../../../context/app/context"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -87,7 +87,7 @@ const Events: React.FC = () => {
     ), [state.payload.clubsPublisher.length])
 
     const [selectedEvent, setSelectedEvent] = useState<EventPreview | null>(null)
-    const [feeds, setFeeds] = useState<FeedsContextType>({})
+    const [feeds, setFeeds] = useState<CalendarContextType["feeds"]>({})
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
     const [loading, setLoading] = useState<boolean>(false)
@@ -114,7 +114,7 @@ const Events: React.FC = () => {
             setFeeds(res.data.reduce((acc, feed) => ({
                 ...acc,
                 [feed.id]: feed.name
-            }), {} as FeedsContextType))
+            }), {} as CalendarContextType))
         })
     }, [])
 
@@ -153,7 +153,7 @@ const Events: React.FC = () => {
     }, [view])
 
     return (
-        <FeedsContext.Provider value={feeds}>
+        <CalendarContext.Provider value={{feeds}}>
             <div className="h-full flex flex-row flex-wrap bg-gray-100">
                 <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
                 <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 ">
@@ -210,7 +210,7 @@ const Events: React.FC = () => {
                     )}
                 </div>
             </div>
-        </FeedsContext.Provider>
+        </CalendarContext.Provider>
     )
 }
 

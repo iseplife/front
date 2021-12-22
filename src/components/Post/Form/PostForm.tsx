@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef} from "react"
 import {ACCEPTED_FILETYPE, DEFAULT_EMBED, EmbedCreation, EmbedEnumType, EmbedForm as EmbedFormType,} from "../../../data/post/types"
 import {Field, Form, FormikProps,} from "formik"
 import {DatePicker, Divider, Upload} from "antd"
-import AuthorPicker from "../../Common/AuthorPicker"
 import EmbedForm from "./EmbedForm"
 import moment from "moment"
 import {isPast} from "date-fns"
@@ -16,6 +15,7 @@ import {
     faVideo
 } from "@fortawesome/free-solid-svg-icons"
 import { Author } from "../../../data/request.type"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number

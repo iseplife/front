@@ -5,8 +5,8 @@ import {Input, message, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
-import AuthorPicker from "../../Common/AuthorPicker"
 import HelperIcon from "../../Common/HelperIcon"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 const {TextArea} = Input
 

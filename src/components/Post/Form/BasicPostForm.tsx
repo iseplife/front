@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import {BasicPostCreation, PostUpdate} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
-import AuthorPicker from "../../Common/AuthorPicker"
 import {createPost} from "../../../data/post"
 import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -10,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { AppContext } from "../../../context/app/context"
 import { Author } from "../../../data/request.type"
 import { StudentPreview } from "../../../data/student/types"
+import AuthorPicker from "../../Common/AuthorPicker"
 
 
 export type BasicPostFormValues = {
