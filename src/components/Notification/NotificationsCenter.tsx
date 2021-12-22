@@ -20,6 +20,9 @@ const NotificationsCenter: React.FC = () => {
     const [oldNotifications, setOldNotifications] = useState([] as NotificationObject[])
 
     const [loading, setLoading] = useState(true)
+    const [showSkeleton, setShowSkeleton] = useState(false)
+
+    setTimeout(() => setShowSkeleton(true))// Show skeletons only if waiting a significant time
 
     useEffect(() => {
         loadNotifications(0).then(notifs => {
@@ -41,7 +44,7 @@ const NotificationsCenter: React.FC = () => {
     return (
         <div className="notif_center fixed top-16 right-6 rounded-lg shadow-lg w-80 max-h-[calc(100vh-4rem-1rem)] bg-white pb-2 overflow-auto scrollbar-thin text-neutral-800">
             <div className="font-bold text-2xl px-4 py-2.5 text-black">{t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}</div>
-            {<NotificationSkeleton amount={Math.min(user.totalNotifications, 15)} loading={true} className={"opacity-100 delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute")}></NotificationSkeleton>}
+            {<NotificationSkeleton amount={Math.min(user.totalNotifications, 15)} loading={true} className={(showSkeleton ? "opacity-100 " : "opacity-0 ") + "delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute ")}></NotificationSkeleton>}
             {newNotifications.map(notif =>
                 <Notification {...notif} key={notif.id}></Notification>
             )}
