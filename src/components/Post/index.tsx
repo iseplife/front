@@ -9,12 +9,12 @@ import CommentList from "../Comment/CommentList"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
-import {faPen, faLock, faHeart as faSolidHeart, faEllipsisH} from "@fortawesome/free-solid-svg-icons"
-import {faTrashAlt, faHeart, faCommentAlt, faCommentDots} from "@fortawesome/free-regular-svg-icons"
+import {faPen, faHeart as faSolidHeart, faEllipsisH} from "@fortawesome/free-solid-svg-icons"
+import {faTrashAlt, faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { getWSService } from "../../realtime/services/WSService"
 import WSPostsService from "../../realtime/services/WSPostsService"
-import { formatDate } from "../../util"
+import {formatDateWithTimer} from "../../util"
 
 type PostProps = {
     data: PostType
@@ -87,18 +87,7 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
     }, [data.id])
 
     const [formattedDate, setFormattedDate] = useState<string>("")
-
-    useEffect(() => {
-        let timeoutId: number
-        const updateDate = () => {
-            const [date, wait] = formatDate(data.publicationDate, t)
-            setFormattedDate(date)
-            if(wait > 0)
-                timeoutId = window.setTimeout(() => updateDate(), wait)
-        }
-        updateDate()
-        return () => window.clearTimeout(timeoutId)
-    }, [data.publicationDate])
+    useEffect(() => formatDateWithTimer(data.publicationDate, t, setFormattedDate), [data.publicationDate])
 
     useEffect(() => {
         if (showEditMenu) {
