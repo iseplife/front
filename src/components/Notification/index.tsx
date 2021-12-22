@@ -20,7 +20,7 @@ const Notification: React.FC<NotificationObject> = (notification) => {
                 alt={"notification"}
                 size={"default"}
                 className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center"></Avatar>
-            <div className="ml-2.5 text-sm">
+            <div className="ml-2.5 text-sm w-full">
                 <Trans components={{ "b\b": <b className="text-neutral-900 font-semibold" /> }}>
                     {t(`notifications:in_menu:${notification.type}`, notification.informations) }
                 </Trans>
