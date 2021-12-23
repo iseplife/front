@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { useTranslation } from "react-i18next"
 import { AppContext } from "../../../context/app/context"
 import { Author } from "../../../data/request.type"
-import { StudentPreview } from "../../../data/student/types"
+import { LoggedStudentPreview } from "../../../data/student/types"
 import AuthorPicker from "../../Common/AuthorPicker"
 
 
@@ -63,7 +63,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
 type BasicPostForm = {
     feedId?: number
     onPost: (post: PostUpdate) => void
-    user: StudentPreview
+    user: LoggedStudentPreview
 }
 const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     mapPropsToValues: (props) => {

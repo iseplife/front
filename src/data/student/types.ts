@@ -30,15 +30,16 @@ export interface Student {
 }
 export interface StudentPreview {
     id: number
-    feedId: number
     promo: number
     firstName: string
     lastName: string
     picture?: string
 }
 export interface LoggedStudentPreview extends StudentPreview {
+    feedId: number
+
     unwatchedNotifications: number
-    totalNotifications: number;
+    totalNotifications: number
 }
 
 export interface StudentsImportData {
