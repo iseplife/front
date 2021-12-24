@@ -10,7 +10,7 @@ export const setNotificationsWatched = async (notifications: Notification[], log
     const unwatched: number = (await apiClient.post("/notifications/watch", notifications.reduce((form, val) => {form.append("ids[]", val.id.toString()); return form}, new FormData())))?.data
     if(unwatched)
         dispatch({
-            type: AppActionType.SET_LOGGED_USER,
-            user: { ...loggedUser, unwatchedNotifications: unwatched }
+            type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
+            payload: unwatched
         })
 }

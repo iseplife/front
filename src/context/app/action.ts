@@ -11,6 +11,7 @@ export enum AppActionType {
     SET_STATE,
     SET_PICTURE,
     SET_TOKEN_EXPIRATION,
+    SET_UNWATCHED_NOTIFICATIONS,
 }
 
 
@@ -47,6 +48,10 @@ interface setTokenAction {
 interface setStateLoggedOutAction {
     type: AppActionType.SET_LOGGED_OUT,
 }
+interface setUnwatchedNotificationsAction {
+    type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
+    payload: number
+}
 
 export type AppContextAction =
     setLoggedStudentAction |
@@ -55,6 +60,7 @@ export type AppContextAction =
     setFullStateAction |
     setPictureStateAction |
     setTokenExpirationAction |
-    setTokenAction
+    setTokenAction |
+    setUnwatchedNotificationsAction
 
 
