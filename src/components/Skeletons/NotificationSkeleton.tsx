@@ -1,13 +1,13 @@
 import React, { useMemo } from "react"
 import { Skeleton } from "antd"
 
-interface NotificationSkeletonrops {
+interface NotificationSkeletonProps {
     loading: boolean
     amount: number
     className?: string
 }
 
-const NotificationSkeleton: React.FC<NotificationSkeletonrops> = ({ loading, amount, className }) => {
+const NotificationSkeleton: React.FC<NotificationSkeletonProps> = ({ loading, amount, className }) => {
     return <div className={"pointer-events-none " + className}>
         {
             Array(amount).fill(null).map((val: unknown, i: number) =>

@@ -38,7 +38,7 @@ const DefaultTemplate: React.FC = () => {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <Navbar openNotifsCenter={openNotifsCenter}>
-                <div id="main" className="flex-grow overflow-y-auto bg-gray-100"
+                <div id="main" className="flex-grow overflow-y-auto bg-gray-100 relative"
                     style={{height: "calc(100vh - 3rem)"}}>
                     <Switch>
                         {/* Add your route here */}
