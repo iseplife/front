@@ -20,8 +20,8 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
 
-    const [newNotifications, setNewNotifications] = useState([] as NotificationObject[])
-    const [oldNotifications, setOldNotifications] = useState([] as NotificationObject[])
+    const [newNotifications, setNewNotifications] = useState<NotificationObject[]>([])
+    const [oldNotifications, setOldNotifications] = useState<NotificationObject[]>([])
 
     const [loading, setLoading] = useState(true)
     const [showSkeleton, setShowSkeleton] = useState(false)
