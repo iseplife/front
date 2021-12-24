@@ -32,7 +32,7 @@ const Notification: React.FC<NotificationObject> = (notification) => {
             </div>
             {!notification.watched &&
                 <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-indigo-500 flex-shrink-0 ml-3">
-                    <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-indigo-500 animate-ping"></div>
+                    <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-indigo-500 animate-ping" />
                 </div>
             }
         </div>
