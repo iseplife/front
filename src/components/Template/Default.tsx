@@ -33,7 +33,7 @@ const DefaultTemplate: React.FC = () => {
         window.addEventListener("click", func)
 
         return () => window.removeEventListener("click", func)
-    })
+    }, [notifsCenterOpen])
 
     return (
         <div className="flex flex-col h-full overflow-hidden">

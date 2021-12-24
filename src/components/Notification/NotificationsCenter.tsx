@@ -40,7 +40,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
 
     const isLoaderInView = useCallback(()=> {
         const elementBoundingRect = (fullPage ? main : elementRef?.current)?.getBoundingClientRect()
-        return ((skeletonsRef?.current?.getBoundingClientRect().y ?? Number.MAX_SAFE_INTEGER) - 150) < ((elementBoundingRect?.y ?? 0) + (elementBoundingRect?.height ?? 0))
+        return ((skeletonsRef?.current?.getBoundingClientRect().y ?? Number.MAX_SAFE_INTEGER) - 200) < ((elementBoundingRect?.y ?? 0) + (elementBoundingRect?.height ?? 0))
     }, [skeletonsRef, elementRef])
 
     //Scroll to top if on mobile view (because it will not automatically scroll back to top when changing route)

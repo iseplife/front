@@ -11,7 +11,11 @@ import { formatDateWithTimer, mediaPath } from "../../util"
 const Notification: React.FC<NotificationObject> = (notification) => {
     const { t } = useTranslation(["common", "notifications"])
     const [formattedDate, setFormattedDate] = useState<string>("")
-    useEffect(() => formatDateWithTimer(notification.creation, t, setFormattedDate), [notification.creation])
+    
+    useEffect(() =>
+        formatDateWithTimer(notification.creation, t, setFormattedDate)
+    , [notification.creation])
+    
     return <Link to={notification.link} className="text-neutral-800 hover:text-neutral-800">
         <div className="w-full px-4 py-2.5 items-center left-32 flex cursor-pointer hover:bg-gray-200 hover:bg-opacity-60 rounded-lg transition-colors">
             <Avatar
@@ -19,7 +23,7 @@ const Notification: React.FC<NotificationObject> = (notification) => {
                 icon={<FontAwesomeIcon icon={faUser} />}
                 alt={"notification"}
                 size={"default"}
-                className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center"></Avatar>
+                className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center" />
             <div className="ml-2.5 text-sm w-full">
                 <Trans components={{ "b\b": <b className="text-neutral-900 font-semibold" /> }}>
                     {t(`notifications:in_menu:${notification.type}`, notification.informations) }
