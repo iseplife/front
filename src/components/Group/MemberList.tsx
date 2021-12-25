@@ -4,15 +4,16 @@ import {GroupMember} from "../../data/group/types"
 import {useTranslation} from "react-i18next"
 import StudentAvatar from "../Student/StudentAvatar"
 
-const MEMBER_PREVIEW_COUNT = 10
+export const MEMBER_PREVIEW_COUNT = 5
 
 type MemberListProps = {
     className?: string
     members: GroupMember[]
     actions: (id: number) => ReactElement
+    showMoreButton: boolean
     actionsTrigger?: number
 }
-const MemberList: React.FC<MemberListProps> = ({members, className, actions, actionsTrigger = 1}) => {
+const MemberList: React.FC<MemberListProps> = ({showMoreButton, members, className, actions, actionsTrigger = 1}) => {
     const {t} = useTranslation("group")
     const [viewAll, setViewAll] = useState<boolean>(false)
     const [preview, leftovers] = useMemo(() => [members.slice(0, MEMBER_PREVIEW_COUNT), members.slice(MEMBER_PREVIEW_COUNT)], [members])
@@ -54,8 +55,8 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
                     </span>
                 ))}
             </div>
-            {members.length >= MEMBER_PREVIEW_COUNT && (
-                <p className="cursor-pointer font-bold text-center text-gray-500" onClick={() => setViewAll(v => !v)}>
+            {members.length > MEMBER_PREVIEW_COUNT && showMoreButton && (
+                <p className="cursor-pointer font-semibold text-center text-gray-500" onClick={() => setViewAll(v => !v)}>
                     {viewAll ? t("see_less") : t("see_all")}
                 </p>
             )}
