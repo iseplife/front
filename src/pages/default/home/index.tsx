@@ -9,7 +9,7 @@ import StudentAvatar from "../../../components/Student/StudentAvatar"
 const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
     return (
-        <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
+        <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 ml-4">
                 <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex">
                     <StudentAvatar
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <UserGroups/>
             </div>
-            <Feed style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
+            <Feed style={{flex: "2 1 0%"}} className="mx-4 md:mx-10 sm:col-span-2"/>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents allowCreate={false} />
             </div>
