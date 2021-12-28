@@ -3,7 +3,7 @@ import Notification from "."
 import { AppContext } from "../../context/app/context"
 import { loadNotifications, setNotificationsWatched } from "../../data/notification"
 import { Notification as NotificationObject } from "../../data/notification/types"
-import { isAfter, isBefore } from "date-fns"
+import {add, isAfter, isBefore} from "date-fns"
 import moment from "moment"
 import { Divider } from "antd"
 import { useTranslation } from "react-i18next"
@@ -38,16 +38,16 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
 
     const main = document.getElementById("main")
 
+    setTimeout(() => setShowSkeleton(true))// Show skeletons only if waiting a significant time
+
     const isLoaderInView = useCallback(()=> {
         const elementBoundingRect = (fullPage ? main : elementRef?.current)?.getBoundingClientRect()
         return ((skeletonsRef?.current?.getBoundingClientRect().y ?? Number.MAX_SAFE_INTEGER) - 200) < ((elementBoundingRect?.y ?? 0) + (elementBoundingRect?.height ?? 0))
     }, [skeletonsRef, elementRef])
 
-    //Scroll to top if on mobile view (because it will not automatically scroll back to top when changing route)
-    useEffect(()=>{
-        if(fullPage && main)
-            main.scrollTop = 0
-    }, [fullPage])
+    const scrollHandler = useCallback(() => (
+        isLoaderInView() && loadMoreNotifications()
+    ), [skeletonsRef, elementRef])
 
     const loadMoreNotifications = useCallback(async () => {
         if(loadingNotifs)
@@ -65,31 +65,35 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             .sort((a, b) => b.id - a.id)
             .filter((val, index, array) => array.findIndex(other => other.id == val.id) == index)
 
-        const oneWeekAgo = moment().add(-1, "week").toDate()
+        const oneWeekAgo = add(new Date(), {weeks: -1})
         
         setNewNotifications(notifs.filter(notif => isAfter(notif.creation, oneWeekAgo)))
         setOldNotifications(notifs.filter(notif => isBefore(notif.creation, oneWeekAgo)))
         
         const unwatched = page.content.filter(notif => !notif.watched)
         if(unwatched.length)
-            setNotificationsWatched(unwatched, user, dispatch)
+            await setNotificationsWatched(unwatched, user, dispatch)
 
         if(isLoaderInView())
             loadMoreNotifications()
     }, [user, loadingNotifs, currentPage, newNotifications, oldNotifications])
 
-    setTimeout(() => setShowSkeleton(true))// Show skeletons only if waiting a significant time
+    /* Scroll to top if on mobile view
+    (because it will not automatically scroll back to top when changing route) */
+    useEffect(()=>{
+        if(fullPage && main)
+            main.scrollTop = 0
+    }, [fullPage])
 
+    /* Fetch notification on first load */
     useEffect(() => {
         loadMoreNotifications()
     }, [])
+
     useLayoutEffect(() => {
         if(isLoaderInView())
             loadMoreNotifications()
     }, [oldNotifications, newNotifications])
-    const scrollHandler = useCallback(() =>
-        isLoaderInView() && loadMoreNotifications()
-    , [skeletonsRef, elementRef])
 
     useLayoutEffect(() => {
         main?.addEventListener("scroll", scrollHandler)
@@ -106,16 +110,19 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             {newNotifications.map(notif =>
                 <Notification {...notif} key={notif.id} />
             )}
-            {!!oldNotifications?.length &&
-                <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
+            {!!oldNotifications?.length && (
+                <Divider className="text-gray-700 text-base" orientation="left">
+                    {t("long_ago")}
+                </Divider>
+            )}
             {oldNotifications.map(notif =>
                 <Notification {...notif} key={notif.id} />
             )}
-            {!isLastPage && loadedNotifications < user.totalNotifications &&
+            {!isLastPage && loadedNotifications < user.totalNotifications && (
                 <div ref={skeletonsRef}>
                     <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
                 </div>
-            }
+            )}
         </div>
     )
 }
