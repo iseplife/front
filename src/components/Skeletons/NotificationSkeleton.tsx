@@ -10,7 +10,8 @@ interface NotificationSkeletonProps {
 const NotificationSkeleton: React.FC<NotificationSkeletonProps> = ({ loading, amount, className }) => {
     const skeletons = useMemo(() =>
         Array(amount).fill(null)
-    , [])
+    , [amount])
+
     return <div className={"pointer-events-none " + className}>
         {
             skeletons.map((val: unknown, i: number) =>
