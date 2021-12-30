@@ -4,10 +4,10 @@ import { AppContext } from "../../context/app/context"
 import { loadNotifications, setNotificationsWatched } from "../../data/notification"
 import { Notification as NotificationObject } from "../../data/notification/types"
 import {add, isAfter, isBefore} from "date-fns"
-import moment from "moment"
 import { Divider } from "antd"
 import { useTranslation } from "react-i18next"
 import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
+import {AppActionType} from "../../context/app/action"
 
 interface NotificationsCenterProps {
     fullPage?: boolean
@@ -33,17 +33,18 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         oldNotifications.length + newNotifications.length
     , [oldNotifications, newNotifications])
 
+    const main = useMemo(() => document.getElementById("main"), [])
     const elementRef = React.createRef<HTMLDivElement>()
     const skeletonsRef = React.createRef<HTMLDivElement>()
 
-    const main = document.getElementById("main")
+    // Show skeletons only if waiting a significant time
+    setTimeout(() => setShowSkeleton(true))
 
-    setTimeout(() => setShowSkeleton(true))// Show skeletons only if waiting a significant time
 
     const isLoaderInView = useCallback(()=> {
         const elementBoundingRect = (fullPage ? main : elementRef?.current)?.getBoundingClientRect()
         return ((skeletonsRef?.current?.getBoundingClientRect().y ?? Number.MAX_SAFE_INTEGER) - 200) < ((elementBoundingRect?.y ?? 0) + (elementBoundingRect?.height ?? 0))
-    }, [skeletonsRef, elementRef])
+    }, [fullPage, skeletonsRef, elementRef])
 
     const scrollHandler = useCallback(() => (
         isLoaderInView() && loadMoreNotifications()
@@ -71,8 +72,15 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         setOldNotifications(notifs.filter(notif => isBefore(notif.creation, oneWeekAgo)))
         
         const unwatched = page.content.filter(notif => !notif.watched)
-        if(unwatched.length)
-            await setNotificationsWatched(unwatched, user, dispatch)
+        if(unwatched.length){
+            const unwatchedCount = (await setNotificationsWatched(unwatched)).data
+            if(unwatchedCount)
+                dispatch({
+                    type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
+                    payload: unwatchedCount
+                })
+        }
+
 
         if(isLoaderInView())
             loadMoreNotifications()
