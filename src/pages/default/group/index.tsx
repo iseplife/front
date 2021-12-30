@@ -44,7 +44,7 @@ const Group: React.FC = () => {
 
     return (
         <div className="mt-5 px-3 flex flex-wrap">
-            <div className="w-full md:w-64 lg:w-1/4 ">
+            <div className="w-full md:w-64 lg:w-1/4">
                 {group && (
                     <div className="flex p-1 mb-5 items-center ">
                         <div>

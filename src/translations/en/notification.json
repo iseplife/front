@@ -1,8 +1,9 @@
 {
   "notifications": "Notifications",
   "long_ago": "Long ago",
+  "see_more": "See all notifications",
   "in_menu": {
-    "NEW_STUDENT_POST": "<b\b>{{author_name}}</b\b> published a new post.",
-    "NEW_CLUB_POST": "<b\b>{{author_name}}</b\b> published a new post."
+    "NEW_STUDENT_POST": "published a new post.",
+    "NEW_CLUB_POST": "published a new post."
   }
 }

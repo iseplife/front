@@ -2,12 +2,11 @@ import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, us
 import Notification from "."
 import { AppContext } from "../../context/app/context"
 import { loadNotifications, setNotificationsWatched } from "../../data/notification"
-import { Notification as NotificationObject } from "../../data/notification/types"
-import {add, isAfter, isBefore} from "date-fns"
-import { Divider } from "antd"
+import { Notification as NotificationType } from "../../data/notification/types"
 import { useTranslation } from "react-i18next"
 import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
 import {AppActionType} from "../../context/app/action"
+import { Link } from "react-router-dom"
 
 interface NotificationsCenterProps {
     fullPage?: boolean
@@ -19,19 +18,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const { state: { user }, dispatch } = useContext(AppContext)
     
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
-
-    const [newNotifications, setNewNotifications] = useState<NotificationObject[]>([])
-    const [oldNotifications, setOldNotifications] = useState<NotificationObject[]>([])
-
-    const [loading, setLoading] = useState(true)
+    const [notifications, setNotifications] = useState<NotificationType[]>([])
+    const [loading, setLoading] = useState(false)
     const [showSkeleton, setShowSkeleton] = useState(false)
-    const [isLastPage, setIsLastPage] = useState(true)
-    const [currentPage, setCurrentPage] = useState(-1)
-    const [loadingNotifs, setLoadingNotifs] = useState(false)
-
-    const loadedNotifications = useMemo(() =>
-        oldNotifications.length + newNotifications.length
-    , [oldNotifications, newNotifications])
 
     const main = useMemo(() => document.getElementById("main"), [])
     const elementRef = React.createRef<HTMLDivElement>()
@@ -51,26 +40,14 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     ), [skeletonsRef, elementRef])
 
     const loadMoreNotifications = useCallback(async () => {
-        if(loadingNotifs)
+        if(loading)
             return
-        
-        setLoadingNotifs(true)
-        const page = (await loadNotifications(currentPage + 1)).data
+
+        setLoading(true)
+        const page = (await loadNotifications(0)).data
+        setNotifications(page.content)
         setLoading(false)
 
-        setCurrentPage(page.number)
-        setIsLastPage(page.last)
-        setLoadingNotifs(false)
-
-        const notifs = [...newNotifications, ...oldNotifications, ...page.content]
-            .sort((a, b) => b.id - a.id)
-            .filter((val, index, array) => array.findIndex(other => other.id == val.id) == index)
-
-        const oneWeekAgo = add(new Date(), {weeks: -1})
-        
-        setNewNotifications(notifs.filter(notif => isAfter(notif.creation, oneWeekAgo)))
-        setOldNotifications(notifs.filter(notif => isBefore(notif.creation, oneWeekAgo)))
-        
         const unwatched = page.content.filter(notif => !notif.watched)
         if(unwatched.length){
             const unwatchedCount = (await setNotificationsWatched(unwatched)).data
@@ -81,10 +58,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                 })
         }
 
-
         if(isLoaderInView())
             loadMoreNotifications()
-    }, [user, loadingNotifs, currentPage, newNotifications, oldNotifications])
+    }, [user, loading])
 
     /* Scroll to top if on mobile view
     (because it will not automatically scroll back to top when changing route) */
@@ -101,7 +77,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     useLayoutEffect(() => {
         if(isLoaderInView())
             loadMoreNotifications()
-    }, [oldNotifications, newNotifications])
+    }, [notifications])
 
     useLayoutEffect(() => {
         main?.addEventListener("scroll", scrollHandler)
@@ -114,23 +90,22 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             <div className="font-bold text-2xl px-4 py-2.5 text-black">
                 {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}
             </div>
-            <NotificationSkeleton amount={Math.min(user.totalNotifications, 15)} loading={true} className={(showSkeleton ? "opacity-100 " : "opacity-0 ") + "delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute ")} />
-            {newNotifications.map(notif =>
+            <NotificationSkeleton
+                amount={Math.min(user.totalNotifications, 15)}
+                loading={true}
+                className={(showSkeleton ? "opacity-100 " : "opacity-0 ") + "delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute ")}
+            />
+            {notifications.map(notif =>
                 <Notification {...notif} key={notif.id} />
             )}
-            {!!oldNotifications?.length && (
-                <Divider className="text-gray-700 text-base" orientation="left">
-                    {t("long_ago")}
-                </Divider>
-            )}
-            {oldNotifications.map(notif =>
-                <Notification {...notif} key={notif.id} />
-            )}
-            {!isLastPage && loadedNotifications < user.totalNotifications && (
-                <div ref={skeletonsRef}>
-                    <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
-                </div>
-            )}
+            <div className="w-full px-3">
+                <Link
+                    to="/notifications"
+                    className="text-center text-gray-500 block hover:text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2"
+                >
+                    {t("see_more")}
+                </Link>
+            </div>
         </div>
     )
 }
