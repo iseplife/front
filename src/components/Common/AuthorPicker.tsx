@@ -27,17 +27,18 @@ const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors = [], 
     const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
     const [t] = useTranslation("common")
 
-    
-    const context = useContext(FeedContext)
+    const feedctx = useContext(FeedContext)
     const [authors, setAuthors] = useState<Author[]>(givenAuthors)
 
     useEffect(() => {
-        if(!authors?.length)
-            if(context)
-                setAuthors(context.authors)
-            else
+        if(givenAuthors.length == 0) {
+            if (feedctx){
+                setAuthors(feedctx.authors)
+            } else {
                 getAuthorizedAuthors().then(res => setAuthors(res.data))
-    }, [context])
+            }
+        }
+    }, [givenAuthors, feedctx])
 
     const handleChange = useCallback((v: number) => (
         callback(authors.find(author => author.id == v))
