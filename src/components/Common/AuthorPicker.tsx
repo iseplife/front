@@ -22,16 +22,16 @@ export type AuthorPickerProps = {
     style?: CSSProperties
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors = [], defaultValue, callback, compact, clubOnly, ...props}) => {
-    const {state: {user: {picture}}} = useContext(AppContext)
-    const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, defaultValue, callback, compact, clubOnly, ...props}) => {
     const [t] = useTranslation("common")
-
+    const {state: {user: {picture}}} = useContext(AppContext)
     const feedctx = useContext(FeedContext)
-    const [authors, setAuthors] = useState<Author[]>(givenAuthors)
+
+    const [authors, setAuthors] = useState<Author[]>(givenAuthors ?? [])
+    const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
 
     useEffect(() => {
-        if(givenAuthors.length == 0) {
+        if(!givenAuthors) {
             if (feedctx){
                 setAuthors(feedctx.authors)
             } else {
