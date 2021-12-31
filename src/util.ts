@@ -222,4 +222,21 @@ export class EntitySet<T extends Entity> {
         })
         return filteredEntities
     }
+
+    *[Symbol.iterator]() {
+        for (const item of this.items)
+            yield item
+    }
+
+    forEach(callbackFn: (val: T) => void): void {
+        this.items.forEach(callbackFn)
+    }
+
+    map<K>(callbackFn: (val: T) => K): K[] {
+        const mappedEntities: K[] = []
+        this.items.forEach((entity) => {
+            mappedEntities.push(callbackFn(entity))
+        })
+        return mappedEntities
+    }
 }

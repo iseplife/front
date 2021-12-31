@@ -7,7 +7,7 @@ import Notification from "../../../components/Notification"
 import InfiniteScroller from "../../../components/Common/InfiniteScroller"
 import {loadNotifications, setNotificationsWatched} from "../../../data/notification"
 import {AppActionType} from "../../../context/app/action"
-import {add, isAfter, isBefore} from "date-fns"
+import {add, isAfter} from "date-fns"
 import {Divider} from "antd"
 
 const NotificationsPage: React.FC = () => {
@@ -16,31 +16,43 @@ const NotificationsPage: React.FC = () => {
 
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
 
-    const [newNotifications, setNewNotifications] = useState<NotificationType[]>([])
+    const [notificationIds, setNotificationIds] = useState<Set<number>>(new Set())
+    const [recentNotifications, setRecentNotifications] = useState<NotificationType[]>([])
     const [oldNotifications, setOldNotifications] = useState<NotificationType[]>([])
 
     const [loading, setLoading] = useState<boolean>(true)
     const [empty, setEmpty] = useState<boolean>(false)
 
     const loadedNotifications = useMemo(() => (
-        oldNotifications.length + newNotifications.length
-    ), [oldNotifications, newNotifications])
+        oldNotifications.length + recentNotifications.length
+    ), [oldNotifications, recentNotifications])
 
     const main = useMemo(() => document.getElementById("main"), [])
 
     const loadMoreNotifications = useCallback(async (count: number) => {
         setLoading(true)
         const res = await loadNotifications(count)
-        setLoading(false)
-
-        /* Sort notifications by creation date and delete duplicate */
-        const notifs = [...newNotifications, ...oldNotifications, ...res.data.content]
-            .sort((a, b) => b.creation.getTime() - a.creation.getTime())
-            .filter((val, index, array) => array.findIndex(other => other.id == val.id) == index)
 
         const oneWeekAgo = add(new Date(), {weeks: -1})
-        setNewNotifications(notifs.filter(notif => isAfter(notif.creation, oneWeekAgo)))
-        setOldNotifications(notifs.filter(notif => isBefore(notif.creation, oneWeekAgo)))
+        const old: NotificationType[] = []
+        const recent: NotificationType[] = []
+        const ids: number[] = []
+        res.data.content.forEach(notif => {
+            if(!notificationIds.has(notif.id)){
+                const notifGroup = isAfter(notif.creation, oneWeekAgo) ? recent : old
+                notifGroup.push(notif)
+                ids.push(notif.id)
+            }
+        })
+
+        setRecentNotifications(notifs => [...notifs, ...recent])
+        setOldNotifications(notifs => [...notifs, ...old])
+        setNotificationIds(set => {
+            ids.forEach(id => set.add(id))
+            return set
+        })
+
+        setLoading(false)
 
         const unwatched = res.data.content.filter(notif => !notif.watched)
         if (unwatched.length) {
@@ -56,16 +68,16 @@ const NotificationsPage: React.FC = () => {
             setEmpty(true)
 
         return res.data.last
-    }, [])
+    }, [notificationIds])
 
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
             <div className="flex-1 ml-4">
                 <div className="p-2 mb-5 items-center cursor-pointer flex">
-                    <div className="font-bold text-2xl px-4 py-2.5 text-black">
+                    <h3 className="text-black mx-2 mb-0 font-bold text-2xl text-gray-700 leading-4 mt-1 block">
                         {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}
-                    </div>
+                    </h3>
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
@@ -80,7 +92,7 @@ const NotificationsPage: React.FC = () => {
                         />
                     }
                 >
-                    {newNotifications.map(notif =>
+                    {recentNotifications.map(notif =>
                         <Notification {...notif} key={notif.id}/>
                     )}
                     {oldNotifications.length > 0 && (
