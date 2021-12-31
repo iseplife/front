@@ -170,7 +170,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     <AuthorPicker
                         defaultValue={values.club}
                         clubOnly={true}
-                        callback={(id) => setFieldValue("club", id)}
+                        callback={(author) => setFieldValue("club", author?.id)}
                         className="mx-2 w-32 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                         placeholder={t("form.placeholder.club")}

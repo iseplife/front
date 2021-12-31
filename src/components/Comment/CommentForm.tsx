@@ -39,7 +39,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 my-3">
-            <AuthorPicker callback={(id => formik.setFieldValue("asClub", id))} compact className="h-7 -ml-2 -mr-1"/>
+            <AuthorPicker callback={(author => formik.setFieldValue("asClub", author?.id))} compact className="h-7 -ml-2 -mr-1"/>
             <input
                 id="message"
                 placeholder={t("write_comment")}
