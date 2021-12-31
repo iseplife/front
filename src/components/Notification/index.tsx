@@ -23,9 +23,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
 
     return (
         <Link to={notification.link} className="text-neutral-800 hover:text-neutral-800">
-            <div
-                className={`${className} w-full px-4 py-2.5 items-center left-32 flex cursor-pointer hover:bg-gray-200 hover:bg-opacity-60 rounded-lg transition-colors`}
-            >
+            <div className={`${className} w-full px-4 py-2.5 items-center left-32 flex cursor-pointer hover:bg-gray-200 hover:bg-opacity-60 rounded-lg transition-colors`}>
                 <Avatar
                     src={mediaPath(notification.icon, AvatarSizes.THUMBNAIL)}
                     icon={<FontAwesomeIcon icon={faUser}/>}
@@ -34,9 +32,9 @@ const Notification: React.FC<NotificationProps> = (props) => {
                     className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center"
                 />
                 <div className="ml-2.5 text-sm w-full">
-                    <b className="text-neutral-900 font-semibold">
-                        {notification.informations.author_name}
-                    </b> {t(`notifications:in_menu:${notification.type}`)}
+                    <Trans components={{"bold": <b className="text-neutral-900 font-semibold"/>}}>
+                        {t(`notifications:in_menu:${notification.type}`, notification.informations)}
+                    </Trans>
                     <div className="text-indigo-500">
                         {formattedDate}
                     </div>
