@@ -53,6 +53,10 @@ export type EventForm = {
 }
 
 export type Marker = [number, number]
+export interface ExtendedMarker {
+    lng: number
+    lat: number
+}
 
 export type FilterList = {
     [name: string]: boolean
