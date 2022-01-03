@@ -6,5 +6,10 @@
 	"max_image_reached": "Vous ne pouvez pas publier plus de 5 photos",
 	"response": "réponse",
 	"respond": "Répondre",
-	"see_more_comments": "Voir plus de commentaires"
+	"see_more_comments": "Voir plus de commentaires",
+	"post_pinned": "Post épinglé !",
+	"post_unpinned": "Post désépinglé !",
+	"planned_for": "Prévu pour ",
+	"pin": "Épingler",
+	"unpin": "Désépingler"
 }

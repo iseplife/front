@@ -42,7 +42,7 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
     else if (now.getFullYear() == date.getFullYear())//This year
         return [formatWithOptions({ locale: fr }, "d MMMM, HH:MM")(date), -1]
     else
-        return [formatWithOptions({ locale: fr }, "d MMMM YYYY, HH:MM")(date), -1]
+        return [formatWithOptions({ locale: fr }, "d MMMM yyyy, HH:MM")(date), -1]
 }
 
 export const formatDateWithTimer = (date: Date, t: TFunction, setFormattedDate: (date: string) => void) => {

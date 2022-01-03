@@ -4,17 +4,19 @@ import Embed from "./Embed"
 import {Divider, message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {toggleThreadLike} from "../../data/thread"
-import {format, isPast} from "date-fns"
+import {format, isFuture} from "date-fns"
 import CommentList from "../Comment/CommentList"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
-import {faPen, faHeart as faSolidHeart, faEllipsisH} from "@fortawesome/free-solid-svg-icons"
-import {faTrashAlt, faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
+import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { getWSService } from "../../realtime/services/WSService"
 import WSPostsService from "../../realtime/services/WSPostsService"
 import {formatDateWithTimer} from "../../util"
+import PostToolBar from "./PostToolBar"
+import {deletePost, pinPost} from "../../data/post"
 
 type PostProps = {
     data: PostType
@@ -22,20 +24,18 @@ type PostProps = {
     embeded?: boolean
     forceShowComments?: boolean
     toggleEdition?: (toggle: boolean) => void
+    onPin?: (id: number, pinned: boolean) => void
     onDelete?: (id: number) => Promise<void>
     onUpdate?: (id: number, postUpdate: PostUpdate) => void
 }
 
-const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments, onDelete, onUpdate, toggleEdition }) => {
+const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments, onPin,onDelete, onUpdate, toggleEdition }) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
     const [showComments, setShowComments] = useState<boolean>(!!(forceShowComments || (data.nbComments == 1 && data.trendingComment)))
-
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
-
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
-
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
 
     const confirmDeletion = useCallback(() => {
@@ -44,17 +44,23 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
             content: t("remove_item.content"),
             okText: "Ok",
             cancelText: t("cancel"),
-            onOk: () => {
-                onDelete?.(data.id).then(() => message.info(t("remove_item.complete")))
+            onOk: async () => {
+                deletePost(data.id)
+                onDelete?.(data.id)
             }
         })
     }, [data.id, t, onDelete])
 
     const confirmUpdate = useCallback((updatedPost: PostUpdate) => {
-        message.info(t("update_item.complete")).then(() =>
-            onUpdate?.(data.id, updatedPost)
-        )
-    }, [data.id, t, onUpdate])
+        onUpdate?.(data.id, updatedPost)
+    }, [data.id, onUpdate])
+
+    const togglePin = useCallback(async () => {
+        pinPost(data.id, !data.pinned).then(() => {
+            onPin?.(data.id, !data.pinned)
+
+        })
+    }, [data.id, data.pinned, onPin])
 
     const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id)
@@ -138,39 +144,23 @@ const Post: React.FC<PostProps> = ({ data, isEdited, embeded, forceShowComments,
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4">
-                        {!isPast(data.publicationDate) && (
-                            <span className="mx-2 text-xs">
-                                {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
-                            </span>
+                        <span className="mx-2 text-xs">
+                            {isFuture(data.publicationDate) && t("post:planned_for")}
+                            {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
+                        </span>
+                        {data.pinned && (
+                            <FontAwesomeIcon
+                                icon={faThumbtack}
+                                className="mr-2.5 text-gray-500"
+                            />
                         )}
                         {data.hasWriteAccess && (
-                            <div className="relative">
-                                <div className="cursor-pointer group rounded-full hover:bg-indigo-700 hover:bg-opacity-10 transition-colors mr-3 md:mr-4 w-9 h-9 items-center flex justify-center"
-                                    onClick={() => setShowEditMenu(!showEditMenu)}>
-                                    <FontAwesomeIcon
-                                        icon={faEllipsisH}
-                                        className="text-gray-400 group-hover:text-indigo-400 transition-colors"
-                                    />
-                                </div>
-                                {showEditMenu &&
-                                    <div className="select-none edit-menu absolute top-10 right-4 rounded bg-white border-gray-300 border-opacity-70 border w-32 text-base font-medium z-20">
-                                        <div onClick={confirmDeletion} className="flex items-center w-full text-red-600 px-3 py-2 cursor-pointer hover:bg-red-50 transition-colors">
-                                            <FontAwesomeIcon
-                                                icon={faTrashAlt}
-                                                className="mr-2.5"
-                                            /> Supprimer
-                                        </div>
-                                        {toggleEdition &&
-                                            <div onClick={() => toggleEdition?.(true)} className="flex items-center w-full text-gray-500 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 transition-colors">
-                                                <FontAwesomeIcon
-                                                    icon={faPen}
-                                                    className="mr-2.5"
-                                                /> Modifier
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </div>
+                            <PostToolBar
+                                pinned={data.pinned}
+                                triggerPin={togglePin}
+                                triggerEdition={() => toggleEdition?.(true)}
+                                triggerDeletion={confirmDeletion}
+                            />
                         )}
                     </div>
                 </div>
