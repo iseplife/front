@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useCallback, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEllipsisH, faPen, faThumbtack, faUnlink} from "@fortawesome/free-solid-svg-icons"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
@@ -13,6 +13,11 @@ type PostToolbarProps = {
 const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, triggerPin, triggerEdition}) => {
     const {t} = useTranslation(["common", "post"])
     const [showMenu, setShowMenu] = useState<boolean>(false)
+
+    const closeMenuWrapper = useCallback((fn) => () => {
+        fn()
+        setShowMenu(false)
+    }, [])
 
     return (
         <div className="relative">
@@ -29,7 +34,7 @@ const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, trigg
                     className="select-none edit-menu absolute top-10 right-4 rounded bg-white border-gray-300 border-opacity-70 border w-32 text-base font-medium z-20"
                 >
                     <div
-                        onClick={triggerEdition}
+                        onClick={closeMenuWrapper(triggerEdition)}
                         className="flex items-center w-full text-gray-500 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 transition-colors"
                     >
                         <FontAwesomeIcon
@@ -38,7 +43,7 @@ const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, trigg
                         /> {t("edit")}
                     </div>
                     <div
-                        onClick={triggerPin}
+                        onClick={closeMenuWrapper(triggerPin)}
                         className="flex items-center w-full text-gray-500 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 transition-colors"
                     >
                         {pinned ?
@@ -58,7 +63,7 @@ const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, trigg
 
                     </div>
                     <div
-                        onClick={triggerDeletion}
+                        onClick={closeMenuWrapper(triggerDeletion)}
                         className="flex items-center w-full text-red-600 px-3 py-2 cursor-pointer hover:bg-red-50 transition-colors"
                     >
                         <FontAwesomeIcon
