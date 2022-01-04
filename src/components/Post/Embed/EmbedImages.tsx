@@ -1,23 +1,21 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {getPhotosAsync, PostPhoto } from "../../../util"
+import {parsePhotosAsync, SafePhoto} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 import {Image} from "../../../data/media/types"
 import PhotoGallery from "react-photo-gallery"
 import {message} from "antd"
-import PostImageLightbox from "./PostImageLightbox"
-import { Post } from "../../../data/post/types"
+import Lightbox from "../../Common/Lightbox"
 
 type EmbedImagesProps = {
     images: Array<Image>
-    post: Post
 }
-const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
-    const [photos, setPhotos] = useState<PostPhoto[]>([])
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>()
+const EmbedImages: React.FC<EmbedImagesProps> = ({images}) => {
+    const [photos, setPhotos] = useState<SafePhoto[]>([])
+    const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getPhotosAsync(images).then(photos => {
+        parsePhotosAsync(images).then(photos => {
             setPhotos(photos)
         }).catch(e => {
             message.error("Error while parsing...")
@@ -33,7 +31,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             src={photo.src}
             height={photo.height}
             width={photo.width}
-            onClick={() => setCurrentPhotoIndex(index)}
+            onClick={() => setLightboxPhotoIndex(index)}
             alt={photo.alt}
         />
     ), [])
@@ -47,13 +45,11 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                 targetRowHeight={200}
                 direction="row"
             />
-            {currentPhotoIndex !== undefined && (
-                <PostImageLightbox
-                    post={post}
+            {lightboxPhotoIndex !== undefined && (
+                <Lightbox
+                    initialIndex={lightboxPhotoIndex}
                     photos={photos}
-                    currentPhotoIndex={currentPhotoIndex}
-                    closeCallback={() => setCurrentPhotoIndex(undefined)}
-                    setCurrentPhotoIndex={index => setCurrentPhotoIndex(index)}
+                    onClose={() => setLightboxPhotoIndex(undefined)}
                 />
             )}
         </div>

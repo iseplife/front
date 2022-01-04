@@ -146,32 +146,33 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export const getPhotosAsync = async (images: ImageType[]): Promise<PostPhoto[]> => {
-    return await Promise.all(
-        images.map(
-            (img) => parsePhoto(img.name, String(img.id), img.nsfw)
-        )
-    )
-}
-export type PostPhoto = PhotoProps<{ hdSrc: string, nsfw: boolean, selected: boolean }>
+export type SafePhoto = PhotoProps<{nsfw: boolean}>
+export type SelectablePhoto = SafePhoto & {selected: boolean}
 
-export const parsePhoto = (imgUrl: string, key: string, nsfw: boolean): Promise<PostPhoto> => {
+export type ParserFunction<T extends PhotoProps = SafePhoto> = (imgUrl: string, key: string, nsfw: boolean) => Promise<T>
+export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: ImageType[], parser?: ParserFunction<T>): Promise<T[]> => {
+    return await Promise.all(
+        images.map(img => (parser ?? defaultPhotoParser)(img.name, String(img.id), img.nsfw))
+    ) as Awaited<T[]>
+}
+
+export const defaultPhotoParser: ParserFunction = (imgUrl: string, key: string, nsfw: boolean): Promise<SafePhoto> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
         image.src = mediaPath(imgUrl, GallerySizes.PREVIEW)!
         image.onerror = reject
         image.onload = () => resolve({
+            key,
             nsfw,
-            selected: false,
             src: image.src,
             width: image.width,
             height: image.height,
-            key,
-            srcSet: imgUrl,
-            hdSrc: mediaPath(imgUrl, GallerySizes.LIGHTBOX)!
+            srcSet: imgUrl
         })
     })
 }
+
+
 
 
 export class EntitySet<T extends Entity> {
