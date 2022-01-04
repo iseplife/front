@@ -1,10 +1,12 @@
 import {AxiosPromise} from "axios"
-import {Comment, CommentForm, CommentUpdate} from "./types"
+import {Comment, CommentForm, CommentUpdate, ThreadState} from "./types"
 import {apiClient} from "../http"
 
 export const toggleThreadLike = (id: number): AxiosPromise<boolean> => {
     return apiClient.put(`/thread/${id}/like`)
 }
+
+export const getThread = (id: number): AxiosPromise<ThreadState> => apiClient.get(`/thread/${id}`)
 
 export const getThreadComments = (id: number): AxiosPromise<Comment[]> => {
     return apiClient.get(`/thread/${id}/comment`)

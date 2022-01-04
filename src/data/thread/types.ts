@@ -1,5 +1,12 @@
 import {Author} from "../request.type"
 
+export type ThreadState = {
+    id: number
+    liked: boolean
+    nbLikes: number
+    nbComments: number
+}
+
 export type Comment = {
     id: number
     thread: number

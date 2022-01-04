@@ -81,9 +81,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 }
 
                 this.refreshingPromise = undefined
-            }).catch((err) => {
-                reject(err)
-
+            }).catch(() => {
                 this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
                 this.refreshingPromise = undefined
 
