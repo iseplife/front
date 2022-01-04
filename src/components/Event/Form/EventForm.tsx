@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react"
 import {Form, FormikProps} from "formik"
-import {EventForm as EventFormType, Marker as MarkerType} from "../../../data/event/types"
+import {EventForm as EventFormType, ExtendedMarker} from "../../../data/event/types"
 import EventType, {EventTypes} from "../../../constants/EventType"
 import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
@@ -21,11 +21,11 @@ const {Option} = Select
 
 const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue, handleChange, isSubmitting, isValid}) => {
     const {t} = useTranslation("event")
-    const [marker, setMarker] = useState<MarkerType>()
+    const [marker, setMarker] = useState<ExtendedMarker>()
 
-    const handleMarkerChange = useCallback((e: { latlng: MarkerType }) => {
+    const handleMarkerChange = useCallback((e: { latlng: ExtendedMarker }) => {
         setMarker(e.latlng)
-        setFieldValue("coordinates", e.latlng)
+        setFieldValue("coordinates", [e.latlng.lat, e.latlng.lng])
     }, [])
 
     return (
@@ -170,7 +170,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     <AuthorPicker
                         defaultValue={values.club}
                         clubOnly={true}
-                        callback={(id) => setFieldValue("club", id)}
+                        callback={(author) => setFieldValue("club", author?.id)}
                         className="mx-2 w-32 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                         placeholder={t("form.placeholder.club")}

@@ -96,7 +96,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                         className="max-w-full w-64 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #e2e8f0"}}
                         clubOnly={true}
-                        callback={id => formik.setFieldValue("club", id || -1)}
+                        callback={author => formik.setFieldValue("club", author?.id || -1)}
                     />
                 </div>
             </div>
