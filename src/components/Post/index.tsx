@@ -165,7 +165,7 @@ const Post: React.FC<PostProps> = ({ data, isEdited, forceShowComments, onPin,on
                 </div>
                 <div>
                     <span>{data.description}</span>
-                    {data.embed && <div className="mt-2"><Embed embed={data.embed} /></div>}
+                    {data.embed && <div className="mt-2"><Embed embed={data.embed} post={data} /></div>}
                 </div>
                 <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
                     <div className="items-center text-gray-400 grid grid-cols-2 w-full mr-5 text-center">

@@ -5,11 +5,14 @@ import {Image} from "../../../data/media/types"
 import PhotoGallery from "react-photo-gallery"
 import {message} from "antd"
 import Lightbox from "../../Common/Lightbox"
+import PostSidebar from "../PostSidebar"
+import {Post} from "../../../data/post/types"
 
 type EmbedImagesProps = {
     images: Array<Image>
+    post: Post
 }
-const EmbedImages: React.FC<EmbedImagesProps> = ({images}) => {
+const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     const [photos, setPhotos] = useState<SafePhoto[]>([])
     const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
     const [loading, setLoading] = useState(true)
@@ -50,6 +53,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images}) => {
                     initialIndex={lightboxPhotoIndex}
                     photos={photos}
                     onClose={() => setLightboxPhotoIndex(undefined)}
+                    Sidebar={() => <PostSidebar post={post} />}
                 />
             )}
         </div>

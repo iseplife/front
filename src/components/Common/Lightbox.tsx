@@ -6,13 +6,18 @@ import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
 import {createPortal} from "react-dom"
 
+type SidebarProps = {
+    currentIndex: number,
+    currentImage: SafePhoto
+}
+
 type LightboxProps = {
     initialIndex: number
     photos: SafePhoto[]
-    sidebar?: React.FC
+    Sidebar?: React.FC<SidebarProps>
     onClose: () => void,
 }
-const Lightbox: React.FC<LightboxProps> = ({photos, initialIndex, sidebar, onClose}) => {
+const Lightbox: React.FC<LightboxProps> = ({photos, initialIndex, Sidebar, onClose}) => {
     const [currentIndex, setCurrentIndex] = useState<number>(initialIndex)
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
@@ -88,13 +93,14 @@ const Lightbox: React.FC<LightboxProps> = ({photos, initialIndex, sidebar, onClo
                         </div>
                     }
                 </div>
-
-                <div
-                    className="bg-gray-100 flex-shrink-0 w-96 rounded-tl-md rounded-bl-md overflow-auto hidden md:block"
-                    ref={rightPanel}
-                >
-                    {sidebar}
-                </div>
+                {Sidebar && (
+                    <div
+                        className="bg-white flex-shrink-0 w-96 rounded-tl-md rounded-bl-md overflow-auto hidden md:block"
+                        ref={rightPanel}
+                    >
+                        <Sidebar currentImage={currentPhoto} currentIndex={currentIndex}/>
+                    </div>
+                )}
             </div>
         </div>
     ), document.body)
