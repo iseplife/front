@@ -149,25 +149,25 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
 export type SafePhoto = PhotoProps<{nsfw: boolean}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
 
-export type ParserFunction<T extends PhotoProps = SafePhoto> = (imgUrl: string, key: string, nsfw: boolean) => Promise<T>
+export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
 export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: ImageType[], parser?: ParserFunction<T>): Promise<T[]> => {
     return await Promise.all(
-        images.map(img => (parser ?? defaultPhotoParser)(img.name, String(img.id), img.nsfw))
+        images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id)))
     ) as Awaited<T[]>
 }
 
-export const defaultPhotoParser: ParserFunction = (imgUrl: string, key: string, nsfw: boolean): Promise<SafePhoto> => {
+export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string): Promise<SafePhoto> => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW)!
+        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
         image.onerror = reject
         image.onload = () => resolve({
             key,
-            nsfw,
             src: image.src,
             width: image.width,
             height: image.height,
-            srcSet: imgUrl
+            nsfw: img.nsfw,
+            srcSet: img.name
         })
     })
 }

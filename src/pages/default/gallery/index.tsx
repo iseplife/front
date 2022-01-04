@@ -19,19 +19,19 @@ import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt, faUser} from "@fortawesome/free-regular-svg-icons"
 
 export type SelectablePhoto = SafePhoto & {selected: boolean}
-const parserSelectablePhoto: ParserFunction<SelectablePhoto> = (imgUrl: string, key: string, nsfw: boolean) => {
+const parserSelectablePhoto: ParserFunction<SelectablePhoto> = (img: ImageType, key: string) => {
     return new Promise((resolve, reject) => {
         const image = new Image()
-        image.src = mediaPath(imgUrl, GallerySizes.PREVIEW)!
+        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
         image.onerror = reject
         image.onload = () => resolve({
             key,
-            nsfw,
-            selected: false,
             src: image.src,
             width: image.width,
             height: image.height,
-            srcSet: imgUrl
+            selected: false,
+            nsfw: img.nsfw,
+            srcSet: img.name
         } as SelectablePhoto)
     })
 }
@@ -87,7 +87,7 @@ const Gallery: React.FC = () => {
     }, [])
 
     const addNewImages = useCallback((images: ImageType[]) => {
-        Promise.all(images.map((img, i) => parserSelectablePhoto(img.name, String(i), img.nsfw))).then(photos => {
+        Promise.all(images.map((img, i) => parserSelectablePhoto(img, String(i)))).then(photos => {
             setPhotos(prevState => [...prevState, ...photos])
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
