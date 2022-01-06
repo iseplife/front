@@ -108,7 +108,6 @@ const StudentsImport: React.FC = () => {
                         firstName: column[1],
                         lastName: column[2],
                         promo: +column[3],
-                        feedId: undefined!
                     }
                 })
             }
@@ -127,7 +126,6 @@ const StudentsImport: React.FC = () => {
                 lastName: "", 
                 id: 0, 
                 promo: 0,
-                feedId: undefined!
             },
             blobStudent: undefined
         }

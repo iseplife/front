@@ -40,6 +40,14 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                     picture: action.payload.custom || action.payload.original
                 }
             }
+        case AppActionType.SET_UNWATCHED_NOTIFICATIONS:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    unwatchedNotifications: action.payload
+                }
+            }
         default:
             return state
     }

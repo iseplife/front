@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from "react"
+import React, {MouseEvent, useCallback, useContext, useMemo, useState} from "react"
 import {Button, Drawer, Dropdown, Menu} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
@@ -52,7 +52,11 @@ const ProfileList: React.FC<{ firstName: string, lastName: string }> = ({firstNa
         </Menu>
     )
 }
-const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
+interface HeaderProps {
+    user: StudentPreview
+    openNotifsCenter: () => void
+}
+const Header: React.FC<HeaderProps> = ({user, openNotifsCenter}) => (
     <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
         <Link to="/" className="flex">
             <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
@@ -68,7 +72,9 @@ const Header: React.FC<{ user: StudentPreview }> = ({user}) => (
                 <Link to="/calendar">
                     <IconButton icon={faCalendarAlt}/>
                 </Link>
-                <IconButton icon={faBell}/>
+                <button onClick={openNotifsCenter}>
+                    <IconButton icon={faBell}/>
+                </button>
             </div>
             <Dropdown
                 overlay={<ProfileList firstName={user.firstName} lastName={user.lastName}/>}
@@ -118,7 +124,9 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 <Link to="/calendar">
                     <Button shape="circle" icon={<FontAwesomeIcon icon={faCalendarAlt} className="text-xl" /> } className="border-0"/>
                 </Link>
-                <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
+                <Link to="/notifications">
+                    <Button shape="circle" icon={<FontAwesomeIcon icon={faBell} className="text-xl" />} className="border-0"/>
+                </Link>
                 <div className="cursor-pointer" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}
@@ -154,12 +162,16 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     )
 }
 
+interface NavbarProps {
+    children: React.ReactNode
+    openNotifsCenter: () => void
+}
 
-const Navbar: React.FC = ({children}) => {
+const Navbar: React.FC<NavbarProps> = ({children, openNotifsCenter}) => {
     const {state: {user}} = useContext(AppContext)
     return (
         <>
-            <Header user={user}/>
+            <Header user={user} openNotifsCenter={openNotifsCenter}/>
             {children}
             <MobileFooter user={user}/>
         </>

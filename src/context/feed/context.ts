@@ -5,6 +5,4 @@ export type FeedContextType = {
     authors: Author[]
 }
 
-export const FeedContext = React.createContext<FeedContextType>({
-    authors: []
-})
+export const FeedContext = React.createContext<FeedContextType | undefined>(undefined)

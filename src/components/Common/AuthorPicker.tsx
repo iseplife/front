@@ -22,22 +22,23 @@ export type AuthorPickerProps = {
     style?: CSSProperties
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors = [], defaultValue, callback, compact, clubOnly, ...props}) => {
-    const {state: {user: {picture}}} = useContext(AppContext)
-    const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, defaultValue, callback, compact, clubOnly, ...props}) => {
     const [t] = useTranslation("common")
+    const {state: {user: {picture}}} = useContext(AppContext)
+    const feedctx = useContext(FeedContext)
 
-    
-    const context = useContext(FeedContext)
-    const [authors, setAuthors] = useState<Author[]>(givenAuthors)
+    const [authors, setAuthors] = useState<Author[]>(givenAuthors ?? [])
+    const value = useMemo(() => defaultValue ? defaultValue : clubOnly ? undefined : 0, [clubOnly, defaultValue])
 
     useEffect(() => {
-        if(!authors?.length)
-            if(context)
-                setAuthors(context.authors)
-            else
+        if(!givenAuthors) {
+            if (feedctx){
+                setAuthors(feedctx.authors)
+            } else {
                 getAuthorizedAuthors().then(res => setAuthors(res.data))
-    }, [context])
+            }
+        }
+    }, [givenAuthors, feedctx])
 
     const handleChange = useCallback((v: number) => (
         callback(authors.find(author => author.id == v))

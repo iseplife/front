@@ -4,14 +4,14 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, StudentsImportData
+    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, StudentsImportData, LoggedStudentPreview
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 import {apiClient} from "../http"
 
-export const getLoggedUser = (): AxiosPromise<StudentPreview> => apiClient.get("/student/me")
+export const getLoggedUser = (): AxiosPromise<LoggedStudentPreview> => apiClient.get("/student/me")
 
 export const getCompleteLoggedUser = (): AxiosPromise<Student> => apiClient.get("/student/me/full")
 

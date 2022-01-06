@@ -1,5 +1,5 @@
 import React, {Dispatch} from "react"
-import {StudentPreview} from "../../data/student/types"
+import {LoggedStudentPreview} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextAction} from "./action"
 
@@ -10,7 +10,7 @@ export const DEFAULT_STATE: AppContextState = {
 
 
 export type AppContextState =  {
-    user: StudentPreview
+    user: LoggedStudentPreview
     payload: TokenPayload
     jwt: string
     token_expiration: number

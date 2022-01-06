@@ -1,0 +1,9 @@
+{
+  "notifications": "Notifications",
+  "long_ago": "Il y a longtemps",
+  "see_more": "Voir toutes les notifications",
+  "in_menu": {
+    "NEW_STUDENT_POST": "<bold>{{author_name}}</bold> a posté une nouvelle publication.",
+    "NEW_CLUB_POST": "<bold>{{author_name}}</bold> a posté une nouvelle publication."
+  }
+}

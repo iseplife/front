@@ -1,4 +1,4 @@
-import {StudentPicture, StudentPreview} from "../../data/student/types"
+import {LoggedStudentPreview, StudentPicture} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextState} from "./context"
 
@@ -11,12 +11,13 @@ export enum AppActionType {
     SET_STATE,
     SET_PICTURE,
     SET_TOKEN_EXPIRATION,
+    SET_UNWATCHED_NOTIFICATIONS,
 }
 
 
 interface setLoggedStudentAction {
     type: AppActionType.SET_LOGGED_USER,
-    user: StudentPreview
+    user: LoggedStudentPreview
 }
 
 interface setPayloadAction {
@@ -47,6 +48,10 @@ interface setTokenAction {
 interface setStateLoggedOutAction {
     type: AppActionType.SET_LOGGED_OUT,
 }
+interface setUnwatchedNotificationsAction {
+    type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
+    payload: number
+}
 
 export type AppContextAction =
     setLoggedStudentAction |
@@ -55,6 +60,7 @@ export type AppContextAction =
     setFullStateAction |
     setPictureStateAction |
     setTokenExpirationAction |
-    setTokenAction
+    setTokenAction |
+    setUnwatchedNotificationsAction
 
 

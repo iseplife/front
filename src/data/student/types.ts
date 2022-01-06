@@ -24,14 +24,22 @@ export interface Student {
     bio?: string
     archived: boolean
     lastConnection: Date
+
+    unwatchedNotifications: number
+    totalNotifications: number;
 }
 export interface StudentPreview {
     id: number
-    feedId: number
     promo: number
     firstName: string
     lastName: string
     picture?: string
+}
+export interface LoggedStudentPreview extends StudentPreview {
+    feedId: number
+
+    unwatchedNotifications: number
+    totalNotifications: number
 }
 
 export interface StudentsImportData {

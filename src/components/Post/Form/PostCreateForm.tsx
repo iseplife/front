@@ -7,13 +7,13 @@ import {createMedia} from "../../../data/media"
 import {createGallery} from "../../../data/gallery"
 import {createPoll} from "../../../data/poll"
 import {createPost} from "../../../data/post"
-import { StudentPreview } from "../../../data/student/types"
+import { LoggedStudentPreview } from "../../../data/student/types"
 
 
 type PostCreateFormProps = {
     type: EmbedEnumType
     feed?: number
-    user: StudentPreview
+    user: LoggedStudentPreview
     onSubmit: (post: PostUpdate) => void
     onClose: () => void
 }

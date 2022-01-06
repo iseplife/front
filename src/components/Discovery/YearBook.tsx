@@ -54,7 +54,6 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
             photoUrlThumb: r.thumbURL,
             picture: r.thumbURL,
             promo: +r.description || -1,
-            feedId: undefined!
         })
     })
 }
