@@ -1,10 +1,10 @@
 import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
-import {getFeedPost} from "../../data/feed"
+import {getFeedPost, getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
 import Post from "../Post"
-import {deletePost, getAuthorizedAuthors} from "../../data/post"
-import {Divider, Modal} from "antd"
+import {getAuthorizedAuthors} from "../../data/post"
+import {Divider, message, Modal} from "antd"
 import CardTextSkeleton from "../Skeletons/CardTextSkeleton"
 import {useTranslation} from "react-i18next"
 import BasicPostForm from "../Post/Form/BasicPostForm"
@@ -15,7 +15,7 @@ import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
 import {getWSService} from "../../realtime/services/WSService"
 import WSFeedService from "../../realtime/services/WSFeedService"
 import {AppContext} from "../../context/app/context"
-import { FeedContext } from "../../context/feed/context"
+import {FeedContext} from "../../context/feed/context"
 import {Author} from "../../data/request.type"
 
 type FeedProps = {
@@ -28,6 +28,8 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
     const {state: {user}} = useContext(AppContext)
     const {t} = useTranslation(["common", "post"])
     const [posts, setPosts] = useState<PostType[]>([])
+    const [postsPinned, setPostsPinned] = useState<PostType[]>([])
+
     const [editPost, setEditPost] = useState<number>(0)
     const [empty, setEmpty] = useState<boolean>(false)
     const [fetching, setFetching] = useState<boolean>(false)
@@ -40,7 +42,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         setPosts(posts => [...posts, ...res.data.content])
         setFetching(false)
 
-        if (count === 0 && res.data.content.length === 0)
+        if (count === 0 && res.data.content.length === 0 && postsPinned.length == 0)
             setEmpty(true)
 
         return res.data.last
@@ -59,25 +61,60 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
         ])
     ), [])
 
-    const onPostRemoval = async (id: number) => {
-        const res = await deletePost(id)
-        if (res.status === 200) {
-            setPosts(posts => posts.filter(p => p.id !== id))
+    const onPostRemoval = useCallback(async (id: number) => {
+        setPosts(posts => posts.filter(p => p.id !== id))
+        message.success(t("remove_item.complete"))
+    }, [])
+
+    const onPostPin = useCallback((id: number, pinned: boolean) => {
+        if (pinned) {
+            const index = posts.findIndex(p => p.id === id)
+            const pinnedPost = {...posts[index], pinned: true}
+
+            // We move post into pinned posts while removing it from common posts
+            setPostsPinned(prev => (
+                [...prev, pinnedPost].sort((a, b) => (
+                    a.publicationDate.getTime() - b.publicationDate.getTime()
+                )))
+            )
+            setPosts(prev => prev.filter((p, i) => i !== index))
+            message.success(t("post:post_pinned"))
+        } else {
+            const index = postsPinned.findIndex(p => p.id === id)
+            const unpinnedPost = {...postsPinned[index], pinned: false}
+
+            // We move post into common posts while removing it from pinned posts
+            setPosts(prev => (
+                [...prev, unpinnedPost].sort((a, b) => (
+                    a.publicationDate.getTime() - b.publicationDate.getTime()
+                )))
+            )
+            setPostsPinned(prev => prev.filter((p, i) => i !== index))
+            message.success(t("post:post_unpinned"))
         }
-    }
+    }, [posts, postsPinned])
 
     const onPostUpdate = useCallback((id: number, postUpdate: PostUpdate) => {
         setPosts(posts => posts.map(p => p.id === id ?
             {...p, ...postUpdate} : p
         ))
         setEditPost(0)
+        message.success(t("update_item.complete"))
     }, [])
 
     useEffect(() => {
+        if (id) {
+            getFeedPostPinned(id).then(res => {
+                setPostsPinned(res.data)
+                if (res.data.length !== 0)
+                    setEmpty(false)
+            })
+        }
+
         getAuthorizedAuthors().then(res => {
             setAuthors(res.data)
         })
-    }, [])
+    }, [id])
 
     useEffect(() => {
         getWSService(WSFeedService).subscribe(id ?? -1)
@@ -162,15 +199,37 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
                             <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
                             <span className="text-center">{t("empty_feed")}</span>
                         </div>
-                        : posts.map((p) => (
-                            <Post
-                                key={p.id} data={p}
-                                onDelete={onPostRemoval}
-                                onUpdate={onPostUpdate}
-                                toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                isEdited={editPost === p.id}
-                            />
-                        ))}
+                        : (
+                            <>
+                                {postsPinned.length !== 0 && (
+                                    <>
+                                        {postsPinned.map(p => (
+                                            <Post
+                                                key={p.id} data={p}
+                                                onDelete={onPostRemoval}
+                                                onUpdate={onPostUpdate}
+                                                onPin={onPostPin}
+                                                toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                                isEdited={editPost === p.id}
+                                            />
+                                        ))}
+                                        <Divider className="text-gray-700"/>
+                                    </>
+                                )}
+
+                                {posts.map(p => (
+                                    <Post
+                                        key={p.id} data={p}
+                                        onDelete={onPostRemoval}
+                                        onUpdate={onPostUpdate}
+                                        onPin={onPostPin}
+                                        toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                        isEdited={editPost === p.id}
+                                    />
+                                ))}
+                            </>
+                        )
+                    }
                 </InfiniteScroller>
             </div>
         </FeedContext.Provider>

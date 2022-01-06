@@ -9,4 +9,6 @@ export const updatePost = (id: number, update: PostUpdateForm): AxiosPromise<Pos
 
 export const deletePost = (id: number): AxiosPromise<void> => apiClient.delete(`/post/${id}`)
 
+export const pinPost = (id: number, pinned: boolean): AxiosPromise<void> => apiClient.put(`/post/${id}/pin`, {}, {params: {pinned}})
+
 export const getAuthorizedAuthors = (): AxiosPromise<Author[]> => apiClient.get("/post/authors")
