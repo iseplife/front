@@ -81,13 +81,12 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 }
 
                 this.refreshingPromise = undefined
-            }).catch((err) => {
-                reject(err)
-
+            }).catch(() => {
                 this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
                 this.refreshingPromise = undefined
 
-                message.error("Vous avez été déconnecté !")
+                this.props.history.push("/logout")
+                message.error("user_disconnected")
             })
         return this.refreshingPromise
     }
@@ -110,7 +109,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     }
                     break
                 case 500:
-                    message.error("Un probleme a été rencontré")
+                    message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
                     message.error(t(error.message))
                     break
                 default:

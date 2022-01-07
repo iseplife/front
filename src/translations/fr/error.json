@@ -3,5 +3,12 @@
   "offline": "Connexion interrompue",
   "user_disconnected": "Vous avez été déconnecté",
   "server_disconnected": "Serveur indisponible",
-  "insufficient_rights": "Vous n'avez pas les droits suffisants"
+  "insufficient_rights": "Vous n'avez pas les droits suffisants",
+  "error_encountered": [
+    "Quelque chose vient de se péter...",
+    "Le code a planté comme Mazepin...",
+    "Une erreur a été rencontrée...",
+    "Bon bah ca n'a pas marché...",
+    "Un problème a été rencontré (source: code de merde)"
+  ]
 }

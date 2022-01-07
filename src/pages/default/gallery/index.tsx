@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
-import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
+import PhotoGallery, {renderImageClickHandler} from "react-photo-gallery"
 import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gallery"
 import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
@@ -11,15 +11,37 @@ import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType} from "../../../data/media/types"
-import {getPhotosAsync, mediaPath, parsePhoto} from "../../../util"
-import Lightbox from "lightbox-react"
-import "lightbox-react/style.css"
+import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt, faUser} from "@fortawesome/free-regular-svg-icons"
+import Lightbox from "../../../components/Common/Lightbox"
+import GallerySidebar from "./GallerySidebar"
 
+export type GalleryPhoto = SafePhoto & {
+    selected: boolean
+    thread: number
+}
+const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
+    return new Promise((resolve, reject) => {
+        const image = new Image()
+        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
+        image.onerror = reject
+        image.onload = () => {
+            resolve({
+                key,
+                src: image.src,
+                width: image.width,
+                height: image.height,
+                selected: false,
+                thread: img.thread,
+                nsfw: img.nsfw,
+                srcSet: img.name
+            } as GalleryPhoto)
+        }
+    })
+}
 
-export type SelectablePhoto = { selected: boolean, nsfw: boolean }
 
 interface ParamTypes {
     id?: string
@@ -34,44 +56,19 @@ const Gallery: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [gallery, setGallery] = useState<GalleryType>()
-    const [photos, setPhotos] = useState<PhotoProps<SelectablePhoto>[]>([])
-
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState<number>()
-
-    /**
-     * Get Gallery and parse photos on first load
-     */
-    useEffect(() => {
-        if (id) {
-            getGallery(id).then(res => {
-                if (res.data) {
-                    setGallery(res.data)
-                    getPhotosAsync(res.data.images)
-                        .then(photos => {
-                            setPhotos(photos)
-                            if (picture)
-                                setCurrentPhotoIndex(+picture)
-                        })
-                        .catch(e => {
-                            message.error("Error while parsing...")
-                            console.log(e)
-                        })
-                        .finally(() => setLoading(false))
-                }
-            }).catch(e => message.error(`Get this gallery failed ,${e}`))
-        }
-    }, [id])
+    const [photos, setPhotos] = useState<GalleryPhoto[]>([])
+    const [initialIndex, setInitialIndex] = useState<number>()
 
     const handleSelect = useCallback((key: string) => {
         setPhotos(prevState => prevState.map(photo => (
-            (photo.key as string) === key) ?
-            ({...photo, selected: !photo.selected}) :
-            photo
-        ))
+            (photo.key as string) === key ?
+                ({...photo, selected: !photo.selected}) :
+                photo
+        )))
     }, [])
 
     const addNewImages = useCallback((images: ImageType[]) => {
-        Promise.all(images.map((img, i) => parsePhoto(img.name, String(i), img.nsfw))).then(photos => {
+        Promise.all(images.map((img, i) => parserSelectablePhoto(img, String(i)))).then(photos => {
             setPhotos(prevState => [...prevState, ...photos])
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
@@ -110,7 +107,7 @@ const Gallery: React.FC = () => {
 
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
         if (photo && gallery) {
-            setCurrentPhotoIndex(photo.index)
+            setInitialIndex(photo.index)
             history.push(`/gallery/${id}?p=${photo.index}`)
         }
     }, [id, gallery])
@@ -121,7 +118,7 @@ const Gallery: React.FC = () => {
     }, [])
 
     const closeLightbox = useCallback(() => {
-        setCurrentPhotoIndex(undefined)
+        setInitialIndex(undefined)
         history.push(`/gallery/${id}`)
     }, [id])
 
@@ -155,6 +152,33 @@ const Gallery: React.FC = () => {
         />
     ), [editMode, handleSelect, openLightbox])
 
+    /**
+     * Get Gallery and parse photos on first load
+     */
+    useEffect(() => {
+        if (id) {
+            getGallery(id).then(res => {
+                if (res.data) {
+                    setGallery(res.data)
+                    parsePhotosAsync(res.data.images, parserSelectablePhoto)
+                        .then(photos => {
+                            setPhotos(photos)
+                            if (picture)
+                                setInitialIndex(+picture)
+                        })
+                        .catch(e => {
+                            message.error("Error while parsing...")
+                            console.log(e)
+                        })
+                        .finally(() => setLoading(false))
+                }
+            }).catch(e => message.error(`Get this gallery failed ,${e}`))
+        }
+    }, [id])
+
+    const updateURL = useCallback((index) => {
+        history.push(`/gallery/${id}?p=${index}`)
+    }, [id])
 
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
@@ -164,7 +188,9 @@ const Gallery: React.FC = () => {
                         <Skeleton loading={true} active paragraph={false} className="w-48 mr-2"/> :
                         <>
                             <h1 className="font-bold text-4xl text-gray-700 mb-0">{gallery?.name}</h1>
-                            <span className="text-xs text-gray-600">{`${gallery?.images.length} ${t("pictures")}`}</span>
+                            <span className="text-xs text-gray-600">
+                                {`${gallery?.images.length} ${t("pictures")}`}
+                            </span>
                         </>
                     }
                 </div>
@@ -192,7 +218,12 @@ const Gallery: React.FC = () => {
                     }
                     {gallery?.hasRight && editMode ?
                         <div className="flex flex-col items-end">
-                            <Button type="primary" className="shadow-md rounded mx-1" style={{width: "max-content"}} onClick={exitEditMode}>
+                            <Button
+                                type="primary"
+                                className="shadow-md rounded mx-1"
+                                style={{width: "max-content"}}
+                                onClick={exitEditMode}
+                            >
                                 {t("common:back")}
                                 <FontAwesomeIcon
                                     icon={faSignOutAlt}
@@ -240,18 +271,13 @@ const Gallery: React.FC = () => {
                     />
                 }
             </div>
-            {currentPhotoIndex != undefined && gallery && (
+            {initialIndex != undefined && gallery && (
                 <Lightbox
-                    mainSrc={mediaPath(gallery.images[currentPhotoIndex].name, GallerySizes.LIGHTBOX) as string}
-                    nextSrc={
-                        mediaPath(gallery.images[(currentPhotoIndex + 1) % gallery.images.length].name, GallerySizes.LIGHTBOX)
-                    }
-                    prevSrc={
-                        mediaPath(gallery.images[(currentPhotoIndex + gallery.images.length - 1) % gallery.images.length].name, GallerySizes.LIGHTBOX)
-                    }
-                    onMovePrevRequest={() => setCurrentPhotoIndex((currentPhotoIndex + gallery.images.length - 1) % gallery.images.length)}
-                    onMoveNextRequest={() => setCurrentPhotoIndex((currentPhotoIndex + 1) % gallery.images.length)}
-                    onCloseRequest={closeLightbox}
+                    photos={photos}
+                    initialIndex={initialIndex}
+                    onClose={closeLightbox}
+                    onChange={updateURL}
+                    Sidebar={gProps => <GallerySidebar gallery={gallery} {...gProps} />}
                 />
             )}
         </div>

@@ -1,6 +1,6 @@
 import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
-import {SelectablePhoto} from "../../pages/default/gallery"
+import {GalleryPhoto} from "../../pages/default/gallery"
 import SafeImage from "../Common/SafeImage"
 import {faCheckCircle} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -16,7 +16,7 @@ const selectedImgStyle = {
 type SelectableImageProps = {
     selectable: boolean
     onSelect: (key: string) => void
-} & RenderImageProps<SelectablePhoto>
+} & RenderImageProps<GalleryPhoto>
 const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, direction, top, left, selectable, onClick, onSelect}) => {
     //calculate x,y scale
     const sx = (100 - (30 / photo.width) * 100) / 100
@@ -50,7 +50,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
                     if (selectable) {
                         onSelect(photo.key as string)
                     } else if (onClick) {
-                        onClick(e, {...photo, index: +(photo.key as string)})
+                        onClick(e, {...photo, index})
                     }
                 }}
             />

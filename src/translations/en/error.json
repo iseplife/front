@@ -3,5 +3,11 @@
   "offline": "You are now offline",
   "user_disconnected": "You have been disconnected",
   "server_disconnected": "Server unavailable",
-  "insufficient_rights": "You have insufficient rights"
+  "insufficient_rights": "You have insufficient rights",
+  "error_encountered": [
+    "Ouch, we've encountered an error...",
+    "Seems like something broke...",
+    "I don't know what you did but it didn't work",
+    "You found a bug (source: shitty code)"
+  ]
 }
