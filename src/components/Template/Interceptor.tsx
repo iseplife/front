@@ -55,11 +55,12 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+        if (request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
             return new Promise((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
                 this.refreshToken(reject).then(res => {
+                    request.headers = request.headers ?? {}
                     request.headers["Authorization"] = `Bearer ${res.data.token}`
                     execute(request)
                 })
