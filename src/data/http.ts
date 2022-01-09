@@ -14,10 +14,8 @@ export function initializeAPIClient(): AxiosInstance {
         baseURL: apiURI,
         timeout: AXIOS_TIMEOUT,
         headers: {
-            common: {
-                "Access-Control-Max-Age": "3600"
-            }
+            "Access-Control-Max-Age": "3600"
         },
-        transformResponse: (response, req) => req["content-type"] === "application/json" ? JSON.parse(response, JSONDateParser) : response
+        transformResponse: (response, req = {}) => req["content-type"] === "application/json" ? JSON.parse(response, JSONDateParser) : response
     })
 }
