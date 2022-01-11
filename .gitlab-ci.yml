@@ -2,9 +2,6 @@ image: docker:19.03.0
 services:
   - docker:19.03-dind
 
-variables:
-  FRONT_VERSION: v1.4
-
 cache:
   paths:
     - .yarn
@@ -13,41 +10,79 @@ cache:
 stages:
   - test
   - build
-  - package
+  - deploy
 
 test:
   stage: test
-  image: node:16.13.1-alpine
+  image: node:16.13-alpine
+  before_script:
+    - npm upgrade --global yarn
   script:
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build:prod
+    - yarn run build
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"'
 
-
-react-build:
+# PROD PIPELINE #
+build-prod:
   stage: build
-  image: node:16.13.1-alpine
+  image: node:16.13-alpine
+  variables:
+    REACT_APP_HTTP_PROTOCOL: https
+    REACT_APP_WS_PROTOCOL: wss
+    REACT_APP_API_URL: iseplife.fr/api
+  before_script:
+    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+  script:
+    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+    - yarn run build
   artifacts:
     paths:
       - build/
-  script:
-    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build:prod
   retry: 2
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-
-docker-build:
-  stage: package
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
+deploy-prod:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
-    - echo "=== BUILDING DOCKER IMAGES ==="
-    - docker build -t $CI_REGISTRY_IMAGE:$FRONT_VERSION -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:$FRONT_VERSION
-    - docker push $CI_REGISTRY_IMAGE:latest
+    - aws s3 rm s3://iseplife.fr --recursive
+    - aws s3 cp build/ s3://iseplife.fr --recursive
+  dependencies:
+    - build
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+
+
+
+# DEV PIPELINE #
+build-dev:
+  stage: build
+  image: node:16.13-alpine
+  variables:
+    REACT_APP_HTTP_PROTOCOL: https
+    REACT_APP_WS_PROTOCOL: wss
+    REACT_APP_API_URL: dev.iseplife.fr/api
+  before_script:
+    - FRONT_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+  script:
+    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+    - yarn run build:dev
+  retry: 2
+  artifacts:
+    paths:
+      - build/
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "staging"'
+deploy-dev:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script:
+    - aws s3 rm s3://dev.iseplife.fr --recursive
+    - aws s3 cp build/ s3://dev.iseplife.fr --recursive
+  dependencies:
+    - build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "staging"'
+
 

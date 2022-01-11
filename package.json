@@ -1,16 +1,15 @@
 {
-  "name": "front",
+  "name": "iseplife-spa",
   "version": "0.1.0",
-  "description": "FRONT - Plateforme associative",
+  "description": "SPA - Plateforme associative",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://git.dev.juniorisep.com/iseplife/front"
+    "url": "git+https://github/iseplife/front"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:prod": "cross-env GENERATE_SOURCEMAP=false CI=false REACT_APP_HTTP_PROTOCOL=https REACT_APP_WS_PROTOCOL=wss REACT_APP_API_URL=dev.iseplife.fr/api react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -72,7 +71,6 @@
     "@typescript-eslint/parser": "^5.8.0",
     "autoprefixer": "^10.4.0",
     "babel-plugin-import": "^1.13.3",
-    "cross-env": "^7.0.0",
     "customize-cra": "^1.0.0",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.3.0",
