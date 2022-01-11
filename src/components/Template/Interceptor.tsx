@@ -7,7 +7,7 @@ import {WithTranslation, withTranslation} from "react-i18next"
 import {refresh} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
-import { TokenSet } from "../../data/security/types"
+import {TokenSet} from "../../data/security/types"
 
 type InterceptorProps = WithTranslation & RouteComponentProps
 type InterceptState = {
@@ -55,7 +55,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
             return new Promise((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
@@ -69,7 +69,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         return request
     }
 
-    refreshToken(reject: (e: Error)=>void): AxiosPromise<TokenSet> {
+    refreshToken(reject: (e: Error) => void): AxiosPromise<TokenSet> {
         if (!this.refreshingPromise)
             (this.refreshingPromise = refresh()).then(res => {
                 try {
@@ -83,11 +83,11 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
                 this.refreshingPromise = undefined
             }).catch(() => {
-                this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
                 this.refreshingPromise = undefined
-
                 this.props.history.push("/logout")
-                message.error("user_disconnected")
+                this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+
+                message.error(this.props.t("user_disconnected"))
             })
         return this.refreshingPromise
     }
@@ -97,15 +97,17 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
             const {t} = this.props
-
             /* We handle only special error which required specific behavior, otherwise display error message */
             switch (error.response.status) {
                 case 503:
                     message.error(t("server_disconnected"))
                     break
                 case 401:
-                    if (!error.request.url.startsWith("/auth")) {
+                    // 401 Error code of /auth are handled in axiosRequestInterceptor function
+                    if (!error.request?.url.startsWith("/auth")) {
                         this.props.history.push("/logout")
+                        this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+
                         message.error(t("user_disconnected"))
                     }
                     break
@@ -119,8 +121,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     console.debug(`[${error.code}] ${error.message}`)
                     return Promise.reject(error)
             }
+        } else {
+            return Promise.reject(error)
         }
-        return Promise.reject(error)
     }
 
     render() {

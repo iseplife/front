@@ -15,7 +15,7 @@ export const getMonthEvents = (timestamp: number): AxiosPromise<EventPreview[]> 
 export const getEventGalleries = (id: number, page = 0): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/event/${id}/galleries`, {params: {page}})
 
 export const getIncomingEvents = (feed?: number): AxiosPromise<EventPreview[]> =>
-    apiClient.get("event/incoming", {
+    apiClient.get("/event/incoming", {
         params: {feed}
     })
 

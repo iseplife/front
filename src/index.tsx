@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
+import React, {useCallback, useEffect, useReducer, useState} from "react"
 import ReactDOM from "react-dom"
 import * as serviceWorker from "./serviceWorker"
 import "./i18n"
@@ -48,9 +48,8 @@ const App: React.FC = () => {
                     token: res.data.token
                 })
                 setLoggedIn(true)
-            }).catch(e => {
+            }).catch(() => {
                 setLoggedIn(false)
-                console.error(e)    // Token refreshing failed
             })
         }else {
             setLoggedIn(false)
