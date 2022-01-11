@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
-
+    
     const formik = useFormik<LoginFormInputs>({
         initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
@@ -41,26 +41,25 @@ const Login: React.FC = () => {
                     }
                 }
                 history.replace(from)
-            })
-                .catch(e => {
-                    setLoadingStatus(false)
-                    let msg
-                    if (e.response) {
-                        switch (e.response.status) {
-                            case 401:
-                                msg = "Mauvais mot de passe ou utilisateur"
-                                break
-                            case 503:
-                                msg = "Mauvais mot de passe ou utilisateur"
-                                break
-                            default:
-                                msg = "Serveur indisponible"
-                        }
-                    } else {
-                        msg = "Serveur indisponible"
+            }).catch(e => {
+                setLoadingStatus(false)
+                let msg
+                if (e.response) {
+                    switch (e.response.status) {
+                        case 401:
+                            msg = "Mauvais mot de passe ou utilisateur"
+                            break
+                        case 503:
+                            msg = "Mauvais mot de passe ou utilisateur"
+                            break
+                        default:
+                            msg = "Serveur indisponible"
                     }
-                    setError(msg)
-                }).finally(() => setLoadingStatus(false))
+                } else {
+                    msg = "Serveur indisponible"
+                }
+                setError(msg)
+            }).finally(() => setLoadingStatus(false))
         }
     })
 

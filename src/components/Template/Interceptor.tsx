@@ -56,7 +56,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
-            return new Promise((execute, reject) => {
+            return new Promise<AxiosRequestConfig>((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
                 this.refreshToken(reject).then(res => {
@@ -84,7 +84,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 this.refreshingPromise = undefined
             }).catch(() => {
                 this.refreshingPromise = undefined
-                this.props.history.push("/logout")
+                this.props.history.push("/login")
                 this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
 
                 message.error(this.props.t("user_disconnected"))
@@ -105,7 +105,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
                     if (!error.request?.url.startsWith("/auth")) {
-                        this.props.history.push("/logout")
+                        this.props.history.push("/login")
                         this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
 
                         message.error(t("user_disconnected"))
