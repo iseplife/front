@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react"
-import {useHistory, useLocation} from "react-router-dom"
+import {useHistory} from "react-router-dom"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
 import {connect, parseToken} from "../../data/security"
@@ -65,10 +65,9 @@ const Login: React.FC = () => {
     })
 
     return (
-        <div className="h-full flex flex-col justify-end items-center overflow-y-auto">
+        <div className="h-full flex flex-col justify-end items-center overflow-y-auto relative">
             <div className="flex-grow flex items-center">
                 <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col">
-
                     {error && (
                         <div className="text-center">
                             <h6 className="text-red-600">{error}</h6>
@@ -103,7 +102,6 @@ const Login: React.FC = () => {
                     </form>
                 </div>
             </div>
-
             <div className="flex flex-col items-center my-2">
                 <div className="flex flex-row">
                     {SUPPORTED_LANGUAGES.map(lng => (
@@ -117,6 +115,9 @@ const Login: React.FC = () => {
                     ))}
                 </div>
             </div>
+            <span className="absolute right-5 my-2 text-gray-400">
+                {process.env.SPA_VERSION}
+            </span>
         </div>
     )
 }
