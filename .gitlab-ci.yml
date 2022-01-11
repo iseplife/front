@@ -15,8 +15,8 @@ stages:
 test:
   stage: test
   image: node:16.13-alpine
-  before_script:
-    - npm upgrade --global yarn
+  variables:
+    CI: "false"
   script:
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
     - yarn run build
@@ -28,9 +28,10 @@ build-prod:
   stage: build
   image: node:16.13-alpine
   variables:
-    REACT_APP_HTTP_PROTOCOL: https
-    REACT_APP_WS_PROTOCOL: wss
-    REACT_APP_API_URL: iseplife.fr/api
+    CI: "false"
+    REACT_APP_HTTP_PROTOCOL: "https"
+    REACT_APP_WS_PROTOCOL: "wss"
+    REACT_APP_API_URL: "iseplife.fr/api"
   before_script:
     - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
   script:
@@ -49,7 +50,7 @@ deploy-prod:
     - aws s3 rm s3://iseplife.fr --recursive
     - aws s3 cp build/ s3://iseplife.fr --recursive
   dependencies:
-    - build
+    - build-prod
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
@@ -60,9 +61,10 @@ build-dev:
   stage: build
   image: node:16.13-alpine
   variables:
-    REACT_APP_HTTP_PROTOCOL: https
-    REACT_APP_WS_PROTOCOL: wss
-    REACT_APP_API_URL: dev.iseplife.fr/api
+    CI: "false"
+    REACT_APP_HTTP_PROTOCOL: "https"
+    REACT_APP_WS_PROTOCOL: "wss"
+    REACT_APP_API_URL: "dev.iseplife.fr/api"
   before_script:
     - FRONT_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
   script:
@@ -81,7 +83,7 @@ deploy-dev:
     - aws s3 rm s3://dev.iseplife.fr --recursive
     - aws s3 cp build/ s3://dev.iseplife.fr --recursive
   dependencies:
-    - build
+    - build-dev
   rules:
     - if: '$CI_COMMIT_REF_NAME == "staging"'
 
