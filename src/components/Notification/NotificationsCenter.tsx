@@ -86,17 +86,14 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     }, [scrollHandler])
 
     return (
-        <div ref={elementRef} onScroll={scrollHandler} className={`${className} notif_center md:fixed top-16 right-6 md:rounded-lg md:shadow-lg md:w-80 md:max-h-[calc(100vh-4rem-1rem)] md:bg-white md:pb-2 md:overflow-auto md:scrollbar-thin text-neutral-800`}>
-            <div className="font-bold text-2xl px-4 py-2.5 text-black">
-                {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}
-            </div>
+        <div ref={elementRef} onScroll={scrollHandler} className={`${className} text-neutral-800 px-1`}>
             <NotificationSkeleton
                 amount={Math.min(user.totalNotifications, 15)}
                 loading={true}
                 className={(showSkeleton ? "opacity-100 " : "opacity-0 ") + "delay-75 transition-opacity w-full left-0 z-10 " + (!loading && "opacity-0 absolute ")}
             />
             {notifications.map(notif =>
-                <Notification {...notif} key={notif.id} />
+                <Notification {...notif} key={notif.id}/>
             )}
             <div className="w-full px-3">
                 <Link
