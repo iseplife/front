@@ -15,12 +15,12 @@ type GroupMembersProps = {
     onAdd: (id: number) => void
     onDemote: (id: number) => () => void
     onDelete: (id: number) => () => void
+    onPromote: (id: number) => () => void
     loading: boolean
     hasRight?: boolean
 }
-const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote, onDelete, loading, hasRight = false}) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote, onPromote, onDelete, loading, hasRight = false}) => {
     const {t} = useTranslation("group")
-
     return (
         loading ?
             <>
@@ -38,23 +38,25 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote
                 <h3 className="text-gray-800 text-lg mt-3 mb-1">{t("admins")}</h3>
                 <MemberList
                     members={orga[0]}
-                    actions={id => <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/>}
-                    showMoreButton={true}
+                    actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/> : <></>}
                 />
+                    
+                {orga[0].length > MEMBER_PREVIEW_COUNT &&
+                    <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[0].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
+                }
 
-                !!orga[1].length && <>
+                {!!orga[1].length && <>
+                    <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
                     <MemberList
                         members={orga[1]}
-                        actions={()=><></>}
-                        showMoreButton={false}
+                        actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onPromote={onPromote(id)}/> : <></>}
                     />
-                    <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
                     
                     {orga[1].length > MEMBER_PREVIEW_COUNT &&
-                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[1].sliceFromGroupShowmap(member => member.student)} />
+                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
                     }
                     {hasRight && <AddMember onAdd={onAdd} />}
-                </>
+                </>}
             </div>
     )
 }

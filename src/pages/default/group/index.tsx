@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams} from "react-router-dom"
 import {Group as GroupType, GroupMember} from "../../../data/group/types"
-import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers} from "../../../data/group"
+import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers, promoteGroupMember} from "../../../data/group"
 import Feed from "../../../components/Feed"
 import {message} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
@@ -75,6 +75,17 @@ const Group: React.FC = () => {
             message.success(t("demote_member"))
         })
     }, [])
+    const onPromote = useCallback((memberId: number) => () => {
+        promoteGroupMember(id, memberId).then(() => {
+            setOrga(org => {
+                const index = org[1].findIndex(m => m.id === memberId)
+                const member = org[1].splice(index, 1)[0]
+
+                return [[...org[0], member], [...org[1]]]
+            })
+            message.success(t("promote_member"))
+        })
+    }, [])
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
@@ -97,7 +108,7 @@ const Group: React.FC = () => {
                 <IncomingEvents className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
-                    <GroupMembers group={id} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers group={id} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">

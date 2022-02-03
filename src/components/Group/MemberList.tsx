@@ -10,18 +10,13 @@ type MemberListProps = {
     className?: string
     members: GroupMember[]
     actions: (id: number) => ReactElement
-    showMoreButton: boolean
     actionsTrigger?: number
 }
-const MemberList: React.FC<MemberListProps> = ({showMoreButton, members, className, actions, actionsTrigger = 1}) => {
-    const {t} = useTranslation("group")
-    const [viewAll, setViewAll] = useState<boolean>(false)
-    const [preview, leftovers] = useMemo(() => [members.slice(0, MEMBER_PREVIEW_COUNT), members.slice(MEMBER_PREVIEW_COUNT)], [members])
-
+const MemberList: React.FC<MemberListProps> = ({members, className, actions, actionsTrigger = 1}) => {
     return (
         <div>
             <div className={`${className} flex flex-col overflow-y-auto`} style={{maxHeight: 400}}>
-                {preview.map(({id, student}) => (
+                {members.map(({id, student}) => (
                     <span key={student.id} className="my-1 flex">
                         <StudentAvatar
                             id={student.id}
@@ -33,33 +28,11 @@ const MemberList: React.FC<MemberListProps> = ({showMoreButton, members, classNa
                             showPreview
                         >
                             <div className="ml-2 flex-shrink-0">{student.firstName + " " + student.lastName}</div>
+                            {members.length >= actionsTrigger && <div className="mr-0 ml-auto">{actions(id)}</div>}
                         </StudentAvatar>
-                        {members.length > actionsTrigger && actions(id)}
-                    </span>
-                ))}
-
-                {viewAll && leftovers.map(({id, student}) => (
-                    <span key={student.id} className="my-1">
-                        <StudentAvatar
-                            id={student.id}
-                            name={student.firstName + " " + student.lastName}
-                            picture={student.picture}
-                            pictureSize={AvatarSizes.THUMBNAIL}
-                            size="default"
-                            className="mr-2 text-gray-500 hover:text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
-                            showPreview
-                        >
-                            {student.firstName + " " + student.lastName}
-                        </StudentAvatar>
-                        {members.length > 1 && actions(id)}
                     </span>
                 ))}
             </div>
-            {members.length > MEMBER_PREVIEW_COUNT && showMoreButton && (
-                <p className="cursor-pointer font-semibold text-center text-gray-500" onClick={() => setViewAll(v => !v)}>
-                    {viewAll ? t("see_less") : t("see_all")}
-                </p>
-            )}
         </div>
     )
 }
