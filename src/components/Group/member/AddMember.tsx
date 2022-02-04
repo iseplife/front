@@ -23,14 +23,15 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
             input.focus()
 
             const fnc = (event: MouseEvent) => setSelected(false)
-            window.addEventListener("click", fnc)
+            setTimeout(() => window.addEventListener("click", fnc))
+            
             return () => window.removeEventListener("click", fnc)
         }else if(input)
             input.blur()
     }, [input, selected])
     return (
         <div className={"flex justify-center "+(selected && "mr-2")}>
-            <div ref={selectorRef} onClick={()=>setSelected(true)} className={"flex items-center mx-auto rounded-full bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 " + (selected ? "w-full py-1 px-2.5 rounded-lg h-10" : "w-8 h-8 px-2 py-2")}>
+            <div ref={selectorRef} onClick={()=>setSelected(true)} className={"flex items-center mx-auto bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 " + (selected ? "w-full py-1 px-2.5 rounded-lg h-10" : "w-8 h-8 px-2 py-2 rounded-full")}>
                 <FontAwesomeIcon
                     icon={faPlus}
                     className="w-4 h-4 block flex-shrink-0"
