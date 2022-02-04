@@ -37,7 +37,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote
             <div>
                 <h3 className="text-gray-800 text-lg mt-3 mb-1">{t("admins")}</h3>
                 <MemberList
-                    members={orga[0]}
+                    members={orga[0].slice(0, MEMBER_PREVIEW_COUNT)}
                     actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/> : <></>}
                 />
                     
@@ -48,12 +48,12 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, orga, onAdd, onDemote
                 {!!orga[1].length && <>
                     <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
                     <MemberList
-                        members={orga[1]}
+                        members={orga[1].slice(0, MEMBER_PREVIEW_COUNT)}
                         actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onPromote={onPromote(id)}/> : <></>}
                     />
                     
                     {orga[1].length > MEMBER_PREVIEW_COUNT &&
-                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
+                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full mb-2" members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
                     }
                     {hasRight && <AddMember onAdd={onAdd} />}
                 </>}
