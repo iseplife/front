@@ -11,5 +11,8 @@
 	"member_added": "Membre ajouté au groupe !",
 	"promote_member": "Membre promu !",
 	"member_removed": "Membre retiré du groupe",
-	"demote_member": "Membre retiré des administrateurs"
+	"demote_member": "Membre retiré des administrateurs",
+	"promote": "Promouvoir",
+	"demote": "Desituer",
+	"kick": "Expulser"
 }

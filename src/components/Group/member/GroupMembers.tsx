@@ -13,9 +13,9 @@ type GroupMembersProps = {
     group: number
     orga: GroupMember[][]
     onAdd: (id: number) => void
-    onDemote: (id: number) => () => void
     onDelete: (id: number) => () => void
     onPromote: (id: number) => () => void
+    onDemote: (id: number) => () => void
     loading: boolean
     hasRight?: boolean
 }

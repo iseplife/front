@@ -11,5 +11,8 @@
 	"member_added": "Member added to group !",
 	"promote_member": "Member promoted",
 	"member_removed": "Membre removed from group",
-	"demote_member": "Member removed from admins"
+	"demote_member": "Member removed from admins",
+	"promote": "Promote",
+	"demote": "Demote",
+	"kick": "Kick"
 }

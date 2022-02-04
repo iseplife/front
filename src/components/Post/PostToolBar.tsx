@@ -17,7 +17,7 @@ const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, trigg
     return (
         <div className="select-none edit-menu text-base font-medium">
             <DropdownPanelElement title={t("edit")} onClick={triggerEdition} icon={faPen} />
-            <DropdownPanelElement title={t(`post:${!pinned ? "un" : ""}pin`)} onClick={triggerPin} icon={pinned ? faUnlink : faThumbtack} />
+            <DropdownPanelElement title={t(`post:${pinned ? "un" : ""}pin`)} onClick={triggerPin} icon={pinned ? faUnlink : faThumbtack} />
             <DropdownPanelElement title={t("delete")} onClick={triggerDeletion} icon={faTrashAlt} color="red" />
         </div>
     )
