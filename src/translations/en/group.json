@@ -14,5 +14,6 @@
 	"demote_member": "Member removed from admins",
 	"promote": "Promote",
 	"demote": "Demote",
-	"kick": "Kick"
+	"kick": "Kick",
+	"search": "Search for a member"
 }

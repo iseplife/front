@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams} from "react-router-dom"
 import {Group as GroupType, GroupMember} from "../../../data/group/types"
 import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers, promoteGroupMember} from "../../../data/group"
-import Feed from "../../../components/Feed"
 import {message} from "antd"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import GroupMembers from "../../../components/Group/member/GroupMembers"
@@ -10,6 +9,7 @@ import {useTranslation} from "react-i18next"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faGlobeEurope, faLock } from "@fortawesome/free-solid-svg-icons"
 import CompressedMembers from "../../../components/Common/CompressedMembers"
+import GroupMembersView from "../../../components/Group/member/GroupMembersView"
 
 interface ParamTypes {
     id?: string
@@ -112,7 +112,8 @@ const Group: React.FC = () => {
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                {<Feed id={group?.feed} loading={!group}/>}
+                {/* {<Feed id={group?.feed} loading={!group}/>} */}
+                <GroupMembersView onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} ></GroupMembersView>
             </div>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>

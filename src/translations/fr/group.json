@@ -14,5 +14,6 @@
 	"demote_member": "Membre retiré des administrateurs",
 	"promote": "Promouvoir",
 	"demote": "Desituer",
-	"kick": "Expulser"
+	"kick": "Expulser",
+	"search": "Rechercher un membre"
 }
