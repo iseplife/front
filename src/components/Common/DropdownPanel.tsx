@@ -8,12 +8,13 @@ type DropdownPanelProps = {
     closeOnClick?: boolean
     panelClassName?: string
     buttonClassName?: string
+    clickable?: boolean
 }
 const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
-    const {icon, title, closeOnClick, panelClassName, buttonClassName, children} = props
+    const {icon, title, closeOnClick, panelClassName, buttonClassName, clickable = true, children} = props
     const panelRef = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState(false)
-    const toggleOpen = useCallback(() => setOpen(prev => !prev), [])
+    const toggleOpen = useCallback(() => clickable && setOpen(prev => !prev), [clickable])
 
     useEffect(() => {
         if (open) {
