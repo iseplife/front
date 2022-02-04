@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {Skeleton} from "antd"
 import MemberList, { MEMBER_PREVIEW_COUNT } from "../MemberList"
 import {useTranslation} from "react-i18next"
@@ -13,11 +13,13 @@ type GroupMembersProps = {
     onDelete: (id: number) => () => void
     onPromote: (id: number) => () => void
     onDemote: (id: number) => () => void
+    setMemberView: (shown: boolean) => void
     loading: boolean
     hasRight?: boolean
 }
-const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPromote, onDelete, loading, hasRight = false}) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPromote, onDelete, setMemberView, loading, hasRight = false}) => {
     const {t} = useTranslation("group")
+    const openMembersView = useCallback(() => setMemberView(true), [])
     return (
         loading ?
             <>
@@ -39,7 +41,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPro
                 />
                     
                 {orga[0].length > MEMBER_PREVIEW_COUNT &&
-                    <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[0].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
+                    <CompressedMembers onClick={openMembersView} className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full" members={orga[0].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
                 }
 
                 <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
@@ -50,7 +52,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPro
                     />
                     
                     {orga[1].length > MEMBER_PREVIEW_COUNT &&
-                        <CompressedMembers className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full mb-2" members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
+                        <CompressedMembers onClick={openMembersView} className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full mb-2" members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)} />
                     }
                 </>}
                 {hasRight && <AddMember onAdd={onAdd} />}

@@ -8,9 +8,10 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons"
 type CompressedMembersProps = {
     members: StudentPreview[]
     className?: string
+    onClick?: () => void
 }
-const CompressedMembers: React.FC<CompressedMembersProps> = ({ members, className }) => {
-    return <div className={"flex " + className}> {
+const CompressedMembers: React.FC<CompressedMembersProps> = ({ members, className, onClick }) => {
+    return <div className={"flex " + className} onClick={onClick}> {
         members.slice(0, 9).map((student, index, array) =>
             <div className="-mr-1.5 relative" style={{ zIndex: 100 - index }} title={`${student.firstName} ${student.lastName}`} key={index}>
                 {array.length - 1 == index && array.length != members.length && <div className="rounded-full bg-black bg-opacity-50 absolute w-full h-full z-10 text-gray-300 items-center justify-center flex text-xs border-gray-100 border-2">

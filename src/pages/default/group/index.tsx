@@ -10,6 +10,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faGlobeEurope, faLock } from "@fortawesome/free-solid-svg-icons"
 import CompressedMembers from "../../../components/Common/CompressedMembers"
 import GroupMembersView from "../../../components/Group/member/GroupMembersView"
+import Feed from "../../../components/Feed"
+import AddMember from "../../../components/Group/member/AddMember"
 
 interface ParamTypes {
     id?: string
@@ -21,6 +23,7 @@ const Group: React.FC = () => {
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
     const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
+    const [membersView, setMembersView] = useState<boolean>(false)
 
     useEffect(() => {
         if (!isNaN(+id)) {
@@ -86,6 +89,8 @@ const Group: React.FC = () => {
             message.success(t("promote_member"))
         })
     }, [])
+    const openMembersView = useCallback(() => setMembersView(true), []),
+        closeMembersView = useCallback(() => setMembersView(false), [])
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
@@ -104,16 +109,30 @@ const Group: React.FC = () => {
                     </div>
                 )}
 
-                {!orgaLoading && <CompressedMembers className="sm:hidden w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />}
+                {!orgaLoading &&
+                    <div className="sm:hidden">
+                        <CompressedMembers onClick={openMembersView} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
+                        {group?.hasRight && <AddMember onAdd={onAdd} />}
+                    </div>
+                }
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
-                    <GroupMembers hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers setMemberView={setMembersView} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                {/* {<Feed id={group?.feed} loading={!group}/>} */}
-                <GroupMembersView onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} ></GroupMembersView>
+                <div className="flex font-semibold text-neutral-600 mt-3">
+                    <div onClick={closeMembersView} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer "+(!membersView && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Publications</div>
+                    <div onClick={openMembersView} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer ml-2.5 "+(membersView && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Membres</div>
+                </div>
+                {
+                    membersView ? 
+                        <GroupMembersView onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />
+                        :
+                        <Feed id={group?.feed} loading={!group} />
+                }
+                
             </div>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>
