@@ -108,7 +108,7 @@ const Group: React.FC = () => {
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
-                    <GroupMembers group={id} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
