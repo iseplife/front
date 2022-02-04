@@ -44,13 +44,13 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
                 </> :
                 events.length ?
                     <EventPreviewList events={events}/> :
-                    <div className="text-gray-500 sm:my-2 text-center text-base sm:text-lg">
+                    <div className="text-gray-500 sm:mt-2 mb-2 text-center text-base sm:text-lg">
                         <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
                         <div className="text-xs sm:mb-1">{t("no_events")}</div>
                     </div>
             }
             {allowCreate && (
-                <div className="mx-auto">
+                <div className="mx-auto mb-2">
                     <EventCreatorModal onSubmit={fetchEvents}/>
                 </div>
             )}

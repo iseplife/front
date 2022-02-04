@@ -10,7 +10,7 @@ const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
-            <div className="flex-1 ml-4">
+            <div className="flex-1 mx-4">
                 <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex">
                     <StudentAvatar
                         id={user.id}

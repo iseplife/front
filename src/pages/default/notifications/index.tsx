@@ -73,7 +73,7 @@ const NotificationsPage: React.FC = () => {
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
-            <div className="flex-1 ml-4">
+            <div className="flex-1 mx-4">
                 <div className="p-2 mb-5 items-center cursor-pointer flex">
                     <h3 className="text-black mx-2 mb-0 font-bold text-2xl text-gray-700 leading-4 mt-1 block">
                         {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}

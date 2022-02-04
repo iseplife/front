@@ -89,7 +89,7 @@ const Group: React.FC = () => {
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
-            <div className="flex-1 ml-4">
+            <div className="flex-1 mx-4">
                 {group && (
                     <div className="flex p-1 mb-1 items-center ">
                         <div>
@@ -105,7 +105,7 @@ const Group: React.FC = () => {
                 )}
 
                 {!orgaLoading && <CompressedMembers className="sm:hidden w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />}
-                <IncomingEvents className="lg:hidden block" />
+                <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
                     <GroupMembers group={id} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
