@@ -32,7 +32,7 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, style, classNa
                     {
                         loading ? 
                             skeletonLength.slice(index * 4, index * 4 + 4).map(length =>
-                                <div className={"w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer "+(index == 0 && "mb-1.5")}>
+                                <div className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
                                     <Skeleton.Avatar className="w-8 h-8" />
                                     <Skeleton
                                         className="ml-2 mt-2 -mb-2"
@@ -50,7 +50,7 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, style, classNa
                             )
                             :
                             orga[index].map(member => member.student).map(student =>
-                                <div className={"w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer "+(index == 0 && "mb-1.5")}>
+                                <div className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
                                     <StudentAvatar 
                                         id={student.id}
                                         name={student.firstName+" "+student.lastName}
