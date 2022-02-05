@@ -16,12 +16,12 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit, className =
         <>
             
             <div className="flex justify-center">
-                <div onClick={() => setOpen(true)} className="flex items-center mx-auto rounded-full bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 p-2">
+                <button onClick={() => setOpen(true)} className="flex items-center mx-auto rounded-full bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 p-2">
                     <FontAwesomeIcon
                         icon={faPlus}
                         className="w-4 h-4 block flex-shrink-0"
                     ></FontAwesomeIcon>
-                </div>
+                </button>
             </div>
             {open &&
             <Modal
