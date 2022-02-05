@@ -1,8 +1,8 @@
 import React, {useContext, useMemo, useState} from "react"
-import {Button, Divider, Drawer, Dropdown, Menu} from "antd"
+import {Button, Divider, Drawer} from "antd"
 import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import {StudentPreview} from "../../data/student/types"
+import {LoggedStudentPreview, Student, StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
@@ -61,54 +61,58 @@ const ProfilePanel: React.FC = () => {
 }
 
 interface HeaderProps {
-    user: StudentPreview
+    user: LoggedStudentPreview
 }
 
-const Header: React.FC<HeaderProps> = ({user}) => (
-    <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
-        <Link to="/" className="flex">
-            <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
-        </Link>
+const Header: React.FC<HeaderProps> = ({user}) => {
+    const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
 
-        <SearchBar/>
+    return (
+        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
+            <Link to="/" className="flex">
+                <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
+            </Link>
 
-        <div className="hidden md:flex justify-end items-center py-5">
-            <div className="flex justify-around items-center mr-4">
-                <Link to="/discovery">
-                    <IconButton icon={faCompass}/>
-                </Link>
-                <Link to="/calendar">
-                    <IconButton icon={faCalendarAlt}/>
-                </Link>
+            <SearchBar/>
+
+            <div className="hidden md:flex justify-end items-center py-5">
+                <div className="flex justify-around items-center mr-4">
+                    <Link to="/discovery">
+                        <IconButton icon={faCompass}/>
+                    </Link>
+                    <Link to="/calendar">
+                        <IconButton icon={faCalendarAlt}/>
+                    </Link>
+                    <DropdownPanel
+                        icon={<IconButton icon={faBell}/>}
+                        title={`Notifications (${unwatchedNotifications})`}
+                        className="w-80 -right-6"
+                    >
+                        <NotificationsCenter className="md:block "/>
+                    </DropdownPanel>
+                </div>
                 <DropdownPanel
-                    icon={<IconButton icon={faBell}/>}
-                    title="Notifications"
-                    panelClassName="w-80 -right-6"
+                    icon={
+                        <div className="flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                            <StudentAvatar
+                                id={user.id}
+                                name={user.firstName + " " + user.lastName}
+                                picture={user.picture}
+                                pictureSize={AvatarSizes.THUMBNAIL}
+                                size="small"
+                            />
+                            <span className="mx-2 ">{user.firstName}</span>
+                        </div>
+                    }
+                    title={user.firstName + " " + user.lastName}
+                    panelClassName="w-60 right-6"
                 >
-                    <NotificationsCenter className=" md:block "/>
+                    <ProfilePanel/>
                 </DropdownPanel>
             </div>
-            <DropdownPanel
-                icon={
-                    <div className="flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
-                        <StudentAvatar
-                            id={user.id}
-                            name={user.firstName + " " + user.lastName}
-                            picture={user.picture}
-                            pictureSize={AvatarSizes.THUMBNAIL}
-                            size="small"
-                        />
-                        <span className="mx-2 ">{user.firstName}</span>
-                    </div>
-                }
-                title={user.firstName + " " + user.lastName}
-                panelClassName="w-60 right-6"
-            >
-                <ProfilePanel/>
-            </DropdownPanel>
         </div>
-    </div>
-)
+    )
+}
 
 
 type DrawerItemProps = {
