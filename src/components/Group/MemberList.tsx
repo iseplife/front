@@ -1,8 +1,9 @@
-import React, {ReactElement, useMemo, useState} from "react"
+import React, {ReactElement, useContext, useMemo, useState} from "react"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {GroupMember} from "../../data/group/types"
 import {useTranslation} from "react-i18next"
 import StudentAvatar from "../Student/StudentAvatar"
+import { AppContext } from "../../context/app/context"
 
 export const MEMBER_PREVIEW_COUNT = 5
 
@@ -13,6 +14,7 @@ type MemberListProps = {
     actionsTrigger?: number
 }
 const MemberList: React.FC<MemberListProps> = ({members, className, actions, actionsTrigger = 1}) => {
+    const {state: {user}} = useContext(AppContext)
     return (
         <div>
             <div className={`${className} flex flex-col overflow-y-auto`} style={{maxHeight: 400}}>
@@ -28,7 +30,7 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
                             showPreview
                         >
                             <div className="ml-2 flex-shrink-0">{student.firstName + " " + student.lastName}</div>
-                            {members.length >= actionsTrigger && <div className="mr-0 ml-auto">{actions(id)}</div>}
+                            {members.length >= actionsTrigger && student.id != user.id && <div className="mr-0 ml-auto">{actions(id)}</div>}
                         </StudentAvatar>
                     </span>
                 ))}
