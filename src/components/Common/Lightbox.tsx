@@ -37,15 +37,8 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
     useEffect(() => {
         const handleResize = () => {
             const ratio = currentPhoto.width / currentPhoto.height
-            let rpWidth, lbHeight
-            if (rightPanel && rightPanel.current) {
-                const {width: rpWidth, height: lbHeight} = rightPanel.current.getBoundingClientRect()
-            } else {
-                rpWidth = 0
-                lbHeight = 0
-            }
-            lbHeight = lbHeight || window.innerHeight
-            rpWidth = rpWidth ?? 0
+            
+            const rpWidth = rightPanel?.current?.getBoundingClientRect().width ?? 0, lbHeight = window.innerHeight
 
             const lbWidth = window.innerWidth - rpWidth
             const lbRatio = lbWidth / lbHeight
