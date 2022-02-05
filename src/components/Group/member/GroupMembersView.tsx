@@ -38,7 +38,7 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, onDelete, onPr
                 <label className="text-neutral-400 text-base"> · {orga.reduce((prev, arr) => prev + arr.length, 0)}</label>
             </Divider>
             {sections.map((name, index) => (!!orga[index].length || loading) && <>
-                <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 w-full">
+                <div key={index} className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 w-full">
                     <div className="font-semibold text-base text-neutral-700 mb-2">
                         {t(name)}
                         {loading || <label className="text-neutral-400 text-sm"> · {orga[index].length}</label>}
@@ -53,8 +53,8 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, onDelete, onPr
                         </div>
                     }
                     {loading ? 
-                        skeletonLength.slice(index * 4, index * 4 + 4).map(length =>
-                            <div className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
+                        skeletonLength.slice(index * 4, index * 4 + 4).map((length, id) =>
+                            <div key={id} className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
                                 <Skeleton.Avatar className="w-8 h-8" />
                                 <Skeleton
                                     className="ml-2 mt-2 -mb-2"
@@ -72,7 +72,7 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, onDelete, onPr
                         )
                         :
                         orga[index].filter(member => index == 0 || (member.student.firstName+" "+member.student.lastName).toLowerCase().includes(search)).map(member =>
-                            <div className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
+                            <div key={member.id} className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
                                 <StudentAvatar 
                                     id={member.student.id}
                                     name={member.student.firstName+" "+member.student.lastName}
