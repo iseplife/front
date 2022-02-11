@@ -49,7 +49,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPro
                 }
 
                 <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
-                {!!orga[1].length && <>
+                {orga[1].length != 0 && <>
                     <MemberList
                         members={orga[1].slice(0, MEMBER_PREVIEW_COUNT)}
                         actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onPromote={onPromote(id)}/> : <></>}
