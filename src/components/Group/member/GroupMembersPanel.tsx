@@ -9,7 +9,7 @@ import { faArrowDown, faArrowUp, faSearch, faTrashAlt } from "@fortawesome/free-
 import { AppContext } from "../../../context/app/context"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-type GroupMembersViewProps = {
+type GroupMembersPanelProps = {
     orga: GroupMember[][]
     onDelete: (id: number) => () => void
     onPromote: (id: number) => () => void
@@ -18,7 +18,7 @@ type GroupMembersViewProps = {
     className?: string
 }
 const sections = ["admins", "members", ]
-const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, onDelete, onPromote, onDemote, style, className}) => {
+const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, onPromote, onDemote, style, className}) => {
     const {t} = useTranslation("group")
     const loading = useMemo(()=>orga[0].length == 0, [orga])
 
@@ -101,4 +101,4 @@ const GroupMembersView: React.FC<GroupMembersViewProps> = ({orga, onDelete, onPr
     )
 }
 
-export default GroupMembersView
+export default GroupMembersPanel

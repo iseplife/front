@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faGlobeEurope, faLock } from "@fortawesome/free-solid-svg-icons"
 import CompressedMembers from "../../../components/Common/CompressedMembers"
-import GroupMembersView from "../../../components/Group/member/GroupMembersView"
+import GroupMembersPanel from "../../../components/Group/member/GroupMembersPanel"
 import Feed from "../../../components/Feed"
 import AddMember from "../../../components/Group/member/AddMember"
 
@@ -128,7 +128,7 @@ const Group: React.FC = () => {
                 </div>
                 {
                     membersView ? 
-                        <GroupMembersView onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />
+                        <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />
                         :
                         <Feed id={group?.feed} loading={!group} />
                 }
