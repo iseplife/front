@@ -85,9 +85,14 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                     </Link>
                     <DropdownPanel
                         icon={<IconButton icon={faBell}/>}
-                        title={`Notifications (${unwatchedNotifications})`}
-                        className="w-80 -right-6"
+                        panelClassName="w-80 -right-6"
                     >
+                        <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
+                            {unwatchedNotifications ? `Notifications (${unwatchedNotifications})` : "Notifications"}
+                            <Link to={"/notifications"}  className="ml-auto mr- rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                                Voir tout
+                            </Link>
+                        </div>
                         <NotificationsCenter className="md:block "/>
                     </DropdownPanel>
                 </div>

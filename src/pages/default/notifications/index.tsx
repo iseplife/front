@@ -9,6 +9,7 @@ import {loadNotifications, setNotificationsWatched} from "../../../data/notifica
 import {AppActionType} from "../../../context/app/action"
 import {add, isAfter} from "date-fns"
 import {Divider} from "antd"
+import NotificationsCenter from "../../../components/Notification/NotificationsCenter"
 
 const NotificationsPage: React.FC = () => {
     const {t} = useTranslation("notifications")
@@ -72,40 +73,26 @@ const NotificationsPage: React.FC = () => {
 
 
     return (
-        <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
-            <div className="flex-1 mx-4">
-                <div className="p-2 mb-5 items-center cursor-pointer flex">
-                    <h3 className="text-black mx-2 mb-0 font-bold text-2xl text-gray-700 leading-4 mt-1 block">
-                        {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}
-                    </h3>
+        <div className="sm:mt-5 flex container mx-auto">
+            <div className="hidden md:block md:w-1/12 lg:w-1/5 xl:w-1/4">
+
+            </div>
+            <div className="mx-4 md:mx-10 sm:col-span-2 flex flex-grow flex-col p-4 shadow-sm rounded-lg bg-white my-5">
+                    
+                <div className="flex-1">
+                    <div className="mb-5 items-center cursor-pointer flex">
+                        <h3 className="text-black mx-2 mb-0 font-bold text-2xl text-gray-700 leading-4 mt-1 block">
+                            {t("notifications")}{!!unwatchedNotifications && ` (${unwatchedNotifications})`}
+                        </h3>
+                    </div>
+                </div>
+                <div>
+                    <NotificationsCenter fullPage={true}></NotificationsCenter>
                 </div>
             </div>
-            <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                <InfiniteScroller
-                    className="bg-white p-2 rounded-lg"
-                    watch="DOWN" callback={loadMoreNotifications} empty={empty}
-                    loadingComponent={
-                        <NotificationSkeleton
-                            amount={Math.min(user.totalNotifications - loadedNotifications, 45)}
-                            loading={loading}
-                            className="transition-opacity w-full"
-                        />
-                    }
-                >
-                    {recentNotifications.map(notif =>
-                        <Notification {...notif} key={notif.id}/>
-                    )}
-                    {oldNotifications.length > 0 && (
-                        <Divider className="text-gray-700 text-base" orientation="left">
-                            {t("long_ago")}
-                        </Divider>
-                    )}
-                    {oldNotifications.map(notif =>
-                        <Notification {...notif} key={notif.id}/>
-                    )}
-                </InfiniteScroller>
+            <div className="hidden md:block md:w-1/12 lg:w-1/5 xl:w-1/4">
+                
             </div>
-            <div className="flex-1 lg:block hidden mr-4"/>
         </div>
     )
 }
