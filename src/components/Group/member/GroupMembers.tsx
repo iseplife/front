@@ -18,9 +18,8 @@ type GroupMembersProps = {
     loading: boolean
     hasRight?: boolean
 }
-const GroupMembers: React.FC<GroupMembersProps> = ({orga: od, onAdd, onDemote, onPromote, onDelete, openMembersPanel, loading, hasRight = false}) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPromote, onDelete, openMembersPanel, loading, hasRight = false}) => {
     const {t} = useTranslation("group")
-    const orga = [od[0], [...od[1],...od[1],...od[1],...od[1]]]
     return (
         loading ?
             <>
