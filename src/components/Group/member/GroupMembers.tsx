@@ -6,6 +6,7 @@ import {GroupMember} from "../../../data/group/types"
 import AdminAction from "./AdminAction"
 import AddMember from "./AddMember"
 import CompressedMembers from "../../Common/CompressedMembers"
+import { GroupPanel } from "../../../pages/default/group"
 
 type GroupMembersProps = {
     orga: GroupMember[][]
@@ -13,13 +14,13 @@ type GroupMembersProps = {
     onDelete: (id: number) => () => void
     onPromote: (id: number) => () => void
     onDemote: (id: number) => () => void
-    setMemberView: (shown: boolean) => void
+    openMembersPanel: () => void
     loading: boolean
     hasRight?: boolean
 }
-const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPromote, onDelete, setMemberView, loading, hasRight = false}) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({orga: od, onAdd, onDemote, onPromote, onDelete, openMembersPanel, loading, hasRight = false}) => {
     const {t} = useTranslation("group")
-    const openMembersView = useCallback(() => setMemberView(true), [])
+    const orga = [od[0], [...od[1],...od[1],...od[1],...od[1]]]
     return (
         loading ?
             <>
@@ -42,7 +43,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPro
                     
                 {orga[0].length > MEMBER_PREVIEW_COUNT &&
                     <CompressedMembers
-                        onClick={openMembersView}
+                        onClick={openMembersPanel}
                         className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
                         members={orga[0].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)}
                     />
@@ -57,7 +58,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPro
                     
                     {orga[1].length > MEMBER_PREVIEW_COUNT &&
                         <CompressedMembers
-                            onClick={openMembersView}
+                            onClick={openMembersPanel}
                             className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full mb-2"
                             members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)}
                         />

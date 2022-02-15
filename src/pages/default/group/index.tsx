@@ -16,6 +16,10 @@ import AddMember from "../../../components/Group/member/AddMember"
 interface ParamTypes {
     id?: string
 }
+export enum GroupPanel {
+    POSTS,
+    MEMBERS,
+}
 const Group: React.FC = () => {
     const {t} = useTranslation("group")
     const {id: idStr} = useParams<ParamTypes>()
@@ -23,7 +27,7 @@ const Group: React.FC = () => {
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
     const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
-    const [membersView, setMembersView] = useState<boolean>(false)
+    const [panel, setPanel] = useState<GroupPanel>(GroupPanel.POSTS)
 
     useEffect(() => {
         if (!isNaN(+id)) {
@@ -89,8 +93,8 @@ const Group: React.FC = () => {
             message.success(t("promote_member"))
         })
     }, [])
-    const openMembersView = useCallback(() => setMembersView(true), []),
-        closeMembersView = useCallback(() => setMembersView(false), [])
+    const openMembersPanel = useCallback(() => setPanel(GroupPanel.MEMBERS), []),
+        openPostsPanel = useCallback(() => setPanel(GroupPanel.POSTS), [])
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
@@ -111,25 +115,27 @@ const Group: React.FC = () => {
 
                 {!orgaLoading &&
                     <div className="sm:hidden">
-                        <CompressedMembers onClick={openMembersView} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
+                        <CompressedMembers onClick={openMembersPanel} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
                         {group?.hasRight && <AddMember onAdd={onAdd} />}
                     </div>
                 }
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
-                    <GroupMembers setMemberView={setMembersView} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers openMembersPanel={openMembersPanel} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
                 <div className="flex font-semibold text-neutral-600 mt-3">
-                    <div onClick={closeMembersView} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer "+(!membersView && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Publications</div>
-                    <div onClick={openMembersView} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer ml-2.5 "+(membersView && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Membres</div>
+                    <div onClick={openPostsPanel} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer "+(panel != GroupPanel.MEMBERS && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Publications</div>
+                    <div onClick={openMembersPanel} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer ml-2.5 "+(panel == GroupPanel.MEMBERS && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Membres</div>
                 </div>
                 {
-                    membersView ? 
+                    panel == GroupPanel.MEMBERS && 
                         <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />
-                        :
+                }
+                {
+                    panel == GroupPanel.POSTS && 
                         <Feed id={group?.feed} loading={!group} />
                 }
                 
