@@ -89,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                     >
                         <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
                             {unwatchedNotifications ? `Notifications (${unwatchedNotifications})` : "Notifications"}
-                            <Link to={"/notifications"}  className="ml-auto mr- rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                            <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
                                 Voir tout
                             </Link>
                         </div>
