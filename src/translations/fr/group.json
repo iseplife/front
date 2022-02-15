@@ -4,12 +4,16 @@
 	"admins": "Administrateurs",
 	"restricted": "Groupe privé",
 	"public": "Groupe public",
-	"see_all": "Voir tous les membres +",
-	"see_less": "Voir moins de membres -",
+	"see_all": "Voir plus de membres",
+	"see_less": "Voir moins de membres",
 	"add_member": "Ajouter un membre",
 	"confirm_add": "Ajouter",
 	"member_added": "Membre ajouté au groupe !",
-	"promote_member": "Membre promue !",
+	"promote_member": "Membre promu !",
 	"member_removed": "Membre retiré du groupe",
-	"demote_member": "Membre retiré des administrateurs"
+	"demote_member": "Membre retiré des administrateurs",
+	"promote": "Promouvoir",
+	"demote": "Desituer",
+	"kick": "Expulser",
+	"search": "Rechercher un membre"
 }

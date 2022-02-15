@@ -2,6 +2,8 @@ import React, {useState} from "react"
 import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import EventCreateForm from "./Form/EventCreateForm"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 type EventModalFormProps = {
     onSubmit: () => void
@@ -12,13 +14,15 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit, className =
     const [open, setOpen] = useState<boolean>(false)
     return (
         <>
-            <Button
-                className={`shadow-md rounded-full px-3 h-auto bg-indigo-200 text-indigo-400 text-md font-bold ${className}`}
-                style={{width: "max-content"}}
-                onClick={() => setOpen(true)}
-            >
-                {t("create.button")} +
-            </Button>
+            
+            <div className="flex justify-center">
+                <button onClick={() => setOpen(true)} className="flex items-center mx-auto rounded-full bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 p-2">
+                    <FontAwesomeIcon
+                        icon={faPlus}
+                        className="w-4 h-4 block flex-shrink-0"
+                    ></FontAwesomeIcon>
+                </button>
+            </div>
             {open &&
             <Modal
                 className="md:w-1/2 w-4/5"

@@ -1,81 +1,25 @@
-import React, {useCallback, useEffect, useState} from "react"
-import {message, Skeleton} from "antd"
-import MemberList from "../MemberList"
+import React, { useCallback } from "react"
+import {Skeleton} from "antd"
+import MemberList, { MEMBER_PREVIEW_COUNT } from "../MemberList"
 import {useTranslation} from "react-i18next"
 import {GroupMember} from "../../../data/group/types"
 import AdminAction from "./AdminAction"
-import MemberAction from "./MemberAction"
-import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroupMembers, promoteGroupMember} from "../../../data/group"
 import AddMember from "./AddMember"
-
-
-type MemberOrga = [GroupMember[], GroupMember[]]
+import CompressedMembers from "../../Common/CompressedMembers"
+import { GroupPanel } from "../../../pages/default/group"
 
 type GroupMembersProps = {
-    group: number
-    members?: GroupMember[]
+    orga: GroupMember[][]
+    onAdd: (id: number) => void
+    onDelete: (id: number) => () => void
+    onPromote: (id: number) => () => void
+    onDemote: (id: number) => () => void
+    openMembersPanel: () => void
+    loading: boolean
     hasRight?: boolean
 }
-const GroupMembers: React.FC<GroupMembersProps> = ({group, members, hasRight = false}) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({orga, onAdd, onDemote, onPromote, onDelete, openMembersPanel, loading, hasRight = false}) => {
     const {t} = useTranslation("group")
-    const [loading, setLoading] = useState(true)
-    const [orga, setOrga] = useState<MemberOrga>([[], []])
-
-    useEffect(() => {
-        setLoading(true)
-        getGroupMembers(group).then(res =>
-            setOrga((res.data).reduce((acc: MemberOrga, curr) => {
-                acc[curr.admin ? 0 : 1].push(curr)
-                return acc
-            }, [[], []]))
-        ).finally(() => setLoading(false))
-    }, [])
-
-    const onAdd = useCallback((studentId: number) => {
-        addGroupMember(group, studentId).then((res) => {
-            setOrga(org => {
-                return [org[0], [res.data, ...org[1]]]
-            })
-            message.success(t("member_added"))
-        })
-    }, [])
-
-    const onDelete = useCallback((id: number) => () => {
-        deleteGroupMember(group, id).then(() => {
-            message.success(t("member_removed"))
-            setOrga(org => {
-                return [
-                    org[0],
-                    org[1].filter(m => m.id !== id)
-                ]
-            })
-        })
-    }, [])
-
-    const onPromote = useCallback((id: number) => () => {
-        promoteGroupMember(group, id).then(() => {
-            setOrga(org => {
-                const index = org[1].findIndex(m => m.id === id)
-                const member = org[1].splice(index, 1)[0]
-
-                return [[...org[0], member], [...org[1]]]
-            })
-            message.success(t("promote_member"))
-        })
-    }, [])
-
-    const onDemote = useCallback((id: number) => () => {
-        demoteGroupMember(group, id).then(() => {
-            setOrga(org => {
-                const index = org[0].findIndex(m => m.id === id)
-                const member = org[0].splice(index, 1)[0]
-
-                return [[...org[0]], [...org[1], member]]
-            })
-            message.success(t("demote_member"))
-        })
-    }, [])
-
     return (
         loading ?
             <>
@@ -90,21 +34,36 @@ const GroupMembers: React.FC<GroupMembersProps> = ({group, members, hasRight = f
                 <Skeleton avatar paragraph={{rows: 0}}/>
             </> :
             <div>
-                <h3 className="text-gray-800 text-lg mt-3">{t("admins")}</h3>
+                <h3 className="text-gray-800 text-lg mt-3 mb-1">{t("admins")}</h3>
                 <MemberList
-                    members={orga[0]}
-                    actions={id => <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/>}
+                    members={orga[0].slice(0, MEMBER_PREVIEW_COUNT)}
+                    actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onDemote={onDemote(id)}/> : <></>}
                 />
+                    
+                {orga[0].length > MEMBER_PREVIEW_COUNT &&
+                    <CompressedMembers
+                        onClick={openMembersPanel}
+                        className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full"
+                        members={orga[0].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)}
+                    />
+                }
 
                 <h3 className="text-gray-800 text-lg mt-3">{t("members")}</h3>
-                {hasRight && <AddMember onAdd={onAdd}/>}
-                <MemberList
-                    members={orga[1]}
-                    actionsTrigger={0}
-                    actions={id =>
-                        <MemberAction onPromote={onPromote(id)} onDelete={onDemote(id)}/>
+                {orga[1].length != 0 && <>
+                    <MemberList
+                        members={orga[1].slice(0, MEMBER_PREVIEW_COUNT)}
+                        actions={id => hasRight ? <AdminAction onDelete={onDelete(id)} onPromote={onPromote(id)}/> : <></>}
+                    />
+                    
+                    {orga[1].length > MEMBER_PREVIEW_COUNT &&
+                        <CompressedMembers
+                            onClick={openMembersPanel}
+                            className="cursor-pointer hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 w-full mb-2"
+                            members={orga[1].slice(MEMBER_PREVIEW_COUNT).map(member => member.student)}
+                        />
                     }
-                />
+                </>}
+                {hasRight && <AddMember onAdd={onAdd} />}
             </div>
     )
 }

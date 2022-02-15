@@ -19,12 +19,13 @@ import {FeedContext} from "../../context/feed/context"
 import {Author} from "../../data/request.type"
 
 type FeedProps = {
+    loading?: boolean,
     id?: number
     allowPublication?: boolean
     style?: CSSProperties
     className?: string
 }
-const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => {
+const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className}) => {
     const {state: {user}} = useContext(AppContext)
     const {t} = useTranslation(["common", "post"])
     const [posts, setPosts] = useState<PostType[]>([])
@@ -38,6 +39,8 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
 
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
         setFetching(true)
+        if(loading)
+            return new Promise<boolean>(()=>undefined)
         const res = await getFeedPost(id, count)
         setPosts(posts => [...posts, ...res.data.content])
         setFetching(false)
@@ -46,7 +49,7 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
             setEmpty(true)
 
         return res.data.last
-    }, [id])
+    }, [id, loading])
 
     const onPostCreation = useCallback((post: PostUpdate) => (
         setPosts(prevPosts => [...prevPosts,
@@ -117,8 +120,10 @@ const Feed: React.FC<FeedProps> = ({id, allowPublication, style, className}) => 
     }, [id])
 
     useEffect(() => {
-        getWSService(WSFeedService).subscribe(id ?? -1)
-        return () => getWSService(WSFeedService).unsubscribe(id ?? -1)
+        if(id !== undefined){
+            getWSService(WSFeedService).subscribe(id)
+            return () => getWSService(WSFeedService).unsubscribe(id)
+        }
     }, [id])
 
     return (

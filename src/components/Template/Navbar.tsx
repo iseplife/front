@@ -83,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({user}) => (
                 <DropdownPanel
                     icon={<IconButton icon={faBell}/>}
                     title="Notifications"
-                    className="w-80 -right-6"
+                    panelClassName="w-80 -right-6"
                 >
                     <NotificationsCenter className=" md:block "/>
                 </DropdownPanel>
@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({user}) => (
                     </div>
                 }
                 title={user.firstName + " " + user.lastName}
-                className="w-60 right-6"
+                panelClassName="w-60 right-6"
             >
                 <ProfilePanel/>
             </DropdownPanel>

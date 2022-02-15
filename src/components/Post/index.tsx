@@ -156,18 +156,9 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
                         )}
                         {data.hasWriteAccess && (
                             <DropdownPanel
-                                className="w-32 left-6"
+                                panelClassName="w-32 right-0 lg:left-0"
                                 closeOnClick={true}
-                                icon={
-                                    <div
-                                        className="cursor-pointer group rounded-full hover:bg-indigo-700 hover:bg-opacity-10 transition-colors mr-3 md:mr-4 w-9 h-9 items-center flex justify-center"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faEllipsisH}
-                                            className="text-gray-400 group-hover:text-indigo-400 transition-colors"
-                                        />
-                                    </div>
-                                }
+                                buttonClassName="mr-0"
                             >
                                 <PostToolBar
                                     pinned={data.pinned}

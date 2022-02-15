@@ -84,7 +84,7 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
 
 
     handleSubmit: async (values, { props, resetForm }) => {
-        values.feed = values.feed ?? values.selectedClub?.feedId ?? props.user.feedId
+        values.feed = values.feed ?? props.feedId ?? values.selectedClub?.feedId ?? props.user.feedId
         values.linkedClub = values.selectedClub?.id
         const res = await createPost(values as BasicPostCreation)
 
