@@ -66,6 +66,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({user}) => {
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
+    const [t] = useTranslation("notifications")
 
     return (
         <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
@@ -90,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                         <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
                             {unwatchedNotifications ? `Notifications (${unwatchedNotifications})` : "Notifications"}
                             <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
-                                Voir tout
+                                {t("see_more")}
                             </Link>
                         </div>
                         <NotificationsCenter className="md:block "/>
