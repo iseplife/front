@@ -17,7 +17,7 @@ const NotificationsPage: React.FC = () => {
 
     const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
 
-    const [notificationIds, setNotificationIds] = useState<Set<number>>(new Set())
+    useEffect(() => document.documentElement.click(), [])// Closes all dropdown menus (including notifications' one)
 
     return (
         <div className="sm:mt-5 flex container mx-auto">
