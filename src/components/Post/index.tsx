@@ -140,16 +140,14 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
                             showPreview
                             size="default"
                         />
-                        <div className={"items-center ml-2"}>
-                            <div className={"font-bold -mb-0.5 -mt-0.5"}>{data.author.name}</div>
-                            <div className={"text-xs"}>{formattedDate}</div>
+                        <div className="items-center ml-2">
+                            <div className="font-bold -mb-0.5 -mt-0.5">{data.author.name}</div>
+                            <div className="text-xs">
+                                {isFuture(data.publicationDate) ? `${t("post:planned_for")} ${format(new Date(data.publicationDate), "dd/MM/yy, HH:mm")}` : formattedDate}
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4">
-                        <span className="mx-2 text-xs">
-                            {isFuture(data.publicationDate) && t("post:planned_for")}
-                            {format(new Date(data.publicationDate), "HH:mm  dd/MM/yy")}
-                        </span>
                         {data.pinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
