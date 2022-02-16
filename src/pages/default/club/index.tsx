@@ -69,7 +69,7 @@ const Club: React.FC = () => {
                             id={club.feed}
                         />,
                         [t("members")]: <ClubMembers />,
-                        ...(club.canEdit ? { "Administration": <ClubAdmin/> } : {})
+                        ...(club.canEdit && { "Administration": <ClubAdmin/> })
                     }}
                 />
                 
