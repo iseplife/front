@@ -33,7 +33,7 @@ const NotificationsPage: React.FC = () => {
                         </h3>
                     </div>
                 </div>
-                <NotificationsCenter fullPage={true}></NotificationsCenter>
+                <NotificationsCenter fullPage={true} />
             </div>
             <div className="hidden md:block md:w-1/12 lg:w-1/5 xl:w-1/4">
                 
