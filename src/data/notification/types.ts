@@ -1,16 +1,16 @@
-import { NotificationType } from "../../constants/NotificationType";
+import { NotificationType } from "../../constants/NotificationType"
 
 export interface Notification {
   id: number
 
-  type: NotificationType;
+  type: NotificationType
   
-  icon: string;
-  link: string;
+  icon: string
+  link: string
 
-  watched: boolean;
+  watched: boolean
 
-  informations: { [key: string]: any };
+  informations: { [key: string]: any }
 
-  creation: Date;
+  creation: Date
 }
