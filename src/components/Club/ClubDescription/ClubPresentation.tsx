@@ -11,7 +11,7 @@ const {Panel} = Collapse
 const ClubPresentation: React.FC = () => {
     const {t} = useTranslation("club")
     return (
-        <div key="desktop-display" className="hidden-scroller w-full md:w-64 lg:w-1/4 md:overflow-y-auto" style={{height: 400}}>
+        <div key="desktop-display" className="hidden-scroller w-full md:overflow-y-auto" style={{height: 400}}>
             <Collapse
                 className="border-b-0 border-t rounded-lg shadow-md"
                 defaultActiveKey={["2"]}

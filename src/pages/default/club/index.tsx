@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useReducer, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router"
 import {getClub} from "../../../data/club"
 import {message, Tabs} from "antd"
@@ -12,6 +12,8 @@ import {ClubActionType} from "../../../context/club/action"
 import ClubMembers from "../../../components/Club/ClubMembers"
 import ClubHeader from "../../../components/Club/ClubHeader"
 import ClubSkeleton from "../../../components/Club/Skeleton"
+import IncomingEvents from "../../../components/Event/IncomingEvents"
+import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 
 enum ClubTab {
     HOME_TAB,
@@ -26,6 +28,11 @@ const Club: React.FC = () => {
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(true)
     const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
+
+
+    const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
+    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
+
 
     /**
      * Club initialisation on mounting
@@ -46,37 +53,26 @@ const Club: React.FC = () => {
 
     return (
         <ClubContext.Provider value={{club, dispatch}}>
-            <div className="w-full h-full ">
-                {loading && !club.id ?
-                    <ClubSkeleton />:
-                    <>
-                        <ClubHeader/>
-                        <div key="desktop-display" className="flex flex-row -mt-10 pt-10 px-5">
-                            <Tabs centered className="w-full">
-                                <TabPane tab={"Accueil"} key={ClubTab.HOME_TAB}>
-                                    <div className="flex flex-row flex-wrap">
-                                        <ClubPresentation/>
-                                        <div className="flex-grow">
-                                            <Feed
-                                                id={club.feed}
-                                                allowPublication={false}
-                                                className="m-4 hidden md:block"
-                                            />
-                                        </div>
-                                    </div>
-                                </TabPane>
-                                <TabPane tab={"Membres"} className="h-full" key={ClubTab.MEMBERS_TAB}>
-                                    <ClubMembers />
-                                </TabPane>
-                                {club.canEdit && (
-                                    <TabPane tab={"Administration"} key={ClubTab.ADMIN_TAB}>
-                                        <ClubAdmin/>
-                                    </TabPane>
-                                )}
-                            </Tabs>
-                        </div>
-                    </>
-                }
+            <ClubHeader />
+            <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
+                <div className="flex-1 mx-4">
+                    <ClubPresentation/>
+                </div>
+                <TabsSwitcher
+                    currentTab={tab}
+                    setCurrentTab={setTabFactory}
+                    tabs={{
+                        "Accueil": <Feed
+                            id={club.feed}
+                        />,
+                        "Membres": <ClubMembers />,
+                        ...(club.canEdit ? { "Administration": <ClubAdmin/> } : {})
+                    }}
+                />
+                
+                <div className="flex-1 lg:block hidden mr-4">
+                    <IncomingEvents allowCreate={false} />
+                </div>
             </div>
         </ClubContext.Provider>
     )
