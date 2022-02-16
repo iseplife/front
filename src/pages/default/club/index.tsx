@@ -14,6 +14,7 @@ import ClubHeader from "../../../components/Club/ClubHeader"
 import ClubSkeleton from "../../../components/Club/Skeleton"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
+import { useTranslation } from "react-i18next"
 
 enum ClubTab {
     HOME_TAB,
@@ -28,6 +29,8 @@ const Club: React.FC = () => {
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(true)
     const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
+
+    const [t] = useTranslation("club")
 
 
     const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
@@ -62,10 +65,10 @@ const Club: React.FC = () => {
                     currentTab={tab}
                     setCurrentTab={setTabFactory}
                     tabs={{
-                        "Accueil": <Feed
+                        "Publications": <Feed
                             id={club.feed}
                         />,
-                        "Membres": <ClubMembers />,
+                        [t("members")]: <ClubMembers />,
                         ...(club.canEdit ? { "Administration": <ClubAdmin/> } : {})
                     }}
                 />
