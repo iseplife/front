@@ -126,16 +126,14 @@ const Group: React.FC = () => {
                     <GroupMembers openMembersPanel={setTabFactory(GroupPanel.MEMBERS)} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
-            <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                <TabsSwitcher
-                    currentTab={tab}
-                    setCurrentTab={setTabFactory}
-                    tabs={{
-                        "Publications": <Feed id={group?.feed} loading={!group} />,
-                        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
-                    }}
-                />
-            </div>
+            <TabsSwitcher
+                currentTab={tab}
+                setCurrentTab={setTabFactory}
+                tabs={{
+                    "Publications": <Feed id={group?.feed} loading={!group} />,
+                    [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
+                }}
+            />
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>
             </div>

@@ -10,7 +10,7 @@ interface TabSwitcherProps {
 const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, tabs}) => {
     const tabsEntries = useMemo(() => Object.entries(tabs), [tabs])
     return (
-        <>
+        <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
             <div className="flex font-semibold text-neutral-600 mt-3">
                 {tabsEntries.map(([tabName], index) => 
                     <div
@@ -24,7 +24,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, ta
             </div>
 
             { tabsEntries[currentTab][1] }
-        </>
+        </div>
     )
 }
 export default TabsSwitcher
