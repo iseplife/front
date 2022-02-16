@@ -25,9 +25,9 @@ const ClubHeader: React.FC = () => {
                         shape="circle"
                         className="-mt-13 md:-mt-16 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
                     />
-                    <div className="flex flex-col ml-4 md:mt-0 -mt-4">
-                        <h1 className="text-gray-700 text-3xl mb-0 font-bold">{club.name}</h1>
-                        <h4 className="text-gray-500 text-md italic">{new Date(club.creation).toLocaleDateString()}</h4>
+                    <div className="flex flex-col ml-4 md:-mt-2 mt-5">
+                        <h1 className="text-black text-3xl mb-0 font-bold">{club.name}</h1>
+                        {/* <h4 className="text-gray-500 text-md italic">{new Date(club.creation).toLocaleDateString()}</h4> */}
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
