@@ -12,6 +12,7 @@ import CompressedMembers from "../../../components/Common/CompressedMembers"
 import GroupMembersPanel from "../../../components/Group/member/GroupMembersPanel"
 import Feed from "../../../components/Feed"
 import AddMember from "../../../components/Group/member/AddMember"
+import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 
 interface ParamTypes {
     id?: string
@@ -27,7 +28,9 @@ const Group: React.FC = () => {
     const [group, setGroup] = useState<GroupType>()
     const [loading, setLoading] = useState<boolean>(false)
     const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
-    const [panel, setPanel] = useState<GroupPanel>(GroupPanel.POSTS)
+    const [tab, setTab] = useState<GroupPanel>(GroupPanel.POSTS)
+
+    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
     useEffect(() => {
         if (!isNaN(+id)) {
@@ -93,8 +96,6 @@ const Group: React.FC = () => {
             message.success(t("promote_member"))
         })
     }, [])
-    const openMembersPanel = useCallback(() => setPanel(GroupPanel.MEMBERS), []),
-        openPostsPanel = useCallback(() => setPanel(GroupPanel.POSTS), [])
 
     return (
         <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
@@ -115,30 +116,25 @@ const Group: React.FC = () => {
 
                 {!orgaLoading &&
                     <div className="sm:hidden">
-                        <CompressedMembers onClick={openMembersPanel} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
+                        <CompressedMembers onClick={setTabFactory(GroupPanel.MEMBERS)} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
                         {group?.hasRight && <AddMember onAdd={onAdd} />}
                     </div>
                 }
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
-                    <GroupMembers openMembersPanel={openMembersPanel} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers openMembersPanel={setTabFactory(GroupPanel.MEMBERS)} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
                 </div>
             </div>
             <div style={{flex: "2 1 0%"}} className="mx-4 md:mx-10">
-                <div className="flex font-semibold text-neutral-600 mt-3">
-                    <div onClick={openPostsPanel} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer "+(panel != GroupPanel.MEMBERS && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Publications</div>
-                    <div onClick={openMembersPanel} className={"rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer ml-2.5 "+(panel == GroupPanel.MEMBERS && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}>Membres</div>
-                </div>
-                {
-                    panel == GroupPanel.MEMBERS && 
-                        <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />
-                }
-                {
-                    panel == GroupPanel.POSTS && 
-                        <Feed id={group?.feed} loading={!group} />
-                }
-                
+                <TabsSwitcher
+                    currentTab={tab}
+                    setCurrentTab={setTabFactory}
+                    tabs={{
+                        "Publications": <Feed id={group?.feed} loading={!group} />,
+                        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
+                    }}
+                />
             </div>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>
