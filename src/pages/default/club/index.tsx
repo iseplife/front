@@ -69,6 +69,7 @@ const Club: React.FC = () => {
                         "Publications": <Feed
                             id={club.feed}
                         />,
+                        "sm:Gallerie": <ClubAdmin/>,
                         [t("members")]: <ClubMembers />,
                         ...(club.canEdit && { "Administration": <ClubAdmin/> })
                     }}
