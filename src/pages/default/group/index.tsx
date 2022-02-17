@@ -98,7 +98,7 @@ const Group: React.FC = () => {
     }, [])
 
     return (
-        <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
+        <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
                 {group && (
                     <div className="flex p-1 mb-1 items-center ">
@@ -127,6 +127,7 @@ const Group: React.FC = () => {
                 </div>
             </div>
             <TabsSwitcher
+                className="mx-4 md:mx-10 sm:col-span-2 mt-3"
                 currentTab={tab}
                 setCurrentTab={setTabFactory}
                 tabs={{
