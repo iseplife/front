@@ -15,6 +15,7 @@ import ClubSkeleton from "../../../components/Club/Skeleton"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { useTranslation } from "react-i18next"
+import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 
 enum ClubTab {
     HOME_TAB,
@@ -57,19 +58,19 @@ const Club: React.FC = () => {
     return (
         <ClubContext.Provider value={{club, dispatch}}>
             <ClubHeader />
-            <div className="flex justify-center container mx-auto md:flex-nowrap flex-wrap">
-                <div className="flex-1 mx-4">
+            <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
+                <div className="flex-1 mx-4 -mt-4 sm:mt-0">
                     <ClubPresentation/>
                 </div>
                 <TabsSwitcher
-                    className="-mt-10"
+                    className="sm:-mt-10 mx-4 md:mx-10 sm:col-span-2"
                     currentTab={tab}
                     setCurrentTab={setTabFactory}
                     tabs={{
                         "Publications": <Feed
                             id={club.feed}
                         />,
-                        "sm:Gallerie": <ClubAdmin/>,
+                        "sm:Gallerie": <GalleriesPreview />,
                         [t("members")]: <ClubMembers />,
                         ...(club.canEdit && { "Administration": <ClubAdmin/> })
                     }}

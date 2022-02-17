@@ -11,12 +11,12 @@ const {Panel} = Collapse
 const ClubPresentation: React.FC = () => {
     const {t} = useTranslation("club")
     return (
-        <div key="desktop-display" className="w-full" style={{ height: 400 }}>
+        <div key="desktop-display" className="w-full">
             <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
                 <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
                 <About/>
             </div>
-            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+            <div className="flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 hidden sm:flex">
                 <span className="text-neutral-900 font-semibold text-base">{t("galleries")}</span>
                 <GalleriesPreview/>
             </div>
