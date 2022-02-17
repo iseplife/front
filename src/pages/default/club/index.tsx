@@ -69,6 +69,7 @@ const Club: React.FC = () => {
                     setCurrentTab={setTabFactory}
                     tabs={{
                         "Publications": <Feed
+                            loading={!club?.feed}
                             id={club.feed}
                             allowPublication={false}
                         />,
