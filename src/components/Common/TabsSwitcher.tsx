@@ -12,7 +12,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, ta
     const tabsEntries = useMemo(() => Object.entries(tabs), [tabs])
     return (
         <div className={`mx-4 md:mx-10 ${className} relative`}>
-            <div className="w-full max-w-full overflow-x-auto absolute">
+            <div className="w-full max-w-full overflow-x-auto absolute scrollbar-thin">
                 <div className="flex font-semibold text-neutral-600">
                     {tabsEntries.map(([tabName], index) => {
                         const splitted = tabName.split(":")

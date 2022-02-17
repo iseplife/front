@@ -16,6 +16,7 @@ import IncomingEvents from "../../../components/Event/IncomingEvents"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { useTranslation } from "react-i18next"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
+import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 
 enum ClubTab {
     HOME_TAB,
@@ -69,8 +70,9 @@ const Club: React.FC = () => {
                     tabs={{
                         "Publications": <Feed
                             id={club.feed}
+                            allowPublication={false}
                         />,
-                        "sm:Gallerie": <GalleriesPreview />,
+                        [`sm:${t("galleries")}`]: <GalleriesTab />,
                         [t("members")]: <ClubMembers />,
                         ...(club.canEdit && { "Administration": <ClubAdmin/> })
                     }}
