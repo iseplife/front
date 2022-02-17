@@ -34,10 +34,7 @@ const GalleriesPreview: React.FC = () => {
             {galleriesPreview.map(g => (
                 <GalleryCard key={g.id} gallery={g}/>
             ))}
-            {galleriesPreview.length > 0 ?
-                <div className="hover:text-indigo-400 cursor-pointer" onClick={() => setVisible(true)}>
-                    {t("see_all")}
-                </div> :
+            {galleriesPreview.length == 0 && 
                 <div className="text-center text-gray-400">
                     <FontAwesomeIcon icon={faCameraRetro} size="4x"/>
                     <p>{t("no_gallery")}</p>

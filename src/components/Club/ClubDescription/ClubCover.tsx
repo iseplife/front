@@ -55,7 +55,7 @@ const ClubCover: React.FC = () => {
 
 
     return (
-        <div className="w-full md:h-48 h-28 relative">
+        <div className="w-full md:h-64 h-28 relative">
             <input type="file" hidden onChange={handleChange} ref={uploadRef}/>
             {image && (
                 <div className="absolute" style={{bottom: 5, right: 5}}>

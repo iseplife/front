@@ -11,31 +11,15 @@ const {Panel} = Collapse
 const ClubPresentation: React.FC = () => {
     const {t} = useTranslation("club")
     return (
-        <div key="desktop-display" className="hidden-scroller w-full md:overflow-y-auto" style={{height: 400}}>
-            <Collapse
-                className="border-b-0 border-t rounded-lg shadow-md"
-                defaultActiveKey={["2"]}
-                bordered={false}
-                expandIconPosition="right"
-                expandIcon={({isActive}) =>
-                    <FontAwesomeIcon icon={faChevronRight} className="text-gray-600 font-bold text-sm" transform={{ rotate: isActive ? 90: 0 }}/>
-                }
-            >
-                <Panel
-                    key={1}
-                    className="border-b-0 border-t-0"
-                    header={<span className="text-gray-500">{t("about")}</span>}
-                >
-                    <About/>
-                </Panel>
-                <Panel
-                    key={2}
-                    className="border-b-0 border-t"
-                    header={<span className="text-gray-500">{t("galleries")}</span>}
-                >
-                    <GalleriesPreview/>
-                </Panel>
-            </Collapse>
+        <div key="desktop-display" className="w-full" style={{ height: 400 }}>
+            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+                <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
+                <About/>
+            </div>
+            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+                <span className="text-neutral-900 font-semibold text-base">{t("galleries")}</span>
+                <GalleriesPreview/>
+            </div>
         </div>
 
     )

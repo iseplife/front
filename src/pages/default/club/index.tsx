@@ -57,7 +57,7 @@ const Club: React.FC = () => {
     return (
         <ClubContext.Provider value={{club, dispatch}}>
             <ClubHeader />
-            <div className="sm:mt-5 flex justify-center container mx-auto md:flex-nowrap flex-wrap">
+            <div className="flex justify-center container mx-auto md:flex-nowrap flex-wrap">
                 <div className="flex-1 mx-4">
                     <ClubPresentation/>
                 </div>

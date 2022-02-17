@@ -23,10 +23,10 @@ const ClubHeader: React.FC = () => {
                     <Avatar
                         src={imageSrc}
                         shape="circle"
-                        className="-mt-13 md:-mt-16 w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
+                        className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
                     />
                     <div className="flex flex-col ml-4 md:-mt-2 mt-5">
-                        <h1 className="text-black text-3xl mb-0 font-bold">{club.name}</h1>
+                        <h1 className="text-neutral-900 text-3xl mb-0 font-bold">{club.name}</h1>
                         {/* <h4 className="text-gray-500 text-md italic">{new Date(club.creation).toLocaleDateString()}</h4> */}
                     </div>
                 </div>
