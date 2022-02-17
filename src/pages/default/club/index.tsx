@@ -62,6 +62,7 @@ const Club: React.FC = () => {
                     <ClubPresentation/>
                 </div>
                 <TabsSwitcher
+                    className="-mt-10"
                     currentTab={tab}
                     setCurrentTab={setTabFactory}
                     tabs={{
