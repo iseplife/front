@@ -12,7 +12,7 @@ const ClubPresentation: React.FC = () => {
     const {t} = useTranslation("club")
     return (
         <div key="desktop-display" className="w-full">
-            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white mb-5 mt-5 sm:mt-0">
                 <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
                 <About/>
             </div>
