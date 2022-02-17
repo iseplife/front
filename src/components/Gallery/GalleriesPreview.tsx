@@ -10,10 +10,14 @@ import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import GalleriesPreviewSkeleton from "../Club/Skeleton/GalleriesPreviewSkeleton"
 
-const GalleriesPreview: React.FC = () => {
+interface GalleriesPreviewProps {
+    visible: boolean,
+    setVisible: (visible: boolean) => void,
+}
+
+const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({visible, setVisible}) => {
     const {t} = useTranslation("gallery")
     const {club: {id}} = useContext(ClubContext)
-    const [visible, setVisible] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>()
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
 
