@@ -2,6 +2,7 @@ import {StudentPreview} from "../student/types"
 
 export type GroupPreview = {
     id: number,
+    feedId: number,
     name: string,
     restricted: boolean
     archived: boolean
@@ -13,7 +14,7 @@ export type Group = {
     cover?: string
     restricted: boolean
     archived: boolean
-    feed: number
+    feedId: number
     hasRight: boolean
     subscribed: boolean
 }
