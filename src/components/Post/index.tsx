@@ -22,6 +22,7 @@ import { AppContext } from "../../context/app/context"
 
 type PostProps = {
     data: PostType
+    feedId: number | undefined,
     isEdited: boolean
     forceShowComments?: boolean
     toggleEdition: (toggle: boolean) => void
@@ -30,7 +31,7 @@ type PostProps = {
     onUpdate: (id: number, postUpdate: PostUpdate) => void
 }
 
-const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, onPin, onDelete, onUpdate, toggleEdition}) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
@@ -134,7 +135,7 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
             <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5" ref={ele => {
                 post = ele ?? post
             }}>
-                {group &&
+                {group && !feedId &&
                     <div className="flex text-sm mb-3">
                         <div className="bg-indigo-400 p-1 rounded-full mr-2 h-5 w-5 flex-shrink-0 my-auto">
                             <img src="/img/icons/user-group.svg" className="w-3 h-3" />

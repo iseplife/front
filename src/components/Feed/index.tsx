@@ -211,6 +211,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                     <>
                                         {postsPinned.map(p => (
                                             <Post
+                                                feedId={id}
                                                 key={p.id} data={p}
                                                 onDelete={onPostRemoval}
                                                 onUpdate={onPostUpdate}
@@ -225,6 +226,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
                                 {posts.map(p => (
                                     <Post
+                                        feedId={id}
                                         key={p.id} data={p}
                                         onDelete={onPostRemoval}
                                         onUpdate={onPostUpdate}
