@@ -55,6 +55,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setPosts(prevPosts => [...prevPosts,
             {
                 ...post,
+                feedId: id!,
                 creationDate: new Date(),
                 liked: false,
                 nbComments: 0,

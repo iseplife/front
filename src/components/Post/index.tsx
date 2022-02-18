@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {Post as PostType, PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, Modal} from "antd"
@@ -9,7 +9,7 @@ import CommentList from "../Comment/CommentList"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
-import {faEllipsisH, faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {getWSService} from "../../realtime/services/WSService"
@@ -18,6 +18,7 @@ import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
 import {deletePost, pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
+import { AppContext } from "../../context/app/context"
 
 type PostProps = {
     data: PostType
@@ -37,6 +38,9 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
+    const { state: { user: { groups } } } = useContext(AppContext)
+    
+    const group = useMemo(() => groups.find(group => group.feedId == data.feedId), [groups, data.feedId])
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
@@ -130,6 +134,14 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
             <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5" ref={ele => {
                 post = ele ?? post
             }}>
+                {group &&
+                    <div className="flex text-sm mb-3">
+                        <div className="bg-indigo-400 p-1 rounded-full mr-2 h-5 w-5 flex-shrink-0 my-auto">
+                            <img src="/img/icons/user-group.svg" className="w-3 h-3" />
+                        </div>
+                        <div className="text-gray-500">{group.name}</div>
+                    </div>
+                }
                 <div className="w-full flex justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
