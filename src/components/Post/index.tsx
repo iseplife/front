@@ -149,15 +149,15 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                         />
                         <div className="items-center ml-2">
                             <div className="font-bold -mb-0.5 -mt-0.5">{data.author.name}</div>
-                            <div className="text-xs">
+                            <div className="text-xs whitespace-nowrap">
                                 {isFuture(data.publicationDate) ? `${t("post:planned_for")} ${format(new Date(data.publicationDate), "dd/MM/yy, HH:mm")}` : formattedDate}
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5">
+                    <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0">
                         {group && !feedId &&
-                            <div className="flex text-sm rounded px-2 py-0.5 font-medium" style={{backgroundColor: getPastelColor(group.name).hex}}>
-                                <div className="text-white">{group.name}</div>
+                            <div className="flex text-sm rounded px-2 py-0.5 font-medium min-w-0" style={{backgroundColor: getPastelColor(group.name).hex}}>
+                                <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
                             </div>
                         }
                         {data.pinned && (
