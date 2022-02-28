@@ -156,7 +156,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
                         {group && !feedId &&
-                            <div className="flex text-sm rounded px-2 py-0.5 font-medium min-w-0" style={{backgroundColor: getPastelColor(group.name).hex}}>
+                            <div className="flex text-sm rounded px-2 py-0.5 font-medium min-w-0" title={t("post:posted_in_group", { group: group.name })} style={{backgroundColor: getPastelColor(group.name).hex}}>
                                 <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
                             </div>
                         }

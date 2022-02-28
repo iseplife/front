@@ -11,5 +11,6 @@
 	"post_unpinned": "Post unpinned !",
 	"planned_for": "Planned for",
 	"pin": "Pin",
-	"unpin": "Unpin"
+	"unpin": "Unpin",
+	"posted_in_group": "Posted in the \"{{group}}\" group"
 }
