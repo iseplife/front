@@ -34,7 +34,7 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({visible, setVisible}
 
     return loading ?
         <GalleriesPreviewSkeleton/> :
-        <div>
+        <div className="-mt-1">
             {galleriesPreview.map(g => (
                 <GalleryCard key={g.id} gallery={g}/>
             ))}
