@@ -16,7 +16,8 @@ import {getWSService} from "../../realtime/services/WSService"
 import WSFeedService from "../../realtime/services/WSFeedService"
 import {AppContext} from "../../context/app/context"
 import {FeedContext} from "../../context/feed/context"
-import {Author} from "../../data/request.type"
+import { Author } from "../../data/request.type"
+import "./Feed.css"
 
 type FeedProps = {
     loading?: boolean,
@@ -140,7 +141,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                         <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
                             <div
                                 onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
-                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
                             >
                                 <FontAwesomeIcon
                                     icon={faImages}
@@ -149,7 +150,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                             </div>
                             <div
                                 onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}
-                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
                             >
                                 <FontAwesomeIcon
                                     icon={faVideo}
@@ -158,7 +159,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                             </div>
                             <div
                                 onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}
-                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                             >
                                 <FontAwesomeIcon
                                     icon={faPaperclip}
@@ -167,7 +168,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                             </div>
                             <div
                                 onClick={() => setCompleteFormType(EmbedEnumType.POLL)}
-                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                             >
                                 <FontAwesomeIcon
                                     icon={faChartBar}
