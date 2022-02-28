@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react"
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {useParams, useHistory, Link} from "react-router-dom"
 import {format} from "date-fns"
 import {Marker, TileLayer, Map} from "react-leaflet"
@@ -21,6 +21,7 @@ import EventDescription from "../../../components/Event/EventDescription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faBell, faBellSlash, faUser} from "@fortawesome/free-regular-svg-icons"
 import {faChevronDown, faChevronUp, faEuroSign, faLock, faUnlock, faUsers} from "@fortawesome/free-solid-svg-icons"
+import StudentAvatar from "../../../components/Student/StudentAvatar"
 
 interface ParamTypes {
     id?: string
@@ -65,10 +66,87 @@ const Event: React.FC = () => {
         }
     }, [id])
 
+    const [placeShortOpen, setPlaceShortOpen] = useState(true)
+    const [placeShortWidth, setPlaceShortWidth] = useState(0)
+    const [placeShortAnimation, setPlaceShortAnimation] = useState(false)
+    const placeShort = useRef<HTMLDivElement>(null)
+    const togglePlaceShort = useCallback(() => {
+        placeShort?.current && placeShortOpen && setPlaceShortWidth(placeShort.current.clientWidth)
+        requestAnimationFrame(() => {
+            setPlaceShortOpen(open => !open)
+            setPlaceShortAnimation(true)
+        })
+    }, [placeShortOpen])
+    
+
 
     return event ?
-        (
-            <div className="h-full">
+        (<>
+            <div className="w-full md:h-64 h-28 relative hidden sm:block">
+                <Map className="w-full h-full" center={event.coordinates || [48.8453227,2.3280245]} zoom={13}>
+                    <TileLayer
+                        url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
+                        id="mapbox/streets-v11"
+                        accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
+                    />
+                    {event.coordinates && (
+                        <Marker position={event.coordinates}/>
+                    )}
+                </Map>
+                <div className="container mx-auto px-5">
+                    <div className="flex bg-white/40 shadow-sm backdrop-blur rounded-lg text-3xl absolute top-1/2 -translate-y-1/2 z-[99999]">
+                        <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
+                            <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
+                        </div>
+                        <div
+                            ref={placeShort}
+                            className={"px-4 py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300 ") + (placeShortOpen || "px-0")}
+                            style={{
+                                maxWidth: (placeShortOpen && (placeShortWidth || 9999) || 0)
+                            }}
+                        >
+                            <div className="font-semibold">
+                                Bal de la Marine
+                            </div>
+                            <div className="font-normal text-neutral-500 text-xl">
+                                Port de Suffren, Paris
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="container mx-auto mt-5 px-5">
+                <div className="flex items-center">
+                    <div className="w-20 h-20 rounded-md bg-white shadow-sm overflow-hidden font-medium text-4xl relative flex flex-col flex-shrink-0">
+                        <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
+                        <div className="grid place-items-center h-full">3</div>
+                    </div>
+                    <div className="ml-4">
+                        <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
+                            JEUDI DE 23:00 À 05:00
+                        </div>
+                        <div className="text-2xl md:text-3xl font-bold leading-6">
+                            Winter - Risoul
+                        </div>
+                    </div>
+                </div>
+            
+                <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+                    <div className="flex items-center font-normal">
+                        <Avatar
+                            src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                            size="large"
+                            className="hover:shadow-outline mr-1"
+                        />
+                        <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{ event.club.name }</div>
+                    </div>
+                </div>
+                <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 sm:mt-0">
+                    <span className="text-neutral-900 font-semibold text-base">Description</span>
+                </div>
+            </div>
+        </>
+    /*<div className="h-full">
                 <div className="md:h-56 h-24 relative" style={{
                     backgroundImage: `linear-gradient(to bottom, rgba(243, 244, 246, 0.3), rgba(243, 244, 246)), url(${mediaPath(event.image || "img/static/default-cover.png")})`,
                     backgroundRepeat: "no-repeat",
@@ -191,7 +269,7 @@ const Event: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*/
         ) : null
 }
 
