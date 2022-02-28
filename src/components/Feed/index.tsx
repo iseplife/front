@@ -121,6 +121,17 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         })
     }, [id])
 
+    const [feedMargin, setFeedMargin] = useState(0)
+    const feedElement = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const fnc = () => feedElement?.current && setFeedMargin(parseInt(getComputedStyle(feedElement?.current).marginLeft) * 2 + 1)
+        
+        fnc()
+        window.addEventListener("resize", fnc)
+        
+        return () => window.removeEventListener("resize", fnc)
+    }, [feedElement?.current])
+
     useEffect(() => {
         if (id !== undefined) {
             getWSService(WSFeedService).subscribe(id)
@@ -128,9 +139,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         }
     }, [id])
 
-    const feedElement = useRef<HTMLDivElement>(null)
 
-    const feedMargin = useMemo(() => feedElement?.current && parseInt(getComputedStyle(feedElement?.current).marginLeft) * 2 + 1, [feedElement?.current])
 
     return (
         <FeedContext.Provider value={{authors}}>
