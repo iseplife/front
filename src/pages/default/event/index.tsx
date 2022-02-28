@@ -93,7 +93,7 @@ const Event: React.FC = () => {
                         <Marker position={event.coordinates}/>
                     )}
                 </Map>
-                <div className="container mx-auto px-5">
+                <div className="container mx-auto px-4">
                     <div className="flex bg-white/40 shadow-sm backdrop-blur rounded-lg text-3xl absolute top-1/2 -translate-y-1/2 z-[99999]">
                         <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
                             <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
@@ -115,9 +115,9 @@ const Event: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="container mx-auto mt-5 px-5">
+            <div className="container mx-auto mt-4 px-4">
                 <div className="flex items-center">
-                    <div className="w-20 h-20 rounded-md bg-white shadow-sm overflow-hidden font-medium text-4xl relative flex flex-col flex-shrink-0">
+                    <div className="w-16 h-16 text-3xl sm:w-20 sm:h-20 sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                         <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
                         <div className="grid place-items-center h-full">3</div>
                     </div>
