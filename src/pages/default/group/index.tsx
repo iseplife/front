@@ -97,6 +97,11 @@ const Group: React.FC = () => {
         })
     }, [])
 
+    const tabs = useMemo(() => ({
+        "Publications": <Feed id={group?.feed} loading={!group} />,
+        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
+    }), [group, onDelete, onPromote, onDemote, orga])
+
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
@@ -130,10 +135,7 @@ const Group: React.FC = () => {
                 className="mx-4 md:mx-10 sm:col-span-2 mt-3"
                 currentTab={tab}
                 setCurrentTab={setTabFactory}
-                tabs={{
-                    "Publications": <Feed id={group?.feed} loading={!group} />,
-                    [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
-                }}
+                tabs={tabs}
             />
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents feed={group?.feed} wait={loading} allowCreate={group?.hasRight}/>

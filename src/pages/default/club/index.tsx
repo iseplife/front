@@ -26,7 +26,7 @@ enum ClubTab {
 
 const {TabPane} = Tabs
 const Club: React.FC = () => {
-    const {id: idStr} = useParams<{ id?: string }>()
+    const { id: idStr } = useParams<{ id?: string }>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
     const [loading, setLoading] = useState<boolean>(true)
@@ -46,7 +46,7 @@ const Club: React.FC = () => {
         if (!isNaN(id)) {
             setLoading(true)
             getClub(+id).then(res => {
-                dispatch({type: ClubActionType.GET_CLUB, payload: res.data})
+                dispatch({ type: ClubActionType.GET_CLUB, payload: res.data })
             }).catch(e =>
                 message.error(e)
             ).finally(() => setLoading(false))
@@ -55,6 +55,16 @@ const Club: React.FC = () => {
         }
     }, [id])
 
+    const tabs = useMemo(() => ({
+        "Publications": <Feed
+            loading={!club.feed}
+            id={club.feed}
+            allowPublication={false}
+        />,
+        [`sm:${t("galleries")}`]: <GalleriesTab />,
+        [t("members")]: <ClubMembers />,
+        ...(club.canEdit && { "Administration": <ClubAdmin /> })
+    }), [club.feed, club.canEdit])
 
     return (
         <ClubContext.Provider value={{club, dispatch}}>
@@ -67,16 +77,7 @@ const Club: React.FC = () => {
                     className="sm:-mt-10 mx-4 md:mx-10 sm:col-span-2"
                     currentTab={tab}
                     setCurrentTab={setTabFactory}
-                    tabs={{
-                        "Publications": <Feed
-                            loading={!club?.feed}
-                            id={club.feed}
-                            allowPublication={false}
-                        />,
-                        [`sm:${t("galleries")}`]: <GalleriesTab />,
-                        [t("members")]: <ClubMembers />,
-                        ...(club.canEdit && { "Administration": <ClubAdmin/> })
-                    }}
+                    tabs={tabs}
                 />
                 
                 <div className="flex-1 lg:block hidden mr-4">
