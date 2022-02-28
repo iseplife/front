@@ -19,6 +19,8 @@ import PostToolBar from "./PostToolBar"
 import {deletePost, pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
 import { AppContext } from "../../context/app/context"
+//@ts-ignore
+import { getPastelColor } from "pastel-color"
 
 type PostProps = {
     data: PostType
@@ -135,14 +137,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5" ref={ele => {
                 post = ele ?? post
             }}>
-                {group && !feedId &&
-                    <div className="flex text-sm mb-3">
-                        <div className="bg-indigo-400 p-1 rounded-full mr-2 h-5 w-5 flex-shrink-0 my-auto">
-                            <img src="/img/icons/user-group.svg" className="w-3 h-3" />
-                        </div>
-                        <div className="text-gray-500">{group.name}</div>
-                    </div>
-                }
                 <div className="w-full flex justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
@@ -160,18 +154,23 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
+                    <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5">
+                        {group && !feedId &&
+                            <div className="flex text-sm rounded px-2 py-0.5 font-medium" style={{backgroundColor: getPastelColor(group.name).hex}}>
+                                <div className="text-white">{group.name}</div>
+                            </div>
+                        }
                         {data.pinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
-                                className="mr-2.5 text-gray-500"
+                                className="mr-2.5 text-gray-500 ml-1"
                             />
                         )}
                         {data.hasWriteAccess && (
                             <DropdownPanel
                                 panelClassName="w-32 right-0 lg:left-0"
                                 closeOnClick={true}
-                                buttonClassName="mr-0"
+                                buttonClassName="mr-0 ml-1"
                             >
                                 <PostToolBar
                                     pinned={data.pinned}
