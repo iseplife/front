@@ -1,41 +1,35 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import {Collapse} from "antd"
 import About from "../About"
 import {useTranslation} from "react-i18next"
 import GalleriesPreview from "../../Gallery/GalleriesPreview"
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Link } from "react-router-dom"
 
 const {Panel} = Collapse
 
 const ClubPresentation: React.FC = () => {
-    const {t} = useTranslation("club")
+    const {t} = useTranslation(["club", "gallery"])
+    const [galleriesVisible, setGalleriesVisible] = useState<boolean>(false)
+
+    const setVisible = useCallback(() => setGalleriesVisible(true), [])
+
     return (
-        <div key="desktop-display" className="hidden-scroller w-full md:w-64 lg:w-1/4 md:overflow-y-auto" style={{height: 400}}>
-            <Collapse
-                className="border-b-0 border-t rounded-lg shadow-md"
-                defaultActiveKey={["2"]}
-                bordered={false}
-                expandIconPosition="right"
-                expandIcon={({isActive}) =>
-                    <FontAwesomeIcon icon={faChevronRight} className="text-gray-600 font-bold text-sm" transform={{ rotate: isActive ? 90: 0 }}/>
-                }
-            >
-                <Panel
-                    key={1}
-                    className="border-b-0 border-t-0"
-                    header={<span className="text-gray-500">{t("about")}</span>}
-                >
-                    <About/>
-                </Panel>
-                <Panel
-                    key={2}
-                    className="border-b-0 border-t"
-                    header={<span className="text-gray-500">{t("galleries")}</span>}
-                >
-                    <GalleriesPreview/>
-                </Panel>
-            </Collapse>
+        <div key="desktop-display" className="w-full">
+            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white mb-5 mt-5 sm:mt-0">
+                <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
+                <About/>
+            </div>
+            <div className="flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 hidden sm:flex">
+                <div className="text-neutral-900 font-semibold text-base flex items-center -mt-1">
+                    <span>{t("club:galleries")}</span>
+                    <div onClick={setVisible}  className="ml-auto py-1 -mr-1 hover:bg-black/5 transition-colors px-2 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                        {t("gallery:see_all")}
+                    </div>
+                </div>
+                <GalleriesPreview visible={galleriesVisible} setVisible={setGalleriesVisible} />
+            </div>
         </div>
 
     )

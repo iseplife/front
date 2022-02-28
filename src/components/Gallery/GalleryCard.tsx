@@ -18,7 +18,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
     const {t} = useTranslation("gallery")
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
     return (
-        <div className={`my-1 ${className}`}>
+        <div className={`my-2 ${className}`}>
             <Link to={`/gallery/${gallery.id}`}><h3 className="text-gray-600 m-0">{gallery.name}</h3></Link>
             <div className="flex flex-col flex-wrap content-start h-20 w-full">
                 {previewLength ?
@@ -29,7 +29,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
                             >
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50 rounded" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
+                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
                                     <FontAwesomeIcon icon={faPlus} className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
@@ -45,9 +45,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 </div>
                             </Link>
                     )) :
-                    <div className="h-full w-full flex flex-col items-center rounded text-sm text-gray-400 ">
-                        <FontAwesomeIcon icon={faImages} size="3x"/>
-                        <p className="text-gray-600">{t("empty")}</p>
+                    <div className="my-auto w-full text-center rounded text-sm text-gray-400 ">
+                        <FontAwesomeIcon icon={faImages} className="text-3xl"/>
+                        <div className="text-neutral-500">{t("empty")}</div>
                     </div>
                 }
             </div>

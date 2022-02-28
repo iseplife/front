@@ -55,7 +55,7 @@ const ClubCover: React.FC = () => {
 
 
     return (
-        <div className="w-full md:h-40 h-24 relative">
+        <div className="w-full md:h-64 h-28 relative">
             <input type="file" hidden onChange={handleChange} ref={uploadRef}/>
             {image && (
                 <div className="absolute" style={{bottom: 5, right: 5}}>
@@ -91,20 +91,20 @@ const ClubCover: React.FC = () => {
                     {club?.coverUrl && (
                         <div
                             onClick={removeCover}
-                            className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group"
+                            className="text-xl flex w-10 h-10 justify-center items-center rounded-full bg-black/20 hover:bg-black/30 transition-colors cursor-pointer group"
                         >
                             <FontAwesomeIcon
-                                className="cursor-pointer text-red-500 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
+                                className="cursor-pointer text-red-400 text-opacity-80 mx-1 group-hover:text-opacity-100 transition-colors"
                                 icon={faTrashAlt}
                             />
                         </div>
                     )}
                     <div
                         onClick={() => uploadRef.current?.click()}
-                        className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group"
+                        className="ml-2 text-xl flex w-10 h-10 justify-center items-center rounded-full bg-black/20 hover:bg-black/30 transition-colors cursor-pointer group"
                     >
                         <FontAwesomeIcon
-                            className="cursor-pointer text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
+                            className="cursor-pointer text-neutral-300 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
                             icon={faPencilAlt}
                         />
                     </div>

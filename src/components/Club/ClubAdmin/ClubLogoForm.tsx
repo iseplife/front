@@ -45,7 +45,7 @@ const ClubLogoForm: React.FC = () => {
     }, [])
 
     return (
-        <div className="relative flex flex-col items-center rounded-lg shadow bg-white p-3 m-2 w-full sm:w-1/3">
+        <div className="relative flex flex-col items-center rounded-lg shadow bg-white p-3 m-2 w-full">
             <h3 className="font-bold text-xl text-gray-600 self-start">Edition logo</h3>
             <ImagePicker
                 className="avatar-uploader-large mt-5 flex-grow"
