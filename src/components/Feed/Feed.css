@@ -1,0 +1,14 @@
+@media screen and (min-width: 350px) {
+    .xsm {
+        display: flex !important;
+    }
+    .xsm-span {
+        grid-column: unset !important;
+    }
+}
+.xsm {
+    display: none;
+}
+.xsm-span {
+    grid-column: span 2 / span 2;
+}
