@@ -1,3 +1,5 @@
+import { GroupPreview } from "../group/types"
+
 export type StudentPicture = {
     original?: string
     custom?: string
@@ -37,6 +39,7 @@ export interface StudentPreview {
 }
 export interface LoggedStudentPreview extends StudentPreview {
     feedId: number
+    groups: GroupPreview[]
 
     unwatchedNotifications: number
     totalNotifications: number

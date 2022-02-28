@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {Post as PostType, PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, Modal} from "antd"
@@ -9,7 +9,7 @@ import CommentList from "../Comment/CommentList"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
-import {faEllipsisH, faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {getWSService} from "../../realtime/services/WSService"
@@ -18,9 +18,14 @@ import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
 import {deletePost, pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
+import { AppContext } from "../../context/app/context"
+//@ts-ignore
+import { getPastelColor } from "pastel-color"
+import { Link } from "react-router-dom"
 
 type PostProps = {
     data: PostType
+    feedId: number | undefined,
     isEdited: boolean
     forceShowComments?: boolean
     toggleEdition: (toggle: boolean) => void
@@ -29,7 +34,7 @@ type PostProps = {
     onUpdate: (id: number, postUpdate: PostUpdate) => void
 }
 
-const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, onPin, onDelete, onUpdate, toggleEdition}) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [likes, setLikes] = useState<number>(data.nbLikes)
@@ -37,6 +42,9 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
+    const { state: { user: { groups } } } = useContext(AppContext)
+    
+    const group = useMemo(() => groups.find(group => group.feedId == data.feedId), [groups, data.feedId])
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
@@ -142,23 +150,30 @@ const Post: React.FC<PostProps> = ({data, isEdited, forceShowComments, onPin, on
                         />
                         <div className="items-center ml-2">
                             <div className="font-bold -mb-0.5 -mt-0.5">{data.author.name}</div>
-                            <div className="text-xs">
+                            <div className="text-xs whitespace-nowrap">
                                 {isFuture(data.publicationDate) ? `${t("post:planned_for")} ${format(new Date(data.publicationDate), "dd/MM/yy, HH:mm")}` : formattedDate}
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
+                    <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
+                        {group && !feedId &&
+                            <Link to={`/group/${group.id}`}>
+                                <div className="flex text-sm rounded px-2 py-0.5 font-medium min-w-0 hover:shadow-sm transition-shadow" title={t("post:posted_in_group", { group: group.name })} style={{backgroundColor: getPastelColor(group.name).hex}}>
+                                    <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
+                                </div>
+                            </Link>
+                        }
                         {data.pinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
-                                className="mr-2.5 text-gray-500"
+                                className="mr-2.5 text-gray-500 ml-1"
                             />
                         )}
                         {data.hasWriteAccess && (
                             <DropdownPanel
                                 panelClassName="w-32 right-0 lg:left-0"
                                 closeOnClick={true}
-                                buttonClassName="mr-0"
+                                buttonClassName="mr-0 ml-1"
                             >
                                 <PostToolBar
                                     pinned={data.pinned}

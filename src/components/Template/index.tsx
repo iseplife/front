@@ -14,6 +14,7 @@ import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
 import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
+import { getUserGroups } from "../../data/group"
 
 
 const Template: React.FC = () => {
@@ -24,11 +25,14 @@ const Template: React.FC = () => {
     ), [state.payload])
 
     useLayoutEffect(() => {
-        getLoggedUser().then(res => {
+        Promise.all([getLoggedUser(), getUserGroups()]).then(res => {
             const socket = initWebSocket(wsURI)
             dispatch({
                 type: AppActionType.SET_LOGGED_USER,
-                user: res.data
+                user: {
+                    ...res[0].data,
+                    groups: res[1].data,
+                }
             })
 
             socket.connect(state.jwt)

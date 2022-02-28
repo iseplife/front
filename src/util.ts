@@ -40,9 +40,9 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
     } else if (nowDay == dateDay + 1)//Yesterday
         return [`${t("yesterday")} ${format(date, "HH:mm")}`, (60 * 60 * 24 - dateS % (60 * 60 * 24)) * 1_000]
     else if (now.getFullYear() == date.getFullYear())//This year
-        return [formatWithOptions({ locale: fr }, "d MMMM, HH:MM")(date), -1]
+        return [formatWithOptions({ locale: fr }, "d LLL, HH:MM")(date), -1]
     else
-        return [formatWithOptions({ locale: fr }, "d MMMM yyyy, HH:MM")(date), -1]
+        return [formatWithOptions({ locale: fr }, "d LLL yyyy, HH:MM")(date), -1]
 }
 
 export const formatDateWithTimer = (date: Date, t: TFunction, setFormattedDate: (date: string) => void) => {

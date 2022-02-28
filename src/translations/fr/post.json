@@ -11,5 +11,6 @@
 	"post_unpinned": "Post désépinglé !",
 	"planned_for": "Prévu pour ",
 	"pin": "Épingler",
-	"unpin": "Désépingler"
+	"unpin": "Désépingler",
+	"posted_in_group": "Posté dans le groupe \"{{group}}\""
 }

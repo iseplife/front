@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPost, getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
@@ -25,9 +25,9 @@ type FeedProps = {
     style?: CSSProperties
     className?: string
 }
-const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className}) => {
-    const {state: {user}} = useContext(AppContext)
-    const {t} = useTranslation(["common", "post"])
+const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, className }) => {
+    const { state: { user } } = useContext(AppContext)
+    const { t } = useTranslation(["common", "post"])
     const [posts, setPosts] = useState<PostType[]>([])
     const [postsPinned, setPostsPinned] = useState<PostType[]>([])
 
@@ -39,8 +39,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     const loadMorePost: loaderCallback = useCallback(async (count: number) => {
         setFetching(true)
-        if(loading)
-            return new Promise<boolean>(()=>undefined)
+        if (loading)
+            return new Promise<boolean>(() => undefined)
         const res = await getFeedPost(id, count)
         setPosts(posts => [...posts, ...res.data.content])
         setFetching(false)
@@ -55,6 +55,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setPosts(prevPosts => [...prevPosts,
             {
                 ...post,
+                feedId: id!,
                 creationDate: new Date(),
                 liked: false,
                 nbComments: 0,
@@ -72,7 +73,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const onPostPin = useCallback((id: number, pinned: boolean) => {
         if (pinned) {
             const index = posts.findIndex(p => p.id === id)
-            const pinnedPost = {...posts[index], pinned: true}
+            const pinnedPost = { ...posts[index], pinned: true }
 
             // We move post into pinned posts while removing it from common posts
             setPostsPinned(prev => (
@@ -84,7 +85,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             message.success(t("post:post_pinned"))
         } else {
             const index = postsPinned.findIndex(p => p.id === id)
-            const unpinnedPost = {...postsPinned[index], pinned: false}
+            const unpinnedPost = { ...postsPinned[index], pinned: false }
 
             // We move post into common posts while removing it from pinned posts
             setPosts(prev => (
@@ -99,7 +100,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     const onPostUpdate = useCallback((id: number, postUpdate: PostUpdate) => {
         setPosts(posts => posts.map(p => p.id === id ?
-            {...p, ...postUpdate} : p
+            { ...p, ...postUpdate } : p
         ))
         setEditPost(0)
         message.success(t("update_item.complete"))
@@ -120,15 +121,19 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [id])
 
     useEffect(() => {
-        if(id !== undefined){
+        if (id !== undefined) {
             getWSService(WSFeedService).subscribe(id)
             return () => getWSService(WSFeedService).unsubscribe(id)
         }
     }, [id])
 
+    const feedElement = useRef<HTMLDivElement>(null)
+
+    const feedMargin = useMemo(() => feedElement?.current && parseInt(getComputedStyle(feedElement?.current).marginLeft) * 2 + 1, [feedElement?.current])
+
     return (
         <FeedContext.Provider value={{authors}}>
-            <div className={`${className}`} style={style}>
+            <div className={`${className}`} style={{ ...style, maxWidth: `calc(100vw - ${feedMargin}px)` }} ref={feedElement}>
                 <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
                 {allowPublication && (
                     <BasicPostForm user={user} feedId={id} onPost={onPostCreation}>
@@ -210,6 +215,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                     <>
                                         {postsPinned.map(p => (
                                             <Post
+                                                feedId={id}
                                                 key={p.id} data={p}
                                                 onDelete={onPostRemoval}
                                                 onUpdate={onPostUpdate}
@@ -224,6 +230,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
                                 {posts.map(p => (
                                     <Post
+                                        feedId={id}
                                         key={p.id} data={p}
                                         onDelete={onPostRemoval}
                                         onUpdate={onPostUpdate}
