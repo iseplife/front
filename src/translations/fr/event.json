@@ -51,5 +51,9 @@
 	"gallery": "Galeries",
 	"published_only": "Évènements publiés seulement",
 	"admin_view": "Vue admin",
-	"ticket_url": "Acheter sa place"
+	"ticket_url": "Acheter sa place",
+	"date": {
+		"same_day_this_week": "{{day}} de {{start}} à {{end}}",
+		"diff_days": "du {{start}} au {{end}}"
+	}
 }

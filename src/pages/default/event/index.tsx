@@ -1,20 +1,20 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import {useParams, useHistory, Link} from "react-router-dom"
 import {Marker, TileLayer, Map} from "react-leaflet"
-import {getEvent, getEventChildren, getEventGalleries} from "../../../data/event"
+import {getEvent, getEventGalleries} from "../../../data/event"
 
-import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types"
+import {Event as EventType} from "../../../data/event/types"
 import "./Event.css"
 import {Avatar, Divider, Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
-import {GalleryPreview} from "../../../data/gallery/types"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
-import {toggleSubscription} from "../../../data/feed"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
+import { format } from "date-fns"
+import { getLocaleFromTranslation } from "../../../constants/TranslationLocale"
 
 interface ParamTypes {
     id?: string
@@ -22,7 +22,7 @@ interface ParamTypes {
 
 const Event: React.FC = () => {
     const {id} = useParams<ParamTypes>()
-    const {t} = useTranslation(["event", "gallery"])
+    const {t, i18n} = useTranslation(["event", "gallery"])
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
 
@@ -117,6 +117,23 @@ const Event: React.FC = () => {
     const subPosition = useMemo(() =>
         event?.position.location ? `${event.position.street}, ${event.position.city}` : `${event?.position.postcode}, ${event?.position.city}`
     , [event?.position])
+    
+    const date = useMemo(() => {
+        if (event) {
+            const locale = { locale: getLocaleFromTranslation(i18n.language) }
+            if (event.endsAt.getTime() - event.startsAt.getTime() <= 24 * 60 * 60 * 1000)//It lasts for less than a day
+                return t("event:date.same_day_this_week", {
+                    day: format(event.startsAt, "EEEE", locale),
+                    start: format(event.startsAt, "HH:MM", locale),
+                    end: format(event.startsAt, "HH:MM", locale),
+                })
+            else 
+                return t("event:date.diff_days", {
+                    start: format(event.startsAt, "d LLL yyyy HH:MM", locale),
+                    end: format(event.startsAt, "d LLL yyyy HH:MM", locale),
+                })
+        }
+    }, [event?.startsAt, event?.endsAt])
 
     return event ?
         (<>
@@ -161,7 +178,7 @@ const Event: React.FC = () => {
                     </div>
                     <div className="ml-4">
                         <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
-                            JEUDI DE 23:00 À 05:00
+                            { date }
                         </div>
                         <div className="text-2xl md:text-3xl font-bold leading-6">
                             { event.title }

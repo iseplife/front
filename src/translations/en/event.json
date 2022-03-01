@@ -51,5 +51,9 @@
 	"gallery": "Galleries",
 	"published_only": "Published events only",
 	"admin_view": "Admin view",
-	"ticket_url": "Buy a ticket"
+	"ticket_url": "Buy a ticket",
+	"date": {
+		"same_day_this_week": "{{day}} from {{start}} to {{end}}",
+		"diff_days": "from {{start}} to {{end}}"
+	}
 }
