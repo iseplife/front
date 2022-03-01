@@ -36,7 +36,7 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({elementId, getGaller
             .catch(e => message.error(e))
             .finally(() => setLoading(false))
 
-    }, [elementId])
+    }, [elementId, getGalleriesCallback])
 
     return <div className={`flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 hidden sm:flex ${className}`}>
         <div className="text-neutral-900 font-semibold text-base flex items-center -mt-1">
