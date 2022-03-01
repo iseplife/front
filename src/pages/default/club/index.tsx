@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router"
-import {getClub} from "../../../data/club"
+import {getClub, getClubGalleries} from "../../../data/club"
 import {message, Tabs} from "antd"
 import {useHistory} from "react-router-dom"
 import Feed from "../../../components/Feed"
@@ -61,7 +61,7 @@ const Club: React.FC = () => {
             id={club.feed}
             allowPublication={false}
         />,
-        [`sm:${t("galleries")}`]: <GalleriesTab />,
+        [`sm:${t("galleries")}`]: <GalleriesTab elementId={club.id} getGalleriesCallback={getClubGalleries} />,
         [t("members")]: <ClubMembers />,
         ...(club.canEdit && { "Administration": <ClubAdmin /> })
     }), [club.feed, club.canEdit])

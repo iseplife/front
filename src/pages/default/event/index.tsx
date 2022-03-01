@@ -83,6 +83,13 @@ const Event: React.FC = () => {
     
     const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} className="mx-4 md:mx-10 sm:col-span-2"></Feed>), [event?.feed])
 
+    const tabs = useMemo(() => ({
+        "Publications": feed,
+        [t("gallery:galleries")]: event?.id ? <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries} /> : <></>,
+    }), [event?.feed])
+    const [tab, setTab] = useState<number>(0)
+    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
+
     const description = useMemo(() =>
         <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
             <span className="text-neutral-900 font-semibold text-base">Description</span>
@@ -104,12 +111,6 @@ const Event: React.FC = () => {
                 On vous attend nombreux 🔥<br />
             </span>
         </div>, [])
-    const tabs = useMemo(() => ({
-        "Publications": feed,
-        [t("gallery:galleries")]: <GalleriesTab />,
-    }), [event?.feed])
-    const [tab, setTab] = useState<number>(0)
-    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
     return event ?
         (<>
