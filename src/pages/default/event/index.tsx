@@ -78,7 +78,7 @@ const Event: React.FC = () => {
         })
     }, [placeShortOpen])
     
-
+    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} className="mx-4 md:mx-10 sm:col-span-2"></Feed>), [event?.feed])
 
     return event ?
         (<>
@@ -115,8 +115,8 @@ const Event: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="container mx-auto mt-4 px-4">
-                <div className="flex items-center">
+            <div className="container mx-auto mt-4">
+                <div className="flex items-center px-4">
                     <div className="w-16 h-16 text-3xl sm:w-20 sm:h-20 sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                         <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
                         <div className="grid place-items-center h-full">3</div>
@@ -130,19 +130,40 @@ const Event: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            
-                <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
-                    <div className="flex items-center font-normal">
-                        <Avatar
-                            src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
-                            size="large"
-                            className="hover:shadow-outline mr-1"
-                        />
-                        <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{ event.club.name }</div>
+                <div className="sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
+                    <div className="flex-1 mx-4 -mt-4 sm:mt-0">
+                        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+                            <div className="flex items-center font-normal">
+                                <Avatar
+                                    src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                    size="large"
+                                    className="hover:shadow-outline mr-1"
+                                />
+                                <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{ event.club.name }</div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 sm:mt-0">
+                            <span className="text-neutral-900 font-semibold text-base">Description</span>
+                            <span>
+                                L’AS, la Winter et le CUI te donnent rendez-vous ce lundi au Casimodo pour leur premier afterwork de l’année 🎿🏆🦅<br />
+                                — INFOS —<br />
+                                Lundi 20 septembre 2021<br />
+                                19h-2h<br />
+                                — ACCÈS —<br />
+                                Ligne 4, RER B, RER C —&gt; Saint-Michel<br />
+                                Ligne 10 —&gt; Maubert-Mutualité<br />
+                                — TARIFS —<br />
+                                Happy hour jusqu’à minuit 🤩<br />
+                                Pinte 3,5€<br />
+                                Cocktails 6€<br />
+                                Pop-corn offert<br />
+                                Margarita 6€<br />
+                                Frites 6€<br />
+                                On vous attend nombreux 🔥<br />
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 sm:mt-0">
-                    <span className="text-neutral-900 font-semibold text-base">Description</span>
+                    { feed }
                 </div>
             </div>
         </>
