@@ -5,7 +5,7 @@ import {getEvent, getEventChildren, getEventGalleries} from "../../../data/event
 
 import {Event as EventType, EventPreview as PreviewType} from "../../../data/event/types"
 import "./Event.css"
-import {Avatar} from "antd"
+import {Avatar, Divider, Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
 import {GalleryPreview} from "../../../data/gallery/types"
@@ -56,27 +56,21 @@ const Event: React.FC = () => {
     const [tab, setTab] = useState<number>(0)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
-    const description = useMemo(() =>
-        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+    const description = useMemo(() => {
+        const skeletonLength = Array(8).fill(0).map(() => 80 + Math.random() * 70)
+        
+        return <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
             <span className="text-neutral-900 font-semibold text-base">Description</span>
-            <span>
-                L’AS, la Winter et le CUI te donnent rendez-vous ce lundi au Casimodo pour leur premier afterwork de l’année 🎿🏆🦅<br />
-                — INFOS —<br />
-                Lundi 20 septembre 2021<br />
-                19h-2h<br />
-                — ACCÈS —<br />
-                Ligne 4, RER B, RER C —&gt; Saint-Michel<br />
-                Ligne 10 —&gt; Maubert-Mutualité<br />
-                — TARIFS —<br />
-                Happy hour jusqu’à minuit 🤩<br />
-                Pinte 3,5€<br />
-                Cocktails 6€<br />
-                Pop-corn offert<br />
-                Margarita 6€<br />
-                Frites 6€<br />
-                On vous attend nombreux 🔥<br />
-            </span>
-        </div>, [])
+            {event ?
+                <span>
+                    {event.description.split("\n").map((val, index, array) => val == "<spacer>" ? <Divider className="my-4" /> : index && array[index - 1] != "<spacer>" ? <><br /> {val}</> : val)}
+                </span>
+                :
+                skeletonLength.map(length => <Skeleton title paragraph={{ rows: 1, width: length }} />)
+                
+            }
+        </div>
+    }, [event])
 
     return event ?
         (<>
@@ -124,7 +118,7 @@ const Event: React.FC = () => {
                             JEUDI DE 23:00 À 05:00
                         </div>
                         <div className="text-2xl md:text-3xl font-bold leading-6">
-                            Winter - Risoul
+                            { event.title }
                         </div>
                     </div>
                 </div>
