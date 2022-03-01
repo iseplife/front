@@ -135,6 +135,8 @@ const Event: React.FC = () => {
         }
     }, [event?.startsAt, event?.endsAt])
 
+    const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
+
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
@@ -174,7 +176,7 @@ const Event: React.FC = () => {
                 <div className="flex items-center px-4">
                     <div className="w-16 h-16 text-3xl sm:w-20 sm:h-20 sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                         <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
-                        <div className="grid place-items-center h-full">3</div>
+                        <div className="grid place-items-center h-full">{ day }</div>
                     </div>
                     <div className="ml-4">
                         <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
