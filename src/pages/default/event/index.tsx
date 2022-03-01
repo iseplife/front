@@ -109,13 +109,13 @@ const Event: React.FC = () => {
 
     const position = useMemo(() =>
         event?.location
-        ??
+        ||
         event?.position?.label.split(" ").filter((val, index, array) =>
             event.position?.postcode != val && array.length != index + 1
-        ).join(" ") ?? t("event:event")
+        ).join(" ") || t("event:event")
     , [event?.position])
     const subPosition = useMemo(() =>
-        event?.position ? event?.location ? `${event.position.street}, ${event.position.city}` : `${event.position.postcode}, ${event.position.city}` : t("event:online")
+        event?.position ? event?.location?.length ? `${event.position.street}, ${event.position.city}` : `${event.position.postcode}, ${event.position.city}` : t("event:online")
     , [event?.position])
     
     const date = useMemo(() => {
