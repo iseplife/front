@@ -142,11 +142,42 @@ const Event: React.FC = () => {
             {event?.price && <>{event?.price}€ - </>}{t("event:participate")}
         </button>
         return event?.ticketURL ?
-            <Link to={{ pathname: event?.ticketURL }}>
+            <Link to={{ pathname: event?.ticketURL }} target="_blank">
                 {button}
             </Link>
             : button
     }, [event?.price])
+
+    const phonePlace = useMemo(() => {
+        const place = <div className={"flex sm:hidden flex-col px-4 py-3 shadow-sm rounded-lg bg-white transition-colors my-5 mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
+            <div className="font-semibold text-base">
+                { position }
+            </div>
+            <div className="font-normal text-neutral-500 text-base">
+                { subPosition }
+            </div>
+        </div>
+        return coordinates ?
+            <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
+                {place}
+            </Link>
+            : place
+    }, [coordinates, event?.position?.label])
+    const bigPlace = useMemo(() => {
+        const place = <>
+            <div className="font-semibold">
+                { position }
+            </div>
+            <div className="font-normal text-neutral-500 text-xl">
+                { subPosition }
+            </div>
+        </>
+        return coordinates ?
+            <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
+                {place}
+            </Link>
+            : place
+    }, [coordinates, event?.position?.label])
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
@@ -161,7 +192,7 @@ const Event: React.FC = () => {
                     )}
                 </Map>
                 <div className="container mx-auto px-4">
-                    <div className="flex bg-white/40 shadow-sm backdrop-blur rounded-lg text-3xl absolute top-1/2 -translate-y-1/2 z-[1049]">
+                    <div className="flex bg-white/40 shadow-sm backdrop-blur rounded-lg text-3xl absolute top-1/2 -translate-y-1/2 z-[1000]">
                         <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
                             <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
                         </div>
@@ -172,12 +203,7 @@ const Event: React.FC = () => {
                                 maxWidth: (placeShortOpen && (placeShortWidth || 9999) || 0)
                             }}
                         >
-                            <div className="font-semibold">
-                                { position }
-                            </div>
-                            <div className="font-normal text-neutral-500 text-xl">
-                                { subPosition }
-                            </div>
+                            {bigPlace}
                         </div>
                     </div>
                 </div>
@@ -215,6 +241,8 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
                         </Link>
+                        
+                        { phonePlace }
 
                         <div className="sm:hidden"> {phoneDescription} </div>
                         <div className="hidden sm:block lg:hidden"> {sideDescription} </div>
