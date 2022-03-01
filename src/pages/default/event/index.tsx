@@ -150,7 +150,7 @@ const Event: React.FC = () => {
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
-                <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={15}>
+                <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={14}>
                     <TileLayer
                         url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                         id="mapbox/streets-v11"
