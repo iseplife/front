@@ -242,9 +242,8 @@ const Event: React.FC = () => {
                             </div>
                         </Link>
                         
-                        { phonePlace }
-
                         <div className="sm:hidden"> {phoneDescription} </div>
+                        { phonePlace }
                         <div className="hidden sm:block lg:hidden"> {sideDescription} </div>
                         
                         <GalleriesPreview className="sm:hidden lg:block" elementId={event.id} getGalleriesCallback={getEventGalleries} />
