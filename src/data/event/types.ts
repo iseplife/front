@@ -12,7 +12,8 @@ export type Event = {
     endsAt: Date
     ticketURL?: string
     price?: number
-    position: EventPosition
+    location?: string;
+    position?: EventPosition
     targets: Feed[]
     published: Date
     closed: boolean
@@ -53,7 +54,6 @@ export type EventForm = {
 
 export interface EventPosition {
   coordinates: string;
-  location?: string;
   
   label: string;
   housenumber: string;

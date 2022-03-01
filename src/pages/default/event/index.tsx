@@ -105,17 +105,17 @@ const Event: React.FC = () => {
     const sideDescription = useMemo(() => generateDescription(false), [generateDescription])
     const phoneDescription = useMemo(() => generateDescription(true), [generateDescription])
 
-    const coordinates = useMemo(() => event?.position.coordinates.split(";").map(v => +v) as [number, number], [event?.position.coordinates])
+    const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
 
     const position = useMemo(() =>
-        event?.position.location
+        event?.location
         ??
-        event?.position.label.split(" ").filter((val, index, array) =>
-            event.position.postcode != val && array.length != index + 1
-        ).join(" ")
+        event?.position?.label.split(" ").filter((val, index, array) =>
+            event.position?.postcode != val && array.length != index + 1
+        ).join(" ") ?? t("event:event")
     , [event?.position])
     const subPosition = useMemo(() =>
-        event?.position.location ? `${event.position.street}, ${event.position.city}` : `${event?.position.postcode}, ${event?.position.city}`
+        event?.position ? event?.location ? `${event.position.street}, ${event.position.city}` : `${event.position.postcode}, ${event.position.city}` : t("event:online")
     , [event?.position])
     
     const date = useMemo(() => {
@@ -124,13 +124,13 @@ const Event: React.FC = () => {
             if (event.endsAt.getTime() - event.startsAt.getTime() <= 24 * 60 * 60 * 1000)//It lasts for less than a day
                 return t("event:date.same_day_this_week", {
                     day: format(event.startsAt, "EEEE", locale),
-                    start: format(event.startsAt, "HH:MM", locale),
-                    end: format(event.startsAt, "HH:MM", locale),
+                    start: format(event.startsAt, "HH:mm", locale),
+                    end: format(event.endsAt, "HH:mm", locale),
                 })
             else 
                 return t("event:date.diff_days", {
-                    start: format(event.startsAt, "d LLL yyyy HH:MM", locale),
-                    end: format(event.startsAt, "d LLL yyyy HH:MM", locale),
+                    start: format(event.startsAt, "d LLL yyyy HH:mm", locale),
+                    end: format(event.endsAt, "d LLL yyyy HH:mm", locale),
                 })
         }
     }, [event?.startsAt, event?.endsAt])
