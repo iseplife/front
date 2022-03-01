@@ -80,6 +80,28 @@ const Event: React.FC = () => {
     
     const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} className="mx-4 md:mx-10 sm:col-span-2"></Feed>), [event?.feed])
 
+    const description = useMemo(() =>
+        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
+            <span className="text-neutral-900 font-semibold text-base">Description</span>
+            <span>
+                L’AS, la Winter et le CUI te donnent rendez-vous ce lundi au Casimodo pour leur premier afterwork de l’année 🎿🏆🦅<br />
+                — INFOS —<br />
+                Lundi 20 septembre 2021<br />
+                19h-2h<br />
+                — ACCÈS —<br />
+                Ligne 4, RER B, RER C —&gt; Saint-Michel<br />
+                Ligne 10 —&gt; Maubert-Mutualité<br />
+                — TARIFS —<br />
+                Happy hour jusqu’à minuit 🤩<br />
+                Pinte 3,5€<br />
+                Cocktails 6€<br />
+                Pop-corn offert<br />
+                Margarita 6€<br />
+                Frites 6€<br />
+                On vous attend nombreux 🔥<br />
+            </span>
+        </div>, [])
+
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
@@ -130,8 +152,9 @@ const Event: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
-                    <div className="flex-1 mx-4 -mt-4 sm:mt-0">
+                <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
+                    
+                    <div className="flex-1 mx-4 sm:mt-0">
                         <Link to={`/club/${event.club.id}`}>
                             <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5">
                                 <div className="flex items-center font-normal">
@@ -144,28 +167,14 @@ const Event: React.FC = () => {
                                 </div>
                             </div>
                         </Link>
-                        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 sm:mt-0">
-                            <span className="text-neutral-900 font-semibold text-base">Description</span>
-                            <span>
-                                L’AS, la Winter et le CUI te donnent rendez-vous ce lundi au Casimodo pour leur premier afterwork de l’année 🎿🏆🦅<br />
-                                — INFOS —<br />
-                                Lundi 20 septembre 2021<br />
-                                19h-2h<br />
-                                — ACCÈS —<br />
-                                Ligne 4, RER B, RER C —&gt; Saint-Michel<br />
-                                Ligne 10 —&gt; Maubert-Mutualité<br />
-                                — TARIFS —<br />
-                                Happy hour jusqu’à minuit 🤩<br />
-                                Pinte 3,5€<br />
-                                Cocktails 6€<br />
-                                Pop-corn offert<br />
-                                Margarita 6€<br />
-                                Frites 6€<br />
-                                On vous attend nombreux 🔥<br />
-                            </span>
+                        <div className="lg:hidden">
+                            {description}
                         </div>
                     </div>
-                    { feed }
+                    {feed}
+                    <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
+                        {description}
+                    </div>
                 </div>
             </div>
         </>
