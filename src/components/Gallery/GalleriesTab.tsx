@@ -39,9 +39,9 @@ const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, getGalleriesCallb
                 </div>
             ))}
             {galleriesPreview.length == 0 && 
-                <div className="text-center text-gray-400">
-                    <FontAwesomeIcon icon={faCameraRetro} size="4x"/>
-                    <p>{t("no_gallery")}</p>
+                <div className="my-4 w-full text-center rounded text-sm text-neutral-400 mt-5">
+                    <FontAwesomeIcon icon={faCameraRetro} className="text-4xl"/>
+                    <div className="text-neutral-500 mt-0.5">{t("no_gallery")}</div>
                 </div>
             }
         </div>
