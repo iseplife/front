@@ -60,7 +60,7 @@ const Event: React.FC = () => {
     const [seeAll, setSeeAll] = useState(false)
     const toggleSeeAll = useCallback(() => setSeeAll(see => !see), [])
 
-    const descLengthThrottle = 400
+    const descLengthThrottle = 350
 
     const generateDescription = useCallback((phone: boolean) => {
         const skeletonLength = Array(8).fill(0).map(() => 80 + Math.random() * 70)
@@ -105,17 +105,30 @@ const Event: React.FC = () => {
     const sideDescription = useMemo(() => generateDescription(false), [generateDescription])
     const phoneDescription = useMemo(() => generateDescription(true), [generateDescription])
 
+    const coordinates = useMemo(() => event?.position.coordinates.split(";").map(v => +v) as [number, number], [event?.position.coordinates])
+
+    const position = useMemo(() =>
+        event?.position.location
+        ??
+        event?.position.label.split(" ").filter((val, index, array) =>
+            event.position.postcode != val && array.length != index + 1
+        ).join(" ")
+    , [event?.position])
+    const subPosition = useMemo(() =>
+        event?.position.location ? `${event.position.street}, ${event.position.city}` : `${event?.position.postcode}, ${event?.position.city}`
+    , [event?.position])
+
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
-                <Map className="w-full h-full" center={event.coordinates || [48.8453227,2.3280245]} zoom={13}>
+                <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={13}>
                     <TileLayer
                         url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                         id="mapbox/streets-v11"
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
-                    {event.coordinates && (
-                        <Marker position={event.coordinates}/>
+                    {coordinates && (
+                        <Marker position={coordinates}/>
                     )}
                 </Map>
                 <div className="container mx-auto px-4">
@@ -131,10 +144,10 @@ const Event: React.FC = () => {
                             }}
                         >
                             <div className="font-semibold">
-                                { event.location }
+                                { position }
                             </div>
                             <div className="font-normal text-neutral-500 text-xl">
-                                Port de Suffren, Paris
+                                { subPosition }
                             </div>
                         </div>
                     </div>
