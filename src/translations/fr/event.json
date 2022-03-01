@@ -57,5 +57,6 @@
 		"diff_days": "du {{start}} au {{end}}"
 	},
 	"see_more": "Voir plus...",
-	"online": "En ligne"
+	"online": "En ligne",
+	"participate": "Participer"
 }

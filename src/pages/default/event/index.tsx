@@ -137,6 +137,11 @@ const Event: React.FC = () => {
 
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
 
+    const participateButton = useMemo(() =>
+        <button className="ml-auto mr-0 px-3 py-2 rounded shadow-sm bg-indigo-400 text-white text-base font-medium cursor-pointer hover:shadow-md transition-shadow">
+            {event?.price}€ - {t("event:participate")}
+        </button>
+    , [event?.price])
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block">
@@ -186,6 +191,13 @@ const Event: React.FC = () => {
                             { event.title }
                         </div>
                     </div>
+                    {event?.ticketURL ?
+                        <Link to={{ pathname: event?.ticketURL }} className="ml-auto mr-0">
+                            {participateButton}
+                        </Link>
+                        :
+                        participateButton
+                    }
                 </div>
                 <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <div className="flex-1 mx-4 sm:mt-0">
