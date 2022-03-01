@@ -56,5 +56,6 @@
 		"same_day_this_week": "{{day}} from {{start}} to {{end}}",
 		"diff_days": "from {{start}} to {{end}}"
 	},
+	"see_more": "See more...",
 	"online": "Online"
 }

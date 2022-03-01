@@ -90,7 +90,7 @@ const Event: React.FC = () => {
                     }
                     {tooLong && !seeAll && phone &&
                         <label className="ml-1 font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
-                            Voir plus...
+                            {t("event:see_more")}
                         </label>
                     }
                 </span>
