@@ -22,6 +22,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faBell, faBellSlash, faUser} from "@fortawesome/free-regular-svg-icons"
 import {faChevronDown, faChevronUp, faEuroSign, faLock, faUnlock, faUsers} from "@fortawesome/free-solid-svg-icons"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
+import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 
 interface ParamTypes {
     id?: string
@@ -153,7 +154,6 @@ const Event: React.FC = () => {
                     </div>
                 </div>
                 <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
-                    
                     <div className="flex-1 mx-4 sm:mt-0">
                         <Link to={`/club/${event.club.id}`}>
                             <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5">
@@ -170,6 +170,7 @@ const Event: React.FC = () => {
                         <div className="lg:hidden">
                             {description}
                         </div>
+                        <GalleriesPreview elementId={event.id} getGalleriesCallback={getEventGalleries} />
                     </div>
                     {feed}
                     <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
