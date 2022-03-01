@@ -95,8 +95,8 @@ const Event: React.FC = () => {
                     }
                 </span>
                 :
-                skeletonLength.map(length =>
-                    <Skeleton title paragraph={{ rows: 1, width: length }} />
+                skeletonLength.map((length, index) =>
+                    <Skeleton key={index} title paragraph={{ rows: 1, width: length }} />
                 )
             }
         </div>
