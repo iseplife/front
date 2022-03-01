@@ -56,21 +56,54 @@ const Event: React.FC = () => {
     const [tab, setTab] = useState<number>(0)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
-    const description = useMemo(() => {
+
+    const [seeAll, setSeeAll] = useState(false)
+    const toggleSeeAll = useCallback(() => setSeeAll(see => !see), [])
+
+    const descLengthThrottle = 400
+
+    const generateDescription = useCallback((phone: boolean) => {
         const skeletonLength = Array(8).fill(0).map(() => 80 + Math.random() * 70)
+
+        const tooLong = event?.description.length ?? 0 > descLengthThrottle
+        let totalLength = 0
         
         return <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
             <span className="text-neutral-900 font-semibold text-base">Description</span>
             {event ?
                 <span>
-                    {event.description.split("\n").map((val, index, array) => val == "<spacer>" ? <Divider className="my-4" /> : index && array[index - 1] != "<spacer>" ? <><br /> {val}</> : val)}
+                    {
+                        event.description.split("\n").map((val, index, array) => {
+                            if (totalLength >= descLengthThrottle) return
+
+                            if (val == "<spacer>")
+                                return <Divider className="my-4" />
+                            
+                            if (!seeAll && phone) {
+                                if (totalLength + val.length > descLengthThrottle)
+                                    val = val.substring(0, descLengthThrottle - totalLength)
+                                totalLength += val.length
+                            }
+
+                            return index && array[index - 1] != "<spacer>" ? <><br /> {val}</> : val
+                        })
+                    }
+                    {tooLong && !seeAll && phone &&
+                        <label className="ml-1 font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
+                            Voir plus...
+                        </label>
+                    }
                 </span>
                 :
-                skeletonLength.map(length => <Skeleton title paragraph={{ rows: 1, width: length }} />)
-                
+                skeletonLength.map(length =>
+                    <Skeleton title paragraph={{ rows: 1, width: length }} />
+                )
             }
         </div>
-    }, [event])
+    }, [event?.description, seeAll])
+
+    const sideDescription = useMemo(() => generateDescription(false), [generateDescription])
+    const phoneDescription = useMemo(() => generateDescription(true), [generateDescription])
 
     return event ?
         (<>
@@ -98,7 +131,7 @@ const Event: React.FC = () => {
                             }}
                         >
                             <div className="font-semibold">
-                                Bal de la Marine
+                                { event.location }
                             </div>
                             <div className="font-normal text-neutral-500 text-xl">
                                 Port de Suffren, Paris
@@ -137,7 +170,7 @@ const Event: React.FC = () => {
                             </div>
                         </Link>
                         <div className="lg:hidden">
-                            {description}
+                            {phoneDescription}
                         </div>
                         <GalleriesPreview className="sm:hidden lg:block" elementId={event.id} getGalleriesCallback={getEventGalleries} />
                     </div>
@@ -151,7 +184,7 @@ const Event: React.FC = () => {
                         {feed}
                     </div>
                     <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
-                        {description}
+                        {sideDescription}
                     </div>
                 </div>
             </div>
