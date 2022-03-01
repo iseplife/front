@@ -132,16 +132,18 @@ const Event: React.FC = () => {
                 </div>
                 <div className="sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
                     <div className="flex-1 mx-4 -mt-4 sm:mt-0">
-                        <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
-                            <div className="flex items-center font-normal">
-                                <Avatar
-                                    src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
-                                    size="large"
-                                    className="hover:shadow-outline mr-1"
-                                />
-                                <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{ event.club.name }</div>
+                        <Link to={`/club/${event.club.id}`}>
+                            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5">
+                                <div className="flex items-center font-normal">
+                                    <Avatar
+                                        src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                        size="large"
+                                        className="hover:shadow-outline mr-1"
+                                    />
+                                    <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{ event.club.name }</div>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                         <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 sm:mt-0">
                             <span className="text-neutral-900 font-semibold text-base">Description</span>
                             <span>
