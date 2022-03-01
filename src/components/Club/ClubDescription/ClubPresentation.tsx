@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import {Collapse} from "antd"
 import About from "../About"
 import {useTranslation} from "react-i18next"
@@ -6,11 +6,15 @@ import GalleriesPreview from "../../Gallery/GalleriesPreview"
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Link } from "react-router-dom"
+import { ClubContext } from "../../../context/club/context"
+import { getClubGalleries } from "../../../data/club"
 
 const {Panel} = Collapse
 
 const ClubPresentation: React.FC = () => {
     const {t} = useTranslation(["club", "gallery"])
+    const { club: { id } } = useContext(ClubContext)
+
     const [galleriesVisible, setGalleriesVisible] = useState<boolean>(false)
 
     const setVisible = useCallback(() => setGalleriesVisible(true), [])
@@ -28,7 +32,7 @@ const ClubPresentation: React.FC = () => {
                         {t("gallery:see_all")}
                     </div>
                 </div>
-                <GalleriesPreview visible={galleriesVisible} setVisible={setGalleriesVisible} />
+                <GalleriesPreview visible={galleriesVisible} setVisible={setGalleriesVisible} elementId={id} getGalleriesCallback={getClubGalleries} />
             </div>
         </div>
 

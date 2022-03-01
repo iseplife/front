@@ -2,21 +2,23 @@ import React, {useCallback, useState} from "react"
 import {GalleryPreview} from "../../data/gallery/types"
 import {useTranslation} from "react-i18next"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
-import GalleryCard from "../Gallery/GalleryCard"
+import GalleryCard from "./GalleryCard"
 import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {getClubGalleries} from "../../data/club"
+import { AxiosPromise } from "axios"
+import { Page } from "../../data/request.type"
 
-type ClubGalleriesProps = {
-    club: number
+type GalleriesModalProps = {
+    elementId: number
+    getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>;
 }
-const ClubGalleries: React.FC<ClubGalleriesProps> = ({club}) => {
+const GalleriesModal: React.FC<GalleriesModalProps> = ({elementId, getGalleriesCallback}) => {
     const {t} = useTranslation("gallery")
     const [galleries, setGalleries] = useState<GalleryPreview[]>([])
     const [empty, setEmpty] = useState<boolean>(false)
 
     const getFollowingGalleries: loaderCallback = useCallback(async (page: number) => {
-        const res = await getClubGalleries(club, page)
+        const res = await getGalleriesCallback(elementId, page)
         if (res.status === 200) {
             if (page === 0 && res.data.content.length === 0)
                 setEmpty(true)
@@ -54,4 +56,4 @@ const ClubGalleries: React.FC<ClubGalleriesProps> = ({club}) => {
     )
 }
 
-export default ClubGalleries
+export default GalleriesModal

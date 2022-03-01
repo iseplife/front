@@ -3,34 +3,37 @@ import {GalleryPreview} from "../../data/gallery/types"
 import GalleryCard from "./GalleryCard"
 import {useTranslation} from "react-i18next"
 import {message, Modal} from "antd"
-import ClubGalleries from "../Club/ClubGalleries"
+import GalleriesModal from "./GalleriesModal"
 import {getClubGalleries} from "../../data/club"
 import {ClubContext} from "../../context/club/context"
 import {faCameraRetro} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import GalleriesPreviewSkeleton from "../Club/Skeleton/GalleriesPreviewSkeleton"
+import { AxiosPromise } from "axios"
+import { Page } from "../../data/request.type"
 
 interface GalleriesPreviewProps {
     visible: boolean,
-    setVisible: (visible: boolean) => void,
+    setVisible: (visible: boolean) => void
+    elementId: number
+    getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>
 }
 
-const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({visible, setVisible}) => {
+const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({visible, setVisible, elementId, getGalleriesCallback}) => {
     const {t} = useTranslation("gallery")
-    const {club: {id}} = useContext(ClubContext)
     const [loading, setLoading] = useState<boolean>()
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
 
     useEffect(() => {
         setLoading(true)
-        getClubGalleries(id)
+        getGalleriesCallback(elementId)
             .then(res => {
                 setGalleriesPreview(res.data.content)
             })
             .catch(e => message.error(e))
             .finally(() => setLoading(false))
 
-    }, [id])
+    }, [elementId])
 
     return loading ?
         <GalleriesPreviewSkeleton/> :
@@ -50,7 +53,7 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({visible, setVisible}
                 onCancel={() => setVisible(false)}
                 footer={null}
             >
-                <ClubGalleries club={id}/>
+                <GalleriesModal elementId={elementId} getGalleriesCallback={getGalleriesCallback}/>
             </Modal>
         </div>
 }
