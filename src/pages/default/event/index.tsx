@@ -23,6 +23,8 @@ import {faBell, faBellSlash, faUser} from "@fortawesome/free-regular-svg-icons"
 import {faChevronDown, faChevronUp, faEuroSign, faLock, faUnlock, faUsers} from "@fortawesome/free-solid-svg-icons"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
+import GalleriesTab from "../../../components/Gallery/GalleriesTab"
+import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 
 interface ParamTypes {
     id?: string
@@ -30,7 +32,7 @@ interface ParamTypes {
 
 const Event: React.FC = () => {
     const {id} = useParams<ParamTypes>()
-    const {t} = useTranslation("event")
+    const {t} = useTranslation(["event", "gallery"])
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
 
@@ -102,6 +104,12 @@ const Event: React.FC = () => {
                 On vous attend nombreux 🔥<br />
             </span>
         </div>, [])
+    const tabs = useMemo(() => ({
+        "Publications": feed,
+        [t("gallery:galleries")]: <GalleriesTab />,
+    }), [event?.feed])
+    const [tab, setTab] = useState<number>(0)
+    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
     return event ?
         (<>
@@ -170,9 +178,17 @@ const Event: React.FC = () => {
                         <div className="lg:hidden">
                             {description}
                         </div>
-                        <GalleriesPreview elementId={event.id} getGalleriesCallback={getEventGalleries} />
+                        <GalleriesPreview className="sm:hidden lg:block" elementId={event.id} getGalleriesCallback={getEventGalleries} />
                     </div>
-                    {feed}
+                    <TabsSwitcher
+                        className="mt-5 mx-4 md:mx-10 sm:col-span-2 lg:hidden"
+                        currentTab={tab}
+                        setCurrentTab={setTabFactory}
+                        tabs={tabs}
+                    />
+                    <div className="hidden lg:block col-span-2">
+                        {feed}
+                    </div>
                     <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
                         {description}
                     </div>
