@@ -81,7 +81,7 @@ const Event: React.FC = () => {
         })
     }, [placeShortOpen])
     
-    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} className="mx-4 md:mx-10 sm:col-span-2"></Feed>), [event?.feed])
+    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed}></Feed>), [event?.feed])
 
     const tabs = useMemo(() => ({
         "Publications": feed,
@@ -187,7 +187,7 @@ const Event: React.FC = () => {
                         setCurrentTab={setTabFactory}
                         tabs={tabs}
                     />
-                    <div className="hidden lg:block col-span-2">
+                    <div className="hidden lg:block mx-4 md:mx-10 sm:col-span-2">
                         {feed}
                     </div>
                     <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
