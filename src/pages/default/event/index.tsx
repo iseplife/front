@@ -165,7 +165,7 @@ const Event: React.FC = () => {
                 <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-3 lg:grid-cols-4">
                     <div className="flex-1 mx-4 sm:mt-0">
                         <Link to={`/club/${event.club.id}`}>
-                            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5">
+                            <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5 mt-1 sm:mt-5">
                                 <div className="flex items-center font-normal">
                                     <Avatar
                                         src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)}
