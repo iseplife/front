@@ -55,6 +55,8 @@
 	"date": {
 		"same_day_this_week": "{{day}} from {{start}} to {{end}}",
 		"diff_days": "from {{start}} to {{end}}",
+		"until_same_day": "Now, until {{end}}",
+		"until_diff_day": "Now, until {{end}}",
 		"today": "Today"
 	},
 	"see_more": "See more...",
