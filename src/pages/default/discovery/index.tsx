@@ -30,12 +30,12 @@ const Discovery: React.FC = () => {
                 <div className="flex gap-5 text-lg ml-auto mr-0 items-center mt-6 md:mt-0 text-center xsgrid">
                     <Link to="/">
                         <div className="bg-indigo-400 text-white rounded-xl w-44 md:w-48 py-[11.5px] grid place-items-center">
-                            Mon Feed
+                            { t("my_feed") }
                         </div>
                     </Link>
                     <Link to={{pathname: "https://github.com/iseplife"}} target="_blank">
                         <div className="border-indigo-400 text-indigo-400 border-[3.5px] rounded-xl w-44 md:w-48 py-2 grid place-items-center">
-                            Voir sur GitHub
+                            { t("watch_github") }
                         </div>
                     </Link>
                 </div>
@@ -43,7 +43,7 @@ const Discovery: React.FC = () => {
             </div>
             <div>
                 <div className="bg-indigo-400 rounded-full w-16 h-3"></div>
-                <div className="text-2xl mt-2">La vie étudiante simplifiée</div>
+                <div className="text-2xl mt-2">{t("student_life")}</div>
             </div>
             <div className="grid gap-y-16 gap-x-10 grid-cols-1 lg:grid-cols-3 pt-20 md:pt-28 px-2 text-lg font-normal text-center">
                 <DiscoverPurpose description={t("purposes.2.description")} img="event" />
@@ -60,14 +60,14 @@ const Discovery: React.FC = () => {
             <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%] pb-5">
                 <div className="mb-5">
                     <div className="bg-white rounded-full w-16 h-3"></div>
-                    <div className="text-2xl mt-2">Les associations</div>
+                    <div className="text-2xl mt-2">{t("assos")}</div>
                 </div>
 
                 <DiscoveryClub />
 
                 <div className="mb-5">
                     <div className="bg-white rounded-full w-16 h-3"></div>
-                    <div className="text-2xl mt-2">Les élèves</div>
+                    <div className="text-2xl mt-2">{t("students")}</div>
                 </div>
 
                 <YearBook />
