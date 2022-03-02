@@ -1,7 +1,9 @@
 import React, { useContext } from "react"
 import {useTranslation} from "react-i18next"
 import { Link } from "react-router-dom"
+import DiscoveryClub from "../../../components/Discovery/DiscoveryClub"
 import DiscoverPurpose from "../../../components/Discovery/DiscoveryPurpose"
+import YearBook from "../../../components/Discovery/YearBook"
 import { AppContext } from "../../../context/app/context"
 import "./Discovery.css"
 
@@ -60,6 +62,8 @@ const Discovery: React.FC = () => {
                     <div className="bg-white rounded-full w-16 h-3"></div>
                     <div className="text-2xl mt-2">Les associations</div>
                 </div>
+
+                <DiscoveryClub />
 
                 <div className="mb-5">
                     <div className="bg-white rounded-full w-16 h-3"></div>
