@@ -222,9 +222,13 @@ const Event: React.FC = () => {
             </div>
             <div className="container mx-auto mt-4">
                 <div className="flex items-center px-4">
-                    <div className="w-16 h-16 text-3xl sm:w-20 sm:h-20 sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
-                        <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
-                        <div className="grid place-items-center h-full">{ day }</div>
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 relative">
+                        <div className="w-full h-full text-3xl sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
+                            <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
+                            <div className="grid place-items-center h-full">{day}</div>
+                        </div>
+
+                        <div className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12" title={t(`type.${event.type}`)}>{t(`type.${event.type}`).replace(/[A-z]| /g, "")}</div>
                     </div>
                     <div className="ml-4">
                         <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
