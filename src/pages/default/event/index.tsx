@@ -15,6 +15,7 @@ import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
+import EventDescription from "../../../components/Event/EventDescription"
 
 interface ParamTypes {
     id?: string
@@ -43,55 +44,6 @@ const Event: React.FC = () => {
     }), [event?.feed])
     const [tab, setTab] = useState<number>(0)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
-
-
-    const [seeAll, setSeeAll] = useState(false)
-    const toggleSeeAll = useCallback(() => setSeeAll(see => !see), [])
-
-    const descLengthThrottle = 350
-
-    const generateDescription = useCallback((phone: boolean) => {
-        const skeletonLength = Array(8).fill(0).map(() => 80 + Math.random() * 70)
-
-        const tooLong = event?.description.length ?? 0 > descLengthThrottle
-        let totalLength = 0
-        
-        return <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
-            <span className="text-neutral-900 font-semibold text-base">Description</span>
-            {event ?
-                <span>
-                    {
-                        event.description.split("\n").map((val, index, array) => {
-                            if (totalLength >= descLengthThrottle) return
-
-                            if (val == "<spacer>")
-                                return <Divider className="my-4" />
-                            
-                            if (!seeAll && phone) {
-                                if (totalLength + val.length > descLengthThrottle)
-                                    val = val.substring(0, descLengthThrottle - totalLength)
-                                totalLength += val.length
-                            }
-
-                            return index && array[index - 1] != "<spacer>" ? <><br /> {val}</> : val
-                        })
-                    }
-                    {tooLong && !seeAll && phone &&
-                        <label className="ml-1 font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
-                            {t("event:see_more")}
-                        </label>
-                    }
-                </span>
-                :
-                skeletonLength.map((length, index) =>
-                    <Skeleton key={index} title paragraph={{ rows: 1, width: length }} />
-                )
-            }
-        </div>
-    }, [event?.description, seeAll])
-
-    const sideDescription = useMemo(() => generateDescription(false), [generateDescription])
-    const phoneDescription = useMemo(() => generateDescription(true), [generateDescription])
 
     const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
     
@@ -183,9 +135,9 @@ const Event: React.FC = () => {
                             </div>
                         </Link>
                         
-                        <div className="sm:hidden"> {phoneDescription} </div>
+                        <div className="sm:hidden"><EventDescription description={event?.description} loading={!event} phone={true} /></div>
                         <EventMapPlace event={event} phone={true} />
-                        <div className="hidden sm:block lg:hidden"> {sideDescription} </div>
+                        <div className="hidden sm:block lg:hidden"><EventDescription description={event?.description} loading={!event} /></div>
                         
                         <GalleriesPreview className="sm:hidden lg:block" elementId={event.id} getGalleriesCallback={getEventGalleries} />
                     </div>
@@ -199,7 +151,7 @@ const Event: React.FC = () => {
                         {feed}
                     </div>
                     <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
-                        {sideDescription}
+                        <EventDescription description={event?.description} loading={!event} />
                     </div>
                 </div>
             </div>
