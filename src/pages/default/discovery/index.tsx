@@ -29,12 +29,12 @@ const Discovery: React.FC = () => {
                 </div>
                 <div className="flex gap-5 text-lg ml-auto mr-0 items-center mt-6 md:mt-0 text-center xsgrid">
                     <Link to="/">
-                        <div className="bg-indigo-400 text-white rounded-xl w-44 md:w-48 py-[11.5px] grid place-items-center">
+                        <div className="bg-indigo-400 hover:bg-indigo-400/90 transition-colors text-white rounded-xl w-44 md:w-48 py-[11.5px] grid place-items-center">
                             { t("my_feed") }
                         </div>
                     </Link>
                     <Link to={{pathname: "https://github.com/iseplife"}} target="_blank">
-                        <div className="border-indigo-400 text-indigo-400 border-[3.5px] rounded-xl w-44 md:w-48 py-2 grid place-items-center">
+                        <div className="border-indigo-400 hover:border-indigo-400/90 transition-colors text-indigo-400 hover:text-indigo-400/90 border-[3.5px] rounded-xl w-44 md:w-48 py-2 grid place-items-center">
                             { t("watch_github") }
                         </div>
                     </Link>
