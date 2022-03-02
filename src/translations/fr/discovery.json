@@ -19,5 +19,10 @@
   "promotions": "Choisir une promotion",
   "yearbook_title": "Annuaire des élèves",
   "associations": "Associations",
-  "no_student": "Aucun élève, t'es parti trop loin"
+  "no_student": "Aucun élève, t'es parti trop loin",
+  "my_feed": "Mon feed",
+  "watch_github": "Voir sur GitHub",
+  "student_life": "La vie étudiante simplifiée",
+  "assos": "Les associations",
+  "students": "Les élèves"
 }

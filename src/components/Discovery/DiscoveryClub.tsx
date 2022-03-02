@@ -35,14 +35,6 @@ const DiscoveryClub: React.FC = () => {
 
     return (
         <div className="container text-center mx-auto my-5">
-            <div className="flex justify-center items-center font-bold text-indigo-400 py-3 text-4xl">
-                {t("associations")}
-                <span className="flex ml-2 text-lg">
-                    {clubs.length !== 0 && `(${clubs.length})`}
-                </span>
-            </div>
-            <HorizontalSpacer spacing={6}/>
-            {/* List of Clubs */}
             <div className="flex flex-wrap justify-around">
                 {!loading ?
                     clubs.map((club, i) =>

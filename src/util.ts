@@ -240,4 +240,8 @@ export class EntitySet<T extends Entity> {
         })
         return mappedEntities
     }
+
+    toArray() {
+        return Array.from(this.items.values())
+    }
 }
