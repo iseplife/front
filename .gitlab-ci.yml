@@ -10,6 +10,7 @@ cache:
 stages:
   - test
   - build
+  - docker
   - deploy
 
 test:
@@ -75,7 +76,21 @@ build-dev:
     paths:
       - build/
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "staging"'
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+docker-build:
+  stage: docker
+  before_script:
+    - FRONT_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+    - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
+  script:
+    - docker build -t iseplife/front:$FRONT_VERSION -t iseplife/front:latest .
+    - docker push iseplife/front:$FRONT_VERSION
+    - docker push iseplife/front:latest
+  dependencies:
+    - build-dev
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
 deploy-dev:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
