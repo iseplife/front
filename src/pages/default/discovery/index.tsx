@@ -13,7 +13,7 @@ const Discovery: React.FC = () => {
             <img src="img/icons/floating/square.svg" className="absolute top-[450px] md:top-[400px] left-1/4" />
             <img src="img/icons/floating/camera.svg" className="absolute top-[450px] right-[10%] md:block hidden" />
             <img src="img/icons/floating/triangle.svg" className="absolute top-[550px] right-[40%] translate-x-32" />
-            <img src="img/icons/floating/star.svg" className="absolute top-[700px] left-[4%]" />
+            <img src="img/icons/floating/star.svg" className="absolute top-[700px] left-[4%] hidden md:block" />
         </div>
 
         <div className="container mx-auto px-5 md:px-10 font-bold text-neutral-700">
@@ -49,7 +49,11 @@ const Discovery: React.FC = () => {
                 <DiscoverPurpose description={t("purposes.1.description")} img="people" />
             </div>
         </div>
-        <img src="img/wave.svg" draggable="false" className="mt-5" />
+        <div className="relative mb-20 z-0 pointer-events-none opacity-60">
+            <img src="img/icons/floating/star.svg" className="absolute top-[20px] right-[10%]" />
+            <img src="img/icons/floating/square.svg" className="absolute top-[75px] left-[30%]" />
+        </div>
+        <img src="img/wave.svg" draggable="false" className="mt-5 z-10 relative" />
         <div className="bg-indigo-400">
             <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%]">
                 <div className="mb-5">
