@@ -33,7 +33,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
     }, [fetchEvents])
 
     return (
-        <div className={`${className} flex flex-col justify-center text-left lg:text-center`}>
+        <div className={`${className} flex flex-col justify-center text-left lg:text-center mx-0 lg:mx-4`}>
             <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("incoming")}</Divider>
             <h3 className="text-gray-700 text-lg lg:mx-3 hidden sm:block">{t("incoming")}</h3>
             {wait || loading ?
