@@ -228,7 +228,7 @@ const Event: React.FC = () => {
                             <div className="grid place-items-center h-full">{day}</div>
                         </div>
 
-                        <div className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12 drop-shadow-md" title={t(`type.${event.type}`)}>{t(`type.${event.type}`).replace(/[A-z]| /g, "")}</div>
+                        <div className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12" title={t(`type.${event.type}`)}>{t(`type.${event.type}`).replace(/[0-9A-zÀ-ÿ ]/g, "")}</div>
                     </div>
                     <div className="ml-4">
                         <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
