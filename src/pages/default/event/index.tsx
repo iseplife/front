@@ -16,7 +16,8 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { format } from "date-fns"
 import { getLocaleFromTranslation } from "../../../constants/TranslationLocale"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons"
+import { faExternalLinkAlt, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
+import EventEditorModal from "../../../components/Event/EventEditorModal"
 
 interface ParamTypes {
     id?: string
@@ -273,6 +274,14 @@ const Event: React.FC = () => {
                     </div>
                 </div>
             </div>
+            
+            {event.hasRight && (
+                <div
+                    className="absolute grid place-items-center top-2 right-2 sm:top-5 sm:right-5 z-[1000] ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
+                >
+                    <EventEditorModal values={event} onSubmit={setEvent}/>
+                </div>
+            )}
         </>) : null
 }
 
