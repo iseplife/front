@@ -192,7 +192,7 @@ const Event: React.FC = () => {
     }, [coordinates, event?.position?.label])
     return event ?
         (<>
-            <div className="w-full md:h-64 h-28 relative hidden sm:block">
+            <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
                 <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={14}>
                     <TileLayer
                         url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
@@ -277,7 +277,7 @@ const Event: React.FC = () => {
             
             {event.hasRight && (
                 <div
-                    className="absolute grid place-items-center top-2 right-2 sm:top-5 sm:right-5 z-[1000] ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
+                    className="absolute grid place-items-center top-2 right-2 sm:top-5 sm:right-5 z-10 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
                 >
                     <EventEditorModal values={event} onSubmit={setEvent}/>
                 </div>
