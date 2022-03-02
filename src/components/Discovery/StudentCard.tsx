@@ -21,7 +21,7 @@ const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, pictu
             {promo}
         </div>
         <div className="bg-white/40 rounded-xl backdrop-blur grid place-items-center px-2 py-2 leading-6 mb-3 mt-auto w-full text-neutral-800 font-semibold text-lg">
-            <div className="line-clamp-2 text-ellipsis">
+            <div className="line-clamp-2 text-ellipsis" title={fullname}>
                 {fullname}
             </div>
         </div>
