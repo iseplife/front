@@ -35,7 +35,7 @@ const Event: React.FC = () => {
             )
     }, [id])
     
-    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed}></Feed>), [event?.feed])
+    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} />), [event?.feed])
 
     const tabs = useMemo(() => ({
         "Publications": feed,
