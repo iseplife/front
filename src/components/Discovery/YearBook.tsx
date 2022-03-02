@@ -83,7 +83,8 @@ const YearBook: React.FC = () => {
             const parsedResults = parseSearchResults(res.data.content)
 
             setStudents(stds => stds.addAll(parsedResults))
-            setFilteredStudents(students.filter(filterFn))
+            const stu = students.toArray().filter(filterFn).sort((a, b) => (filter.atoz ? 1 : -1) * +(a.firstName+a.lastName > b.firstName+b.lastName))
+            setFilteredStudents(stu)
 
             if (page === 0 && res.data.content.length === 0)
                 setEmpty(true)
@@ -96,13 +97,6 @@ const YearBook: React.FC = () => {
         return false
     }, [filter.atoz, filter.name, filter.promos, students, empty])
 
-    /**
-     * Filter Update
-     */
-    useEffect(() => {
-        setFilteredStudents(students.filter(filterFn))
-    }, [filterFn])
-
     return (
         <div className="container mx-auto text-center mt-10 mb-20" style={{minHeight: "calc(100vh - 8rem)"}}>
 
@@ -114,7 +108,7 @@ const YearBook: React.FC = () => {
                 empty={empty}
                 watch="DOWN"
                 callback={getNextStudents}
-                className="flex flex-wrap justify-start"
+                className="flex flex-wrap justify-start mt-10"
             >
                 {filteredStudent.length == 0 ?
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">

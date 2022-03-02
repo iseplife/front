@@ -40,7 +40,7 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
                     defaultValue={[]}
                     mode="multiple"
                     bordered={false}
-                    className="w-48 mx-2 text-gray-400"
+                    className="w-44 mx-4 text-neutral-600"
                     style={{borderBottom: "1px solid rgb(156, 163, 175)"}}
                     placeholder={t("promotions")}
                     onSelect={(promo: number) => onFilterUpdate({type: "ADD_PROMO", promo: +promo})}
