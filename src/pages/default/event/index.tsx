@@ -15,6 +15,8 @@ import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { format } from "date-fns"
 import { getLocaleFromTranslation } from "../../../constants/TranslationLocale"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -152,13 +154,16 @@ const Event: React.FC = () => {
     }, [event?.price])
 
     const phonePlace = useMemo(() => {
-        const place = <div className={"flex sm:hidden flex-col px-4 py-3 shadow-sm rounded-lg bg-white transition-colors my-5 mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
-            <div className="font-semibold text-base">
-                { position }
+        const place = <div className={"flex items-center sm:hidden px-4 py-3 shadow-sm rounded-lg bg-white transition-colors my-5 mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
+            <div>
+                <div className="font-semibold text-base">
+                    { position }
+                </div>
+                <div className="font-normal text-neutral-500 text-base">
+                    { subPosition }
+                </div>
             </div>
-            <div className="font-normal text-neutral-500 text-base">
-                { subPosition }
-            </div>
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base text-black/20 ml-auto mr-0" />
         </div>
         return coordinates ?
             <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
@@ -167,14 +172,17 @@ const Event: React.FC = () => {
             : place
     }, [coordinates, event?.position?.label])
     const bigPlace = useMemo(() => {
-        const place = <>
-            <div className="font-semibold">
-                { position }
+        const place = <div className="flex items-center text-black">
+            <div>
+                <div className="font-semibold">
+                    { position }
+                </div>
+                <div className="font-normal text-neutral-500 text-xl">
+                    { subPosition }
+                </div>
             </div>
-            <div className="font-normal text-neutral-500 text-xl">
-                { subPosition }
-            </div>
-        </>
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base ml-4 text-black/20" />
+        </div>
         return coordinates ?
             <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
                 {place}
