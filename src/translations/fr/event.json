@@ -54,7 +54,8 @@
 	"ticket_url": "Acheter sa place",
 	"date": {
 		"same_day_this_week": "{{day}} de {{start}} à {{end}}",
-		"diff_days": "du {{start}} au {{end}}"
+		"diff_days": "du {{start}} au {{end}}",
+		"today": "Aujourd'hui"
 	},
 	"see_more": "Voir plus...",
 	"online": "En ligne",

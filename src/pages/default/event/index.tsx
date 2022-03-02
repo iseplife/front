@@ -121,16 +121,19 @@ const Event: React.FC = () => {
     const date = useMemo(() => {
         if (event) {
             const locale = { locale: getLocaleFromTranslation(i18n.language) }
-            if (event.endsAt.getTime() - event.startsAt.getTime() <= 24 * 60 * 60 * 1000)//It lasts for less than a day
+            const startMs = event.startsAt.getTime()
+            const fullDay = event.startsAt.getFullYear() == new Date().getFullYear() ? "d LLL" : "d LLL yyyy"
+            if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
+                const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
                 return t("event:date.same_day_this_week", {
-                    day: format(event.startsAt, "EEEE", locale),
+                    day: delayDays <= 1 ? t("event:date.today") : format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "") , locale),
                     start: format(event.startsAt, "HH:mm", locale),
                     end: format(event.endsAt, "HH:mm", locale),
                 })
-            else 
+            }else 
                 return t("event:date.diff_days", {
-                    start: format(event.startsAt, "d LLL yyyy HH:mm", locale),
-                    end: format(event.endsAt, "d LLL yyyy HH:mm", locale),
+                    start: format(event.startsAt, fullDay + " HH:mm", locale),
+                    end: format(event.endsAt, fullDay + " HH:mm", locale),
                 })
         }
     }, [event?.startsAt, event?.endsAt])
