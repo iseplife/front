@@ -155,7 +155,7 @@ const Event: React.FC = () => {
     }, [event?.price])
 
     const phonePlace = useMemo(() => {
-        const place = <div className={"flex items-center sm:hidden px-4 py-3 shadow-sm rounded-lg bg-white transition-colors my-5 mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
+        const place = <div className={"flex items-center sm:hidden px-4 py-3 shadow-sm rounded-lg bg-white transition-colors mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
             <div>
                 <div className="font-semibold text-base">
                     { position }
