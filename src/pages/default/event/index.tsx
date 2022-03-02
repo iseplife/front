@@ -164,7 +164,7 @@ const Event: React.FC = () => {
                     { subPosition }
                 </div>
             </div>
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base text-black/20 ml-auto mr-0" />
+            {coordinates && <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base text-black/20 ml-auto mr-0" />}
         </div>
         return coordinates ?
             <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
@@ -182,7 +182,7 @@ const Event: React.FC = () => {
                     { subPosition }
                 </div>
             </div>
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base ml-4 text-black/20" />
+            {coordinates && <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base ml-4 text-black/20" />}
         </div>
         return coordinates ?
             <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
