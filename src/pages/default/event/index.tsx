@@ -8,13 +8,11 @@ import "./Event.css"
 import {Avatar, Divider, Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
-import {mediaPath} from "../../../util"
+import {mediaPath, _format} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
-import { format } from "date-fns"
-import { getLocaleFromTranslation } from "../../../constants/TranslationLocale"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExternalLinkAlt, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
@@ -123,21 +121,20 @@ const Event: React.FC = () => {
     
     const date = useMemo(() => {
         if (event) {
-            const locale = { locale: getLocaleFromTranslation(i18n.language) }
             const startMs = event.startsAt.getTime()
             const fullDay = event.startsAt.getFullYear() == new Date().getFullYear() ? "d LLL" : "d LLL yyyy"
             const now = startMs < new Date().getTime()
             if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
                 const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
                 return t(now ? "event:date.until_same_day" : "event:date.same_day_this_week", {
-                    day: delayDays <= 1 ? t("event:date.today") : format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "") , locale),
-                    start: format(event.startsAt, "HH:mm", locale),
-                    end: format(event.endsAt, "HH:mm", locale),
+                    day: delayDays <= 1 ? t("event:date.today") : _format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "")),
+                    start: _format(event.startsAt, "HH:mm"),
+                    end: _format(event.endsAt, "HH:mm"),
                 })
             }else 
                 return t(now ? "event:date.until_diff_day" : "event:date.diff_days", {
-                    start: format(event.startsAt, fullDay + " HH:mm", locale),
-                    end: format(event.endsAt, fullDay + " HH:mm", locale),
+                    start: _format(event.startsAt, fullDay + " HH:mm"),
+                    end: _format(event.endsAt, fullDay + " HH:mm"),
                 })
         }
     }, [event?.startsAt, event?.endsAt])

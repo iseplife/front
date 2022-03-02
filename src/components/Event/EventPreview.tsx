@@ -1,9 +1,8 @@
 import React from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
-import {format} from "date-fns"
-import { getLocaleFromTranslation } from "../../constants/TranslationLocale"
 import { useTranslation } from "react-i18next"
+import { _format } from "../../util"
 
 type EventProps = {
     event: PreviewType
@@ -20,7 +19,7 @@ const EventPreview: React.FC<EventProps> = ({ event }) => {
                     <div className="w-12 h-12 md:w-14 md:h-14 relative">
                         <div className="w-full h-full mx-auto sm:mx-0 text-2xl md:text-3xl rounded-md bg-neutral-100 shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                             <div className="bg-red-500 w-full h-4 text-xs leading-4 md:leading-5 md:text-sm md:h-5 flex-shrink-0  uppercase">
-                                {format(event.startsAt, "MMM", {locale: getLocaleFromTranslation(language)})}
+                                {_format(event.startsAt, "MMM")}
                             </div>
                             <div className="grid place-items-center h-full">
                                 { event.startsAt.getDate() }
