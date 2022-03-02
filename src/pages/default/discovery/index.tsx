@@ -57,7 +57,7 @@ const Discovery: React.FC = () => {
         </div>
         <img src="img/wave.svg" draggable="false" className="mt-5 z-10 relative w-full" />
         <div className="bg-indigo-400">
-            <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%]">
+            <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%] pb-5">
                 <div className="mb-5">
                     <div className="bg-white rounded-full w-16 h-3"></div>
                     <div className="text-2xl mt-2">Les associations</div>
