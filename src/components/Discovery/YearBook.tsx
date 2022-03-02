@@ -105,13 +105,8 @@ const YearBook: React.FC = () => {
 
     return (
         <div className="container mx-auto text-center mt-10 mb-20" style={{minHeight: "calc(100vh - 8rem)"}}>
-            <div className="font-bold text-indigo-400 py-3 text-4xl">
-                {t("yearbook_title")}
-            </div>
 
-            <HorizontalSpacer spacing={6}/>
             <YearBookSearchBar filter={filter} onFilterUpdate={setFilter} onSortingSwitch={switchSorting}/>
-            <HorizontalSpacer spacing={8}/>
 
             {/* List of students */}
             <InfiniteScroller

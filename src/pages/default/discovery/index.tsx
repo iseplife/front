@@ -69,7 +69,8 @@ const Discovery: React.FC = () => {
                     <div className="bg-white rounded-full w-16 h-3"></div>
                     <div className="text-2xl mt-2">Les élèves</div>
                 </div>
-                s
+
+                <YearBook />
             </div>
         </div>
     </>)
