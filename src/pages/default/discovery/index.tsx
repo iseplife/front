@@ -48,6 +48,21 @@ const Discovery: React.FC = () => {
                 <DiscoverPurpose description={t("purposes.1.description")} img="people" />
             </div>
         </div>
+        <img src="img/wave.svg" draggable="false" className="mt-5" />
+        <div className="bg-indigo-400">
+            <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%]">
+                <div className="mb-5">
+                    <div className="bg-white rounded-full w-16 h-3"></div>
+                    <div className="text-2xl mt-2">Les associations</div>
+                </div>
+
+                <div className="mb-5">
+                    <div className="bg-white rounded-full w-16 h-3"></div>
+                    <div className="text-2xl mt-2">Les élèves</div>
+                </div>
+                s
+            </div>
+        </div>
     </>)
 }
 export default Discovery
