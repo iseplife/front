@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
+import EventMapPlace from "../../../components/Event/EventMapPlace"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useParams, useHistory, Link} from "react-router-dom"
 import {Marker, TileLayer, Map} from "react-leaflet"
 import {getEvent, getEventGalleries} from "../../../data/event"
@@ -13,8 +14,6 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExternalLinkAlt, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 
 interface ParamTypes {
@@ -35,18 +34,6 @@ const Event: React.FC = () => {
                 setEvent(res.data)
             )
     }, [id])
-
-    const [placeShortOpen, setPlaceShortOpen] = useState(true)
-    const [placeShortWidth, setPlaceShortWidth] = useState(0)
-    const [placeShortAnimation, setPlaceShortAnimation] = useState(false)
-    const placeShort = useRef<HTMLDivElement>(null)
-    const togglePlaceShort = useCallback(() => {
-        placeShort?.current && placeShortOpen && setPlaceShortWidth(placeShort.current.clientWidth)
-        requestAnimationFrame(() => {
-            setPlaceShortOpen(open => !open)
-            setPlaceShortAnimation(true)
-        })
-    }, [placeShortOpen])
     
     const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed}></Feed>), [event?.feed])
 
@@ -107,17 +94,6 @@ const Event: React.FC = () => {
     const phoneDescription = useMemo(() => generateDescription(true), [generateDescription])
 
     const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
-
-    const position = useMemo(() =>
-        event?.location
-        ||
-        event?.position?.label.split(" ").filter((val, index, array) =>
-            event.position?.postcode != val && array.length != index + 1
-        ).join(" ") || t("event:event")
-    , [event?.position])
-    const subPosition = useMemo(() =>
-        event?.position ? event?.location?.length ? `${event.position.street}, ${event.position.city}` : `${event.position.postcode}, ${event.position.city}` : t("event:online")
-    , [event?.position])
     
     const date = useMemo(() => {
         if (event) {
@@ -152,42 +128,6 @@ const Event: React.FC = () => {
             : button
     }, [event?.price])
 
-    const phonePlace = useMemo(() => {
-        const place = <div className={"flex items-center sm:hidden px-4 py-3 shadow-sm rounded-lg bg-white transition-colors mt-1 sm:mt-5 "+(coordinates && "hover:bg-neutral-50")}>
-            <div>
-                <div className="font-semibold text-base">
-                    { position }
-                </div>
-                <div className="font-normal text-neutral-500 text-base">
-                    { subPosition }
-                </div>
-            </div>
-            {coordinates && <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base text-black/20 ml-auto mr-0" />}
-        </div>
-        return coordinates ?
-            <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
-                {place}
-            </Link>
-            : place
-    }, [coordinates, event?.position?.label])
-    const bigPlace = useMemo(() => {
-        const place = <div className="flex items-center text-black">
-            <div>
-                <div className="font-semibold">
-                    { position }
-                </div>
-                <div className="font-normal text-neutral-500 text-xl">
-                    { subPosition }
-                </div>
-            </div>
-            {coordinates && <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base ml-4 text-black/20" />}
-        </div>
-        return coordinates ?
-            <Link to={{ pathname: `https://maps.google.com/?q=${event?.position?.label}` }} target="_blank">
-                {place}
-            </Link>
-            : place
-    }, [coordinates, event?.position?.label])
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
@@ -202,20 +142,7 @@ const Event: React.FC = () => {
                     )}
                 </Map>
                 <div className="container mx-auto px-4">
-                    <div className="flex bg-white/40 shadow-sm backdrop-blur rounded-lg text-3xl absolute top-1/2 -translate-y-1/2 z-[1000]">
-                        <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
-                            <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
-                        </div>
-                        <div
-                            ref={placeShort}
-                            className={"px-4 py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300 ") + (placeShortOpen || "px-0")}
-                            style={{
-                                maxWidth: (placeShortOpen && (placeShortWidth || 9999) || 0)
-                            }}
-                        >
-                            {bigPlace}
-                        </div>
-                    </div>
+                    <EventMapPlace event={event} />
                 </div>
             </div>
             <div className="container mx-auto mt-4">
@@ -257,7 +184,7 @@ const Event: React.FC = () => {
                         </Link>
                         
                         <div className="sm:hidden"> {phoneDescription} </div>
-                        { phonePlace }
+                        <EventMapPlace event={event} phone={true} />
                         <div className="hidden sm:block lg:hidden"> {sideDescription} </div>
                         
                         <GalleriesPreview className="sm:hidden lg:block" elementId={event.id} getGalleriesCallback={getEventGalleries} />
