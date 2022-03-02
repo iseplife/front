@@ -45,7 +45,7 @@ const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
                 <div
                     ref={panelRef}
                     className={`${panelClassName} 
-                        absolute top-10 z-20 
+                        absolute top-10 z-[1000] 
                         border rounded-lg shadow-lg max-h-[calc(100vh-6rem)] 
                         bg-white text-neutral-800 overflow-auto scrollbar-thin
                     `}
