@@ -1,17 +1,15 @@
 import React from "react"
 
 type DiscoveryPurposeProps = {
-    title: string
     description: string
     img: string
 }
-const DiscoverPurpose: React.FC<DiscoveryPurposeProps> = ({title, img, description}) => (
-    <div className="text-center sm:w-1/3 w-4/5 px-1" style={{minHeight: "16rem"}}>
-        <img src={img} className="h-40 mx-auto" alt={title}/>
-        <h4 className="font-bold text-indigo-500 ">{title}</h4>
-        <p className="max-w-md leading-7">
-            {description}
-        </p>
+const DiscoverPurpose: React.FC<DiscoveryPurposeProps> = ({img, description}) => (
+    <div className="md:mt-0 border-black/[6%] border-[1.5px] rounded-xl relative pt-14 pb-4 px-[12%]">
+        <div className="bg-indigo-400 rounded-full w-20 h-20 grid place-items-center absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <img draggable="false" src={`img/icons/discovery/${img}.svg`} className="w-8 h-8" />
+        </div>
+        { description }
     </div>
 )
 

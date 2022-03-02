@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import {useTranslation} from "react-i18next"
 import { Link } from "react-router-dom"
+import DiscoverPurpose from "../../../components/Discovery/DiscoveryPurpose"
 import { AppContext } from "../../../context/app/context"
 
 const Discovery: React.FC = () => {
@@ -8,14 +9,14 @@ const Discovery: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
     return (<>
         <div className="z-0 pointer-events-none opacity-60">
-            <img src="img/icons/floating/square.svg" className="fixed top-[450px] md:top-[400px] left-1/4" />
-            <img src="img/icons/floating/camera.svg" className="fixed top-[450px] right-[10%] md:block hidden" />
-            <img src="img/icons/floating/triangle.svg" className="fixed top-[550px] right-[40%] translate-x-32" />
-            <img src="img/icons/floating/star.svg" className="fixed top-[700px] left-[5%]" />
+            <img src="img/icons/floating/square.svg" className="absolute top-[450px] md:top-[400px] left-1/4" />
+            <img src="img/icons/floating/camera.svg" className="absolute top-[450px] right-[10%] md:block hidden" />
+            <img src="img/icons/floating/triangle.svg" className="absolute top-[550px] right-[40%] translate-x-32" />
+            <img src="img/icons/floating/star.svg" className="absolute top-[700px] left-[4%]" />
         </div>
 
-        <div className="container mx-auto px-4 font-bold text-neutral-700">
-            <div className="py-40 block md:flex">
+        <div className="container mx-auto px-5 md:px-10 font-bold text-neutral-700">
+            <div className="py-40 block md:flex mb-5 md:mb-12">
                 <div>
                     <div className="flex text-4xl items-center">
                         Bonjour
@@ -40,6 +41,11 @@ const Discovery: React.FC = () => {
             <div>
                 <div className="bg-indigo-400 rounded-full w-16 h-3"></div>
                 <div className="text-2xl mt-2">La vie étudiante simplifiée</div>
+            </div>
+            <div className="grid gap-y-16 gap-x-10 grid-cols-1 lg:grid-cols-3 pt-20 md:pt-28 px-2 text-lg font-normal text-center">
+                <DiscoverPurpose description={t("purposes.2.description")} img="event" />
+                <DiscoverPurpose description={t("purposes.0.description")} img="network" />
+                <DiscoverPurpose description={t("purposes.1.description")} img="people" />
             </div>
         </div>
     </>)
