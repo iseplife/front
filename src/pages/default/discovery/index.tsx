@@ -14,7 +14,7 @@ const Discovery: React.FC = () => {
         <div className="z-0 pointer-events-none opacity-60">
             <img src="img/icons/floating/square.svg" className="absolute top-[450px] md:top-[400px] left-1/4" />
             <img src="img/icons/floating/camera.svg" className="absolute top-[450px] right-[10%] md:block hidden" />
-            <img src="img/icons/floating/triangle.svg" className="absolute top-[550px] right-[40%] translate-x-32" />
+            <img src="img/icons/floating/triangle.svg" className="absolute top-[520px] sm:top-[550px] right-[40%] translate-x-32" />
             <img src="img/icons/floating/star.svg" className="absolute top-[700px] left-[4%] hidden md:block" />
         </div>
 
