@@ -76,7 +76,7 @@ build-dev:
     paths:
       - build/
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "staging"'
 docker-build:
   stage: docker
   before_script:
@@ -87,7 +87,7 @@ docker-build:
     - docker push iseplife/front:$FRONT_VERSION
     - docker push iseplife/front:latest
   dependencies:
-    - build-dev
+    - build-prod
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
