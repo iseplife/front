@@ -16,6 +16,7 @@ import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 import EventDescription from "../../../components/Event/EventDescription"
+import EventParticipateButton from "../../../components/Event/EventParticipateButton"
 
 interface ParamTypes {
     id?: string
@@ -69,17 +70,6 @@ const Event: React.FC = () => {
 
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
 
-    const participateButton = useMemo(() => {
-        const button = <button className="px-3 py-2 rounded shadow-sm bg-indigo-400 text-white text-base font-medium cursor-pointer hover:shadow-md transition-shadow">
-            {event?.price && <>{event?.price}€ - </>}{t("event:participate")}
-        </button>
-        return event?.ticketURL ?
-            <Link to={{ pathname: event?.ticketURL }} target="_blank">
-                {button}
-            </Link>
-            : button
-    }, [event?.price])
-
     return event ?
         (<>
             <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
@@ -115,10 +105,14 @@ const Event: React.FC = () => {
                             { event.title }
                         </div>
                     </div>
-                    <div className="ml-auto mr-0 hidden md:block">{participateButton}</div>
+                    <div className="ml-auto mr-0 hidden md:block">
+                        <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} />
+                    </div>
                 </div>
                 <div className="w-full px-4 mt-5 flex">
-                    <div className="md:hidden ml-auto mr-0">{participateButton}</div>
+                    <div className="md:hidden ml-auto mr-0">
+                        <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} />
+                    </div>
                 </div>
                 <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <div className="flex-1 mx-4 sm:mt-0">
