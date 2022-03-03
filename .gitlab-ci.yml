@@ -24,36 +24,36 @@ test:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"'
 
-# PROD PIPELINE #
-build-prod:
-  stage: build
-  image: node:16.13-alpine
-  variables:
-    CI: "false"
-    REACT_APP_HTTP_PROTOCOL: "https"
-    REACT_APP_WS_PROTOCOL: "wss"
-    REACT_APP_API_URL: "iseplife.fr/api"
-  before_script:
-    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
-  script:
-    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build
-  artifacts:
-    paths:
-      - build/
-  retry: 2
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-deploy-prod:
-  stage: deploy
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  script:
-    - aws s3 rm s3://iseplife.fr --recursive
-    - aws s3 cp build/ s3://iseplife.fr --recursive
-  dependencies:
-    - build-prod
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+## PROD PIPELINE #
+#build-prod:
+#  stage: build
+#  image: node:16.13-alpine
+#  variables:
+#    CI: "false"
+#    REACT_APP_HTTP_PROTOCOL: "https"
+#    REACT_APP_WS_PROTOCOL: "wss"
+#    REACT_APP_API_URL: "iseplife.fr/api"
+#  before_script:
+#    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+#  script:
+#    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+#    - yarn run build
+#  artifacts:
+#    paths:
+#      - build/
+#  retry: 2
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#deploy-prod:
+#  stage: deploy
+#  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#  script:
+#    - aws s3 rm s3://iseplife.fr --recursive
+#    - aws s3 cp build/ s3://iseplife.fr --recursive
+#  dependencies:
+#    - build-prod
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 
 
@@ -76,7 +76,7 @@ build-dev:
     paths:
       - build/
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "staging"'
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 docker-build:
   stage: docker
   before_script:
@@ -100,6 +100,6 @@ deploy-dev:
   dependencies:
     - build-dev
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "staging"'
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 
