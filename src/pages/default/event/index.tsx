@@ -72,18 +72,24 @@ const Event: React.FC = () => {
 
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
 
+    const [showLoadingMap, setShowLoadingMap] = useState(false)
+
+    useEffect(() => { setTimeout(() => setShowLoadingMap(true), 200) }, [])// Wait for fast connections
+
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
-            <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={14}>
-                <TileLayer
-                    url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
-                    id="mapbox/streets-v11"
-                    accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
-                />
-                {coordinates && (
-                    <Marker position={coordinates}/>
-                )}
-            </Map>
+            {(event || showLoadingMap) &&
+                <Map className="w-full h-full" center={coordinates || [48.8453227,2.3280245]} zoom={14}>
+                    <TileLayer
+                        url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
+                        id="mapbox/streets-v11"
+                        accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
+                    />
+                    {coordinates && (
+                        <Marker position={coordinates}/>
+                    )}
+                </Map>
+            }
             <div className="container mx-auto px-4">
                 <EventMapPlace event={event} loading={!event} />
             </div>
