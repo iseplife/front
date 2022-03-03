@@ -88,7 +88,7 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({ loading, event, phone }) 
             <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
                 <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
             </div>
-            <div ref={placeShort} className={"px-4 py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300 ") + (placeShortOpen || "px-0")} style={{
+            <div ref={placeShort} className={"py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300") + (placeShortOpen ? " px-4" : " px-0")} style={{
                 maxWidth: placeShortOpen && (placeShortWidth || 9999) || 0
             }}>
                 {bigPlace}
