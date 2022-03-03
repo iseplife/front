@@ -36,12 +36,12 @@
 	"month": "Mois",
 	"week": "Semaine",
 	"type": {
-		"PARTY": "\uD83C\uDF89 Soirée",
-		"AFTERWORK": "\uD83C\uDF7B Afterwork",
-		"CONFERENCE": "\uD83C\uDF99 Conférence",
-		"WORKSHOP": "\uD83D\uDCBB Workshop",
-		"FORMATION": "\uD83D\uDCDA Formation",
-		"MEETING": "\uD83D\uDD14 Réunion"
+		"PARTY": "Soirée",
+		"AFTERWORK": "Afterwork",
+		"CONFERENCE": "Conférence",
+		"WORKSHOP": "Workshop",
+		"FORMATION": "Formation",
+		"MEETING": "Réunion"
 	},
 	"free": "Gratuit",
 	"event": "Évènement",

@@ -14,7 +14,14 @@ export const EventTypeColor: {[index: string]: string} = {
     [EventType.CONFERENCE]: "#a0aec0",
     [EventType.WORKSHOP]: "#4299e1",
     [EventType.FORMATION]: "#4299e1",
-    [EventType.PARTY]: "#f56565",
+    [EventType.MEETING]: "#f56565",
 }
 
-
+export const EventTypeEmoji: {[index: string]: string} = {
+    [EventType.PARTY]: "\uD83C\uDF89",
+    [EventType.AFTERWORK]: "\uD83C\uDF7B",
+    [EventType.CONFERENCE]: "\uD83C\uDF99",
+    [EventType.WORKSHOP]: "\uD83D\uDCBB",
+    [EventType.FORMATION]: "\uD83D\uDCDA",
+    [EventType.MEETING]: "\uD83D\uDD14",
+}

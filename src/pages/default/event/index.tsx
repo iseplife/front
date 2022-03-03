@@ -17,6 +17,7 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import EventEditorModal from "../../../components/Event/EventEditorModal"
 import EventDescription from "../../../components/Event/EventDescription"
 import EventParticipateButton from "../../../components/Event/EventParticipateButton"
+import { EventTypeEmoji } from "../../../constants/EventType"
 
 interface ParamTypes {
     id?: string
@@ -95,7 +96,7 @@ const Event: React.FC = () => {
                             <div className="grid place-items-center h-full">{day}</div>
                         </div>
 
-                        <div className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12" title={t(`type.${event.type}`)}>{t(`type.${event.type}`).replace(/[0-9A-zÀ-ÿ ]/g, "")}</div>
+                        <div className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12" title={t(`type.${event.type}`)}>{EventTypeEmoji[event.type]}</div>
                     </div>
                     <div className="ml-4">
                         <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">

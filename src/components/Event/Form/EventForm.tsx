@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react"
 import {Form, FormikProps} from "formik"
 import {EventForm as EventFormType, ExtendedMarker} from "../../../data/event/types"
-import EventType, {EventTypes} from "../../../constants/EventType"
+import EventType, {EventTypeEmoji, EventTypes} from "../../../constants/EventType"
 import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
 import {Marker, TileLayer, Map} from "react-leaflet"
@@ -33,7 +33,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             <div className="flex items-center justify-between mb-3 mr-3">
                 <Select defaultValue={EventType.AFTERWORK} onChange={value => setFieldValue("type", value)}>
                     {EventTypes.map(e =>
-                        <Option key={e} value={e}>{t(`type.${e}`)}</Option>
+                        <Option key={e} value={e}>{`${EventTypeEmoji[e]} ${t(`type.${e}`)}`}</Option>
                     )}
                 </Select>
                 <div className="flex items-center">
