@@ -36,12 +36,12 @@
 	"month": "Mois",
 	"week": "Semaine",
 	"type": {
-		"PARTY": "\uD83C\uDF89 Soirée",
-		"AFTERWORK": "\uD83C\uDF7B Afterwork",
-		"CONFERENCE": "\uD83C\uDF99 Conférence",
-		"WORKSHOP": "\uD83D\uDCBB Workshop",
-		"FORMATION": "\uD83D\uDCDA Formation",
-		"MEETING": "\uD83D\uDD14 Réunion"
+		"PARTY": "Soirée",
+		"AFTERWORK": "Afterwork",
+		"CONFERENCE": "Conférence",
+		"WORKSHOP": "Workshop",
+		"FORMATION": "Formation",
+		"MEETING": "Réunion"
 	},
 	"free": "Gratuit",
 	"event": "Évènement",
@@ -51,5 +51,15 @@
 	"gallery": "Galeries",
 	"published_only": "Évènements publiés seulement",
 	"admin_view": "Vue admin",
-	"ticket_url": "Acheter sa place"
+	"ticket_url": "Acheter sa place",
+	"date": {
+		"same_day_this_week": "{{day}} de {{start}} à {{end}}",
+		"diff_days": "du {{start}} au {{end}}",
+		"today": "Aujourd'hui",
+		"until_same_day": "Maintenant, jusqu'à {{end}}",
+		"until_diff_day": "Actuellement, jusqu'au {{end}}"
+	},
+	"see_more": "Voir plus...",
+	"online": "En ligne",
+	"participate": "Participer"
 }

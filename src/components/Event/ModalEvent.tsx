@@ -7,7 +7,7 @@ import {differenceInDays} from "date-fns"
 import {_format} from "../../util"
 import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
-import {EventTypeColor} from "../../constants/EventType"
+import {EventTypeColor, EventTypeEmoji} from "../../constants/EventType"
 import {Link} from "react-router-dom"
 import {Avatar} from "antd"
 import {faEuroSign, faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
@@ -24,7 +24,7 @@ export const ModalEventHeader: React.FC<ModalEventHeaderProps> = ({event}) => {
             <span
                 className="text-white inline-block rounded shadow m-1 px-2 py-1 text-xs font-semibold"
                 style={{backgroundColor: EventTypeColor[event.type]}}>
-                {t(`type.${event.type}`)}
+                {`${EventTypeEmoji[event.type]} ${t(`type.${event.type}`)}`}
             </span>
             <span className="ml-1">{event.title}</span>
         </Link>

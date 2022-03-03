@@ -12,8 +12,8 @@ export type Event = {
     endsAt: Date
     ticketURL?: string
     price?: number
-    location?: string
-    coordinates?: Marker
+    location?: string;
+    position?: EventPosition
     targets: Feed[]
     published: Date
     closed: boolean
@@ -50,6 +50,18 @@ export type EventForm = {
     published: Date
     closed: boolean
     club: number
+}
+
+export interface EventPosition {
+  coordinates: string;
+  
+  label: string;
+  housenumber: string;
+  postcode: string;
+  city: string;
+  context: string;
+  district: string;
+  street: string;
 }
 
 export type Marker = [number, number]

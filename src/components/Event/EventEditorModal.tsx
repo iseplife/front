@@ -3,7 +3,7 @@ import {Button, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {Event, EventForm as EventFormType} from "../../data/event/types"
 import EventEditForm from "./Form/EventEditForm"
-import {faEdit} from "@fortawesome/free-solid-svg-icons"
+import {faEdit, faPencilAlt} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
@@ -28,13 +28,16 @@ const EventEditorModal: React.FC<EventEditorModalProps> = ({values, onSubmit}) =
 
     return (
         <>
-            <Button
-                className="rounded px-2 self-center md:self-end bg-transparent hover:text-gray-600 text-gray-700 border-none shadow-none"
+            <button
+                className="w-full h-full grid place-items-center"
                 style={{width: "max-content"}}
                 onClick={() => setOpen(true)}
             >
-                <FontAwesomeIcon icon={faEdit} className="ml-2"/>
-            </Button>
+                <FontAwesomeIcon
+                    className="cursor-pointer text-white text-opacity-90 mx-1 group-hover:text-opacity-100 transition-colors"
+                    icon={faPencilAlt}
+                />
+            </button>
             {open && (
                 <Modal
                     className="md:w-2/3 w-4/5"
