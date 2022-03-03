@@ -1,21 +1,20 @@
 import React, {useContext, useMemo, useState} from "react"
-import {Button, Divider, Drawer} from "antd"
-import {Link} from "react-router-dom"
+import {Divider, Drawer} from "antd"
+import {Link, useLocation} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import {LoggedStudentPreview, Student, StudentPreview} from "../../data/student/types"
+import {LoggedStudentPreview, StudentPreview} from "../../data/student/types"
 import "./Navbar.css"
 import {Roles} from "../../data/security/types"
 import SearchBar from "../SearchBar"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
-import {faCogs, faHome, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {faCogs, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
-import {faBell, faCalendarAlt, faCompass} from "@fortawesome/free-regular-svg-icons"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
-import { cFaBellFull, cFaCalendarFull, cFaCompassFull } from "../../constants/CustomFontAwesome"
+import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline } from "../../constants/CustomFontAwesome"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -136,36 +135,27 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
         </div>
     </Link>
 )
+const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any }> = ({ route, selectedIcon, notSelectedIcon }) => {
+    const { pathname } = useLocation()
+    return <Link to={route}>
+        <button className="border-0 grid place-items-center h-full w-full text-2xl">
+            <div className="w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full">
+                <FontAwesomeIcon icon={pathname == route ? selectedIcon : notSelectedIcon} />
+            </div>
+        </button>
+    </Link>
+}
 const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
     return (
         <>
-            <div
-                className="md:hidden flex justify-around items-center shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
-                <Link to="/">
-                    <Button
-                        shape="circle"
-                        icon={<FontAwesomeIcon icon={faHome} className="text-xl"/>}
-                        className="border-0"
-                    />
-                </Link>
-                <Link to="/calendar">
-                    <Button
-                        shape="circle"
-                        icon={<FontAwesomeIcon icon={faCalendarAlt} className="text-xl"/>}
-                        className="border-0"
-                    />
-                </Link>
-                <Link to="/notifications">
-                    <Button
-                        shape="circle"
-                        icon={<FontAwesomeIcon icon={faBell} className="text-xl"/>}
-                        className="border-0"
-                    />
-                </Link>
-                <div className="cursor-pointer" onClick={() => setVisible(true)}>
+            <div className="md:hidden grid grid-cols-4 shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
+                <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
+                <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
+                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} />
+                <div className="cursor-pointer grid place-items-center h-full w-full" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}
                         name={user.firstName + " " + user.lastName}
