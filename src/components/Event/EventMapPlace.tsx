@@ -1,15 +1,17 @@
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Skeleton } from "antd"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { Event } from "../../data/event/types"
 
 interface EventMapPlaceProps {
-    event: Event
+    loading: boolean
+    event: Event | undefined
     phone?: boolean
 }
-const EventMapPlace: React.FC<EventMapPlaceProps> = ({ event, phone }) => {
+const EventMapPlace: React.FC<EventMapPlaceProps> = ({ loading, event, phone }) => {
     const [placeShortOpen, setPlaceShortOpen] = useState(true)
     const [placeShortWidth, setPlaceShortWidth] = useState(0)
     const [placeShortAnimation, setPlaceShortAnimation] = useState(false)
@@ -38,14 +40,32 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({ event, phone }) => {
     const place = useMemo(() => <div className="flex items-center sm:text-black">
         <div>
             <div className="font-semibold">
-                {position}
+                {
+                    loading ?
+                        <Skeleton 
+                            active
+                            title={false}
+                            paragraph={{ rows: 1, width: 250 }}
+                            className="-mb-3.5 mt-1.5"
+                        />
+                        : position
+                }
             </div>
             <div className="font-normal text-neutral-500 sm:text-xl">
-                {subPosition}
+                {
+                    loading ?
+                        <Skeleton 
+                            active
+                            title={false}
+                            paragraph={{ rows: 1, width: 200 }}
+                            className="-mb-3.5 mt-1.5"
+                        />
+                        : subPosition
+                }
             </div>
         </div>
         {event?.position?.coordinates && <FontAwesomeIcon icon={faExternalLinkAlt} className="text-base text-black/20 mr-0 ml-auto sm:ml-4" />}
-    </div>, [position, subPosition, event?.position?.coordinates])
+    </div>, [loading, position, subPosition, event?.position?.coordinates])
 
     const bigPlace = useMemo(() => {
         return event?.position?.coordinates ?
@@ -53,7 +73,7 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({ event, phone }) => {
                 {place}
             </Link>
             : place
-    }, [place, event?.position?.coordinates, event?.position?.label])
+    }, [loading, place, event?.position?.coordinates, event?.position?.label])
 
     return phone ?
         <div className={"flex items-center sm:hidden px-4 py-3 shadow-sm text-base rounded-lg bg-white transition-colors mt-1 sm:mt-5 " + (event?.position?.coordinates && "hover:bg-neutral-50")}>
@@ -68,7 +88,7 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({ event, phone }) => {
             <div className="bg-white/40 px-2 grid place-items-center cursor-pointer shadow-sm" onClick={togglePlaceShort}>
                 <div className={"h-0.5 rounded-full w-2.5 bg-neutral-400 transition-transform duration-300 " + (placeShortOpen || "rotate-90")}></div>
             </div>
-            <div ref={placeShort} className={"px-4 py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300 ") + (placeShortOpen || "px-0")} style={{
+            <div ref={placeShort} className={"py-2 overflow-hidden whitespace-nowrap " + (placeShortAnimation && "transition-all duration-300") + (placeShortOpen ? " px-4" : " px-0")} style={{
                 maxWidth: placeShortOpen && (placeShortWidth || 9999) || 0
             }}>
                 {bigPlace}

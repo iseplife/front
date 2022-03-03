@@ -13,7 +13,7 @@ import { AxiosPromise } from "axios"
 import { Page } from "../../data/request.type"
 
 interface GalleriesPreviewProps {
-    elementId: number
+    elementId: number | undefined
     getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>
     className?: string
 }
@@ -29,13 +29,13 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({elementId, getGaller
 
     useEffect(() => {
         setLoading(true)
-        getGalleriesCallback(elementId)
-            .then(res => {
-                setGalleriesPreview(res.data.content)
-            })
-            .catch(e => message.error(e))
-            .finally(() => setLoading(false))
-
+        if(elementId != undefined)
+            getGalleriesCallback(elementId)
+                .then(res => {
+                    setGalleriesPreview(res.data.content)
+                })
+                .catch(e => message.error(e))
+                .finally(() => setLoading(false))
     }, [elementId, getGalleriesCallback])
 
     return <div className={`flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 hidden sm:flex ${className}`}>
@@ -63,7 +63,7 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({elementId, getGaller
                     onCancel={closeModal}
                     footer={null}
                 >
-                    <GalleriesModal elementId={elementId} getGalleriesCallback={getGalleriesCallback} />
+                    {elementId != undefined && <GalleriesModal elementId={elementId} getGalleriesCallback={getGalleriesCallback} />}
                 </Modal>
             </div>
         }
