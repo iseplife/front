@@ -14,7 +14,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, 
 
     const skeletonLength = Array(10).fill(0).map(() => 100 + Math.random() * 80)
 
-    const tooLong = description?.length ?? 0 > descLengthThrottle
+    const tooLong = (description?.length ?? 0) > descLengthThrottle
     let totalLength = 0
     
     const [seeAll, setSeeAll] = useState(false)
