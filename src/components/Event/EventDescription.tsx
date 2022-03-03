@@ -1,22 +1,20 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, {useCallback, useRef, useState} from "react"
+import React, {useCallback, useState} from "react"
 import {useTranslation} from "react-i18next"
-import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons"
 import { Divider, Skeleton } from "antd"
 
 
 type EventDescriptionProps = {
     loading: boolean
-    description: string
+    description: string | undefined
     phone?: boolean
 }
 const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, loading}) => {
     const descLengthThrottle = 350
     const {t} = useTranslation("event")
 
-    const skeletonLength = Array(8).fill(0).map(() => 80 + Math.random() * 70)
+    const skeletonLength = Array(10).fill(0).map(() => 100 + Math.random() * 80)
 
-    const tooLong = description.length ?? 0 > descLengthThrottle
+    const tooLong = description?.length ?? 0 > descLengthThrottle
     let totalLength = 0
     
     const [seeAll, setSeeAll] = useState(false)
@@ -25,7 +23,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, 
 
     return <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
         <span className="text-neutral-900 font-semibold text-base">Description</span>
-        {!loading ?
+        {!loading && description ?
             <span>
                 {
                     description.split("\n").map((val, index, array) => {
@@ -50,9 +48,11 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, 
                 }
             </span>
             :
-            skeletonLength.map((length, index) =>
-                <Skeleton key={index} title paragraph={{ rows: 1, width: length }} />
-            )
+            <div className="mt-1">
+                {skeletonLength.map((length, index) =>
+                    <Skeleton key={index} title={false} active paragraph={{ rows: 1, width: length }} className="-mb-1" />
+                )}
+            </div>
         }
     </div>
 }
