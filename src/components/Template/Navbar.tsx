@@ -15,13 +15,14 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import {faBell, faCalendarAlt, faCompass} from "@fortawesome/free-regular-svg-icons"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
+import { cFaBellFull, cFaCalendarFull, cFaCompassFull } from "../../constants/CustomFontAwesome"
 
 type IconButtonProps = {
     icon: IconDefinition
 }
 const IconButton: React.FC<IconButtonProps> = ({icon}) => {
     return (
-        <div className="flex p-2 cursor-pointer rounded-full mx-3 hover:bg-indigo-400 hover:text-white text-indigo-300">
+        <div className="grid place-items-center p-2 cursor-pointer rounded-full mx-3 group-hover:bg-indigo-400/20 transition-colors text-indigo-400">
             <FontAwesomeIcon icon={icon}/>
         </div>
     )
@@ -69,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
     const [t] = useTranslation("notifications")
 
     return (
-        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30">
+        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center">
             <Link to="/" className="flex">
                 <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
             </Link>
@@ -77,16 +78,17 @@ const Header: React.FC<HeaderProps> = ({user}) => {
             <SearchBar/>
 
             <div className="hidden md:flex justify-end items-center py-5">
-                <div className="flex justify-around items-center mr-4">
-                    <Link to="/discovery">
-                        <IconButton icon={faCompass}/>
+                <div className="flex justify-around items-center mr-4 text-xl text-indigo-400">
+                    <Link to="/discovery" className="group">
+                        <IconButton icon={cFaCompassFull}/>
                     </Link>
-                    <Link to="/calendar">
-                        <IconButton icon={faCalendarAlt}/>
+                    <Link to="/calendar" className="group">
+                        <IconButton icon={cFaCalendarFull}/>
                     </Link>
                     <DropdownPanel
-                        icon={<IconButton icon={faBell}/>}
+                        icon={<IconButton icon={cFaBellFull}/>}
                         panelClassName="w-80 -right-6"
+                        buttonClassName="group"
                     >
                         <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
                             {unwatchedNotifications ? `Notifications (${unwatchedNotifications})` : "Notifications"}
@@ -99,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                 </div>
                 <DropdownPanel
                     icon={
-                        <div className="flex rounded-full ml-1 p-1 hover:bg-indigo-400 hover:text-white text-indigo-300">
+                        <div className="flex rounded-full ml-1 p-1 hover:bg-indigo-400/20 transition-colors font-medium text-indigo-400">
                             <StudentAvatar
                                 id={user.id}
                                 name={user.firstName + " " + user.lastName}
@@ -107,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                                 pictureSize={AvatarSizes.THUMBNAIL}
                                 size="small"
                             />
-                            <span className="mx-2 ">{user.firstName}</span>
+                            <span className="mx-2 grid place-items-center">{user.firstName}</span>
                         </div>
                     }
                     title={user.firstName + " " + user.lastName}
