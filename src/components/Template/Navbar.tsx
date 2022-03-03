@@ -130,8 +130,8 @@ type DrawerItemProps = {
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
     <Link to={link}>
         <div className={`flex flex-col cursor-pointer text-center mx-2 ${className}`}>
-            <FontAwesomeIcon icon={icon}/>
-            <span className="nav-footer-text">{children}</span>
+            <FontAwesomeIcon icon={icon} className="text-2xl mx-auto" />
+            <span className="nav-footer-text text-xs mt-1">{children}</span>
         </div>
     </Link>
 )
@@ -172,14 +172,14 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 onClose={() => setVisible(false)}
                 visible={visible}
             >
-                <div className="flex justify-around">
+                <div className="justify-around grid grid-cols-3" onClick={() => setVisible(false)}>
                     {payload.roles.includes(Roles.ADMIN) && (
                         <DrawerItem icon={faUserShield} link="/admin">
                             {t("administration")}
                         </DrawerItem>
                     )}
                     <DrawerItem icon={faCogs} link="/setting" className="text-red-600">
-                        {t("parameter")}
+                        {t("setting")}
                     </DrawerItem>
                     <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
                         {t("logout")}
