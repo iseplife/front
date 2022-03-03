@@ -67,10 +67,10 @@ build-dev:
     REACT_APP_WS_PROTOCOL: "wss"
     REACT_APP_API_URL: "dev.iseplife.fr/api"
   before_script:
-    - FRONT_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
   script:
     - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-    - yarn run build:dev
+    - yarn run build
   retry: 2
   artifacts:
     paths:
