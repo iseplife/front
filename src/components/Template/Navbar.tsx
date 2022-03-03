@@ -137,10 +137,11 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
 )
 const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any }> = ({ route, selectedIcon, notSelectedIcon }) => {
     const { pathname } = useLocation()
+    const selected = useMemo(() => pathname == route, [route, pathname])
     return <Link to={route}>
         <button className="border-0 grid place-items-center h-full w-full text-2xl">
-            <div className="w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full">
-                <FontAwesomeIcon icon={pathname == route ? selectedIcon : notSelectedIcon} />
+            <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 "+(selected && "scale-100")}>
+                <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
             </div>
         </button>
     </Link>
