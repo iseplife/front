@@ -140,7 +140,7 @@ const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelect
     const selected = useMemo(() => pathname == route, [route, pathname])
     return <Link to={route}>
         <button className="border-0 grid place-items-center h-full w-full text-2xl">
-            <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 "+(selected && "scale-100")}>
+            <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 text-indigo-400 "+(selected && "scale-100")}>
                 <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
             </div>
         </button>
