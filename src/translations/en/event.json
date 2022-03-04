@@ -57,7 +57,8 @@
 		"diff_days": "from {{start}} to {{end}}",
 		"until_same_day": "Now, until {{end}}",
 		"until_diff_day": "Now, until {{end}}",
-		"today": "Today"
+		"today": "Today",
+		"before": "It was "
 	},
 	"see_more": "See more...",
 	"online": "Online",
