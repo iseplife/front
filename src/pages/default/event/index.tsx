@@ -58,7 +58,7 @@ const Event: React.FC = () => {
             if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
                 const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
                 return t(now ? "event:date.until_same_day" : "event:date.same_day_this_week", {
-                    day: delayDays <= 1 ? t("event:date.today") : _format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "")),
+                    day: delayDays <= 1 ? t("event:date.today") && event.startsAt.getDate() == new Date().getDate() : _format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "")),
                     start: _format(event.startsAt, "HH:mm"),
                     end: _format(event.endsAt, "HH:mm"),
                 })
