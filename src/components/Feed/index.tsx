@@ -52,19 +52,20 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         return res.data.last
     }, [id, loading])
 
-    const onPostCreation = useCallback((post: PostUpdate) => (
-        setPosts(prevPosts => [...prevPosts,
+    const onPostCreation = useCallback((post: PostUpdate) => 
+        setPosts(prevPosts => [
             {
                 ...post,
-                feedId: id!,
+                feedId: id ?? post.author.feedId,
                 creationDate: new Date(),
                 liked: false,
                 nbComments: 0,
                 nbLikes: 0,
                 hasWriteAccess: true
-            }
+            },
+            ...prevPosts
         ])
-    ), [])
+    , [])
 
     const onPostRemoval = useCallback(async (id: number) => {
         setPosts(posts => posts.filter(p => p.id !== id))
