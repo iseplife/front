@@ -22,7 +22,7 @@
   "student_answer_not_found": "Cette réponse n'existe pas",
   "post_related_not_found": "Ce poste n'existe pas",
   "gallery_not_found": "Cette galerie n'existe pas",
-  "thread_not_found": "Cette thread n'existe pas",
+  "thread_not_found": "Ce thread n'existe pas",
   "comment_not_found": "Ce commentaire n'existe pas",
   "authentification_failed": "Echec d'authentification (sorry hacker)",
   "isep_cas_unavailable": "Impossible d'accéder au service CAS de l'ISEP, échec d'authentification ",
