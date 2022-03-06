@@ -13,6 +13,8 @@ import GroupMembersPanel from "../../../components/Group/member/GroupMembersPane
 import Feed from "../../../components/Feed"
 import AddMember from "../../../components/Group/member/AddMember"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
+import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
+import { SubscribableType } from "../../../data/subscription/SubscribableType"
 
 interface ParamTypes {
     id?: string
@@ -102,6 +104,15 @@ const Group: React.FC = () => {
         [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
     }), [group, onDelete, onPromote, onDemote, orga])
 
+    const [extensive, setExtensive] = useState(group?.subscribed.extensive)
+
+    useEffect(() => setExtensive(group?.subscribed.extensive), [group?.subscribed])
+
+    const handleExtensive = useCallback((newExtensive: boolean) => {
+        if (group)
+            setExtensive(group.subscribed.extensive = newExtensive)
+    }, [group?.subscribed])
+
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
@@ -115,6 +126,11 @@ const Group: React.FC = () => {
                                 <FontAwesomeIcon className="mr-1.5 text-sm"  icon={group.restricted ? faLock : faGlobeEurope}/>
                                 {t(group.restricted ? "restricted" : "public")}
                             </h6>
+                        </div>
+                        <div className="mr-0 ml-auto">
+                            {group &&
+                                <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={extensive!} id={group?.id} type={SubscribableType.GROUP} />
+                            }
                         </div>
                     </div>
                 )}

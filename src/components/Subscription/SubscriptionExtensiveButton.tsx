@@ -19,7 +19,7 @@ const SubscriptionExtensiveButton: React.FC<SubscriptionExtensiveButtonProps> = 
             subscribe(id, type, newExtensive).then(() => updateExtensive(newExtensive))
         }
     }, [extensive, id, type])
-    return <div className="w-12 grid place-items-center relative ml-0 mr-auto">
+    return <div className="w-12 grid place-items-center relative ml-0 mr-auto h-10">
         <FontAwesomeIcon onClick={handleExtensive} icon={extensive ? faSolidBell : faBell} className="text-blue-500 text-2xl cursor-pointer hover:text-opacity-90" />
         {extensive && <FontAwesomeIcon icon={faCheck} className="top-1.5 right-[3px] pointer-events-none text-blue-500 cursor-pointer text-sm absolute transform scale-75" />}
     </div>
