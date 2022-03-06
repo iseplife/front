@@ -145,7 +145,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     return (
         <FeedContext.Provider value={{authors}}>
             <div className={`${className}`} style={{ ...style, maxWidth: `calc(100vw - ${feedMargin}px)` }} ref={feedElement}>
-                <Divider className="text-gray-700 text-lg" orientation="left">Publications</Divider>
+                <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
                 {allowPublication && (
                     <BasicPostForm user={user} feedId={id} onPost={onPostCreation}>
                         <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">

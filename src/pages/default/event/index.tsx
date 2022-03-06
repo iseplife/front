@@ -26,7 +26,7 @@ interface ParamTypes {
 
 const Event: React.FC = () => {
     const {id} = useParams<ParamTypes>()
-    const {t, i18n} = useTranslation(["event", "gallery"])
+    const {t, i18n} = useTranslation(["event", "gallery", "common"])
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
 
@@ -42,7 +42,7 @@ const Event: React.FC = () => {
     const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed} />), [event?.feed])
 
     const tabs = useMemo(() => ({
-        "Publications": feed,
+        [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ? <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries} /> : <></>,
     }), [event?.feed])
     const [tab, setTab] = useState<number>(0)
