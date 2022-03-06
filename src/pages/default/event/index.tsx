@@ -19,6 +19,7 @@ import EventDescription from "../../../components/Event/EventDescription"
 import EventParticipateButton from "../../../components/Event/EventParticipateButton"
 import { EventTypeEmoji } from "../../../constants/EventType"
 import SkeletonAvatar from "antd/lib/skeleton/Avatar"
+import { isSameDay } from "date-fns"
 
 interface ParamTypes {
     id?: string
@@ -52,21 +53,27 @@ const Event: React.FC = () => {
     
     const date = useMemo(() => {
         if (event) {
+            let toRespond: string
             const startMs = event.startsAt.getTime()
             const fullDay = event.startsAt.getFullYear() == new Date().getFullYear() ? "d LLL" : "d LLL yyyy"
             const now = startMs < new Date().getTime()
+            const finished = event.endsAt.getTime() < new Date().getTime()
             if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
                 const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
-                return t(now ? "event:date.until_same_day" : "event:date.same_day_this_week", {
-                    day: delayDays <= 1 ? t("event:date.today") : _format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "")),
+                toRespond = t(now && !finished ? "event:date.until_same_day" : "event:date.same_day_this_week", {
+                    day: isSameDay(new Date(), event.startsAt) ?
+                        t("event:date.today") : // If same day, we show "Today"
+                        _format(event.startsAt, `EEEE${(delayDays > 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
                     start: _format(event.startsAt, "HH:mm"),
                     end: _format(event.endsAt, "HH:mm"),
                 })
             }else 
-                return t(now ? "event:date.until_diff_day" : "event:date.diff_days", {
+                toRespond = t(now ? "event:date.until_diff_day" : "event:date.diff_days", {
                     start: _format(event.startsAt, fullDay + " HH:mm"),
                     end: _format(event.endsAt, fullDay + " HH:mm"),
                 })
+
+            return (finished ? t("event:date.before")  : "") + toRespond
         }
     }, [event?.startsAt, event?.endsAt])
 
