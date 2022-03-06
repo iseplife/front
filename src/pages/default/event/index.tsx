@@ -19,6 +19,7 @@ import EventDescription from "../../../components/Event/EventDescription"
 import EventParticipateButton from "../../../components/Event/EventParticipateButton"
 import { EventTypeEmoji } from "../../../constants/EventType"
 import SkeletonAvatar from "antd/lib/skeleton/Avatar"
+import { isSameDay } from "date-fns"
 
 interface ParamTypes {
     id?: string
@@ -60,7 +61,9 @@ const Event: React.FC = () => {
             if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
                 const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
                 toRespond = t(now && !finished ? "event:date.until_same_day" : "event:date.same_day_this_week", {
-                    day: delayDays <= 1 && event.startsAt.getDate() == new Date().getDate() ? t("event:date.today") : _format(event.startsAt, "EEEE" + (delayDays > 7 ? ` ${fullDay}` : "")),
+                    day: isSameDay(new Date(), event.startsAt) ?
+                        t("event:date.today") : // If same day, we show "Today"
+                        _format(event.startsAt, `EEEE${(delayDays > 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
                     start: _format(event.startsAt, "HH:mm"),
                     end: _format(event.endsAt, "HH:mm"),
                 })
