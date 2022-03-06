@@ -20,6 +20,9 @@ import EventParticipateButton from "../../../components/Event/EventParticipateBu
 import { EventTypeEmoji } from "../../../constants/EventType"
 import SkeletonAvatar from "antd/lib/skeleton/Avatar"
 import { isSameDay } from "date-fns"
+import { subscribe, unsubscribe } from "../../../data/subscription"
+import { SubscribableType } from "../../../data/subscription/SubscribableType"
+import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
 
 interface ParamTypes {
     id?: string
@@ -83,6 +86,39 @@ const Event: React.FC = () => {
 
     useEffect(() => { setTimeout(() => setShowLoadingMap(true), 200) }, [])// Wait for fast connections
 
+    const [subscription, setSubscription] = useState(event?.subscribed)
+
+    useEffect(() => setSubscription(event?.subscribed), [event?.subscribed])
+    
+    const handleSubscription = useCallback(() => {
+        if (event) {
+            const wasSubscribed = event.subscribed;
+            (event.subscribed ? unsubscribe : subscribe)(event.id, SubscribableType.EVENT).then(_ => {
+                setSubscription(event.subscribed = wasSubscribed ? undefined : { extensive: false })
+            })
+        }
+    }, [event])
+    const handleExtensive = useCallback((newExtensive: boolean) => {
+        if(event)
+            setSubscription(event.subscribed = { extensive: newExtensive })
+    }, [event])
+
+    const subscribeElement = useMemo(() => 
+        event &&
+            <>
+                <div onClick={handleSubscription} className={"h-10 font-bold cursor-pointer select-none rounded-full px-3.5 text-white text-base items-center flex " + (event.subscribed ? "border-blue-500 border-2 text-blue-500 hover:text-opacity-80 hover:border-opacity-80" : "bg-blue-500 hover:bg-opacity-90")}>{event.subscribed ? "Unfollow" : "Follow"}</div>
+                {event.subscribed &&
+                    <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={subscription?.extensive ?? false} id={event?.id} type={SubscribableType.CLUB} />
+                }
+            </>, [event?.id, subscription, handleSubscription, handleExtensive])
+            
+    const participateCallback = useCallback(() => {
+        if (event)
+            subscribe(event?.id, SubscribableType.EVENT, true).then(() =>
+                setSubscription(event.subscribed = { extensive: true })
+            )
+    }, [event])
+
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
             {(event || showLoadingMap) &&
@@ -117,8 +153,11 @@ const Event: React.FC = () => {
                             <div className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
                                 { date }
                             </div>
-                            <div className="text-2xl md:text-3xl font-bold leading-6">
-                                { event.title }
+                            <div className="text-2xl md:text-3xl font-bold leading-6 flex items-center">
+                                {event.title}
+                                <div className="ml-4 md:flex hidden">
+                                    {subscribeElement}
+                                </div>
                             </div>
                         </>
                         : 
@@ -129,12 +168,15 @@ const Event: React.FC = () => {
                     }
                 </div>
                 <div className="ml-auto mr-0 hidden md:block">
-                    <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} />
+                    <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} onClick={participateCallback} />
                 </div>
             </div>
             <div className="w-full px-4 mt-5 flex">
+                <div className="md:hidden flex">
+                    {subscribeElement}
+                </div>
                 <div className="md:hidden ml-auto mr-0">
-                    <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} />
+                    <EventParticipateButton price={event?.price} ticketURL={event?.ticketURL} onClick={participateCallback} />
                 </div>
             </div>
             <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
