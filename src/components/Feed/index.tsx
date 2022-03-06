@@ -52,6 +52,11 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         return res.data.last
     }, [id, loading])
 
+    useEffect(() => {
+        if (posts?.length)
+            setEmpty(false)
+    }, [posts?.length])
+
     const onPostCreation = useCallback((post: PostUpdate) => 
         setPosts(prevPosts => [
             {
