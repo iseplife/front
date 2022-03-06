@@ -115,7 +115,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     break
                 case 404:
                     message.error(t(error.message))
-                    this.props.history.push("/404")
+                    this.props.history.replace("/404")
 
                     break
                 case 500:
