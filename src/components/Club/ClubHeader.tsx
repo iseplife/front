@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBell as faSolidBell, faCheck } from "@fortawesome/free-solid-svg-icons"
 import { faBell } from "@fortawesome/free-regular-svg-icons"
 import SubscriptionExtensiveButton from "../Subscription/SubscriptionExtensiveButton"
+import SubscriptionButton from "../Subscription/SubscriptionButton"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -23,17 +24,14 @@ const ClubHeader: React.FC = () => {
     ), [club.logoUrl])
 
     
-    const handleSubscription = useCallback(() => {
+    const handleSubscription = useCallback((subscribed) => {
         if (club) {
-            const wasSubscribed = club.subscribed;
-            (club.subscribed ? unsubscribe : subscribe)(club.id, SubscribableType.CLUB).then(_ => {
-                dispatch({
-                    type: ClubActionType.UPDATE_CLUB,
-                    payload: {
-                        ...club,
-                        subscribed: wasSubscribed ? undefined : { extensive: false },
-                    }
-                })
+            dispatch({
+                type: ClubActionType.UPDATE_CLUB,
+                payload: {
+                    ...club,
+                    subscribed: subscribed ? { extensive: false } : undefined,
+                }
             })
         }
     }, [club])
@@ -60,7 +58,7 @@ const ClubHeader: React.FC = () => {
                     <div className="flex ml-4 md:-mt-5 font-bold flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                         <h1 className="text-neutral-900 text-3xl mb-0 -mt-1 ml-0.5 sm:ml-0 mr-auto">{club.name}</h1>
                         <div className="flex">
-                            <div onClick={handleSubscription} className={"py-1.5 cursor-pointer select-none rounded-full px-3.5 text-white text-base items-center flex " + (club.subscribed ? "border-blue-500 border-2 text-blue-500 hover:text-opacity-80 hover:border-opacity-80" : "bg-blue-500 hover:bg-opacity-90")}>{club.subscribed ? "Unfollow" : "Follow"}</div>
+                            <SubscriptionButton id={club?.id} subscribed={!!club?.subscribed} type={SubscribableType.CLUB} updateSubscription={handleSubscription} />
                             {club.subscribed &&
                                 <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={club?.subscribed?.extensive} id={club?.id} type={SubscribableType.CLUB} />
                             }

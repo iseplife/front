@@ -23,6 +23,7 @@ import { isSameDay } from "date-fns"
 import { subscribe, unsubscribe } from "../../../data/subscription"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
+import SubscriptionButton from "../../../components/Subscription/SubscriptionButton"
 
 interface ParamTypes {
     id?: string
@@ -90,13 +91,9 @@ const Event: React.FC = () => {
 
     useEffect(() => setSubscription(event?.subscribed), [event?.subscribed])
     
-    const handleSubscription = useCallback(() => {
-        if (event) {
-            const wasSubscribed = event.subscribed;
-            (event.subscribed ? unsubscribe : subscribe)(event.id, SubscribableType.EVENT).then(_ => {
-                setSubscription(event.subscribed = wasSubscribed ? undefined : { extensive: false })
-            })
-        }
+    const handleSubscription = useCallback((subscribed: boolean) => {
+        if (event)
+            setSubscription(subscribed ? { extensive: false } : undefined)
     }, [event])
     const handleExtensive = useCallback((newExtensive: boolean) => {
         if(event)
@@ -106,8 +103,8 @@ const Event: React.FC = () => {
     const subscribeElement = useMemo(() => 
         event &&
             <>
-                <div onClick={handleSubscription} className={"h-10 font-bold cursor-pointer select-none rounded-full px-3.5 text-white text-base items-center flex " + (event.subscribed ? "border-blue-500 border-2 text-blue-500 hover:text-opacity-80 hover:border-opacity-80" : "bg-blue-500 hover:bg-opacity-90")}>{event.subscribed ? "Unfollow" : "Follow"}</div>
-                {event.subscribed &&
+                <SubscriptionButton id={event?.id} subscribed={!!subscription} type={SubscribableType.EVENT} updateSubscription={handleSubscription} />
+                {subscription &&
                     <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={subscription?.extensive ?? false} id={event?.id} type={SubscribableType.CLUB} />
                 }
             </>, [event?.id, subscription, handleSubscription, handleExtensive])
