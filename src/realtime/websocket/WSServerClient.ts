@@ -2,6 +2,7 @@ import MessageDecoder from "../MessageDecoder"
 import DataWriter from "../DataWriter"
 import ConnectedListener from "../listeners/ConnectedListener"
 import PacketOut from "../protocol/PacketOut"
+import PacketListener from "../protocol/listener/PacketListener"
 
 class WSServerClient {
     private socket!: WebSocket
@@ -9,6 +10,8 @@ class WSServerClient {
     private queue: PacketOut[] = []
     private buffer: DataWriter = new DataWriter(new ArrayBuffer(1024 * 2))
     private accessToken!: string
+
+    public listeners: PacketListener[] = []
 
     private _connected!: boolean
     get connected() { return this._connected }
@@ -71,6 +74,8 @@ class WSServerClient {
 
     public disconnect() {
         console.log("disconnect")
+        for(const listener of this.listeners)
+            listener.unregister()
         this.socket.close()
     }
 }
@@ -83,5 +88,9 @@ function initWebSocket(ip: string) {
 function getWebSocket() {
     return instance
 }
+function logoutWebSocket() {
+    instance?.disconnect()
+    instance = undefined!
+}
 
-export { WSServerClient, getWebSocket, initWebSocket}
+export { WSServerClient, getWebSocket, initWebSocket, logoutWebSocket}

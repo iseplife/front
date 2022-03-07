@@ -13,6 +13,7 @@ export default class PacketListener {
             if(!key.prototype.listeners.find((handler: PacketHandlerFunction) => handler.instance == this && handler.method == func))
                 key.prototype.listeners.push(new PacketHandlerFunction(func, this))
         })
+        this.client.listeners.push(this)
     }
 
     public unregister() {
@@ -28,5 +29,7 @@ export default class PacketListener {
             const listeners = packet.prototype.listeners as PacketHandlerFunction[]
             packet.prototype.listeners = listeners.filter(handler => handler.instance != this)
         }
+        
+        this.client.listeners.splice(this.client.listeners.indexOf(this), 1)
     }
 }
