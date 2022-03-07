@@ -2,8 +2,6 @@ import React, {useCallback, useEffect, useState} from "react"
 import {useTranslation} from "react-i18next"
 import {Divider} from "antd"
 import {toggleThreadLike} from "../../data/thread"
-import {getWSService} from "../../realtime/services/WSService"
-import WSPostsService from "../../realtime/services/WSPostsService"
 import {formatDateWithTimer} from "../../util"
 import StudentAvatar from "../Student/StudentAvatar"
 import {AvatarSizes} from "../../constants/MediaSizes"
@@ -30,12 +28,6 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
             setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
         }
     }, [])
-
-    useEffect(() => {
-        getWSService(WSPostsService).subscribe(post)
-
-        return () => getWSService(WSPostsService).unsubscribe(post)
-    }, [post.id])
 
     const [formattedDate, setFormattedDate] = useState<string>("")
     useEffect(() => formatDateWithTimer(post.publicationDate, t, setFormattedDate), [post.publicationDate])

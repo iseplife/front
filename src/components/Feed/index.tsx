@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useRef, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPost, getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
@@ -12,8 +12,6 @@ import PostCreateForm from "../Post/Form/PostCreateForm"
 import {faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
-import {getWSService} from "../../realtime/services/WSService"
-import WSFeedService from "../../realtime/services/WSFeedService"
 import {AppContext} from "../../context/app/context"
 import {FeedContext} from "../../context/feed/context"
 import { Author } from "../../data/request.type"
@@ -136,14 +134,6 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         
         return () => window.removeEventListener("resize", fnc)
     }, [feedElement?.current])
-
-    useEffect(() => {
-        if (id !== undefined) {
-            getWSService(WSFeedService).subscribe(id)
-            return () => getWSService(WSFeedService).unsubscribe(id)
-        }
-    }, [id])
-
 
 
     return (

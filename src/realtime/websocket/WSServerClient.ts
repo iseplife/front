@@ -3,6 +3,8 @@ import DataWriter from "../DataWriter"
 import ConnectedListener from "../listeners/ConnectedListener"
 import PacketOut from "../protocol/PacketOut"
 import PacketListener from "../protocol/listener/PacketListener"
+import FeedListener from "../listeners/FeedListener"
+import EventListener from "../listeners/EventListener"
 
 class WSServerClient {
     private socket!: WebSocket
@@ -51,6 +53,8 @@ class WSServerClient {
 
     private _registerListeners() {
         new ConnectedListener(this).register()
+        new FeedListener(this).register()
+        new EventListener(this).register()
     }
 
     public setLogged() {

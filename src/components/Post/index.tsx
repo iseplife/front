@@ -12,8 +12,6 @@ import PostEditForm from "./Form/PostEditForm"
 import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {getWSService} from "../../realtime/services/WSService"
-import WSPostsService from "../../realtime/services/WSPostsService"
 import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
 import {deletePost, pinPost} from "../../data/post"
@@ -80,8 +78,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
 
     let post!: HTMLDivElement
     useEffect(() => {
-        getWSService(WSPostsService).subscribe(data)
-
         //Petite opti
         const scrollListener = () => {
             const boundings = post.getBoundingClientRect()
@@ -96,7 +92,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
 
         return () => {
             main?.removeEventListener("scroll", scrollListener)
-            getWSService(WSPostsService).unsubscribe(data)
         }
     }, [data.id])
 
