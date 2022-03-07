@@ -39,7 +39,7 @@
   "already_tagged": "L'utilisateur est déjà identifié",
   "poll_finished": "Le sondage est terminé",
   "choice_already_picked": "Vous avez déjà voté",
-  "invalid_embed_type": "Type d'attachement renseigné invalid",
+  "invalid_embed_type": "Type d'attachement renseigné invalide",
   "fail_deserialize_data": "Impossible de traduire la requête",
   "fail_serialize_data": "Impossible de traduire la requête"
 }
