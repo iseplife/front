@@ -30,7 +30,7 @@
   "student_id_already_exist": "Student id is already taken",
   "member_already_exist": "Student is already part of club",
   "minimum_admins_size_required": "Club needs at least 1 administrator",
-  "pseudo_gallery_max_size_reached": "Impossible to attached more than 5 images",
+  "pseudo_gallery_max_size_reached": "You can't attach more than 5 images",
   "image_already_attached": "Image is already linked to a gallery",
   "images_not_attached_to_gallery": "Image isn't link to this gallery",
   "archiving_impossible": "Impossible to archive this group",
