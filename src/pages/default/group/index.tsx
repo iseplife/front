@@ -22,7 +22,7 @@ export enum GroupPanel {
     MEMBERS,
 }
 const Group: React.FC = () => {
-    const {t} = useTranslation("group")
+    const {t} = useTranslation(["group", "common"])
     const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
@@ -98,7 +98,7 @@ const Group: React.FC = () => {
     }, [])
 
     const tabs = useMemo(() => ({
-        "Publications": <Feed id={group?.feedId} loading={!group} />,
+        [t("common:posts")]: <Feed id={group?.feedId} loading={!group} />,
         [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
     }), [group, onDelete, onPromote, onDemote, orga])
 

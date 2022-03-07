@@ -97,6 +97,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
             const {t} = this.props
+            console.debug(`[${error.code}] ${error.message}`)
+
             /* We handle only special error which required specific behavior, otherwise display error message */
             switch (error.response.status) {
                 case 503:
@@ -111,14 +113,17 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                         message.error(t("user_disconnected"))
                     }
                     break
+                case 404:
+                    message.error(t(error.message))
+                    this.props.history.replace("/404")
+
+                    break
                 case 500:
                     message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
-                    message.error(t(error.message))
                     break
                 default:
                     message.error(t(error.message))
 
-                    console.debug(`[${error.code}] ${error.message}`)
                     return Promise.reject(error)
             }
         } else {

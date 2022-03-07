@@ -32,7 +32,7 @@ const Club: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
-    const [t] = useTranslation("club")
+    const [t] = useTranslation(["club", "common"])
 
 
     const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
@@ -56,7 +56,7 @@ const Club: React.FC = () => {
     }, [id])
 
     const tabs = useMemo(() => ({
-        "Publications": <Feed
+        [t("common:posts")]: <Feed
             loading={!club.feed}
             id={club.feed}
             allowPublication={false}
