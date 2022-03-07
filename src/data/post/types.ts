@@ -54,6 +54,7 @@ export type Post = {
 
 export type PostUpdate = {
     id: number
+    feedId: number
     author: Author
     description: string
     publicationDate: Date
