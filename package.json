@@ -42,6 +42,7 @@
     "date-fns": "^2.8.1",
     "formik": "^2.0.7",
     "i18next": "^19.0.2",
+    "idb": "^7.0.0",
     "leaflet": "1.6.0",
     "lightbox-react": "^0.3.8",
     "pastel-color": "^1.0.3",

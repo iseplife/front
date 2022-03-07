@@ -5,6 +5,8 @@ import PacketOut from "../protocol/PacketOut"
 import PacketListener from "../protocol/listener/PacketListener"
 import FeedListener from "../listeners/FeedListener"
 import EventListener from "../listeners/EventListener"
+import WSEventType from "./WSEventType"
+import NotificationManager from "../../datamanager/NotificationManager"
 
 class WSServerClient {
     private socket!: WebSocket
@@ -42,13 +44,24 @@ class WSServerClient {
         this.socket.onopen = (event) => {
             this.socket.send(this.accessToken)
             this._connected = true
+            this._dispatchConnected()
         }
-        // this.socket.onclose = (event) => {}
-        // this.socket.onerror = (event) => {}
-        this.socket.onmessage = (event) => {
+        this.socket.onclose = this.socket.onerror = this._dispatchDisconnected
+        this.socket.onmessage = (event) => 
             this.messageDecoder.decode(event.data)
-        }
         this._registerListeners()
+
+        new NotificationManager()
+    }
+
+    private _dispatchDisconnected(){
+        const event = new Event(WSEventType.DISCONNECTED)
+        window.dispatchEvent(event)
+    }
+
+    private _dispatchConnected(){
+        const event = new Event(WSEventType.DISCONNECTED)
+        window.dispatchEvent(event)
     }
 
     private _registerListeners() {
