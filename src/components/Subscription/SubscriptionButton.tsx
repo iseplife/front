@@ -31,8 +31,8 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
     return <div 
         onClick={handleSubscription}
         className={
-            "h-10 font-bold cursor-pointer select-none rounded-full text-white text-base grid place-items-center group "
-            + (subscribed ? "border-blue-400 border-2 text-blue-400 hover:text-red-500 hover:border-red-500 hover:bg-red-400/10 px-3.5" : "bg-blue-400 hover:bg-opacity-90 px-5")
+            "h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group "
+            + (subscribed ? "border-indigo-400 border-2 text-indigo-400 hover:text-red-500 hover:border-red-500 hover:bg-red-400/10 px-3.5" : "bg-indigo-400 hover:bg-opacity-90 px-5 text-white")
         }
         style={{ minWidth }}
         onMouseEnter={mouseEnterCallback}
