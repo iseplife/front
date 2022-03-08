@@ -24,6 +24,8 @@ export default class PacketListener {
     public unregister() {
         if(this.registered)
             this.registered = false
+        else
+            return
         
         console.log("[WebSocket packetlistener debug] Unregistering ", this)
         const packets = new Set<any>()

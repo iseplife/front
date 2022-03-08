@@ -91,7 +91,7 @@ export default class NotificationManager extends DataManager<Notification> {
     }
 
 }
-let notificationManager: NotificationManager
+let notificationManager = new NotificationManager(undefined!)
 
 window.addEventListener("logged", () => (notificationManager = new NotificationManager(getWebSocket())).init())
 

@@ -101,6 +101,8 @@ export default abstract class DataManager<T> extends PacketListener {
         this.database.close()
         
         super.unregister()
+
+        this.registredEventsListener.forEach(event => window.removeEventListener(...event))
     }
     
     protected abstract initData(): Promise<void>
