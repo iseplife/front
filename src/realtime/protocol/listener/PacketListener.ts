@@ -3,10 +3,15 @@ import PacketHandlerFunction from "./PacketHandlerFunction"
 
 export default class PacketListener {
     listeners!: Map<any, string>
+    registered = false
 
     constructor(public client: WSServerClient) { }
 
     public register() {
+        if(this.registered)
+            return
+        this.registered = true
+
         console.log("[WebSocket packetlistener debug] Registering ", this);
         (Object.getPrototypeOf(this) as PacketListener).listeners.forEach((value, key) => {
             const func = (this as any)[value]
@@ -17,6 +22,9 @@ export default class PacketListener {
     }
 
     public unregister() {
+        if(this.registered)
+            this.registered = false
+        
         console.log("[WebSocket packetlistener debug] Unregistering ", this)
         const packets = new Set<any>()
         const prototype = (Object.getPrototypeOf(this) as PacketListener)

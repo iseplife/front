@@ -2,6 +2,7 @@ import Protocol from "../Protocol"
 import WSPSConnected from "./packets/server/WSPSConnected"
 import WSPSEventCreated from "./packets/server/WSPSEventCreated"
 import WSPSFeedPostCreated from "./packets/server/WSPSFeedPostCreated"
+import WSPSNotificationRecieved from "./packets/server/WSPSNotificationRecieved"
 
 class ProtocolV1 implements Protocol {
 
@@ -24,6 +25,7 @@ class ProtocolV1 implements Protocol {
         const packetsServer: any[] = []
         packetsServer.push(WSPSConnected)
         packetsServer.push(WSPSFeedPostCreated)
+        packetsServer.push(WSPSNotificationRecieved)
         packetsServer.push(WSPSEventCreated)
         const packetsClient: any[] = []
 

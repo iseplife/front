@@ -15,6 +15,8 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
 import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline } from "../../constants/CustomFontAwesome"
+import { useLiveQuery } from "dexie-react-hooks"
+import { notificationManager } from "../../datamanager/NotificationManager"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -65,7 +67,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({user}) => {
-    const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
+    const unwatchedNotifications = useLiveQuery(() => notificationManager?.getUnwatched(), [])
     const [t] = useTranslation("notifications")
 
     return (
@@ -85,12 +87,17 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                         <IconButton icon={cFaCalendarFull}/>
                     </Link>
                     <DropdownPanel
-                        icon={<IconButton icon={cFaBellFull}/>}
+                        icon={<div>
+                            <IconButton icon={cFaBellFull}/>
+                            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications ? "scale-100" : "scale-0")}>
+                                {Math.min(unwatchedNotifications ?? 0, 9)}
+                            </div>
+                        </div>}
                         panelClassName="w-80 -right-6"
                         buttonClassName="group"
                     >
                         <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
-                            {unwatchedNotifications ? `Notifications (${unwatchedNotifications})` : "Notifications"}
+                            {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
                             <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
                                 {t("see_more")}
                             </Link>
@@ -135,18 +142,26 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
         </div>
     </Link>
 )
-const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any }> = ({ route, selectedIcon, notSelectedIcon }) => {
+const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any, unwatchedNotifications?: number }> = ({ route, selectedIcon, notSelectedIcon, unwatchedNotifications }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
     return <Link to={route}>
         <button className="border-0 grid place-items-center h-full w-full text-2xl">
-            <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 text-indigo-400 "+(selected && "scale-100")}>
-                <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
+            <div className="relative">
+                <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 text-indigo-400 "+(selected && "scale-100")}>
+                    <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
+                </div>
+                
+                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(unwatchedNotifications ? "scale-100" : "scale-0")}>
+                    {Math.min(unwatchedNotifications ?? 0, 9)}
+                </div>
             </div>
         </button>
     </Link>
 }
 const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
+    const unwatchedNotifications = useLiveQuery(() => notificationManager?.getUnwatched(), [])
+    
     const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
@@ -155,7 +170,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
             <div className="md:hidden grid grid-cols-4 shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
                 <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
                 <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
-                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} />
+                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} unwatchedNotifications={unwatchedNotifications} />
                 <div className="cursor-pointer grid place-items-center h-full w-full" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}

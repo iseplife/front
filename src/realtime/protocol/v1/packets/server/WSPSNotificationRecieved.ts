@@ -1,4 +1,4 @@
-import { PostUpdate } from "../../../../../data/post/types"
+import { Notification } from "../../../../../data/notification/types"
 import DataReader from "../../../../DataReader"
 import PacketIn from "../../../PacketIn"
 
@@ -8,6 +8,7 @@ export default class WSPSNotificationRecieved implements PacketIn {
 
     read(dataReader: DataReader): void {
         this.notification = JSON.parse(dataReader.readString())
+        this.notification.creation = new Date(this.notification.creation)
     }
 
 }

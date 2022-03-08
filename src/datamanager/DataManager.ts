@@ -1,7 +1,9 @@
 import WSEventType from "../realtime/websocket/WSEventType"
 import Dexie from "dexie"
+import PacketListener from "../realtime/protocol/listener/PacketListener"
+import { WSServerClient } from "../realtime/websocket/WSServerClient"
 
-export default abstract class DataManager<T> {
+export default abstract class DataManager<T> extends PacketListener {
     private needDataLoad = false
 
     protected _currentPage = -1
@@ -9,13 +11,15 @@ export default abstract class DataManager<T> {
     protected _waitingForFetchEnd: (() => void)[] = []
 
     protected database!: Dexie
-    constructor(name: string, indexedProps: string[]) {
+    constructor(name: string, indexedProps: string[], wsServerClient: WSServerClient) {
+        super(wsServerClient)
+
         this.database = new Dexie(name)
         this.database.version(1).stores({
             data: indexedProps.join(", "), // Primary key and indexed props
             context: "type",
         })
-        this.database.table("context").delete("minFreshId")
+        this.removeContext("minFreshId")
 
         this.registerEvent("logout", () => 
             this.unregister()
@@ -29,24 +33,36 @@ export default abstract class DataManager<T> {
     protected getTable() {
         return this.database.table("data")
     }
+    protected getContext(type: string) {
+        return this.database.table("context").where("type").equals(type).first()
+    }
+    protected setContext(type: string, object: {[key: string]: unknown} = {}) {
+        return this.database.table("context").put({
+            type,
+            ...object
+        })
+    }
+    protected removeContext(type: string) {
+        return this.database.table("context").delete(type)
+    }
     public async getMinFresh(): Promise<number> {
-        return (await this.database.table("context").where("type").equals("minFreshId").first())?.objectId ?? Number.MAX_SAFE_INTEGER
+        return (await this.getContext("minFreshId"))?.objectId ?? Number.MAX_SAFE_INTEGER
     }
     protected async setMinFresh(id: number) {
-        await this.database.table("context").put({ type: "minFreshId", objectId: id })
+        await this.setContext("minFreshId", { objectId: id })
     }
     public async didLastPage() {
-        return !!(await this.database.table("context").where("type").equals("lastPage").first())
+        return !!(await this.getContext("lastPage"))
     }
     protected async setLastPage() {
-        await this.database.table("context").put({ type: "lastPage" })
+        await this.setContext("lastPage")
     }
 
     protected async getResultsByPage() {
-        return (await this.database.table("context").where("type").equals("resultsByPage").first()).count
+        return (await this.getContext("resultsByPage"))?.count
     }
     protected async setResultsByPage(count: number) {
-        await this.database.table("context").put({ type: "resultsByPage", count })
+        await this.setContext("resultsByPage", { count })
     }
 
     protected async addData(data: unknown) {
@@ -66,6 +82,7 @@ export default abstract class DataManager<T> {
 
     public async init(){
         await this.initData()
+        this.register()
         this.registerEvent(WSEventType.CONNECTED, () => {
             if(this.needDataLoad) {
                 console.log("Loading data on reconnect for", this)
@@ -82,6 +99,8 @@ export default abstract class DataManager<T> {
     public async unregister() {
         this.database.delete()
         this.database.close()
+        
+        super.unregister()
     }
     
     protected abstract initData(): Promise<void>

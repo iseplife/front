@@ -43,6 +43,9 @@ const Template: React.FC = () => {
             
             window.dispatchEvent(new Event("logged"))
 
+            notificationManager.setUnwatched(res[0].data.unwatchedNotifications)
+            res[0].data.unwatchedNotifications = undefined!
+
             socket.connect(state.jwt)
         }).finally(() => setLoading(false))
 

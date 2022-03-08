@@ -6,7 +6,6 @@ import PacketListener from "../protocol/listener/PacketListener"
 import FeedListener from "../listeners/FeedListener"
 import EventListener from "../listeners/EventListener"
 import WSEventType from "./WSEventType"
-import NotificationManager from "../../datamanager/NotificationManager"
 
 class WSServerClient {
     private socket!: WebSocket
@@ -50,8 +49,6 @@ class WSServerClient {
         this.socket.onmessage = (event) => 
             this.messageDecoder.decode(event.data)
         this._registerListeners()
-
-        new NotificationManager()
     }
 
     private _dispatchDisconnected(){

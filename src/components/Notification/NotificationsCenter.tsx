@@ -18,7 +18,7 @@ interface NotificationsCenterProps {
 
 const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, className}) => {
     const { t } = useTranslation("notifications")
-    const { state: { user }, dispatch } = useContext(AppContext)
+    const { state: { user } } = useContext(AppContext)
     
     const [notificationIds, setNotificationIds] = useState<Set<number>>(new Set())
 
@@ -55,12 +55,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             const unwatched = notifications.filter(notif => !notif.watched)
             if (unwatched.length) {
                 try {
-                    setNotificationsWatched(unwatched).then(res => res.data).then(unwatchedCount => {
-                        dispatch({
-                            type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
-                            payload: unwatchedCount
-                        })
-                    }).catch(e => console.error(e))
+                    setNotificationsWatched(unwatched).then(res => res.data).then(unwatchedCount => 
+                        notificationManager.setUnwatched(unwatchedCount)
+                    ).catch(e => console.error(e))
                 }catch(e){
                     console.error(e)
                 }
