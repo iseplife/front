@@ -32,7 +32,6 @@ const Template: React.FC = () => {
                 type: AppActionType.SET_LOGGED_USER,
                 user: {
                     ...res[0].data,
-                    groups: res[1].data,
                 }
             })
 

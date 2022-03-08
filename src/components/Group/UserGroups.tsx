@@ -5,17 +5,19 @@ import {useTranslation} from "react-i18next"
 import GroupList from "./GroupList"
 import {Divider, Skeleton} from "antd"
 import { AppContext } from "../../context/app/context"
+import { useLiveQuery } from "dexie-react-hooks"
+import { groupManager } from "../../datamanager/GroupManager"
 
 
 const UserGroups: React.FC = () => {
     const {t} = useTranslation("group")
-    const {state: {user}} = useContext(AppContext)
+    const groups = useLiveQuery(() => groupManager.getGroups(), [])
 
     return (
         <div className="">
             <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("group") + "s"}</Divider>
             <h3 className="text-gray-700 text-lg hidden sm:block">{t("group") + "s"}</h3>
-            {!user?.groups ?
+            {!groups ?
                 <>
                     <Skeleton title paragraph={{rows: 0}}/>
                     <Skeleton title paragraph={{rows: 0}}/>
@@ -24,7 +26,7 @@ const UserGroups: React.FC = () => {
                     <Skeleton title paragraph={{rows: 0}}/>
                     <Skeleton title paragraph={{rows: 0}}/>
                 </> :
-                <GroupList groups={user.groups}/>
+                <GroupList groups={groups}/>
             }
         </div>
     )

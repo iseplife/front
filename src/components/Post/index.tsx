@@ -20,6 +20,8 @@ import { AppContext } from "../../context/app/context"
 //@ts-ignore
 import { getPastelColor } from "pastel-color"
 import { Link } from "react-router-dom"
+import { groupManager } from "../../datamanager/GroupManager"
+import { useLiveQuery } from "dexie-react-hooks"
 
 type PostProps = {
     data: PostType
@@ -40,9 +42,9 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
-    const { state: { user: { groups } } } = useContext(AppContext)
+    const groups = useLiveQuery(() => groupManager.getGroups(), [])
     
-    const group = useMemo(() => groups.find(group => group.feedId == data.feedId), [groups, data.feedId])
+    const group = useMemo(() => groups?.find(group => group.feedId == data.feedId), [groups, data.feedId])
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
