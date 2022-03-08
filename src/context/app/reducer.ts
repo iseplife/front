@@ -20,6 +20,7 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
             delete apiClient.defaults.headers.common["Authorization"]
             localStorage.removeItem("logged")
             logoutWebSocket()
+            window.dispatchEvent(new Event("logout"))
             return DEFAULT_STATE as AppContextState
         case AppActionType.SET_TOKEN: {
             const parsedToken = parseToken(action.token)

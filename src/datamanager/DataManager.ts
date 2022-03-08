@@ -1,69 +1,88 @@
 import WSEventType from "../realtime/websocket/WSEventType"
-import { openDB, IDBPDatabase, IDBPObjectStore } from "idb"
+import Dexie from "dexie"
 
 export default abstract class DataManager<T> {
-    protected _data: T[] = []
-    protected _deprecatedData: T[] = []
-    get data(){ return this._data }
-
     private needDataLoad = false
 
     protected _currentPage = -1
-    protected _lastPage = false
     protected _fetching = false
+    protected _waitingForFetchEnd: (() => void)[] = []
 
-    protected database!: IDBPDatabase
-    protected store!: IDBPObjectStore
-    constructor(name: string, database?: IDBPDatabase) {
-        if(!database)
-            openDB(name, 1, {
-                upgrade: (database, old) => {
-                    switch(old) {
-                        case 0:
-                            database.createObjectStore("data")
-                            break
-                        default:
-                            break
-                    }
-                    console.log("Upgrade database from", old)
-                }
-            }).then(database => this.database = database).then(() => this.init())
-        else {
-            this.database = database
-        }
+    protected database!: Dexie
+    constructor(name: string, indexedProps: string[]) {
+        this.database = new Dexie(name)
+        this.database.version(1).stores({
+            data: indexedProps.join(", "), // Primary key and indexed props
+            context: "type",
+        })
+        this.database.table("context").delete("minFreshId")
+
+        this.registerEvent("logout", () => 
+            this.unregister()
+        )
     }
 
-    protected async getTable(name: string){
-        try{
-            return this.database.transaction(name, "readwrite").objectStore(name)
-        }catch(e){
-            console.log("done")
-            this.database.createObjectStore(name)
-            console.log("a")
-            return this.database.transaction(name, "readwrite").objectStore(name)
-        }
+    async isLastPage() {
+        return await this.getMinFresh() == -1 && await this.didLastPage()
+    }
+
+    protected getTable() {
+        return this.database.table("data")
+    }
+    public async getMinFresh(): Promise<number> {
+        return (await this.database.table("context").where("type").equals("minFreshId").first())?.objectId ?? Number.MAX_SAFE_INTEGER
+    }
+    protected async setMinFresh(id: number) {
+        await this.database.table("context").put({ type: "minFreshId", objectId: id })
+    }
+    public async didLastPage() {
+        return !!(await this.database.table("context").where("type").equals("lastPage").first())
+    }
+    protected async setLastPage() {
+        await this.database.table("context").put({ type: "lastPage" })
+    }
+
+    protected async getResultsByPage() {
+        return (await this.database.table("context").where("type").equals("resultsByPage").first()).count
+    }
+    protected async setResultsByPage(count: number) {
+        await this.database.table("context").put({ type: "resultsByPage", count })
+    }
+
+    protected async addData(data: unknown) {
+        await this.getTable().put(data)
+    }
+
+    protected async addBulkData(data: unknown[]) {
+        await this.getTable().bulkPut(data)
+    }
+
+    private registredEventsListener: [string, (event: Event) => void][] = []
+
+    protected registerEvent(event: string, callback: (event: Event) => void) {
+        window.addEventListener(event, callback)
+        this.registredEventsListener.push([event, callback])
     }
 
     public async init(){
-        console.log( this.getTable("test"))
-        await this.loadCache()
         await this.initData()
-        window.addEventListener(WSEventType.CONNECTED, () => {
-            console.log("connected", this)
-            if(this.needDataLoad){
-                console.log("data load")
+        this.registerEvent(WSEventType.CONNECTED, () => {
+            if(this.needDataLoad) {
+                console.log("Loading data on reconnect for", this)
                 this.needDataLoad = false
 
-                this._deprecatedData = this.data
                 this.initData()
             }
         })
-        window.addEventListener(WSEventType.DISCONNECTED, () => {
-            console.log("disconnected", this)
+        this.registerEvent(WSEventType.DISCONNECTED, () => {
             this.needDataLoad = true
         })
     }
+
+    public async unregister() {
+        this.database.delete()
+        this.database.close()
+    }
     
-    protected abstract loadCache(): Promise<void>
     protected abstract initData(): Promise<void>
 }

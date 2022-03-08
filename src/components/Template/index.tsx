@@ -15,6 +15,7 @@ import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
 import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
 import { getUserGroups } from "../../data/group"
+import { notificationManager } from "../../datamanager/NotificationManager"
 
 
 const Template: React.FC = () => {
@@ -34,6 +35,13 @@ const Template: React.FC = () => {
                     groups: res[1].data,
                 }
             })
+
+            if (localStorage.getItem("logged_id") != res[0].data.id.toString())
+                window.dispatchEvent(new Event("logout"))
+            
+            localStorage.setItem("logged_id", res[0].data.id.toString())
+            
+            window.dispatchEvent(new Event("logged"))
 
             socket.connect(state.jwt)
         }).finally(() => setLoading(false))
