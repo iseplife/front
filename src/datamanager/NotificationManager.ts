@@ -56,7 +56,7 @@ export default class NotificationManager extends DataManager<Notification> {
 
     public async watch(notifications: Notification[]) {
         notifications.forEach(notif => notif.watched = true)
-        this.getTable().bulkAdd(notifications)
+        this.getTable().bulkPut(notifications)
     }
 
     public async loadMore(minId: number) {

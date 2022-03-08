@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { AppContext } from "../../context/app/context"
 import { useTranslation } from "react-i18next"
 import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
@@ -56,7 +56,6 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             if (unwatched.length) {
                 try {
                     setNotificationsWatched(unwatched).then(res => res.data).then(unwatchedCount => {
-                        notificationManager.watch(unwatched)
                         dispatch({
                             type: AppActionType.SET_UNWATCHED_NOTIFICATIONS,
                             payload: unwatchedCount
@@ -68,6 +67,14 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             }
         }
     }, [notifications])
+
+    useEffect(() => () => { // On component destroy
+        if (notifications) {
+            const unwatched = notifications.filter(notif => !notif.watched)
+            if (unwatched.length)
+                notificationManager.watch(unwatched)
+        }
+    }, [user.unwatchedNotifications, notifications])
 
     const scrollElement = useRef<HTMLDivElement>(null)
     return (
