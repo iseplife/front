@@ -16,7 +16,7 @@ export type Group = {
     archived: boolean
     feedId: number
     hasRight: boolean
-    subscribed: boolean
+    subscribed: { extensive: boolean }
 }
 
 export type GroupAdmin = Omit<Group, "subscribed" | "hasRight" | "feed"> & {

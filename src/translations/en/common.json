@@ -68,5 +68,10 @@
   },
 	"yesterday": "yesterday,",
 	"just_now": "Just now",
-  "me": "me"
+  "me": "me",
+  "subscription": {
+    "subscribe": "Follow",
+    "subscribed": "Followed",
+    "unsubscribe": "Unfollow"
+  }
 }

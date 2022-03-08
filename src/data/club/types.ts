@@ -27,7 +27,7 @@ export type Club = {
     feed: number
 
     canEdit: boolean
-    subscribed: boolean
+    subscribed?: { extensive: boolean },
     facebook?: string
     instagram?: string
     snapchat?: string

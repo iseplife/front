@@ -69,5 +69,10 @@
   },
 	"yesterday": "hier, à",
 	"just_now": "À l'instant",
-  "me": "moi"
+  "me": "moi",
+  "subscription": {
+    "subscribe": "Suivre",
+    "subscribed": "Abonné",
+    "unsubscribe": "Se désabonner"
+  }
 }
