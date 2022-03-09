@@ -13,7 +13,7 @@ import { groupManager } from "./GroupManager"
 
 export default class EventsManager extends DataManager<EventPreview> {
     constructor(wsServerClient: WSServerClient, private context: React.ContextType<typeof AppContext>){
-        super("events", ["id", "type", "title", "startsAt", "endsAt"], wsServerClient)
+        super("events", ["id", "feedId", "type", "title", "startsAt", "endsAt"], wsServerClient)
     }
 
     protected async initData() {
@@ -32,6 +32,10 @@ export default class EventsManager extends DataManager<EventPreview> {
             return events
         else
             return events.filter(event => event.targets.includes(feed))
+    }
+
+    public getEventByEventFeedId(feedId: number): Promise<EventPreview> {
+        return this.getTable().where("feedId").equals(feedId).first()
     }
 
     @PacketHandler(WSPSEventCreated)

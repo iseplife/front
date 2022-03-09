@@ -12,5 +12,6 @@
 	"planned_for": "Prévu pour ",
 	"pin": "Épingler",
 	"unpin": "Désépingler",
-	"posted_in_group": "Posté dans le groupe \"{{group}}\""
+	"posted_in_group": "Posté dans le groupe \"{{group}}\"",
+	"posted_in_event": "Posté dans l'événement \"{{event}}\""
 }

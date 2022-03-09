@@ -22,6 +22,7 @@ import { getPastelColor } from "pastel-color"
 import { Link } from "react-router-dom"
 import { groupManager } from "../../datamanager/GroupManager"
 import { useLiveQuery } from "dexie-react-hooks"
+import { eventsManager } from "../../datamanager/EventsManager"
 
 type PostProps = {
     data: PostType
@@ -43,7 +44,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
     const groups = useLiveQuery(() => groupManager.getGroups(), [])
-    
+
+    const event = useLiveQuery(async () => data.feedId != undefined && await eventsManager.getEventByEventFeedId(data.feedId), [data.feedId])
     const group = useMemo(() => groups?.find(group => group.feedId == data.feedId), [groups, data.feedId])
 
     const confirmDeletion = useCallback(() => {
@@ -157,6 +159,14 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                             <Link to={`/group/${group.id}`} className="min-w-0">
                                 <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow" title={t("post:posted_in_group", { group: group.name })} style={{backgroundColor: getPastelColor(group.name).hex}}>
                                     <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
+                                </div>
+                            </Link>
+                        }
+                        {event && !feedId &&
+                            <Link to={`/event/${event.id}`} className="min-w-0">
+                                <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow items items-center bg-red-300" title={t("post:posted_in_event", { event: event.title })}>
+                                    <div className="bg-neutral-50 w-4 h-4 shadow-sm rounded-sm mr-1.5 overflow-hidden "><div className="bg-red-500 w-4 h-[0.32rem]" /></div>
+                                    <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{event.title}</div>
                                 </div>
                             </Link>
                         }

@@ -25,6 +25,7 @@ export type Event = {
 
 export type EventPreview = {
     id: number
+    feedId: number
     title: string
     type: EventType
     startsAt: Date
