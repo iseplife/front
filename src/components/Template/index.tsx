@@ -19,16 +19,16 @@ import { notificationManager } from "../../datamanager/NotificationManager"
 
 
 const Template: React.FC = () => {
-    const {state, dispatch} = useContext(AppContext)
+    const context = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(true)
     const isAdmin = useMemo(() => (
-        state.payload.roles.includes(Roles.ADMIN)
-    ), [state.payload])
+        context.state.payload.roles.includes(Roles.ADMIN)
+    ), [context.state.payload])
 
     useLayoutEffect(() => {
         Promise.all([getLoggedUser(), getUserGroups()]).then(res => {
             const socket = initWebSocket(wsURI)
-            dispatch({
+            context.dispatch({
                 type: AppActionType.SET_LOGGED_USER,
                 user: {
                     ...res[0].data,
@@ -45,7 +45,7 @@ const Template: React.FC = () => {
             notificationManager.setUnwatched(res[0].data.unwatchedNotifications)
             res[0].data.unwatchedNotifications = undefined!
 
-            socket.connect(state.jwt)
+            socket.connect(context)
         }).finally(() => setLoading(false))
 
         return () => getWebSocket() && getWebSocket().disconnect()

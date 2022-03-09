@@ -6,6 +6,10 @@ import PacketListener from "../protocol/listener/PacketListener"
 import FeedListener from "../listeners/FeedListener"
 import EventListener from "../listeners/EventListener"
 import WSEventType from "./WSEventType"
+import GroupListener from "../listeners/GroupListener"
+import React from "react"
+import { AppContext } from "../../context/app/context"
+import ProtocolV1 from "../protocol/v1/ProtocolV1"
 
 class WSServerClient {
     private socket!: WebSocket
@@ -23,17 +27,21 @@ class WSServerClient {
 
     constructor(
         public ip: string,
-    ) { }
+    ) {
+        // Clear listeners
+        ProtocolV1.instance.packetsServer.forEach(packet => packet.listeners = [])
+    }
 
     /**
      * Se connecte et s'authentifie au serveur.
      * @param username Le nom d'utilisateur du client
      * @param accessToken AccessToken renouvelé à utiliser pour se connecter
      */
-    public connect(accessToken: string) {
+    public connect(context: React.ContextType<typeof AppContext>) {
         if (this.connected)
             return
-        this.accessToken = accessToken
+        new GroupListener(this, context).register()
+        this.accessToken = context.state.jwt
         this.socket = new WebSocket(this.ip)
         this.initSocket()
     }
@@ -67,7 +75,7 @@ class WSServerClient {
         new EventListener(this).register()
     }
 
-    public setLogged() {
+    public setLogged() {        
         this._logged = true
         for (const packet of this.queue)
             this.forcePacket(packet)

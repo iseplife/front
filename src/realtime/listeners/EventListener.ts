@@ -6,7 +6,8 @@ import WSPSFeedPostCreated from "../protocol/v1/packets/server/WSPSFeedPostCreat
 export default class EventListener extends PacketListener {
 
     @PacketHandler(WSPSEventCreated)
-    public handleNewPost(packet: WSPSFeedPostCreated) {
-        console.log(`New post in feed ${packet.post.feedId} :`, packet.post)
+    public handleNewEvent(packet: WSPSEventCreated) {
+        console.log(`New event`, packet.event)
     }
+    
 }

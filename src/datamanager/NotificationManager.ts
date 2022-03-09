@@ -13,7 +13,13 @@ export default class NotificationManager extends DataManager<Notification> {
     }
 
     protected async initData() {
+        this.removeContext("maxLoaded")
         await this.loadPage(0)
+        this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
+    }
+
+    public async getMaxLoaded(){
+        return (await this.getContext("maxLoaded"))?.id ?? Number.MAX_SAFE_INTEGER
     }
 
     private async _waitFetching() {
