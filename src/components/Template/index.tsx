@@ -16,6 +16,7 @@ import {wsURI} from "../../data/http"
 import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
 import { getUserGroups } from "../../data/group"
 import { notificationManager } from "../../datamanager/NotificationManager"
+import LoggedEvent from "../../events/LoggedEvent"
 
 
 const Template: React.FC = () => {
@@ -40,7 +41,7 @@ const Template: React.FC = () => {
             
             localStorage.setItem("logged_id", res[0].data.id.toString())
             
-            window.dispatchEvent(new Event("logged"))
+            window.dispatchEvent(new LoggedEvent(context))
 
             notificationManager.setUnwatched(res[0].data.unwatchedNotifications)
             res[0].data.unwatchedNotifications = undefined!

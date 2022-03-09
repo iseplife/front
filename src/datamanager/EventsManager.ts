@@ -1,28 +1,37 @@
-import { useLiveQuery } from "dexie-react-hooks"
+import React from "react"
+import { AppContext } from "../context/app/context"
 import { getIncomingEvents } from "../data/event"
 import { EventPreview } from "../data/event/types"
-import { getUserGroups } from "../data/group"
-import { GroupPreview } from "../data/group/types"
+import LoggedEvent from "../events/LoggedEvent"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSEventCreated from "../realtime/protocol/v1/packets/server/WSPSEventCreated"
 import WSPSGroupJoined from "../realtime/protocol/v1/packets/server/WSPSGroupJoined"
 import WSPSGroupLeft from "../realtime/protocol/v1/packets/server/WSPSGroupLeft"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import DataManager from "./DataManager"
+import { groupManager } from "./GroupManager"
 
 export default class EventsManager extends DataManager<EventPreview> {
-    constructor(wsServerClient: WSServerClient){
-        super("groups", ["id", "type", "title", "startsAt", "endsAt", "targets"], wsServerClient)
+    constructor(wsServerClient: WSServerClient, private context: React.ContextType<typeof AppContext>){
+        super("events", ["id", "type", "title", "startsAt", "endsAt"], wsServerClient)
     }
 
     protected async initData() {
         const data = (await getIncomingEvents()).data
-        await this.getTable().clear()
-        this.addBulkData(data)
+        await this.addBulkData(data)
+        await this.getTable().bulkDelete(
+            (await this.getEvents())
+                .filter(event => !data.find(other => other.id == event.id))
+                .map(event => event.id)
+        )
     }
 
-    public getEvents(){
-        return this.getTable().toArray()
+    public async getEvents(feed?: number): Promise<EventPreview[]>{
+        const events = await this.getTable().toArray() as EventPreview[]
+        if(feed == undefined)
+            return events
+        else
+            return events.filter(event => event.targets.includes(feed))
     }
 
     @PacketHandler(WSPSEventCreated)
@@ -31,18 +40,31 @@ export default class EventsManager extends DataManager<EventPreview> {
         this.addData(packet.event)
     }
 
+    private async removeEvent(event: EventPreview){
+        await this.getTable().delete(event.id)
+    }
+
     @PacketHandler(WSPSGroupJoined)
     private handleGroupJoined() {
         setTimeout(() => this.initData())
     }
     @PacketHandler(WSPSGroupLeft)
-    private handleGroupLeft() {
-        setTimeout(() => this.initData())
+    private async handleGroupLeft(packet: WSPSGroupLeft) {
+        const group = (await groupManager.getGroups()).find(group => group.id == packet.id)
+        if(group){
+            console.log("Successfully detected left group for events")
+            const newFeedsId = this.context.state.payload.feeds.filter(feedId => feedId != group?.feedId)
+            for(const event of (await this.getEvents()).filter(event => 
+                event.targets.length != 0 && !event.targets.find(event => newFeedsId.includes(event))
+            )){
+                this.removeEvent(event)
+            }
+        }
     }
     
 }
-let eventsManager = new EventsManager(undefined!)
+let eventsManager = new EventsManager(undefined!, undefined!)
 
-window.addEventListener("logged", () => (eventsManager = new EventsManager(getWebSocket())).init())
+window.addEventListener("logged", (event) => (eventsManager = new EventsManager(getWebSocket(), (event as LoggedEvent).context)).init())
 
 export { eventsManager }

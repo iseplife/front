@@ -1,4 +1,3 @@
-import { useLiveQuery } from "dexie-react-hooks"
 import { getUserGroups } from "../data/group"
 import { GroupPreview } from "../data/group/types"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
@@ -14,11 +13,15 @@ export default class GroupManager extends DataManager<GroupPreview> {
 
     protected async initData() {
         const data = (await getUserGroups()).data
-        await this.getTable().clear()
-        this.addBulkData(data)
+        await this.addBulkData(data)
+        await this.getTable().bulkDelete(
+            (await this.getGroups())
+                .filter(group => !data.find(other => other.id == group.id))
+                .map(group => group.id)
+        )
     }
 
-    public getGroups(){
+    public getGroups(): Promise<GroupPreview[]>{
         return this.getTable().toArray()
     }
 
@@ -28,7 +31,7 @@ export default class GroupManager extends DataManager<GroupPreview> {
     }
     @PacketHandler(WSPSGroupLeft)
     private handleGroupLeft(packet: WSPSGroupLeft){
-        this.getTable().delete(packet.id)
+        setTimeout(() => this.getTable().delete(packet.id))
     }
     
 }

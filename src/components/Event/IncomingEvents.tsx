@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react"
-import {EventPreview} from "../../data/event/types"
-import {getIncomingEvents} from "../../data/event"
+import React from "react"
 import {useTranslation} from "react-i18next"
 import {Divider, Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
 import EventCreatorModal from "./EventCreatorModal"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSadCry } from "@fortawesome/free-regular-svg-icons"
+import { useLiveQuery } from "dexie-react-hooks"
+import { eventsManager } from "../../datamanager/EventsManager"
 
 type IncomingEventsProps = {
     feed?: number
@@ -16,33 +16,20 @@ type IncomingEventsProps = {
 }
 const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, className, wait = false}) => {
     const {t} = useTranslation("event")
-    const [events, setEvents] = useState<EventPreview[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
 
-    const fetchEvents = useCallback(() => {
-        if (!wait) {
-            setLoading(true)
-            getIncomingEvents(feed).then(res => {
-                setEvents(res.data)
-            }).finally(() => setLoading(false))
-        }
-    }, [wait, feed])
-
-    useEffect(() => {
-        fetchEvents()
-    }, [fetchEvents])
+    const events = useLiveQuery(() => eventsManager.getEvents(feed), [feed])
 
     return (
         <div className={`${className} flex flex-col justify-center text-left lg:text-center mx-0 lg:mx-4`}>
             <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("incoming")}</Divider>
             <h3 className="text-gray-700 text-lg lg:mx-3 hidden sm:block">{t("incoming")}</h3>
-            {wait || loading ?
+            {wait || !events ?
                 <>
                     <Skeleton.Input className="w-full rounded my-1" active size="large"/>
                     <Skeleton.Input className="w-full rounded my-1" active size="large"/>
                     <Skeleton.Input className="w-full rounded my-1" active size="large"/>
                 </> :
-                events.length ?
+                events?.length ?
                     <EventPreviewList events={events}/> :
                     <div className="text-gray-500 sm:mt-2 mb-2 text-center text-base sm:text-lg">
                         <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
@@ -51,7 +38,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
             }
             {allowCreate && (
                 <div className="mx-auto mb-2">
-                    <EventCreatorModal onSubmit={fetchEvents}/>
+                    <EventCreatorModal onSubmit={() => console.log("lol")}/>
                 </div>
             )}
         </div>
