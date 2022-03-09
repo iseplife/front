@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { AppContext } from "../../context/app/context"
 import { useTranslation } from "react-i18next"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
@@ -8,8 +7,6 @@ import Notification from "."
 import { setNotificationsWatched } from "../../data/notification"
 
 const NotificationsOverlay: React.FC = () => {
-    const { t } = useTranslation("notifications")
-
     const minNotificationId = useLiveQuery(async () => await notificationManager.getMaxLoaded(), [])
 
     const notifications = useLiveQuery(async () => {
@@ -17,7 +14,7 @@ const NotificationsOverlay: React.FC = () => {
             return (await notificationManager.getNotifications(minNotificationId)).filter(notif => !notif.watched)
     }, [minNotificationId])
 
-    useEffect(() => console.log("[Notification] Recieved:", notifications?.filter(notif => !notif.watched)), [notifications])
+    const unwatched = useLiveQuery(() => notificationManager.getUnwatched(), [])
 
     const clickNotifFactory = useCallback((notif: NotificationType) => {
         return () => {
@@ -29,7 +26,7 @@ const NotificationsOverlay: React.FC = () => {
     }, [])
 
     return <div className="fixed left-3 flex-col gap-3 w-80 hidden sm:flex bottom-16 md:bottom-3">
-        { notifications?.map(notif => 
+        { unwatched != 0 && notifications?.map(notif => 
             <div onClick={clickNotifFactory(notif)}>
                 <Notification {...notif} key={notif.id} backgroundHover={false} className={"bg-white shadow-sm hover:bg-[#fcfcfc] hover:shadow-md transition-all"} />
             </div>
