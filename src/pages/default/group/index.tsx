@@ -28,7 +28,6 @@ const Group: React.FC = () => {
     const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
-    const [loading, setLoading] = useState<boolean>(false)
     const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
     const [tab, setTab] = useState<GroupPanel>(GroupPanel.POSTS)
 
@@ -36,11 +35,9 @@ const Group: React.FC = () => {
 
     useEffect(() => {
         if (!isNaN(+id)) {
-            setLoading(true)
-            getGroup(id).then(res => {
+            getGroup(id).then(res =>
                 setGroup(res.data)
-
-            }).finally(() => setLoading(false))
+            )
         }
     }, [id])
 
@@ -141,7 +138,7 @@ const Group: React.FC = () => {
                         {group?.hasRight && <AddMember onAdd={onAdd} />}
                     </div>
                 }
-                <IncomingEvents feed={group?.feedId} wait={loading} allowCreate={group?.hasRight} className="lg:hidden block" />
+                <IncomingEvents feed={group?.feedId} wait={!group} allowCreate={group?.hasRight} className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
                 <div className="hidden sm:block">
                     <GroupMembers openMembersPanel={setTabFactory(GroupPanel.MEMBERS)} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
@@ -154,7 +151,7 @@ const Group: React.FC = () => {
                 tabs={tabs}
             />
             <div className="flex-1 lg:block hidden mr-4">
-                <IncomingEvents feed={group?.feedId} wait={loading} allowCreate={group?.hasRight}/>
+                <IncomingEvents feed={group?.feedId} wait={!group} allowCreate={group?.hasRight}/>
             </div>
         </div>
     )

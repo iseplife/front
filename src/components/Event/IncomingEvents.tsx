@@ -17,7 +17,7 @@ type IncomingEventsProps = {
 const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, className, wait = false}) => {
     const {t} = useTranslation("event")
 
-    const events = useLiveQuery(() => eventsManager.getEvents(feed), [feed])
+    const events = useLiveQuery(async () => !wait && await eventsManager.getEvents(feed), [feed, wait])
 
     return (
         <div className={`${className} flex flex-col justify-center text-left lg:text-center mx-0 lg:mx-4`}>
