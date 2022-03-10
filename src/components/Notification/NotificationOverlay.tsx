@@ -20,8 +20,8 @@ const NotificationsOverlay: React.FC = () => {
     
     const [lastUnwatched, setLastUnwatched] = useState<NotificationType[]>([])
 
-    useEffect(()=> {
-        if(notifications?.find(notif => !lastUnwatched.find(other => other.id = notif.id))){
+    useEffect(() => {
+        if(notifications?.find(notif => !lastUnwatched.find(other => other.id == notif.id))){
             const audio = new Audio(notificationSoundUrl)
             audio.play()
             setLastUnwatched(notifications ?? [])
