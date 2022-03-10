@@ -1,7 +1,6 @@
 import { loadNotifications } from "../data/notification"
 import { Notification } from "../data/notification/types"
 import DataManager from "./DataManager"
-import { openDB } from "idb"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSNotificationRecieved from "../realtime/protocol/v1/packets/server/WSPSNotificationRecieved"
