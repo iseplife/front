@@ -31,7 +31,7 @@ export default abstract class DataManager<T> extends PacketListener {
     }
 
     protected getTable() {
-        return this.database.table("data")
+        return this.database.table<T>("data")
     }
     protected getContext(type: string) {
         return this.database.table("context").where("type").equals(type).first()
@@ -65,11 +65,11 @@ export default abstract class DataManager<T> extends PacketListener {
         await this.setContext("resultsByPage", { count })
     }
 
-    protected async addData(data: unknown) {
+    protected async addData(data: T) {
         await this.getTable().put(data)
     }
 
-    protected async addBulkData(data: unknown[]) {
+    protected async addBulkData(data: T[]) {
         await this.getTable().bulkPut(data)
     }
 

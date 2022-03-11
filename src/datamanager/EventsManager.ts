@@ -27,15 +27,15 @@ export default class EventsManager extends DataManager<EventPreview> {
     }
 
     public async getEvents(feed?: number): Promise<EventPreview[]>{
-        const events = await this.getTable().toArray() as EventPreview[]
+        const events = (await this.getTable().toArray()).sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
         if(feed == undefined)
             return events
         else
             return events.filter(event => event.targets.includes(feed))
     }
 
-    public getEventByEventFeedId(feedId: number): Promise<EventPreview> {
-        return this.getTable().where("feedId").equals(feedId).first()
+    public async getEventByEventFeedId(feedId: number): Promise<EventPreview> {
+        return (await this.getTable().where("feedId").equals(feedId).first())!
     }
 
     @PacketHandler(WSPSEventCreated)
