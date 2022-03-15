@@ -61,14 +61,14 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const [loadedPosts, setLoadedPosts] = useState(0)
     const posts = useLiveQuery(async () => !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined, [id, loadedPosts, loading])
 
-    const [firstLoaded, setFirstLoaded] = useState(Number.MAX_SAFE_INTEGER)
+    const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     const loadMorePost = useCallback(async (count: number) => {
         return new Promise<boolean>(exec => {
             setLoadedPosts((loadedPosts) => {
                 (async () => {
                     const posts = await feedsManager.getFeedPosts(id, loadedPosts)
-                    const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER) ?? Number.MAX_SAFE_INTEGER)
+                    const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE) ?? Number.MAX_VALUE)
                     setFirstLoaded(resp[1])
                     exec(resp[0])
                 })()
@@ -235,7 +235,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
                 <InfiniteScroller
                     watch="DOWN" callback={loadMorePost} empty={empty}
-                    loadingComponent={<CardTextSkeleton loading={fetching} number={3} className="my-3"/>}
+                    loadingComponent={<CardTextSkeleton loading={true} number={3} className="my-3"/>}
                 >
                     {empty ?
                         <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
@@ -261,7 +261,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                     </>
                                 )}
 
-                                {posts?.map(p => (
+                                {posts?.map(p => (p.publicationDateId > firstLoaded && 
                                     <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
                                         <Post
                                             feedId={id}

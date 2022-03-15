@@ -3,7 +3,7 @@ import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClie
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSFeedPostCreated from "../realtime/protocol/v1/packets/server/WSPSFeedPostCreated"
 import { getFeedPost } from "../data/feed"
-import { Post } from "../data/post/types"
+import { Post, PostUpdate } from "../data/post/types"
 import { Page } from "../data/request.type"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
@@ -15,7 +15,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["publicationDate", "id", "feedId", "lastLoadId", "loadedFeed", "[id+loadedFeed]"], wsServerClient)
+        super("feeds", ["publicationDateId", "id", "feedId", "lastLoadId", "loadedFeed", "[publicationDateId+loadedFeed]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
@@ -57,9 +57,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return this.getTable().where({ "loadedFeed": feed ?? mainFeedId }).reverse().limit(limit).toArray()
     }
 
-    public async loadMore(feed: FeedId, lastLoadedId: number){
+    public async loadMore(feed: FeedId, lastLoadedCustomId: number){
         await this._waitFetching()
-        const count = await this.getTable().where(["id", "loadedFeed"]).between([lastLoadedId, feed ?? mainFeedId], [Number.MAX_SAFE_INTEGER, feed ?? mainFeedId]).count()
+        const count = await this.getTable().where(["publicationDateId", "loadedFeed"]).between([lastLoadedCustomId, feed ?? mainFeedId], [Number.MAX_VALUE, feed ?? mainFeedId]).count()
         const page = Math.floor(count / FeedsManager.PAGE_SIZE)
         return await this.loadPage(feed, page)
     }
@@ -90,12 +90,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             ...post,
             lastLoadId: this.lastLoadId,
             loadedFeed: feed ?? mainFeedId,
+            publicationDateId: this.calcId(post),
         } as ManagerPost))
 
         this.addBulkData(content)
 
-        const maxId = posts.content.reduce((prev, post) => Math.max(prev, post.id), 0)
-        const lastId = posts.content.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER)
+        const maxId = content.reduce((prev, post) => Math.max(prev, post.publicationDateId), 0)
+        const lastId = content.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE)
         this.maxIdByPage[page] = maxId
 
         if(posts.last)
@@ -112,6 +113,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return [posts.last, maxId]
     }
 
+    private calcId(post: Post | PostUpdate){
+        return +(post.publicationDate.getTime().toString() + post.id)
+    }
+
     private async getAllFeedPosts(feed: FeedId){
         return this.getTable().where("loadedFeed").equals(feed ?? mainFeedId).toArray()
     }
@@ -123,8 +128,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return (await this.getContext(`last:${feed}`)).lastId as number | undefined
     }
 
-    private async checkUnloaded(feed: FeedId, minId: number, maxId: number){
-        const posts = (await this.getTable().where(["id", "loadedFeed"]).between([minId, feed ?? mainFeedId], [maxId, feed ?? mainFeedId], true, true).toArray()).sort((a, b) => a.id - b.id)
+    private async checkUnloaded(feed: FeedId, minCustomId: number, maxCustomId: number){
+        const posts = (await this.getTable().where(["publicationDateId", "loadedFeed"]).between([minCustomId, feed ?? mainFeedId], [maxCustomId, feed ?? mainFeedId], true, true).toArray()).sort((a, b) => a.id - b.id)
         
         const toUnload: ManagerPost[] = []
         let toUnloadTemp: ManagerPost[] = []
@@ -142,9 +147,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             } else
                 toUnloadTemp.push(post)
         }
-
         console.log("Unload posts:", toUnload)
-        await this.getTable().bulkDelete(toUnload.map(post => post.id))
+        await this.getTable().bulkDelete(toUnload.map(post => post.publicationDateId))
     }
 
     public isFresh(post: ManagerPost){
@@ -154,17 +158,22 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     @PacketHandler(WSPSFeedPostCreated)
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated){
         packet.post.publicationDate = new Date(packet.post.publicationDate)
+
+        const publicationDateId = this.calcId(packet.post)
+
         this.addData({
             ...packet.post,
             lastLoadId: this.lastLoadId,
-            loadedFeed: packet.post.feedId
+            loadedFeed: packet.post.feedId,
+            publicationDateId,
         } as ManagerPost)
 
         if(packet.follow){
             this.addData({
                 ...packet.post,
                 lastLoadId: this.lastLoadId,
-                loadedFeed: mainFeedId
+                loadedFeed: mainFeedId,
+                publicationDateId,
             } as ManagerPost)
         }
     }
@@ -176,6 +185,6 @@ window.addEventListener("logged", () => (feedsManager = new FeedsManager(getWebS
 
 export { feedsManager }
 
-type ManagerPost = { lastLoadId: number, loadedFeed: number } & Post
+type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number } & Post
 type FeedId = number | undefined
 const mainFeedId = -1
