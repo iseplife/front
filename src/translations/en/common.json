@@ -67,8 +67,7 @@
     "status_passed": "Passed",
     "status_active": "Active"
   },
-	"yesterday": "yesterday,",
-	"just_now": "Just now",
+	"yesterday": "yesterday",
   "me": "me",
   "subscription": {
     "subscribe": "Follow",

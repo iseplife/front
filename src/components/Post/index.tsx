@@ -4,10 +4,7 @@ import Embed from "./Embed"
 import {Divider, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import {toggleThreadLike} from "../../data/thread"
-import {format, isFuture} from "date-fns"
 import CommentList from "../Comment/CommentList"
-import {AvatarSizes} from "../../constants/MediaSizes"
-import StudentAvatar from "../Student/StudentAvatar"
 import PostEditForm from "./Form/PostEditForm"
 import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
@@ -49,7 +46,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: async () => {
-                feedsManager.deletePost(data.id)
                 onDelete(data.id)
             }
         })
@@ -93,9 +89,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
         }
     }, [data.id])
 
-    const [formattedDate, setFormattedDate] = useState<string>("")
-    useEffect(() => formatDateWithTimer(data.publicationDate, t, setFormattedDate), [data.publicationDate])
-
     useEffect(() => {
         if (showEditMenu) {
             const onClick = () => setShowEditMenu(false)
@@ -134,22 +127,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             )}
             <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 relative" ref={setRef}>
                 <div className="w-full flex justify-between mb-1">
-                    <div className="flex">
-                        <StudentAvatar
-                            id={data.author.id}
-                            name={data.author.name}
-                            picture={data.author.thumbnail}
-                            pictureSize={AvatarSizes.THUMBNAIL}
-                            showPreview
-                            size="default"
-                        />
-                        <div className="items-center ml-2">
-                            <div className="font-bold -mb-0.5 -mt-0.5">{data.author.name}</div>
-                            <div className="text-xs whitespace-nowrap">
-                                {isFuture(data.publicationDate) ? `${t("post:planned_for")} ${format(new Date(data.publicationDate), "dd/MM/yy, HH:mm")}` : formattedDate}
-                            </div>
-                        </div>
-                    </div>
+                    <PostAuthor author={data.author} publicationDate={data.publicationDate}/>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
                         {!feedId && 
                             <PostRelatedCard feedId={data.feedId} />
