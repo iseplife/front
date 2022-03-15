@@ -6,8 +6,8 @@ import {Image as ImageType} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
 import { TFunction } from "i18next"
-import { formatWithOptions } from "date-fns/fp"
 import axios from "axios"
+import {EventPosition, Marker} from "./data/event/types"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -173,6 +173,14 @@ export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string):
 }
 
 
+export const positionToMarker = (position?: EventPosition) => {
+    let marker: Marker | undefined = undefined
+    if (position) {
+        const strArr = position.coordinates.split(";")
+        marker = [+strArr[0], +strArr[1]]
+    }
+    return marker
+}
 
 
 export class EntitySet<T extends Entity> {

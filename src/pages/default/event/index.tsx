@@ -130,14 +130,14 @@ const Event: React.FC = () => {
                 </Map>
             }
             <div className="container mx-auto px-4">
-                <EventMapPlace event={event} loading={!event} />
+                <EventMapPlace position={event?.position} location={event?.location} loading={!event} />
             </div>
         </div>
         <div className="container mx-auto mt-4">
             <div className="flex items-center px-4">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative">
                     <div className="w-full h-full text-3xl sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
-                        <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
+                        <div className="bg-red-500 w-full h-5 flex-shrink-0"/>
                         <div className="grid place-items-center h-full">{day}</div>
                     </div>
 
@@ -200,7 +200,7 @@ const Event: React.FC = () => {
                     </Link>
                     
                     <div className="sm:hidden"><EventDescription description={event?.description} loading={!event} phone={true} /></div>
-                    <EventMapPlace event={event} phone={true} loading={!event} />
+                    <EventMapPlace position={event?.position} location={event?.location} phone={true} loading={!event} />
                     <div className="hidden sm:block lg:hidden"><EventDescription description={event?.description} loading={!event} /></div>
                     
                     <GalleriesPreview className="sm:hidden lg:block" elementId={event?.id} getGalleriesCallback={getEventGalleries} />

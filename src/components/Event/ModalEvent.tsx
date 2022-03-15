@@ -4,7 +4,7 @@ import {Event, EventPreview} from "../../data/event/types"
 import Loading from "../Common/Loading"
 import {Map, Marker, TileLayer} from "react-leaflet"
 import {differenceInDays} from "date-fns"
-import {_format} from "../../util"
+import {_format, positionToMarker} from "../../util"
 import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
 import {EventTypeColor, EventTypeEmoji} from "../../constants/EventType"
@@ -50,6 +50,8 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
         }
         return "xx:xx - xx:xx"
     }, [event, start, end])
+
+    const marker = useMemo(() => positionToMarker(event?.position),[event])
 
     useEffect(() => {
         setLoading(true)
@@ -117,7 +119,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                     </ul>
                     <Map
                         className="mt-5 rounded h-32"
-                        center={[51.505, -0.09]}
+                        center={marker ?? [51.505, -0.09]}
                         zoom={13}
                     >
                         <TileLayer
@@ -126,7 +128,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                             accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                         />
-                        <Marker position={[51.505, -0.09]}/>
+                        {marker && <Marker position={marker}/> }
                     </Map>
                 </div>
             </div>
