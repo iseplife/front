@@ -8,6 +8,7 @@ import "./SideCalendar.css"
 import FeedFilter from "../Feed/FeedFilter"
 import {AppContext} from "../../context/app/context"
 import {Roles} from "../../data/security/types"
+import {EventTypeEmoji} from "../../constants/EventType"
 
 type SideCalendarProps = {
     date: Date
@@ -75,7 +76,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     <div id="types-filter" className="flex flex-wrap">
                         {Object.entries(filter.types).map(([type, visible]) => (
                             <Checkbox className="mx-0 text-black whitespace-no-wrap" style={{minWidth: "50%"}} key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
-                                {t(`type.${type}`)}
+                                {EventTypeEmoji[type]+ " "+ t(`type.${type}`)}
                             </Checkbox>
                         ))}
                     </div>
