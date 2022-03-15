@@ -43,10 +43,9 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
-    const groups = useLiveQuery(() => groupManager.getGroups(), [])
 
     const event = useLiveQuery(async () => data.feedId != undefined && await eventsManager.getEventByEventFeedId(data.feedId), [data.feedId])
-    const group = useMemo(() => groups?.find(group => group.feedId == data.feedId), [groups, data.feedId])
+    const group = useLiveQuery(() => groupManager.getGroupByFeedId(data.feedId), [data.feedId])
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({

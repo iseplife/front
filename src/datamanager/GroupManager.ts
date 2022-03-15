@@ -21,8 +21,11 @@ export default class GroupManager extends DataManager<GroupPreview> {
         )
     }
 
-    public getGroups(): Promise<GroupPreview[]>{
+    public getGroups() {
         return this.getTable().toArray()
+    }
+    public getGroupByFeedId(feedId: number) {
+        return this.getTable().where("feedId").equals(feedId).first()
     }
 
     @PacketHandler(WSPSGroupJoined)
