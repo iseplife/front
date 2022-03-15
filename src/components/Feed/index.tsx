@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useContext, useEffect, useRef, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
-import {getFeedPost, getFeedPostPinned} from "../../data/feed"
-import InfiniteScroller, {loaderCallback} from "../Common/InfiniteScroller"
+import {getFeedPostPinned} from "../../data/feed"
+import InfiniteScroller from "../Common/InfiniteScroller"
 import Post from "../Post"
 import {getAuthorizedAuthors} from "../../data/post"
 import {Divider, message, Modal} from "antd"
@@ -16,6 +16,8 @@ import {AppContext} from "../../context/app/context"
 import {FeedContext} from "../../context/feed/context"
 import { Author } from "../../data/request.type"
 import "./Feed.css"
+import FeedsManager, { feedsManager } from "../../datamanager/FeedsManager"
+import { useLiveQuery } from "dexie-react-hooks"
 
 type FeedProps = {
     loading?: boolean,
@@ -27,7 +29,6 @@ type FeedProps = {
 const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, className }) => {
     const { state: { user } } = useContext(AppContext)
     const { t } = useTranslation(["common", "post"])
-    const [posts, setPosts] = useState<PostType[]>([])
     const [postsPinned, setPostsPinned] = useState<PostType[]>([])
 
     const [editPost, setEditPost] = useState<number>(0)
@@ -36,76 +37,111 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const [completeFormType, setCompleteFormType] = useState<EmbedEnumType | undefined>()
     const [authors, setAuthors] = useState<Author[]>([])
 
-    const loadMorePost: loaderCallback = useCallback(async (count: number) => {
-        setFetching(true)
-        if (loading)
-            return new Promise<boolean>(() => undefined)
-        const res = await getFeedPost(id, count)
-        setPosts(posts => [...posts, ...res.data.content])
-        setFetching(false)
+    // const loadMorePost: loaderCallback = useCallback(async (count: number) => {
+    //     setFetching(true)
+    //     if (loading)
+    //         return new Promise<boolean>(() => undefined)
+    //     const res = await getFeedPost(id, count)
+    //     setPosts(posts => [...posts, ...res.data.content])
+    //     setFetching(false)
 
-        if (count === 0 && res.data.content.length === 0 && postsPinned.length == 0)
-            setEmpty(true)
+    //     if (count === 0 && res.data.content.length === 0 && postsPinned.length == 0)
+    //         setEmpty(true)
 
-        return res.data.last
-    }, [id, loading])
+    //     return res.data.last
+    // }, [id, loading])
+
 
     useEffect(() => {
-        if (posts?.length)
-            setEmpty(false)
-    }, [posts?.length])
+        if(!loading){
+            feedsManager.subscribe(id)
+            return () => { feedsManager.unsubscribe(id) }
+        }
+    }, [id, loading])
 
-    const onPostCreation = useCallback((post: PostUpdate) => 
-        setPosts(prevPosts => [
-            {
-                ...post,
-                creationDate: new Date(),
-                liked: false,
-                nbComments: 0,
-                nbLikes: 0,
-                hasWriteAccess: true
-            },
-            ...prevPosts
-        ])
-    , [])
+    const [loadedPosts, setLoadedPosts] = useState(0)
+    const posts = useLiveQuery(async () => !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined, [id, loadedPosts, loading])
+
+    const [firstLoaded, setFirstLoaded] = useState(Number.MAX_SAFE_INTEGER)
+
+    const loadMorePost = useCallback(async (count: number) => {
+        try{
+            const e: string = undefined!
+            e.length
+        }catch(e){
+            console.log(e)
+        }
+        return new Promise<boolean>(exec => {
+            setLoadedPosts((loadedPosts) => {
+                (async () => {
+                    const posts = await feedsManager.getFeedPosts(id, loadedPosts)
+                    console.log(posts, posts?.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER))
+                    const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER) ?? Number.MAX_SAFE_INTEGER)
+                    setFirstLoaded(resp[1])
+                    exec(resp[0])
+                })()
+                return loadedPosts + FeedsManager.PAGE_SIZE
+            })
+        })
+    }, [id])
+
+    // useEffect(() => {
+    //     if (posts?.length)
+    //         setEmpty(false)
+    // }, [posts?.length])
+
+    const onPostCreation = useCallback((post: PostUpdate) => console.log("")
+        // setPosts(prevPosts => [
+        //     {
+        //         ...post,
+        //         creationDate: new Date(),
+        //         liked: false,
+        //         nbComments: 0,
+        //         nbLikes: 0,
+        //         hasWriteAccess: true
+        //     },
+        //     ...prevPosts
+        // ])
+        , [])
 
     const onPostRemoval = useCallback(async (id: number) => {
-        setPosts(posts => posts.filter(p => p.id !== id))
+        // setPosts(posts => posts.filter(p => p.id !== id))
         message.success(t("remove_item.complete"))
     }, [])
 
     const onPostPin = useCallback((id: number, pinned: boolean) => {
-        if (pinned) {
-            const index = posts.findIndex(p => p.id === id)
-            const pinnedPost = { ...posts[index], pinned: true }
+        // if (pinned) {
+        //     const index = posts.findIndex(p => p.id === id)
+        //     const pinnedPost = { ...posts[index], pinned: true }
 
-            // We move post into pinned posts while removing it from common posts
-            setPostsPinned(prev => (
-                [...prev, pinnedPost].sort((a, b) => (
-                    a.publicationDate.getTime() - b.publicationDate.getTime()
-                )))
-            )
-            setPosts(prev => prev.filter((p, i) => i !== index))
-            message.success(t("post:post_pinned"))
-        } else {
-            const index = postsPinned.findIndex(p => p.id === id)
-            const unpinnedPost = { ...postsPinned[index], pinned: false }
+        //     // We move post into pinned posts while removing it from common posts
+        //     setPostsPinned(prev => (
+        //         [...prev, pinnedPost].sort((a, b) => (
+        //             a.publicationDate.getTime() - b.publicationDate.getTime()
+        //         )))
+        //     )
+        //     setPosts(prev => prev.filter((p, i) => i !== index))
+        //     message.success(t("post:post_pinned"))
+        // } else {
+        //     const index = postsPinned.findIndex(p => p.id === id)
+        //     const unpinnedPost = { ...postsPinned[index], pinned: false }
 
-            // We move post into common posts while removing it from pinned posts
-            setPosts(prev => (
-                [...prev, unpinnedPost].sort((a, b) => (
-                    a.publicationDate.getTime() - b.publicationDate.getTime()
-                )))
-            )
-            setPostsPinned(prev => prev.filter((p, i) => i !== index))
-            message.success(t("post:post_unpinned"))
-        }
+        //     // We move post into common posts while removing it from pinned posts
+        //     setPosts(prev => (
+        //         [...prev, unpinnedPost].sort((a, b) => (
+        //             a.publicationDate.getTime() - b.publicationDate.getTime()
+        //         )))
+        //     )
+        //     setPostsPinned(prev => prev.filter((p, i) => i !== index))
+        //     message.success(t("post:post_unpinned"))
+        // }
+        console.log("")
     }, [posts, postsPinned])
 
     const onPostUpdate = useCallback((id: number, postUpdate: PostUpdate) => {
-        setPosts(posts => posts.map(p => p.id === id ?
-            { ...p, ...postUpdate } : p
-        ))
+        // setPosts(posts => posts.map(p => p.id === id ?
+        //     { ...p, ...postUpdate } : p
+        // ))
         setEditPost(0)
         message.success(t("update_item.complete"))
     }, [])
@@ -233,7 +269,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                     </>
                                 )}
 
-                                {posts.map(p => (
+                                {posts?.map(p => (
                                     <Post
                                         feedId={id}
                                         key={p.id} data={p}

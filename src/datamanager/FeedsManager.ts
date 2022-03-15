@@ -4,20 +4,26 @@ import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSFeedPostCreated from "../realtime/protocol/v1/packets/server/WSPSFeedPostCreated"
 import { getFeedPost } from "../data/feed"
 import { Post } from "../data/post/types"
+import { Page } from "../data/request.type"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
-    private static PAGE_SIZE = 10
+    public static PAGE_SIZE = 10
 
     lastLoadId = Math.round(Math.random() * 10_000_000)
 
+    private loadedFeeds = new Set<FeedId>()
+
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["id", "feedId", "pinned", "lastLoadId", "loadedFeed"], wsServerClient)
+        super("feeds", ["publicationDate", "id", "feedId", "lastLoadId", "loadedFeed", "[id+loadedFeed]"], wsServerClient)
+        this.setContext("no_connection", { bugged: new Set() })
     }
 
     protected async initData() {
         this.maxIdByPage = {}
         this.lastLoadId = Math.round(Math.random() * 10_000_000)
+        for(const loaded of this.loadedFeeds)
+            this.initFeedData(loaded)
     }
 
     private async _waitFetching() {
@@ -29,25 +35,62 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.loadPage(feed, 0)
     }
 
-    private maxIdByPage: {[key: number]: number} = {}
+    public async isWithoutConnection(feed: FeedId){
+        return ((await this.getContext("no_connection")).bugged as Set<FeedId>).has(feed ?? mainFeedId)
+    }
+    public async setWithoutConnection(feed: FeedId, error: boolean){
+        const bugged = (await this.getContext("no_connection")).bugged as Set<FeedId>
+        const before = bugged.size
 
-    public getFeedNotifications(feed: FeedId, page: number, limit: number){
-        return this.getTable().where({ "loadedFeed": feed ?? mainFeedId }).limit(limit)
+        if(error)
+            bugged.add(feed ?? mainFeedId)
+        else
+            bugged.delete(feed ?? mainFeedId)
+
+        if(bugged.size != before)
+            await this.setContext("no_connection", { bugged })
     }
 
-    public async loadPage(feed: FeedId, page: number) {
+    private maxIdByPage: {[key: number]: number} = {}
+
+    public getFeedPosts(feed: FeedId, limit: number){
+        return this.getTable().where({ "loadedFeed": feed ?? mainFeedId }).reverse().limit(limit).toArray()
+    }
+
+    public async loadMore(feed: FeedId, lastLoadedId: number){
         await this._waitFetching()
-        
-        const posts = (await getFeedPost(feed, page)).data
+        const count = await this.getTable().where(["id", "loadedFeed"]).between([lastLoadedId, feed ?? mainFeedId], [Number.MAX_SAFE_INTEGER, feed ?? mainFeedId]).count()
+        const page = Math.floor(count / FeedsManager.PAGE_SIZE)
+        return await this.loadPage(feed, page)
+    }
+
+    public async subscribe(feed: FeedId){
+        this.loadedFeeds.add(feed)
+    }
+    public async unsubscribe(feed: FeedId){
+        this.loadedFeeds.delete(feed)
+    }
+
+    public async loadPage(feed: FeedId, page: number): Promise<[boolean, number]> {
+        await this._waitFetching()
+        let posts: Page<Post>
+        try{
+            posts = (await getFeedPost(feed, page)).data
+        }catch(e){
+            this.setWithoutConnection(feed, true)
+            throw e
+        }
+
+        this.setWithoutConnection(feed, false)
 
         FeedsManager.PAGE_SIZE = posts.size
 
         // Update lastLoadId
         const content = posts.content.map(post => ({
             ...post,
-             lastLoadId: this.lastLoadId,
-             loadedFeed: feed ?? mainFeedId,
-        } as ManagerPost));
+            lastLoadId: this.lastLoadId,
+            loadedFeed: feed ?? mainFeedId,
+        } as ManagerPost))
 
         this.addBulkData(content)
 
@@ -66,39 +109,27 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         else
             this.checkUnloaded(feed, lastId, maxId)
 
-        return posts.last
+        return [posts.last, maxId]
     }
 
-    private async getFeedPosts(feed: FeedId){
+    private async getAllFeedPosts(feed: FeedId){
         return this.getTable().where("loadedFeed").equals(feed ?? mainFeedId).toArray()
     }
 
     private async setFeedLastId(feed: FeedId, lastId: number){
         await this.setContext(`last:${feed}`, { lastId })
     }
-    private async getFeedLastId(feed: FeedId){
+    public async getFeedLastId(feed: FeedId){
         return (await this.getContext(`last:${feed}`)).lastId as number | undefined
     }
 
-
-    public async loadMore(feed: number | undefined, minId: number) {
-        await this._waitFetching()
-        // return await this.loadPage(feed, Math.floor(await this.getTable().where("id").aboveOrEqual(minId).count() / await this.getResultsByPage()))
-    }
-
-    protected async isAnyInCache(ids: number[]): Promise<boolean> {
-        return !!(await this.getTable().where("id").anyOf(ids).first())
-    }
-    private async isAnyOfFeedInCache(feed: FeedId, ids: number[]){
-        return !!(await this.getTable().where("loadedFeed").equals(feed ?? mainFeedId).and(post => ids.includes(post.id)).first())
-    }
     private async checkUnloaded(feed: FeedId, minId: number, maxId: number){
-        const posts = (await this.getTable().where(["loadedFeed", "id"]).between([feed ?? mainFeedId, minId], [feed ?? mainFeedId, maxId], true, true).toArray()).sort((a, b) => a.id - b.id)
+        const posts = (await this.getTable().where(["id", "loadedFeed"]).between([minId, feed ?? mainFeedId], [maxId, feed ?? mainFeedId], true, true).toArray()).sort((a, b) => a.id - b.id)
         
         const toUnload: ManagerPost[] = []
         let toUnloadTemp: ManagerPost[] = []
 
-        let freshBefore = false;
+        let freshBefore = false
         //De l'id - au +
         for(const post of posts){
             const fresh = this.isFresh(post)
@@ -122,6 +153,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     @PacketHandler(WSPSFeedPostCreated)
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated){
+        packet.post.publicationDate = new Date(packet.post.publicationDate)
         this.addData({
             ...packet.post,
             lastLoadId: this.lastLoadId,
