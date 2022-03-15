@@ -58,24 +58,16 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
             return () => { feedsManager.unsubscribe(id) }
         }
     }, [id, loading])
-
     const [loadedPosts, setLoadedPosts] = useState(0)
     const posts = useLiveQuery(async () => !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined, [id, loadedPosts, loading])
 
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_SAFE_INTEGER)
 
     const loadMorePost = useCallback(async (count: number) => {
-        try{
-            const e: string = undefined!
-            e.length
-        }catch(e){
-            console.log(e)
-        }
         return new Promise<boolean>(exec => {
             setLoadedPosts((loadedPosts) => {
                 (async () => {
                     const posts = await feedsManager.getFeedPosts(id, loadedPosts)
-                    console.log(posts, posts?.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER))
                     const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.id), Number.MAX_SAFE_INTEGER) ?? Number.MAX_SAFE_INTEGER)
                     setFirstLoaded(resp[1])
                     exec(resp[0])
@@ -270,15 +262,17 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                 )}
 
                                 {posts?.map(p => (
-                                    <Post
-                                        feedId={id}
-                                        key={p.id} data={p}
-                                        onDelete={onPostRemoval}
-                                        onUpdate={onPostUpdate}
-                                        onPin={onPostPin}
-                                        toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                        isEdited={editPost === p.id}
-                                    />
+                                    <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
+                                        <Post
+                                            feedId={id}
+                                            key={p.id} data={p}
+                                            onDelete={onPostRemoval}
+                                            onUpdate={onPostUpdate}
+                                            onPin={onPostPin}
+                                            toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                            isEdited={editPost === p.id}
+                                        />
+                                    </div>
                                 ))}
                             </>
                         )
