@@ -5,6 +5,7 @@ import WSPSFeedPostCreated from "../realtime/protocol/v1/packets/server/WSPSFeed
 import { getFeedPost } from "../data/feed"
 import { Post, PostUpdate } from "../data/post/types"
 import { Page } from "../data/request.type"
+import { isBefore } from "date-fns"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -110,7 +111,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         else
             this.checkUnloaded(feed, lastId, maxId)
 
-        return [posts.last, maxId]
+        return [posts.last, content.reduce((prev, post) => isBefore(post.publicationDate, new Date()) ? Math.max(prev, post.publicationDateId) : prev, 0)]
     }
 
     private calcId(post: Post | PostUpdate){

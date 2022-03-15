@@ -18,6 +18,7 @@ import { Author } from "../../data/request.type"
 import "./Feed.css"
 import FeedsManager, { feedsManager } from "../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
+import { isAfter, isBefore } from "date-fns"
 
 type FeedProps = {
     loading?: boolean,
@@ -69,7 +70,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                 (async () => {
                     const posts = await feedsManager.getFeedPosts(id, loadedPosts)
                     const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE) ?? Number.MAX_VALUE)
-                    setFirstLoaded(resp[1])
+                    setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[1] : Math.max(firstLoaded, resp[1]))
                     exec(resp[0])
                 })()
                 return loadedPosts + FeedsManager.PAGE_SIZE
@@ -152,6 +153,14 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         })
     }, [id])
 
+    const now = new Date()
+
+    const loadAllPosts = useCallback(() => {
+        console.log("loaddd")
+        if(posts)
+            setFirstLoaded(posts.reduce((prev, post) => isBefore(post.publicationDate, new Date()) ? Math.max(prev, post.publicationDateId) : prev, 0))
+    }, [posts])
+
     const [feedMargin, setFeedMargin] = useState(0)
     const feedElement = useRef<HTMLDivElement>(null)
     useEffect(() => {
@@ -163,6 +172,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         return () => window.removeEventListener("resize", fnc)
     }, [feedElement?.current])
 
+    const toLoad = posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
 
     return (
         <FeedContext.Provider value={{authors}}>
@@ -228,10 +238,12 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                     </BasicPostForm>
                 )}
 
-                <div
-                    className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
-                    <div className="ant-divider-inner-text">3 nouveaux posts</div>
-                </div>
+                {toLoad != 0 &&
+                    <div onClick={loadAllPosts}
+                        className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
+                        <div className="ant-divider-inner-text">{toLoad} nouveaux posts</div>
+                    </div>
+                }
 
                 <InfiniteScroller
                     watch="DOWN" callback={loadMorePost} empty={empty}
@@ -261,7 +273,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                     </>
                                 )}
 
-                                {posts?.map(p => (p.publicationDateId > firstLoaded && 
+                                {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && 
                                     <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
                                         <Post
                                             feedId={id}
