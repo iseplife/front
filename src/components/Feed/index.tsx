@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useEffect, useRef, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller from "../Common/InfiniteScroller"
@@ -156,7 +156,6 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const now = new Date()
 
     const loadAllPosts = useCallback(() => {
-        console.log("loaddd")
         if(posts)
             setFirstLoaded(posts.reduce((prev, post) => isBefore(post.publicationDate, new Date()) ? Math.max(prev, post.publicationDateId) : prev, 0))
     }, [posts])
@@ -172,7 +171,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         return () => window.removeEventListener("resize", fnc)
     }, [feedElement?.current])
 
-    const toLoad = posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
+    const toLoad = useMemo(() =>
+        posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
+    , [posts, firstLoaded])
 
     return (
         <FeedContext.Provider value={{authors}}>
@@ -238,7 +239,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                     </BasicPostForm>
                 )}
 
-                {toLoad != 0 &&
+                {!!toLoad &&
                     <div onClick={loadAllPosts}
                         className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
                         <div className="ant-divider-inner-text">{toLoad} nouveaux posts</div>

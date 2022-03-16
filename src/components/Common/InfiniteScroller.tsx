@@ -91,14 +91,6 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
         }
     }))
 
-    /**
-     * Initial data, call on component creation
-     * first element that are going to be displayed
-     */
-    useEffect(() => {
-        initialLoad()
-    }, [initialLoad])
-
     useEffect(() => {
         if (!upLoader.over && !upLoader.loading && upLoader.fetch) {
             setUpLoader(prevState => ({...prevState, loading: true}))
@@ -111,7 +103,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     loading: false
                 }))
 
-                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > triggerDistance)
+                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0)
                     setUpLoader(prevState => ({...prevState, fetch: true}))
             })
         }
@@ -128,7 +120,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     count: ++prevState.count,
                     loading: false
                 }))
-                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < (window.innerHeight + triggerDistance))
+                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight)
                     setDownLoader(prevState => ({...prevState, fetch: true}))
             })
         }
