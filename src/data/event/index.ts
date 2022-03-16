@@ -8,7 +8,7 @@ export const getEvent = (id: number): AxiosPromise<Event> => apiClient.get(`/eve
 
 export const createEvent = (form: EventForm): AxiosPromise<Event> => apiClient.post("/event", form)
 
-export const editEvent = (form: EventForm): AxiosPromise<Event> => apiClient.put("/event", form)
+export const editEvent = (id: number, form: EventForm): AxiosPromise<Event> => apiClient.put(`/event/${id}`, form)
 
 export const getMonthEvents = (timestamp: number): AxiosPromise<EventPreview[]> => apiClient.get(`/event/m/${timestamp}`)
 

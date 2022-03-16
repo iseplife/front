@@ -74,5 +74,6 @@
     "subscribed": "Abonné",
     "unsubscribe": "Se désabonner"
   },
-  "retry": "Réessayer"
+  "retry": "Réessayer",
+  "no_targets": "Aucune audience (Évènement public) "
 }

@@ -35,7 +35,7 @@ const EventEditForm = withFormik<EventEditFormProps, EventFormType>({
         })
     },
     handleSubmit: async (values, {props}) => {
-        editEvent(values).then(res => {
+        editEvent(props.event.id, values).then(res => {
             if (res.status === 200) {
                 props.onSubmit && props.onSubmit(res.data)
                 message.info(props.message)

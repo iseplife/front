@@ -74,5 +74,6 @@
     "subscribed": "Followed",
     "unsubscribe": "Unfollow"
   },
+  "no_targets": "No targets (Public event)",
   "retry": "Retry"
 }

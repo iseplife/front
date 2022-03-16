@@ -10,16 +10,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const {Option} = Select
 
-type OptionType = {
-    label: string
-    value: number
-}
-
-
 //TODO: rework how filter is handle, it's overcomplicated.
 const FeedFilter: React.FC = () => {
     const {t} = useTranslation("event")
-    const [value, setValue] = useState()
+    const [value, setValue] = useState<number>()
     const {feeds} = useContext(CalendarContext)
     const [filter, setFilter] = useRecoilState(filterState)
 
@@ -49,10 +43,12 @@ const FeedFilter: React.FC = () => {
                 value={value}
                 placeholder={t("feed_filter")}
                 showArrow={false}
-                filterOption={(filter, option) => option ? (option as OptionType).label.includes(filter) : false}
+                filterOption={(filter, option) => option ?
+                    option.children.toLocaleLowerCase().includes(filter.toLowerCase()) :
+                    false
+                }
                 onSelect={id => {
                     toggleFeed(id)
-                    setValue(undefined)
                 }}
                 className="rounded-scroller w-full hover:border-indigo-400"
             >
