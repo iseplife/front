@@ -246,8 +246,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                 }
 
                 <InfiniteScroller
+                    triggerDistance={500}
                     watch="DOWN" callback={loadMorePost} empty={empty}
-                    loadingComponent={<CardTextSkeleton loading={true} number={3} className="my-3"/>}
+                    loadingComponent={<CardTextSkeleton loading={true} number={5} className="my-3"/>}
                 >
                     {empty ?
                         <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
