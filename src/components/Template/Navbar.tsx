@@ -54,7 +54,7 @@ const ProfilePanel: React.FC = () => {
             <Divider className="my-2"/>
             <Link
                 to="/logout"
-                className="flex justify-center text-red-500 mx-3 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 rounded transition-colors"
+                className="flex justify-center text-red-500 mx-3 mb-2 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 rounded transition-colors"
             >
                 {t("logout")}
             </Link>
