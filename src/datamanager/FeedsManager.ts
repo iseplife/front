@@ -18,7 +18,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["publicationDateId", "loadedFeed", "id", "feedId", "[loadedFeed+lastLoadId]", "[loadedFeed+publicationDateId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["[loadedFeed+publicationDateId]", "loadedFeed", "id", "feedId", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
