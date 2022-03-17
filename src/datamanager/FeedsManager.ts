@@ -18,7 +18,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["publicationDateId", "loadedFeed", "id", "feedId", "[loadedFeed+lastLoadId]", "[publicationDateId+loadedFeed]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["publicationDateId", "loadedFeed", "id", "feedId", "[loadedFeed+lastLoadId]", "[loadedFeed+publicationDateId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
@@ -59,8 +59,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public countFreshFeedPosts(feed: FeedId){
         return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.lastLoadId]).count()
     }
-    public countFreshPostsAfter(feed: FeedId, publicationDateId: number){
-        return this.getTable().where(["publicationDateId", "loadedFeed"]).between([publicationDateId, feed ?? mainFeedId], [this.calcIdFromDateId(new Date(), 999_999), feed ?? mainFeedId]).count()
+    public async countFreshPostsAfter(feed: FeedId, publicationDateId: number) {
+        return this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, publicationDateId], [feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).count()
     }
     public async getLastPostedFresh(feed: FeedId) {
         return this.getTable().where(["lastLoadId", "loadedFeed", "publicationDateId"]).between([this.lastLoadId, feed ?? mainFeedId, 0], [this.lastLoadId, feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).last()
@@ -145,7 +145,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     private async checkUnloaded(feed: FeedId) {
-        const posts = (await this.getTable().where(["publicationDateId", "loadedFeed"]).between([(await this.getFirstPostedFresh(feed))?.publicationDateId, feed ?? mainFeedId], [Number.MAX_VALUE, feed ?? mainFeedId]).toArray()).sort((a, b) => a.id - b.id)
+        const posts = (await this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId], [feed ?? mainFeedId, Infinity]).toArray()).sort((a, b) => a.id - b.id)
         
         const toUnload: ManagerPost[] = []
         let toUnloadTemp: ManagerPost[] = []

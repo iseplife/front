@@ -68,11 +68,12 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                     try {
                         if (nextLoadedPosts >= ((await feedsManager.countFreshFeedPosts(id)) ?? 0)) {
                             const resp = await feedsManager.loadMore(id)
-                            const loaded = await feedsManager.countFreshPostsAfter(id, resp[1])
-                            setNextLoadedPosts(loaded + FeedsManager.PAGE_SIZE)
-                            setLoadedPosts(loaded)
-                            setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[2] : Math.max(firstLoaded, resp[2]))
-    
+                            if (resp[1] != Infinity) {
+                                const loaded = await feedsManager.countFreshPostsAfter(id, resp[1])
+                                setNextLoadedPosts(loaded + FeedsManager.PAGE_SIZE)
+                                setLoadedPosts(loaded)
+                                setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[2] : Math.max(firstLoaded, resp[2]))
+                            }
                             setError(false)
                             exec(resp[0])
                         } else {
