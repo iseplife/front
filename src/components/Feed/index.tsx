@@ -29,29 +29,15 @@ type FeedProps = {
 }
 const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, className }) => {
     const { state: { user } } = useContext(AppContext)
-    const { t } = useTranslation(["common", "post"])
+    const { t } = useTranslation(["common", "post", "error"])
     const [postsPinned, setPostsPinned] = useState<PostType[]>([])
 
     const [editPost, setEditPost] = useState<number>(0)
     const [empty, setEmpty] = useState<boolean>(false)
-    const [fetching, setFetching] = useState<boolean>(false)
     const [completeFormType, setCompleteFormType] = useState<EmbedEnumType | undefined>()
     const [authors, setAuthors] = useState<Author[]>([])
 
-    // const loadMorePost: loaderCallback = useCallback(async (count: number) => {
-    //     setFetching(true)
-    //     if (loading)
-    //         return new Promise<boolean>(() => undefined)
-    //     const res = await getFeedPost(id, count)
-    //     setPosts(posts => [...posts, ...res.data.content])
-    //     setFetching(false)
-
-    //     if (count === 0 && res.data.content.length === 0 && postsPinned.length == 0)
-    //         setEmpty(true)
-
-    //     return res.data.last
-    // }, [id, loading])
-
+    const [error, setError] = useState<boolean>(false)
 
     useEffect(() => {
         if(!loading){
@@ -60,20 +46,40 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         }
     }, [id, loading])
     const [loadedPosts, setLoadedPosts] = useState(0)
+    const [nextLoadedPosts, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
     const posts = useLiveQuery(async () => !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined, [id, loadedPosts, loading])
 
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
-    const loadMorePost = useCallback(async (count: number) => {
+    useEffect(() => {
+        if(!loading)
+            feedsManager.getLastPostedFresh(id).then(post => {
+                console.log(post)
+                setFirstLoaded(firstLoaded => post?.publicationDateId ?? firstLoaded)
+            })
+    }, [loading, id])
+
+    const loadMorePost = useCallback(async () => {
         return new Promise<boolean>(exec => {
-            setLoadedPosts((loadedPosts) => {
+            setNextLoadedPosts(nextLoadedPosts => {
+                setLoadedPosts(nextLoadedPosts);
                 (async () => {
-                    const posts = await feedsManager.getFeedPosts(id, loadedPosts)
-                    const resp = await feedsManager.loadMore(id, posts?.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE) ?? Number.MAX_VALUE)
-                    setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[1] : Math.max(firstLoaded, resp[1]))
-                    exec(resp[0])
+                    try {
+                        const resp = await feedsManager.loadMore(id)
+                        const loaded = await feedsManager.countFreshFeedPosts(id)
+                        setNextLoadedPosts(loaded + FeedsManager.PAGE_SIZE)
+                        setLoadedPosts(loaded)
+                        setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[1] : Math.max(firstLoaded, resp[1]))
+
+                        setError(false)
+                        exec(resp[0])
+                    } catch (e) {
+                        console.error("Error when fetching posts", e)
+                        setError(true)
+                    }
+                    exec(false)
                 })()
-                return loadedPosts + FeedsManager.PAGE_SIZE
+                return nextLoadedPosts
             })
         })
     }, [id])
@@ -174,6 +180,8 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const toLoad = useMemo(() =>
         posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
     , [posts, firstLoaded])
+    
+    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3"/>, [])
 
     return (
         <FeedContext.Provider value={{authors}}>
@@ -245,53 +253,67 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                         <div className="ant-divider-inner-text">{toLoad} nouveaux posts</div>
                     </div>
                 }
-
-                <InfiniteScroller
-                    triggerDistance={500}
-                    watch="DOWN" callback={loadMorePost} empty={empty}
-                    loadingComponent={<CardTextSkeleton loading={true} number={5} className="my-3"/>}
-                >
-                    {empty ?
-                        <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
-                            <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
-                            <span className="text-center">{t("empty_feed")}</span>
-                        </div>
-                        : (
-                            <>
-                                {postsPinned.length !== 0 && (
+                {
+                    loading ? loadingSkeletons : 
+                        <InfiniteScroller
+                            block={error}
+                            triggerDistance={500}
+                            watch="DOWN" callback={loadMorePost} empty={empty}
+                            loadingComponent={error || loadingSkeletons}
+                        >
+                            {empty ?
+                                <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
+                                    <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
+                                    <span className="text-center">{t("empty_feed")}</span>
+                                </div>
+                                : (
                                     <>
-                                        {postsPinned.map(p => (
-                                            <Post
-                                                feedId={id}
-                                                key={p.id} data={p}
-                                                onDelete={onPostRemoval}
-                                                onUpdate={onPostUpdate}
-                                                onPin={onPostPin}
-                                                toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                                isEdited={editPost === p.id}
-                                            />
-                                        ))}
-                                        <Divider className="text-gray-700"/>
-                                    </>
-                                )}
+                                        {postsPinned.length !== 0 && (
+                                            <>
+                                                {postsPinned.map(p => (
+                                                    <Post
+                                                        feedId={id}
+                                                        key={p.id} data={p}
+                                                        onDelete={onPostRemoval}
+                                                        onUpdate={onPostUpdate}
+                                                        onPin={onPostPin}
+                                                        toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                                        isEdited={editPost === p.id}
+                                                    />
+                                                ))}
+                                                <Divider className="text-gray-700"/>
+                                            </>
+                                        )}
 
-                                {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && 
-                                    <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
-                                        <Post
-                                            feedId={id}
-                                            key={p.id} data={p}
-                                            onDelete={onPostRemoval}
-                                            onUpdate={onPostUpdate}
-                                            onPin={onPostPin}
-                                            toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                            isEdited={editPost === p.id}
-                                        />
-                                    </div>
-                                ))}
-                            </>
-                        )
-                    }
-                </InfiniteScroller>
+                                        {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p)) && 
+                                            <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
+                                                <Post
+                                                    feedId={id}
+                                                    key={p.id} data={p}
+                                                    onDelete={onPostRemoval}
+                                                    onUpdate={onPostUpdate}
+                                                    onPin={onPostPin}
+                                                    toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                                    isEdited={editPost === p.id}
+                                                />
+                                            </div>
+                                        ))}
+                                        {
+                                            error &&
+                                                <div className="flex flex-col text-center">
+                                                    <label className="text-neutral-800">{t("error:no_connection_retry")}</label>
+                                                    <div className="flex justify-center mt-2">
+                                                        <button onClick={loadMorePost} className="bg-indigo-400 rounded-full px-4 py-2 font-semibold text-base text-white hover:bg-indigo-500 hover:shadow-sm transition-all">
+                                                            {t("retry")}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                        }
+                                    </>
+                                )
+                            }
+                        </InfiniteScroller>
+                }
             </div>
         </FeedContext.Provider>
     )

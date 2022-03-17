@@ -74,5 +74,6 @@
     "subscribe": "Suivre",
     "subscribed": "Abonné",
     "unsubscribe": "Se désabonner"
-  }
+  },
+  "retry": "Réessayer"
 }

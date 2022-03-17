@@ -1,4 +1,5 @@
 {
+  "no_connection_retry": "Il semble que vous ayez perdu votre connexion. Veuillez vérifier et réessayer.",
   "online": "De nouveau connecté !",
   "offline": "Connexion interrompue",
   "user_disconnected": "Vous avez été déconnecté",

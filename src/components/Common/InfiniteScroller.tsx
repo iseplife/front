@@ -26,17 +26,20 @@ type InfiniteScrollerProps = {
     children: ReactNode
     loadingComponent?: React.ReactNode,
     scrollElement?: HTMLElement | null | false,
+    block?: boolean
 }
 
 const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>((props, ref) => {
     const {t} = useTranslation("common")
-    const {watch, empty = false,  callback, triggerDistance = 200, loadingComponent, scrollElement, children, className} = props
+    const {watch, block = false, empty = false,  callback, triggerDistance = 200, loadingComponent, scrollElement, children, className} = props
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
 
     const intersector = useMemo(() => 
         new IntersectionObserver(() => {
+            if (block)
+                return
             if (watch !== "DOWN")
                 setUpLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
             if (watch !== "UP")
@@ -103,11 +106,11 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     loading: false
                 }))
 
-                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0)
+                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0 && !block)
                     setUpLoader(prevState => ({...prevState, fetch: true}))
             })
         }
-    }, [upLoader, callback, loaderRef?.current])
+    }, [upLoader, callback, loaderRef?.current, block])
 
     useEffect(() => {
         if (!downLoader.over && !downLoader.loading && downLoader.fetch) {
@@ -120,11 +123,11 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     count: ++prevState.count,
                     loading: false
                 }))
-                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight)
+                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !block)
                     setDownLoader(prevState => ({...prevState, fetch: true}))
             })
         }
-    }, [downLoader, callback])
+    }, [downLoader, callback, loaderRef?.current, block])
 
     return (
         <div className="relative h-auto">
