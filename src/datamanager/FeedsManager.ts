@@ -118,6 +118,20 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             publicationDateId: this.calcId(post),
         } as ManagerPost))
 
+        if (!lastLoadedDate) {
+            const deleted = await this.getTable().where(["loadedFeed", "publicationDateId"]).between(
+                [
+                    feed ?? mainFeedId,
+                    content.reduce((prev, post) => Math.max(prev, post.publicationDateId), 0) + 1
+                ], [
+                    feed ?? mainFeedId,
+                    Infinity
+                ]
+            ).delete()
+            if (deleted)
+                console.log("deleted", deleted, "removed posts")
+        }
+
         this.addBulkData(content)
 
         const lastId = content.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE)
@@ -180,7 +194,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await this.getTable().bulkDelete(toUnload.map(post => [post.loadedFeed, post.publicationDateId]))
     }
 
-    public isFresh(post: ManagerPost, feed: FeedId){
+    public isFresh(post: ManagerPost, feed: FeedId) {
         return post.lastLoadId == this.getLastLoad(feed)
     }
 
