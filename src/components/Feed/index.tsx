@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
 import {getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller from "../Common/InfiniteScroller"
@@ -39,14 +39,24 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     const [error, setError] = useState<boolean>(false)
 
+    const [baseLastLoad, setBaseLastLoad] = useState<number>(0)
+
     useEffect(() => {
-        if(!loading){
-            feedsManager.subscribe(id)
+        if (!loading) {
+            feedsManager.subscribe(id).then(setBaseLastLoad)
             return () => { feedsManager.unsubscribe(id) }
         }
     }, [id, loading])
+
+    const [needFullReload, setNeedFullReload] = useState(false)
+
+    useLiveQuery(async () => {
+        console.log("update NFR")
+        setNeedFullReload(baseLastLoad != 0 && baseLastLoad != await feedsManager.getGeneralLastLoad())
+    }, [baseLastLoad])
+
     const [loadedPosts, setLoadedPosts] = useState(0)
-    const [nextLoadedPosts, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
+    const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
     const posts = useLiveQuery(async () => 
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     , [id, loadedPosts, loading])
@@ -177,6 +187,13 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         if(posts)
             setFirstLoaded(posts.reduce((prev, post) => isBefore(post.publicationDate, new Date()) ? Math.max(prev, post.publicationDateId) : prev, 0))
     }, [posts])
+    const fullReload = useCallback(async () => {
+        setNeedFullReload(false)
+        setFirstLoaded(Number.MAX_VALUE)
+        await feedsManager.subscribe(id)
+        setLoadedPosts(0)
+        loadMorePost()
+    }, [id])
 
     const [feedMargin, setFeedMargin] = useState(0)
     const feedElement = useRef<HTMLDivElement>(null)
@@ -259,10 +276,10 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                     </BasicPostForm>
                 )}
 
-                {!!toLoad &&
-                    <div onClick={loadAllPosts}
+                {(!!toLoad || needFullReload) &&
+                    <div onClick={needFullReload ? fullReload : loadAllPosts}
                         className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors">
-                        <div className="ant-divider-inner-text">{toLoad} nouveaux posts</div>
+                        <div className="ant-divider-inner-text">{needFullReload ? t("post:full_reload") : t("post:new_posts", { toLoad })}</div>
                     </div>
                 }
                 {
@@ -297,8 +314,8 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                             </>
                                         )}
 
-                                        {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p)) && 
-                                            <div className={!feedsManager.isFresh(p) ? "opacity-60 pointer-events-none" : ""}>
+                                        {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id)) && 
+                                            <div className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none" : ""}>
                                                 <Post
                                                     feedId={id}
                                                     key={p.id} data={p}

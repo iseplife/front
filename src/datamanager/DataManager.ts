@@ -91,9 +91,9 @@ export default abstract class DataManager<T> extends PacketListener {
                 this.initData()
             }
         })
-        this.registerEvent(WSEventType.DISCONNECTED, () => {
+        this.registerEvent(WSEventType.DISCONNECTED, () => 
             this.needDataLoad = true
-        })
+        )
     }
 
     public async unregister() {

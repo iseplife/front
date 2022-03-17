@@ -13,5 +13,7 @@
 	"pin": "Épingler",
 	"unpin": "Désépingler",
 	"posted_in_group": "Posté dans le groupe \"{{group}}\"",
-	"posted_in_event": "Posté dans l'événement \"{{event}}\""
+	"posted_in_event": "Posté dans l'événement \"{{event}}\"",
+	"full_reload": "Charger les nouveaux posts",
+	"new_posts": "{{toLoad}} nouveaux posts"
 }

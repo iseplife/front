@@ -11,6 +11,8 @@ import { AppContext } from "../../context/app/context"
 import ProtocolV1 from "../protocol/v1/ProtocolV1"
 
 class WSServerClient {
+    private static reconnectTimeout: number
+
     private socket!: WebSocket
     private messageDecoder!: MessageDecoder
     private queue: PacketOut[] = []
@@ -24,6 +26,8 @@ class WSServerClient {
 
     private _logged = false
 
+    private context!: React.ContextType<typeof AppContext>
+
     constructor(
         public ip: string,
     ) {
@@ -36,31 +40,47 @@ class WSServerClient {
      * @param username Le nom d'utilisateur du client
      * @param accessToken AccessToken renouvelé à utiliser pour se connecter
      */
-    public connect(context: React.ContextType<typeof AppContext>) {
+    public connect(context: React.ContextType<typeof AppContext>, retry = false) {
         if (this.connected)
             return
-        new GroupListener(this, context).register()
+        if(!retry)
+            clearTimeout(WSServerClient.reconnectTimeout)
+        this.context = context
         this.accessToken = context.state.jwt
         this.socket = new WebSocket(this.ip)
-        this.initSocket()
+        this.initSocket(retry)
     }
-    private initSocket() {
+    private initSocket(retry = false) {
         this.messageDecoder = new MessageDecoder()
         this.socket.binaryType = "arraybuffer"
         this.socket.onopen = (event) => {
+            window.dispatchEvent(new Event(WSEventType.CONNECTED))
+
             this.socket.send(this.accessToken)
             this._connected = true
             this._dispatchConnected()
         }
-        this.socket.onclose = this.socket.onerror = this._dispatchDisconnected
-        this.socket.onmessage = (event) => 
-            this.messageDecoder.decode(event.data)
-        this._registerListeners()
+        this.socket.onclose = () => this._dispatchDisconnected()
+        this.socket.onmessage = (event) => this.messageDecoder.decode(event.data)
+        
+        if (!retry)
+            this._registerListeners()
     }
 
-    private _dispatchDisconnected(){
-        const event = new Event(WSEventType.DISCONNECTED)
-        window.dispatchEvent(event)
+    private _dispatchDisconnected() {
+        if (this._connected) {
+            const event = new Event(WSEventType.DISCONNECTED)
+            window.dispatchEvent(event)
+            console.log("[WebSocket] Disconnected")
+        } else
+            console.log("[WebSocket] Connection failed")
+        
+        this._connected = false
+
+        WSServerClient.reconnectTimeout = window.setTimeout(() => 
+            this.connect(this.context, true)
+        , 1000)
+        
     }
 
     private _dispatchConnected(){
@@ -71,6 +91,7 @@ class WSServerClient {
     private _registerListeners() {
         new ConnectedListener(this).register()
         new FeedListener(this).register()
+        new GroupListener(this, this.context).register()
     }
 
     public setLogged() {        

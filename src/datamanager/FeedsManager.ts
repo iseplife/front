@@ -13,7 +13,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public static PAGE_SIZE = 8
 
-    lastLoadId = Math.round(Math.random() * 10_000_000)
+    lastLoadIdByFeed: { [key: number]: number } = {}
 
     private loadedFeeds = new Set<FeedId>()
 
@@ -23,10 +23,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     protected async initData() {
-        this.maxIdByPage = {}
-        this.lastLoadId = Math.round(Math.random() * 10_000_000)
-        for(const loaded of this.loadedFeeds)
-            this.initFeedData(loaded)
+        const now = Date.now()
+
+        for (const feedId in this.lastLoadIdByFeed)
+            if (!this.loadedFeeds.has(+feedId))
+                this.lastLoadIdByFeed[feedId] = now
+        // for(const loaded of this.loadedFeeds)
+        //     this.initFeedData(loaded)
+        
+        this.setContext("lastLoad", { lastLoad: now })
     }
 
     private async _waitFetching() {
@@ -54,19 +59,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             await this.setContext("no_connection", { bugged })
     }
 
-    private maxIdByPage: {[key: number]: number} = {}
-
     public countFreshFeedPosts(feed: FeedId){
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.lastLoadId]).count()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).count()
     }
     public async countFreshPostsAfter(feed: FeedId, publicationDateId: number) {
         return this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, publicationDateId], [feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).count()
     }
     public async getLastPostedFresh(feed: FeedId) {
-        return this.getTable().where(["lastLoadId", "loadedFeed", "publicationDateId"]).between([this.lastLoadId, feed ?? mainFeedId, 0], [this.lastLoadId, feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).last()
+        return this.getTable().where(["lastLoadId", "loadedFeed", "publicationDateId"]).between([this.getLastLoad(feed), feed ?? mainFeedId, 0], [this.getLastLoad(feed), feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).last()
     }
     public async getFirstPostedFresh(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.lastLoadId]).first()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).first()
     }
     public getFeedPosts(feed: FeedId, limit: number){
         return this.getTable().where({ "loadedFeed": feed ?? mainFeedId }).reverse().limit(limit).toArray()
@@ -78,11 +81,19 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return await this.loadBefore(feed, firstFresh?.publicationDate ?? undefined)
     }
 
-    public async subscribe(feed: FeedId){
-        this.loadedFeeds.add(feed)
+    public async getGeneralLastLoad() {
+        return (await this.getContext("lastLoad"))?.lastLoad
+    }
+    public getLastLoad(feed: FeedId): number {
+        return this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0
+    }
+
+    public async subscribe(feed: FeedId) {
+        this.loadedFeeds.add(feed ?? mainFeedId)
+        return this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
     }
     public async unsubscribe(feed: FeedId){
-        this.loadedFeeds.delete(feed)
+        this.loadedFeeds.delete(feed ?? mainFeedId)
     }
 
     public async loadBefore(feed: FeedId, lastLoadedDate?: Date): Promise<[boolean, number, number]> {
@@ -102,7 +113,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         // Update lastLoadId
         const content = posts.content.map(post => ({
             ...post,
-            lastLoadId: this.lastLoadId,
+            lastLoadId: this.getLastLoad(feed),
             loadedFeed: feed ?? mainFeedId,
             publicationDateId: this.calcId(post),
         } as ManagerPost))
@@ -122,6 +133,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             content.reduce((prev, post) => isBefore(post.publicationDate, new Date()) ? Math.max(prev, post.publicationDateId) : prev, 0),
         ]
     }
+
+    // REWORK LOAD AFTER RECONNECT
 
     private calcId(post: Post | PostUpdate) {
         return this.calcIdFromDateId(post.publicationDate, post.id)
@@ -153,7 +166,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         let freshBefore = false
         //De l'id - au +
         for(const post of posts){
-            const fresh = this.isFresh(post)
+            const fresh = this.isFresh(post, feed)
             if(fresh){
                 if(freshBefore){
                     toUnload.push(...toUnloadTemp)
@@ -164,11 +177,11 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 toUnloadTemp.push(post)
         }
         console.log("Unload posts:", feed, toUnload)
-        await this.getTable().bulkDelete(toUnload.map(post => post.publicationDateId))
+        await this.getTable().bulkDelete(toUnload.map(post => [post.loadedFeed, post.publicationDateId]))
     }
 
-    public isFresh(post: ManagerPost){
-        return post.lastLoadId == this.lastLoadId
+    public isFresh(post: ManagerPost, feed: FeedId){
+        return post.lastLoadId == this.getLastLoad(feed)
     }
 
     @PacketHandler(WSPSFeedPostCreated)
@@ -179,15 +192,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
         this.addData({
             ...packet.post,
-            lastLoadId: this.lastLoadId,
+            lastLoadId: this.getLastLoad(packet.post.feedId),
             loadedFeed: packet.post.feedId,
             publicationDateId,
         } as ManagerPost)
 
-        if(packet.follow){
+        if (packet.follow) {
             this.addData({
                 ...packet.post,
-                lastLoadId: this.lastLoadId,
+                lastLoadId: this.getLastLoad(undefined),
                 loadedFeed: mainFeedId,
                 publicationDateId,
             } as ManagerPost)
