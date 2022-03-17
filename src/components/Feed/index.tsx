@@ -47,16 +47,17 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     }, [id, loading])
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [nextLoadedPosts, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
-    const posts = useLiveQuery(async () => !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined, [id, loadedPosts, loading])
+    const posts = useLiveQuery(async () => 
+        !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
+    , [id, loadedPosts, loading])
 
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     useEffect(() => {
         if(!loading)
-            feedsManager.getLastPostedFresh(id).then(post => {
-                console.log(post)
+            feedsManager.getLastPostedFresh(id).then(post => 
                 setFirstLoaded(firstLoaded => post?.publicationDateId ?? firstLoaded)
-            })
+            )
     }, [loading, id])
 
     const loadMorePost = useCallback(async () => {
@@ -65,19 +66,29 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                 setLoadedPosts(nextLoadedPosts);
                 (async () => {
                     try {
-                        const resp = await feedsManager.loadMore(id)
-                        const loaded = await feedsManager.countFreshFeedPosts(id)
-                        setNextLoadedPosts(loaded + FeedsManager.PAGE_SIZE)
-                        setLoadedPosts(loaded)
-                        setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[1] : Math.max(firstLoaded, resp[1]))
-
-                        setError(false)
-                        exec(resp[0])
+                        if (nextLoadedPosts >= ((await feedsManager.countFreshFeedPosts(id)) ?? 0)) {
+                            const resp = await feedsManager.loadMore(id)
+                            const loaded = await feedsManager.countFreshPostsAfter(id, resp[1])
+                            setNextLoadedPosts(loaded + FeedsManager.PAGE_SIZE)
+                            setLoadedPosts(loaded)
+                            setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[2] : Math.max(firstLoaded, resp[2]))
+    
+                            setError(false)
+                            exec(resp[0])
+                        } else {
+                            setTimeout(async () => {
+                                setNextLoadedPosts(nextLoadedPosts + FeedsManager.PAGE_SIZE)
+                                const firstLoadedPost = await feedsManager.getLastPostedFresh(id)
+                                if(firstLoadedPost)
+                                    setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? firstLoadedPost.publicationDateId : Math.max(firstLoaded, firstLoadedPost.publicationDateId))
+                                exec(false)
+                            }, 300)
+                        }
                     } catch (e) {
                         console.error("Error when fetching posts", e)
                         setError(true)
+                        exec(false)
                     }
-                    exec(false)
                 })()
                 return nextLoadedPosts
             })
