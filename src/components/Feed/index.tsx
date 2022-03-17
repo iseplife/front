@@ -50,10 +50,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     const [needFullReload, setNeedFullReload] = useState(false)
 
-    useLiveQuery(async () => {
-        console.log("update NFR")
+    useLiveQuery(async () =>
         setNeedFullReload(baseLastLoad != 0 && baseLastLoad != await feedsManager.getGeneralLastLoad())
-    }, [baseLastLoad])
+    , [baseLastLoad])
 
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)

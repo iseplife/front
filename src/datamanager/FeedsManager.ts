@@ -5,7 +5,7 @@ import WSPSFeedPostCreated from "../realtime/protocol/v1/packets/server/WSPSFeed
 import { getFeedPost, getFeedPostsBefore } from "../data/feed"
 import { Post, PostUpdate } from "../data/post/types"
 import { Page } from "../data/request.type"
-import { isBefore } from "date-fns"
+import { addMonths, isBefore } from "date-fns"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -18,7 +18,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["[loadedFeed+publicationDateId]", "loadedFeed", "id", "feedId", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["[loadedFeed+publicationDateId]", "publicationDate", "loadedFeed", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
@@ -28,10 +28,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         for (const feedId in this.lastLoadIdByFeed)
             if (!this.loadedFeeds.has(+feedId))
                 this.lastLoadIdByFeed[feedId] = now
-        // for(const loaded of this.loadedFeeds)
-        //     this.initFeedData(loaded)
         
         this.setContext("lastLoad", { lastLoad: now })
+
+        this.getTable().where("publicationDate").below(addMonths(new Date(), -4)).delete().then(deleted => console.log("Deleted", deleted, "old posts"))
     }
 
     private async _waitFetching() {
