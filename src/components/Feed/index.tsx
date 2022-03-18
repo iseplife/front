@@ -125,7 +125,6 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         , [])
 
     const onPostRemoval = useCallback(async (id: number) => {
-        // setPosts(posts => posts.filter(p => p.id !== id))
         message.success(t("remove_item.complete"))
     }, [])
 
@@ -158,10 +157,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         console.log("")
     }, [posts, postsPinned])
 
-    const onPostUpdate = useCallback((id: number, postUpdate: PostUpdate) => {
-        // setPosts(posts => posts.map(p => p.id === id ?
-        //     { ...p, ...postUpdate } : p
-        // ))
+    const onPostUpdate = useCallback(() => {
         setEditPost(0)
         message.success(t("update_item.complete"))
     }, [])

@@ -23,6 +23,7 @@ import { Link } from "react-router-dom"
 import { groupManager } from "../../datamanager/GroupManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import { eventsManager } from "../../datamanager/EventsManager"
+import { feedsManager } from "../../datamanager/FeedsManager"
 
 type PostProps = {
     data: PostType
@@ -54,7 +55,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: async () => {
-                deletePost(data.id)
+                feedsManager.deletePost(data.id)
                 onDelete(data.id)
             }
         })

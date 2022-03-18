@@ -3,9 +3,11 @@ import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClie
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSFeedPostCreated from "../realtime/protocol/v1/packets/server/WSPSFeedPostCreated"
 import { getFeedPost, getFeedPostsBefore } from "../data/feed"
-import { Post, PostUpdate } from "../data/post/types"
+import { BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm } from "../data/post/types"
 import { Page } from "../data/request.type"
 import { addMonths, isBefore } from "date-fns"
+import { createPost, deletePost, updatePost } from "../data/post"
+import { message } from "antd"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -201,7 +203,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     @PacketHandler(WSPSFeedPostCreated)
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated){
         packet.post.publicationDate = new Date(packet.post.publicationDate)
-
+        
         const publicationDateId = this.calcId(packet.post)
 
         this.addData({
@@ -219,6 +221,34 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 publicationDateId,
             } as ManagerPost)
         }
+    }
+
+    public async createPost(post: BasicPostCreation | PostCreation){
+        return await createPost(post)
+    }
+
+    public async editPost(id: number, post: PostUpdateForm){
+        const res = await updatePost(
+            id,
+            post
+        )
+        if(res.status === 200){
+            for(const post of await this.getTable().where("id").equals(id).toArray())
+                this.addData({
+                    ...post,
+                    ...res.data,
+                })
+        }else
+            throw new Error("No connection")
+
+        return res.data
+    }
+
+    public async deletePost(id: number) {
+        if((await deletePost(id)).status == 200)
+            await this.getTable().bulkDelete((await this.getTable().where("id").equals(id).toArray()).map(post => [post.loadedFeed, post.publicationDateId]))
+        else
+            throw new Error("No connection")
     }
 
 }
