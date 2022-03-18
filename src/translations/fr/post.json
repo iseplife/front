@@ -15,5 +15,9 @@
 	"posted_in_group": "Posté dans le groupe \"{{group}}\"",
 	"posted_in_event": "Posté dans l'événement \"{{event}}\"",
 	"full_reload": "Charger les nouveaux posts",
-	"new_posts": "{{toLoad}} nouveaux posts"
+	"new_posts": "{{toLoad}} nouveaux posts",
+	"updates": {
+		"edited": "Mettre à jour",
+		"deleted": "Post supprimé"
+	}
 }

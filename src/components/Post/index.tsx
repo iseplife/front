@@ -23,10 +23,10 @@ import { Link } from "react-router-dom"
 import { groupManager } from "../../datamanager/GroupManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import { eventsManager } from "../../datamanager/EventsManager"
-import { feedsManager } from "../../datamanager/FeedsManager"
+import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 
 type PostProps = {
-    data: PostType
+    data: ManagerPost
     feedId: number | undefined,
     isEdited: boolean
     forceShowComments?: boolean
@@ -121,6 +121,10 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
         }
     }, [showComments])
 
+    const setRef = useCallback(ele => { post = ele ?? post }, [post])
+    
+    const applyUpdates = useCallback(() => feedsManager.applyUpdates(data.id), [data?.id])
+
     return (
         <div>
             {isEdited && (
@@ -134,9 +138,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                     <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
                 </Modal>
             )}
-            <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5" ref={ele => {
-                post = ele ?? post
-            }}>
+            <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 relative" ref={setRef}>
                 <div className="w-full flex justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
@@ -244,6 +246,14 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                             loadComment={data.nbComments !== 0}/>
                     </>
                 )}
+
+                {data.waitingForUpdate &&
+                    <div className="bg-black/40 backdrop-blur-md h-full w-full grid place-items-center absolute rounded-lg top-0 left-0">
+                        <button onClick={applyUpdates} className={"rounded-full px-4 py-2 bg-neutral-500 font-semibold text-white text-base mt-1 " + (data.waitFor?.delete && "text-red-400")}>
+                            {t(data.waitFor?.delete ? "post:updates.deleted" : "post:updates.edited")}
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     )

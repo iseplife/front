@@ -2,6 +2,8 @@ import Protocol from "../Protocol"
 import WSPSConnected from "./packets/server/WSPSConnected"
 import WSPSEventCreated from "./packets/server/WSPSEventCreated"
 import WSPSFeedPostCreated from "./packets/server/WSPSFeedPostCreated"
+import WSPSFeedPostEdited from "./packets/server/WSPSFeedPostEdited"
+import WSPSFeedPostRemoved from "./packets/server/WSPSFeedPostRemoved"
 import WSPSGroupJoined from "./packets/server/WSPSGroupJoined"
 import WSPSGroupLeft from "./packets/server/WSPSGroupLeft"
 import WSPSNotificationRecieved from "./packets/server/WSPSNotificationRecieved"
@@ -31,6 +33,8 @@ class ProtocolV1 implements Protocol {
         packetsServer.push(WSPSEventCreated)
         packetsServer.push(WSPSGroupJoined)
         packetsServer.push(WSPSGroupLeft)
+        packetsServer.push(WSPSFeedPostRemoved)
+        packetsServer.push(WSPSFeedPostEdited)
         const packetsClient: any[] = []
 
         for (const packet of packetsServer) {

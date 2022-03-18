@@ -7,7 +7,8 @@ import { BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm } fro
 import { Page } from "../data/request.type"
 import { addMonths, isBefore } from "date-fns"
 import { createPost, deletePost, updatePost } from "../data/post"
-import { message } from "antd"
+import WSPSFeedPostRemoved from "../realtime/protocol/v1/packets/server/WSPSFeedPostRemoved"
+import WSPSFeedPostEdited from "../realtime/protocol/v1/packets/server/WSPSFeedPostEdited"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -20,7 +21,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["[loadedFeed+publicationDateId]", "publicationDate", "loadedFeed", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
@@ -91,6 +92,23 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async subscribe(feed: FeedId) {
+        const postsToDelete = [] as ManagerPost[]
+        const postsToAdd = [] as ManagerPost[]
+
+        for(const post of await this.getTable().where({"loadedFeed": feed ?? mainFeedId, "waitingForUpdate": true}).toArray()){
+            if(post.waitFor?.delete)
+                postsToDelete.push(post)
+            else if(post.waitFor?.modif)
+                postsToAdd.push({
+                    ...post,
+                    ...post.waitFor.modif,
+                })
+        }
+        await Promise.all([
+            this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId])),
+            this.addBulkData(postsToAdd),
+        ])
+
         this.loadedFeeds.add(feed ?? mainFeedId)
         return this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
     }
@@ -225,6 +243,39 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         }
     }
 
+    @PacketHandler(WSPSFeedPostRemoved)
+    private async handleFeedPostRemoved(packet: WSPSFeedPostRemoved){
+        this.addBulkData(
+            (await this.getTable().where("id").equals(packet.id).toArray())
+                .map(post => 
+                    ({
+                        ...post,
+                        waitFor: {...post.waitFor, delete: true},
+                        waitingForUpdate: true,
+                    })
+                )
+        )
+    }
+
+    @PacketHandler(WSPSFeedPostEdited)
+    private async handleFeedPostEdited(packet: WSPSFeedPostEdited) {
+        packet.post.publicationDate = new Date(packet.post.publicationDate)
+
+        this.addBulkData(
+            (await this.getTable().where("id").equals(packet.post.id).toArray())
+                .map(post => 
+                    ({
+                        ...post,
+                        waitFor: {
+                            ...post.waitFor,
+                            modif: packet.post,
+                        },
+                        waitingForUpdate: true,
+                    })
+                )
+        )
+    }
+
     public async createPost(post: BasicPostCreation | PostCreation){
         return await createPost(post)
     }
@@ -253,6 +304,26 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             throw new Error("No connection")
     }
 
+    public async applyUpdates(id: number) {
+        const postsToDelete = [] as ManagerPost[]
+        const postsToAdd = [] as ManagerPost[]
+        for(const post of (await this.getTable().where("id").equals(id).toArray())) {
+            if(post.waitFor?.delete)
+                postsToDelete.push(post)
+            else if(post.waitFor?.modif)
+                postsToAdd.push({
+                    ...post,
+                    ...post.waitFor.modif,
+                    waitingForUpdate: false,
+                    waitFor: undefined!,
+                })
+        }
+        await Promise.all([
+            this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId])),
+            this.addBulkData(postsToAdd),
+        ])
+    }
+
 }
 let feedsManager = new FeedsManager(undefined!)
 
@@ -260,6 +331,6 @@ window.addEventListener("logged", () => (feedsManager = new FeedsManager(getWebS
 
 export { feedsManager }
 
-type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number } & Post
+export type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number, waitingForUpdate: boolean, waitFor: {delete?: boolean, modif?: PostUpdate} } & Post
 type FeedId = number | undefined
 const mainFeedId = 0

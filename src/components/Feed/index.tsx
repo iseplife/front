@@ -16,7 +16,7 @@ import {AppContext} from "../../context/app/context"
 import {FeedContext} from "../../context/feed/context"
 import { Author } from "../../data/request.type"
 import "./Feed.css"
-import FeedsManager, { feedsManager } from "../../datamanager/FeedsManager"
+import FeedsManager, { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import { isAfter, isBefore } from "date-fns"
 
@@ -297,7 +297,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                                 {postsPinned.map(p => (
                                                     <Post
                                                         feedId={id}
-                                                        key={p.id} data={p}
+                                                        key={p.id} data={p as ManagerPost}
                                                         onDelete={onPostRemoval}
                                                         onUpdate={onPostUpdate}
                                                         onPin={onPostPin}

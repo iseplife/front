@@ -14,6 +14,10 @@
 	"unpin": "Unpin",
 	"posted_in_group": "Posted in the \"{{group}}\" group",
 	"posted_in_event": "Posted in the \"{{event}}\" event feed",
-		"full_reload": "Load new posts",
-		"new_posts": "{{toLoad}} new posts"
+	"full_reload": "Load new posts",
+	"new_posts": "{{toLoad}} new posts",
+	"updates": {
+		"edited": "Update post",
+		"deleted": "Post deleted"
+	}
 }
