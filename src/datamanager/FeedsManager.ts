@@ -210,6 +210,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             ...packet.post,
             lastLoadId: this.getLastLoad(packet.post.feedId),
             loadedFeed: packet.post.feedId,
+            hasWriteAccess: packet.hasWriteAccess,
             publicationDateId,
         } as ManagerPost)
 
@@ -218,6 +219,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 ...packet.post,
                 lastLoadId: this.getLastLoad(undefined),
                 loadedFeed: mainFeedId,
+                hasWriteAccess: packet.hasWriteAccess,
                 publicationDateId,
             } as ManagerPost)
         }
