@@ -325,6 +325,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         ])
     }
 
+    public outdateMain() {
+        this.lastLoadIdByFeed[mainFeedId] = Date.now()
+    }
+
 }
 let feedsManager = new FeedsManager(undefined!)
 
