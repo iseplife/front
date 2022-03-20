@@ -4,13 +4,14 @@ import { subscribe, unsubscribe } from "../../data/subscription"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 
 interface SubscriptionButtonProps {
-    id: number
+    id: number | undefined
     type: SubscribableType
     subscribed: boolean
+    loading?: boolean
     updateSubscription: (subscribed: boolean) => void
 }
 
-const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subscribed, updateSubscription }) => {
+const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subscribed, loading, updateSubscription }) => {
     const { t } = useTranslation("common")
     const [minWidth, setMinWidth] = useState(0)
 
@@ -28,7 +29,7 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
             setMinWidth((event.target as HTMLDivElement).clientWidth + 4)
     }, [subscribed])
 
-    return <div 
+    return loading ? <div className="w-24 h-10 bg-neutral-200 rounded-full" /> : <div
         onClick={handleSubscription}
         className={
             "h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group "

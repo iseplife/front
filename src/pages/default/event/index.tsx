@@ -72,7 +72,7 @@ const Event: React.FC = () => {
                     end: _format(event.endsAt, "HH:mm"),
                 })
             }else 
-                toRespond = t(now ? "event:date.until_diff_day" : "event:date.diff_days", {
+                toRespond = t(now && !finished ? "event:date.until_diff_day" : "event:date.diff_days", {
                     start: _format(event.startsAt, fullDay + " HH:mm"),
                     end: _format(event.endsAt, fullDay + " HH:mm"),
                 })
@@ -101,13 +101,12 @@ const Event: React.FC = () => {
     }, [event])
 
     const subscribeElement = useMemo(() => 
-        event &&
-            <>
-                <SubscriptionButton id={event?.id} subscribed={!!subscription} type={SubscribableType.EVENT} updateSubscription={handleSubscription} />
-                {subscription &&
-                    <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={subscription?.extensive ?? false} id={event?.id} type={SubscribableType.CLUB} />
-                }
-            </>, [event?.id, subscription, handleSubscription, handleExtensive])
+        <>
+            <SubscriptionButton loading={!event} id={event?.id} subscribed={!!subscription} type={SubscribableType.EVENT} updateSubscription={handleSubscription} />
+            {subscription &&
+                <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={subscription?.extensive ?? false} id={event?.id} type={SubscribableType.CLUB} />
+            }
+        </>, [event?.id, subscription, handleSubscription, handleExtensive])
             
     const participateCallback = useCallback(() => {
         if (event)
@@ -136,7 +135,7 @@ const Event: React.FC = () => {
         </div>
         <div className="container mx-auto mt-4">
             <div className="flex items-center px-4">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 relative">
+                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative">
                     <div className="w-full h-full text-3xl sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                         <div className="bg-red-500 w-full h-5 flex-shrink-0"></div>
                         <div className="grid place-items-center h-full">{day}</div>
@@ -158,10 +157,10 @@ const Event: React.FC = () => {
                             </div>
                         </>
                         : 
-                        <>
+                        <div className={event || "-translate-y-1/2 absolute"}>
                             <Skeleton title={false} active paragraph={{ rows: 1, width: 200 }} className="mt-4" />
                             <Skeleton title={false} active paragraph={{ rows: 1, width: 120 }} />
-                        </>
+                        </div>
                     }
                 </div>
                 <div className="ml-auto mr-0 hidden md:block">
