@@ -41,7 +41,8 @@
 		"CONFERENCE": "Conférence",
 		"WORKSHOP": "Workshop",
 		"FORMATION": "Formation",
-		"MEETING": "Réunion"
+		"MEETING": "Réunion",
+		"OTHER": "Autre"
 	},
 	"free": "Gratuit",
 	"event": "Évènement",
