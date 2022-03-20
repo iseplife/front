@@ -95,13 +95,14 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
-        for(const post of await this.getTable().where({"loadedFeed": feed ?? mainFeedId, "waitingForUpdate": true}).toArray()){
+        for (const post of await this.getTable().where({ "loadedFeed": feed ?? mainFeedId, "waitingForUpdate": "true" }).toArray()) {
             if(post.waitFor?.delete)
                 postsToDelete.push(post)
             else if(post.waitFor?.modif)
                 postsToAdd.push({
                     ...post,
                     ...post.waitFor.modif,
+                    waitingForUpdate: false,
                 })
         }
         await Promise.all([
@@ -244,14 +245,14 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     @PacketHandler(WSPSFeedPostRemoved)
-    private async handleFeedPostRemoved(packet: WSPSFeedPostRemoved){
+    private async handleFeedPostRemoved(packet: WSPSFeedPostRemoved) {
         this.addBulkData(
             (await this.getTable().where("id").equals(packet.id).toArray())
                 .map(post => 
                     ({
                         ...post,
                         waitFor: {...post.waitFor, delete: true},
-                        waitingForUpdate: true,
+                        waitingForUpdate: "true",
                     })
                 )
         )
@@ -270,7 +271,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                             ...post.waitFor,
                             modif: packet.post,
                         },
-                        waitingForUpdate: true,
+                        waitingForUpdate: "true",
                     })
                 )
         )
@@ -331,6 +332,6 @@ window.addEventListener("logged", () => (feedsManager = new FeedsManager(getWebS
 
 export { feedsManager }
 
-export type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number, waitingForUpdate: boolean, waitFor: {delete?: boolean, modif?: PostUpdate} } & Post
+export type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number, waitingForUpdate: "true" | false, waitFor: {delete?: boolean, modif?: PostUpdate} } & Post
 type FeedId = number | undefined
 const mainFeedId = 0
