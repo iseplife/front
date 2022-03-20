@@ -48,6 +48,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const event = useLiveQuery(async () => data.feedId != undefined && await eventsManager.getEventByEventFeedId(data.feedId), [data.feedId])
     const group = useLiveQuery(() => groupManager.getGroupByFeedId(data.feedId), [data.feedId])
 
+    useEffect(() => setLikes(data.nbLikes), [data.nbLikes])
+
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
             title: t("remove_item.title"),

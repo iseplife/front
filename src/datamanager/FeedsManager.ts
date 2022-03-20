@@ -9,6 +9,7 @@ import { addMonths, isBefore } from "date-fns"
 import { createPost, deletePost, updatePost } from "../data/post"
 import WSPSFeedPostRemoved from "../realtime/protocol/v1/packets/server/WSPSFeedPostRemoved"
 import WSPSFeedPostEdited from "../realtime/protocol/v1/packets/server/WSPSFeedPostEdited"
+import WSPSFeedPostLikesUpdate from "../realtime/protocol/v1/packets/server/WSPSFeedPostLikesUpdate"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -21,7 +22,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
         this.setContext("no_connection", { bugged: new Set() })
     }
 
@@ -262,7 +263,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostEdited(packet: WSPSFeedPostEdited) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        this.addBulkData(
+        const toUpdate = 
             (await this.getTable().where("id").equals(packet.post.id).toArray())
                 .map(post => 
                     ({
@@ -272,9 +273,18 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                             modif: packet.post,
                         },
                         waitingForUpdate: "true",
-                    })
+                    }) as ManagerPost
                 )
-        )
+        if(toUpdate.length)
+            this.addBulkData(toUpdate)
+    }
+    @PacketHandler(WSPSFeedPostLikesUpdate)
+    private async handleFeedPostLikesUpdate(packet: WSPSFeedPostLikesUpdate) {
+        console.log(packet.likes);
+        (await this.getTable().where("thread").equals(packet.threadID).toArray())
+            .forEach(post => 
+                this.getTable().update([post.loadedFeed, post.publicationDateId], {nbLikes: packet.likes})
+            )
     }
 
     public async createPost(post: BasicPostCreation | PostCreation){
