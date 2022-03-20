@@ -172,7 +172,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     // REWORK LOAD AFTER RECONNECT
 
-    private calcId(post: Post | PostUpdate) {
+    public calcId(post: Post | PostUpdate) {
         return this.calcIdFromDateId(post.publicationDate, post.id)
     }
     private calcIdFromDateId(date: Date, _id: number) {

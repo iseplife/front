@@ -33,9 +33,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const [postsPinned, setPostsPinned] = useState<PostType[]>([])
 
     const [editPost, setEditPost] = useState<number>(0)
-    const [empty, setEmpty] = useState<boolean>(false)
     const [completeFormType, setCompleteFormType] = useState<EmbedEnumType | undefined>()
     const [authors, setAuthors] = useState<Author[]>([])
+    const [fetching, setFetching] = useState(true)
 
     const [error, setError] = useState<boolean>(false)
 
@@ -59,7 +59,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const posts = useLiveQuery(async () => 
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     , [id, loadedPosts, loading])
-
+    
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     useEffect(() => {
@@ -71,6 +71,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     const loadMorePost = useCallback(async () => {
         return new Promise<boolean>(exec => {
+            setFetching(true)
             setNextLoadedPosts(nextLoadedPosts => {
                 setLoadedPosts(nextLoadedPosts);
                 (async () => {
@@ -84,6 +85,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                 setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? resp[2] : Math.max(firstLoaded, resp[2]))
                             }
                             setError(false)
+                            setFetching(false)
                             exec(resp[0])
                         } else {
                             setTimeout(async () => {
@@ -105,24 +107,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         })
     }, [id])
 
-    // useEffect(() => {
-    //     if (posts?.length)
-    //         setEmpty(false)
-    // }, [posts?.length])
-
-    const onPostCreation = useCallback((post: PostUpdate) => console.log("")
-        // setPosts(prevPosts => [
-        //     {
-        //         ...post,
-        //         creationDate: new Date(),
-        //         liked: false,
-        //         nbComments: 0,
-        //         nbLikes: 0,
-        //         hasWriteAccess: true
-        //     },
-        //     ...prevPosts
-        // ])
-        , [])
+    const onPostCreation = useCallback((post: PostUpdate) => 
+        setFirstLoaded(feedsManager.calcId(post))
+    , [])
 
     const onPostRemoval = useCallback(async (id: number) => {
         message.success(t("remove_item.complete"))
@@ -166,8 +153,6 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         if (id) {
             getFeedPostPinned(id).then(res => {
                 setPostsPinned(res.data)
-                if (res.data.length !== 0)
-                    setEmpty(false)
             })
         }
 
@@ -205,7 +190,11 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
     , [posts, firstLoaded])
     
-    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3"/>, [])
+    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3" />, [])
+    
+    const empty = useMemo(() => 
+        !loading && !fetching && !error && !posts?.length && !postsPinned?.length
+    , [loading, fetching, error, posts, postsPinned])
 
     return (
         <FeedContext.Provider value={{authors}}>
