@@ -6,10 +6,11 @@ import StudentCard from "./StudentCard"
 import {FilterReducerAction, StudentPreview} from "../../data/student/types"
 import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
-import {EntitySet} from "../../util"
+import {EntitySet, mediaPath} from "../../util"
 import {faUserAstronaut} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import StudentCardSkeleton from "./StudentCardSkeleton"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 export type StudentFilter = {
     promos: number[]
