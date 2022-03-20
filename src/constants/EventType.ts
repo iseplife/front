@@ -5,9 +5,10 @@ enum EventType {
     "WORKSHOP" = "WORKSHOP",
     "FORMATION" = "FORMATION",
     "MEETING" = "MEETING",
+    "OTHER" = "OTHER",
 }
 export default EventType
-export const EventTypes = [EventType.PARTY, EventType.AFTERWORK, EventType.CONFERENCE, EventType.WORKSHOP, EventType.FORMATION, EventType.MEETING]
+export const EventTypes = [EventType.PARTY, EventType.AFTERWORK, EventType.CONFERENCE, EventType.WORKSHOP, EventType.FORMATION, EventType.MEETING, EventType.OTHER]
 export const EventTypeColor: {[index: string]: string} = {
     [EventType.PARTY]: "#ed64a6",
     [EventType.AFTERWORK]: "#ed8936",
@@ -15,6 +16,7 @@ export const EventTypeColor: {[index: string]: string} = {
     [EventType.WORKSHOP]: "#4299e1",
     [EventType.FORMATION]: "#4299e1",
     [EventType.MEETING]: "#f56565",
+    [EventType.OTHER]: "#fdce59",
 }
 
 export const EventTypeEmoji: {[index: string]: string} = {
@@ -24,4 +26,5 @@ export const EventTypeEmoji: {[index: string]: string} = {
     [EventType.WORKSHOP]: "\uD83D\uDCBB",
     [EventType.FORMATION]: "\uD83D\uDCDA",
     [EventType.MEETING]: "\uD83D\uDD14",
+    [EventType.OTHER]: "⭐",
 }
