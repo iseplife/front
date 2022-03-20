@@ -6,7 +6,7 @@ import { subscribe } from "../../data/subscription"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 
 interface SubscriptionExtensiveButtonProps {
-    id: number
+    id: number | undefined
     type: SubscribableType
     extensive: boolean
     updateExtensive: (extensive: boolean) => void

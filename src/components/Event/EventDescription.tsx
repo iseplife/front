@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import {useTranslation} from "react-i18next"
 import { Divider, Skeleton } from "antd"
 
@@ -12,7 +12,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, 
     const descLengthThrottle = 350
     const {t} = useTranslation("event")
 
-    const skeletonLength = Array(10).fill(0).map(() => 100 + Math.random() * 80)
+    const skeletonLength = useMemo(() => Array(10).fill(0).map(() => 110 + Math.random() * 80), [])
 
     const tooLong = (description?.length ?? 0) > descLengthThrottle
     let totalLength = 0
@@ -50,7 +50,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, 
             :
             <div className="mt-1">
                 {skeletonLength.map((length, index) =>
-                    <Skeleton key={index} title={false} active paragraph={{ rows: 1, width: length }} className="-mb-1" />
+                    <Skeleton key={index} title={false} active paragraph={{ rows: 1, width: length }} className={"-mb-1 " + (index > 6 && "hidden sm:block")} />
                 )}
             </div>
         }
