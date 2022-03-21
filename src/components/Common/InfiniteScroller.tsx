@@ -155,7 +155,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                 <div className="mb-3 text-center">
                     { downLoader.over && !empty ?
                         <p>{t("end")}</p>:
-                        /*downLoader.loading &&*/ (loadingComponent || <Loading size="3x"/>)
+                        (loadingComponent || <Loading size="3x"/>)
                     }
                 </div>
             )}
