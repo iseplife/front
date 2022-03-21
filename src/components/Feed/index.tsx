@@ -50,9 +50,10 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     const [needFullReload, setNeedFullReload] = useState(false)
 
-    useLiveQuery(async () =>
-        setNeedFullReload(baseLastLoad != 0 && baseLastLoad != await feedsManager.getGeneralLastLoad())
-    , [baseLastLoad])
+    useLiveQuery(async () => {
+        const generalLoad = await feedsManager.getGeneralLastLoad()
+        setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != 0 && baseLastLoad < generalLoad))
+    }, [baseLastLoad])
 
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
@@ -116,33 +117,33 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     }, [])
 
     const onPostPin = useCallback((id: number, pinned: boolean) => {
-        // if (pinned) {
-        //     const index = posts.findIndex(p => p.id === id)
-        //     const pinnedPost = { ...posts[index], pinned: true }
+        if(posts)
+            if (pinned) {
+                const index = posts.findIndex(p => p.id === id)
+                const pinnedPost = { ...posts[index], pinned: true }
 
-        //     // We move post into pinned posts while removing it from common posts
-        //     setPostsPinned(prev => (
-        //         [...prev, pinnedPost].sort((a, b) => (
-        //             a.publicationDate.getTime() - b.publicationDate.getTime()
-        //         )))
-        //     )
-        //     setPosts(prev => prev.filter((p, i) => i !== index))
-        //     message.success(t("post:post_pinned"))
-        // } else {
-        //     const index = postsPinned.findIndex(p => p.id === id)
-        //     const unpinnedPost = { ...postsPinned[index], pinned: false }
+                // We move post into pinned posts while removing it from common posts
+                setPostsPinned(prev => (
+                    [...prev, pinnedPost].sort((a, b) => (
+                        a.publicationDate.getTime() - b.publicationDate.getTime()
+                    )))
+                )
+                feedsManager.removePostFromLoadedFeed(pinnedPost.publicationDateId, id)
 
-        //     // We move post into common posts while removing it from pinned posts
-        //     setPosts(prev => (
-        //         [...prev, unpinnedPost].sort((a, b) => (
-        //             a.publicationDate.getTime() - b.publicationDate.getTime()
-        //         )))
-        //     )
-        //     setPostsPinned(prev => prev.filter((p, i) => i !== index))
-        //     message.success(t("post:post_unpinned"))
-        // }
-        console.log("")
-    }, [posts, postsPinned])
+                message.success(t("post:post_pinned"))
+            } else {
+                const index = postsPinned.findIndex(p => p.id === id)
+                const unpinnedPost = { ...postsPinned[index], pinned: false }
+
+                
+                // We move post into common posts while removing it from pinned posts
+                feedsManager.outdateFeed(id)
+                setNeedFullReload(true)
+                
+                setPostsPinned(prev => prev.filter((p, i) => i !== index))
+                message.success(t("post:post_unpinned"))
+            }
+    }, [posts, postsPinned, id])
 
     const onPostUpdate = useCallback(() => {
         setEditPost(0)

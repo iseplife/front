@@ -4,7 +4,7 @@ import { apiClient } from "../http"
 import { SubscribableType } from "./SubscribableType"
 
 export const subscribe = (id: number, type: SubscribableType, extensive = false): AxiosPromise<void> => {
-    feedsManager.outdateMain()// Because main feed has now differents posts
+    feedsManager.outdateFeed(undefined)// Because main feed has now differents posts
     return apiClient.put(`/subscription/${type}/${id}`, { extensive })
 }
 

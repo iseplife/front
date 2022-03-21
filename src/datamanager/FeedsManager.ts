@@ -244,6 +244,14 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             } as ManagerPost)
         }
     }
+    public async removePostFromLoadedFeed(publicationDateId: number, loadedFeed: FeedId) {
+        const detected = (await this.getTable().where({loadedFeed: loadedFeed ?? mainFeedId, publicationDateId}).toArray()).map(post => [post.loadedFeed, post.publicationDateId])
+        console.log("Deleted", detected, "for", publicationDateId, loadedFeed)
+        await this.getTable().bulkDelete(detected)
+    }
+    public async removePost(id: number) {
+        await this.getTable().bulkDelete((await this.getTable().where("id").equals(id).toArray()).map(post => [post.loadedFeed, post.publicationDateId]))
+    }
 
     @PacketHandler(WSPSFeedPostRemoved)
     private async handleFeedPostRemoved(packet: WSPSFeedPostRemoved) {
@@ -334,8 +342,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         ])
     }
 
-    public outdateMain() {
-        this.lastLoadIdByFeed[mainFeedId] = Date.now()
+    public outdateFeed(feed: FeedId) {
+        this.lastLoadIdByFeed[feed ?? mainFeedId] = Date.now()
     }
 
 }
