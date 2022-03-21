@@ -280,7 +280,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
     @PacketHandler(WSPSFeedPostLikesUpdate)
     private async handleFeedPostLikesUpdate(packet: WSPSFeedPostLikesUpdate) {
-        console.log(packet.likes);
         (await this.getTable().where("thread").equals(packet.threadID).toArray())
             .forEach(post => 
                 this.getTable().update([post.loadedFeed, post.publicationDateId], {nbLikes: packet.likes})

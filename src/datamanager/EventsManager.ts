@@ -40,7 +40,7 @@ export default class EventsManager extends DataManager<EventPreview> {
 
     @PacketHandler(WSPSEventCreated)
     private handleEventCreated(packet: WSPSEventCreated){
-        console.log("[Event] Created :", packet.event)
+        console.debug("[Event] Created :", packet.event)
         this.addData(packet.event)
     }
 

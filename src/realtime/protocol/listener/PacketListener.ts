@@ -12,7 +12,7 @@ export default class PacketListener {
             return
         this.registered = true
 
-        console.log("[WebSocket packetlistener debug] Registering ", this);
+        console.debug("[WebSocket packetlistener debug] Registering ", this);
         (Object.getPrototypeOf(this) as PacketListener).listeners.forEach((value, key) => {
             const func = (this as any)[value]
             if(!key.prototype.listeners.find((handler: PacketHandlerFunction) => handler.instance == this && handler.method == func))
@@ -27,7 +27,7 @@ export default class PacketListener {
         else
             return
         
-        console.log("[WebSocket packetlistener debug] Unregistering ", this)
+        console.debug("[WebSocket packetlistener debug] Unregistering ", this)
         const packets = new Set<any>()
         const prototype = (Object.getPrototypeOf(this) as PacketListener)
 
