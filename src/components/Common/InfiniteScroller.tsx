@@ -36,30 +36,36 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
 
-    const intersector = useMemo(() => 
-        new IntersectionObserver(() => {
-            if (block)
-                return
-            if (watch !== "DOWN")
-                setUpLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
-            if (watch !== "UP")
-                setDownLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
-        }, {
-            threshold: 0,
+    const [intersector, setIntersector] = useState<IntersectionObserver>(undefined!)
+    useEffect(() => {
+        setIntersector(intersector => {
+            intersector?.disconnect()
+            return new IntersectionObserver(
+                () => {
+                    if (block)
+                        return
+                    if (watch !== "DOWN")
+                        setUpLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
+                    if (watch !== "UP")
+                        setDownLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
+                }, {
+                    threshold: 0,
+                }
+            )
         })
-    , [])
+    }, [block, watch])
 
     const loaderRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const ele = loaderRef?.current
         if(ele){
-            intersector.observe(ele)
-            return () => intersector.unobserve(ele)
+            intersector?.observe(ele)
+            return () => intersector?.unobserve(ele)
         }
-    }, [loaderRef?.current])
+    }, [loaderRef?.current, intersector])
 
-    useEffect(() => () => intersector.disconnect(), [])// Turn off intersector on unload
+    useEffect(() => () => setIntersector(intersector => {intersector.disconnect(); return undefined!}), [])// Turn off intersector on unload
 
     const initialLoad = useCallback(() => {
         switch (watch) {
