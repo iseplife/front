@@ -71,7 +71,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     }, [loading, id])
 
     const loadMorePost = useCallback(async () => {
-        return new Promise<boolean>(exec => {
+        return new Promise<boolean>(resolve => {
             setFetching(true)
             setNextLoadedPosts(nextLoadedPosts => {
                 setLoadedPosts(nextLoadedPosts);
@@ -87,20 +87,20 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                             }
                             setError(false)
                             setFetching(false)
-                            exec(resp[0])
+                            resolve(resp[0])
                         } else {
                             setTimeout(async () => {
                                 setNextLoadedPosts(nextLoadedPosts + FeedsManager.PAGE_SIZE)
                                 const firstLoadedPost = await feedsManager.getLastPostedFresh(id)
                                 if(firstLoadedPost)
                                     setFirstLoaded(firstLoaded => firstLoaded == Number.MAX_VALUE ? firstLoadedPost.publicationDateId : Math.max(firstLoaded, firstLoadedPost.publicationDateId))
-                                exec(false)
+                                resolve(false)
                             }, 300)
                         }
                     } catch (e) {
                         console.error("Error when fetching posts", e)
                         setError(true)
-                        exec(false)
+                        resolve(false)
                     }
                 })()
                 return nextLoadedPosts
