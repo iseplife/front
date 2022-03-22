@@ -66,8 +66,30 @@ interface HeaderProps {
     user: LoggedStudentPreview
 }
 
-const Header: React.FC<HeaderProps> = ({user}) => {
+const NotificationHeaderButton: React.FC = () => {
+    const [t] = useTranslation("notifications")
     const unwatchedNotifications = useLiveQuery(() => notificationManager?.getUnwatched(), [])
+    return <DropdownPanel
+        icon={<div>
+            <IconButton icon={cFaBellFull}/>
+            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications ? "scale-100" : "scale-0")}>
+                {Math.min(unwatchedNotifications ?? 0, 9)}
+            </div>
+        </div>}
+        panelClassName="w-80 -right-6"
+        buttonClassName="group"
+    >
+        <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
+            {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
+            <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                {t("see_more")}
+            </Link>
+        </div>
+        <NotificationsCenter className="md:block "/>
+    </DropdownPanel>
+}
+
+const Header: React.FC<HeaderProps> = ({user}) => {
     const [t] = useTranslation("notifications")
 
     return (
@@ -86,24 +108,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                     <Link to="/calendar" className="group">
                         <IconButton icon={cFaCalendarFull}/>
                     </Link>
-                    <DropdownPanel
-                        icon={<div>
-                            <IconButton icon={cFaBellFull}/>
-                            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications ? "scale-100" : "scale-0")}>
-                                {Math.min(unwatchedNotifications ?? 0, 9)}
-                            </div>
-                        </div>}
-                        panelClassName="w-80 -right-6"
-                        buttonClassName="group"
-                    >
-                        <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
-                            {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
-                            <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
-                                {t("see_more")}
-                            </Link>
-                        </div>
-                        <NotificationsCenter className="md:block "/>
-                    </DropdownPanel>
+                    <NotificationHeaderButton />
                 </div>
                 <DropdownPanel
                     icon={

@@ -1,5 +1,5 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
-import {Post as PostType, PostUpdate} from "../../data/post/types"
+import React, {useCallback, useEffect, useState} from "react"
+import {PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, Modal} from "antd"
 import {useTranslation} from "react-i18next"
@@ -14,16 +14,14 @@ import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
-import {deletePost, pinPost} from "../../data/post"
+import {pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
-import { AppContext } from "../../context/app/context"
-//@ts-ignore
-import { getPastelColor } from "pastel-color"
-import { Link } from "react-router-dom"
 import { groupManager } from "../../datamanager/GroupManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import { eventsManager } from "../../datamanager/EventsManager"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
+import { PostRelatedCard } from "./PostRelatedCard"
+import { EventPreview } from "../../data/event/types"
 
 type PostProps = {
     data: ManagerPost
@@ -159,20 +157,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
-                        {group && !feedId &&
-                            <Link to={`/group/${group.id}`} className="min-w-0">
-                                <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow" title={t("post:posted_in_group", { group: group.name })} style={{backgroundColor: getPastelColor(group.name).hex}}>
-                                    <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
-                                </div>
-                            </Link>
-                        }
-                        {event && !feedId &&
-                            <Link to={`/event/${event.id}`} className="min-w-0">
-                                <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow items items-center bg-red-300" title={t("post:posted_in_event", { event: event.title })}>
-                                    <div className="bg-neutral-50 w-4 h-4 shadow-sm rounded-sm mr-1.5 overflow-hidden "><div className="bg-red-500 w-4 h-[0.32rem]" /></div>
-                                    <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{event.title}</div>
-                                </div>
-                            </Link>
+                        {!feedId && (event || group) &&
+                            <PostRelatedCard group={group} event={event as EventPreview} />
                         }
                         {data.pinned && (
                             <FontAwesomeIcon
