@@ -2,6 +2,7 @@ import WSEventType from "../realtime/websocket/WSEventType"
 import Dexie from "dexie"
 import PacketListener from "../realtime/protocol/listener/PacketListener"
 import { WSServerClient } from "../realtime/websocket/WSServerClient"
+import GeneralEventType from "../constants/GeneralEventType"
 
 export default abstract class DataManager<T> extends PacketListener {
     private needDataLoad = false
@@ -21,7 +22,7 @@ export default abstract class DataManager<T> extends PacketListener {
         })
         this.removeContext("minFreshId")
 
-        this.registerEvent("logout", () => 
+        this.registerEvent(GeneralEventType.LOGOUT, () => 
             this.unregister()
         )
     }

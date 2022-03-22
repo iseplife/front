@@ -10,6 +10,7 @@ import { createPost, deletePost, updatePost } from "../data/post"
 import WSPSFeedPostRemoved from "../realtime/protocol/v1/packets/server/WSPSFeedPostRemoved"
 import WSPSFeedPostEdited from "../realtime/protocol/v1/packets/server/WSPSFeedPostEdited"
 import WSPSFeedPostLikesUpdate from "../realtime/protocol/v1/packets/server/WSPSFeedPostLikesUpdate"
+import GeneralEventType from "../constants/GeneralEventType"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -351,7 +352,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 }
 let feedsManager = new FeedsManager(undefined!)
 
-window.addEventListener("logged", () => (feedsManager = new FeedsManager(getWebSocket())).init())
+window.addEventListener(GeneralEventType.LOGGED, () => (feedsManager = new FeedsManager(getWebSocket())).init())
 
 export { feedsManager }
 

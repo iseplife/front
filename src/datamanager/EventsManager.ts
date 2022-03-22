@@ -1,4 +1,5 @@
 import React from "react"
+import GeneralEventType from "../constants/GeneralEventType"
 import { AppContext } from "../context/app/context"
 import { getIncomingEvents } from "../data/event"
 import { EventPreview } from "../data/event/types"
@@ -69,6 +70,6 @@ export default class EventsManager extends DataManager<EventPreview> {
 }
 let eventsManager = new EventsManager(undefined!, undefined!)
 
-window.addEventListener("logged", (event) => (eventsManager = new EventsManager(getWebSocket(), (event as LoggedEvent).context)).init())
+window.addEventListener(GeneralEventType.LOGGED, (event) => (eventsManager = new EventsManager(getWebSocket(), (event as LoggedEvent).context)).init())
 
 export { eventsManager }

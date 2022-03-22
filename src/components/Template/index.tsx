@@ -17,6 +17,7 @@ import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClie
 import { getUserGroups } from "../../data/group"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import LoggedEvent from "../../events/LoggedEvent"
+import GeneralEventType from "../../constants/GeneralEventType"
 
 
 const Template: React.FC = () => {
@@ -37,7 +38,7 @@ const Template: React.FC = () => {
             })
 
             if (localStorage.getItem("logged_id") != res[0].data.id.toString())
-                window.dispatchEvent(new Event("logout"))
+                window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
             
             localStorage.setItem("logged_id", res[0].data.id.toString())
             

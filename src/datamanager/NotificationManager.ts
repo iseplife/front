@@ -4,6 +4,7 @@ import DataManager from "./DataManager"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import WSPSNotificationRecieved from "../realtime/protocol/v1/packets/server/WSPSNotificationRecieved"
+import GeneralEventType from "../constants/GeneralEventType"
 
 export default class NotificationManager extends DataManager<Notification> {
 
@@ -98,6 +99,6 @@ export default class NotificationManager extends DataManager<Notification> {
 }
 let notificationManager = new NotificationManager(undefined!)
 
-window.addEventListener("logged", () => (notificationManager = new NotificationManager(getWebSocket())).init())
+window.addEventListener(GeneralEventType.LOGGED, () => (notificationManager = new NotificationManager(getWebSocket())).init())
 
 export { notificationManager }

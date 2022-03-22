@@ -1,3 +1,4 @@
+import GeneralEventType from "../constants/GeneralEventType"
 import { getUserGroups } from "../data/group"
 import { GroupPreview } from "../data/group/types"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
@@ -40,6 +41,6 @@ export default class GroupManager extends DataManager<GroupPreview> {
 }
 let groupManager = new GroupManager(undefined!)
 
-window.addEventListener("logged", () => (groupManager = new GroupManager(getWebSocket())).init())
+window.addEventListener(GeneralEventType.LOGGED, () => (groupManager = new GroupManager(getWebSocket())).init())
 
 export { groupManager }
