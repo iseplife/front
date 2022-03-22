@@ -224,15 +224,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated){
         packet.post.publicationDate = new Date(packet.post.publicationDate)
         
-        const publicationDateId = this.calcId(packet.post)
-
-        this.addData({
-            ...packet.post,
-            lastLoadId: this.getLastLoad(packet.post.feedId),
-            loadedFeed: packet.post.feedId,
-            hasWriteAccess: packet.hasWriteAccess,
-            publicationDateId,
-        } as ManagerPost)
+        this.addPostToFeed(packet.post, packet.post.feedId, packet.hasWriteAccess)
 
         if (packet.follow) {
             this.addData({
@@ -240,13 +232,23 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 lastLoadId: this.getLastLoad(undefined),
                 loadedFeed: mainFeedId,
                 hasWriteAccess: packet.hasWriteAccess,
-                publicationDateId,
+                publicationDateId: this.calcId(packet.post),
             } as ManagerPost)
         }
     }
+
+    public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean){
+        await this.addData({
+            ...post,
+            lastLoadId: this.getLastLoad(feed),
+            loadedFeed: feed,
+            hasWriteAccess: hasWriteAccess ?? (post as Post).hasWriteAccess,
+            publicationDateId: this.calcId(post),
+        } as ManagerPost)
+    }
+
     public async removePostFromLoadedFeed(publicationDateId: number, loadedFeed: FeedId) {
         const detected = (await this.getTable().where({loadedFeed: loadedFeed ?? mainFeedId, publicationDateId}).toArray()).map(post => [post.loadedFeed, post.publicationDateId])
-        console.log("Deleted", detected, "for", publicationDateId, loadedFeed)
         await this.getTable().bulkDelete(detected)
     }
     public async removePost(id: number) {

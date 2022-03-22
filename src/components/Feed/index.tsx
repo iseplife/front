@@ -116,10 +116,10 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
         message.success(t("remove_item.complete"))
     }, [])
 
-    const onPostPin = useCallback((id: number, pinned: boolean) => {
+    const onPostPin = useCallback((postId: number, pinned: boolean) => {
         if(posts)
             if (pinned) {
-                const index = posts.findIndex(p => p.id === id)
+                const index = posts.findIndex(p => p.id === postId)
                 const pinnedPost = { ...posts[index], pinned: true }
 
                 // We move post into pinned posts while removing it from common posts
@@ -132,14 +132,12 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
                 message.success(t("post:post_pinned"))
             } else {
-                const index = postsPinned.findIndex(p => p.id === id)
+                const index = postsPinned.findIndex(p => p.id === postId)
                 const unpinnedPost = { ...postsPinned[index], pinned: false }
 
-                
                 // We move post into common posts while removing it from pinned posts
-                feedsManager.outdateFeed(id)
-                setNeedFullReload(true)
-                
+                feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.feedId)
+
                 setPostsPinned(prev => prev.filter((p, i) => i !== index))
                 message.success(t("post:post_unpinned"))
             }
