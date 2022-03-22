@@ -75,6 +75,7 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
                             <SafeImage
                                 key={currentIndex}
                                 nsfw={currentPhoto.nsfw}
+                                status={currentPhoto.status}
                                 src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
                                 alt={currentPhoto.alt}
                                 width={width}

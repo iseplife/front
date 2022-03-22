@@ -1,21 +1,40 @@
-import React, {ImgHTMLAttributes, useState} from "react"
+import React, {ImgHTMLAttributes, useMemo, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
+import {MediaStatus} from "../../data/media/types"
+import MediaProcessing from "./MediaProcessing"
 
 
-type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & { nsfw: boolean, hide?: boolean, clickable?: boolean }
+type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
+    nsfw: boolean,
+    status: MediaStatus
+    hide?: boolean,
+    clickable?: boolean
+}
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, hide, ...imgProps} = props
+    const {nsfw, status, hide, ...imgProps} = props
     const safeMode = Boolean(localStorage.getItem("nsfw") || true)
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
-    return (
-        <div className={`${props.className} ${props.clickable && "image-display"} relative bg-gray-400 overflow-hidden m-auto w-max rounded`}>
+    const ready = useMemo(() => status === MediaStatus.READY, [status])
+
+    return ready ? (
+        <div className={`
+            ${props.className} 
+            ${props.clickable && "image-display"} 
+            ${!ready && "h-56 flex-grow mx-2"}
+            relative bg-gray-300 overflow-hidden m-auto w-max rounded`
+        }>
             <div className="overflow-hidden h-full w-full">
                 <img
                     {...imgProps}
-                    style={hidden ? {...props.style, WebkitFilter: "blur(12px)", filter: "blur(12px)", msFilter: "blur(12px)"} : {...props.style}}
+                    style={hidden ? {
+                        ...props.style,
+                        WebkitFilter: "blur(12px)",
+                        filter: "blur(12px)",
+                        msFilter: "blur(12px)"
+                    } : {...props.style}}
                     alt={""}
                 />
             </div>
@@ -27,7 +46,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 </div>
             )}
         </div>
-    )
+    ): <MediaProcessing />
 }
 
 SafeImage.defaultProps = {

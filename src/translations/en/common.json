@@ -75,5 +75,6 @@
     "unsubscribe": "Unfollow"
   },
   "no_targets": "No targets (Public event)",
+  "media_processing": "Media is being processed",
   "retry": "Retry"
 }

@@ -41,6 +41,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
             <FontAwesomeIcon icon={faCheckCircle} className={photo.selected ? "absolute z-10" : "hidden"} style={{left: "4px", top: "4px"}}/>
             <SafeImage
                 nsfw={photo.nsfw}
+                status={photo.status}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}
                 src={photo.src}
                 height={photo.height}

@@ -27,7 +27,7 @@ const VideoForm: React.FC = () => {
         }
         return undefined
     }, [values.embed])
-    
+
     const handleUpload = useCallback((file: File) => {
         setFieldValue("embed", {type: EmbedEnumType.VIDEO, data: [{file, nsfw: false}]} as EmbedCreation)
         return false

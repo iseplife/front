@@ -29,7 +29,13 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
                             >
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <SafeImage className="h-full w-full rounded bg-gray-400 object-cover opacity-50" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} hide/>
+                                    <SafeImage
+                                        className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
+                                        src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                        nsfw={img.nsfw}
+                                        status={img.status}
+                                        hide
+                                    />
                                     <FontAwesomeIcon icon={faPlus} className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
@@ -41,7 +47,13 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >
                                 <div className="hover:bg-black rounded h-full w-full">
-                                    <SafeImage hide className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded" src={mediaPath(img.name, GallerySizes.PREVIEW)} nsfw={img.nsfw} />
+                                    <SafeImage
+                                        className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
+                                        src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                        nsfw={img.nsfw}
+                                        status={img.status}
+                                        hide
+                                    />
                                 </div>
                             </Link>
                     )) :

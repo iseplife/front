@@ -74,6 +74,7 @@
     "subscribed": "Abonné",
     "unsubscribe": "Se désabonner"
   },
-  "retry": "Réessayer",
-  "no_targets": "Aucune audience (Évènement public) "
+  "no_targets": "Aucune audience (Évènement public) ",
+  "media_processing": "Media en cours de traitement",
+  "retry": "Réessayer"
 }
