@@ -39,7 +39,9 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     const [error, setError] = useState<boolean>(false)
 
-    const [baseLastLoad, setBaseLastLoad] = useState<number>(0)
+    const [baseLastLoad, setBaseLastLoad] = useState<number>(-1)
+
+    const loadingInformations = useMemo(() => loading || baseLastLoad == -1, [baseLastLoad, loading])
 
     useEffect(() => {
         if (!loading) {
@@ -52,7 +54,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
 
     useLiveQuery(async () => {
         const generalLoad = await feedsManager.getGeneralLastLoad()
-        setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != 0 && baseLastLoad < generalLoad))
+        setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != -1 && baseLastLoad < generalLoad))
     }, [baseLastLoad])
 
     const [loadedPosts, setLoadedPosts] = useState(0)
@@ -64,11 +66,11 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     useEffect(() => {
-        if(!loading)
+        if(!loadingInformations)
             feedsManager.getLastPostedFresh(id).then(post => 
                 setFirstLoaded(firstLoaded => post?.publicationDateId ?? firstLoaded)
             )
-    }, [loading, id])
+    }, [loadingInformations, id])
 
     const loadMorePost = useCallback(async () => {
         return new Promise<boolean>(resolve => {
@@ -192,8 +194,8 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3" />, [])
     
     const empty = useMemo(() => 
-        !loading && !fetching && !error && !posts?.length && !postsPinned?.length
-    , [loading, fetching, error, posts, postsPinned])
+        !loadingInformations && !fetching && !error && !posts?.length && !postsPinned?.length
+    , [loadingInformations, fetching, error, posts, postsPinned])
 
     return (
         <FeedContext.Provider value={{authors}}>
@@ -266,7 +268,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                     </div>
                 }
                 {
-                    loading ? loadingSkeletons : 
+                    loadingInformations ? loadingSkeletons : 
                         <InfiniteScroller
                             block={error}
                             triggerDistance={500}
@@ -301,7 +303,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
                                             <div className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none" : ""}>
                                                 <Post
                                                     feedId={id}
-                                                    key={p.id} data={p}
+                                                    key={p.publicationDateId} data={p}
                                                     onDelete={onPostRemoval}
                                                     onUpdate={onPostUpdate}
                                                     onPin={onPostPin}

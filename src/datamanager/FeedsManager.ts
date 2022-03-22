@@ -94,10 +94,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async subscribe(feed: FeedId) {
+        this.loadedFeeds.add(feed ?? mainFeedId)
+        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
+        
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
-        for (const post of await this.getTable().where({ "loadedFeed": feed ?? mainFeedId, "waitingForUpdate": "true" }).toArray()) {
+        this.getTable().where({ "loadedFeed": feed ?? mainFeedId, "waitingForUpdate": "true" }).toArray().then(posts => posts.forEach(post => {
             if(post.waitFor?.delete)
                 postsToDelete.push(post)
             else if(post.waitFor?.modif)
@@ -106,14 +109,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                     ...post.waitFor.modif,
                     waitingForUpdate: false,
                 })
-        }
-        await Promise.all([
-            this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId])),
-            this.addBulkData(postsToAdd),
-        ])
+        }))
 
-        this.loadedFeeds.add(feed ?? mainFeedId)
-        return this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
+
+        this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId]))
+        this.addBulkData(postsToAdd)
+
+        return lastLoad
     }
     public async unsubscribe(feed: FeedId){
         this.loadedFeeds.delete(feed ?? mainFeedId)
