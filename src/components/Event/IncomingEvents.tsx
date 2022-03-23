@@ -24,12 +24,12 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
             <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("incoming")}</Divider>
             <h3 className="text-gray-700 text-lg lg:mx-3 hidden sm:block">{t("incoming")}</h3>
             {wait || !events ?
-                <>
-                    <Skeleton.Input className="w-full rounded my-1" active size="large"/>
-                    <Skeleton.Input className="w-full rounded my-1" active size="large"/>
-                    <Skeleton.Input className="w-full rounded my-1" active size="large"/>
-                </> :
-                events?.length ?
+                <div className="flex gap-2.5 sm:flex-col sm:mb-4">
+                    <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
+                    <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
+                    <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
+                </div> :
+                events.length ?
                     <EventPreviewList events={events}/> :
                     <div className="text-gray-500 sm:mt-2 mb-2 text-center text-base sm:text-lg">
                         <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
