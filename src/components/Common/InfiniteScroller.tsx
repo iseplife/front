@@ -137,9 +137,9 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
     return (
         <div className="relative h-auto">
-            {(watch !== "DOWN") && (
+            {(watch !== "DOWN") && !empty && (
                 <div className="mb-3 text-center">
-                    { upLoader.over && !empty ?
+                    { upLoader.over ?
                         <p>{t("end")}</p> :
                         upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
@@ -151,9 +151,9 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
             <div className="invisible absolute" style={{marginTop: `-${triggerDistance}px`}} ref={loaderRef} />
 
-            {(watch !== "UP") && (
+            {(watch !== "UP") && !empty && (
                 <div className="mb-3 text-center">
-                    { downLoader.over && !empty ?
+                    { downLoader.over ?
                         <p>{t("end")}</p>:
                         (loadingComponent || <Loading size="3x"/>)
                     }
