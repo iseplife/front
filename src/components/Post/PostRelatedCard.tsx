@@ -4,14 +4,19 @@ import { EventPreview } from "../../data/event/types"
 import { GroupPreview } from "../../data/group/types"
 //@ts-ignore
 import { getPastelColor } from "pastel-color"
+import { useLiveQuery } from "dexie-react-hooks"
+import { groupManager } from "../../datamanager/GroupManager"
+import { eventsManager } from "../../datamanager/EventsManager"
 
 interface PostRelatedCardProps {
-    event?: EventPreview,
-    group?: GroupPreview,
+    feedId: number,
 }
 
-export const PostRelatedCard: React.FC<PostRelatedCardProps> = ({event, group}) => {
+export const PostRelatedCard: React.FC<PostRelatedCardProps> = ({feedId}) => {
     const {t} = useTranslation("post")
+    const event = useLiveQuery(async () => feedId != undefined && await eventsManager.getEventByEventFeedId(feedId), [feedId])
+    const group = useLiveQuery(() => groupManager.getGroupByFeedId(feedId), [feedId])
+
     return <>
         {event && <Link to={`/event/${event.id}`} className="min-w-0">
             <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow items items-center bg-red-300" title={t("post:posted_in_event", { event: event.title })}>

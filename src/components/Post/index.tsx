@@ -16,9 +16,6 @@ import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
 import {pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
-import { groupManager } from "../../datamanager/GroupManager"
-import { useLiveQuery } from "dexie-react-hooks"
-import { eventsManager } from "../../datamanager/EventsManager"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 import { PostRelatedCard } from "./PostRelatedCard"
 import { EventPreview } from "../../data/event/types"
@@ -42,9 +39,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
-
-    const event = useLiveQuery(async () => data.feedId != undefined && await eventsManager.getEventByEventFeedId(data.feedId), [data.feedId])
-    const group = useLiveQuery(() => groupManager.getGroupByFeedId(data.feedId), [data.feedId])
 
     useEffect(() => setLikes(data.nbLikes), [data.nbLikes])
 
@@ -157,8 +151,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
-                        {!feedId && (event || group) &&
-                            <PostRelatedCard group={group} event={event as EventPreview} />
+                        {!feedId && 
+                            <PostRelatedCard feedId={data.feedId} />
                         }
                         {data.pinned && (
                             <FontAwesomeIcon
