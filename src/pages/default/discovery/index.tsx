@@ -65,7 +65,7 @@ const Discovery: React.FC = () => {
 
                 <DiscoveryClub />
 
-                <div className="mb-5">
+                <div className="mb-5 mt-10">
                     <div className="bg-white rounded-full w-16 h-3"></div>
                     <div className="text-2xl mt-2">{t("students")}</div>
                 </div>
