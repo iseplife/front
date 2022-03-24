@@ -73,5 +73,6 @@
     "subscribe": "Follow",
     "subscribed": "Followed",
     "unsubscribe": "Unfollow"
-  }
+  },
+  "retry": "Retry"
 }

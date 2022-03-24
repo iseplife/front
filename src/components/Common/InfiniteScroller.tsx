@@ -1,4 +1,4 @@
-import React, {forwardRef, ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useState} from "react"
+import React, {forwardRef, ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react"
 import Loading from "./Loading"
 import {useTranslation} from "react-i18next"
 
@@ -26,14 +26,46 @@ type InfiniteScrollerProps = {
     children: ReactNode
     loadingComponent?: React.ReactNode,
     scrollElement?: HTMLElement | null | false,
+    block?: boolean
 }
 
 const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>((props, ref) => {
     const {t} = useTranslation("common")
-    const {watch, empty = false,  callback, triggerDistance = 50, loadingComponent, scrollElement, children, className} = props
+    const {watch, block = false, empty = false,  callback, triggerDistance = 200, loadingComponent, scrollElement, children, className} = props
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
+
+    const [intersector, setIntersector] = useState<IntersectionObserver>(undefined!)
+    useEffect(() => {
+        setIntersector(intersector => {
+            intersector?.disconnect()
+            return new IntersectionObserver(
+                () => {
+                    if (block)
+                        return
+                    if (watch !== "DOWN")
+                        setUpLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
+                    if (watch !== "UP")
+                        setDownLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
+                }, {
+                    threshold: 0,
+                }
+            )
+        })
+    }, [block, watch])
+
+    const loaderRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const ele = loaderRef?.current
+        if(ele){
+            intersector?.observe(ele)
+            return () => intersector?.unobserve(ele)
+        }
+    }, [loaderRef?.current, intersector])
+
+    useEffect(() => () => setIntersector(intersector => {intersector.disconnect(); return undefined!}), [])// Turn off intersector on unload
 
     const initialLoad = useCallback(() => {
         switch (watch) {
@@ -68,38 +100,6 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
         }
     }))
 
-    /**
-     * Initial data, call on component creation
-     * first element that are going to be displayed
-     */
-    useEffect(() => {
-        initialLoad()
-    }, [initialLoad])
-
-    /**
-     * Init listener on scroller according on which way we're listening,
-     * remove listener on unmount
-     */
-    useEffect(() => {
-        function scrollerListener(this: HTMLElement) {
-            // Trigger event loader when top of page is almost reached
-            if (watch !== "DOWN" && this.scrollTop <= triggerDistance) {
-                setUpLoader(prevState => ({...prevState, fetch: true}))
-            }
-            // Trigger event loader when bottom of page is almost reached
-            if (watch !== "UP" && this.clientHeight + this.scrollTop >= this.scrollHeight - triggerDistance) {
-                setDownLoader(prevState => ({...prevState, fetch: true}))
-            }
-        }
-
-        const main = scrollElement || document.getElementById("main")
-        main?.addEventListener("scroll", scrollerListener)
-
-        return () => {
-            main?.removeEventListener("scroll", scrollerListener)
-        }
-    }, [triggerDistance, watch, scrollElement])
-
     useEffect(() => {
         if (!upLoader.over && !upLoader.loading && upLoader.fetch) {
             setUpLoader(prevState => ({...prevState, loading: true}))
@@ -111,9 +111,12 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     count: ++prevState.count,
                     loading: false
                 }))
+
+                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0 && !block)
+                    setUpLoader(prevState => ({...prevState, fetch: true}))
             })
         }
-    }, [upLoader, callback])
+    }, [upLoader, callback, loaderRef?.current, block])
 
     useEffect(() => {
         if (!downLoader.over && !downLoader.loading && downLoader.fetch) {
@@ -126,15 +129,17 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     count: ++prevState.count,
                     loading: false
                 }))
+                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !block)
+                    setDownLoader(prevState => ({...prevState, fetch: true}))
             })
         }
-    }, [downLoader, callback])
+    }, [downLoader, callback, loaderRef?.current, block])
 
     return (
         <div className="relative h-auto">
-            {(watch !== "DOWN") && (
+            {(watch !== "DOWN") && !empty && (
                 <div className="mb-3 text-center">
-                    { upLoader.over && !empty ?
+                    { upLoader.over ?
                         <p>{t("end")}</p> :
                         upLoader.loading && (loadingComponent || <Loading size="3x"/>)}
                 </div>
@@ -144,11 +149,13 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                 {children}
             </div>
 
-            {(watch !== "UP") && (
+            <div className="invisible absolute" style={{marginTop: `-${triggerDistance}px`}} ref={loaderRef} />
+
+            {(watch !== "UP") && !empty && (
                 <div className="mb-3 text-center">
-                    { downLoader.over && !empty ?
+                    { downLoader.over ?
                         <p>{t("end")}</p>:
-                        downLoader.loading && (loadingComponent || <Loading size="3x"/>)
+                        (loadingComponent || <Loading size="3x"/>)
                     }
                 </div>
             )}

@@ -13,6 +13,7 @@ import NotFound from "../../pages/errors/NotFound"
 import StudentDrawer from "../Student/StudentDrawer"
 import Setting from "../../pages/default/setting"
 import NotificationsPage from "../../pages/default/notifications"
+import NotificationsOverlay from "../Notification/NotificationOverlay"
 
 
 const DefaultTemplate: React.FC = () => (
@@ -36,6 +37,7 @@ const DefaultTemplate: React.FC = () => (
             </div>
         </Navbar>
         <StudentDrawer/>
+        <NotificationsOverlay />
     </div>
 )
 

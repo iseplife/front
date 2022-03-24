@@ -15,27 +15,39 @@ import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
 import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
 import { getUserGroups } from "../../data/group"
+import { notificationManager } from "../../datamanager/NotificationManager"
+import LoggedEvent from "../../events/LoggedEvent"
+import GeneralEventType from "../../constants/GeneralEventType"
 
 
 const Template: React.FC = () => {
-    const {state, dispatch} = useContext(AppContext)
+    const context = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(true)
     const isAdmin = useMemo(() => (
-        state.payload.roles.includes(Roles.ADMIN)
-    ), [state.payload])
+        context.state.payload.roles.includes(Roles.ADMIN)
+    ), [context.state.payload])
 
     useLayoutEffect(() => {
         Promise.all([getLoggedUser(), getUserGroups()]).then(res => {
             const socket = initWebSocket(wsURI)
-            dispatch({
+            context.dispatch({
                 type: AppActionType.SET_LOGGED_USER,
                 user: {
                     ...res[0].data,
-                    groups: res[1].data,
                 }
             })
 
-            socket.connect(state.jwt)
+            if (localStorage.getItem("logged_id") != res[0].data.id.toString())
+                window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
+            
+            localStorage.setItem("logged_id", res[0].data.id.toString())
+            
+            window.dispatchEvent(new LoggedEvent(context))
+
+            notificationManager.setUnwatched(res[0].data.unwatchedNotifications)
+            res[0].data.unwatchedNotifications = undefined!
+
+            socket.connect(context)
         }).finally(() => setLoading(false))
 
         return () => getWebSocket() && getWebSocket().disconnect()

@@ -2,55 +2,97 @@ import MessageDecoder from "../MessageDecoder"
 import DataWriter from "../DataWriter"
 import ConnectedListener from "../listeners/ConnectedListener"
 import PacketOut from "../protocol/PacketOut"
+import PacketListener from "../protocol/listener/PacketListener"
+import WSEventType from "./WSEventType"
+import GroupListener from "../listeners/GroupListener"
+import React from "react"
+import { AppContext } from "../../context/app/context"
+import ProtocolV1 from "../protocol/v1/ProtocolV1"
 
 class WSServerClient {
+    private static reconnectTimeout: number
+
     private socket!: WebSocket
     private messageDecoder!: MessageDecoder
     private queue: PacketOut[] = []
     private buffer: DataWriter = new DataWriter(new ArrayBuffer(1024 * 2))
     private accessToken!: string
 
+    public listeners: PacketListener[] = []
+
     private _connected!: boolean
     get connected() { return this._connected }
 
     private _logged = false
 
+    private context!: React.ContextType<typeof AppContext>
+
     constructor(
         public ip: string,
-    ) { }
+    ) {
+        // Clear listeners
+        ProtocolV1.instance.packetsServer.forEach(packet => packet.listeners = [])
+    }
 
     /**
      * Se connecte et s'authentifie au serveur.
      * @param username Le nom d'utilisateur du client
      * @param accessToken AccessToken renouvelé à utiliser pour se connecter
      */
-    public connect(accessToken: string) {
+    public connect(context: React.ContextType<typeof AppContext>, retry = false) {
         if (this.connected)
             return
-        this.accessToken = accessToken
+        if(!retry)
+            clearTimeout(WSServerClient.reconnectTimeout)
+        this.context = context
+        this.accessToken = context.state.jwt
         this.socket = new WebSocket(this.ip)
-        this.initSocket()
+        this.initSocket(retry)
     }
-    private initSocket() {
+    private initSocket(retry = false) {
         this.messageDecoder = new MessageDecoder()
         this.socket.binaryType = "arraybuffer"
         this.socket.onopen = (event) => {
+            window.dispatchEvent(new Event(WSEventType.CONNECTED))
+
             this.socket.send(this.accessToken)
             this._connected = true
+            this._dispatchConnected()
         }
-        // this.socket.onclose = (event) => {}
-        // this.socket.onerror = (event) => {}
-        this.socket.onmessage = (event) => {
-            this.messageDecoder.decode(event.data)
-        }
-        this._registerListeners()
+        this.socket.onclose = () => this._dispatchDisconnected()
+        this.socket.onmessage = (event) => this.messageDecoder.decode(event.data)
+        
+        if (!retry)
+            this._registerListeners()
+    }
+
+    private _dispatchDisconnected() {
+        if (this._connected) {
+            const event = new Event(WSEventType.DISCONNECTED)
+            window.dispatchEvent(event)
+            console.log("[WebSocket] Disconnected")
+        } else
+            console.log("[WebSocket] Connection failed")
+        
+        this._connected = false
+
+        WSServerClient.reconnectTimeout = window.setTimeout(() => 
+            this.connect(this.context, true)
+        , 1000)
+        
+    }
+
+    private _dispatchConnected(){
+        const event = new Event(WSEventType.DISCONNECTED)
+        window.dispatchEvent(event)
     }
 
     private _registerListeners() {
         new ConnectedListener(this).register()
+        new GroupListener(this, this.context).register()
     }
 
-    public setLogged() {
+    public setLogged() {        
         this._logged = true
         for (const packet of this.queue)
             this.forcePacket(packet)
@@ -71,6 +113,8 @@ class WSServerClient {
 
     public disconnect() {
         console.log("disconnect")
+        for(const listener of this.listeners)
+            listener.unregister()
         this.socket.close()
     }
 }
@@ -83,5 +127,9 @@ function initWebSocket(ip: string) {
 function getWebSocket() {
     return instance
 }
+function logoutWebSocket() {
+    instance?.disconnect()
+    instance = undefined!
+}
 
-export { WSServerClient, getWebSocket, initWebSocket}
+export { WSServerClient, getWebSocket, initWebSocket, logoutWebSocket}

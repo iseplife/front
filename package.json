@@ -40,6 +40,8 @@
     "antd": "^4.4.1",
     "axios": "^0.24.0",
     "date-fns": "^2.8.1",
+    "dexie": "^3.2.1",
+    "dexie-react-hooks": "^1.1.1",
     "formik": "^2.0.7",
     "i18next": "^19.0.2",
     "leaflet": "1.6.0",

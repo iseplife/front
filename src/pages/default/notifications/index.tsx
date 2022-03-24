@@ -1,21 +1,14 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
+import React, {useContext, useEffect} from "react"
 import {useTranslation} from "react-i18next"
 import {AppContext} from "../../../context/app/context"
-import {Notification as NotificationType} from "../../../data/notification/types"
-import NotificationSkeleton from "../../../components/Skeletons/NotificationSkeleton"
-import Notification from "../../../components/Notification"
-import InfiniteScroller from "../../../components/Common/InfiniteScroller"
-import {loadNotifications, setNotificationsWatched} from "../../../data/notification"
-import {AppActionType} from "../../../context/app/action"
-import {add, isAfter} from "date-fns"
-import {Divider} from "antd"
 import NotificationsCenter from "../../../components/Notification/NotificationsCenter"
+import { useLiveQuery } from "dexie-react-hooks"
+import { notificationManager } from "../../../datamanager/NotificationManager"
 
 const NotificationsPage: React.FC = () => {
     const {t} = useTranslation("notifications")
-    const {state: {user}, dispatch} = useContext(AppContext)
 
-    const unwatchedNotifications = useMemo(() => user.unwatchedNotifications, [])
+    const unwatchedNotifications = useLiveQuery(() => notificationManager.getUnwatched(), [])
 
     useEffect(() => document.documentElement.click(), [])// Closes all dropdown menus (including notifications' one)
 

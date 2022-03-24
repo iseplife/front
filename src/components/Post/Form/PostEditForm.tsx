@@ -20,6 +20,7 @@ import {message} from "antd"
 import {createMedia} from "../../../data/media"
 import {addGalleryImages, createGallery, deleteGalleryImages} from "../../../data/gallery"
 import {MediaUploadNSFW} from "../../../data/media/types"
+import { feedsManager } from "../../../datamanager/FeedsManager"
 
 type PostEditFormProps = {
     post: Post,
@@ -149,18 +150,14 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
             }
         }
 
-        const res = await updatePost(
+        props.onEdit(await feedsManager.editPost(
             props.post.id,
             {
                 ...post,
                 removeEmbed: props.post.embed != undefined && embed == undefined
             }
-        )
-        if (res.status === 200) {
-            props.onEdit(res.data)
-            props.onClose()
-            message.success("Post publié !")
-        }
+        ))
+        props.onClose()
     },
     displayName: "PostEditForm"
 })(PostForm)

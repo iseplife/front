@@ -1,5 +1,5 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
-import {Post as PostType, PostUpdate} from "../../data/post/types"
+import React, {useCallback, useEffect, useState} from "react"
+import {PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
 import {Divider, Modal} from "antd"
 import {useTranslation} from "react-i18next"
@@ -12,19 +12,16 @@ import PostEditForm from "./Form/PostEditForm"
 import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {getWSService} from "../../realtime/services/WSService"
-import WSPostsService from "../../realtime/services/WSPostsService"
 import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
-import {deletePost, pinPost} from "../../data/post"
+import {pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
-import { AppContext } from "../../context/app/context"
-//@ts-ignore
-import { getPastelColor } from "pastel-color"
-import { Link } from "react-router-dom"
+import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
+import { PostRelatedCard } from "./PostRelatedCard"
+import { EventPreview } from "../../data/event/types"
 
 type PostProps = {
-    data: PostType
+    data: ManagerPost
     feedId: number | undefined,
     isEdited: boolean
     forceShowComments?: boolean
@@ -42,9 +39,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
-    const { state: { user: { groups } } } = useContext(AppContext)
-    
-    const group = useMemo(() => groups.find(group => group.feedId == data.feedId), [groups, data.feedId])
+
+    useEffect(() => setLikes(data.nbLikes), [data.nbLikes])
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
@@ -53,7 +49,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: async () => {
-                deletePost(data.id)
+                feedsManager.deletePost(data.id)
                 onDelete(data.id)
             }
         })
@@ -80,8 +76,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
 
     let post!: HTMLDivElement
     useEffect(() => {
-        getWSService(WSPostsService).subscribe(data)
-
         //Petite opti
         const scrollListener = () => {
             const boundings = post.getBoundingClientRect()
@@ -96,7 +90,6 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
 
         return () => {
             main?.removeEventListener("scroll", scrollListener)
-            getWSService(WSPostsService).unsubscribe(data)
         }
     }, [data.id])
 
@@ -122,6 +115,10 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
         }
     }, [showComments])
 
+    const setRef = useCallback(ele => { post = ele ?? post }, [post])
+    
+    const applyUpdates = useCallback(() => feedsManager.applyUpdates(data.id), [data?.id])
+
     return (
         <div>
             {isEdited && (
@@ -135,9 +132,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                     <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
                 </Modal>
             )}
-            <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5" ref={ele => {
-                post = ele ?? post
-            }}>
+            <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 relative" ref={setRef}>
                 <div className="w-full flex justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
@@ -156,12 +151,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
-                        {group && !feedId &&
-                            <Link to={`/group/${group.id}`} className="min-w-0">
-                                <div className="flex text-sm rounded px-2 py-0.5 font-medium hover:shadow-sm transition-shadow" title={t("post:posted_in_group", { group: group.name })} style={{backgroundColor: getPastelColor(group.name).hex}}>
-                                    <div className="text-white text-ellipsis whitespace-nowrap overflow-hidden">{group.name}</div>
-                                </div>
-                            </Link>
+                        {!feedId && 
+                            <PostRelatedCard feedId={data.feedId} />
                         }
                         {data.pinned && (
                             <FontAwesomeIcon
@@ -237,6 +228,14 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                             loadComment={data.nbComments !== 0}/>
                     </>
                 )}
+
+                {data.waitingForUpdate &&
+                    <div className="bg-black/40 backdrop-blur-md h-full w-full grid place-items-center absolute rounded-lg top-0 left-0">
+                        <button onClick={applyUpdates} className={"rounded-full px-4 py-2 bg-neutral-500 font-semibold text-white text-base mt-1 " + (data.waitFor?.delete && "text-red-400")}>
+                            {t(data.waitFor?.delete ? "post:updates.deleted" : "post:updates.edited")}
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     )

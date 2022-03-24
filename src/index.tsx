@@ -47,6 +47,7 @@ const App: React.FC = () => {
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
+                
                 setLoggedIn(true)
             }).catch(() => {
                 setLoggedIn(false)

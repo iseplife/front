@@ -39,7 +39,6 @@ export interface StudentPreview {
 }
 export interface LoggedStudentPreview extends StudentPreview {
     feedId: number
-    groups: GroupPreview[]
 
     unwatchedNotifications: number
     totalNotifications: number
