@@ -111,13 +111,10 @@ const YearBook: React.FC = () => {
     }, [getNextStudents])
 
     const switchSorting = useCallback(() => {
-        setStudents(s => s.clear())
-        setFilteredStudents([])
         setFilter({type: "TOGGLE_SORT"})
     }, [scrollerRef])
 
     const updateFilter = useCallback((action: FilterReducerAction) => {
-        setFilteredStudents([])
         setFilter(action)
     }, [])
 
@@ -139,16 +136,17 @@ const YearBook: React.FC = () => {
                         <FontAwesomeIcon icon={faUserAstronaut} size="8x" className="block"/>
                         <span className="text-center mt-5">{t("no_student")}</span>
                     </div> : <>
-                        {filteredStudent.map((s, i) =>
+                        {filteredStudent.map(s =>
                             <StudentCard
-                                key={i}
+                                key={s.id}
                                 id={s.id}
                                 picture={s.picture}
                                 promo={s.promo}
                                 fullname={s.firstName + " " + s.lastName}
+                                className={loading && "opacity-50"}
                             />
                         )}
-                        {loading && <>
+                        {loading && filteredStudent.length == 0 && <>
                             <StudentCardSkeleton />
                             <StudentCardSkeleton />
                             <StudentCardSkeleton />

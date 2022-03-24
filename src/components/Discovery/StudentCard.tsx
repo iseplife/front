@@ -5,11 +5,12 @@ type StudentCardProps = {
     fullname: string
     picture?: string
     promo: number
+    className?: boolean | string
 }
 
-const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, picture, promo}) => (
+const StudentCard: React.FC<StudentCardProps> = React.memo(({id, fullname, picture, promo, className}) => (
     <div
-        className="relative bg-white rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-3.5 items-end flex aspect-[18/20]"
+        className={"relative bg-white rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-3.5 items-end flex aspect-[18/20] " + className}
         style={{
             backgroundImage: `url("${picture ?? "img/icons/discovery/user.svg"}")`,
             backgroundRepeat: "no-repeat",
