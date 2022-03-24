@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {Input, Select, Switch} from "antd"
 import {useTranslation} from "react-i18next"
 import {getAllPromo} from "../../data/student"
@@ -26,13 +26,22 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
         })
     }, [])
 
+    const [, setLastUpdate] = useState(0)
+
+    const inputUpdate = useCallback(value => {
+        setLastUpdate(lastUpdate => {
+            clearTimeout(lastUpdate)
+            return window.setTimeout(() => onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value}), 200)
+        })
+    }, [])
+
     return (
         <div className="flex flex-col flex-wrap sm:flex-no-wrap sm:justify-between items-center">
             <div className="w-4/5" style={{maxWidth: 1000}}>
                 <Input
                     placeholder={t("placeholder_search")}
                     className="border-none text-sm sm:text-lg shadow rounded-full sm:w-full mx-auto sm:mx-0 px-3"
-                    onChange={value => onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value})}
+                    onChange={inputUpdate}
                 />
             </div>
             <div className="mt-2 flex items-center">
