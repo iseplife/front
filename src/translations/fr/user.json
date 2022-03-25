@@ -3,6 +3,7 @@
   "no-bio": "Pas de biographie",
   "clubs": "Associations",
   "photos": "Photos",
+  "no_club": "{{user}} n'est membre d'aucune association.",
   "not-specified": "Non renseigné",
   "no-mail": "Aucun mail renseigné",
   "no-phone": "Aucun téléphone renseigné",

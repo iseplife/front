@@ -3,4 +3,5 @@ export enum SubscribableType {
     GROUP = "group",
     EVENT = "event",
     CLUB = "club",
+    STUDENT = "student",
 }

@@ -64,6 +64,8 @@ export type StudentOverview = StudentPreview & {
     bio?: string
     mail?: string
     archived: boolean
+    feedId: number
+    subscribed?: {extensive: boolean}
 
     facebook?: string
     twitter?: string
