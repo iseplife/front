@@ -7,9 +7,9 @@ import {FilterReducerAction, StudentPreview} from "../../data/student/types"
 import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
 import {EntitySet} from "../../util"
-import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 import {faUserAstronaut} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import StudentCardSkeleton from "./StudentCardSkeleton"
 
 export type StudentFilter = {
     promos: number[]
@@ -61,16 +61,13 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
 const YearBook: React.FC = () => {
     const {t} = useTranslation("discovery")
     const [empty, setEmpty] = useState<boolean>(false)
-    const [students, setStudents] = useState<EntitySet<StudentPreview>>(new EntitySet())
+    const [, setStudents] = useState<EntitySet<StudentPreview>>(new EntitySet())
     const [filteredStudent, setFilteredStudents] = useState<StudentPreview[]>([])
     const [filter, setFilter] = useReducer(reducer, DEFAULT_FILTER)
 
+    const [loading, setLoading] = useState(false)
+
     const scrollerRef = useRef<InfiniteScrollerRef>(null)
-    const switchSorting = useCallback(() => {
-        setFilter({type: "TOGGLE_SORT"})
-        setStudents(s => s.clear())
-        setFilteredStudents([])
-    }, [scrollerRef])
 
     const filterFn = useCallback((s: StudentPreview) => (
         (!filter.promos.length || filter.promos.includes(s.promo)) && (!filter.name || new RegExp(filter.name, "i").test(s.firstName + " " + s.lastName))
@@ -78,29 +75,57 @@ const YearBook: React.FC = () => {
 
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
+        setLoading(true)
         const res = await searchStudents(page, filter.name, filter.promos.toString(), filter.atoz)
         if (res.status === 200) {
             const parsedResults = parseSearchResults(res.data.content)
 
-            setStudents(stds => stds.addAll(parsedResults))
-            const stu = students.toArray().filter(filterFn).sort((a, b) => (filter.atoz ? 1 : -1) * +(a.firstName+a.lastName > b.firstName+b.lastName))
-            setFilteredStudents(stu)
+            setStudents(students => {
 
-            if (page === 0 && res.data.content.length === 0)
-                setEmpty(true)
+                setEmpty(empty => {
+                    if (page === 0 && res.data.content.length === 0)
+                        return true
 
-            if (res.data.content.length !== 0 && empty)
-                setEmpty(false)
+                    if (res.data.content.length !== 0 && empty)
+                        return false
 
+                    return empty
+                })
+
+                setLoading(false)
+                students.addAll(parsedResults)
+
+                setFilteredStudents(() => (
+                    students.toArray()
+                        .filter(filterFn)
+                        .sort((a, b) => (
+                            filter.atoz ? 1 : -1) * +(a.firstName + a.lastName > b.firstName + b.lastName)
+                        )
+                ))
+                return students
+            })
             return res.data.last
         }
+        setLoading(false)
         return false
-    }, [filter.atoz, filter.name, filter.promos, students, empty])
+    }, [filter])
+
+    useEffect(() => {
+        getNextStudents(0)
+    }, [getNextStudents])
+
+    const switchSorting = useCallback(() => {
+        setFilter({type: "TOGGLE_SORT"})
+    }, [scrollerRef])
+
+    const updateFilter = useCallback((action: FilterReducerAction) => {
+        setFilter(action)
+    }, [])
 
     return (
         <div className="container mx-auto text-center mt-10">
 
-            <YearBookSearchBar filter={filter} onFilterUpdate={setFilter} onSortingSwitch={switchSorting}/>
+            <YearBookSearchBar filter={filter} onFilterUpdate={updateFilter} onSortingSwitch={switchSorting}/>
 
             {/* List of students */}
             <InfiniteScroller
@@ -108,22 +133,34 @@ const YearBook: React.FC = () => {
                 empty={empty}
                 watch="DOWN"
                 callback={getNextStudents}
-                className="flex flex-wrap justify-around sm:justify-start mt-10 gap-5"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center mt-10 gap-5"
             >
-                {filteredStudent.length == 0 ?
+                {filteredStudent.length == 0 && !loading ?
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">
                         <FontAwesomeIcon icon={faUserAstronaut} size="8x" className="block"/>
                         <span className="text-center mt-5">{t("no_student")}</span>
                     </div> :
-                    filteredStudent.map((s, i) =>
-                        <StudentCard
-                            key={i}
-                            id={s.id}
-                            picture={s.picture}
-                            promo={s.promo}
-                            fullname={s.firstName + " " + s.lastName}
-                        />
-                    )}
+                    <>
+                        {filteredStudent.map(s =>
+                            <StudentCard
+                                key={s.id}
+                                id={s.id}
+                                picture={s.picture}
+                                promo={s.promo}
+                                fullname={s.firstName + " " + s.lastName}
+                                className="opacity-50"
+                            />
+                        )}
+                        {loading && filteredStudent.length == 0 && <>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                        </>}
+                    </>
+                }
             </InfiniteScroller>
         </div>
     )

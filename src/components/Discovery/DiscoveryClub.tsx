@@ -1,25 +1,16 @@
 import React, {useEffect, useState} from "react"
-import {Skeleton} from "antd"
-import {useTranslation} from "react-i18next"
 import {getAllClubs} from "../../data/club"
 import {ClubPreview} from "../../data/club/types"
 import ClubCard from "./ClubCard"
-import {HorizontalSpacer} from "../Common/HorizontalSpacer"
 
-const ClubLoader = [1, 2, 3, 4].map(i =>
-    <Skeleton
-        key={i}
-        paragraph={{rows: 5}}
-        loading={true}
-        className="w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/4"
-        active
-        avatar
-    />
+const ClubLoader = [1, 2, 3, 4].map(() =>
+    <div className="mx-1 bg-neutral-300 animate-pulse rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-4 items-end flex aspect-[18/20]">
+        <div className="bg-white/40 rounded-xl backdrop-blur grid place-items-center px-3 py-1 mb-3 mt-auto w-full text-neutral-800 font-semibold text-2xl h-9" />
+    </div>
 )
 
 
 const DiscoveryClub: React.FC = () => {
-    const {t} = useTranslation("discovery")
     const [clubs, setClubs] = useState<ClubPreview[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -30,20 +21,16 @@ const DiscoveryClub: React.FC = () => {
         setLoading(true)
         getAllClubs().then(res => {
             setClubs(res.data)
-        }).catch().finally(() => setLoading(false))
+        }).finally(() => setLoading(false))
     }, [])
 
     return (
-        <div className="container text-center mx-auto my-5">
-            <div className="flex flex-wrap justify-around">
-                {!loading ?
-                    clubs.map((club, i) =>
-                        <ClubCard key={i} club={club}/>
-                    ) :
-                    <div className="flex flex-wrap flex-row w-full">
-                        {ClubLoader}
-                    </div>}
-            </div>
+        <div className="mx-auto my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center mt-10 gap-5">
+            {!loading ?
+                clubs.map((club, i) =>
+                    <ClubCard key={i} club={club}/>
+                ) : ClubLoader
+            }
         </div>
     )
 }
