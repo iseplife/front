@@ -1,6 +1,6 @@
 import {ClubPreview} from "../club/types"
 import EventType from "../../constants/EventType"
-import {Feed} from "../feed/types"
+import {Feed, Subscription} from "../feed/types"
 
 export type Event = {
     id: number
@@ -17,7 +17,7 @@ export type Event = {
     targets: Feed[]
     published: Date
     closed: boolean
-    subscribed?: { extensive: boolean }
+    subscribed: Subscription
     hasRight: boolean
     club: ClubPreview
     feed: number

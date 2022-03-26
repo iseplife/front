@@ -2,6 +2,7 @@ import ClubType from "../../constants/ClubType"
 import { StudentPreview} from "../student/types"
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import {faPenNib, faUser, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {Subscription} from "../feed/types"
 
 export enum ClubRole {
     MEMBER = "MEMBER",
@@ -27,7 +28,7 @@ export type Club = {
     feed: number
 
     canEdit: boolean
-    subscribed?: { extensive: boolean },
+    subscribed: Subscription
     facebook?: string
     instagram?: string
     snapchat?: string

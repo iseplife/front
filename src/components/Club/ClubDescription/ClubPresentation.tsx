@@ -21,7 +21,7 @@ const ClubPresentation: React.FC = () => {
                 <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
                 <About/>
             </div>
-            <GalleriesPreview elementId={id} getGalleriesCallback={getClubGalleries} />
+            <GalleriesPreview getGalleriesCallback={(page) => getClubGalleries(id, page)} />
         </div>
 
     )
