@@ -112,10 +112,10 @@ class WSServerClient {
     }
 
     public disconnect() {
-        console.log("disconnect")
         for(const listener of this.listeners)
             listener.unregister()
-        this.socket.close()
+        
+        if(this.socket) this.socket.close()
     }
 }
 

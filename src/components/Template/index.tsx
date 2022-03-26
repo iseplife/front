@@ -13,7 +13,7 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
 import {wsURI} from "../../data/http"
-import {getWebSocket, initWebSocket} from "../../realtime/websocket/WSServerClient"
+import {getWebSocket, initWebSocket, logoutWebSocket} from "../../realtime/websocket/WSServerClient"
 import { getUserGroups } from "../../data/group"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import LoggedEvent from "../../events/LoggedEvent"
@@ -50,7 +50,7 @@ const Template: React.FC = () => {
             socket.connect(context)
         }).finally(() => setLoading(false))
 
-        return () => getWebSocket() && getWebSocket().disconnect()
+        return () => logoutWebSocket()
     }, [])
 
     return loading ?

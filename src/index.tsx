@@ -41,7 +41,7 @@ const App: React.FC = () => {
     useEffect(() => {
         if (state.payload && state.token_expiration >= new Date().getTime()) {
             setLoggedIn(true)
-        } else if(localStorage.getItem("logged")) {
+        } else if(localStorage.getItem("logged") == "1") {
             refresh().then(res => {
                 dispatch({
                     type: AppActionType.SET_TOKEN,

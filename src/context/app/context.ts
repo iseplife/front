@@ -13,7 +13,7 @@ export type AppContextState =  {
     user: LoggedStudentPreview
     payload: TokenPayload
     jwt: string
-    token_expiration: number
+    token_expiration: number  // in milliseconds
 }
 
 
