@@ -1,9 +1,11 @@
-import React, {ImgHTMLAttributes, useMemo, useState} from "react"
+import React, {ImgHTMLAttributes, useEffect, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 import {MediaStatus} from "../../data/media/types"
 import MediaProcessing from "./MediaProcessing"
 
+// 30s
+const MS_PERIODIC_CHECK = 30000
 
 type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     nsfw: boolean,
@@ -11,24 +13,47 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     hide?: boolean,
     clickable?: boolean
 }
-
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, status, hide, ...imgProps} = props
+    const {nsfw, status, hide, clickable, className, ...imgProps} = props
     const safeMode = Boolean(localStorage.getItem("nsfw") || true)
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
-    const ready = useMemo(() => status === MediaStatus.READY, [status])
+    const [ready, setReady] = useState(status === MediaStatus.READY)
+    const [attributes, setAttributes] = useState<ImgHTMLAttributes<HTMLImageElement>>(imgProps)
+
+    useEffect(() => {
+        if(!ready) {
+            const check = setInterval(() => {
+                const image = new Image()
+                image.src = imgProps.src as string
+                image.onerror = () => {
+                    console.log("fail")
+                }
+                image.onload = () => {
+                    setReady(true)
+                    setAttributes(attr => ({
+                        ...attr,
+                        src: image.src,
+                        width: image.width,
+                        height: image.height
+                    }))
+                }
+            }, MS_PERIODIC_CHECK)
+
+            return () => clearInterval(check)
+        }
+    }, [ready, imgProps])
 
     return ready ? (
         <div className={`
-            ${props.className} 
-            ${props.clickable && "image-display"} 
+            ${className} 
+            ${clickable && "image-display"} 
             ${!ready && "h-56 flex-grow mx-2"}
             relative bg-gray-300 overflow-hidden m-auto w-max rounded`
         }>
             <div className="overflow-hidden h-full w-full">
                 <img
-                    {...imgProps}
+                    {...attributes}
                     style={hidden ? {
                         ...props.style,
                         WebkitFilter: "blur(12px)",

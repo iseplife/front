@@ -39,7 +39,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     return (
         <div>
             <div className="flex flex-col p-4">
-                <div className="w-full flex justify-between mb-1">
+                <div className="w-full flex justify-between mb-1 hidden md:block">
                     <div className="flex">
                         <StudentAvatar
                             id={gallery.club.id}
@@ -59,7 +59,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                         </span>
                     </div>
                 </div>
-                <div className="text-base ml-2 mt-2">
+                <div className="text-base ml-2 mt-2 hidden md:block">
                     {gallery.name}
                 </div>
                 <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
