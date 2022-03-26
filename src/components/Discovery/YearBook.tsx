@@ -1,4 +1,4 @@
-import React, {useCallback, useReducer, useRef, useState} from "react"
+import React, {useCallback, useEffect, useReducer, useRef, useState} from "react"
 import InfiniteScroller, {InfiniteScrollerRef, loaderCallback} from "../Common/InfiniteScroller"
 import {searchStudents} from "../../data/student"
 import {useTranslation} from "react-i18next"
@@ -123,10 +123,6 @@ const YearBook: React.FC = () => {
     const switchSorting = useCallback(() => {
         setFilter({type: "TOGGLE_SORT"})
     }, [scrollerRef])
-
-    const updateFilter = useCallback((action: FilterReducerAction) => {
-        setFilter(action)
-    }, [])
 
     return (
         <div className="container mx-auto text-center mt-10">

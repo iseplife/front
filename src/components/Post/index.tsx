@@ -9,13 +9,12 @@ import PostEditForm from "./Form/PostEditForm"
 import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {formatDateWithTimer} from "../../util"
 import PostToolBar from "./PostToolBar"
 import {pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 import { PostRelatedCard } from "./PostRelatedCard"
-import { EventPreview } from "../../data/event/types"
+import PostAuthor from "./PostAuthor"
 
 type PostProps = {
     data: ManagerPost
