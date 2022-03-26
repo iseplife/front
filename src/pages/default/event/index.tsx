@@ -24,6 +24,7 @@ import {subscribe} from "../../../data/subscription"
 import {SubscribableType} from "../../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../../../components/Subscription"
 import {Subscription} from "../../../data/feed/types"
+import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 
 interface ParamTypes {
     id?: string
@@ -236,11 +237,19 @@ const Event: React.FC = () => {
                     </div>
 
                     {event && (
-                        <GalleriesPreview
-                            className="sm:hidden lg:block"
-                            getGalleriesCallback={(page) => getEventGalleries(event.id, page)}
-                        />
+                        <>
+                            <GalleriesPreview
+                                className="sm:hidden lg:block"
+                                getGalleriesCallback={(page) => getEventGalleries(event.id, page)}
+                            />
+                            {event.hasRight && (
+                                <div className="text-center">
+                                    <GalleryModalForm feed={event.feed} onSubmit={() => console.log("oui")}/>
+                                </div>
+                            )}
+                        </>
                     )}
+
                 </div>
                 <TabsSwitcher
                     className="mt-5 mx-4 md:mx-10 md:col-span-2 lg:hidden"

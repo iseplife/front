@@ -10,7 +10,7 @@ import {useHistory} from "react-router-dom"
 import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
-import {Image as ImageType} from "../../../data/media/types"
+import {Image as ImageType, MediaStatus} from "../../../data/media/types"
 import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
@@ -24,6 +24,19 @@ export type GalleryPhoto = SafePhoto & {
 }
 const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
     return new Promise((resolve, reject) => {
+        if (img.status != MediaStatus.READY){
+            return resolve({
+                key,
+                src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
+                width: 50,
+                height: 50,
+                selected: false,
+                thread: img.thread,
+                nsfw: img.nsfw,
+                status: img.status,
+                srcSet: img.name
+            })
+        }
         const image = new Image()
         image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
         image.onerror = reject
@@ -36,6 +49,7 @@ const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key
                 selected: false,
                 thread: img.thread,
                 nsfw: img.nsfw,
+                status: img.status,
                 srcSet: img.name
             } as GalleryPhoto)
         }
