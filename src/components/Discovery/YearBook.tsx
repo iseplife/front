@@ -61,14 +61,14 @@ const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
 const YearBook: React.FC = () => {
     const {t} = useTranslation("discovery")
     const [empty, setEmpty] = useState<boolean>(false)
-    const [students, setStudents] = useState<EntitySet<StudentPreview>>(new EntitySet())
+    const [, setStudents] = useState<EntitySet<StudentPreview>>(new EntitySet())
     const [filteredStudent, setFilteredStudents] = useState<StudentPreview[]>([])
     const [filter, setFilter] = useReducer(reducer, DEFAULT_FILTER)
 
     const [loading, setLoading] = useState(false)
 
     const scrollerRef = useRef<InfiniteScrollerRef>(null)
-    
+
     const filterFn = useCallback((s: StudentPreview) => (
         (!filter.promos.length || filter.promos.includes(s.promo)) && (!filter.name || new RegExp(filter.name, "i").test(s.firstName + " " + s.lastName))
     ), [filter.promos.length, filter.name])
@@ -94,10 +94,14 @@ const YearBook: React.FC = () => {
 
                 setLoading(false)
                 students.addAll(parsedResults)
-                
-                const stu = students.toArray().filter(filterFn).sort((a, b) => (filter.atoz ? 1 : -1) * +(a.firstName+a.lastName > b.firstName+b.lastName))
-                setFilteredStudents(stu)
-                
+
+                setFilteredStudents(() => (
+                    students.toArray()
+                        .filter(filterFn)
+                        .sort((a, b) => (
+                            filter.atoz ? 1 : -1) * +(a.firstName + a.lastName > b.firstName + b.lastName)
+                        )
+                ))
                 return students
             })
             return res.data.last
@@ -135,7 +139,8 @@ const YearBook: React.FC = () => {
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">
                         <FontAwesomeIcon icon={faUserAstronaut} size="8x" className="block"/>
                         <span className="text-center mt-5">{t("no_student")}</span>
-                    </div> : <>
+                    </div> :
+                    <>
                         {filteredStudent.map(s =>
                             <StudentCard
                                 key={s.id}
@@ -143,16 +148,16 @@ const YearBook: React.FC = () => {
                                 picture={s.picture}
                                 promo={s.promo}
                                 fullname={s.firstName + " " + s.lastName}
-                                className={loading && "opacity-50"}
+                                className="opacity-50"
                             />
                         )}
                         {loading && filteredStudent.length == 0 && <>
-                            <StudentCardSkeleton />
-                            <StudentCardSkeleton />
-                            <StudentCardSkeleton />
-                            <StudentCardSkeleton />
-                            <StudentCardSkeleton />
-                            <StudentCardSkeleton />
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
+                            <StudentCardSkeleton/>
                         </>}
                     </>
                 }
