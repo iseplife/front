@@ -51,6 +51,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
         <div id="side-cal" className="md:w-1/5 w-full shadow bg-white p-4">
             <div className="sticky w-full" style={{top: "1rem"}}>
                 <Calendar
+                    className="hidden md:block"
                     locale={i18n.language}
                     value={date}
                     onChange={(d) => handleDate(Array.isArray(d) ? d[0] : d)}

@@ -38,7 +38,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
             }
             {allowCreate && (
                 <div className="mx-auto mb-2">
-                    <EventCreatorModal onSubmit={() => console.log("lol")}/>
+                    <EventCreatorModal />
                 </div>
             )}
         </div>

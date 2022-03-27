@@ -157,15 +157,25 @@ const Events: React.FC = () => {
             <div className="h-full flex flex-row flex-wrap bg-gray-100">
                 <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
                 <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 ">
-                    <div className="h-16 w-full flex justify-between items-center">
-                        <div className="flex items-center text-gray-700">
+                    <div className="w-full flex flex-wrap justify-between items-center m-2">
+                        <div className="flex items-center flex-grow justify-start text-gray-700 m-2">
                             <h1 className="text-2xl font-extrabold my-auto text-current">
                                 {dateTitle}
                             </h1>
-                            <FontAwesomeIcon icon={faArrowLeft} className="my-auto mx-2 cursor-pointer" onClick={decrementDate}/>
-                            <FontAwesomeIcon icon={faArrowRight} className="my-auto mx-2 cursor-pointer" onClick={incrementDate}/>
+                            <div>
+                                <FontAwesomeIcon
+                                    icon={faArrowLeft}
+                                    className="my-auto mx-2 cursor-pointer"
+                                    onClick={decrementDate}
+                                />
+                                <FontAwesomeIcon
+                                    icon={faArrowRight}
+                                    className="my-auto mx-2 cursor-pointer"
+                                    onClick={incrementDate}
+                                />
+                            </div>
                             {canCreateEvent && (
-                                <EventCreatorModal onSubmit={fetchMonthEvents} className="fixed bottom-8 right-8 z-10 py-2"/>
+                                <EventCreatorModal onSubmit={fetchMonthEvents}/>
                             )}
                         </div>
                         <div>
