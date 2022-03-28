@@ -16,7 +16,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const {nsfw, status, hide, clickable, className, ...imgProps} = props
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
-    const ready = useMemo(() => status === MediaStatus.READY, [])
+    const ready = useMemo(() => status === MediaStatus.READY, [status])
 
     return ready ? (
         <div className={`
