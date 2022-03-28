@@ -115,6 +115,7 @@ const Feed: React.FC<FeedProps> = ({ loading, id, allowPublication, style, class
     , [])
 
     const onPostRemoval = useCallback(async (id: number) => {
+        await feedsManager.deletePost(id)
         message.success(t("remove_item.complete"))
     }, [])
 

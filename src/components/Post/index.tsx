@@ -10,7 +10,7 @@ import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
-import {pinPost} from "../../data/post"
+import {deletePost, pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 import { PostRelatedCard } from "./PostRelatedCard"
@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
             okText: "Ok",
             cancelText: t("cancel"),
             onOk: async () => {
-                onDelete(data.id)
+                await onDelete(data.id)
             }
         })
     }, [data.id, t, onDelete])

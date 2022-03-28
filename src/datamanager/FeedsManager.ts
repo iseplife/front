@@ -303,11 +303,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return await createPost(post)
     }
 
-    public async editPost(id: number, post: PostUpdateForm){
-        const res = await updatePost(
-            id,
-            post
-        )
+    public async editPost(id: number, postUpdate: PostUpdateForm){
+        const res = await updatePost(id, postUpdate)
         if(res.status === 200){
             for(const post of await this.getTable().where("id").equals(id).toArray())
                 this.addData({
