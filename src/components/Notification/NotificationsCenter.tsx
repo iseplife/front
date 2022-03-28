@@ -8,7 +8,6 @@ import Notification from "../../components/Notification"
 import InfiniteScroller from "../Common/InfiniteScroller"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
-import { AppActionType } from "../../context/app/action"
 import { setNotificationsWatched } from "../../data/notification"
 
 interface NotificationsCenterProps {
@@ -20,8 +19,6 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
     
-    const [notificationIds, setNotificationIds] = useState<Set<number>>(new Set())
-
     const [empty, setEmpty] = useState<boolean>(false)
 
     const minNotificationId = useLiveQuery(async () => {
@@ -46,9 +43,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         oldNotifications.length + recentNotifications.length
     ), [oldNotifications, recentNotifications])
     
-    const loadMoreNotifications = useCallback(async (count: number) => {
-        return count != 0 && minNotificationId != undefined && await notificationManager.loadMore(minNotificationId)
-    }, [notificationIds, minNotificationId])
+    const loadMoreNotifications = useCallback(async (count: number) => 
+        count != 0 && minNotificationId != undefined && await notificationManager.loadMore(minNotificationId)
+    , [minNotificationId])
 
     useEffect(() => {
         if (notifications) {

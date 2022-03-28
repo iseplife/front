@@ -18,6 +18,13 @@ export default class NotificationManager extends DataManager<Notification> {
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
     }
 
+    id = Math.random()
+
+    public register(): void {
+        console.log("register", this.id)
+        super.register()
+    }
+
     public async getMaxLoaded(){
         return (await this.getContext("maxLoaded"))?.id ?? Number.MAX_SAFE_INTEGER
     }
@@ -90,10 +97,11 @@ export default class NotificationManager extends DataManager<Notification> {
         return (await this.getTable().where("id").anyOf(ids).count()) > 0
     }
 
-    @PacketHandler(WSPSNotificationReceived)
-    private async handleNotificationRecieved(packet: WSPSNotificationReceived){
-        await this.addData(packet.notification)
-        await this.setUnwatched(await this.getTable().limit(20).filter(notif => !notif.watched).count())
+    @PacketHandler(WSPSNotificationRecieved)
+    private async handleNotificationRecieved(packet: WSPSNotificationRecieved){
+        this.addData(packet.notification)
+        console.log((await this.getUnwatched()) + "!!")
+        this.setUnwatched(await this.getUnwatched() + 1)
     }
 
 }
