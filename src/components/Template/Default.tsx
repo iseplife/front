@@ -37,7 +37,6 @@ const DefaultTemplate: React.FC = () => (
                 </Switch>
             </div>
         </Navbar>
-        {/* <StudentDrawer/> */}
         <NotificationsOverlay />
     </div>
 )
