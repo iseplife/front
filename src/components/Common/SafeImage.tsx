@@ -1,11 +1,9 @@
-import React, {ImgHTMLAttributes, useEffect, useState} from "react"
+import React, {ImgHTMLAttributes, useMemo, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 import {MediaStatus} from "../../data/media/types"
 import MediaProcessing from "./MediaProcessing"
 
-// 30s
-const MS_PERIODIC_CHECK = 30000
 
 type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     nsfw: boolean,
@@ -13,36 +11,12 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     hide?: boolean,
     clickable?: boolean
 }
+
 const SafeImage: React.FC<SafeImageProps> = (props) => {
     const {nsfw, status, hide, clickable, className, ...imgProps} = props
-    const safeMode = Boolean(localStorage.getItem("nsfw") || true)
+    const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
-
-    const [ready, setReady] = useState(status === MediaStatus.READY)
-    const [attributes, setAttributes] = useState<ImgHTMLAttributes<HTMLImageElement>>(imgProps)
-
-    useEffect(() => {
-        if(!ready) {
-            const check = setInterval(() => {
-                const image = new Image()
-                image.src = imgProps.src as string
-                image.onerror = () => {
-                    console.log("fail")
-                }
-                image.onload = () => {
-                    setReady(true)
-                    setAttributes(attr => ({
-                        ...attr,
-                        src: image.src,
-                        width: image.width,
-                        height: image.height
-                    }))
-                }
-            }, MS_PERIODIC_CHECK)
-
-            return () => clearInterval(check)
-        }
-    }, [ready, imgProps])
+    const ready = useMemo(() => status === MediaStatus.READY, [])
 
     return ready ? (
         <div className={`
@@ -53,7 +27,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
         }>
             <div className="overflow-hidden h-full w-full">
                 <img
-                    {...attributes}
+                    {...imgProps}
                     style={hidden ? {
                         ...props.style,
                         WebkitFilter: "blur(12px)",

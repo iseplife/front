@@ -39,7 +39,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     return (
         <div>
             <div className="flex flex-col p-4">
-                <div className="w-full flex justify-between mb-1 hidden md:block">
+                <div className="hidden md:flex w-full justify-between mb-1">
                     <div className="flex">
                         <StudentAvatar
                             id={gallery.club.id}

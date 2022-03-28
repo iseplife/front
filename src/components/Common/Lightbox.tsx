@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {useEffect, useMemo, useRef, useState} from "react"
+import React, {useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
@@ -38,11 +38,11 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
     useEffect(() => {
         const handleResize = () => {
             const ratio = currentPhoto.width / currentPhoto.height
-            
+
+            const lbHeight = window.innerHeight
             const rpWidth = window.innerWidth >= 768 ?
                 rightPanel?.current?.getBoundingClientRect().width ?? 0 :
                 0
-            const lbHeight = window.innerHeight
 
             const lbWidth = window.innerWidth - rpWidth
             const lbRatio = lbWidth / lbHeight
@@ -68,19 +68,25 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
         <div>
             <div
                 className="
-                    flex flex-col md:flex-row bg-black bg-opacity-80 fixed top-0 left-0
+                    flex flex-wrap md:flex-nowrap md:flex-row bg-black bg-opacity-80 fixed top-0 left-0
                     w-screen h-screen z-50 backdrop-blur-md backdrop-filter
-                    max-w-full overflow-y-auto
+                    max-w-full overflow-y-auto md:overflow-hidden
                 "
             >
-                <div className="w-full h-full grid place-items-center relative my-1">
+                <div className="w-full h-[77vh] md:h-full grid place-items-center relative">
                     <div className="w-full h-full absolute top-0 left-0" onClick={onClose}/>
-                    <div className="absolute w-9 h-9 grid place-items-center  m-3.5 bg-gray-800 bg-opacity-60 hover:bg-gray-700 hover:bg-opacity-50 transition-colors rounded-full cursor-pointer z-50 top-0 left-0 text-white"
-                        onClick={onClose}>
+                    <div
+                        className="
+                            absolute w-9 h-9 grid place-items-center m-3.5 bg-gray-800 bg-opacity-60
+                            hover:bg-gray-700 hover:bg-opacity-50 transition-colors rounded-full
+                            cursor-pointer z-50 top-0 left-0 text-white
+                        "
+                        onClick={onClose}
+                    >
                         <FontAwesomeIcon icon={cFaCross} className=""/>
                     </div>
                     <div className="relative m-auto">
-                        {currentPhoto ?
+                        {currentPhoto && height !== 0 && width !== 0 ?
                             <SafeImage
                                 key={currentIndex}
                                 nsfw={currentPhoto.nsfw}
