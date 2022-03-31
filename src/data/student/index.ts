@@ -50,7 +50,7 @@ export const searchStudentsPaged = (page: number, name?: string, promos?: string
 
 export const searchAllStudents = (name: string): AxiosPromise<SearchItem[]> => apiClient.get("/search/student/all", {params: {name}})
 
-export const getStudentClubs = (studentId: number): AxiosPromise<SearchItem> => apiClient.get(`/student/${studentId}/club`)
+export const getStudentClubs = (studentId: number): AxiosPromise<ClubMemberPreview[]> => apiClient.get(`/student/${studentId}/clubs`)
 
 export const searchStudents = (page: number, name?: string, promos?: string, atoz?: boolean): AxiosPromise<Page<SearchItem>> => apiClient.get("/search/student", {params: {page, name, promos, atoz}})
 
@@ -70,9 +70,6 @@ export const toggleStudentArchiveStatus = (id: number): AxiosPromise<boolean> =>
 
 
 export const deleteStudent = (id: number): AxiosPromise<void> => apiClient.delete(`/student/${id}`)
-
-
-export const getClubsForStudent = (id: number): AxiosPromise<ClubMemberPreview[]> => apiClient.get(`/student/${id}/club`)
 
 export const importStudent = (student: StudentPreview, file: Blob | undefined): AxiosPromise => {
     const fd = new FormData()

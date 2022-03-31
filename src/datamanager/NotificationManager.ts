@@ -92,8 +92,8 @@ export default class NotificationManager extends DataManager<Notification> {
 
     @PacketHandler(WSPSNotificationRecieved)
     private async handleNotificationRecieved(packet: WSPSNotificationRecieved){
-        this.addData(packet.notification)
-        this.setUnwatched(await this.getUnwatched() + 1)
+        await this.addData(packet.notification)
+        await this.setUnwatched(await this.getTable().limit(20).filter(notif => !notif.watched).count())
     }
 
 }

@@ -1,5 +1,5 @@
 import React from "react"
-import {Route, Switch,} from "react-router-dom"
+import {Route, Switch} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -10,10 +10,10 @@ import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
 import Group from "../../pages/default/group"
 import NotFound from "../../pages/errors/NotFound"
-import StudentDrawer from "../Student/StudentDrawer"
 import Setting from "../../pages/default/setting"
 import NotificationsPage from "../../pages/default/notifications"
 import NotificationsOverlay from "../Notification/NotificationOverlay"
+import Student from "../../pages/default/student"
 
 
 const DefaultTemplate: React.FC = () => (
@@ -25,6 +25,7 @@ const DefaultTemplate: React.FC = () => (
                     <Route path="/notifications" strict component={NotificationsPage}/>
                     <Route path="/discovery" component={Discovery}/>
                     <Route path="/calendar" component={Events}/>
+                    <Route path="/student/:id" component={Student}/>
                     <Route path="/event/:id" component={Event}/>
                     <Route path="/club/:id" component={Club}/>
                     <Route path="/group/:id" component={Group}/>
@@ -36,7 +37,6 @@ const DefaultTemplate: React.FC = () => (
                 </Switch>
             </div>
         </Navbar>
-        <StudentDrawer/>
         <NotificationsOverlay />
     </div>
 )

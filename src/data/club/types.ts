@@ -51,6 +51,7 @@ export type ClubMember = {
 
 export type ClubMemberPreview = {
     id: number
+    role: ClubRole
     position: string
     club: ClubPreview
 }
