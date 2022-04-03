@@ -8,7 +8,7 @@ import {
     Switch,
     Redirect
 } from "react-router-dom"
-import {initializeAPIClient} from "./data/http"
+import {getAPIStatus, initializeAPIClient} from "./data/http"
 import Login from "./pages/security/Login"
 import {refresh} from "./data/security"
 import Template from "./components/Template"
@@ -17,14 +17,16 @@ import {AppContext, DEFAULT_STATE} from "./context/app/context"
 import {appContextReducer} from "./context/app/reducer"
 import Interceptor from "./components/Template/Interceptor"
 import {AppActionType} from "./context/app/action"
-import { RouteComponentProps } from "react-router"
+import {RouteComponentProps} from "react-router"
 import "./index.css"
 import "antd/dist/antd.min.css"
+import Maintenance from "./pages/errors/Maintenance"
 
 initializeAPIClient()
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
     const [isLoggedIn, setLoggedIn] = useState<boolean>()
+    const [maintenance, setMaintenance] = useState<boolean>(false)
     const renderTemplate = useCallback(({location}: RouteComponentProps) => (
         isLoggedIn ?
             <Template/> :
@@ -36,6 +38,10 @@ const App: React.FC = () => {
             />
     ), [isLoggedIn])
 
+    // Maintenance redirection if API is down
+    useEffect(() => {
+        getAPIStatus().catch(() => setMaintenance(true))
+    }, [])
 
     // Check user's state (logged in or not)
     useEffect(() => {
@@ -64,6 +70,9 @@ const App: React.FC = () => {
                     <Router>
                         <Interceptor/>
                         <Switch>
+                            <Route path="/maintenance" component={Maintenance}/>
+                            {maintenance && <Redirect to="/maintenance" />}
+
                             <Route path="/login" component={Login}/>
                             <Route path="/" render={renderTemplate}/>
                         </Switch>

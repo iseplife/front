@@ -11,6 +11,20 @@
     "I don't know what you did but it didn't work",
     "You found a bug (source: shitty code)"
   ],
+  "maintenance": {
+    "title":"iseplife is under maintenance",
+    "message": [
+      "We are upgrading the website for Paris 2024 Olympics, be patient...",
+      "Maintenance in progress, stop staying in front of your computer real life is outside !",
+      "Fake maintenance to hide the fact that the website is currently down"
+    ]
+  },
+  "not_found": [
+    "Seems like you went to far...",
+    "Il n'y a rien a voir par ici...",
+    "You won't find your exams answers here sorry...",
+    "Seems like the page you looked for doesn't exist"
+  ],
   "feed_not_found": "This feed doesn't exist",
   "club_not_found": "This club doesn't exist",
   "student_not_found": "This student doesn't exist",

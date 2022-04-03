@@ -52,7 +52,8 @@ const Group: React.FC = () => {
                 return acc
             }, [[], []]))
         ).finally(() => setOrgaLoading(false))
-    }, [])
+    }, [id])
+
     const onAdd = useCallback((studentId: number) => {
         addGroupMember(id, studentId).then((res) => {
             setOrga(org => {
@@ -60,7 +61,7 @@ const Group: React.FC = () => {
             })
             message.success(t("member_added"))
         })
-    }, [])
+    }, [id])
 
     const onDelete = useCallback((memberId: number) => () => {
         deleteGroupMember(id, memberId).then(() => {
@@ -72,7 +73,7 @@ const Group: React.FC = () => {
                 ]
             })
         })
-    }, [])
+    }, [id])
 
     const onDemote = useCallback((memberId: number) => () => {
         demoteGroupMember(id, memberId).then(() => {
@@ -84,7 +85,8 @@ const Group: React.FC = () => {
             })
             message.success(t("demote_member"))
         })
-    }, [])
+    }, [id])
+
     const onPromote = useCallback((memberId: number) => () => {
         promoteGroupMember(id, memberId).then(() => {
             setOrga(org => {
@@ -95,7 +97,7 @@ const Group: React.FC = () => {
             })
             message.success(t("promote_member"))
         })
-    }, [])
+    }, [id])
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed id={group?.feedId} loading={!group} />,
