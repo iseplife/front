@@ -1,6 +1,6 @@
 import PacketHandler from "../protocol/listener/PacketHandler"
 import PacketListener from "../protocol/listener/PacketListener"
-import WSPSConnected from "../protocol/v1/packets/server/WSPSConnected"
+import WSPSConnected from "../protocol/packets/server/WSPSConnected"
 
 export default class ConnectedListener extends PacketListener {
 

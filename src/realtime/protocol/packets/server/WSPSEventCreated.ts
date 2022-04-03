@@ -1,6 +1,6 @@
-import { EventPreview } from "../../../../../data/event/types"
-import DataReader from "../../../../DataReader"
-import PacketIn from "../../../PacketIn"
+import { EventPreview } from "../../../../data/event/types"
+import DataReader from "../../../DataReader"
+import PacketIn from "../../PacketIn"
 
 export default class WSPSEventCreated implements PacketIn {
 

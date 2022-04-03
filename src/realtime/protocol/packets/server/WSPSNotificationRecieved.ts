@@ -1,6 +1,6 @@
-import { Notification } from "../../../../../data/notification/types"
-import DataReader from "../../../../DataReader"
-import PacketIn from "../../../PacketIn"
+import { Notification } from "../../../../data/notification/types"
+import DataReader from "../../../DataReader"
+import PacketIn from "../../PacketIn"
 
 export default class WSPSNotificationRecieved implements PacketIn {
 

@@ -7,7 +7,7 @@ import WSEventType from "./WSEventType"
 import GroupListener from "../listeners/GroupListener"
 import React from "react"
 import { AppContext } from "../../context/app/context"
-import ProtocolV1 from "../protocol/v1/ProtocolV1"
+import PacketProtocol from "../protocol/PacketProtocol"
 
 class WSServerClient {
     private static reconnectTimeout: number
@@ -31,7 +31,7 @@ class WSServerClient {
         public ip: string,
     ) {
         // Clear listeners
-        ProtocolV1.instance.packetsServer.forEach(packet => packet.listeners = [])
+        PacketProtocol.instance.packetsServer.forEach(packet => packet.listeners = [])
     }
 
     /**
