@@ -1,22 +1,26 @@
 import {LoggedStudentPreview, StudentPicture} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextState} from "./context"
+import {Author} from "../../data/request.type"
 
 export enum AppActionType {
-    SET_LOGGED_USER,
+    SET_INITIALIZATION,
     SET_LOGGED_OUT,
     SET_STUDENT,
     SET_TOKEN,
     SET_PAYLOAD,
     SET_STATE,
     SET_PICTURE,
-    SET_TOKEN_EXPIRATION,
+    SET_TOKEN_EXPIRATION
 }
 
 
-interface setLoggedStudentAction {
-    type: AppActionType.SET_LOGGED_USER,
-    user: LoggedStudentPreview
+interface setInitializationAction {
+    type: AppActionType.SET_INITIALIZATION,
+    payload: {
+        user: LoggedStudentPreview
+        authors: Author[]
+    }
 }
 
 interface setPayloadAction {
@@ -49,7 +53,7 @@ interface setStateLoggedOutAction {
 }
 
 export type AppContextAction =
-    setLoggedStudentAction |
+    setInitializationAction |
     setStateLoggedOutAction |
     setPayloadAction |
     setFullStateAction |
