@@ -2,7 +2,7 @@ import { Notification } from "../../../../data/notification/types"
 import DataReader from "../../../DataReader"
 import PacketIn from "../../PacketIn"
 
-export default class WSPSNotificationRecieved implements PacketIn {
+export default class WSPSNotificationReceived implements PacketIn {
 
     notification!: Notification
 

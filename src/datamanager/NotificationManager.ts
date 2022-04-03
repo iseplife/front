@@ -3,7 +3,7 @@ import { Notification } from "../data/notification/types"
 import DataManager from "./DataManager"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import WSPSNotificationRecieved from "../realtime/protocol/packets/server/WSPSNotificationRecieved"
+import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 import GeneralEventType from "../constants/GeneralEventType"
 
 export default class NotificationManager extends DataManager<Notification> {
@@ -90,8 +90,8 @@ export default class NotificationManager extends DataManager<Notification> {
         return (await this.getTable().where("id").anyOf(ids).count()) > 0
     }
 
-    @PacketHandler(WSPSNotificationRecieved)
-    private async handleNotificationRecieved(packet: WSPSNotificationRecieved){
+    @PacketHandler(WSPSNotificationReceived)
+    private async handleNotificationRecieved(packet: WSPSNotificationReceived){
         await this.addData(packet.notification)
         await this.setUnwatched(await this.getTable().limit(20).filter(notif => !notif.watched).count())
     }
