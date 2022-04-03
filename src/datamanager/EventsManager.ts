@@ -57,7 +57,7 @@ export default class EventsManager extends DataManager<EventPreview> {
     private async handleGroupLeft(packet: WSPSGroupLeft) {
         const group = (await groupManager.getGroups()).find(group => group.id == packet.id)
         if(group){
-            console.log("Successfully detected left group for events")
+            console.debug("Successfully detected left group for events")
             const newFeedsId = this.context.state.payload.feeds.filter(feedId => feedId != group?.feedId)
             for(const event of (await this.getEvents()).filter(event => 
                 event.targets.length != 0 && !event.targets.find(event => newFeedsId.includes(event))

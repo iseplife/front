@@ -70,9 +70,9 @@ class WSServerClient {
         if (this._connected) {
             const event = new Event(WSEventType.DISCONNECTED)
             window.dispatchEvent(event)
-            console.log("[WebSocket] Disconnected")
+            console.debug("[WebSocket] Disconnected")
         } else
-            console.log("[WebSocket] Connection failed")
+            console.debug("[WebSocket] Connection failed")
         
         this._connected = false
 

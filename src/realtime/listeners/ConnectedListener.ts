@@ -6,7 +6,7 @@ export default class ConnectedListener extends PacketListener {
 
     @PacketHandler(WSPSConnected)
     public handleConnected(packet: WSPSConnected) {
-        console.log(`Logged in with id: ${packet.userId}`)
+        console.debug(`Logged in with id: ${packet.userId}`)
         this.client.setLogged()
     }
 }

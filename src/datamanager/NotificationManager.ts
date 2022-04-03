@@ -35,7 +35,7 @@ export default class NotificationManager extends DataManager<Notification> {
         
         this._fetching = true
         
-        console.log(`[Notifications] Fetching page ${page}.`)
+        console.debug(`[Notifications] Fetching page ${page}.`)
 
         const response = (await loadNotifications(page)).data
         

@@ -22,7 +22,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             setPhotos(photos)
         }).catch(e => {
             message.error("Error while parsing...")
-            console.log(e)
+            console.error(e)
         }).finally(() => setLoading(false))
     }, [images])
 

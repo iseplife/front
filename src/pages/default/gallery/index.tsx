@@ -112,7 +112,7 @@ const Gallery: React.FC = () => {
                             })
                             .catch(e => {
                                 message.error(t("Une erreur est survenue"))
-                                console.log(e)
+                                console.error(e)
                             })
                     }
                 }
@@ -182,7 +182,7 @@ const Gallery: React.FC = () => {
                         })
                         .catch(e => {
                             message.error("Error while parsing...")
-                            console.log(e)
+                            console.error(e)
                         })
                         .finally(() => setLoading(false))
                 }

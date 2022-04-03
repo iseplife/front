@@ -86,7 +86,7 @@ export default abstract class DataManager<T> extends PacketListener {
         this.register()
         this.registerEvent(WSEventType.CONNECTED, () => {
             if(this.needDataLoad) {
-                console.log("Loading data on reconnect for", this)
+                console.debug("Loading data on reconnect for", this)
                 this.needDataLoad = false
 
                 this.initData()

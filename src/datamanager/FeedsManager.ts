@@ -36,7 +36,11 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         
         this.setContext("lastLoad", { lastLoad: now })
 
-        this.getTable().where("publicationDate").below(addMonths(new Date(), -4)).delete().then(deleted => console.log("Deleted", deleted, "old posts"))
+        this.getTable()
+            .where("publicationDate")
+            .below(addMonths(new Date(), -4))
+            .delete()
+            .then(deleted => console.debug("Deleted", deleted, "old posts"))
     }
 
     private async _waitFetching() {
@@ -154,7 +158,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 ]
             ).delete()
             if (deleted)
-                console.log("deleted", deleted, "removed posts")
+                console.debug("deleted", deleted, "removed posts")
         }
 
         this.addBulkData(content)
@@ -215,7 +219,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             } else
                 toUnloadTemp.push(post)
         }
-        console.log("Unload posts:", feed, toUnload)
+        console.debug("Unload posts:", feed, toUnload)
         await this.getTable().bulkDelete(toUnload.map(post => [post.loadedFeed, post.publicationDateId]))
     }
 
