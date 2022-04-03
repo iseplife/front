@@ -5,6 +5,8 @@ import { WSServerClient } from "../websocket/WSServerClient"
 import { AppContext } from "../../context/app/context"
 import { AppActionType } from "../../context/app/action"
 import WSPSGroupLeft from "../protocol/v1/packets/server/WSPSGroupLeft"
+import React from "react"
+import {refresh} from "../../data/security"
 
 export default class GroupListener extends PacketListener {
 
@@ -13,17 +15,33 @@ export default class GroupListener extends PacketListener {
     }
 
     @PacketHandler(WSPSGroupJoined)
-    public handleGroupJoined(packet: WSPSGroupJoined) {
-        this.context.dispatch({
-            type: AppActionType.SET_TOKEN,
-            token: packet.jwt.token
+    public handleGroupJoined() {
+        refresh().then(res => {
+            try {
+                this.context.dispatch({
+                    type: AppActionType.SET_TOKEN,
+                    token: res.data.token
+                })
+            } catch (e) {
+                new Error("JWT cookie unreadable")
+            }
+        }).catch(() => {
+            this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
         })
     }
     @PacketHandler(WSPSGroupLeft)
-    public handleGroupLeft(packet: WSPSGroupLeft) {
-        this.context.dispatch({
-            type: AppActionType.SET_TOKEN,
-            token: packet.jwt.token
+    public handleGroupLeft() {
+        refresh().then(res => {
+            try {
+                this.context.dispatch({
+                    type: AppActionType.SET_TOKEN,
+                    token: res.data.token
+                })
+            } catch (e) {
+                new Error("JWT cookie unreadable")
+            }
+        }).catch(() => {
+            this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
         })
     }
     
