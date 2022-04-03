@@ -3,6 +3,7 @@ import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
 import {Poll, PollForm} from "../poll/types"
 import { Comment } from "../thread/types"
+import {FeedContext} from "../feed/types";
 
 
 export enum EmbedEnumType {
@@ -36,6 +37,7 @@ export type PostUpdateForm = {
 
 export type Post = {
     id: number
+    context: FeedContext
     feedId: number
     description: string
     publicationDate: Date
@@ -45,7 +47,6 @@ export type Post = {
     embed?: Embed
     thread: number
     trendingComment?: Comment
-
     nbComments: number
     nbLikes: number
     liked: boolean

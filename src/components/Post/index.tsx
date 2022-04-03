@@ -10,10 +10,10 @@ import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-
 import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
-import {deletePost, pinPost} from "../../data/post"
+import {pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
-import { PostRelatedCard } from "./PostRelatedCard"
+import { PostContextTag } from "./context/PostContextTag"
 import PostAuthor from "./PostAuthor"
 
 type PostProps = {
@@ -128,8 +128,8 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                 <div className="w-full flex justify-between mb-1">
                     <PostAuthor author={data.author} publicationDate={data.publicationDate}/>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
-                        {!feedId && 
-                            <PostRelatedCard feedId={data.feedId} />
+                        {feedId == undefined &&
+                            <PostContextTag context={data.context}/>
                         }
                         {data.pinned && (
                             <FontAwesomeIcon
