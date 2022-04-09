@@ -57,15 +57,13 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != -1 && baseLastLoad < generalLoad))
     }, [baseLastLoad])
 
-    useEffect(() => {
-        if (!loading) {
-            feedsManager.subscribe(id).then(setBaseLastLoad)
-            return () => {
-                feedsManager.unsubscribe(id)
-            }
-        }
-    }, [id, loading])
+    const [loadedPosts, setLoadedPosts] = useState(0)
+    const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
+    const posts = useLiveQuery(async () => (
+        !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
+    ), [id, loadedPosts, loading])
 
+    const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     useEffect(() => {
         if (!loadingInformations)
@@ -197,7 +195,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     ), [loadingInformations, fetching, error, posts, postsPinned])
 
     return (
-        <div className={`${className}`} style={{...style, maxWidth: `calc(100vw - ${feedMargin}px)`}} ref={feedElement}>
+        <div
+            className={`${className}`}
+            style={{...style, maxWidth: `calc(100vw - ${feedMargin}px)`}}
+            ref={feedElement}
+        >
             <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
             {allowPublication && (
                 <BasicPostForm user={user} feedId={id} onPost={onPostCreation}>
@@ -233,9 +235,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                             onClick={() => setCompleteFormType(EmbedEnumType.POLL)}
                             className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                         >
-                            <FontAwesomeIcon
-                                icon={faChartBar}
-                                className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
+                            <PostCreateForm
+                                type={completeFormType}
+                                feed={id}
+                                user={user}
+                                onSubmit={onPostCreation}
+                                onClose={() => setCompleteFormType(undefined)}
                             />
                         </div>
                         {completeFormType && (
@@ -261,85 +266,85 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
             {(!!toLoad || needFullReload) &&
                 <div
-                    className="
-                        ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center 
-                        text-gray-700 text-opacity-60 text-base cursor-pointer hover:bg-gray-500 
-                        hover:bg-opacity-5 p-2 rounded-lg transition-colors
-                    "
                     onClick={needFullReload ? fullReload : loadAllPosts}
+                    className="
+                        ant-divider ant-divider-horizontal ant-divider-with-text
+                        ant-divider-with-text-center text-gray-700 text-opacity-60 text-base
+                        cursor-pointer hover:bg-gray-500 hover:bg-opacity-5 p-2 rounded-lg transition-colors
+                    "
                 >
                     <div className="ant-divider-inner-text">
                         {needFullReload ? t("post:full_reload") : t("post:new_posts", {toLoad})}
                     </div>
                 </div>
             }
-            {
-                loadingInformations ? loadingSkeletons :
-                    <InfiniteScroller
-                        block={error}
-                        triggerDistance={500}
-                        watch="DOWN" callback={loadMorePost} empty={empty}
-                        loadingComponent={error || loadingSkeletons}
-                    >
-                        {empty ?
-                            <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
-                                <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
-                                <span className="text-center">{t("empty_feed")}</span>
-                            </div>
-                            : (
-                                <>
-                                    {postsPinned.length !== 0 && (
-                                        <>
-                                            {postsPinned.map(p => (
-                                                <Post
-                                                    feedId={id}
-                                                    key={p.id} data={p as ManagerPost}
-                                                    onDelete={onPostRemoval}
-                                                    onUpdate={onPostUpdate}
-                                                    onPin={onPostPin}
-                                                    toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                                    isEdited={editPost === p.id}
-                                                />
-                                            ))}
-                                            <Divider className="text-gray-700"/>
-                                        </>
-                                    )}
-
-                                    {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id)) &&
-                                        <div
-                                            className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none" : ""}>
+            {loadingInformations ? loadingSkeletons :
+                <InfiniteScroller
+                    block={error}
+                    triggerDistance={500}
+                    watch="DOWN" callback={loadMorePost} empty={empty}
+                    loadingComponent={error || loadingSkeletons}
+                >
+                    {empty ?
+                        <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
+                            <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
+                            <span className="text-center">{t("empty_feed")}</span>
+                        </div>
+                        : (
+                            <>
+                                {postsPinned.length !== 0 && (
+                                    <>
+                                        {postsPinned.map(p => (
                                             <Post
                                                 feedId={id}
-                                                key={p.publicationDateId} data={p}
+                                                key={p.id} data={p as ManagerPost}
                                                 onDelete={onPostRemoval}
                                                 onUpdate={onPostUpdate}
                                                 onPin={onPostPin}
                                                 toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
                                                 isEdited={editPost === p.id}
                                             />
+                                        ))}
+                                        <Divider className="text-gray-700"/>
+                                    </>
+                                )}
+
+                                {posts?.map(p => ((isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id)) &&
+                                    <div
+                                        key={p.publicationDateId}
+                                        className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none" : ""}
+                                    >
+                                        <Post
+                                            feedId={id}
+                                            data={p}
+                                            onDelete={onPostRemoval}
+                                            onUpdate={onPostUpdate}
+                                            onPin={onPostPin}
+                                            toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
+                                            isEdited={editPost === p.id}
+                                        />
+                                    </div>
+                                ))}
+                                {error && (
+                                    <div className="flex flex-col text-center">
+                                        <label className="text-neutral-800">{t("error:no_connection_retry")}</label>
+                                        <div className="flex justify-center mt-2">
+                                            <button
+                                                onClick={loadMorePost}
+                                                className="
+                                                    bg-indigo-400 rounded-full px-4 py-2 font-semibold text-base
+                                                    text-white hover:bg-indigo-500 hover:shadow-sm transition-all
+                                                "
+                                            >
+                                                {t("retry")}
+                                            </button>
                                         </div>
-                                    ))}
-                                    {
-                                        error &&
-                                        <div className="flex flex-col text-center">
-                                            <label className="text-neutral-800">{t("error:no_connection_retry")}</label>
-                                            <div className="flex justify-center mt-2">
-                                                <button
-                                                    className="
-                                                        bg-indigo-400 rounded-full px-4 py-2 font-semibold text-base
-                                                        text-white hover:bg-indigo-500 hover:shadow-sm transition-all
-                                                     "
-                                                    onClick={loadMorePost}
-                                                >
-                                                    {t("retry")}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    }
-                                </>
-                            )
-                        }
-                    </InfiniteScroller>
+                                    </div>
+                                )}
+                            </>
+                        )
+                    }
+                </InfiniteScroller>
             }
         </div>
     )
