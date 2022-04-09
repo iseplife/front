@@ -62,6 +62,16 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             )
     }, [loadingInformations, id])
 
+    useEffect(() => {
+        if (!loading) {
+            feedsManager.subscribe(id).then(setBaseLastLoad)
+            return () => {
+                feedsManager.unsubscribe(id)
+            }
+        }
+    }, [id, loading])
+
+
     const loadMorePost = useCallback(async () => {
         return new Promise<boolean>(resolve => {
             setFetching(true)
