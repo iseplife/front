@@ -52,7 +52,7 @@ class WSServerClient {
     private initSocket(retry = false) {
         this.messageDecoder = new MessageDecoder()
         this.socket.binaryType = "arraybuffer"
-        this.socket.onopen = (event) => {
+        this.socket.onopen = (()) => {
             window.dispatchEvent(new Event(WSEventType.CONNECTED))
 
             this.socket.send(this.accessToken)

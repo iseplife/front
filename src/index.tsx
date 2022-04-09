@@ -68,7 +68,6 @@ const App: React.FC = () => {
             <RecoilRoot>
                 {isLoggedIn != undefined && (
                     <Router>
-                        <ScrollToTop />
                         <Interceptor/>
                         <Switch>
                             <Route path="/maintenance" component={Maintenance}/>

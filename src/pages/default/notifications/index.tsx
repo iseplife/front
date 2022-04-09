@@ -1,6 +1,5 @@
-import React, {useContext, useEffect} from "react"
+import React, {useEffect} from "react"
 import {useTranslation} from "react-i18next"
-import {AppContext} from "../../../context/app/context"
 import NotificationsCenter from "../../../components/Notification/NotificationsCenter"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../../datamanager/NotificationManager"

@@ -11,11 +11,9 @@ import {ClubContext, DEFAULT_STATE} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 import ClubMembers from "../../../components/Club/ClubMembers"
 import ClubHeader from "../../../components/Club/ClubHeader"
-import ClubSkeleton from "../../../components/Club/Skeleton"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { useTranslation } from "react-i18next"
-import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 
 enum ClubTab {
@@ -24,7 +22,6 @@ enum ClubTab {
     ADMIN_TAB
 }
 
-const {TabPane} = Tabs
 const Club: React.FC = () => {
     const { id: idStr } = useParams<{ id?: string }>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])

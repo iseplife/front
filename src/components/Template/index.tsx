@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useMemo, useState} from "react"
 import {
     Redirect,
     Route,
-    Switch
+    Switch, useLocation
 } from "react-router-dom"
 import {getLoggedUser} from "../../data/student"
 
@@ -23,6 +23,7 @@ import {getAuthorizedAuthors} from "../../data/post"
 
 const Template: React.FC = () => {
     const context = useContext<AppContextType>(AppContext)
+    const { pathname } = useLocation()
     const [loading, setLoading] = useState<boolean>(true)
     const isAdmin = useMemo(() => (
         context.state.payload.roles.includes(Roles.ADMIN)
@@ -51,6 +52,10 @@ const Template: React.FC = () => {
 
         return () => logoutWebSocket()
     }, [])
+
+    useLayoutEffect(() => {
+        document.getElementById("main")?.scrollTo(0, 0)
+    }, [pathname])
 
     return loading ?
         <LoadingPage/> :
