@@ -44,10 +44,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const loadingInformations = useMemo(() => loading || baseLastLoad == -1, [baseLastLoad, loading])
     const [needFullReload, setNeedFullReload] = useState(false)
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
-
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
-
     const posts = useLiveQuery(async () => (
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     ), [id, loadedPosts, loading])
@@ -56,14 +54,6 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         const generalLoad = await feedsManager.getGeneralLastLoad()
         setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != -1 && baseLastLoad < generalLoad))
     }, [baseLastLoad])
-
-    const [loadedPosts, setLoadedPosts] = useState(0)
-    const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
-    const posts = useLiveQuery(async () => (
-        !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
-    ), [id, loadedPosts, loading])
-
-    const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
 
     useEffect(() => {
         if (!loadingInformations)
@@ -235,12 +225,9 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                             onClick={() => setCompleteFormType(EmbedEnumType.POLL)}
                             className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                         >
-                            <PostCreateForm
-                                type={completeFormType}
-                                feed={id}
-                                user={user}
-                                onSubmit={onPostCreation}
-                                onClose={() => setCompleteFormType(undefined)}
+                            <FontAwesomeIcon
+                                icon={faChartBar}
+                                className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
                             />
                         </div>
                         {completeFormType && (

@@ -97,8 +97,8 @@ export default class NotificationManager extends DataManager<Notification> {
         return (await this.getTable().where("id").anyOf(ids).count()) > 0
     }
 
-    @PacketHandler(WSPSNotificationRecieved)
-    private async handleNotificationRecieved(packet: WSPSNotificationRecieved){
+    @PacketHandler(WSPSNotificationReceived)
+    private async handleNotificationReceived(packet: WSPSNotificationReceived){
         this.addData(packet.notification)
         this.setUnwatched(await this.getUnwatched() + 1)
     }
