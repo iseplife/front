@@ -102,12 +102,10 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                         })
                         post.attachements = {[EmbedEnumType.IMAGE]: res.data.id}
                     } else {
-                        // Edit and create images
+                        // create new images
                         const newImagesID = []
                         for (const img of embed.data) {
-                            if ("id" in img) {
-                                console.log("oui")
-                            } else {
+                            if (!("id" in img)) {
                                 const res = await createMedia(img)
                                 newImagesID.push(res.data.id)
                             }

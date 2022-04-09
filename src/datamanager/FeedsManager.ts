@@ -40,7 +40,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             .where("publicationDate")
             .below(addMonths(new Date(), -4))
             .delete()
-            .then(deleted => console.debug("Deleted", deleted, "old posts"))
+            .then(deleted => console.debug("[Feed] deleted", deleted, "old posts"))
     }
 
     private async _waitFetching() {

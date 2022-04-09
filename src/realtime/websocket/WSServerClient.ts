@@ -112,6 +112,7 @@ class WSServerClient {
     }
 
     public disconnect() {
+        console.debug("disconnect")
         for(const listener of this.listeners)
             listener.unregister()
         

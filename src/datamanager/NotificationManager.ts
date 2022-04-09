@@ -21,7 +21,7 @@ export default class NotificationManager extends DataManager<Notification> {
     id = Math.random()
 
     public register(): void {
-        console.log("register", this.id)
+        console.debug("register", this.id)
         super.register()
     }
 
@@ -100,7 +100,6 @@ export default class NotificationManager extends DataManager<Notification> {
     @PacketHandler(WSPSNotificationRecieved)
     private async handleNotificationRecieved(packet: WSPSNotificationRecieved){
         this.addData(packet.notification)
-        console.log((await this.getUnwatched()) + "!!")
         this.setUnwatched(await this.getUnwatched() + 1)
     }
 

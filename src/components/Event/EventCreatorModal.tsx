@@ -14,17 +14,18 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
     const [open, setOpen] = useState<boolean>(false)
     return (
         <>
-            <button
-                className="
-                        flex items-center rounded-full bg-indigo-400
-                        text-base text-white cursor-pointer opacity-100
-                        hover:opacity-80 duration-200 p-2
+            <div className="flex justify-center">
+                <button
+                    onClick={() => setOpen(true)}
+                    className="
+                        flex items-center mx-auto rounded-full bg-indigo-400 text-base
+                        text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 p-2
                     "
-                onClick={() => setOpen(true)}
-            >
-                <FontAwesomeIcon icon={faPlus} className="w-4 h-4 block flex-shrink-0"/>
-            </button>
-            {open &&
+                >
+                    <FontAwesomeIcon icon={faPlus} className="w-4 h-4 block flex-shrink-0"/>
+                </button>
+            </div>
+            {open && (
                 <Modal
                     className="md:w-1/2 w-4/5"
                     visible={true}
@@ -34,7 +35,7 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
                 >
                     <EventCreateForm onSubmit={onSubmit} onClose={() => setOpen(false)} message={t("create.created")}/>
                 </Modal>
-            }
+            )}
         </>
     )
 }
