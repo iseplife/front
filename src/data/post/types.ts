@@ -3,7 +3,7 @@ import {GalleryPreForm} from "../gallery/types"
 import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
 import {Poll, PollForm} from "../poll/types"
 import { Comment } from "../thread/types"
-import {FeedContext} from "../feed/types";
+import {FeedContext} from "../feed/types"
 
 
 export enum EmbedEnumType {

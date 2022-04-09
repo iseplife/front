@@ -17,9 +17,9 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
 
     const handleSubscription = useCallback(() => {
         if (id != undefined) {
-            const wasSubscribed = subscribed;
-            (subscribed ? unsubscribe : subscribe)(id, type).then(_ => updateSubscription(!wasSubscribed))
-
+            (subscribed ? unsubscribe : subscribe)(id, type).then(() => {
+                updateSubscription(!subscribed)
+            })
             setMinWidth(0)
         }
     }, [id, type, subscribed, updateSubscription])

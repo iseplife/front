@@ -9,7 +9,7 @@ import { AxiosPromise } from "axios"
 import { Page } from "../../data/request.type"
 
 type GalleriesModalProps = {
-    getGalleriesCallback: (page?: number) => AxiosPromise<Page<GalleryPreview>>;
+    getGalleriesCallback: (page?: number) => AxiosPromise<Page<GalleryPreview>>
 }
 const GalleriesModal: React.FC<GalleriesModalProps> = ({getGalleriesCallback}) => {
     const {t} = useTranslation("gallery")

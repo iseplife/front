@@ -1,15 +1,15 @@
 module.exports = {
     important: true,
     content: [
-      "./src/**/*.{js,jsx,ts,tsx}",
+        "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
-      extend: {},
+        extend: {},
     },
     plugins: [
-      require("tailwind-scrollbar"),
-      require('@tailwindcss/line-clamp'),
-      require("tailwindcss-textshadow")
+        require("tailwind-scrollbar"),
+        require('@tailwindcss/line-clamp'),
+        require("tailwindcss-textshadow")
     ],
-  }
+}
   

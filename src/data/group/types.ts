@@ -1,5 +1,5 @@
 import {StudentPreview} from "../student/types"
-import {Subscription} from "../feed/types";
+import {Subscription} from "../feed/types"
 
 export type GroupPreview = {
     id: number,
