@@ -9,6 +9,8 @@ import InfiniteScroller from "../Common/InfiniteScroller"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import { setNotificationsWatched } from "../../data/notification"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSadCry} from "@fortawesome/free-regular-svg-icons"
 
 interface NotificationsCenterProps {
     fullPage?: boolean
@@ -18,16 +20,19 @@ interface NotificationsCenterProps {
 const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, className}) => {
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
-    
-    const [empty, setEmpty] = useState<boolean>(false)
+    const [empty, setEmpty] = useState<boolean>(true)
 
     const minNotificationId = useLiveQuery(async () => {
         return await notificationManager.getMinFresh()
     }, [])
 
     const notifications = useLiveQuery(async () => {
-        if(minNotificationId != undefined)
-            return await notificationManager.getNotifications(minNotificationId)
+        if(minNotificationId != undefined) {
+            const notifs = await notificationManager.getNotifications(minNotificationId)
+            setEmpty(notifs.length == 0)
+
+            return notifs
+        }
     }, [minNotificationId])
 
     const recentNotifications = useMemo(() => {
@@ -62,7 +67,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         }
     }, [notifications])
 
-    useEffect(() => () => { // On component destroy
+    useEffect(() => () => {
         if (notifications) {
             const unwatched = notifications.filter(notif => !notif.watched)
             if (unwatched.length)
@@ -83,14 +88,23 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
                 }
             >
-                {recentNotifications.map(notif =>
-                    <Notification {...notif} key={notif.id} />
-                )}
-                {!!oldNotifications?.length &&
-                    <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
-                {oldNotifications.map(notif =>
-                    <Notification {...notif} key={notif.id} />
-                )}
+                {empty ?
+                    <div className="text-gray-300 sm:mt-2 mb-2 text-center text-base sm:text-lg">
+                        <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
+                        <div className="text-sm font-bold mt-2 sm:mb-1">{t("no_notifications")}</div>
+                    </div> :
+                    <>
+                        {recentNotifications.map(notif =>
+                            <Notification {...notif} key={notif.id} />
+                        )}
+                        {!!oldNotifications?.length &&
+                            <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
+                        {oldNotifications.map(notif =>
+                            <Notification {...notif} key={notif.id} />
+                        )}
+                    </>
+                }
+
             </InfiniteScroller>
         </div>
     )

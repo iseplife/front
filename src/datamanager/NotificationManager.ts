@@ -3,8 +3,8 @@ import { Notification } from "../data/notification/types"
 import DataManager from "./DataManager"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 import GeneralEventType from "../constants/GeneralEventType"
+import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 
 export default class NotificationManager extends DataManager<Notification> {
 

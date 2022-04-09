@@ -1,9 +1,11 @@
 {
   "notifications": "Notifications",
+  "no_notifications": "You have notifications",
   "long_ago": "Long ago",
   "see_more": "See all",
   "in_menu": {
     "NEW_STUDENT_POST": "<bold>{{author_name}}</bold> published a new post.",
-    "NEW_CLUB_POST": "<bold>{{author_name}}</bold> published a new post."
+    "NEW_CLUB_POST": "<bold>{{author_name}}</bold> published a new post.",
+    "NEW_GROUP_POST": "<bold>{{author_name}}</bold> published a new post in the group <bold>{{group_name}}</bold>."
   }
 }
