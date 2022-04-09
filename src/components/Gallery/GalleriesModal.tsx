@@ -9,16 +9,15 @@ import { AxiosPromise } from "axios"
 import { Page } from "../../data/request.type"
 
 type GalleriesModalProps = {
-    elementId: number
-    getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>;
+    getGalleriesCallback: (page?: number) => AxiosPromise<Page<GalleryPreview>>
 }
-const GalleriesModal: React.FC<GalleriesModalProps> = ({elementId, getGalleriesCallback}) => {
+const GalleriesModal: React.FC<GalleriesModalProps> = ({getGalleriesCallback}) => {
     const {t} = useTranslation("gallery")
     const [galleries, setGalleries] = useState<GalleryPreview[]>([])
     const [empty, setEmpty] = useState<boolean>(false)
 
     const getFollowingGalleries: loaderCallback = useCallback(async (page: number) => {
-        const res = await getGalleriesCallback(elementId, page)
+        const res = await getGalleriesCallback(page)
         if (res.status === 200) {
             if (page === 0 && res.data.content.length === 0)
                 setEmpty(true)
@@ -27,7 +26,7 @@ const GalleriesModal: React.FC<GalleriesModalProps> = ({elementId, getGalleriesC
             return res.data.last
         }
         return false
-    }, [])
+    }, [getGalleriesCallback])
 
     return (
         <div className="w-full overflow-y-auto">

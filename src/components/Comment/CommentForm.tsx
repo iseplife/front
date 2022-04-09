@@ -43,7 +43,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
             <input
                 id="message"
                 placeholder={t("write_comment")}
-                className="message border-none flex-1 bg-transparent focus:outline-none"
+                className="message border-none flex-1 bg-transparent focus:outline-none text-white md:text-black"
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.message}

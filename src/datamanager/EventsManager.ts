@@ -5,9 +5,9 @@ import { getIncomingEvents } from "../data/event"
 import { EventPreview } from "../data/event/types"
 import LoggedEvent from "../events/LoggedEvent"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import WSPSEventCreated from "../realtime/protocol/v1/packets/server/WSPSEventCreated"
-import WSPSGroupJoined from "../realtime/protocol/v1/packets/server/WSPSGroupJoined"
-import WSPSGroupLeft from "../realtime/protocol/v1/packets/server/WSPSGroupLeft"
+import WSPSEventCreated from "../realtime/protocol/packets/server/WSPSEventCreated"
+import WSPSGroupJoined from "../realtime/protocol/packets/server/WSPSGroupJoined"
+import WSPSGroupLeft from "../realtime/protocol/packets/server/WSPSGroupLeft"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import DataManager from "./DataManager"
 import { groupManager } from "./GroupManager"
@@ -57,7 +57,7 @@ export default class EventsManager extends DataManager<EventPreview> {
     private async handleGroupLeft(packet: WSPSGroupLeft) {
         const group = (await groupManager.getGroups()).find(group => group.id == packet.id)
         if(group){
-            console.log("Successfully detected left group for events")
+            console.debug("Successfully detected left group for events")
             const newFeedsId = this.context.state.payload.feeds.filter(feedId => feedId != group?.feedId)
             for(const event of (await this.getEvents()).filter(event => 
                 event.targets.length != 0 && !event.targets.find(event => newFeedsId.includes(event))

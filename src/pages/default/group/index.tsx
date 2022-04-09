@@ -13,8 +13,9 @@ import GroupMembersPanel from "../../../components/Group/member/GroupMembersPane
 import Feed from "../../../components/Feed"
 import AddMember from "../../../components/Group/member/AddMember"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
-import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
+import SubscriptionHandler from "../../../components/Subscription"
+import {Subscription} from "../../../data/feed/types"
 
 interface ParamTypes {
     id?: string
@@ -51,7 +52,8 @@ const Group: React.FC = () => {
                 return acc
             }, [[], []]))
         ).finally(() => setOrgaLoading(false))
-    }, [])
+    }, [id])
+
     const onAdd = useCallback((studentId: number) => {
         addGroupMember(id, studentId).then((res) => {
             setOrga(org => {
@@ -59,7 +61,7 @@ const Group: React.FC = () => {
             })
             message.success(t("member_added"))
         })
-    }, [])
+    }, [id])
 
     const onDelete = useCallback((memberId: number) => () => {
         deleteGroupMember(id, memberId).then(() => {
@@ -71,7 +73,7 @@ const Group: React.FC = () => {
                 ]
             })
         })
-    }, [])
+    }, [id])
 
     const onDemote = useCallback((memberId: number) => () => {
         demoteGroupMember(id, memberId).then(() => {
@@ -83,7 +85,8 @@ const Group: React.FC = () => {
             })
             message.success(t("demote_member"))
         })
-    }, [])
+    }, [id])
+
     const onPromote = useCallback((memberId: number) => () => {
         promoteGroupMember(id, memberId).then(() => {
             setOrga(org => {
@@ -94,21 +97,20 @@ const Group: React.FC = () => {
             })
             message.success(t("promote_member"))
         })
-    }, [])
+    }, [id])
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed id={group?.feedId} loading={!group} />,
         [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
     }), [group, onDelete, onPromote, onDemote, orga])
 
-    const [extensive, setExtensive] = useState(group?.subscribed.extensive)
 
-    useEffect(() => setExtensive(group?.subscribed.extensive), [group?.subscribed])
-
-    const handleExtensive = useCallback((newExtensive: boolean) => {
-        if (group)
-            setExtensive(group.subscribed.extensive = newExtensive)
-    }, [group?.subscribed])
+    const onSubscriptionUpdate = useCallback((sub: Subscription) => {
+        setGroup(g => ({
+            ...(g as GroupType),
+            subscribed: sub
+        }))
+    }, [])
 
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
@@ -125,25 +127,50 @@ const Group: React.FC = () => {
                             </h6>
                         </div>
                         <div className="mr-0 ml-auto">
-                            {group &&
-                                <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={extensive!} id={group?.id} type={SubscribableType.GROUP} />
-                            }
+                            {group && (
+                                <SubscriptionHandler
+                                    type={SubscribableType.GROUP}
+                                    subscribable={group.id}
+                                    subscription={group.subscribed}
+                                    onUpdate={onSubscriptionUpdate}
+                                />
+                            )}
                         </div>
                     </div>
                 )}
 
                 {!orgaLoading &&
                     <div className="sm:hidden">
-                        <CompressedMembers onClick={setTabFactory(GroupPanel.MEMBERS)} className="w-full cursor-pointer" members={[...orga[0], ...orga[1]].map(member => member.student)} />
+                        <CompressedMembers
+                            onClick={setTabFactory(GroupPanel.MEMBERS)}
+                            className="w-full cursor-pointer"
+                            members={[...orga[0], ...orga[1]].map(member => member.student)}
+                        />
                         {group?.hasRight && <AddMember onAdd={onAdd} />}
                     </div>
                 }
-                <IncomingEvents feed={group?.feedId} wait={!group} allowCreate={group?.hasRight} className="lg:hidden block" />
-                <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"></div>
+                <IncomingEvents
+                    feed={group?.feedId}
+                    wait={!group}
+                    allowCreate={group?.hasRight}
+                    className="lg:hidden block"
+                />
+
+                <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"/>
                 <div className="hidden sm:block">
-                    <GroupMembers openMembersPanel={setTabFactory(GroupPanel.MEMBERS)} hasRight={group?.hasRight} onAdd={onAdd} onDelete={onDelete} onDemote={onDemote} onPromote={onPromote} orga={orga} loading={orgaLoading} />
+                    <GroupMembers
+                        openMembersPanel={setTabFactory(GroupPanel.MEMBERS)}
+                        hasRight={group?.hasRight}
+                        onAdd={onAdd}
+                        onDelete={onDelete}
+                        onDemote={onDemote}
+                        onPromote={onPromote}
+                        orga={orga}
+                        loading={orgaLoading}
+                    />
                 </div>
             </div>
+
             <TabsSwitcher
                 className="mx-4 md:mx-10 sm:col-span-2 mt-3"
                 currentTab={tab}

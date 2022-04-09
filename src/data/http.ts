@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from "axios"
+import axios, {AxiosInstance, AxiosPromise} from "axios"
 import {JSONDateParser} from "../util"
 
 const url = process.env.REACT_APP_API_URL || "localhost:8080"
@@ -17,5 +17,12 @@ export function initializeAPIClient(): AxiosInstance {
             "Access-Control-Max-Age": "3600"
         },
         transformResponse: (response, req = {}) => req["content-type"] === "application/json" ? JSON.parse(response, JSONDateParser) : response
+    })
+}
+
+export function getAPIStatus(): AxiosPromise {
+    return apiClient.get("/health", {
+        transformResponse: res => res,
+        responseType: "text"
     })
 }

@@ -21,7 +21,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => 
     return (
         <>
             <Button
-                className="shadow-sm rounded-full px-4 bg-indigo-200 text-indigo-400 font-bold"
+                className="shadow-sm rounded px-3 bg-indigo-200 text-indigo-400 font-bold"
                 style={{width: "max-content"}}
                 onClick={() => setVisible(true)}
             >

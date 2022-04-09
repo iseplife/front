@@ -14,7 +14,7 @@
     padding: 0 5px !important;
 }
 
-.search-bar > .ant-select-selector:focus > {
+.search-bar > .ant-select-selector:focus {
     background-color:  #fff !important;
 }
 

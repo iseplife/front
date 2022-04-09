@@ -52,6 +52,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                 <SafeImage
                                     className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                    status={img.status}
                                     nsfw={img.nsfw}
                                 />
                                 <FontAwesomeIcon icon={faPlus} size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
@@ -60,6 +61,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                 <SafeImage
                                     className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                    status={img.status}
                                     nsfw={img.nsfw}
                                 />
                             </div>

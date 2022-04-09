@@ -12,6 +12,20 @@
     "Bon bah ca n'a pas marché...",
     "Un problème a été rencontré (source: code de merde)"
   ],
+  "maintenance": {
+    "title":"iseplife est en cours de maintenance",
+    "message": [
+      "Nous préparons le site pour les JO de Paris 2024, un peu de patience...",
+      "Maintenance en cours, décroche toi de ton écran la vraie vie c'est dehors hein",
+      "Fausse maintenance pour cacher le fait que le site est down"
+    ]
+  },
+  "not_found": [
+    "Il semblerait que tu te sois aventuré un peu trop loin...",
+    "Il n'y a rien a voir par ici...",
+    "C'est pas ici que tu trouveras les solutions des partiels...",
+    "Comment tu t'es retrouvé là ? S'agirait de regarder ou tu vas..."
+  ],
   "feed_not_found": "Ce feed n'existe pas",
   "club_not_found": "Cette association n'existe pas",
   "student_not_found": "Cet élève n'existe pas",

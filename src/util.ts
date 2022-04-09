@@ -2,12 +2,12 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
-import {Image as ImageType} from "./data/media/types"
+import {Image as ImageType, MediaStatus} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
-import { TFunction } from "i18next"
-import { formatWithOptions } from "date-fns/fp"
+import {TFunction} from "i18next"
 import axios from "axios"
+import {EventPosition, Marker} from "./data/event/types"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -146,7 +146,7 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export type SafePhoto = PhotoProps<{nsfw: boolean}>
+export type SafePhoto = PhotoProps<{nsfw: boolean, status: MediaStatus}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
 
 export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
@@ -158,21 +158,42 @@ export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: 
 
 export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string): Promise<SafePhoto> => {
     return new Promise((resolve, reject) => {
+        if (img.status != MediaStatus.READY){
+            return resolve({
+                key,
+                src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
+                width: 50,
+                height: 50,
+                status: img.status,
+                nsfw: img.nsfw,
+                srcSet: img.name,
+            })
+        }
+
         const image = new Image()
-        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
+        image.src = mediaPath(img.name, GallerySizes.PREVIEW) as string
         image.onerror = reject
         image.onload = () => resolve({
             key,
             src: image.src,
             width: image.width,
             height: image.height,
+            status: img.status,
             nsfw: img.nsfw,
-            srcSet: img.name
+            srcSet: img.name,
         })
     })
 }
 
 
+export const positionToMarker = (position?: EventPosition) => {
+    let marker: Marker | undefined = undefined
+    if (position) {
+        const strArr = position.coordinates.split(";")
+        marker = [+strArr[0], +strArr[1]]
+    }
+    return marker
+}
 
 
 export class EntitySet<T extends Entity> {

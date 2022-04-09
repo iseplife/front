@@ -28,7 +28,7 @@ export interface Student {
     lastConnection: Date
 
     unwatchedNotifications: number
-    totalNotifications: number;
+    totalNotifications: number
 }
 export interface StudentPreview {
     id: number
@@ -39,7 +39,6 @@ export interface StudentPreview {
 }
 export interface LoggedStudentPreview extends StudentPreview {
     feedId: number
-
     unwatchedNotifications: number
     totalNotifications: number
 }

@@ -17,10 +17,11 @@ type Option = {
 
 type StudentPickerProps = {
     onChange: (id: number, metadata: SearchItem) => void
+    placeholder?: string
     multiple?: boolean
     className?: string
 }
-const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false, className}) => {
+const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false, className, placeholder}) => {
     const {t} = useTranslation("search")
     const [value, setValue] = useState<number>()
     const [options, setOptions] = useState<Option[]>([])
@@ -66,7 +67,7 @@ const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false
 
     return (
         <Select
-            placeholder={t("search_student")}
+            placeholder={placeholder ?? t("search_student")}
             mode={multiple ? "multiple": undefined}
             allowClear={!multiple}
             showSearch

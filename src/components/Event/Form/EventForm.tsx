@@ -21,7 +21,12 @@ const {Option} = Select
 
 const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue, handleChange, isSubmitting, isValid}) => {
     const {t} = useTranslation("event")
-    const [marker, setMarker] = useState<ExtendedMarker>()
+    const [marker, setMarker] = useState<ExtendedMarker | undefined>(values.coordinates ?
+        {
+            lat: values.coordinates[0],
+            lng: values.coordinates[1]
+        } : undefined
+    )
 
     const handleMarkerChange = useCallback((e: { latlng: ExtendedMarker }) => {
         setMarker(e.latlng)
@@ -46,7 +51,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                             format="YYYY-MM-DD HH:mm"
                             showTime
                             value={moment(values.published)}
-                            onChange={date => setFieldValue("published", date ? date.toDate(): new Date() )}
+                            onChange={date => setFieldValue("published", date ? date.toDate() : new Date())}
                             bordered={false}
                             placeholder={t("form.placeholder.published")}
                             className="hover:border-indigo-400 block"
@@ -58,7 +63,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             </div>
             <div className="flex flex-wrap justify-between items-end">
                 <div className="lg:w-1/2 w-full">
-                    <label >{t("form.label.name")}*</label>
+                    <label>{t("form.label.name")}*</label>
                     <Input
                         required
                         name="title"
@@ -71,7 +76,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     />
                 </div>
                 <div className="lg:w-1/2 w-full">
-                    <label >Dates*</label>
+                    <label>Dates*</label>
                     <RangePicker
                         className="ml-4"
                         defaultValue={[moment(values.startsAt), moment(values.endsAt)]}
@@ -87,7 +92,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
             </div>
             <div className="my-4 w-full">
-                <label >{t("form.label.description")}*</label>
+                <label>{t("form.label.description")}*</label>
                 <TextArea
                     required
                     name="description"
@@ -104,10 +109,10 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             <div className="w-full">
                 <div className="flex justify-between flex-wrap">
                     <div className="lg:w-40 w-full">
-                        <label >{t("form.label.location")}</label>
+                        <label>{t("form.label.location")}</label>
                         <Input
                             name="location"
-                            prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
+                            prefix={<FontAwesomeIcon icon={faMapMarkerAlt}/>}
                             placeholder={t("form.placeholder.location")}
                             value={values.location}
                             onChange={handleChange}
@@ -118,10 +123,10 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                     </div>
                     <div className="flex">
                         <div className="w-24 mr-2">
-                            <label >{t("form.label.price")}</label>
+                            <label>{t("form.label.price")}</label>
                             <Input
                                 name="price"
-                                suffix={<FontAwesomeIcon icon={faEuroSign} />}
+                                suffix={<FontAwesomeIcon icon={faEuroSign}/>}
                                 placeholder="80.00"
                                 value={values.price}
                                 onChange={handleChange}
@@ -131,10 +136,10 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                             />
                         </div>
                         <div>
-                            <label >{t("form.label.ticket_url")}</label>
+                            <label>{t("form.label.ticket_url")}</label>
                             <Input
                                 name="ticketURL"
-                                suffix={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+                                suffix={<FontAwesomeIcon icon={faExternalLinkAlt}/>}
                                 placeholder="linkedin.com/in/pvenard/"
                                 value={values.ticketURL}
                                 onChange={handleChange}
@@ -147,7 +152,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                 </div>
                 <Map
                     className="mt-5 rounded h-32"
-                    center={[48.857, 2.348]}
+                    center={values.coordinates ?? [48.857, 2.348]}
                     onClick={handleMarkerChange}
                     zoom={12}
                 >
@@ -162,8 +167,11 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
             </div>
             <div className="flex flex-wrap justify-between items-end mt-2">
                 <div className="lg:w-1/2 w-full">
-                    <label >{t("form.label.target")}</label>
-                    <FeedSelector defaultValues={values.targets} onChange={targets => setFieldValue("targets", targets)}/>
+                    <label>{t("form.label.target")}</label>
+                    <FeedSelector
+                        defaultValues={values.targets}
+                        onChange={targets => setFieldValue("targets", targets)}
+                    />
                 </div>
 
                 <div className="lg:w-1/2 w-full flex mt-2 justify-between">

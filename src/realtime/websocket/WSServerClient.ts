@@ -7,7 +7,7 @@ import WSEventType from "./WSEventType"
 import GroupListener from "../listeners/GroupListener"
 import React from "react"
 import { AppContext } from "../../context/app/context"
-import ProtocolV1 from "../protocol/v1/ProtocolV1"
+import PacketProtocol from "../protocol/PacketProtocol"
 
 class WSServerClient {
     private static reconnectTimeout: number
@@ -31,7 +31,7 @@ class WSServerClient {
         public ip: string,
     ) {
         // Clear listeners
-        ProtocolV1.instance.packetsServer.forEach(packet => packet.listeners = [])
+        PacketProtocol.instance.packetsServer.forEach(packet => packet.listeners = [])
     }
 
     /**
@@ -70,9 +70,9 @@ class WSServerClient {
         if (this._connected) {
             const event = new Event(WSEventType.DISCONNECTED)
             window.dispatchEvent(event)
-            console.log("[WebSocket] Disconnected")
+            console.debug("[WebSocket] Disconnected")
         } else
-            console.log("[WebSocket] Connection failed")
+            console.debug("[WebSocket] Connection failed")
         
         this._connected = false
 
@@ -112,10 +112,10 @@ class WSServerClient {
     }
 
     public disconnect() {
-        console.log("disconnect")
         for(const listener of this.listeners)
             listener.unregister()
-        this.socket.close()
+        
+        if(this.socket) this.socket.close()
     }
 }
 

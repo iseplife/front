@@ -1,10 +1,7 @@
-import React, {useContext, useEffect, useState} from "react"
-import {getUserGroups} from "../../data/group"
-import {GroupPreview} from "../../data/group/types"
+import React from "react"
 import {useTranslation} from "react-i18next"
 import GroupList from "./GroupList"
 import {Divider, Skeleton} from "antd"
-import { AppContext } from "../../context/app/context"
 import { useLiveQuery } from "dexie-react-hooks"
 import { groupManager } from "../../datamanager/GroupManager"
 

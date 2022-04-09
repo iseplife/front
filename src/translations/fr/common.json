@@ -68,12 +68,13 @@
     "status_active": "Actif"
   },
 	"yesterday": "hier, à",
-	"just_now": "À l'instant",
   "me": "moi",
   "subscription": {
     "subscribe": "Suivre",
     "subscribed": "Abonné",
     "unsubscribe": "Se désabonner"
   },
+  "no_targets": "Aucune audience (Évènement public) ",
+  "media_processing": "Media en cours de traitement",
   "retry": "Réessayer"
 }

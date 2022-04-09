@@ -88,11 +88,21 @@ const PollForm: React.FC = () => {
             />
             <div className="flex items-baseline mt-1 mb-2">
                 <div className="mx-1">
-                    <Switch defaultChecked={poll.anonymous} className="mr-2" size="small"/>
+                    <Switch
+                        defaultChecked={poll.anonymous}
+                        onChange={value => setFieldValue("embed.data.multiple", value)}
+                        className="mr-2"
+                        size="small"
+                    />
                     {t("anonymous_poll")}
                 </div>
                 <div className="mx-1">
-                    <Switch defaultChecked={poll.anonymous} className="mr-2" size="small"/>
+                    <Switch
+                        defaultChecked={poll.multiple}
+                        onChange={value => setFieldValue("embed.data.multiple", value)}
+                        className="mr-2"
+                        size="small"
+                    />
                     {t("multiple_choice_poll")}
                 </div>
             </div>

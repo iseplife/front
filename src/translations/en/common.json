@@ -67,13 +67,14 @@
     "status_passed": "Passed",
     "status_active": "Active"
   },
-	"yesterday": "yesterday,",
-	"just_now": "Just now",
+	"yesterday": "yesterday",
   "me": "me",
   "subscription": {
     "subscribe": "Follow",
     "subscribed": "Followed",
     "unsubscribe": "Unfollow"
   },
+  "no_targets": "No targets (Public event)",
+  "media_processing": "Media is being processed",
   "retry": "Retry"
 }

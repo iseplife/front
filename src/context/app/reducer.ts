@@ -2,7 +2,7 @@ import {AppContextState, DEFAULT_STATE} from "./context"
 import {AppActionType, AppContextAction} from "./action"
 import {parseToken} from "../../data/security"
 import {apiClient} from "../../data/http"
-import { logoutWebSocket } from "../../realtime/websocket/WSServerClient"
+import {logoutWebSocket} from "../../realtime/websocket/WSServerClient"
 import GeneralEventType from "../../constants/GeneralEventType"
 
 
@@ -12,16 +12,19 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
             return {...state, payload: action.payload}
         case AppActionType.SET_STATE:
             return {...action.state}
-        case AppActionType.SET_LOGGED_USER:
+        case AppActionType.SET_INITIALIZATION:
             return {
                 ...state,
-                user: action.user,
+                user: action.payload.user,
+                authors: action.payload.authors
             }
         case AppActionType.SET_LOGGED_OUT:
             delete apiClient.defaults.headers.common["Authorization"]
             localStorage.removeItem("logged")
+
             logoutWebSocket()
             window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
+
             return DEFAULT_STATE as AppContextState
         case AppActionType.SET_TOKEN: {
             const parsedToken = parseToken(action.token)

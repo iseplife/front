@@ -1,5 +1,5 @@
 import React from "react"
-import {Route, Switch} from "react-router-dom"
+import {Redirect, Route, Switch} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -32,8 +32,10 @@ const DefaultTemplate: React.FC = () => (
                     <Route path="/gallery/:id" component={Gallery}/>
                     <Route path="/setting" component={Setting}/>
                     <Route path="/logout" component={Logout}/>
-                    <Route path="/" strict component={Home}/>
-                    <Route path="*" component={NotFound}/>
+                    <Route path="/" exact component={Home}/>
+
+                    <Route path="/404" exact component={NotFound}/>
+                    <Route path="*" render={() => <Redirect to="/404"/>}/>
                 </Switch>
             </div>
         </Navbar>

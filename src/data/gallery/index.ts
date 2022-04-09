@@ -9,7 +9,7 @@ export const createGallery = (form: GalleryForm): AxiosPromise<Gallery> => apiCl
 export const deleteGallery = (id: number): AxiosPromise<boolean> => apiClient.delete(`gallery/${id}`)
 
 export const addGalleryImages = (gallery: number, images: number[]): AxiosPromise<void> =>
-    apiClient.put(`/gallery/${gallery}/images`, {
+    apiClient.put(`/gallery/${gallery}/images`, undefined, {
         params: {
             id: images.join(",").trim()
         }

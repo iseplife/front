@@ -19,5 +19,6 @@
 	"updates": {
 		"edited": "Update post",
 		"deleted": "Post deleted"
-	}
+	},
+	"just_now": "Just now"
 }

@@ -6,14 +6,9 @@ import {ClubContext} from "../../context/club/context"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {Avatar} from "antd"
-import { subscribe, unsubscribe } from "../../data/subscription"
 import { ClubActionType } from "../../context/club/action"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBell as faSolidBell, faCheck } from "@fortawesome/free-solid-svg-icons"
-import { faBell } from "@fortawesome/free-regular-svg-icons"
-import SubscriptionExtensiveButton from "../Subscription/SubscriptionExtensiveButton"
-import SubscriptionButton from "../Subscription/SubscriptionButton"
+import SubscriptionHandler from "../Subscription"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -24,26 +19,16 @@ const ClubHeader: React.FC = () => {
     ), [club.logoUrl])
 
     
-    const handleSubscription = useCallback((subscribed) => {
-        if (club) {
-            dispatch({
-                type: ClubActionType.UPDATE_CLUB,
-                payload: {
-                    ...club,
-                    subscribed: subscribed ? { extensive: false } : undefined,
-                }
-            })
-        }
-    }, [club])
-    const handleExtensive = useCallback((newExtensive: boolean) => {
+    const onSubscriptionUpdate = useCallback((subscribed) => {
         dispatch({
             type: ClubActionType.UPDATE_CLUB,
             payload: {
                 ...club,
-                subscribed: { extensive: newExtensive },
+                subscribed: subscribed ,
             }
         })
     }, [club])
+
 
     return (
         <>
@@ -58,10 +43,12 @@ const ClubHeader: React.FC = () => {
                     <div className="flex ml-4 md:-mt-5 font-bold flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                         <h1 className="text-neutral-900 text-3xl mb-0 -mt-1 ml-0.5 sm:ml-0 mr-auto">{club.name}</h1>
                         <div className="flex">
-                            <SubscriptionButton id={club?.id} subscribed={!!club?.subscribed} type={SubscribableType.CLUB} updateSubscription={handleSubscription} />
-                            {club.subscribed &&
-                                <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={club?.subscribed?.extensive} id={club?.id} type={SubscribableType.CLUB} />
-                            }
+                            <SubscriptionHandler
+                                type={SubscribableType.CLUB}
+                                subscribable={club.id}
+                                subscription={club.subscribed}
+                                onUpdate={onSubscriptionUpdate}
+                            />
                         </div>
                     </div>
                 </div>

@@ -22,15 +22,16 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             setPhotos(photos)
         }).catch(e => {
             message.error("Error while parsing...")
-            console.log(e)
+            console.error(e)
         }).finally(() => setLoading(false))
     }, [images])
 
     const imageRenderer = useCallback(({index, photo}) => (
         <SafeImage
             key={index}
-            nsfw={photo.nsfw}
             className="cursor-pointer"
+            nsfw={photo.nsfw}
+            status={photo.status}
             src={photo.src}
             height={photo.height}
             width={photo.width}
@@ -41,7 +42,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
 
 
     return (
-        <div className="flex flex-col flex-wrap">
+        <div className="flex flex-col flex-wrap mx-3">
             <PhotoGallery
                 renderImage={imageRenderer}
                 photos={photos}

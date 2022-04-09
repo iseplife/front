@@ -15,8 +15,6 @@ import {
 import {mediaPath} from "../../../util"
 import {PostSizes} from "../../../constants/MediaSizes"
 import {createPoll, updatePoll} from "../../../data/poll"
-import {updatePost} from "../../../data/post"
-import {message} from "antd"
 import {createMedia} from "../../../data/media"
 import {addGalleryImages, createGallery, deleteGalleryImages} from "../../../data/gallery"
 import {MediaUploadNSFW} from "../../../data/media/types"

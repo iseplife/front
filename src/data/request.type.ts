@@ -11,7 +11,7 @@ export type Page<T> = {
 export type Author = {
     id: number
     feedId: number
-    type: "CLUB" | "STUDENT" | "ADMIN"
+    authorType: "CLUB" | "STUDENT" | "ADMIN"
     name: string
     thumbnail: string
 }

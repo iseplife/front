@@ -40,7 +40,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
 
     const onFilesUploaded = useCallback((ids) => {
         formik.setFieldValue("images", ids)
-        formik.submitForm().then(r => console.log(r))
+        formik.submitForm()
     }, [formik])
     
     const isFormValid = useMemo(() => (

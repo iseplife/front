@@ -1,4 +1,4 @@
-import Protocol from "../Protocol"
+import Protocol from "./Protocol"
 import WSPSConnected from "./packets/server/WSPSConnected"
 import WSPSEventCreated from "./packets/server/WSPSEventCreated"
 import WSPSFeedPostCreated from "./packets/server/WSPSFeedPostCreated"
@@ -7,11 +7,11 @@ import WSPSFeedPostLikesUpdate from "./packets/server/WSPSFeedPostLikesUpdate"
 import WSPSFeedPostRemoved from "./packets/server/WSPSFeedPostRemoved"
 import WSPSGroupJoined from "./packets/server/WSPSGroupJoined"
 import WSPSGroupLeft from "./packets/server/WSPSGroupLeft"
-import WSPSNotificationRecieved from "./packets/server/WSPSNotificationRecieved"
+import WSPSNotificationReceived from "./packets/server/WSPSNotificationReceived"
 
-class ProtocolV1 implements Protocol {
+class PacketProtocol implements Protocol {
 
-    static instance = new ProtocolV1().init()
+    static instance = new PacketProtocol().init()
 
     public packetsServer: any[] = []
     public packetsClient: any[] = []
@@ -26,11 +26,11 @@ class ProtocolV1 implements Protocol {
         return this.packetsClient.length - 1
     }
 
-    init(): ProtocolV1 {
+    init(): PacketProtocol {
         const packetsServer: any[] = []
         packetsServer.push(WSPSConnected)
         packetsServer.push(WSPSFeedPostCreated)
-        packetsServer.push(WSPSNotificationRecieved)
+        packetsServer.push(WSPSNotificationReceived)
         packetsServer.push(WSPSEventCreated)
         packetsServer.push(WSPSGroupJoined)
         packetsServer.push(WSPSGroupLeft)
@@ -53,4 +53,4 @@ class ProtocolV1 implements Protocol {
 
 }
 
-export default ProtocolV1
+export default PacketProtocol

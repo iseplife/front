@@ -6,10 +6,11 @@ import StudentCard from "./StudentCard"
 import {FilterReducerAction, StudentPreview} from "../../data/student/types"
 import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
-import {EntitySet} from "../../util"
+import {EntitySet, mediaPath} from "../../util"
 import {faUserAstronaut} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import StudentCardSkeleton from "./StudentCardSkeleton"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 export type StudentFilter = {
     promos: number[]
@@ -23,25 +24,30 @@ const DEFAULT_FILTER: StudentFilter = {
     promos: []
 }
 const reducer: React.Reducer<StudentFilter, FilterReducerAction> = (filter, action) => {
-    const newFilter = {...filter}
     switch (action.type) {
         case "UPDATE_SEARCH":
-            newFilter.name = action.name
-            break
+            return {
+                ...filter,
+                name: action.name
+            }
         case "ADD_PROMO":
-            newFilter.promos.push(action.promo)
-            break
+            return {
+                ...filter,
+                promos: [...filter.promos, action.promo]
+            }
         case "REMOVE_PROMO":
-            if (newFilter.promos.indexOf(action.promo) > -1)
-                newFilter.promos.splice(newFilter.promos.indexOf(action.promo), 1)
-            break
+            return {
+                ...filter,
+                promos: [...filter.promos.filter(p => p != action.promo)]
+            }
         case "TOGGLE_SORT":
-            newFilter.atoz = !newFilter.atoz
-            break
+            return {
+                ...filter,
+                atoz: !filter.atoz
+            }
         case "INIT_FILTER":
             return DEFAULT_FILTER
     }
-    return newFilter
 }
 
 const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
@@ -118,16 +124,10 @@ const YearBook: React.FC = () => {
         setFilter({type: "TOGGLE_SORT"})
     }, [scrollerRef])
 
-    const updateFilter = useCallback((action: FilterReducerAction) => {
-        setFilter(action)
-    }, [])
-
     return (
         <div className="container mx-auto text-center mt-10">
+            <YearBookSearchBar filter={filter} onFilterUpdate={setFilter} onSortingSwitch={switchSorting}/>
 
-            <YearBookSearchBar filter={filter} onFilterUpdate={updateFilter} onSortingSwitch={switchSorting}/>
-
-            {/* List of students */}
             <InfiniteScroller
                 ref={scrollerRef}
                 empty={empty}

@@ -2,22 +2,25 @@ import React, {Dispatch} from "react"
 import {LoggedStudentPreview} from "../../data/student/types"
 import {TokenPayload} from "../../data/security/types"
 import {AppContextAction} from "./action"
+import {Author} from "../../data/request.type"
 
 export const DEFAULT_STATE: AppContextState = {
-    token_expiration: 628021800000,
+    authors: [] as Author[],
+    token_expiration: 628021800000, // 18:30:00, 25 November 1989
 } as AppContextState
 
 
 
 export type AppContextState =  {
     user: LoggedStudentPreview
+    authors: Author[]
     payload: TokenPayload
     jwt: string
-    token_expiration: number
+    token_expiration: number  // in milliseconds
 }
 
 
-type AppContextType = {
+export type AppContextType = {
     state: AppContextState
     dispatch: Dispatch<AppContextAction>
 }

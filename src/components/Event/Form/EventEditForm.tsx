@@ -1,23 +1,43 @@
 import {withFormik} from "formik"
-import {EventForm as EventFormType, Event as EventType} from "../../../data/event/types"
+import {EventForm as EventFormType, Event as EventType, Marker} from "../../../data/event/types"
 import {editEvent} from "../../../data/event"
 import {message} from "antd"
 import EventForm from "./EventForm"
+import {positionToMarker} from "../../../util"
 
 
 type EventEditFormProps = {
     previousEdition?: number
-    event: EventFormType
+    event: EventType
     message: string
     onSubmit?: (e: EventType) => void
     onClose: () => void
 }
 const EventEditForm = withFormik<EventEditFormProps, EventFormType>({
-    mapPropsToValues: ({event}) => event,
+    mapPropsToValues: ({event}) => {
+        let coordinates: Marker | undefined = undefined
+        if (event.position) {
+            const strArr = event.position.coordinates.split(";")
+            coordinates = [+strArr[0], +strArr[1]]
+        }
+
+        return ({
+            type: event.type,
+            title: event.title,
+            description: event.description,
+            closed: event.closed,
+            startsAt: event.startsAt,
+            endsAt: event.endsAt,
+            club: event.club.id,
+            published: event.published,
+            targets: event.targets.map(t => t.id),
+            coordinates: positionToMarker(event.position)
+        })
+    },
     handleSubmit: async (values, {props}) => {
-        editEvent(values).then(res => {
+        editEvent(props.event.id, values).then(res => {
             if (res.status === 200) {
-                props.onSubmit &&  props.onSubmit(res.data)
+                props.onSubmit && props.onSubmit(res.data)
                 message.info(props.message)
                 props.onClose()
             }

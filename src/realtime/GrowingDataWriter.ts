@@ -1,4 +1,4 @@
-import DataWriter from "./DataWriter";
+import DataWriter from "./DataWriter"
 
 class GrowingDataWriter extends DataWriter {
     private _ensureWritable(size: number) {

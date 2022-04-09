@@ -1,3 +1,9 @@
+export enum MediaStatus {
+    UNPROCESSED = "UNPROCESSED",
+    PROCESSING = "PROCESSING",
+    READY = "READY"
+}
+
 export type MediaUploadNSFW = {
     file: File
     nsfw: boolean
@@ -17,6 +23,7 @@ export interface Media extends MediaName {
     id: number
     creation: Date
     nsfw: boolean
+    status: MediaStatus
 }
 
 

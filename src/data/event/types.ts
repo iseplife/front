@@ -1,6 +1,6 @@
 import {ClubPreview} from "../club/types"
 import EventType from "../../constants/EventType"
-import {Feed} from "../feed/types"
+import {Feed, Subscription} from "../feed/types"
 
 export type Event = {
     id: number
@@ -12,12 +12,12 @@ export type Event = {
     endsAt: Date
     ticketURL?: string
     price?: number
-    location?: string;
+    location?: string
     position?: EventPosition
     targets: Feed[]
     published: Date
     closed: boolean
-    subscribed?: { extensive: boolean }
+    subscribed: Subscription
     hasRight: boolean
     club: ClubPreview
     feed: number
@@ -54,15 +54,14 @@ export type EventForm = {
 }
 
 export interface EventPosition {
-  coordinates: string;
-  
-  label: string;
-  housenumber: string;
-  postcode: string;
-  city: string;
-  context: string;
-  district: string;
-  street: string;
+  coordinates: string
+  label: string
+  housenumber: string
+  postcode: string
+  city: string
+  context: string
+  district: string
+  street: string
 }
 
 export type Marker = [number, number]

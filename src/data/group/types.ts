@@ -1,4 +1,5 @@
 import {StudentPreview} from "../student/types"
+import {Subscription} from "../feed/types"
 
 export type GroupPreview = {
     id: number,
@@ -16,7 +17,7 @@ export type Group = {
     archived: boolean
     feedId: number
     hasRight: boolean
-    subscribed: { extensive: boolean }
+    subscribed: Subscription
 }
 
 export type GroupAdmin = Omit<Group, "subscribed" | "hasRight" | "feed"> & {
