@@ -1,16 +1,16 @@
 import DataManager from "./DataManager"
-import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
+import {getWebSocket, WSServerClient} from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
-import { getFeedPost, getFeedPostsBefore } from "../data/feed"
-import { BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm } from "../data/post/types"
-import { Page } from "../data/request.type"
-import { addMonths, isBefore } from "date-fns"
-import { createPost, deletePost, updatePost } from "../data/post"
-import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPostRemoved"
+import {getFeedPost, getFeedPostsBefore} from "../data/feed"
+import {BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
+import {Page} from "../data/request.type"
+import {addMonths, isBefore} from "date-fns"
+import {createPost, deletePost, updatePost} from "../data/post"
+import GeneralEventType from "../constants/GeneralEventType"
 import WSPSFeedPostEdited from "../realtime/protocol/packets/server/WSPSFeedPostEdited"
 import WSPSFeedPostLikesUpdate from "../realtime/protocol/packets/server/WSPSFeedPostLikesUpdate"
-import GeneralEventType from "../constants/GeneralEventType"
+import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPostRemoved"
+import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
 
 export default class FeedsManager extends DataManager<ManagerPost> {
 
@@ -24,7 +24,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     constructor(wsServerClient: WSServerClient) {
         super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
-        this.setContext("no_connection", { bugged: new Set() })
+        this.setContext("no_connection", {bugged: new Set()})
     }
 
     protected async initData() {
@@ -33,14 +33,14 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         for (const feedId in this.lastLoadIdByFeed)
             if (!this.loadedFeeds.has(+feedId))
                 this.lastLoadIdByFeed[feedId] = now
-        
-        this.setContext("lastLoad", { lastLoad: now })
+
+        this.setContext("lastLoad", {lastLoad: now})
 
         this.getTable()
             .where("publicationDate")
             .below(addMonths(new Date(), -4))
             .delete()
-            .then(deleted => console.debug("Deleted", deleted, "old posts"))
+            .then(deleted => console.debug("[Feed] deleted", deleted, "old posts"))
     }
 
     private async _waitFetching() {
@@ -48,43 +48,48 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             await new Promise<void>(executor => this._waitingForFetchEnd.push(executor))
     }
 
-    private initFeedData(feed: FeedId){
+    private initFeedData(feed: FeedId) {
         this.loadBefore(feed)
     }
 
-    public async isWithoutConnection(feed: FeedId){
+    public async isWithoutConnection(feed: FeedId) {
         return ((await this.getContext("no_connection")).bugged as Set<FeedId>).has(feed ?? mainFeedId)
     }
-    public async setWithoutConnection(feed: FeedId, error: boolean){
+
+    public async setWithoutConnection(feed: FeedId, error: boolean) {
         const bugged = (await this.getContext("no_connection")).bugged as Set<FeedId>
         const before = bugged.size
 
-        if(error)
+        if (error)
             bugged.add(feed ?? mainFeedId)
         else
             bugged.delete(feed ?? mainFeedId)
 
-        if(bugged.size != before)
-            await this.setContext("no_connection", { bugged })
+        if (bugged.size != before)
+            await this.setContext("no_connection", {bugged})
     }
 
-    public countFreshFeedPosts(feed: FeedId){
+    public countFreshFeedPosts(feed: FeedId) {
         return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).count()
     }
+
     public async countFreshPostsAfter(feed: FeedId, publicationDateId: number) {
         return this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, publicationDateId], [feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).count()
     }
+
     public async getLastPostedFresh(feed: FeedId) {
         return this.getTable().where(["lastLoadId", "loadedFeed", "publicationDateId"]).between([this.getLastLoad(feed), feed ?? mainFeedId, 0], [this.getLastLoad(feed), feed ?? mainFeedId, this.calcIdFromDateId(new Date(), 999_999)]).last()
     }
+
     public async getFirstPostedFresh(feed: FeedId) {
         return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).first()
     }
-    public getFeedPosts(feed: FeedId, limit: number){
-        return this.getTable().where({ "loadedFeed": feed ?? mainFeedId }).reverse().limit(limit).toArray()
+
+    public getFeedPosts(feed: FeedId, limit: number) {
+        return this.getTable().where({"loadedFeed": feed ?? mainFeedId}).reverse().limit(limit).toArray()
     }
 
-    public async loadMore(feed: FeedId){
+    public async loadMore(feed: FeedId) {
         await this._waitFetching()
         const firstFresh = await this.getFirstPostedFresh(feed)
         return await this.loadBefore(feed, firstFresh?.publicationDate ?? undefined)
@@ -93,6 +98,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public async getGeneralLastLoad() {
         return (await this.getContext("lastLoad"))?.lastLoad
     }
+
     public getLastLoad(feed: FeedId): number {
         return this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0
     }
@@ -100,14 +106,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public async subscribe(feed: FeedId) {
         this.loadedFeeds.add(feed ?? mainFeedId)
         const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
-        
+
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
-        this.getTable().where({ "loadedFeed": feed ?? mainFeedId, "waitingForUpdate": "true" }).toArray().then(posts => posts.forEach(post => {
-            if(post.waitFor?.delete)
+        this.getTable().where({
+            "loadedFeed": feed ?? mainFeedId,
+            "waitingForUpdate": "true"
+        }).toArray().then(posts => posts.forEach(post => {
+            if (post.waitFor?.delete)
                 postsToDelete.push(post)
-            else if(post.waitFor?.modif)
+            else if (post.waitFor?.modif)
                 postsToAdd.push({
                     ...post,
                     ...post.waitFor.modif,
@@ -121,16 +130,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
         return lastLoad
     }
-    public async unsubscribe(feed: FeedId){
+
+    public async unsubscribe(feed: FeedId) {
         this.loadedFeeds.delete(feed ?? mainFeedId)
     }
 
     public async loadBefore(feed: FeedId, lastLoadedDate?: Date): Promise<[boolean, number, number]> {
         await this._waitFetching()
         let posts: Page<Post>
-        try{
+        try {
             posts = (await (lastLoadedDate ? getFeedPostsBefore(feed, lastLoadedDate.getTime()) : getFeedPost(feed, 0))).data
-        }catch(e){
+        } catch (e) {
             this.setWithoutConnection(feed, true)
             throw e
         }
@@ -165,7 +175,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
         const lastId = content.reduce((prev, post) => Math.min(prev, post.publicationDateId), Number.MAX_VALUE)
 
-        if(posts.last)
+        if (posts.last)
             this.setFeedLastId(feed, lastId)
 
         this.checkUnloaded(feed)
@@ -182,6 +192,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public calcId(post: Post | PostUpdate) {
         return this.calcIdFromDateId(post.publicationDate, post.id)
     }
+
     private calcIdFromDateId(date: Date, _id: number) {
         let id = _id.toString()
         while (id.length < 6)
@@ -189,29 +200,30 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return +(Math.floor((date.getTime() - FeedsManager.baseDateMs) / 10_000).toString() + id)
     }
 
-    private async getAllFeedPosts(feed: FeedId){
+    private async getAllFeedPosts(feed: FeedId) {
         return this.getTable().where("loadedFeed").equals(feed ?? mainFeedId).toArray()
     }
 
-    private async setFeedLastId(feed: FeedId, lastId: number){
-        await this.setContext(`last:${feed}`, { lastId })
+    private async setFeedLastId(feed: FeedId, lastId: number) {
+        await this.setContext(`last:${feed}`, {lastId})
     }
-    public async getFeedLastId(feed: FeedId){
+
+    public async getFeedLastId(feed: FeedId) {
         return (await this.getContext(`last:${feed}`)).lastId as number | undefined
     }
 
     private async checkUnloaded(feed: FeedId) {
         const posts = (await this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId], [feed ?? mainFeedId, Infinity]).toArray()).sort((a, b) => a.id - b.id)
-        
+
         const toUnload: ManagerPost[] = []
         let toUnloadTemp: ManagerPost[] = []
 
         let freshBefore = false
         //De l'id - au +
-        for(const post of posts){
+        for (const post of posts) {
             const fresh = this.isFresh(post, feed)
-            if(fresh){
-                if(freshBefore){
+            if (fresh) {
+                if (freshBefore) {
                     toUnload.push(...toUnloadTemp)
                     toUnloadTemp = []
                 }
@@ -228,9 +240,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     @PacketHandler(WSPSFeedPostCreated)
-    private async handleFeedPostCreated(packet: WSPSFeedPostCreated){
+    private async handleFeedPostCreated(packet: WSPSFeedPostCreated) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
-        
+
         this.addPostToFeed(packet.post, packet.post.feedId, packet.hasWriteAccess)
 
         if (packet.follow) {
@@ -244,7 +256,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         }
     }
 
-    public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean){
+    public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean) {
         await this.addData({
             ...post,
             lastLoadId: this.getLastLoad(feed),
@@ -255,9 +267,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async removePostFromLoadedFeed(publicationDateId: number, loadedFeed: FeedId) {
-        const detected = (await this.getTable().where({loadedFeed: loadedFeed ?? mainFeedId, publicationDateId}).toArray()).map(post => [post.loadedFeed, post.publicationDateId])
+        const detected = (await this.getTable().where({
+            loadedFeed: loadedFeed ?? mainFeedId,
+            publicationDateId
+        }).toArray()).map(post => [post.loadedFeed, post.publicationDateId])
         await this.getTable().bulkDelete(detected)
     }
+
     public async removePost(id: number) {
         await this.getTable().bulkDelete((await this.getTable().where("id").equals(id).toArray()).map(post => [post.loadedFeed, post.publicationDateId]))
     }
@@ -266,7 +282,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostRemoved(packet: WSPSFeedPostRemoved) {
         this.addBulkData(
             (await this.getTable().where("id").equals(packet.id).toArray())
-                .map(post => 
+                .map(post =>
                     ({
                         ...post,
                         waitFor: {...post.waitFor, delete: true},
@@ -280,9 +296,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostEdited(packet: WSPSFeedPostEdited) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        const toUpdate = 
+        const toUpdate =
             (await this.getTable().where("id").equals(packet.post.id).toArray())
-                .map(post => 
+                .map(post =>
                     ({
                         ...post,
                         waitFor: {
@@ -292,37 +308,38 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                         waitingForUpdate: "true",
                     }) as ManagerPost
                 )
-        if(toUpdate.length)
+        if (toUpdate.length)
             this.addBulkData(toUpdate)
     }
+
     @PacketHandler(WSPSFeedPostLikesUpdate)
     private async handleFeedPostLikesUpdate(packet: WSPSFeedPostLikesUpdate) {
         (await this.getTable().where("thread").equals(packet.threadID).toArray())
-            .forEach(post => 
+            .forEach(post =>
                 this.getTable().update([post.loadedFeed, post.publicationDateId], {nbLikes: packet.likes})
             )
     }
 
-    public async createPost(post: BasicPostCreation | PostCreation){
+    public async createPost(post: BasicPostCreation | PostCreation) {
         return await createPost(post)
     }
 
-    public async editPost(id: number, postUpdate: PostUpdateForm){
+    public async editPost(id: number, postUpdate: PostUpdateForm) {
         const res = await updatePost(id, postUpdate)
-        if(res.status === 200){
-            for(const post of await this.getTable().where("id").equals(id).toArray())
+        if (res.status === 200) {
+            for (const post of await this.getTable().where("id").equals(id).toArray())
                 this.addData({
                     ...post,
                     ...res.data,
                 })
-        }else
+        } else
             throw new Error("No connection")
 
         return res.data
     }
 
     public async deletePost(id: number) {
-        if((await deletePost(id)).status == 200)
+        if ((await deletePost(id)).status == 200)
             await this.getTable().bulkDelete((await this.getTable().where("id").equals(id).toArray()).map(post => [post.loadedFeed, post.publicationDateId]))
         else
             throw new Error("No connection")
@@ -331,10 +348,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public async applyUpdates(id: number) {
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
-        for(const post of (await this.getTable().where("id").equals(id).toArray())) {
-            if(post.waitFor?.delete)
+        for (const post of (await this.getTable().where("id").equals(id).toArray())) {
+            if (post.waitFor?.delete)
                 postsToDelete.push(post)
-            else if(post.waitFor?.modif)
+            else if (post.waitFor?.modif)
                 postsToAdd.push({
                     ...post,
                     ...post.waitFor.modif,
@@ -357,8 +374,17 @@ let feedsManager = new FeedsManager(undefined!)
 
 window.addEventListener(GeneralEventType.LOGGED, () => (feedsManager = new FeedsManager(getWebSocket())).init())
 
-export { feedsManager }
+export {feedsManager}
 
-export type ManagerPost = { lastLoadId: number, loadedFeed: number, publicationDateId: number, waitingForUpdate: "true" | false, waitFor: {delete?: boolean, modif?: PostUpdate} } & Post
+export type ManagerPost = {
+    lastLoadId: number,
+    loadedFeed: number,
+    publicationDateId: number,
+    waitingForUpdate: "true" | false,
+    waitFor: {
+        delete?: boolean,
+        modif?: PostUpdate
+    }
+} & Post
 type FeedId = number | undefined
 const mainFeedId = 0

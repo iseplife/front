@@ -19,6 +19,7 @@ const LoadingPage: React.FC = () => {
     return (
         <div className="h-screen w-screen fixed top-0 overflow-hidden">
             <Loading/>
+            {sentence}
         </div>
     )
 }

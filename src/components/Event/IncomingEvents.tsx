@@ -16,7 +16,6 @@ type IncomingEventsProps = {
 }
 const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, className, wait = false}) => {
     const {t} = useTranslation("event")
-
     const events = useLiveQuery(async () => !wait && await eventsManager.getEvents(feed), [feed, wait])
 
     return (

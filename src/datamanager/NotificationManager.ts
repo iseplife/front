@@ -3,8 +3,8 @@ import { Notification } from "../data/notification/types"
 import DataManager from "./DataManager"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 import GeneralEventType from "../constants/GeneralEventType"
+import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 
 export default class NotificationManager extends DataManager<Notification> {
 
@@ -16,6 +16,13 @@ export default class NotificationManager extends DataManager<Notification> {
         this.removeContext("maxLoaded")
         await this.loadPage(0)
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
+    }
+
+    id = Math.random()
+
+    public register(): void {
+        console.debug("register", this.id)
+        super.register()
     }
 
     public async getMaxLoaded(){
@@ -91,9 +98,9 @@ export default class NotificationManager extends DataManager<Notification> {
     }
 
     @PacketHandler(WSPSNotificationReceived)
-    private async handleNotificationRecieved(packet: WSPSNotificationReceived){
-        await this.addData(packet.notification)
-        await this.setUnwatched(await this.getTable().limit(20).filter(notif => !notif.watched).count())
+    private async handleNotificationReceived(packet: WSPSNotificationReceived){
+        this.addData(packet.notification)
+        this.setUnwatched(await this.getUnwatched() + 1)
     }
 
 }

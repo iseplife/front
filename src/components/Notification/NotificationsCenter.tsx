@@ -8,8 +8,9 @@ import Notification from "../../components/Notification"
 import InfiniteScroller from "../Common/InfiniteScroller"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
-import { AppActionType } from "../../context/app/action"
 import { setNotificationsWatched } from "../../data/notification"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSadCry} from "@fortawesome/free-regular-svg-icons"
 
 interface NotificationsCenterProps {
     fullPage?: boolean
@@ -19,18 +20,19 @@ interface NotificationsCenterProps {
 const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, className}) => {
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
-    
-    const [notificationIds, setNotificationIds] = useState<Set<number>>(new Set())
-
-    const [empty, setEmpty] = useState<boolean>(false)
+    const [empty, setEmpty] = useState<boolean>(true)
 
     const minNotificationId = useLiveQuery(async () => {
         return await notificationManager.getMinFresh()
     }, [])
 
     const notifications = useLiveQuery(async () => {
-        if(minNotificationId != undefined)
-            return await notificationManager.getNotifications(minNotificationId)
+        if(minNotificationId != undefined) {
+            const notifs = await notificationManager.getNotifications(minNotificationId)
+            setEmpty(notifs.length == 0)
+
+            return notifs
+        }
     }, [minNotificationId])
 
     const recentNotifications = useMemo(() => {
@@ -46,9 +48,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         oldNotifications.length + recentNotifications.length
     ), [oldNotifications, recentNotifications])
     
-    const loadMoreNotifications = useCallback(async (count: number) => {
-        return count != 0 && minNotificationId != undefined && await notificationManager.loadMore(minNotificationId)
-    }, [notificationIds, minNotificationId])
+    const loadMoreNotifications = useCallback(async (count: number) => 
+        count != 0 && minNotificationId != undefined && await notificationManager.loadMore(minNotificationId)
+    , [minNotificationId])
 
     useEffect(() => {
         if (notifications) {
@@ -65,7 +67,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         }
     }, [notifications])
 
-    useEffect(() => () => { // On component destroy
+    useEffect(() => () => {
         if (notifications) {
             const unwatched = notifications.filter(notif => !notif.watched)
             if (unwatched.length)
@@ -86,14 +88,23 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
                 }
             >
-                {recentNotifications.map(notif =>
-                    <Notification {...notif} key={notif.id} />
-                )}
-                {!!oldNotifications?.length &&
-                    <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
-                {oldNotifications.map(notif =>
-                    <Notification {...notif} key={notif.id} />
-                )}
+                {empty ?
+                    <div className="text-gray-300 sm:mt-2 mb-2 text-center text-base sm:text-lg">
+                        <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />
+                        <div className="text-sm font-bold mt-2 sm:mb-1">{t("no_notifications")}</div>
+                    </div> :
+                    <>
+                        {recentNotifications.map(notif =>
+                            <Notification {...notif} key={notif.id} />
+                        )}
+                        {!!oldNotifications?.length &&
+                            <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
+                        {oldNotifications.map(notif =>
+                            <Notification {...notif} key={notif.id} />
+                        )}
+                    </>
+                }
+
             </InfiniteScroller>
         </div>
     )
