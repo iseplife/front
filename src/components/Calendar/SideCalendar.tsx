@@ -9,6 +9,7 @@ import FeedFilter from "../Feed/FeedFilter"
 import {AppContext} from "../../context/app/context"
 import {Roles} from "../../data/security/types"
 import {EventTypeEmoji} from "../../constants/EventType"
+import useAdminRole from "../../hooks/useAdminRole"
 
 type SideCalendarProps = {
     date: Date
@@ -16,9 +17,8 @@ type SideCalendarProps = {
 }
 const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
     const {t, i18n} = useTranslation("event")
-    const {state} = useContext(AppContext)
     const [filter, setFilter] = useRecoilState(filterState)
-    const isAdmin = useMemo(() => state.payload.roles.includes(Roles.ADMIN), [])
+    const isAdmin = useAdminRole()
 
     const handleChange = (type: string, name: string | number) => {
         setFilter(prev => {

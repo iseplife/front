@@ -17,6 +17,7 @@ import NotificationsCenter from "../Notification/NotificationsCenter"
 import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline } from "../../constants/CustomFontAwesome"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
+import useAdminRole from "../../hooks/useAdminRole"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -30,9 +31,9 @@ const IconButton: React.FC<IconButtonProps> = ({icon}) => {
 }
 
 const ProfilePanel: React.FC = () => {
-    const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
-    const isAdmin = useMemo(() => payload.roles.includes(Roles.ADMIN), [payload.roles])
+    const isAdmin = useAdminRole()
+
     return (
         <div className="">
             {isAdmin && (

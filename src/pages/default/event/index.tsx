@@ -73,7 +73,7 @@ const Event: React.FC = () => {
 
             return (finished ? t("event:date.before") : "") + toRespond
         }
-    }, [event?.startsAt, event?.endsAt])
+    }, [event])
 
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 

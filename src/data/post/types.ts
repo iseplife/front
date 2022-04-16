@@ -43,6 +43,8 @@ export type Post = {
     publicationDate: Date
     creationDate: Date
     pinned: boolean
+    homepagePinned: boolean
+    homepageForced: boolean
     author: Author
     embed?: Embed
     thread: number
