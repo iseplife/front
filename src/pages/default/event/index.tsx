@@ -22,9 +22,9 @@ import SkeletonAvatar from "antd/lib/skeleton/Avatar"
 import {isSameDay} from "date-fns"
 import {subscribe} from "../../../data/subscription"
 import {SubscribableType} from "../../../data/subscription/SubscribableType"
-import SubscriptionHandler from "../../../components/Subscription"
 import {Subscription} from "../../../data/feed/types"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
+import SubscriptionHandler from "../../../components/Subscription"
 
 interface ParamTypes {
     id?: string
@@ -35,25 +35,17 @@ const Event: React.FC = () => {
     const {t} = useTranslation(["event", "gallery", "common"])
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
+    const [showLoadingMap, setShowLoadingMap] = useState(false)
+    const [tab, setTab] = useState<number>(0)
 
-    useEffect(() => {
-        if (!id || !+id)
-            history.push("/")
-        else
-            getEvent(+id).then(res =>
-                setEvent(res.data)
-            )
-    }, [id])
-
+    const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
     const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed}/>), [event?.feed])
-
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?
-            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries}/> : <></>,
-    }), [event?.feed])
-    const [tab, setTab] = useState<number>(0)
-    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
+            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries}/> :
+            <></>,
+    }), [feed, event?.id])
 
     const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
 
@@ -83,14 +75,11 @@ const Event: React.FC = () => {
         }
     }, [event?.startsAt, event?.endsAt])
 
-    const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
+    const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
-    const [showLoadingMap, setShowLoadingMap] = useState(false)
-
-    useEffect(() => {
-        setTimeout(() => setShowLoadingMap(true), 200)
-    }, [])// Wait for fast connections
-
+    const galleriesCallback = useCallback((page) => {
+        return getEventGalleries((event as EventType).id, page)
+    }, [event?.id])
 
     const participateCallback = useCallback(() => {
         if (event)
@@ -109,6 +98,20 @@ const Event: React.FC = () => {
         }))
     }, [])
 
+    useEffect(() => {
+        if (!id || !+id)
+            history.push("/")
+        else
+            getEvent(+id).then(res =>
+                setEvent(res.data)
+            )
+    }, [id])
+
+    useEffect(() => {
+        setTimeout(() => setShowLoadingMap(true), 200)
+    }, [])// Wait for fast connections
+
+
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
             {(event || showLoadingMap) &&
@@ -118,9 +121,7 @@ const Event: React.FC = () => {
                         id="mapbox/streets-v11"
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
-                    {coordinates && (
-                        <Marker position={coordinates}/>
-                    )}
+                    {coordinates && <Marker position={coordinates}/>}
                 </Map>
             }
             <div className="container mx-auto px-4">
@@ -164,9 +165,8 @@ const Event: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                        </>
-                        :
-                        <div className={event || "-translate-y-1/2 absolute"}>
+                        </> :
+                        <div className="-translate-y-1/2 absolute">
                             <Skeleton title={false} active paragraph={{rows: 1, width: 200}} className="mt-4"/>
                             <Skeleton title={false} active paragraph={{rows: 1, width: 120}}/>
                         </div>
@@ -203,7 +203,11 @@ const Event: React.FC = () => {
                 <div className="flex-1 mx-4 sm:mt-0">
                     <Link to={`/club/${event?.club.id}`}>
                         <div
-                            className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white hover:bg-neutral-50 transition-colors my-5 mt-1 sm:mt-5">
+                            className="
+                                flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white
+                                hover:bg-neutral-50 transition-colors my-5 mt-1 sm:mt-5
+                            "
+                        >
                             <div className="flex items-center font-normal">
                                 {event ?
                                     <>
@@ -212,10 +216,10 @@ const Event: React.FC = () => {
                                             size="large"
                                             className="hover:shadow-outline mr-1"
                                         />
-                                        <div
-                                            className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">{event?.club.name}</div>
-                                    </>
-                                    :
+                                        <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">
+                                            {event?.club.name}
+                                        </div>
+                                    </> :
                                     <>
                                         <SkeletonAvatar active size="large"/>
                                         <Skeleton
@@ -240,11 +244,11 @@ const Event: React.FC = () => {
                         <>
                             <GalleriesPreview
                                 className="sm:hidden lg:block"
-                                getGalleriesCallback={(page) => getEventGalleries(event.id, page)}
+                                getGalleriesCallback={galleriesCallback}
                             />
                             {event.hasRight && (
                                 <div className="text-center">
-                                    <GalleryModalForm feed={event.feed} onSubmit={() => console.log("oui")}/>
+                                    <GalleryModalForm feed={event.feed} />
                                 </div>
                             )}
                         </>

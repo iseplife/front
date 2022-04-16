@@ -213,7 +213,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     private async checkUnloaded(feed: FeedId) {
-        const posts = (await this.getTable().where(["loadedFeed", "publicationDateId"]).between([feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId], [feed ?? mainFeedId, Infinity]).toArray()).sort((a, b) => a.id - b.id)
+        const posts = (await this.getTable()
+            .where(["loadedFeed", "publicationDateId"])
+            .between(
+                [feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId],
+                [feed ?? mainFeedId, Infinity]
+            ).toArray())
+            .sort((a, b) => a.id - b.id)
 
         const toUnload: ManagerPost[] = []
         let toUnloadTemp: ManagerPost[] = []
