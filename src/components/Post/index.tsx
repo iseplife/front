@@ -1,13 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
-import {Divider, Modal} from "antd"
+import {Modal} from "antd"
 import {useTranslation} from "react-i18next"
-import {toggleThreadLike} from "../../data/thread"
-import CommentList from "../Comment/CommentList"
 import PostEditForm from "./Form/PostEditForm"
-import {faHeart as faSolidHeart, faHouseCircleExclamation, faThumbtack} from "@fortawesome/free-solid-svg-icons"
-import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
+import {faHouseCircleExclamation, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
 import {homepageForcedPost, pinPost} from "../../data/post"
@@ -52,7 +49,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
     }, [data.id, onUpdate])
 
     const togglePin = useCallback((homepage: boolean) => async () => {
-        pinPost(data.id, !data.pinned, homepage).then(() => {
+        pinPost(data.id, !(homepage ? data.homepagePinned: data.pinned), homepage).then(() => {
             onPin(data.id, !data.pinned)
         })
     }, [data.id, data.pinned, onPin])
