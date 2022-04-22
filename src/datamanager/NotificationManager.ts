@@ -4,6 +4,7 @@ import DataManager from "./DataManager"
 import { getWebSocket, WSServerClient } from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import GeneralEventType from "../constants/GeneralEventType"
+import pushService from "../services/PushService"
 import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
 
 export default class NotificationManager extends DataManager<Notification> {
@@ -13,6 +14,7 @@ export default class NotificationManager extends DataManager<Notification> {
     }
 
     protected async initData() {
+        await pushService.initData()
         this.removeContext("maxLoaded")
         await this.loadPage(0)
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
@@ -95,6 +97,20 @@ export default class NotificationManager extends DataManager<Notification> {
     }
     protected async isAnyInCache(ids: number[]): Promise<boolean> {
         return (await this.getTable().where("id").anyOf(ids).count()) > 0
+    }
+
+    public async isWebPushEnabled(){
+        return (await this.getContext("webpush.enabled"))?.enabled as boolean
+    }
+    public async setWebPushEnabled(enabled: boolean){
+        this.setContext("webpush.enabled", { enabled })
+    }
+
+    public async isSubscribed(){
+        return (await this.getContext("webpush.subscribed"))?.subscribed as boolean
+    }
+    public async setSubscribed(subscribed: boolean){
+        this.setContext("webpush.subscribed", { subscribed })
     }
 
     @PacketHandler(WSPSNotificationReceived)

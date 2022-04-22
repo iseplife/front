@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from "react"
+import React, {useContext, useEffect, useMemo, useState} from "react"
 import {Divider, Drawer} from "antd"
 import {Link, useLocation} from "react-router-dom"
 import {useTranslation} from "react-i18next"
@@ -18,6 +18,7 @@ import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCo
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
+import pushService from "../../services/PushService"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -69,12 +70,15 @@ interface HeaderProps {
 
 const NotificationHeaderButton: React.FC = () => {
     const [t] = useTranslation("notifications")
-    const unwatchedNotifications = useLiveQuery(() => notificationManager?.getUnwatched(), [])
+    const unwatchedNotifications = useLiveQuery(async () => await notificationManager?.getUnwatched() as number, [])
+
+    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
+
     return <DropdownPanel
         icon={<div>
             <IconButton icon={cFaBellFull}/>
-            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications ? "scale-100" : "scale-0")}>
-                {Math.min(unwatchedNotifications ?? 0, 9)}
+            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications || showPushAsk ? "scale-100" : "scale-0")}>
+                {Math.min((unwatchedNotifications ?? 0) + +(showPushAsk ?? false), 9)}
             </div>
         </div>}
         panelClassName="w-80 -right-6"
@@ -151,6 +155,9 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
 const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any, alerts?: number }> = ({ route, selectedIcon, notSelectedIcon, alerts }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
+    
+    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
+    
     return <Link to={route}>
         <button className="border-0 grid place-items-center h-full w-full text-2xl">
             <div className="relative">
@@ -158,8 +165,8 @@ const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelect
                     <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
                 </div>
                 
-                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts ? "scale-100" : "scale-0")}>
-                    {Math.min(alerts ?? 0, 9)}
+                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts || showPushAsk ? "scale-100" : "scale-0")}>
+                    {Math.min((alerts ?? 0) + +(showPushAsk ?? false), 9)}
                 </div>
             </div>
         </button>
