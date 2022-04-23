@@ -127,7 +127,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 {...(posts as ManagerPost[])[index], pinned: true}
 
             // We move post into pinned posts while removing it from common posts
-            if(!homepage || (homepage && id)) {
+            if(!homepage || (homepage && !id)) {
                 setPostsPinned(prev => (
                     [...prev, pinnedPost].sort((a, b) => (
                         a.publicationDate.getTime() - b.publicationDate.getTime()
@@ -142,7 +142,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 {...postsPinned[index], homepagePinned: false}:
                 {...postsPinned[index], pinned: false}
 
-            if(!homepage || (homepage && id)) {
+            if(!homepage || (homepage && !id)) {
                 // We move post into common posts while removing it from pinned posts
                 setPostsPinned(prev => prev.filter((p, i) => i !== index))
                 feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.context.id)
@@ -157,11 +157,9 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [])
 
     useEffect(() => {
-        if (id) {
-            getFeedPostPinned(id).then(res => {
-                setPostsPinned(res.data)
-            })
-        }
+        getFeedPostPinned(id).then(res => {
+            setPostsPinned(res.data)
+        })
     }, [id])
 
     const now = new Date()

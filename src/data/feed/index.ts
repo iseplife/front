@@ -15,8 +15,8 @@ export const getFeedPostsBefore = (id?: number, lastDate = 0): AxiosPromise<Page
     })
 )
 
-export const getFeedPostPinned = (id: number): AxiosPromise<Post[]> => (
-    apiClient.get(`/feed/${id}/post/pinned`)
+export const getFeedPostPinned = (id?: number): AxiosPromise<Post[]> => (
+    apiClient.get(`/feed/${id ?? "main"}/post/pinned`)
 )
 
 export const toggleSubscription = (id: number): AxiosPromise<boolean> => apiClient.post(`/feed/${id}/subscribe`)

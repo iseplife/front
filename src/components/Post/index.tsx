@@ -51,7 +51,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
 
     const togglePin = useCallback((homepage: boolean) => async () => {
         pinPost(data.id, !(homepage ? data.homepagePinned: data.pinned), homepage).then(() => {
-            onPin(data.id, !data.pinned)
+            onPin(data.id, !data.pinned, homepage)
         })
     }, [data.homepagePinned, data.id, data.pinned, onPin])
 
