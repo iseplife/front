@@ -4,7 +4,7 @@ import Embed from "./Embed"
 import {Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import PostEditForm from "./Form/PostEditForm"
-import {faHouseCircleExclamation, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faHouseCircleCheck, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
 import {homepageForcedPost, pinPost} from "../../data/post"
@@ -22,7 +22,7 @@ type PostProps = {
     isEdited: boolean
     forceShowComments?: boolean
     toggleEdition: (toggle: boolean) => void
-    onPin: (id: number, pinned: boolean) => void
+    onPin: (id: number, pinned: boolean, homepage?: boolean) => void
     onDelete: (id: number) => Promise<void>
     onUpdate: (id: number, postUpdate: PostUpdate) => void
 }
@@ -30,6 +30,7 @@ type PostProps = {
 const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition}) => {
     const {t} = useTranslation(["common", "post"])
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
+    const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
     const isAdmin = useAdminRole()
 
     const confirmDeletion = useCallback(() => {
@@ -52,12 +53,15 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         pinPost(data.id, !(homepage ? data.homepagePinned: data.pinned), homepage).then(() => {
             onPin(data.id, !data.pinned)
         })
-    }, [data.id, data.pinned, onPin])
+    }, [data.homepagePinned, data.id, data.pinned, onPin])
 
     const toggleHomepageForced = useCallback(async () => {
-        homepageForcedPost(data.id, !data.homepageForced)
-    }, [data.id, data.homepageForced])
+        homepageForcedPost(data.id, !superVisibility).then(() => {
+            setSuperVisibility(sv => !sv)
+        })
+    }, [data.id, superVisibility])
 
+    useEffect(() => setSuperVisibility(data.homepageForced), [data.homepageForced])
 
     let post!: HTMLDivElement
     useEffect(() => {
@@ -111,16 +115,16 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                         {feedId == undefined &&
                             <PostContextTag context={data.context}/>
                         }
+                        {superVisibility && isAdmin && (
+                            <FontAwesomeIcon
+                                icon={faHouseCircleCheck}
+                                className="mr-2.5 text-gray-400 ml-1"
+                            />
+                        )}
                         {data.pinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
-                                className="mr-2.5 text-gray-500 ml-1"
-                            />
-                        )}
-                        {data.homepageForced && isAdmin && (
-                            <FontAwesomeIcon
-                                icon={faHouseCircleExclamation}
-                                className="mr-2.5 text-gray-500 ml-1"
+                                className="mr-2.5 text-gray-400 ml-1"
                             />
                         )}
                         {data.hasWriteAccess && (
@@ -132,7 +136,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                                 <PostToolBar
                                     feed={feedId}
                                     pinned={data.pinned}
-                                    homepageForced={data.homepageForced}
+                                    homepageForced={superVisibility}
                                     triggerPin={togglePin}
                                     triggerHomepageForced={toggleHomepageForced}
                                     triggerEdition={() => toggleEdition(true)}

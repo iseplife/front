@@ -1,5 +1,12 @@
 import React from "react"
-import {faHouseCircleExclamation, faHouseCircleXmark, faHouseFlag, faPen, faThumbtack, faUnlink} from "@fortawesome/free-solid-svg-icons"
+import {
+    faHouseCircleCheck,
+    faHouseCircleXmark,
+    faHouseFlag,
+    faPen,
+    faThumbtack,
+    faUnlink
+} from "@fortawesome/free-solid-svg-icons"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import {useTranslation} from "react-i18next"
 import DropdownPanelElement from "../Common/DropdownPanelElement"
@@ -30,14 +37,14 @@ const PostToolbar: React.FC<PostToolbarProps> = ({feed, pinned, homepageForced, 
             {isAdmin && (
                 <>
                     <DropdownPanelElement
+                        title={t("post:homepage_forced")}
+                        onClick={triggerHomepageForced}
+                        icon={homepageForced ? faHouseCircleXmark: faHouseCircleCheck}
+                    />
+                    <DropdownPanelElement
                         title={t("post:homepage_pin")}
                         onClick={triggerPin(true)}
                         icon={faHouseFlag}
-                    />
-                    <DropdownPanelElement
-                        title={t("post:homepage_forced")}
-                        onClick={triggerHomepageForced}
-                        icon={homepageForced ? faHouseCircleXmark: faHouseCircleExclamation}
                     />
                 </>
             )}
