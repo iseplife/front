@@ -9,7 +9,7 @@ import {Avatar} from "antd"
 import { ClubActionType } from "../../context/club/action"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../Subscription"
-import {faLink} from "@fortawesome/free-solid-svg-icons"
+import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -54,7 +54,7 @@ const ClubHeader: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
-                    {club.website && <SocialIcon icon={faLink} url={club.website}/>}
+                    {club.website && <SocialIcon icon={cFaLinkWorld} url={club.website}/>}
                     {club.facebook && <SocialIcon icon={faFacebook} url={club.facebook}/>}
                     {club.instagram && <SocialIcon icon={faInstagram} url={club.instagram}/>}
                     {club.snapchat && <SocialIcon icon={faSnapchat} url={club.snapchat}/>}
