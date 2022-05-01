@@ -23,7 +23,7 @@ const DropdownPanelElement: React.FC<DropdownPanelElementProps> = (props) => {
         >
             <FontAwesomeIcon
                 icon={icon}
-                className="mr-2.5 w-3"
+                className="mr-2.5"
             /> {title}
         </div>
     )
