@@ -136,9 +136,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             message.success(t("post:post_pinned"))
         } else {
             const index = postsPinned.findIndex(p => p.id === postId)
-            const unpinnedPost = homepage ?
-                {...postsPinned[index], homepagePinned: false}:
-                {...postsPinned[index], pinned: false}
+            const unpinnedPost = {...postsPinned[index], [homepage ? "homepagePinned" : "pinned"]: false}
 
             if(!homepage || (homepage && !id)) {
                 // We move post into common posts while removing it from pinned posts
