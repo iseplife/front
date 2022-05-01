@@ -12,12 +12,12 @@ import LoadingPage from "../../pages/LoadingPage"
 import {AppContext, AppContextType} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {Roles} from "../../data/security/types"
-import {wsURI} from "../../data/http"
 import {initWebSocket, logoutWebSocket} from "../../realtime/websocket/WSServerClient"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import LoggedEvent from "../../events/LoggedEvent"
 import GeneralEventType from "../../constants/GeneralEventType"
 import {getAuthorizedAuthors} from "../../data/post"
+import { wsURI } from "../../data/http.constants"
 import useAdminRole from "../../hooks/useAdminRole"
 
 
