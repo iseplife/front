@@ -122,9 +122,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const onPostPin = useCallback((postId: number, pinned: boolean, homepage?: boolean) => {
         if (pinned) {
             const index = (posts as ManagerPost[]).findIndex(p => p.id === postId)
-            const pinnedPost =  homepage ?
-                {...(posts as ManagerPost[])[index], homepagePinned: true}:
-                {...(posts as ManagerPost[])[index], pinned: true}
+            const pinnedPost = {...(posts as ManagerPost[])[index], [homepage ? "homepagePinned" : "pinned"]: true}
 
             // We move post into pinned posts while removing it from common posts
             if(!homepage || (homepage && !id)) {
