@@ -153,10 +153,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [])
 
     useEffect(() => {
-        getFeedPostPinned(id).then(res => {
-            setPostsPinned(res.data)
-        })
-    }, [id])
+        if(!loading)
+            getFeedPostPinned(id).then(res => {
+                setPostsPinned(res.data)
+            })
+    }, [id, loading])
 
     const now = new Date()
 
