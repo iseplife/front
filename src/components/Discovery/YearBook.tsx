@@ -148,7 +148,7 @@ const YearBook: React.FC = () => {
                                 picture={s.picture}
                                 promo={s.promo}
                                 fullname={s.firstName + " " + s.lastName}
-                                className="opacity-50"
+                                className={loading && "opacity-50"}
                             />
                         )}
                         {loading && filteredStudent.length == 0 && <>
