@@ -98,6 +98,9 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const scrollElement = useRef<HTMLDivElement>(null)
     return (
         <div ref={scrollElement} className={`${className} text-neutral-800 px-1`}>
+            {subscribing &&
+                <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-500/70 backdrop-blur-sm z-50" />
+            }
             <InfiniteScroller
                 watch="DOWN"
                 callback={loadMoreNotifications}
@@ -108,7 +111,6 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
                 }
             >
-
                 {showPushAsk && 
                     <div className="w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
                         <div className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center bg-red-400 text-white">
@@ -116,15 +118,15 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                         </div>
                         <div className="ml-2.5 text-sm w-full">
                             <div className="font-semibold">
-                                Les notifications sont là !
+                                {t("notif_are_here")}
                             </div>
-                            Recevez-les directement sur votre appareil !
+                            {t("receive_here")}
                             <div className={"flex mt-2 " + (subscribing && "pointer-events-none opacity-70")}>
                                 <button onClick={callbackNotif(false)} className="bg-red-400 rounded px-3 py-1.5 text-white font-semibold hover:shadow-md transition-shadow">
-                                    Refuser
+                                    {t("refuse")}
                                 </button>
                                 <button onClick={callbackNotif(true)} className="ml-2 bg-green-400 rounded px-3 py-1.5 text-white font-semibold hover:shadow-md transition-shadow">
-                                    Accepter
+                                    {t("accept")}
                                 </button>
                             </div>
                         </div>   
