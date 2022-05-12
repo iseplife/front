@@ -32,7 +32,7 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
     const diff = nowS - dateS
     if (diff / 60 / 60 < 24) {//Less than 24h ago
         if(diff < 60 * 1.5)//Less than 1.5 min ago
-            return [t("just_now"), (60 * 1.5 - diff) * 1_000]
+            return [t("post:just_now"), (60 * 1.5 - diff) * 1_000]
         else if (diff / 60 < 60)// Less than 1 hour ago
             return [`${Math.floor(diff / 60)} min`, (60 - diff % 60) * 1_000]
         else

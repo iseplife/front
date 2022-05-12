@@ -1,24 +1,64 @@
 import React from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faPen, faThumbtack, faUnlink} from "@fortawesome/free-solid-svg-icons"
+import {
+    faHouseCircleCheck,
+    faHouseCircleXmark,
+    faHouseFlag,
+    faPen,
+    faThumbtack,
+    faUnlink
+} from "@fortawesome/free-solid-svg-icons"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import {useTranslation} from "react-i18next"
 import DropdownPanelElement from "../Common/DropdownPanelElement"
+import useAdminRole from "../../hooks/useAdminRole"
 
 type PostToolbarProps = {
     pinned: boolean,
-    triggerPin: () => void
+    homepageForced: boolean
+    feed?: number
+    triggerPin: (homepage: boolean) => () => void
+    triggerHomepageForced: () => void
     triggerEdition: () => void
     triggerDeletion: () => void
 }
-const PostToolbar: React.FC<PostToolbarProps> = ({pinned, triggerDeletion, triggerPin, triggerEdition}) => {
+const PostToolbar: React.FC<PostToolbarProps> = ({feed, pinned, homepageForced,  triggerDeletion, triggerPin, triggerEdition, triggerHomepageForced}) => {
     const {t} = useTranslation(["common", "post"])
+    const isAdmin = useAdminRole()
 
     return (
         <div className="select-none edit-menu text-base font-medium">
-            <DropdownPanelElement title={t("edit")} onClick={triggerEdition} icon={faPen} />
-            <DropdownPanelElement title={t(`post:${pinned ? "un" : ""}pin`)} onClick={triggerPin} icon={pinned ? faUnlink : faThumbtack} />
-            <DropdownPanelElement title={t("delete")} onClick={triggerDeletion} icon={faTrashAlt} color="red" />
+            {feed !== undefined && (
+                <DropdownPanelElement
+                    title={t(`post:${pinned ? "unpin" : "pin"}`)}
+                    onClick={triggerPin(false)}
+                    icon={pinned ? faUnlink : faThumbtack}
+                />
+            )}
+            {isAdmin && (
+                <>
+                    <DropdownPanelElement
+                        title={t("post:homepage_forced")}
+                        onClick={triggerHomepageForced}
+                        icon={homepageForced ? faHouseCircleXmark: faHouseCircleCheck}
+                    />
+                    <DropdownPanelElement
+                        title={t("post:homepage_pin")}
+                        onClick={triggerPin(true)}
+                        icon={faHouseFlag}
+                    />
+                </>
+            )}
+            <DropdownPanelElement
+                title={t("edit")}
+                onClick={triggerEdition}
+                icon={faPen}
+            />
+            <DropdownPanelElement
+                title={t("delete")}
+                onClick={triggerDeletion}
+                icon={faTrashAlt}
+                color="red"
+            />
         </div>
     )
 }

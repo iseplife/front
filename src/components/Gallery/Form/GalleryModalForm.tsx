@@ -8,7 +8,7 @@ import {faImages} from "@fortawesome/free-regular-svg-icons"
 
 type GalleryModalFormProps = {
     feed: number
-    onSubmit: (g: GalleryPreview) => void
+    onSubmit?: (g: GalleryPreview) => void
 }
 const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => {
     const {t} = useTranslation("gallery")
@@ -16,7 +16,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => 
 
     const handleSubmit = useCallback((g: GalleryPreview) => {
         setVisible(false)
-        onSubmit(g)
+        onSubmit && onSubmit(g)
     }, [onSubmit])
     return (
         <>

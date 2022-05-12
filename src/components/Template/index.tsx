@@ -18,6 +18,7 @@ import { notificationManager } from "../../datamanager/NotificationManager"
 import LoggedEvent from "../../events/LoggedEvent"
 import GeneralEventType from "../../constants/GeneralEventType"
 import {getAuthorizedAuthors} from "../../data/post"
+import useAdminRole from "../../hooks/useAdminRole"
 
 
 
@@ -25,9 +26,7 @@ const Template: React.FC = () => {
     const context = useContext<AppContextType>(AppContext)
     const { pathname } = useLocation()
     const [loading, setLoading] = useState<boolean>(true)
-    const isAdmin = useMemo(() => (
-        context.state.payload.roles.includes(Roles.ADMIN)
-    ), [context.state.payload])
+    const isAdmin = useAdminRole()
 
     useEffect(() => {
         Promise.all([getLoggedUser(), getAuthorizedAuthors()]).then(([userRes, authorsRes]) => {

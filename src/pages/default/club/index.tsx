@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router"
 import {getClub, getClubGalleries} from "../../../data/club"
-import {message, Tabs} from "antd"
+import {message} from "antd"
 import {useHistory} from "react-router-dom"
 import Feed from "../../../components/Feed"
 import ClubPresentation from "../../../components/Club/ClubDescription/ClubPresentation"

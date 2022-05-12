@@ -119,31 +119,32 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         message.success(t("remove_item.complete"))
     }, [])
 
-    const onPostPin = useCallback((postId: number, pinned: boolean) => {
-        if (posts)
-            if (pinned) {
-                const index = posts.findIndex(p => p.id === postId)
-                const pinnedPost = {...posts[index], pinned: true}
+    const onPostPin = useCallback((postId: number, pinned: boolean, homepage?: boolean) => {
+        if (pinned) {
+            const index = (posts as ManagerPost[]).findIndex(p => p.id === postId)
+            const pinnedPost = {...(posts as ManagerPost[])[index], [homepage ? "homepagePinned" : "pinned"]: true}
 
-                // We move post into pinned posts while removing it from common posts
+            // We move post into pinned posts while removing it from common posts
+            if(!homepage || (homepage && !id)) {
                 setPostsPinned(prev => (
                     [...prev, pinnedPost].sort((a, b) => (
                         a.publicationDate.getTime() - b.publicationDate.getTime()
                     )))
                 )
                 feedsManager.removePostFromLoadedFeed(pinnedPost.publicationDateId, id)
-
-                message.success(t("post:post_pinned"))
-            } else {
-                const index = postsPinned.findIndex(p => p.id === postId)
-                const unpinnedPost = {...postsPinned[index], pinned: false}
-
-                // We move post into common posts while removing it from pinned posts
-                feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.context.id)
-
-                setPostsPinned(prev => prev.filter((p, i) => i !== index))
-                message.success(t("post:post_unpinned"))
             }
+            message.success(t("post:post_pinned"))
+        } else {
+            const index = postsPinned.findIndex(p => p.id === postId)
+            const unpinnedPost = {...postsPinned[index], [homepage ? "homepagePinned" : "pinned"]: false}
+
+            if(!homepage || (homepage && !id)) {
+                // We move post into common posts while removing it from pinned posts
+                setPostsPinned(prev => prev.filter((p, i) => i !== index))
+                feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.context.id)
+            }
+            message.success(t("post:post_unpinned"))
+        }
     }, [posts, postsPinned, id])
 
     const onPostUpdate = useCallback(() => {
@@ -152,12 +153,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [])
 
     useEffect(() => {
-        if (id) {
+        if(!loading)
             getFeedPostPinned(id).then(res => {
                 setPostsPinned(res.data)
             })
-        }
-    }, [id])
+    }, [id, loading])
 
     const now = new Date()
 

@@ -1,20 +1,20 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
-import {Divider, Modal} from "antd"
+import {Modal} from "antd"
 import {useTranslation} from "react-i18next"
-import {toggleThreadLike} from "../../data/thread"
-import CommentList from "../Comment/CommentList"
 import PostEditForm from "./Form/PostEditForm"
-import {faHeart as faSolidHeart, faThumbtack} from "@fortawesome/free-solid-svg-icons"
-import {faHeart, faCommentAlt} from "@fortawesome/free-regular-svg-icons"
+import {faHouseCircleCheck, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
-import {pinPost} from "../../data/post"
+import {homepageForcedPost, pinPost} from "../../data/post"
 import DropdownPanel from "../Common/DropdownPanel"
 import { feedsManager, ManagerPost } from "../../datamanager/FeedsManager"
 import { PostContextTag } from "./context/PostContextTag"
 import PostAuthor from "./PostAuthor"
+import useAdminRole from "../../hooks/useAdminRole"
+import PostThread from "./PostThread"
+
 
 type PostProps = {
     data: ManagerPost
@@ -22,21 +22,16 @@ type PostProps = {
     isEdited: boolean
     forceShowComments?: boolean
     toggleEdition: (toggle: boolean) => void
-    onPin: (id: number, pinned: boolean) => void
+    onPin: (id: number, pinned: boolean, homepage?: boolean) => void
     onDelete: (id: number) => Promise<void>
     onUpdate: (id: number, postUpdate: PostUpdate) => void
 }
 
-const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, onPin, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition}) => {
     const {t} = useTranslation(["common", "post"])
-    const [liked, setLiked] = useState<boolean>(data.liked)
-    const [likes, setLikes] = useState<number>(data.nbLikes)
-    const [showComments, setShowComments] = useState<boolean>(!!(forceShowComments || (data.nbComments == 1 && data.trendingComment)))
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
-    const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
-    const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
-
-    useEffect(() => setLikes(data.nbLikes), [data.nbLikes])
+    const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
+    const isAdmin = useAdminRole()
 
     const confirmDeletion = useCallback(() => {
         Modal.confirm({
@@ -54,20 +49,19 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
         onUpdate(data.id, updatedPost)
     }, [data.id, onUpdate])
 
-    const togglePin = useCallback(async () => {
-        pinPost(data.id, !data.pinned).then(() => {
-            onPin(data.id, !data.pinned)
-
+    const togglePin = useCallback((homepage: boolean) => async () => {
+        pinPost(data.id, !(homepage ? data.homepagePinned: data.pinned), homepage).then(() => {
+            onPin(data.id, !data.pinned, homepage)
         })
-    }, [data.id, data.pinned, onPin])
+    }, [data.homepagePinned, data.id, data.pinned, onPin])
 
-    const toggleLike = useCallback(async (id: number) => {
-        const res = await toggleThreadLike(id)
-        if (res.status === 200) {
-            setLiked(res.data)
-            setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
-        }
-    }, [])
+    const toggleHomepageForced = useCallback(async () => {
+        homepageForcedPost(data.id, !superVisibility).then(() => {
+            setSuperVisibility(sv => !sv)
+        })
+    }, [data.id, superVisibility])
+
+    useEffect(() => setSuperVisibility(data.homepageForced), [data.homepageForced])
 
     let post!: HTMLDivElement
     useEffect(() => {
@@ -98,17 +92,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
         }
     }, [showEditMenu])
 
-    useEffect(() => {
-        if (!showComments && alreadyMore)
-            setNoTrendingComment(true)
-        else if (showComments) {
-            setAlreadyMore(true)
-            setShowComments(true)
-        }
-    }, [showComments])
-
     const setRef = useCallback(ele => { post = ele ?? post }, [post])
-    
     const applyUpdates = useCallback(() => feedsManager.applyUpdates(data.id), [data?.id])
 
     return (
@@ -131,10 +115,16 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                         {feedId == undefined &&
                             <PostContextTag context={data.context}/>
                         }
+                        {superVisibility && isAdmin && (
+                            <FontAwesomeIcon
+                                icon={faHouseCircleCheck}
+                                className="mr-2.5 text-gray-400 ml-1"
+                            />
+                        )}
                         {data.pinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
-                                className="mr-2.5 text-gray-500 ml-1"
+                                className="mr-2.5 text-gray-400 ml-1"
                             />
                         )}
                         {data.hasWriteAccess && (
@@ -144,8 +134,11 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                                 buttonClassName="mr-0 ml-1"
                             >
                                 <PostToolBar
+                                    feed={feedId}
                                     pinned={data.pinned}
+                                    homepageForced={superVisibility}
                                     triggerPin={togglePin}
+                                    triggerHomepageForced={toggleHomepageForced}
                                     triggerEdition={() => toggleEdition(true)}
                                     triggerDeletion={confirmDeletion}
                                 />
@@ -155,56 +148,18 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments, o
                 </div>
                 <div>
                     <span>{data.description}</span>
-                    {data.embed && <div className="mt-2"><Embed embed={data.embed} post={data}/></div>}
+                    {data.embed &&
+                        <div className="mt-2"><Embed embed={data.embed} post={data}/></div>
+                    }
                 </div>
-                <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
-                    <div className="items-center text-gray-400 grid grid-cols-2 w-full mr-5 text-center">
-                        <span
-                            className="group flex items-center justify-center cursor-pointer hover:text-indigo-500 mr-3 text-xl transition-colors duration-100"
-                            onClick={() => setShowComments(!showComments)}
-                        >
-                            <div className="text-base mx-1.5 w-7 text-right">
-                                {data.nbComments > 0 && data.nbComments}
-                            </div>
-                            <div
-                                className="-ml-1 cursor-pointer rounded-full bg-indigo-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
-                                <FontAwesomeIcon
-                                    icon={faCommentAlt}
-                                    size="1x"
-                                />
-                            </div>
-                        </span>
-                        <span
-                            className="group flex items-center justify-center cursor-pointer mr-3 text-xl"
-                            onClick={() => toggleLike(data.thread)}
-                        >
-                            <div className="text-base mx-1.5 w-7 text-right">
-                                {likes > 0 && likes}
-                            </div>
-                            <div
-                                className="-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
-                                <FontAwesomeIcon
-                                    icon={liked ? faSolidHeart : faHeart}
-                                    className={`${liked ? "text-red-400" : "hover:text-red-600"} transition-colors`}
-                                    size="1x"
-                                />
-                            </div>
-                        </span>
-                    </div>
-                </div>
-                {((data.trendingComment && !noTrendingComment) || showComments) && (
-                    <>
-                        <Divider className="mb-0 mt-4"/>
-                        <CommentList
-                            showMoreComments={() => setShowComments(true)}
-                            showComments={showComments}
-                            trendingComment={noTrendingComment ? undefined : data.trendingComment}
-                            numberComments={data.nbComments}
-                            id={data.thread}
-                            depth={0}
-                            loadComment={data.nbComments !== 0}/>
-                    </>
-                )}
+                <PostThread
+                    thread={data.thread}
+                    liked={data.liked}
+                    likesCount={data.nbLikes}
+                    commentsCount={data.nbComments}
+                    forceShowComments={forceShowComments}
+                    trendingComment={data.trendingComment}
+                />
 
                 {data.waitingForUpdate &&
                     <div className="bg-black/40 backdrop-blur-md h-full w-full grid place-items-center absolute rounded-lg top-0 left-0">

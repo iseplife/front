@@ -1,5 +1,5 @@
 import SocialIcon from "../Common/SocialIcon"
-import {faFacebook, faFirefox, faInstagram, faSnapchat} from "@fortawesome/free-brands-svg-icons"
+import {faFacebook, faInstagram, faSnapchat} from "@fortawesome/free-brands-svg-icons"
 import React, {useCallback, useContext, useMemo} from "react"
 import ClubCover from "./ClubDescription/ClubCover"
 import {ClubContext} from "../../context/club/context"
@@ -9,6 +9,7 @@ import {Avatar} from "antd"
 import { ClubActionType } from "../../context/club/action"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../Subscription"
+import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -53,7 +54,7 @@ const ClubHeader: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
-                    {club.website && <SocialIcon icon={faFirefox} url={club.website}/>}
+                    {club.website && <SocialIcon icon={cFaLinkWorld} url={club.website}/>}
                     {club.facebook && <SocialIcon icon={faFacebook} url={club.facebook}/>}
                     {club.instagram && <SocialIcon icon={faInstagram} url={club.instagram}/>}
                     {club.snapchat && <SocialIcon icon={faSnapchat} url={club.snapchat}/>}

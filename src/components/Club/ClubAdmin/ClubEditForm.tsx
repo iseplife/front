@@ -1,6 +1,6 @@
 import React, {useContext} from "react"
 import {useFormik} from "formik"
-import {Club, ClubForm} from "../../../data/club/types"
+import {ClubForm} from "../../../data/club/types"
 import {Button, Input, message} from "antd"
 import {format} from "date-fns"
 import {useTranslation} from "react-i18next"

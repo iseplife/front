@@ -44,8 +44,8 @@ const Poll: React.FC<PollProps> = ({data}) => {
     return (
         <div>
             <div className="flex justify-between items-baseline">
-                <h3 className="text-gray-700">
-                    {t("poll")}: {poll.title}
+                <h3 className="text-gray-500 font-bold">
+                    {poll.title}
                 </h3>
 
                 <span className="text-gray-500 text-xs lowercase">

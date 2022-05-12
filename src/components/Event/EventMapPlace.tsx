@@ -36,7 +36,7 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({loading, location = "", po
 
     const subPosition = useMemo(() => (
         position ?
-            location.length ?
+            location?.length ?
                 `${position.street}, ${position.city}` :
                 `${position.postcode}, ${position.city}` :
             t("event:online")
