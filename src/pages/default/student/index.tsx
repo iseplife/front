@@ -5,10 +5,12 @@ import { useHistory, useParams } from "react-router-dom"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import Feed from "../../../components/Feed"
 import StudentClubs from "../../../components/Student/StudentClubs"
+import SubscriptionHandler from "../../../components/Subscription"
 import SubscriptionButton from "../../../components/Subscription/SubscriptionButton"
 import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
+import { Subscription } from "../../../data/feed/types"
 import { getStudent } from "../../../data/student"
 import { StudentOverview } from "../../../data/student/types"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
@@ -61,9 +63,9 @@ const Student: React.FC = () => {
         // [t("user:photos")]: <StudentPhotos id={student?.id} />,
     }), [student?.feedId])
     
-    const handleSubscription = useCallback((subscribed) => {
+    const handleSubscription = useCallback((sub: Subscription) => {
         if (student)
-            setStudent({...student, subscribed: subscribed ? {extensive: false} : undefined})
+            setStudent({...student, subscribed: sub })
     }, [student])
     const handleExtensive = useCallback((newExtensive: boolean) => {
         if(student)
@@ -82,11 +84,13 @@ const Student: React.FC = () => {
                             <div className="text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
                             <div className="text-xl text-neutral-500">Promo {student?.promo}</div>
                         
-                            {student?.id != myId && <div className="flex mt-3">
-                                <SubscriptionButton id={student?.id} subscribed={!!student?.subscribed} type={SubscribableType.STUDENT} updateSubscription={handleSubscription} />
-                                {student?.subscribed &&
-                                    <SubscriptionExtensiveButton updateExtensive={handleExtensive} extensive={student?.subscribed?.extensive} id={student?.id} type={SubscribableType.STUDENT} />
-                                }
+                            {student && student?.id != myId && <div className="flex mt-3">
+                                <SubscriptionHandler
+                                    type={SubscribableType.STUDENT}
+                                    subscribable={student.id}
+                                    subscription={student.subscribed}
+                                    onUpdate={handleSubscription}
+                                />
                             </div>}
                         </div>
                         
