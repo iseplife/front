@@ -258,7 +258,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 loadedFeed: mainFeedId,
                 hasWriteAccess: packet.hasWriteAccess,
                 publicationDateId: this.calcId(packet.post),
-            } as ManagerPost)
+                waitingForUpdate: false,
+                waitFor: {},
+            })
         }
     }
 
