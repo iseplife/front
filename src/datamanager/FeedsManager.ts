@@ -105,8 +105,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public async subscribe(feed: FeedId) {
         this.loadedFeeds.add(feed ?? mainFeedId)
-        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = (await this.getGeneralLastLoad())
-
+        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
@@ -249,8 +248,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        this.addPostToFeed(packet.post, packet.post.feedId, packet.hasWriteAccess)
-
+        this.addPostToFeed(packet.post, packet.post.context.id, packet.hasWriteAccess)
         if (packet.follow) {
             this.addData({
                 ...packet.post,
@@ -259,7 +257,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 hasWriteAccess: packet.hasWriteAccess,
                 publicationDateId: this.calcId(packet.post),
                 waitingForUpdate: false,
-                waitFor: {},
+                waitFor: undefined!,
             })
         }
     }
