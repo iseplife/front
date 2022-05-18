@@ -38,7 +38,6 @@ export type PostUpdateForm = {
 export type Post = {
     id: number
     context: FeedContext
-    feedId: number
     description: string
     publicationDate: Date
     creationDate: Date
