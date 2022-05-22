@@ -14,6 +14,7 @@ import Setting from "../../pages/default/setting"
 import NotificationsPage from "../../pages/default/notifications"
 import NotificationsOverlay from "../Notification/NotificationOverlay"
 import Student from "../../pages/default/student"
+import FirstFollow from "../FirstFollow"
 
 const DefaultTemplate: React.FC = () => (
     <div className="flex flex-col h-full overflow-hidden">
@@ -39,6 +40,7 @@ const DefaultTemplate: React.FC = () => (
             </div>
         </Navbar>
         <NotificationsOverlay />
+        <FirstFollow />
     </div>
 )
 
