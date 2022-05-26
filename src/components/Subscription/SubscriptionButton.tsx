@@ -2,6 +2,7 @@ import React, { MouseEvent, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { subscribe, unsubscribe } from "../../data/subscription"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
+import { feedsManager } from "../../datamanager/FeedsManager"
 
 interface SubscriptionButtonProps {
     id: number | undefined
@@ -19,6 +20,7 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
         if (id != undefined) {
             (subscribed ? unsubscribe : subscribe)(id, type).then(() => {
                 updateSubscription(!subscribed)
+                feedsManager.outdateFeed(undefined)// Because main feed has now differents posts
             })
             setMinWidth(0)
         }
