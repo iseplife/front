@@ -9,10 +9,11 @@ interface SubscriptionButtonProps {
     type: SubscribableType
     subscribed: boolean
     loading?: boolean
+    className?: string
     updateSubscription: (subscribed: boolean) => void
 }
 
-const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subscribed, loading, updateSubscription }) => {
+const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subscribed, loading, className, updateSubscription }) => {
     const { t } = useTranslation("common")
     const [minWidth, setMinWidth] = useState(0)
 
@@ -28,14 +29,15 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
 
     const mouseEnterCallback = useCallback((event: MouseEvent) => {
         if(subscribed)
-            setMinWidth((event.target as HTMLDivElement).clientWidth + 4)
+            setMinWidth(minWidth => Math.max(minWidth, (event.target as HTMLDivElement).clientWidth + 4))
     }, [subscribed])
 
-    return loading ? <div className="w-24 h-10 bg-neutral-200 rounded-full" /> : <div
+    return loading ? <div className={"w-24 h-10 bg-neutral-200 rounded-full " + className} /> : <div
         onClick={handleSubscription}
         className={
             "h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group "
-            + (subscribed ? "border-indigo-400 border-2 text-indigo-400 sm:hover:text-red-500 sm:hover:border-red-500 sm:hover:bg-red-400/10 px-3.5" : "bg-indigo-400 hover:bg-opacity-90 px-5 text-white")
+            + (subscribed ? "border-indigo-400 border-2 text-indigo-400 sm:hover:text-red-500 sm:hover:border-red-500 sm:hover:bg-red-400/10 px-3.5 " : "bg-indigo-400 hover:bg-opacity-90 px-5 text-white ")
+            + className
         }
         style={{ minWidth }}
         onMouseEnter={mouseEnterCallback}
