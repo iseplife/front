@@ -1,10 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import SubscriptionButton from "../Subscription/SubscriptionButton"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 import { ClubPreview } from "../../data/club/types"
 import { getAllClubs } from "../../data/club"
 import { mediaPath } from "../../util"
 import { AvatarSizes } from "../../constants/MediaSizes"
+import { AppContext } from "../../context/app/context"
+import { didFirstFollow } from "../../data/student"
+import { AppActionType } from "../../context/app/action"
+import { useHistory } from "react-router-dom"
 
 const REQUIRED_FOLLOWING = 3
 
@@ -12,6 +16,21 @@ const FirstFollow: React.FC = () => {
     const [clubs, setClubs] = useState<ClubPreview[]>([])
     const [error, setError] = useState(false)
     const loading = useMemo(() => !clubs.length && !error, [clubs, error])
+
+    const history = useHistory()
+
+    useEffect(() => 
+        history.replace("/discovery")
+    , [])
+
+    const { dispatch } = useContext(AppContext)
+
+    const didFollow = useCallback(() => {
+        didFirstFollow().then(student => dispatch({
+            type: AppActionType.SET_STUDENT,
+            payload: student.data,
+        }))
+    }, [])
 
     useEffect(() => {
         getAllClubs().then(res => 
@@ -105,9 +124,9 @@ const FirstFollow: React.FC = () => {
                             <>Suivez encore au moins {REQUIRED_FOLLOWING - followed.length} assos</>
                             :
                             <div className="flex">
-                                <div className="ml-auto mr-4 rounded-full px h-10 font-bold cursor-pointer select-none text-base grid place-items-center bg-indigo-400 hover:bg-opacity-90 px-5 text-white">
+                                <button onClick={didFollow} className="ml-auto mr-4 rounded-full px h-10 font-bold cursor-pointer select-none text-base grid place-items-center bg-indigo-400 hover:bg-opacity-90 px-5 text-white">
                                     Suivant
-                                </div>
+                                </button>
                             </div>
                     }
                 </div>
