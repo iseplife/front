@@ -25,7 +25,7 @@ const DiscoveryClub: React.FC = () => {
     }, [])
 
     return (
-        <div className="mx-auto my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center mt-10 gap-5">
+        <div className="mx-auto my-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 place-items-center mt-10 gap-5">
             {!loading ?
                 clubs.map((club, i) =>
                     <ClubCard key={i} club={club}/>

@@ -133,7 +133,7 @@ const YearBook: React.FC = () => {
                 empty={empty}
                 watch="DOWN"
                 callback={getNextStudents}
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center mt-10 gap-5"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 place-items-center mt-10 gap-5"
             >
                 {filteredStudent.length == 0 && !loading ?
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">
