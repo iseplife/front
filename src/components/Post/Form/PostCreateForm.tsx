@@ -38,8 +38,8 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         const { embed, ...post } = values
         props.feed = props.feed ?? values.selectedClub?.feedId ?? props.user.feedId
 
-        if (embed) {
-            try {
+        try {
+            if (embed) {
                 let res: AxiosResponse<{ id: number }>
                 switch (embed.type) {
                     case EmbedEnumType.IMAGE: {
@@ -57,6 +57,8 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                         break
                     }
                     case EmbedEnumType.DOCUMENT:
+                        res = await createMedia(embed.data)
+                        break
                     case EmbedEnumType.VIDEO:
                         res = await createMedia(embed.data[0])
                         break
@@ -70,20 +72,20 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                 }
 
                 (post as PostCreation).attachements = {[embed.type]: res.data.id}
-            } catch (e: any) {
-                message.error(e.message)
             }
+            (post as PostCreation).feed = props.feed
+            post.linkedClub = post.selectedClub?.id
+            const res = await createPost(post as PostCreation)
+            if (res.status === 200) {
+                props.onSubmit(res.data)
+                props.onClose()
+                resetForm({})
+                message.success("Post publié !")
+            }
+        } catch (e: any) {
+            message.error(e.message)
         }
 
-        (post as PostCreation).feed = props.feed
-        post.linkedClub = post.selectedClub?.id
-        const res = await createPost(post as PostCreation)
-        if (res.status === 200) {
-            props.onSubmit(res.data)
-            props.onClose()
-            resetForm({})
-            message.success("Post publié !")
-        }
     },
     displayName: "PostCreateForm"
 })(PostForm)

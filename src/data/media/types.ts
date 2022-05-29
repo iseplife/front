@@ -37,6 +37,19 @@ export type Video = Media & {
     views: number
 }
 
+
+export type DocumentCreation = {
+    file: File
+    nsfw: boolean
+}
+
+export type DocumentEdition = {
+    id: number
+    title: string
+    file: string
+    nsfw: boolean
+}
+
 export type Document = Media & {
     title: string
 }
