@@ -5,6 +5,7 @@ import {useHistory} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
+import {faUser} from "@fortawesome/free-regular-svg-icons"
 
 
 type MemberCardProps = {
@@ -29,6 +30,7 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
         >
             <Avatar
                 src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
+                icon={<FontAwesomeIcon icon={faUser} />}
                 alt={m.student.firstName + " " + m.student.lastName}
                 shape="square"
                 className="sm:w-full h-full w-1/3 rounded-lg"

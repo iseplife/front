@@ -25,6 +25,8 @@ import {SubscribableType} from "../../../data/subscription/SubscribableType"
 import {Subscription} from "../../../data/feed/types"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import SubscriptionHandler from "../../../components/Subscription"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUserGroup} from "@fortawesome/free-solid-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -213,6 +215,7 @@ const Event: React.FC = () => {
                                     <>
                                         <Avatar
                                             src={mediaPath(event?.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                            icon={<FontAwesomeIcon icon={faUserGroup} />}
                                             size="large"
                                             className="hover:shadow-outline mr-1"
                                         />

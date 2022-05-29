@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from "react"
-import {Avatar, Badge, message, Modal, Select} from "antd"
+import {Avatar, message, Modal, Select} from "antd"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next"
 import {deleteClubMember, updateClubMember} from "../../../data/club"
 import {Field, Form, Formik} from "formik"
 import MemberCardToolbar from "./MemberCardToolbar"
+import {faUser} from "@fortawesome/free-solid-svg-icons"
 
 const {Option} = Select
 const isValuesUpdated = (a: ClubMemberUpdateForm, b: ClubMemberUpdateForm): boolean => {
@@ -59,6 +60,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                     >
                         <Avatar
                             src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
+                            icon={<FontAwesomeIcon icon={faUser} />}
                             alt={m.student.firstName + " " + m.student.lastName}
                             shape="square"
                             className="sm:w-full h-full w-1/3 rounded-lg"
