@@ -52,4 +52,5 @@ export type DocumentEdition = {
 
 export type Document = Media & {
     title: string
+    sizeBytes: number
 }
