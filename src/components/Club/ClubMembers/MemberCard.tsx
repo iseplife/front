@@ -30,10 +30,10 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
         >
             <Avatar
                 src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
-                icon={<FontAwesomeIcon icon={faUser} />}
+                icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
                 alt={m.student.firstName + " " + m.student.lastName}
                 shape="square"
-                className="sm:w-full h-full w-1/3 rounded-lg"
+                className="sm:w-full h-full w-1/3 rounded-lg flex items-center justify-center"
             />
             <div className="sm:text-center text-left mt-0 ml-2 sm:mt-2 sm:ml-0 w-2/3 sm:w-full">
                 <h5 className="font-bold text-xl mb-0 truncate">
