@@ -19,6 +19,7 @@ import {createMedia} from "../../../data/media"
 import {addGalleryImages, createGallery, deleteGalleryImages} from "../../../data/gallery"
 import {MediaUploadNSFW} from "../../../data/media/types"
 import { feedsManager } from "../../../datamanager/FeedsManager"
+import {message} from "antd"
 
 type PostEditFormProps = {
     post: Post,
@@ -85,75 +86,85 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
         const {embed, ...postForm} = values
         const post = postForm as PostUpdateForm
 
-        if (embed) {
-            switch (embed.type) {
-                case EmbedEnumType.IMAGE: {
-                    if (props.post.embed == null || embed.type != props.post.embed.embedType) {
-                        const ids = []
-                        for (const img of embed.data) {
-                            const res = await createMedia(img as MediaUploadNSFW)
-                            ids.push(res.data.id)
-                        }
-
-                        const res = await createGallery({
-                            feed: 1, //TODO change this with real feed
-                            pseudo: true,
-                            images: ids
-                        })
-                        post.attachements = {[EmbedEnumType.IMAGE]: res.data.id}
-                    } else {
-                        // create new images
-                        const newImagesID = []
-                        for (const img of embed.data) {
-                            if (!("id" in img)) {
-                                const res = await createMedia(img)
-                                newImagesID.push(res.data.id)
+        try {
+            if (embed) {
+                switch (embed.type) {
+                    case EmbedEnumType.IMAGE: {
+                        if (props.post.embed == null || embed.type != props.post.embed.embedType) {
+                            const ids = []
+                            for (const img of embed.data) {
+                                const res = await createMedia(img as MediaUploadNSFW)
+                                ids.push(res.data.id)
                             }
-                        }
-                        if (newImagesID.length > 0)
-                            await addGalleryImages(props.post.embed.id, newImagesID)
 
-                        // Remove media that are no longer present in form
-                        const removeImagesID = []
-                        for (const img of props.post.embed.images) {
-                            if (!embed.data.find(comparedImg => "id" in comparedImg && comparedImg.id == img.id)) {
-                                removeImagesID.push(img.id)
+                            const res = await createGallery({
+                                feed: 1, //TODO change this with real feed
+                                pseudo: true,
+                                images: ids
+                            })
+                            post.attachements = {[EmbedEnumType.IMAGE]: res.data.id}
+                        } else {
+                            // create new images
+                            const newImagesID = []
+                            for (const img of embed.data) {
+                                if (!("id" in img)) {
+                                    const res = await createMedia(img)
+                                    newImagesID.push(res.data.id)
+                                }
                             }
+                            if (newImagesID.length > 0)
+                                await addGalleryImages(props.post.embed.id, newImagesID)
+
+                            // Remove media that are no longer present in form
+                            const removeImagesID = []
+                            for (const img of props.post.embed.images) {
+                                if (!embed.data.find(comparedImg => "id" in comparedImg && comparedImg.id == img.id)) {
+                                    removeImagesID.push(img.id)
+                                }
+                            }
+                            if (removeImagesID.length > 0)
+                                await deleteGalleryImages(props.post.embed.id, removeImagesID)
                         }
-                        if (removeImagesID.length > 0)
-                            await deleteGalleryImages(props.post.embed.id, removeImagesID)
+                        break
                     }
-                    break
-                }
-                case EmbedEnumType.DOCUMENT:
-                case EmbedEnumType.VIDEO: {
-                    const media = embed.data[0]
-                    if (!("id" in media)) {
-                        const res = await createMedia(media)
-                        post.attachements = {[embed.type]: res.data.id}
+                    case EmbedEnumType.DOCUMENT:
+                        if (!("id" in embed.data)) {
+                            const res = await createMedia(embed.data)
+                            post.attachements = {[EmbedEnumType.DOCUMENT]: res.data.id}
+                        }
+                        break
+                    case EmbedEnumType.VIDEO: {
+                        const media = embed.data[0]
+                        if (!("id" in media)) {
+                            const res = await createMedia(media)
+                            post.attachements = {[EmbedEnumType.VIDEO]: res.data.id}
+                        }
+                        break
                     }
-                    break
-                }
-                case EmbedEnumType.POLL: {
-                    if (props.post.embed == null || embed.type != props.post.embed.embedType) {
-                        const res = await createPoll(embed.data)
-                        post.attachements = {[EmbedEnumType.POLL]: res.data.id}
-                    } else {
-                        await updatePoll(embed.data)
+                    case EmbedEnumType.POLL: {
+                        if (props.post.embed == null || embed.type != props.post.embed.embedType) {
+                            const res = await createPoll(embed.data)
+                            post.attachements = {[EmbedEnumType.POLL]: res.data.id}
+                        } else {
+                            await updatePoll(embed.data)
+                        }
+                        break
                     }
-                    break
                 }
             }
+
+            props.onEdit(await feedsManager.editPost(
+                props.post.id,
+                {
+                    ...post,
+                    removeEmbed: props.post.embed != undefined && embed == undefined
+                }
+            ))
+            props.onClose()
+        }catch (e: any) {
+            message.error(e.message)
         }
 
-        props.onEdit(await feedsManager.editPost(
-            props.post.id,
-            {
-                ...post,
-                removeEmbed: props.post.embed != undefined && embed == undefined
-            }
-        ))
-        props.onClose()
     },
     displayName: "PostEditForm"
 })(PostForm)

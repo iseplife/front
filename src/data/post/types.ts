@@ -1,6 +1,14 @@
 import {Author} from "../request.type"
 import {GalleryPreForm} from "../gallery/types"
-import {Image, Video, Document, MediaUploadNSFW, MediaEditionNSFW} from "../media/types"
+import {
+    Image,
+    Video,
+    Document,
+    MediaUploadNSFW,
+    MediaEditionNSFW,
+    DocumentCreation,
+    DocumentEdition
+} from "../media/types"
 import {Poll, PollForm} from "../poll/types"
 import { Comment } from "../thread/types"
 import {FeedContext} from "../feed/types"
@@ -93,20 +101,30 @@ export type EmbedGalleryCreation = {
     data: GalleryPreForm
 }
 export type EmbedMediaCreation = {
-    type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
+    type: EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
     data: Array<MediaUploadNSFW>
 }
 
 export type EmbedMediaEdition = {
-    type: EmbedEnumType.DOCUMENT | EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
+    type: EmbedEnumType.VIDEO | EmbedEnumType.IMAGE
     data:  Array<MediaEditionNSFW | MediaUploadNSFW>
 }
+
+export type EmbedDocumentCreation = {
+    type: EmbedEnumType.DOCUMENT
+    data: DocumentCreation
+}
+export type EmbedDocumentEdition = {
+    type: EmbedEnumType.DOCUMENT
+    data: DocumentCreation | DocumentEdition
+}
+
 
 export type EmbedPollForm = {
     type: EmbedEnumType.POLL
     data: PollForm
 }
-export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollForm
+export type EmbedCreation = EmbedMediaCreation | EmbedGalleryCreation | EmbedPollForm |  EmbedDocumentCreation
 
 export type EmbedGalleryEdition = {
     type: EmbedEnumType.GALLERY
@@ -114,7 +132,7 @@ export type EmbedGalleryEdition = {
 }
 
 
-export type EmbedEdition = EmbedMediaEdition | EmbedGalleryEdition | EmbedPollForm
+export type EmbedEdition = EmbedMediaEdition | EmbedGalleryEdition | EmbedPollForm | EmbedDocumentEdition
 
 export interface EmbedForm {
     type: EmbedEnumType,
@@ -141,7 +159,9 @@ export const DEFAULT_EMBED: Record<EmbedEnumType, EmbedCreation> = {
     },
     [EmbedEnumType.DOCUMENT]: {
         type: EmbedEnumType.DOCUMENT,
-        data: []
+        data: {
+            nsfw: false
+        } as DocumentCreation
     },
     [EmbedEnumType.POLL]: {
         type: EmbedEnumType.POLL,
