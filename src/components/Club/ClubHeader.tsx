@@ -10,6 +10,9 @@ import { ClubActionType } from "../../context/club/action"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../Subscription"
 import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUser} from "@fortawesome/free-regular-svg-icons"
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -38,6 +41,7 @@ const ClubHeader: React.FC = () => {
                 <div className="flex">
                     <Avatar
                         src={imageSrc}
+                        icon={<FontAwesomeIcon icon={faUserGroup} />}
                         shape="circle"
                         className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md bg-white"
                     />

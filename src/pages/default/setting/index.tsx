@@ -30,7 +30,8 @@ const Setting: React.FC = () => {
             <div className="flex bg-white text-gray-700 rounded-lg p-5 m-5 h-32 shadow">
                 <div>
                     <Avatar
-                        src={mediaPath(user.picture, AvatarSizes.DEFAULT)} icon={<FontAwesomeIcon icon={faUser}/>}
+                        src={mediaPath(user.picture, AvatarSizes.DEFAULT)}
+                        icon={<FontAwesomeIcon icon={faUser}/>}
                         className="rounded-lg mr-5"
                         size={80}
                     />

@@ -10,7 +10,7 @@ import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {SearchItem} from "../../../data/searchbar/types"
 import MemberCardToolbar from "./MemberCardToolbar"
-import {faPlus} from "@fortawesome/free-solid-svg-icons"
+import {faPlus, faUser, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 
 const {Option} = Select
 
@@ -57,9 +57,10 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
                                 <>
                                     <Avatar
                                         src={mediaPath(student.thumbURL, AvatarSizes.DEFAULT)}
+                                        icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
                                         alt={student.name}
                                         shape="square"
-                                        className="sm:w-full h-full w-1/3 rounded-lg"
+                                        className="sm:w-full h-full w-1/3 rounded-lg flex items-center justify-center"
                                     />
                                     <div className="sm:text-center text-left mt-0 ml-2 sm:mt-2 sm:ml-0 w-2/3 sm:w-full">
                                         <h5 className="font-bold text-xl mb-0 truncate">

@@ -83,7 +83,8 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                 </> :
                 <>
                     <Avatar
-                        src={mediaPath(original, AvatarSizes.DEFAULT)} icon={<FontAwesomeIcon icon={faUser}/>}
+                        src={mediaPath(original, AvatarSizes.DEFAULT)}
+                        icon={<FontAwesomeIcon icon={faUser}/>}
                         className="rounded"
                         size={135}
                     />

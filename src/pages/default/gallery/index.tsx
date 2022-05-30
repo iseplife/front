@@ -13,8 +13,8 @@ import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType, MediaStatus} from "../../../data/media/types"
 import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
-import {faEdit, faTrashAlt, faUser} from "@fortawesome/free-regular-svg-icons"
+import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
+import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
 
@@ -224,7 +224,7 @@ const Gallery: React.FC = () => {
                                         src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
                                         shape="circle"
                                         className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                        icon={<FontAwesomeIcon icon={faUser}/>}
+                                        icon={<FontAwesomeIcon icon={faUserGroup}/>}
                                     />
                                 </Link>
                             </Tooltip>
