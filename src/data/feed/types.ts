@@ -11,7 +11,7 @@ export type Feed = {
     type: FeedType
 }
 
-export type FeedContext = Omit<Feed, "name">
+export type FeedContext = Feed
 
 
 export type Subscription = {

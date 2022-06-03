@@ -10,9 +10,9 @@ interface PostContextTagProps {
 export const PostContextTag: React.FC<PostContextTagProps> = ({context}) => {
     switch (context.type){
         case FeedType.EVENT:
-            return <PostEventTag id={context.id} />
+            return <PostEventTag context={context} />
         case FeedType.GROUP:
-            return <PostGroupTag id={context.id} />
+            return <PostGroupTag context={context} />
         case FeedType.CLUB:
         case FeedType.STUDENT:
         default: {
