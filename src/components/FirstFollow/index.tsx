@@ -6,8 +6,8 @@ import { didFirstFollow } from "../../data/student"
 import { AppActionType } from "../../context/app/action"
 import { useHistory } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import ClubFollowSkeleton from "./ClubFollowSkeleton";
-import ClubFollow from "./ClubFollow";
+import ClubFollowSkeleton from "./ClubFollowSkeleton"
+import ClubFollow from "./ClubFollow"
 
 const REQUIRED_FOLLOWING = 3
 
