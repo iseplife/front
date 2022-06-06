@@ -6,6 +6,8 @@ import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import AuthorPicker from "../Common/AuthorPicker"
 
+const COMMENT_MIN_LENGTH = 2
+
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>
     focus?: boolean
@@ -49,7 +51,11 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
                 value={formik.values.message}
                 ref={inputRef}
             />
-            <button type="submit" className="cursor-pointer text-gray-500 hover:text-gray-700 px-2" disabled={isSubmitting}>
+            <button
+                type="submit"
+                className={(formik.values.message.length > COMMENT_MIN_LENGTH ? "cursor-pointer hover:bg-gray-100 px-2" : "cursor-default text-gray-300 px-2")}
+                disabled={isSubmitting || formik.values.message.length < COMMENT_MIN_LENGTH}
+            >
                 <FontAwesomeIcon icon={isSubmitting ? faCircleNotch : faPaperPlane} spin={isSubmitting}/>
             </button>
         </form>
