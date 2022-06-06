@@ -15,7 +15,6 @@ import NotificationsPage from "../../pages/default/notifications"
 import NotificationsOverlay from "../Notification/NotificationOverlay"
 import Student from "../../pages/default/student"
 
-
 const DefaultTemplate: React.FC = () => (
     <div className="flex flex-col h-full overflow-hidden">
         <Navbar>

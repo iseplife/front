@@ -26,6 +26,8 @@ export default class GroupManager extends DataManager<GroupPreview> {
         return this.getTable().toArray()
     }
     public getGroupByFeedId(feedId: number) {
+        if(feedId == undefined)
+            return undefined
         return this.getTable().where("feedId").equals(feedId).first()
     }
 

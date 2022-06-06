@@ -3,6 +3,10 @@
   "no_notifications": "You have notifications",
   "long_ago": "Long ago",
   "see_more": "See all",
+  "notif_are_here": "Notifications are here !",
+  "receive_here": "Receive them directly to your device!",
+  "refuse": "Decline",
+  "accept": "Accept",
   "in_menu": {
     "NEW_STUDENT_POST": "<bold>{{author_name}}</bold> published a new post.",
     "NEW_CLUB_POST": "<bold>{{author_name}}</bold> published a new post.",

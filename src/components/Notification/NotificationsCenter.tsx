@@ -3,13 +3,15 @@ import { AppContext } from "../../context/app/context"
 import { useTranslation } from "react-i18next"
 import NotificationSkeleton from "../Skeletons/NotificationSkeleton"
 import { add, isAfter } from "date-fns"
-import { Divider } from "antd"
+import { Avatar, Divider } from "antd"
 import Notification from "../../components/Notification"
 import InfiniteScroller from "../Common/InfiniteScroller"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import { setNotificationsWatched } from "../../data/notification"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import pushService from "../../services/PushService"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBell } from "@fortawesome/free-solid-svg-icons"
 import {faSadCry} from "@fortawesome/free-regular-svg-icons"
 
 interface NotificationsCenterProps {
@@ -21,6 +23,8 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
     const [empty, setEmpty] = useState<boolean>(true)
+
+    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
 
     const minNotificationId = useLiveQuery(async () => {
         return await notificationManager.getMinFresh()
@@ -75,9 +79,28 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         }
     }, [user.unwatchedNotifications, notifications])
 
+    const [subscribing, setSubscribing] = useState(false)
+
+    const callbackNotif = useCallback((accept: boolean) => {
+        if(accept) 
+            return async () => {
+                setSubscribing(true)
+
+                await pushService.subscribeUser()
+                
+                setSubscribing(false)
+            }
+        return () => {
+            pushService.refuse()
+        }
+    }, [])
+
     const scrollElement = useRef<HTMLDivElement>(null)
     return (
         <div ref={scrollElement} className={`${className} text-neutral-800 px-1`}>
+            {subscribing &&
+                <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-500/70 backdrop-blur-sm z-50" />
+            }
             <InfiniteScroller
                 watch="DOWN"
                 callback={loadMoreNotifications}
@@ -88,6 +111,28 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
                 }
             >
+                {showPushAsk && 
+                    <div className="w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
+                        <div className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center bg-red-400 text-white">
+                            <FontAwesomeIcon icon={faBell}/>
+                        </div>
+                        <div className="ml-2.5 text-sm w-full">
+                            <div className="font-semibold">
+                                {t("notif_are_here")}
+                            </div>
+                            {t("receive_here")}
+                            <div className={"flex mt-2 " + (subscribing && "pointer-events-none opacity-70")}>
+                                <button onClick={callbackNotif(false)} className="bg-red-400 rounded px-3 py-1.5 text-white font-semibold hover:shadow-md transition-shadow">
+                                    {t("refuse")}
+                                </button>
+                                <button onClick={callbackNotif(true)} className="ml-2 bg-green-400 rounded px-3 py-1.5 text-white font-semibold hover:shadow-md transition-shadow">
+                                    {t("accept")}
+                                </button>
+                            </div>
+                        </div>   
+                    </div>
+                }
+
                 {empty ?
                     <div className="text-gray-300 sm:mt-2 mb-2 text-center text-base sm:text-lg">
                         <FontAwesomeIcon icon={faSadCry} size="2x" className="hidden sm:inline mb-1" />

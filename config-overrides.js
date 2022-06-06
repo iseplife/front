@@ -1,4 +1,6 @@
-const {override, fixBabelImports, addLessLoader, addPostcssPlugins} = require("customize-cra")
+const {override, fixBabelImports, addLessLoader} = require("customize-cra")
+const {rewireWorkboxGenerate, defaultInjectConfig, rewireWorkboxInject} = require("react-app-rewire-workbox")
+const path = require("path")
 
 module.exports = override(
     fixBabelImports("import", {
@@ -6,8 +8,9 @@ module.exports = override(
         libraryDirectory: "es",
         style: true,
     }),
-    addLessLoader({
-        javascriptEnabled: true,
-        modifyVars: {"@primary-color": "#667eea"},
-    }),
+    rewireWorkboxInject({
+        ...defaultInjectConfig,
+        swSrc: "./src/service-worker.ts",
+        swDest: './dist/sw.js',
+    })
 )
