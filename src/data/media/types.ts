@@ -1,6 +1,7 @@
 export enum MediaStatus {
     UNPROCESSED = "UNPROCESSED",
     PROCESSING = "PROCESSING",
+    ERROR = "ERROR",
     READY = "READY"
 }
 

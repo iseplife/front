@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {parsePhotosAsync, SafePhoto} from "../../../util"
-import SafeImage from "../../Common/SafeImage"
-import {Image} from "../../../data/media/types"
+import Image from "../../Common/Image"
+import {Image as ImageType} from "../../../data/media/types"
 import PhotoGallery from "react-photo-gallery"
 import {message} from "antd"
 import Lightbox from "../../Common/Lightbox"
@@ -9,7 +9,7 @@ import PostSidebar from "../PostSidebar"
 import {Post} from "../../../data/post/types"
 
 type EmbedImagesProps = {
-    images: Array<Image>
+    images: Array<ImageType>
     post: Post
 }
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
@@ -27,7 +27,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     }, [images])
 
     const imageRenderer = useCallback(({index, photo}) => (
-        <SafeImage
+        <Image
             key={index}
             className="cursor-pointer"
             nsfw={photo.nsfw}

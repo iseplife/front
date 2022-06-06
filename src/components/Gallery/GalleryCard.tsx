@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import {mediaPath} from "../../util"
 import {GallerySizes} from "../../constants/MediaSizes"
-import SafeImage from "../Common/SafeImage"
+import Image from "../Common/Image"
 import {faImages, faPlus} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
@@ -29,7 +29,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
                             >
                                 <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    <SafeImage
+                                    <Image
                                         className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
                                         src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                         nsfw={img.nsfw}
@@ -47,7 +47,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >
                                 <div className="hover:bg-black rounded h-full w-full">
-                                    <SafeImage
+                                    <Image
                                         className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
                                         src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                         nsfw={img.nsfw}

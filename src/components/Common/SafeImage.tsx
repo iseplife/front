@@ -1,28 +1,23 @@
 import React, {ImgHTMLAttributes, useMemo, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
-import {MediaStatus} from "../../data/media/types"
-import MediaProcessing from "./MediaProcessing"
 
 
-type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
+export type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     nsfw: boolean,
-    status: MediaStatus
     hide?: boolean,
     clickable?: boolean
 }
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, status, hide, clickable, className, ...imgProps} = props
+    const {nsfw, hide, clickable, className, ...imgProps} = props
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
-    const ready = useMemo(() => status === MediaStatus.READY, [status])
 
-    return ready ? (
+   return (
         <div className={`
             ${className} 
             ${clickable && "image-display"} 
-            ${!ready && "h-56 flex-grow mx-2"}
             relative bg-gray-300 overflow-hidden m-auto w-max rounded`
         }>
             <div className="overflow-hidden h-full w-full">
@@ -45,7 +40,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 </div>
             )}
         </div>
-    ): <MediaProcessing />
+   )
 }
 
 SafeImage.defaultProps = {

@@ -4,7 +4,7 @@ import {mediaPath} from "../../../util"
 import {GallerySizes} from "../../../constants/MediaSizes"
 import {useTranslation} from "react-i18next"
 import {EmbedGallery as EmbedGalleryType} from "../../../data/post/types"
-import SafeImage from "../../Common/SafeImage"
+import Image from "../../Common/Image"
 import "lightbox-react/style.css"
 import {faImages, faPlus} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -49,7 +49,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                     >
                         {i === previewLength - 1 ?
                             <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                <SafeImage
+                                <Image
                                     className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
@@ -58,7 +58,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                 <FontAwesomeIcon icon={faPlus} size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
                             </div> :
                             <div className="hover:bg-black rounded h-full w-full">
-                                <SafeImage
+                                <Image
                                     className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}

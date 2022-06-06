@@ -1,7 +1,7 @@
 import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {GalleryPhoto} from "../../pages/default/gallery"
-import SafeImage from "../Common/SafeImage"
+import Image from "../Common/Image"
 import {faCheckCircle} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
@@ -39,7 +39,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
             className={`relative cursor-pointer overflow-hidden ${selectable && "hover:shadow-outline focus:bg-blue-100"}`}
         >
             <FontAwesomeIcon icon={faCheckCircle} className={photo.selected ? "absolute z-10" : "hidden"} style={{left: "4px", top: "4px"}}/>
-            <SafeImage
+            <Image
                 nsfw={photo.nsfw}
                 status={photo.status}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}

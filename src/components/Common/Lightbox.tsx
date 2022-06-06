@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
+import React, {useEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
-import SafeImage from "./SafeImage"
+import Image from "./Image"
 import {GallerySizes} from "../../constants/MediaSizes"
 import {createPortal} from "react-dom"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
@@ -87,7 +87,7 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
                     </div>
                     <div className="relative m-auto">
                         {currentPhoto && height !== 0 && width !== 0 ?
-                            <SafeImage
+                            <Image
                                 key={currentIndex}
                                 nsfw={currentPhoto.nsfw}
                                 status={currentPhoto.status}
