@@ -47,7 +47,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
 
         axios.all(requests)
             .then(axios.spread((...res) => {
-                addGalleryImages(gallery, res.map(r => r.data.id)).then(res => {
+                addGalleryImages(gallery, res.map(r => r.data.id)).then(() => {
                     message.success(t("upload_success"))
                     setVisible(false)
                 })

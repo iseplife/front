@@ -10,7 +10,7 @@ import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {SearchItem} from "../../../data/searchbar/types"
 import MemberCardToolbar from "./MemberCardToolbar"
-import {faPlus, faUser, faUserGroup} from "@fortawesome/free-solid-svg-icons"
+import {faPlus, faUser} from "@fortawesome/free-solid-svg-icons"
 
 const {Option} = Select
 

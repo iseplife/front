@@ -2,7 +2,7 @@ import {useLocation} from "react-router-dom"
 import {Entity} from "./data/request.type"
 import {format, formatDistance} from "date-fns"
 import {enUS, fr} from "date-fns/locale"
-import {Image as ImageType, MediaStatus} from "./data/media/types"
+import {Media, MediaStatus} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
 import {TFunction} from "i18next"
@@ -146,17 +146,18 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export type SafePhoto = PhotoProps<{nsfw: boolean, status: MediaStatus}>
+export type SafePhoto = PhotoProps<{key:string, nsfw: boolean, status: MediaStatus}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
+export type ProcessableImage = Omit<Media, "creation">
 
-export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
-export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: ImageType[], parser?: ParserFunction<T>): Promise<T[]> => {
+export type ParserFunction<T extends PhotoProps = SafePhoto, U extends ProcessableImage = ProcessableImage> = (img: U, key: string) => Promise<T>
+export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto, U extends ProcessableImage = ProcessableImage>(images: U[], parser?: ParserFunction<T, U>): Promise<T[]> => {
     return await Promise.all(
         images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id)))
     ) as Awaited<T[]>
 }
 
-export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string): Promise<SafePhoto> => {
+export const defaultPhotoParser: ParserFunction = (img, key) => {
     return new Promise((resolve, reject) => {
         if (img.status != MediaStatus.READY){
             return resolve({

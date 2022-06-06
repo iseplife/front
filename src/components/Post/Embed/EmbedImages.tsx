@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {parsePhotosAsync, SafePhoto} from "../../../util"
-import Image from "../../Common/Image"
-import {Image as ImageType} from "../../../data/media/types"
+import {defaultPhotoParser, parsePhotosAsync, ProcessableImage, SafePhoto} from "../../../util"
+import ImageContainer from "../../Common/ImageContainer"
+import {Image as ImageType, MediaStatus} from "../../../data/media/types"
 import PhotoGallery from "react-photo-gallery"
 import {message} from "antd"
 import Lightbox from "../../Common/Lightbox"
@@ -26,8 +26,22 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
         }).finally(() => setLoading(false))
     }, [images])
 
+    const imageFinishedProcessing = useCallback( (index : number) => () => {
+        const image: ProcessableImage = {
+            id: +(photos[index].key),
+            name: photos[index].srcSet as string,
+            nsfw: photos[index].nsfw,
+            status: MediaStatus.READY
+        }
+
+        defaultPhotoParser(image, photos[index].key).then(photo => {
+            setPhotos(prevPhotos => prevPhotos.map(p => p.key == photo.key ? photo : p))
+        })
+    }, [photos])
+
     const imageRenderer = useCallback(({index, photo}) => (
-        <Image
+        <ImageContainer
+            id={photo.key as never}
             key={index}
             className="cursor-pointer"
             nsfw={photo.nsfw}
@@ -36,6 +50,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             height={photo.height}
             width={photo.width}
             onClick={() => setLightboxPhotoIndex(index)}
+            onProcessingFinished={imageFinishedProcessing(index)}
             alt={photo.alt}
         />
     ), [])

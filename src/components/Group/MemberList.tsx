@@ -1,7 +1,6 @@
-import React, {ReactElement, useContext, useMemo, useState} from "react"
+import React, {ReactElement, useContext} from "react"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {GroupMember} from "../../data/group/types"
-import {useTranslation} from "react-i18next"
 import StudentAvatar from "../Student/StudentAvatar"
 import { AppContext } from "../../context/app/context"
 

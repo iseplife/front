@@ -11,18 +11,29 @@ import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import SelectableImage from "../../../components/Gallery/SelectableImage"
 import GalleryAdder from "../../../components/Gallery/GalleryAdder"
 import {Image as ImageType, MediaStatus} from "../../../data/media/types"
-import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../util"
+import {
+    parsePhotosAsync,
+    mediaPath,
+    SafePhoto,
+    ParserFunction,
+    ProcessableImage
+} from "../../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
 
+
+type GalleryProcessablePhoto  = {
+    thread: number
+} & ProcessableImage
+
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
     thread: number
 }
-const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
+const parserSelectablePhoto: ParserFunction<GalleryPhoto, GalleryProcessablePhoto> = (img,  key: string) => {
     return new Promise((resolve, reject) => {
         if (img.status != MediaStatus.READY){
             return resolve({
@@ -151,6 +162,20 @@ const Gallery: React.FC = () => {
             }
         }), [gallery])
 
+    const imageFinishedProcessing = useCallback( (index : number) => () => {
+        const image: GalleryProcessablePhoto = {
+            id: +(photos[index].key),
+            name: photos[index].srcSet as string,
+            nsfw: photos[index].nsfw,
+            thread: photos[index].thread,
+            status: MediaStatus.READY
+        }
+
+        parserSelectablePhoto(image, photos[index].key).then(photo => {
+            setPhotos(prevPhotos => prevPhotos.map(p => p.key == photo.key ? photo : p))
+        })
+    }, [photos])
+
     const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
         <SelectableImage
             key={key}
@@ -162,6 +187,7 @@ const Gallery: React.FC = () => {
             top={top}
             direction="row"
             onSelect={handleSelect}
+            onProcessingFinished={imageFinishedProcessing(index)}
             onClick={openLightbox}
         />
     ), [editMode, handleSelect, openLightbox])

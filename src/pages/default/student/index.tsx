@@ -6,8 +6,6 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import Feed from "../../../components/Feed"
 import StudentClubs from "../../../components/Student/StudentClubs"
 import SubscriptionHandler from "../../../components/Subscription"
-import SubscriptionButton from "../../../components/Subscription/SubscriptionButton"
-import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
 import { Subscription } from "../../../data/feed/types"
@@ -18,8 +16,8 @@ import { mediaPath } from "../../../util"
 
 enum StudentTab {
     HOME_TAB,
-    CLUBS,
-    POSTS,
+    //CLUBS,
+    //POSTS,
 }
 
 const Student: React.FC = () => {

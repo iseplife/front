@@ -1,7 +1,7 @@
 import React, {CSSProperties, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {GalleryPhoto} from "../../pages/default/gallery"
-import Image from "../Common/Image"
+import ImageContainer, {ImageContainerProps} from "../Common/ImageContainer"
 import {faCheckCircle} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
@@ -16,8 +16,9 @@ const selectedImgStyle = {
 type SelectableImageProps = {
     selectable: boolean
     onSelect: (key: string) => void
+    onProcessingFinished: ImageContainerProps["onProcessingFinished"]
 } & RenderImageProps<GalleryPhoto>
-const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, direction, top, left, selectable, onClick, onSelect}) => {
+const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, direction, top, left, selectable, onClick, onProcessingFinished, onSelect}) => {
     //calculate x,y scale
     const sx = (100 - (30 / photo.width) * 100) / 100
     const sy = (100 - (30 / photo.height) * 100) / 100
@@ -38,8 +39,13 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
             style={container}
             className={`relative cursor-pointer overflow-hidden ${selectable && "hover:shadow-outline focus:bg-blue-100"}`}
         >
-            <FontAwesomeIcon icon={faCheckCircle} className={photo.selected ? "absolute z-10" : "hidden"} style={{left: "4px", top: "4px"}}/>
-            <Image
+            <FontAwesomeIcon
+                icon={faCheckCircle}
+                className={photo.selected ? "absolute z-10" : "hidden"}
+                style={{left: "4px", top: "4px"}}
+            />
+            <ImageContainer
+                id={photo.key as never}
                 nsfw={photo.nsfw}
                 status={photo.status}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}
@@ -47,6 +53,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
                 height={photo.height}
                 width={photo.width}
                 alt={photo.alt}
+                onProcessingFinished={onProcessingFinished}
                 onClick={(e) => {
                     if (selectable) {
                         onSelect(photo.key as string)

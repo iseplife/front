@@ -15,12 +15,6 @@ type EventEditFormProps = {
 }
 const EventEditForm = withFormik<EventEditFormProps, EventFormType>({
     mapPropsToValues: ({event}) => {
-        let coordinates: Marker | undefined = undefined
-        if (event.position) {
-            const strArr = event.position.coordinates.split(";")
-            coordinates = [+strArr[0], +strArr[1]]
-        }
-
         return ({
             type: event.type,
             title: event.title,

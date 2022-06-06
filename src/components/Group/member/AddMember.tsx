@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
-import StudentSelector from "../../Student/StudentSelector"
 import {useTranslation} from "react-i18next"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
@@ -11,7 +10,7 @@ type AddMemberProps = {
 const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
     const {t} = useTranslation("group")
 
-    const onSelect = useCallback((id, metq)=> onAdd(id), [onAdd])
+    const onSelect = useCallback((id)=> onAdd(id), [onAdd])
     const [selected, setSelected] = useState(false)
     const selectorRef = useRef<HTMLButtonElement>(null)
 
@@ -21,7 +20,7 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
         if(input && selected){
             input.focus()
 
-            const fnc = (event: MouseEvent) => setSelected(false)
+            const fnc = () => setSelected(false)
             setTimeout(() => window.addEventListener("click", fnc))
             
             return () => window.removeEventListener("click", fnc)

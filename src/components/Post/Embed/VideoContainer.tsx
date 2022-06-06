@@ -8,7 +8,7 @@ type VideoProps = {
     data: VideoType
 }
 
-const Video: React.FC<VideoProps> = ({data}) => {
+const VideoContainer: React.FC<VideoProps> = ({data}) => {
     const videoComponent = useMemo<JSX.Element>(() => {
         switch (data.status){
             case MediaStatus.READY:
@@ -40,4 +40,4 @@ const Video: React.FC<VideoProps> = ({data}) => {
     )
 }
 
-export default Video
+export default VideoContainer

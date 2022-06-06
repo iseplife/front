@@ -1,10 +1,11 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {useEffect, useMemo, useRef, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
-import Image from "./Image"
+import ImageContainer from "./ImageContainer"
 import {GallerySizes} from "../../constants/MediaSizes"
 import {createPortal} from "react-dom"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
+import {MediaStatus} from "../../data/media/types"
 
 export interface SidebarProps<T extends SafePhoto> {
     currentImage: T
@@ -34,6 +35,7 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
             <Sidebar currentImage={currentPhoto} />
         </div>
     ), [Sidebar])
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -87,7 +89,7 @@ const Lightbox = <T extends SafePhoto, >(props: LightboxProps<T>) => {
                     </div>
                     <div className="relative m-auto">
                         {currentPhoto && height !== 0 && width !== 0 ?
-                            <Image
+                            <ImageContainer
                                 key={currentIndex}
                                 nsfw={currentPhoto.nsfw}
                                 status={currentPhoto.status}

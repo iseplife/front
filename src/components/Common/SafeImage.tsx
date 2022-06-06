@@ -14,7 +14,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
 
-   return (
+    return (
         <div className={`
             ${className} 
             ${clickable && "image-display"} 
@@ -33,14 +33,22 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 />
             </div>
             {hidden && !hide && (
-                <div className="cursor-pointer" style={{left: "50%", top: "50%", position: "absolute", transform: "translate(-50%, -50%)"}}>
-                    <span className="flex flex-col justify-center items-center text-indigo-400" onClick={() => setHidden(false)}>
+                <div className="cursor-pointer" style={{
+                    left: "50%",
+                    top: "50%",
+                    position: "absolute",
+                    transform: "translate(-50%, -50%)"
+                }}>
+                    <span
+                        className="flex flex-col justify-center items-center text-indigo-400"
+                        onClick={() => setHidden(false)}
+                    >
                         <FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW
                     </span>
                 </div>
             )}
         </div>
-   )
+    )
 }
 
 SafeImage.defaultProps = {
