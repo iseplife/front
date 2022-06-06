@@ -76,5 +76,6 @@
   },
   "no_targets": "Aucune audience (Évènement public) ",
   "media_processing": "Media en cours de traitement",
+  "media_error": "Erreur lors du traitement",
   "retry": "Réessayer"
 }

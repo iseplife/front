@@ -15,7 +15,7 @@ const ImageContainer: React.FC<ImageContainerProps> = (props) => {
     const {status, onProcessingFinished, ...imgProps} = props
 
     useEffect(() => {
-        if(status != MediaStatus.READY) {
+        if(status == MediaStatus.PROCESSING) {
             const check = setInterval(() => {
                 const image = new Image()
                 image.src = imgProps.src as string
@@ -31,12 +31,12 @@ const ImageContainer: React.FC<ImageContainerProps> = (props) => {
 
     switch (status){
         case MediaStatus.READY:
-            return <SafeImage {...imgProps}/>
+            return <div className="p-1"><SafeImage {...imgProps}/></div>
         case MediaStatus.UNPROCESSED:
         case MediaStatus.PROCESSING:
-            return <MediaProcessing />
+            return <div className="p-1"><MediaProcessing /></div>
         case MediaStatus.ERROR:
-            return <MediaProcessingFailed />
+            return <div className="p-1"><MediaProcessingFailed /></div>
     }
 }
 

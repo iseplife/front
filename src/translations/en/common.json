@@ -76,5 +76,6 @@
   },
   "no_targets": "No targets (Public event)",
   "media_processing": "Media is being processed",
+  "media_error": "Processing error",
   "retry": "Retry"
 }
