@@ -41,7 +41,6 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
 
     const imageRenderer = useCallback(({index, photo}) => (
         <ImageContainer
-            id={photo.key as never}
             key={index}
             className="cursor-pointer"
             nsfw={photo.nsfw}
@@ -53,8 +52,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             onProcessingFinished={imageFinishedProcessing(index)}
             alt={photo.alt}
         />
-    ), [])
-
+    ), [imageFinishedProcessing])
 
     return (
         <div className="flex flex-col flex-wrap mx-3">

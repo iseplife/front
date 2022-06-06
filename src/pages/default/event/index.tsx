@@ -133,8 +133,7 @@ const Event: React.FC = () => {
         <div className="container mx-auto mt-4">
             <div className="flex items-center px-4">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative">
-                    <div
-                        className="w-full h-full text-3xl sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
+                    <div className="w-full h-full text-3xl sm:text-4xl rounded-md bg-white shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                         <div className="bg-red-500 w-full h-5 flex-shrink-0"/>
                         <div className="grid place-items-center h-full">{day}</div>
                     </div>

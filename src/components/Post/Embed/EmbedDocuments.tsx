@@ -8,9 +8,15 @@ type EmbedDocumentsProps = {
     data: Document
 }
 const EmbedDocuments: React.FC<EmbedDocumentsProps> = ({ data }) => {
-    console.log(data)
     const sizeKo = useMemo(() => Math.floor(data.sizeBytes / 1024), [data.sizeBytes])
     const sizeMb = useMemo(() => (sizeKo / 1024).toFixed(sizeKo > 1024 * 10 ? 0 : 2), [sizeKo])
+
+    const sizeFile = useMemo(() => {
+        const sizeKo = Math.floor(data.sizeBytes / 1024)
+        const sizeMb = (sizeKo / 1024).toFixed(sizeKo > 1024 * 10 ? 0 : 2)
+
+        return sizeKo >= 1024 ? sizeMb + " Mo" : sizeKo + " Ko"
+    }, [data.sizeBytes])
     return (
         <span>
             <a
@@ -24,7 +30,7 @@ const EmbedDocuments: React.FC<EmbedDocumentsProps> = ({ data }) => {
                         <FontAwesomeIcon icon={faFileArrowDown} className="text-4xl text-white drop-shadow-sm" />
                         <div className="ml-3 leading-5">
                             <div className="text-indigo-500 font-medium text-md group-hover:underline">{ data.title }</div>
-                            <div className="text-neutral-500/90 font-normal text-sm -mb-0.5">{ sizeKo >= 1024 ? sizeMb + " Mo" : sizeKo + " Ko" }</div>
+                            <div className="text-neutral-500/90 font-normal text-sm -mb-0.5">{ sizeFile }</div>
                         </div>
                     </div>
                 </div>

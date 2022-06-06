@@ -45,7 +45,6 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
                 style={{left: "4px", top: "4px"}}
             />
             <ImageContainer
-                id={photo.key as never}
                 nsfw={photo.nsfw}
                 status={photo.status}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}

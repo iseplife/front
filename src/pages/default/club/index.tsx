@@ -18,8 +18,8 @@ import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 
 enum ClubTab {
     HOME_TAB,
-    MEMBERS_TAB,
-    ADMIN_TAB
+    //MEMBERS_TAB,
+    //ADMIN_TAB
 }
 
 const Club: React.FC = () => {
@@ -29,7 +29,6 @@ const Club: React.FC = () => {
     const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
 
     const [t] = useTranslation(["club", "common"])
-
 
     const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
@@ -51,15 +50,11 @@ const Club: React.FC = () => {
     }, [id])
 
     const tabs = useMemo(() => ({
-        [t("common:posts")]: <Feed
-            loading={!club.feed}
-            id={club.feed}
-            allowPublication={false}
-        />,
+        [t("common:posts")]: <Feed loading={!club.feed} id={club.feed} allowPublication={false}/>,
         [`sm:${t("galleries")}`]: <GalleriesTab elementId={club.id} getGalleriesCallback={getClubGalleries} />,
         [t("members")]: <ClubMembers />,
         ...(club.canEdit && { "Administration": <ClubAdmin /> })
-    }), [club.feed, club.canEdit])
+    }), [club.id, club.feed, club.canEdit])
 
     return (
         <ClubContext.Provider value={{club, dispatch}}>

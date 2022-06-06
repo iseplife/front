@@ -190,7 +190,7 @@ const Gallery: React.FC = () => {
             onProcessingFinished={imageFinishedProcessing(index)}
             onClick={openLightbox}
         />
-    ), [editMode, handleSelect, openLightbox])
+    ), [editMode, handleSelect, imageFinishedProcessing, openLightbox])
 
     /**
      * Get Gallery and parse photos on first load
