@@ -34,14 +34,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
                         </div>
                         <div className="mb-1.5 sm:mb-0 sm:h-16 flex sm:items-center ml-8">
                             <SubscriptionButton
-                                className="hidden sm:grid w-[150px]"
-                                id={club.id}
-                                subscribed={subscribed}
-                                type={SubscribableType.CLUB}
-                                updateSubscription={subscriptionCallback}
-                            />
-                            <SubscriptionButton
-                                className="sm:hidden"
+                                className="grid sm:w-[150px]"
                                 id={club.id}
                                 subscribed={subscribed}
                                 type={SubscribableType.CLUB}
