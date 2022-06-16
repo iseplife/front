@@ -44,7 +44,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     const imagesComponent = useMemo(() => {
         const first = photos[0]
         return photos.length == 1 ?
-            <div className="rounded-xl overflow-hidden" style={{
+            <div className="rounded-xl overflow-hidden relative" style={{
                 backgroundColor: `#${first.color}`,
                 ...(first.width > first.height ? {
                     width: "100%",
@@ -53,7 +53,8 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                 }),
                 aspectRatio: (first.width / first.height).toString(),
             }}>
-                <img src={first.src} alt="Image" className="w-full h-full" />
+                <img width={first.width} height={first.height} className="w-full h-full invisible" />
+                <img src={first.src} alt="Image" className="w-full h-full absolute top-0" />
             </div>
             :
             <div className="grid grid-cols-2 w-full gap-0.5">
@@ -95,7 +96,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
 
 
     return (
-        <div className="flex flex-col flex-wrap mx-3">
+        <div className="flex flex-col mx-3">
             {imagesComponent}
             {lightboxPhotoIndex !== undefined && (
                 <Lightbox
