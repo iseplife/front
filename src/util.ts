@@ -8,6 +8,7 @@ import {GallerySizes} from "./constants/MediaSizes"
 import {TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
+import { CSSProperties } from "react"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -178,6 +179,13 @@ export const positionToMarker = (position?: EventPosition) => {
     }
     return marker
 }
+
+export const setStyles = (element: HTMLElement, style: CSSProperties) => {
+    for(const entry of Object.entries(style))
+        (element.style as any)[entry[0]] = entry[1]
+}
+
+export const waitForFrame = async () => new Promise(requestAnimationFrame)
 
 
 export class EntitySet<T extends Entity> {

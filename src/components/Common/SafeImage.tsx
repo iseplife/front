@@ -1,57 +1,48 @@
-import React, {ImgHTMLAttributes, useMemo, useState} from "react"
+import React, {ImgHTMLAttributes, useCallback, useMemo, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 import {MediaStatus} from "../../data/media/types"
-import MediaProcessing from "./MediaProcessing"
 
 
 type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
-    nsfw: boolean,
+    nsfw: boolean
     status: MediaStatus
-    hide?: boolean,
-    clickable?: boolean
+    lowQualitySrc?: string | undefined
+    src: string | undefined
+    width: number
+    height: number
+    skipNsfw?: boolean
 }
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, status, hide, clickable, className, ...imgProps} = props
+    const {nsfw, status, skipNsfw, src, width, height, lowQualitySrc} = props
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
-    const [hidden, setHidden] = useState<boolean>(nsfw && safeMode)
+    const [hidden, setHidden] = useState<boolean>(nsfw && safeMode && !skipNsfw)
     const ready = useMemo(() => status === MediaStatus.READY, [status])
+    const unhideCallback = useCallback(() => setHidden(false), [])
 
-    return ready ? (
-        <div className={`
-            ${className} 
-            ${clickable && "image-display"} 
-            ${!ready && "h-56 flex-grow mx-2"}
-            relative bg-gray-300 overflow-hidden m-auto w-max rounded`
-        }>
-            <div className="overflow-hidden h-full w-full">
-                <img
-                    {...imgProps}
-                    style={hidden ? {
-                        ...props.style,
-                        WebkitFilter: "blur(12px)",
-                        filter: "blur(12px)",
-                        msFilter: "blur(12px)"
-                    } : {...props.style}}
-                    alt={""}
-                />
+    return <>
+        <img width={width} height={height} className="w-full h-full invisible" />
+        {ready && lowQualitySrc && <img src={lowQualitySrc} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+            WebkitFilter: "blur(12px)",
+            filter: "blur(12px)",
+            msFilter: "blur(12px)"
+        } : {}} />}
+        {ready && <img src={src} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+            WebkitFilter: "blur(12px)",
+            filter: "blur(12px)",
+            msFilter: "blur(12px)"
+        } : {}} />}
+        {hidden && (
+            <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-indigo-300 text-xl bg-neutral-800/50" onClick={unhideCallback}>
+                <span><FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW</span>
             </div>
-            {hidden && !hide && (
-                <div className="cursor-pointer" style={{left: "50%", top: "50%", position: "absolute", transform: "translate(-50%, -50%)"}}>
-                    <span className="flex flex-col justify-center items-center text-indigo-400" onClick={() => setHidden(false)}>
-                        <FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW
-                    </span>
-                </div>
-            )}
-        </div>
-    ): <MediaProcessing />
+        )}
+    </>
 }
 
 SafeImage.defaultProps = {
     nsfw: false,
-    className: "",
-    clickable: true
 }
 
 export default SafeImage

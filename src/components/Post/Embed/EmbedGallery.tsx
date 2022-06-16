@@ -47,7 +47,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                         className="p-1 block"
                         style={getFormat(i, previewLength)}
                     >
-                        {i === previewLength - 1 ?
+                        {/* {i === previewLength - 1 ?
                             <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
                                 <SafeImage
                                     className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
@@ -65,7 +65,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                     nsfw={img.nsfw}
                                 />
                             </div>
-                        }
+                        } */}
                     </Link>
                 ))}
             </div>
