@@ -22,38 +22,19 @@ export type GalleryPhoto = SafePhoto & {
     selected: boolean
     thread: number
 }
-const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
-    return new Promise((resolve, reject) => {
-        if (img.status != MediaStatus.READY){
-            return resolve({
-                key,
-                src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
-                width: 50,
-                height: 50,
-                selected: false,
-                thread: img.thread,
-                nsfw: img.nsfw,
-                status: img.status,
-                srcSet: img.name
-            })
-        }
-        const image = new Image()
-        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
-        image.onerror = reject
-        image.onload = () => {
-            resolve({
-                key,
-                src: image.src,
-                width: image.width,
-                height: image.height,
-                selected: false,
-                thread: img.thread,
-                nsfw: img.nsfw,
-                status: img.status,
-                srcSet: img.name
-            } as GalleryPhoto)
-        }
-    })
+const parserSelectablePhoto: ParserFunction<GalleryPhoto> = async (img: ImageType, key: string) => {
+    return {
+        key,
+        color: img.color,
+        src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
+        width: 100 * img.ratio,
+        height: 100,
+        selected: false,
+        thread: img.thread,
+        nsfw: img.nsfw,
+        status: img.status,
+        srcSet: img.name
+    }
 }
 
 
