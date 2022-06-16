@@ -18,75 +18,95 @@ type LightboxProps<T extends (SafePhoto & {ref: RefObject<HTMLDivElement>})> = {
   onChange?: (index: number) => void
 }
 const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement> })>(props: LightboxProps<T>) => {
+    const [show, setShow] = useState(false)
+    const [clone, setClone] = useState<HTMLDivElement>(undefined!)
     const [showImage, setShowImage] = useState(false)
     const [animationDone, setAnimationDone] = useState(false)
+    
     const firstImageCreatedCallback = useCallback((element: HTMLDivElement, photo: SafePhoto & { ref?: RefObject<HTMLDivElement> }) => {
         setAnimationDone(done => {
-            (async () => {
-                if(!done && photo.ref?.current){
-                    const clone = photo.ref.current.cloneNode(true) as HTMLDivElement
-                    let box = photo.ref.current.getBoundingClientRect()
-                    clone.classList.remove("relative", "rounded-xl")
-                    setStyles(clone, {
-                        position: "fixed",
-                        top: `${box.top}px`,
-                        left: `${box.left}px`,
-                        width: `${box.width}px`,
-                        height: `${box.height}px`,
-                        zIndex: 1000,
-                        border: "none",
-                        borderRadius: "12px",
-                        transition: "top .2s ease-out, left .2s ease-out, width .2s ease-out, height .2s ease-out, opacity .1s, border-radius .25s"
-                    })
-
-                    document.documentElement.appendChild(clone)
-                    clone.querySelector("img:not(.absolute)")?.remove()
-
-                    await waitForFrame()
-
-                    box = element.getBoundingClientRect()
-
-                    setStyles(clone, {
-                        top: `${box.top}px`,
-                        left: `${box.left}px`,
-                        width: `${box.width}px`,
-                        height: `${box.height}px`,
-                        maxHeight: "",
-                        borderRadius: "0.1px"
-                    })
-
-                    clone.ontransitionend = async () => {
-                        clone.ontransitionend = undefined!
-
-                        setShowImage(true)
-                        console.log("anim end")
-
+            setClone(clone => {
+                (async () => {
+                    if(!done && photo.ref?.current){
+                        clone.style.visibility = ""
+                            
                         await waitForFrame()
-                        
-                        setTimeout(() => {
-                            clone.ontransitionend = () => {
-                                console.log("remove")
-                                clone.remove()
-                            }
-                            clone.style.opacity = "0"
-                        }, 100)
-                    }
-                }
-            })()
+
+                        const box = element.getBoundingClientRect()
+
+                        setStyles(clone, {
+                            top: `${box.top}px`,
+                            left: `${box.left}px`,
+                            width: `${box.width}px`,
+                            height: `${box.height}px`,
+                            maxHeight: "",
+                            borderRadius: "0.1px"
+                        })
+
+                        clone.ontransitionend = async () => {
+                            clone.ontransitionend = undefined!
+
+                            setShowImage(true)
+
+                            await waitForFrame()
+                            
+                            setTimeout(() => {
+                                clone.ontransitionend = () => 
+                                    clone.remove()
+                                
+                                clone.style.opacity = "0"
+                            }, 100)
+                        }
+                    }   
+                })()
+                return clone
+            })
             return true
         })
     }, [])
 
     useEffect(() => {
+        if(props.show && props.initialIndex !== undefined){
+            const photo = props.photos[props.initialIndex]
+            if(photo?.ref.current){
+                const clone = photo.ref.current.cloneNode(true) as HTMLDivElement
+                const box = photo.ref.current.getBoundingClientRect()
+                clone.classList.remove("relative", "rounded-xl")
+                setStyles(clone, {
+                    position: "fixed",
+                    top: `${box.top}px`,
+                    left: `${box.left}px`,
+                    width: `${box.width}px`,
+                    height: `${box.height}px`,
+                    zIndex: 1000,
+                    border: "none",
+                    borderRadius: "12px",
+                    visibility: "hidden",
+                    transition: "top .2s ease-out, left .2s ease-out, width .2s ease-out, height .2s ease-out, opacity .1s, border-radius .25s"
+                })
+                
+                document.documentElement.appendChild(clone)
+                clone.querySelector("img:not(.absolute)")?.remove()
+
+                clone.querySelector<HTMLImageElement>("img.absolute")!.onload = () => {
+                    setClone(clone)
+                    setShow(true)
+                }
+            }
+        }
+    }, [props.initialIndex, props.show])
+    
+    useEffect(() => {
         if(props.show){
             setShowImage(false)
             setAnimationDone(false)
-        }
+        }else
+            setShow(false)
     }, [props.show])
 
     return <Animated.div
         className="fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter w-screen h-screen"
-        show={props.show}
+        show={show}
         mountAnim={`
             0% { opacity: 0;}
             100% {opacity: 1; }
