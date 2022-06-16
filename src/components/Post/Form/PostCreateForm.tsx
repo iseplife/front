@@ -45,7 +45,7 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                     case EmbedEnumType.IMAGE: {
                         const ids = []
                         for (const f of embed.data) {
-                            const res = await createMedia(f)
+                            const res = await createMedia(f, values.selectedClub?.id)
                             ids.push(res.data.id)
                         }
 
