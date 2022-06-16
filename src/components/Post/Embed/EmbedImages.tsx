@@ -16,13 +16,6 @@ type EmbedImagesProps = {
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     const [photos, setPhotos] = useState<(SafePhoto & { ref: React.RefObject<HTMLDivElement> })[]>([])
     const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
-    const [lastLightboxPhotoIndex, setLastLightboxPhotoIndex] = useState<number>()
-    const a = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        if(lightboxPhotoIndex !== undefined)
-            setLastLightboxPhotoIndex(lightboxPhotoIndex)
-    }, [lightboxPhotoIndex])
 
     useEffect(() => {
         parsePhotosAsync(images).then(photos => 
@@ -58,8 +51,8 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                         const longPhoto = photos.length == 3 && index == 0
                         
                         return <div style={{ backgroundColor: `#${photo.color}` }} className={
-                            "relative overflow-hidden cursor-pointer " +
-                            (longPhoto && "row-span-2")
+                            "relative overflow-hidden cursor-pointer h-32 lg:h-40 " +
+                            (longPhoto && "row-span-2 h-full lg:h-full")
                         }
                         ref={photo.ref}
                         key={index}
@@ -83,7 +76,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             {imagesComponent}
             <AnimatedLightbox
                 show={lightboxPhotoIndex !== undefined}
-                initialIndex={lastLightboxPhotoIndex as number}
+                initialIndex={lightboxPhotoIndex as number}
                 photos={photos}
                 onClose={() => setLightboxPhotoIndex(undefined)}
                 Sidebar={() => <PostSidebar post={post} />}

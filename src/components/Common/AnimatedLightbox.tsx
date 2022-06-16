@@ -22,7 +22,13 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
     const [clone, setClone] = useState<HTMLDivElement>(undefined!)
     const [showImage, setShowImage] = useState(false)
     const [animationDone, setAnimationDone] = useState(false)
-    
+    const [lastLightboxPhotoIndex, setLastLightboxPhotoIndex] = useState<number>()
+
+    useEffect(() => {
+        if(props.initialIndex !== undefined)
+            setLastLightboxPhotoIndex(props.initialIndex)
+    }, [props.initialIndex])
+
     const firstImageCreatedCallback = useCallback((element: HTMLDivElement, photo: SafePhoto & { ref?: RefObject<HTMLDivElement> }) => {
         setAnimationDone(done => {
             setClone(clone => {
@@ -79,6 +85,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                     width: `${box.width}px`,
                     height: `${box.height}px`,
                     zIndex: 1000,
+                    pointerEvents: "none",
                     border: "none",
                     borderRadius: "12px",
                     visibility: "hidden",
@@ -98,6 +105,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
     
     useEffect(() => {
         if(props.show){
+            setClone(undefined!)
             setShowImage(false)
             setAnimationDone(false)
         }else
@@ -105,7 +113,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
     }, [props.show])
 
     return <Animated.div
-        className="fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter w-screen h-screen"
+        className="fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
         show={show}
         mountAnim={`
             0% { opacity: 0;}
@@ -116,7 +124,6 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
             100% {opacity: 0; margin-top: 70px; pointer-events: none; }
         `}
         time={0.3}
-        unmountTime={0.3}
         unmountTimingFunction="ease-out"
     >
         <Lightbox
@@ -124,6 +131,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
             showImage={showImage}
             firstImageCreatedCallback={firstImageCreatedCallback}
             {...props}
+            initialIndex={lastLightboxPhotoIndex!}
         />
     </Animated.div>
 }

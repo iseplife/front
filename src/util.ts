@@ -181,8 +181,10 @@ export const positionToMarker = (position?: EventPosition) => {
 }
 
 export const setStyles = (element: HTMLElement, style: CSSProperties) => {
-    for(const entry of Object.entries(style))
+    for(const entry of Object.entries(style)){
         (element.style as any)[entry[0]] = entry[1]
+        element.style.setProperty(entry[0], entry[1], "important")
+    }
 }
 
 export const waitForFrame = async () => new Promise(requestAnimationFrame)
