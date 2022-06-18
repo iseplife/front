@@ -15,6 +15,8 @@ export const getLoggedUser = (): AxiosPromise<LoggedStudentPreview> => apiClient
 
 export const getCompleteLoggedUser = (): AxiosPromise<Student> => apiClient.get("/student/me/full")
 
+export const didFirstFollow = (): AxiosPromise<LoggedStudentPreview> => apiClient.put("/student/me/did-first-follow")
+
 export const updateSettings = (settings: Partial<StudentSettings>): AxiosPromise<Student> => apiClient.patch("/student/me/setting", settings)
 
 export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPicture> => {

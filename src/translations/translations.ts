@@ -14,6 +14,7 @@ import poll_en from "./en/poll.json"
 import post_en from "./en/post.json"
 import error_en from "./en/error.json"
 import notifications_en from "./en/notification.json"
+import first_follow_en from "./en/first-follow.json"
 
 import login_fr from "./fr/login.json"
 import date_fr from "./fr/date.json"
@@ -31,6 +32,7 @@ import poll_fr from "./fr/poll.json"
 import post_fr from "./fr/post.json"
 import error_fr from "./fr/error.json"
 import notifications_fr from "./fr/notification.json"
+import first_follow_fr from "./fr/first-follow.json"
 
 export const en = {
     login: login_en,
@@ -49,6 +51,7 @@ export const en = {
     post: post_en,
     error: error_en,
     notifications: notifications_en,
+    "first-follow": first_follow_en,
 }
 export const fr = {
     login: login_fr,
@@ -67,6 +70,7 @@ export const fr = {
     post: post_fr,
     error: error_fr,
     notifications: notifications_fr,
+    "first-follow": first_follow_fr,
 }
 
 const translations = {en, fr}

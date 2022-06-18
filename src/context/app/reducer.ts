@@ -12,6 +12,8 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
             return {...state, payload: action.payload}
         case AppActionType.SET_STATE:
             return {...action.state}
+        case AppActionType.SET_STUDENT:
+            return {...state, user: action.payload}
         case AppActionType.SET_INITIALIZATION:
             return {
                 ...state,

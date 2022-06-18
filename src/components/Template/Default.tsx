@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import {Redirect, Route, Switch} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
@@ -14,33 +14,40 @@ import Setting from "../../pages/default/setting"
 import NotificationsPage from "../../pages/default/notifications"
 import NotificationsOverlay from "../Notification/NotificationOverlay"
 import Student from "../../pages/default/student"
+import FirstFollow from "../FirstFollow"
+import { AppContext } from "../../context/app/context"
 
-const DefaultTemplate: React.FC = () => (
-    <div className="flex flex-col h-full overflow-hidden">
-        <Navbar>
-            <div id="main" className="flex-grow overflow-y-auto bg-gray-100 relative" style={{height: "calc(100vh - 3rem)"}}>
-                <Switch>
-                    {/* Add your route here */}
-                    <Route path="/notifications" strict component={NotificationsPage}/>
-                    <Route path="/discovery" component={Discovery}/>
-                    <Route path="/calendar" component={Events}/>
-                    <Route path="/student/:id" component={Student}/>
-                    <Route path="/event/:id" component={Event}/>
-                    <Route path="/club/:id" component={Club}/>
-                    <Route path="/group/:id" component={Group}/>
-                    <Route path="/gallery/:id" component={Gallery}/>
-                    <Route path="/setting" component={Setting}/>
-                    <Route path="/logout" component={Logout}/>
-                    <Route path="/" exact component={Home}/>
+const DefaultTemplate: React.FC = () => {
+    const { state: { user: { didFirstFollow } } } = useContext(AppContext)
+    
+    return (
+        <div className="flex flex-col h-full overflow-hidden">
+            <Navbar>
+                <div id="main" className="flex-grow overflow-y-auto bg-gray-100 relative" style={{ height: "calc(100vh - 3rem)" }}>
+                    <Switch>
+                        {/* Add your route here */}
+                        <Route path="/notifications" strict component={NotificationsPage} />
+                        <Route path="/discovery" component={Discovery} />
+                        <Route path="/calendar" component={Events} />
+                        <Route path="/student/:id" component={Student} />
+                        <Route path="/event/:id" component={Event} />
+                        <Route path="/club/:id" component={Club} />
+                        <Route path="/group/:id" component={Group} />
+                        <Route path="/gallery/:id" component={Gallery} />
+                        <Route path="/setting" component={Setting} />
+                        <Route path="/logout" component={Logout} />
+                        <Route path="/" exact component={Home} />
 
-                    <Route path="/404" exact component={NotFound}/>
-                    <Route path="*" render={() => <Redirect to="/404"/>}/>
-                </Switch>
-            </div>
-        </Navbar>
-        <NotificationsOverlay />
-    </div>
-)
+                        <Route path="/404" exact component={NotFound} />
+                        <Route path="*" render={() => <Redirect to="/404" />} />
+                    </Switch>
+                </div>
+            </Navbar>
+            <NotificationsOverlay />
+            { !didFirstFollow && <FirstFollow /> }
+        </div>
+    )
+}
 
 
 export default DefaultTemplate

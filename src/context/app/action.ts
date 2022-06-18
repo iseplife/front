@@ -33,6 +33,11 @@ interface setPictureStateAction {
     payload: StudentPicture
 }
 
+interface setStudentAction {
+    type: AppActionType.SET_STUDENT,
+    payload: LoggedStudentPreview
+}
+
 interface setFullStateAction {
     type: AppActionType.SET_STATE,
     state: AppContextState
@@ -59,6 +64,7 @@ export type AppContextAction =
     setFullStateAction |
     setPictureStateAction |
     setTokenExpirationAction |
-    setTokenAction
+    setTokenAction |
+    setStudentAction
 
 
