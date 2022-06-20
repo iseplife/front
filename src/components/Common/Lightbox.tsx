@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
+import React, {RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
@@ -22,7 +22,7 @@ type LightboxProps<T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}> = {
 }
 const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props: LightboxProps<T>) => {
     const {photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, onClose, onChange} = props
-    const [currentIndex, setCurrentIndex] = useState<number>(initialIndex)
+    const [currentIndex, _setCurrentIndex] = useState<number>(initialIndex)
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
 
@@ -37,6 +37,10 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
             <Sidebar currentImage={currentPhoto} />
         </div>
     ), [Sidebar])
+
+    useEffect(() => 
+        _setCurrentIndex(initialIndex)
+    , [initialIndex])
 
     const photoRef = useRef<HTMLDivElement>(null)
 
@@ -67,9 +71,14 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
         return () => window.removeEventListener("resize", handleResize)
     }, [currentPhoto, rightPanel, firstImageCreatedCallback])
 
-    useEffect(() => {
-        if (onChange) onChange(currentIndex)
-    }, [currentIndex, onChange])
+    const setCurrentIndex = useCallback((fct: (index: number) => number) => {
+        _setCurrentIndex((index: number) => {
+            const result = fct(index)
+            if (onChange) onChange(result)
+            return result
+        })
+        
+    }, [initialIndex, onChange])
 
     return <div
         className={`

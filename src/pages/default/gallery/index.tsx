@@ -18,6 +18,7 @@ import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
+import { initializeAPIClient } from "../../../data/http"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -102,11 +103,17 @@ const Gallery: React.FC = () => {
             })
     }, [gallery, photos])
 
+    useEffect(() => {
+        const params = new URLSearchParams(history.location.search)
+        if (params.has("p"))
+            setInitialIndex(+params.get("p")!)
+        else
+            setInitialIndex(undefined)
+    }, [history.location.search])
+
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
-        if (photo && gallery) {
-            setInitialIndex(photo.index)
+        if (photo && gallery)
             history.push(`/gallery/${id}?p=${photo.index}`)
-        }
     }, [id, gallery])
 
     const exitEditMode = useCallback(() => {
@@ -114,10 +121,9 @@ const Gallery: React.FC = () => {
         setPhotos(prevState => prevState.map(photo => ({...photo, selected: false})))
     }, [])
 
-    const closeLightbox = useCallback(() => {
-        setInitialIndex(undefined)
+    const closeLightbox = useCallback(() => 
         history.push(`/gallery/${id}`)
-    }, [id])
+    , [id])
 
     const removeGallery = useCallback(() =>
         Modal.confirm({
