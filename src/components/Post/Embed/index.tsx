@@ -15,7 +15,7 @@ const Embed: React.FC<EmbedProps> = ({embed, post}) => {
     
     switch (embed.embedType) {
         case EmbedEnumType.VIDEO:
-            return <Video data={embed} />
+            return <Video data={embed} post={post} />
         case EmbedEnumType.POLL:
             return <Poll data={embed} />
         case EmbedEnumType.DOCUMENT:

@@ -370,6 +370,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             this.addBulkData(postsToAdd),
         ])
     }
+    public async updatePost(id: number, update: Partial<Post>) {
+        const postsToAdd = []
+        for (const post of (await this.getTable().where("id").equals(id).toArray()))
+            postsToAdd.push({
+                ...post,
+                ...update,
+            })
+        await this.addBulkData(postsToAdd)
+    }
 
     public outdateFeed(feed: FeedId) {
         this.lastLoadIdByFeed[feed ?? mainFeedId] = Date.now()

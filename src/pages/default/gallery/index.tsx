@@ -25,6 +25,7 @@ export type GalleryPhoto = SafePhoto & {
 const parserSelectablePhoto: ParserFunction<GalleryPhoto> = async (img: ImageType, key: string) => {
     return {
         key,
+        id: img.id,
         color: img.color,
         src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
         width: 100 * img.ratio,

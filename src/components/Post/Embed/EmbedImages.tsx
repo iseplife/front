@@ -1,13 +1,14 @@
-import React, {useEffect, useMemo, useRef, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import {parsePhotosAsync, SafePhoto} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
-import {Image} from "../../../data/media/types"
+import {Image, MediaStatus} from "../../../data/media/types"
 import {message} from "antd"
 import Lightbox from "../../Common/Lightbox"
 import PostSidebar from "../PostSidebar"
-import {Post} from "../../../data/post/types"
+import {EmbedPseudoGallery, Post} from "../../../data/post/types"
 import Animated from "react-mount-animation"
 import { AnimatedLightbox } from "../../Common/AnimatedLightbox"
+import { feedsManager } from "../../../datamanager/FeedsManager"
 
 type EmbedImagesProps = {
     images: Array<Image>
@@ -26,6 +27,13 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
         })
     }, [images])
     
+    const onLoadFactory = useCallback((id: number) => 
+        () => {
+            const embed = post.embed as EmbedPseudoGallery
+            embed.images = embed.images.map(img => img.id == id ? {...img, status: MediaStatus.READY} : img)
+            feedsManager.updatePost(post.id, { embed })
+        }
+    , [])
 
     const imagesComponent = useMemo(() => {
         const first = photos[0]
@@ -42,7 +50,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             ref={first.ref}
             onClick={() => setLightboxPhotoIndex(0)}
             >
-                <SafeImage src={first.src} height={first.height} width={first.width} nsfw={first.nsfw} status={first.status} />
+                <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} height={first.height} width={first.width} nsfw={first.nsfw} status={first.status} />
             </div>
             :
             <div className="grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border">
@@ -58,7 +66,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                         key={index}
                         onClick={() => setLightboxPhotoIndex(index)}
                         >
-                            <SafeImage src={photo.src} height={photo.height} width={photo.width} nsfw={photo.nsfw} status={photo.status} />
+                            <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} height={photo.height} width={photo.width} nsfw={photo.nsfw} status={photo.status} />
                             {index == 3 && photos.length > 4 &&
                                 <div className="w-full h-full absolute top-0 left-0 bg-neutral-800/60 backdrop-blur-lg text-white grid place-items-center text-4xl font-bold">
                                     + {photos.length - 3}

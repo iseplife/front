@@ -93,7 +93,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                         if (props.post.embed == null || embed.type != props.post.embed.embedType) {
                             const ids = []
                             for (const img of embed.data) {
-                                const res = await createMedia(img as MediaUploadNSFW)
+                                const res = await createMedia(img as MediaUploadNSFW, embed.type, post.linkedClub)
                                 ids.push(res.data.id)
                             }
 
@@ -108,7 +108,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                             const newImagesID = []
                             for (const img of embed.data) {
                                 if (!("id" in img)) {
-                                    const res = await createMedia(img)
+                                    const res = await createMedia(img, embed.type, post.linkedClub)
                                     newImagesID.push(res.data.id)
                                 }
                             }
@@ -129,14 +129,14 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                     }
                     case EmbedEnumType.DOCUMENT:
                         if (!("id" in embed.data)) {
-                            const res = await createMedia(embed.data)
+                            const res = await createMedia(embed.data, embed.type, post.linkedClub)
                             post.attachements = {[EmbedEnumType.DOCUMENT]: res.data.id}
                         }
                         break
                     case EmbedEnumType.VIDEO: {
                         const media = embed.data[0]
                         if (!("id" in media)) {
-                            const res = await createMedia(media)
+                            const res = await createMedia(media, embed.type, post.linkedClub)
                             post.attachements = {[EmbedEnumType.VIDEO]: res.data.id}
                         }
                         break
