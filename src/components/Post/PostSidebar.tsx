@@ -19,7 +19,7 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
     return (
         <div>
             <div className="flex flex-col p-4">
-                <div className="w-full flex justify-between mb-1">
+                <div className="w-full flex justify-between mb-1 text-neutral-200 md:text-black">
                     <div className="flex">
                         <StudentAvatar
                             id={post.author.id}
@@ -41,10 +41,11 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                         </span>
                     </div>
                 </div>
-                <div className="text-base ml-2 mt-2">
+                <div className="text-base ml-2 mt-2 text-neutral-100 md:text-black">
                     {post.description}
                 </div>
                 <PostThread
+                    lightbox={true}
                     thread={post.thread}
                     liked={post.liked}
                     likesCount={post.nbLikes}

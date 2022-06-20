@@ -17,9 +17,10 @@ interface CommentProps {
     allowReplies: boolean
     handleDeletion: (id: number) => Promise<void>
     handleEdit: (id: number, msg: string) => Promise<void>
+    lightbox?: boolean
 }
 
-const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, handleEdit}) => {
+const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, handleEdit, lightbox}) => {
     const {t} = useTranslation(["common", "post"])
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -71,7 +72,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 />
             </div>
             <div className="w-full">
-                <div className="flex flex-col justify-between bg-gray-100 rounded-lg px-2 py-1">
+                <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightbox ? "bg-gray-100/20 text-neutral-100 md:text-black md:bg-gray-100" : "bg-gray-100"}`}>
                     <div className="items-center flex">
                         <span className="text-xs flex-1 mr-3 font-bold">{data.author.name}</span>
                         {data.hasWriteAccess && (
@@ -136,7 +137,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     </span>
                     {allowReplies && (
                         <label
-                            className="mx-2 font-semibold hover:underline cursor-pointer text-gray-500"
+                            className={`mx-2 font-semibold hover:underline cursor-pointer ${lightbox ? "text-gray-300 md:text-gray-500" : "text-gray-500"}`}
                             onClick={() => {
                                 setShowComments(true)
                                 setRespond(true)
