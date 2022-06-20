@@ -31,7 +31,7 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
     const rightPanel = useRef<HTMLDivElement>(null)
     const sidePanel = useMemo(() => Sidebar && ( 
         <div
-            className="md:bg-white flex-shrink-0 w-full md:w-96 rounded-tl-md rounded-bl-md overflow-auto md:block"
+            className="md:bg-white flex-shrink-0 w-full md:w-96 rounded-t-xl md:rounded-none md:rounded-tl-md md:rounded-bl-md overflow-auto md:block z-50 bg-neutral-500/50"
             ref={rightPanel}
         >
             <Sidebar currentImage={currentPhoto} />
