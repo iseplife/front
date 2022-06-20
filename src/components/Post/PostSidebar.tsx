@@ -34,12 +34,6 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                             <div className="text-md">{ formattedDate }</div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
-                        <span className="mx-2 text-xs">
-                            {isFuture(post.publicationDate) && t("post:planned_for")}
-                            {format(new Date(post.publicationDate), "HH:mm  dd/MM/yy")}
-                        </span>
-                    </div>
                 </div>
                 <div className="text-base ml-2 mt-2 text-neutral-100 md:text-black">
                     {post.description}
