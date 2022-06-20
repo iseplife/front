@@ -11,6 +11,8 @@ import {getThread, toggleThreadLike} from "../../../data/thread"
 import {SidebarProps} from "../../../components/Common/Lightbox"
 import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
+import { formatDateWithTimer } from "../../../util"
+import { useTranslation } from "react-i18next"
 
 type GallerySidebarProps = {
     gallery: Gallery
@@ -19,6 +21,11 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     const [liked, setLiked] = useState<boolean>(false)
     const [nbLikes, setNbLikes] = useState<number>(0)
     const [nbComments, setNbComments] = useState<number>(0)
+
+    const {t} = useTranslation("common")
+
+    const [formattedDate, setFormattedDate] = useState("")
+    useEffect(() => formatDateWithTimer(gallery.creation, t, setFormattedDate), [gallery.creation])
 
     const toggleLike = useCallback(async () => {
         const res = await toggleThreadLike(currentImage.thread)
@@ -51,12 +58,8 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                         />
                         <div className="items-center ml-3">
                             <div className="font-bold -mb-0.5 text-base">{gallery.club.name}</div>
+                            <div className="text-md">{ formattedDate }</div>
                         </div>
-                    </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
-                        <span className="mx-2 text-xs">
-                            {format(new Date(gallery.creation), "HH:mm  dd/MM/yy")}
-                        </span>
                     </div>
                 </div>
                 <div className="text-base ml-2 mt-2 hidden md:block">
