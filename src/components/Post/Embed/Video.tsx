@@ -43,23 +43,17 @@ const Video: React.FC<VideoProps> = ({data, post}) => {
                     {data.title}
                 </h3>
             </div>
-            <div className="flex flex-col items-center mx-3 rounded-xl overflow-hidden">
-                <div className="rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer" style={{
-                    ...(data.ratio > 1 ? {
-                        width: "100%",
-                    } : {
-                        maxHeight: "400px",
-                    }),
-                    aspectRatio: data.ratio.toString(),
-                }}>
-                    { ready ?
-                        <VideoPlayer src={data.name} thumbnail={data.thumbnail}/>
-                        :
-                        <div className="w-full h-full grid place-items-center bg-neutral-300 relative">
-                            <LoadingSpinner className="drop-shadow-xl h-full scale-50" />
-                        </div>
-                    }
-                </div>
+            <div className="mx-3 rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer" style={{
+                height: data.ratio <= 1 ? "400px" : "",
+                aspectRatio: data.ratio.toString(),
+            }}>
+                { ready ?
+                    <VideoPlayer src={data.name} thumbnail={data.thumbnail}/>
+                    :
+                    <div className="w-full h-full grid place-items-center bg-neutral-300 relative">
+                        <LoadingSpinner className="drop-shadow-xl h-full scale-50" />
+                    </div>
+                }
             </div>
         </div>
     )
