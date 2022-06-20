@@ -17,7 +17,7 @@ type PostTheadProps = {
 }
 const PostThread: React.FC<PostTheadProps> = (props) => {
     const {commentsCount, thread, trendingComment} = props
-    const [showComments, setShowComments] = useState<boolean>()
+    const [showComments, setShowComments] = useState<boolean>(props.forceShowComments)
     const [liked, setLiked] = useState<boolean>(props.liked)
     const [likes, setLikes] = useState<number>(props.likesCount)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
@@ -53,7 +53,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                             group flex items-center justify-center cursor-pointer
                             hover:text-indigo-500 mr-3 text-xl transition-colors duration-100
                         "
-                        onClick={() => setShowComments(!showComments)}
+                        onClick={() => props.forceShowComments || setShowComments(!showComments)}
                     >
                         <div className="text-base mx-1.5 w-7 text-right">
                             {commentsCount > 0 && commentsCount}
