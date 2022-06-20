@@ -110,6 +110,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                     setShow(true)
                 }
             } else {
+                setAnimationDone(true)
                 setShow(true)
                 setShowImage(true)
             }
