@@ -71,6 +71,15 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
             return true
         })
     }, [])
+    
+    useEffect(() => {
+        if(props.show){
+            setClone(undefined!)
+            setShowImage(false)
+            setAnimationDone(false)
+        }else
+            setShow(false)
+    }, [props.show])
 
     useEffect(() => {
         if (props.show && props.initialIndex !== undefined) {
@@ -100,18 +109,12 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                     setClone(clone)
                     setShow(true)
                 }
+            } else {
+                setShow(true)
+                setShowImage(true)
             }
         }
     }, [props.initialIndex, props.show])
-    
-    useEffect(() => {
-        if(props.show){
-            setClone(undefined!)
-            setShowImage(false)
-            setAnimationDone(false)
-        }else
-            setShow(false)
-    }, [props.show])
 
     return <Animated.div
         className="fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
