@@ -43,7 +43,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
             <div className="flex flex-col flex-wrap w-full" style={{height: 300}}>
                 {gallery.preview.slice(0, previewLength).map((img, i) => (
                     <Link
-                        key={img.id} to={`/gallery/${gallery.id}${i === previewLength - 1 ? "" : "?p=" + i}`}
+                        key={img.id} to={`/gallery/${gallery.id}${i === previewLength - 1 ? "" : "/" + i}`}
                         className="p-1 block"
                         style={getFormat(i, previewLength)}
                     >

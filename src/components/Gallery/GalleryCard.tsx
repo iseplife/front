@@ -43,7 +43,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                             :
                             <Link
                                 key={img.id}
-                                to={`/gallery/${gallery.id}?p=${i}`}
+                                to={`/gallery/${gallery.id}/${i}`}
                                 className={`p-0.5 block ${i === 0 ? "w-1/2" : "w-1/4"}`}
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >

@@ -104,16 +104,19 @@ const Gallery: React.FC = () => {
     }, [gallery, photos])
 
     useEffect(() => {
-        const params = new URLSearchParams(history.location.search)
-        if (params.has("p"))
-            setInitialIndex(+params.get("p")!)
+        const splitted = history.location.pathname.split("/")
+        splitted.shift()
+        if (splitted.length == 3)
+            setInitialIndex(+splitted[2])
+        else if (splitted.length != 2)
+            history.replace("/404")
         else
             setInitialIndex(undefined)
-    }, [history.location.search])
+    }, [history.location.pathname])
 
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
         if (photo && gallery)
-            history.push(`/gallery/${id}?p=${photo.index}`)
+            history.push(`/gallery/${id}/${photo.index}`)
     }, [id, gallery])
 
     const exitEditMode = useCallback(() => {
@@ -181,7 +184,7 @@ const Gallery: React.FC = () => {
     }, [id])
 
     const updateURL = useCallback((index) => {
-        history.push(`/gallery/${id}?p=${index}`)
+        history.push(`/gallery/${id}/${index}`)
     }, [id])
 
     return (
