@@ -26,6 +26,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
         if(!ready){
             let id: number
             const check = () => {
+                if (id == -1) return
                 const img = new Image()
                 img.onload = onLoaded!
                 img.onerror = () => id = window.setTimeout(check, 1000)
@@ -34,7 +35,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
 
             id = window.setTimeout(check, 800)
 
-            return () => clearTimeout(id)
+            return () => { id = -1 }
         }
     }, [ready, onLoaded])
 
