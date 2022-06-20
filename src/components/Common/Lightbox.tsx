@@ -88,7 +88,7 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
             ${!animated && " fixed top-0 left-0 bg-black/80 backdrop-blur-md backdrop-filter"}
         `}
     >
-        <div className="w-full h-[77vh] md:h-full grid place-items-center relative">
+        <div className="select-none w-full h-[77vh] md:h-full grid place-items-center relative">
             <div className="w-full h-full absolute top-0 left-0" onClick={onClose}/>
             <div
                 className={`
