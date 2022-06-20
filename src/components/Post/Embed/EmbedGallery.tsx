@@ -47,25 +47,31 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                         className="p-1 block"
                         style={getFormat(i, previewLength)}
                     >
-                        {/* {i === previewLength - 1 ?
-                            <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
+                        {i === previewLength - 1 ?
+                            <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white overflow-hidden">
                                 <SafeImage
+                                    width={100 * img.ratio}
+                                    height={100}
                                     className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
                                     nsfw={img.nsfw}
                                 />
-                                <FontAwesomeIcon icon={faPlus} size="2x" className="text-center absolute z-10 h-8 w-8 -ml-4 -mt-4" style={{top: "50%", left: "50%"}}/>
+                                <div className="w-full h-full absolute top-0 left-0 bg-neutral-800/60 backdrop-blur-lg text-white grid place-items-center text-4xl font-bold">
+                                    <span className="-translate-y-1">+</span>
+                                </div>
                             </div> :
-                            <div className="hover:bg-black rounded h-full w-full">
+                            <div className="hover:bg-black rounded h-full w-full relative overflow-hidden">
                                 <SafeImage
+                                    width={100 * img.ratio}
+                                    height={100}
                                     className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
                                     nsfw={img.nsfw}
                                 />
                             </div>
-                        } */}
+                        }
                     </Link>
                 ))}
             </div>

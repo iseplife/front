@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
@@ -17,6 +17,7 @@ import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
+import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -52,7 +53,7 @@ const Gallery: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [gallery, setGallery] = useState<GalleryType>()
-    const [photos, setPhotos] = useState<GalleryPhoto[]>([])
+    const [photos, setPhotos] = useState<(GalleryPhoto & {ref: RefObject<HTMLDivElement>})[]>([])
     const [initialIndex, setInitialIndex] = useState<number>()
 
     const handleSelect = useCallback((key: string) => {
@@ -65,7 +66,7 @@ const Gallery: React.FC = () => {
 
     const addNewImages = useCallback((images: ImageType[]) => {
         Promise.all(images.map((img, i) => parserSelectablePhoto(img, String(i)))).then(photos => {
-            setPhotos(prevState => [...prevState, ...photos])
+            setPhotos(prevState => [...prevState, ...photos].map(img => ({...img, ref: React.createRef()})))
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
 
@@ -133,8 +134,9 @@ const Gallery: React.FC = () => {
             }
         }), [gallery])
 
-    const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
+    const imageRenderer = useCallback(({ index, key, left, top, photo }: any) => (
         <SelectableImage
+            photoRef={photo.ref}
             key={key}
             selectable={editMode}
             margin={"2px"}
@@ -158,7 +160,7 @@ const Gallery: React.FC = () => {
                     setGallery(res.data)
                     parsePhotosAsync(res.data.images, parserSelectablePhoto)
                         .then(photos => {
-                            setPhotos(photos)
+                            setPhotos(photos.map(photo => ({...photo, ref: React.createRef()})))
                             if (picture)
                                 setInitialIndex(+picture)
                         })
@@ -267,15 +269,14 @@ const Gallery: React.FC = () => {
                     />
                 }
             </div>
-            {initialIndex != undefined && gallery && (
-                <Lightbox
-                    photos={photos}
-                    initialIndex={initialIndex}
-                    onClose={closeLightbox}
-                    onChange={updateURL}
-                    Sidebar={gProps => <GallerySidebar gallery={gallery} {...gProps} />}
-                />
-            )}
+            <AnimatedLightbox
+                show={initialIndex != undefined && gallery != undefined}
+                initialIndex={initialIndex as number}
+                photos={photos}
+                onChange={updateURL}
+                onClose={closeLightbox}
+                Sidebar={(gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />}
+            />
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, {CSSProperties, useMemo} from "react"
+import React, {CSSProperties, useEffect, useMemo} from "react"
 import {RenderImageProps} from "react-photo-gallery"
 import {GalleryPhoto} from "../../pages/default/gallery"
 import SafeImage from "../Common/SafeImage"
@@ -15,9 +15,10 @@ const selectedImgStyle = {
 
 type SelectableImageProps = {
     selectable: boolean
+    photoRef: React.RefObject<HTMLDivElement>,
     onSelect: (key: string) => void
 } & RenderImageProps<GalleryPhoto>
-const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, direction, top, left, selectable, onClick, onSelect}) => {
+const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin, direction, top, left, selectable, photoRef, onClick, onSelect}) => {
     //calculate x,y scale
     const sx = (100 - (30 / photo.width) * 100) / 100
     const sy = (100 - (30 / photo.height) * 100) / 100
@@ -34,9 +35,19 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
 
     return (
         <div
+            ref={photoRef}
             key={index}
-            style={container}
+            style={{
+                ...container,
+                backgroundColor: `#${photo.color}`
+            }}
             className={`relative cursor-pointer overflow-hidden ${selectable && "hover:shadow-outline focus:bg-blue-100"}`}
+            onClick={(e) => {
+                if (selectable)
+                    onSelect(photo.key as string)
+                else
+                    onClick?.(e, { ...photo, index })
+            }}
         >
             <FontAwesomeIcon icon={faCheckCircle} className={photo.selected ? "absolute z-10" : "hidden"} style={{left: "4px", top: "4px"}}/>
             <SafeImage
@@ -47,13 +58,6 @@ const SelectableImage: React.FC<SelectableImageProps> = ({index, photo, margin, 
                 height={photo.height}
                 width={photo.width}
                 alt={photo.alt}
-                onClick={(e) => {
-                    if (selectable) {
-                        onSelect(photo.key as string)
-                    } else if (onClick) {
-                        onClick(e, {...photo, index})
-                    }
-                }}
             />
         </div>
     )

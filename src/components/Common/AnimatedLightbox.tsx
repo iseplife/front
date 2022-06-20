@@ -46,6 +46,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                             width: `${box.width}px`,
                             height: `${box.height}px`,
                             maxHeight: "",
+                            margin: "0",
                             borderRadius: "0.1px"
                         })
 
@@ -72,7 +73,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
     }, [])
 
     useEffect(() => {
-        if(props.show && props.initialIndex !== undefined){
+        if (props.show && props.initialIndex !== undefined) {
             const photo = props.photos[props.initialIndex]
             if(photo?.ref.current){
                 const clone = photo.ref.current.cloneNode(true) as HTMLDivElement

@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {parsePhotosAsync, SafePhoto} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 import {Image, MediaStatus} from "../../../data/media/types"
 import {message} from "antd"
-import Lightbox from "../../Common/Lightbox"
 import PostSidebar from "../PostSidebar"
 import {EmbedPseudoGallery, Post} from "../../../data/post/types"
-import Animated from "react-mount-animation"
 import { AnimatedLightbox } from "../../Common/AnimatedLightbox"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 

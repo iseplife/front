@@ -28,14 +28,15 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 key={img.id}
                                 to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
                             >
-                                <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white">
-                                    {/* <SafeImage
+                                <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white overflow-hidden">
+                                    <SafeImage
+                                        height={1}
+                                        width={img.ratio}
                                         className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
                                         src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                         nsfw={img.nsfw}
                                         status={img.status}
-                                        hide
-                                    /> */}
+                                    />
                                     <FontAwesomeIcon icon={faPlus} className="absolute z-10" style={{top: "30%", left: "43%"}}/>
                                 </div>
                             </Link>
@@ -46,14 +47,15 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                 className={`p-0.5 block ${i === 0 ? "w-1/2" : "w-1/4"}`}
                                 style={{height: i === 0 ? "100%" : "50%"}}
                             >
-                                <div className="hover:bg-black rounded h-full w-full">
-                                    {/* <SafeImage
+                                <div className="hover:bg-black rounded h-full w-full relative overflow-hidden">
+                                    <SafeImage
+                                        height={1}
+                                        width={img.ratio}
                                         className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
                                         src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                         nsfw={img.nsfw}
                                         status={img.status}
-                                        hide
-                                    /> */}
+                                    />
                                 </div>
                             </Link>
                     )) :
