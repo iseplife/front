@@ -29,7 +29,10 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 if (id == -1) return
                 const img = new Image()
                 img.onload = onLoaded!
-                img.onerror = () => id = window.setTimeout(check, 1000)
+                img.onerror = () => {
+                    if(id != -1)
+                        id = window.setTimeout(check, 1000)
+                }
                 img.src = lowQualitySrc!
             }
 
