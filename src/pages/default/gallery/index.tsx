@@ -187,6 +187,8 @@ const Gallery: React.FC = () => {
         history.push(`/gallery/${id}/${index}`)
     }, [id])
 
+    const gallerySidebar = useCallback((gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />, [gallery])
+
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
             <div className="flex flex-col sm:flex-row justify-between m-2">
@@ -284,7 +286,7 @@ const Gallery: React.FC = () => {
                 photos={photos}
                 onChange={updateURL}
                 onClose={closeLightbox}
-                Sidebar={(gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />}
+                Sidebar={gallerySidebar}
             />
         </div>
     )
