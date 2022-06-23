@@ -36,12 +36,10 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     const imagesComponent = useMemo(() => {
         const first = photos[0]
         return photos.length == 1 ?
-            <div className="rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer" style={{
+            <div className="rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer max-h-[400px]" style={{
                 backgroundColor: `#${first.color}`,
-                ...(first.width > first.height ? {
+                ...(first.width > first.height && {
                     width: "100%",
-                } : {
-                    maxHeight: "400px",
                 }),
                 aspectRatio: (first.width / first.height).toString(),
             }}
