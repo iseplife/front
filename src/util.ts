@@ -134,7 +134,9 @@ export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation()
 
 export const isFileImage = (file: string): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file)
 
-export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
+function mediaPath(fullPath: string, size?: string): string
+function mediaPath(fullPath: string | undefined, size?: string): string | undefined
+function mediaPath(fullPath: string | undefined, size?: string): string | undefined {
     if (fullPath) {
         const storageUrl = process.env.STORAGE_URL || "https://iseplife-dev.s3.eu-west-3.amazonaws.com"
         if (size) {
@@ -146,6 +148,8 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     }
     return fullPath
 }
+
+export {mediaPath}
 
 export type SafePhoto = PhotoProps<{nsfw: boolean, color: string, status: MediaStatus, id: number}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}

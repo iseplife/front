@@ -9,8 +9,8 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     nsfw: boolean
     status: MediaStatus
     onLoaded?: () => void
-    lowQualitySrc?: string | undefined
-    src: string | undefined
+    lowQualitySrc?: string
+    src: string
     width: number
     height: number
     skipNsfw?: boolean
@@ -33,7 +33,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                     if(id != -1)
                         id = window.setTimeout(check, 1000)
                 }
-                img.src = lowQualitySrc!
+                img.src = lowQualitySrc ?? src
             }
 
             id = window.setTimeout(check, 800)
