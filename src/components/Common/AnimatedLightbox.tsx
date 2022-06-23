@@ -45,7 +45,6 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                             left: `${box.left}px`,
                             width: `${box.width}px`,
                             height: `${box.height}px`,
-                            maxHeight: "",
                             margin: "0",
                             borderRadius: "0.1px"
                         })
@@ -94,6 +93,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
                     left: `${box.left}px`,
                     width: `${box.width}px`,
                     height: `${box.height}px`,
+                    maxHeight: "initial",
                     zIndex: 1000,
                     pointerEvents: "none",
                     border: "none",

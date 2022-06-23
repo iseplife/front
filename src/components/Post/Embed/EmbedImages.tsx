@@ -49,14 +49,14 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                 <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} height={first.height} width={first.width} nsfw={first.nsfw} status={first.status} />
             </div>
             :
-            <div className="grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border">
+            <div className={`grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border ${photos.length >= 3 ? "h-64 lg:h-80" : "h-32 lg:h-40"}`}>
                 {
                     photos.slice(0, 4).map((photo, index) => {
                         const longPhoto = photos.length == 3 && index == 0
                         
                         return <div style={{ backgroundColor: `#${photo.color}` }} className={
-                            "relative overflow-hidden cursor-pointer h-32 lg:h-40 " +
-                            (longPhoto && "row-span-2 h-full lg:h-full")
+                            "relative overflow-hidden cursor-pointer h-full " +
+                            (longPhoto && "row-span-2")
                         }
                         ref={photo.ref}
                         key={index}
