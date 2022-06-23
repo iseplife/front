@@ -15,16 +15,16 @@ const getFormat = (index: number, size: number): CSSProperties | undefined => {
     switch (size) {
         case 1:
         case 2:
-            return ({height: "100%", width: "50%"})
+            return ({height: "calc(100% - 0.0635rem)"})
         case 3:
             return index === 0 ?
-                ({height: "100%", width: "50%"}) :
-                ({height: "50%", width: "50%"})
+                ({height: "calc(100% - 0.0625rem)"}) :
+                ({height: "calc(50% - 0.0625rem)"})
         case 4:
         case 5:
             return index <= 1 ?
-                ({height: "50%", width: "50%"}) :
-                ({height: "33%", width: "50%"})
+                ({height: "calc(50% - 0.0625rem)"}) :
+                ({height: "calc(100% / 3 - 0.087rem)"})
     }
 }
 
@@ -40,19 +40,22 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
     return previewLength ?
         <div>
             <Link to={`/gallery/${gallery.id}`}><h3 className="text-xl text-gray-600 m-0">{gallery.name}</h3></Link>
-            <div className="flex flex-col flex-wrap w-full" style={{height: 300}}>
+            <div className="flex flex-col gap-0.5 flex-wrap w-full rounded-xl overflow-hidden" style={{height: 300}}>
                 {gallery.preview.slice(0, previewLength).map((img, i) => (
                     <Link
                         key={img.id} to={`/gallery/${gallery.id}${i === previewLength - 1 ? "" : "/" + i}`}
-                        className="p-1 block"
+                        className="block w-1/2"
                         style={getFormat(i, previewLength)}
                     >
                         {i === previewLength - 1 ?
-                            <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white overflow-hidden">
+                            <div
+                                className="relative h-full w-full bg-black text-gray-400 hover:text-white overflow-hidden"
+                                style={{backgroundColor: `#${img.color}`}}
+                            >
                                 <SafeImage
                                     width={100 * img.ratio}
                                     height={100}
-                                    className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
+                                    className="h-full w-full bg-gray-400 object-cover opacity-50"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
                                     nsfw={img.nsfw}
@@ -61,11 +64,14 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                     <span className="-translate-y-1">+</span>
                                 </div>
                             </div> :
-                            <div className="hover:bg-black rounded h-full w-full relative overflow-hidden">
+                            <div
+                                className="hover:bg-black h-full w-full relative overflow-hidden"
+                                style={{backgroundColor: `#${img.color}`}}
+                            >
                                 <SafeImage
                                     width={100 * img.ratio}
                                     height={100}
-                                    className="h-full w-full rounded bg-gray-400 object-cover hover:opacity-75"
+                                    className="h-full w-full bg-gray-400 object-cover hover:opacity-75"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
                                     nsfw={img.nsfw}
