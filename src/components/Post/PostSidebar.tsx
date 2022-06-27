@@ -39,7 +39,7 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                     {post.description}
                 </div>
                 <PostThread
-                    lightbox={true}
+                    lightboxView={true}
                     thread={post.thread}
                     liked={post.liked}
                     likesCount={post.nbLikes}
