@@ -5,6 +5,7 @@ import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
 import {createPortal} from "react-dom"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
+import { useTranslation } from "react-i18next"
 
 export interface SidebarProps<T extends SafePhoto> {
     currentImage: T
@@ -25,6 +26,7 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
     const [currentIndex, _setCurrentIndex] = useState<number>(initialIndex)
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
+    const {t} = useTranslation("common")
 
     const currentPhoto = useMemo(() => photos[currentIndex], [photos, currentIndex])
 
@@ -113,7 +115,7 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
                         width={currentPhoto.width}
                         height={currentPhoto.height}
                     /> :
-                    <div>Erreur rencontrée</div>
+                    <div>{t("error")}</div>
                 }
             </div>
             {currentIndex + 1 < photos.length &&
