@@ -47,21 +47,25 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 <LoadingSpinner />
             </div>
         }
-        {ready && lowQualitySrc && <img src={lowQualitySrc} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
-            WebkitFilter: "blur(12px)",
-            filter: "blur(12px)",
-            msFilter: "blur(12px)"
-        } : {}} />}
-        {ready && <img src={src} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
-            WebkitFilter: "blur(12px)",
-            filter: "blur(12px)",
-            msFilter: "blur(12px)"
-        } : {}} />}
-        {hidden && ready && (
-            <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-indigo-300 text-xl bg-neutral-800/50" onClick={unhideCallback}>
-                <span><FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW</span>
-            </div>
-        )}
+        {ready && <>
+            {lowQualitySrc &&
+                <img src={lowQualitySrc} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                    WebkitFilter: "blur(12px)",
+                    filter: "blur(12px)",
+                    msFilter: "blur(12px)"
+                } : {}} />
+            }
+            <img src={src} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                WebkitFilter: "blur(12px)",
+                filter: "blur(12px)",
+                msFilter: "blur(12px)"
+            } : {}} />
+            {hidden && 
+                <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-indigo-300 text-xl bg-neutral-800/50" onClick={unhideCallback}>
+                    <span><FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW</span>
+                </div>
+            }
+        </>}
     </>
 }
 
