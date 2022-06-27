@@ -15,10 +15,8 @@ import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../u
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
-import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
-import { initializeAPIClient } from "../../../data/http"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
