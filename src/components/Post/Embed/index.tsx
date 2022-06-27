@@ -5,6 +5,7 @@ import Poll from "./Poll"
 import Video from "./Video"
 import EmbedImages from "./EmbedImages"
 import EmbedDocuments from "./EmbedDocuments"
+import { Video as VideoType } from "../../../data/media/types"
 
 
 type EmbedProps = {
@@ -15,7 +16,7 @@ const Embed: React.FC<EmbedProps> = ({embed, post}) => {
     
     switch (embed.embedType) {
         case EmbedEnumType.VIDEO:
-            return <Video data={embed} post={post} />
+            return <Video data={embed} postId={post.id} postEmbed={post.embed as VideoType & {embedType: EmbedEnumType.VIDEO}} />
         case EmbedEnumType.POLL:
             return <Poll data={embed} />
         case EmbedEnumType.DOCUMENT:

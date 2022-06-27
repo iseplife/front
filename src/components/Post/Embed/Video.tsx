@@ -8,18 +8,18 @@ import LoadingSpinner from "../../Common/LoadingSpinner"
 
 type VideoProps = {
     data: VideoType
-    post: Post
+    postId: number
+    postEmbed: VideoType & {embedType: EmbedEnumType.VIDEO}
     onLoaded?: () => void
 }
 
-const Video: React.FC<VideoProps> = ({data, post}) => {
+const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
     const ready = useMemo(() => data.status === MediaStatus.READY, [data.status])
 
     const onLoaded = useCallback(() => {
-        const embed = post.embed as VideoType & {embedType: EmbedEnumType.VIDEO}
-        embed.status = MediaStatus.READY
-        feedsManager.updatePost(post.id, { embed })
-    }, [])
+        postEmbed.status = MediaStatus.READY
+        feedsManager.updatePost(postId, { embed: postEmbed })
+    }, [postId, postEmbed])
 
     useEffect(() => {
         if(!ready){
