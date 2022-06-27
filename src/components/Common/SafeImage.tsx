@@ -11,8 +11,6 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     onLoaded?: () => void
     lowQualitySrc?: string
     src: string
-    width: number
-    height: number
     skipNsfw?: boolean
 }
 
