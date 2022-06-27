@@ -98,7 +98,7 @@ const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props
                 `}
                 onClick={onClose}
             >
-                <FontAwesomeIcon icon={cFaCross} className=""/>
+                <FontAwesomeIcon icon={cFaCross}/>
             </div>
             <div className={"relative m-auto " + (showImage == false && "opacity-0")} style={{width, height}} ref={photoRef}>
                 {currentPhoto && height !== 0 && width !== 0 ?
