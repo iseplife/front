@@ -9,7 +9,7 @@ export interface SidebarProps<T extends SafePhoto> {
   currentImage: T
 }
 
-type LightboxProps<T extends (SafePhoto & {ref: RefObject<HTMLDivElement>})> = {
+type LightboxProps<T extends AnimatedSafePhoto> = {
   show: boolean
   initialIndex: number
   photos: T[]
@@ -17,7 +17,7 @@ type LightboxProps<T extends (SafePhoto & {ref: RefObject<HTMLDivElement>})> = {
   onClose: () => void
   onChange?: (index: number) => void
 }
-const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement> })>(props: LightboxProps<T>) => {
+const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const [show, setShow] = useState(false)
     const [clone, setClone] = useState<HTMLDivElement>(undefined!)
     const [showImage, setShowImage] = useState(false)
@@ -29,7 +29,7 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
             setLastLightboxPhotoIndex(props.initialIndex)
     }, [props.initialIndex])
 
-    const firstImageCreatedCallback = useCallback((element: HTMLDivElement, photo: SafePhoto & { ref?: RefObject<HTMLDivElement> }) => {
+    const firstImageCreatedCallback = useCallback((element: HTMLDivElement, photo: AnimatedSafePhoto) => {
         setAnimationDone(done => {
             setClone(clone => {
                 (async () => {
@@ -141,4 +141,5 @@ const AnimatedLightbox = <T extends (SafePhoto & { ref: RefObject<HTMLDivElement
     </Animated.div>
 }
 
+export type AnimatedSafePhoto = SafePhoto & { ref: React.RefObject<HTMLDivElement> }
 export {AnimatedLightbox}

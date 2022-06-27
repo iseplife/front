@@ -5,7 +5,7 @@ import {Image, MediaStatus} from "../../../data/media/types"
 import {message} from "antd"
 import PostSidebar from "../PostSidebar"
 import {EmbedPseudoGallery, Post} from "../../../data/post/types"
-import { AnimatedLightbox } from "../../Common/AnimatedLightbox"
+import { AnimatedLightbox, AnimatedSafePhoto } from "../../Common/AnimatedLightbox"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 
 type EmbedImagesProps = {
@@ -13,7 +13,7 @@ type EmbedImagesProps = {
     post: Post
 }
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
-    const [photos, setPhotos] = useState<(SafePhoto & { ref: React.RefObject<HTMLDivElement> })[]>([])
+    const [photos, setPhotos] = useState<AnimatedSafePhoto[]>([])
     const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
 
     useEffect(() => {

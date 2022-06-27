@@ -1,27 +1,27 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
-import {createPortal} from "react-dom"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
 import { useTranslation } from "react-i18next"
+import { AnimatedSafePhoto } from "./AnimatedLightbox"
 
 export interface SidebarProps<T extends SafePhoto> {
     currentImage: T
 }
 
-type LightboxProps<T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}> = {
+type LightboxProps<T extends AnimatedSafePhoto> = {
     animated?: boolean
     showImage?: boolean
     initialIndex: number
-    firstImageCreatedCallback?: (element: HTMLDivElement, photo: SafePhoto & {ref?: RefObject<HTMLDivElement>}) => void
+    firstImageCreatedCallback?: (element: HTMLDivElement, photo: AnimatedSafePhoto) => void
     photos: T[]
     Sidebar?: React.FC<SidebarProps<T>>
     onClose: () => void
     onChange?: (index: number) => void
 }
-const Lightbox = <T extends SafePhoto & {ref?: RefObject<HTMLDivElement>}>(props: LightboxProps<T>) => {
+const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const {photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, onClose, onChange} = props
     const [currentIndex, _setCurrentIndex] = useState<number>(initialIndex)
     const [width, setWidth] = useState<number>(0)
