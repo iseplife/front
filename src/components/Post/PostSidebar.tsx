@@ -31,7 +31,12 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                         />
                         <div className="items-center ml-3">
                             <div className="font-bold -mb-0.5 text-base">{post.author.name}</div>
-                            <div className="text-md">{ formattedDate }</div>
+                            <div className="text-md">
+                                {isFuture(post.publicationDate) ?
+                                    `${t("post:planned_for")} ${format(new Date(post.publicationDate), "dd/MM/yy, HH:mm")}` :
+                                    formattedDate
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
