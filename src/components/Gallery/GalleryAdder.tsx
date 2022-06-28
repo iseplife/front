@@ -9,6 +9,7 @@ import {addGalleryImages} from "../../data/gallery"
 import {UploadFile} from "antd/es/upload/interface"
 import {faFileUpload} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { EmbedEnumType } from "../../data/post/types"
 
 type GalleryAdderProps = {
     gallery: number
@@ -35,6 +36,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
             requests.push(
                 createMedia(
                     img,
+                    EmbedEnumType.IMAGE,
                     club,
                     true,
                     (e) => setFileList(list => list.map(file => file.fileName === img.file.name ?

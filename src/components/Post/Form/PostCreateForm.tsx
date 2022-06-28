@@ -45,7 +45,7 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                     case EmbedEnumType.IMAGE: {
                         const ids = []
                         for (const f of embed.data) {
-                            const res = await createMedia(f)
+                            const res = await createMedia(f, embed.type, values.selectedClub?.id)
                             ids.push(res.data.id)
                         }
 
@@ -57,10 +57,10 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                         break
                     }
                     case EmbedEnumType.DOCUMENT:
-                        res = await createMedia(embed.data)
+                        res = await createMedia(embed.data, embed.type, values.selectedClub?.id)
                         break
                     case EmbedEnumType.VIDEO:
-                        res = await createMedia(embed.data[0])
+                        res = await createMedia(embed.data[0], embed.type, values.selectedClub?.id)
                         break
                     case EmbedEnumType.POLL:
                         res = await createPoll(embed.data)

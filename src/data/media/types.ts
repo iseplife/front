@@ -29,12 +29,15 @@ export interface Media extends MediaName {
 
 export type Image = Media & {
     thread: number
+    color: string
+    ratio: number
 }
 
 export type Video = Media & {
     title: string
     thumbnail: string
     views: number
+    ratio: number
 }
 
 

@@ -8,6 +8,7 @@ import {GallerySizes} from "./constants/MediaSizes"
 import {TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
+import { CSSProperties } from "react"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -133,7 +134,9 @@ export const useQuery = (): URLSearchParams => new URLSearchParams(useLocation()
 
 export const isFileImage = (file: string): boolean => ["image/gif", "image/jpeg", "image/png"].includes(file)
 
-export const mediaPath = (fullPath?: string, size?: string): string | undefined => {
+function mediaPath(fullPath: string, size?: string): string
+function mediaPath(fullPath: string | undefined, size?: string): string | undefined
+function mediaPath(fullPath: string | undefined, size?: string): string | undefined {
     if (fullPath) {
         const storageUrl = process.env.STORAGE_URL || "https://iseplife-dev.s3.eu-west-3.amazonaws.com"
         if (size) {
@@ -146,7 +149,9 @@ export const mediaPath = (fullPath?: string, size?: string): string | undefined 
     return fullPath
 }
 
-export type SafePhoto = PhotoProps<{nsfw: boolean, status: MediaStatus}>
+export {mediaPath}
+
+export type SafePhoto = PhotoProps<{nsfw: boolean, color: string, status: MediaStatus, id: number, ratio: number}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
 
 export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
@@ -156,33 +161,19 @@ export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: 
     ) as Awaited<T[]>
 }
 
-export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string): Promise<SafePhoto> => {
-    return new Promise((resolve, reject) => {
-        if (img.status != MediaStatus.READY){
-            return resolve({
-                key,
-                src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
-                width: 50,
-                height: 50,
-                status: img.status,
-                nsfw: img.nsfw,
-                srcSet: img.name,
-            })
-        }
-
-        const image = new Image()
-        image.src = mediaPath(img.name, GallerySizes.PREVIEW) as string
-        image.onerror = reject
-        image.onload = () => resolve({
-            key,
-            src: image.src,
-            width: image.width,
-            height: image.height,
-            status: img.status,
-            nsfw: img.nsfw,
-            srcSet: img.name,
-        })
-    })
+export const defaultPhotoParser: ParserFunction = async (img: ImageType, key: string): Promise<SafePhoto> => {
+    return {
+        key,
+        id: img.id,
+        width: img.ratio * 100,
+        height: 100,
+        color: img.color,
+        src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
+        ratio: img.ratio,
+        status: img.status,
+        nsfw: img.nsfw,
+        srcSet: img.name,
+    }
 }
 
 
@@ -194,6 +185,22 @@ export const positionToMarker = (position?: EventPosition) => {
     }
     return marker
 }
+
+export const setStyles = (element: HTMLElement, style: CSSProperties) => {
+    for(const entry of Object.entries(style)){
+        (element.style as any)[entry[0]] = entry[1]
+        element.style.setProperty(
+            entry[0]
+                .split("")
+                .map(letter => letter == letter.toUpperCase() ? `-${letter}` : letter)
+                .join(""),
+            entry[1],
+            "important"
+        )
+    }
+}
+
+export const waitForFrame = async () => new Promise(requestAnimationFrame)
 
 
 export class EntitySet<T extends Entity> {

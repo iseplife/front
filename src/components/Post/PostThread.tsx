@@ -14,10 +14,11 @@ type PostTheadProps = {
     commentsCount: number
     forceShowComments: boolean
     trendingComment?: Comment
+    lightboxView?: boolean
 }
 const PostThread: React.FC<PostTheadProps> = (props) => {
-    const {commentsCount, thread, trendingComment} = props
-    const [showComments, setShowComments] = useState<boolean>()
+    const {commentsCount, thread, trendingComment, lightboxView} = props
+    const [showComments, setShowComments] = useState<boolean>(props.forceShowComments)
     const [liked, setLiked] = useState<boolean>(props.liked)
     const [likes, setLikes] = useState<number>(props.likesCount)
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
@@ -53,7 +54,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                             group flex items-center justify-center cursor-pointer
                             hover:text-indigo-500 mr-3 text-xl transition-colors duration-100
                         "
-                        onClick={() => setShowComments(!showComments)}
+                        onClick={() => props.forceShowComments || setShowComments(!showComments)}
                     >
                         <div className="text-base mx-1.5 w-7 text-right">
                             {commentsCount > 0 && commentsCount}
@@ -88,6 +89,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                 <>
                     <Divider className="mb-0 mt-4"/>
                     <CommentList
+                        lightboxView={lightboxView}
                         showMoreComments={() => setShowComments(true)}
                         showComments={showComments}
                         trendingComment={noTrendingComment ? undefined : trendingComment}

@@ -9,6 +9,7 @@ import {Media, MediaUploadNSFW} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
 import {faInbox} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { EmbedEnumType } from "../../../data/post/types"
 
 const UPLOADER_ID = "imgupload"
 
@@ -102,6 +103,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                 if (isFileImage(img.file.type)) {
                     res = await createMedia(
                         img,
+                        EmbedEnumType.IMAGE,
                         club,
                         true,
                         e => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.size)))

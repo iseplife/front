@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
@@ -15,45 +15,28 @@ import {parsePhotosAsync, mediaPath, SafePhoto, ParserFunction} from "../../../u
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
-import Lightbox from "../../../components/Common/Lightbox"
 import GallerySidebar from "./GallerySidebar"
+import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
     thread: number
 }
-const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
-    return new Promise((resolve, reject) => {
-        if (img.status != MediaStatus.READY){
-            return resolve({
-                key,
-                src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
-                width: 50,
-                height: 50,
-                selected: false,
-                thread: img.thread,
-                nsfw: img.nsfw,
-                status: img.status,
-                srcSet: img.name
-            })
-        }
-        const image = new Image()
-        image.src = mediaPath(img.name, GallerySizes.PREVIEW)!
-        image.onerror = reject
-        image.onload = () => {
-            resolve({
-                key,
-                src: image.src,
-                width: image.width,
-                height: image.height,
-                selected: false,
-                thread: img.thread,
-                nsfw: img.nsfw,
-                status: img.status,
-                srcSet: img.name
-            } as GalleryPhoto)
-        }
-    })
+const parserSelectablePhoto: ParserFunction<GalleryPhoto> = async (img: ImageType, key: string) => {
+    return {
+        key,
+        id: img.id,
+        color: img.color,
+        src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
+        ratio: img.ratio,
+        selected: false,
+        thread: img.thread,
+        nsfw: img.nsfw,
+        status: img.status,
+        srcSet: img.name,
+        width: img.ratio * 100,
+        height: 100,
+    }
 }
 
 
@@ -70,7 +53,7 @@ const Gallery: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [gallery, setGallery] = useState<GalleryType>()
-    const [photos, setPhotos] = useState<GalleryPhoto[]>([])
+    const [photos, setPhotos] = useState<(GalleryPhoto & {ref: RefObject<HTMLDivElement>})[]>([])
     const [initialIndex, setInitialIndex] = useState<number>()
 
     const handleSelect = useCallback((key: string) => {
@@ -83,7 +66,7 @@ const Gallery: React.FC = () => {
 
     const addNewImages = useCallback((images: ImageType[]) => {
         Promise.all(images.map((img, i) => parserSelectablePhoto(img, String(i)))).then(photos => {
-            setPhotos(prevState => [...prevState, ...photos])
+            setPhotos(prevState => [...prevState, ...photos].map(img => ({...img, ref: React.createRef()})))
         }).catch(e => message.error("Error while parsing...", e))
     }, [])
 
@@ -119,11 +102,20 @@ const Gallery: React.FC = () => {
             })
     }, [gallery, photos])
 
+    useEffect(() => {
+        const splitted = history.location.pathname.split("/")
+        splitted.shift()
+        if (splitted.length == 3)
+            setInitialIndex(+splitted[2])
+        else if (splitted.length != 2)
+            history.replace("/404")
+        else
+            setInitialIndex(undefined)
+    }, [history.location.pathname])
+
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
-        if (photo && gallery) {
-            setInitialIndex(photo.index)
-            history.push(`/gallery/${id}?p=${photo.index}`)
-        }
+        if (photo && gallery)
+            history.push(`/gallery/${id}/${photo.index}`)
     }, [id, gallery])
 
     const exitEditMode = useCallback(() => {
@@ -131,10 +123,9 @@ const Gallery: React.FC = () => {
         setPhotos(prevState => prevState.map(photo => ({...photo, selected: false})))
     }, [])
 
-    const closeLightbox = useCallback(() => {
-        setInitialIndex(undefined)
+    const closeLightbox = useCallback(() => 
         history.push(`/gallery/${id}`)
-    }, [id])
+    , [id])
 
     const removeGallery = useCallback(() =>
         Modal.confirm({
@@ -151,8 +142,9 @@ const Gallery: React.FC = () => {
             }
         }), [gallery])
 
-    const imageRenderer = useCallback(({index, key, left, top, photo}: any) => (
+    const imageRenderer = useCallback(({ index, key, left, top, photo }: any) => (
         <SelectableImage
+            photoRef={photo.ref}
             key={key}
             selectable={editMode}
             margin={"2px"}
@@ -176,7 +168,7 @@ const Gallery: React.FC = () => {
                     setGallery(res.data)
                     parsePhotosAsync(res.data.images, parserSelectablePhoto)
                         .then(photos => {
-                            setPhotos(photos)
+                            setPhotos(photos.map(photo => ({...photo, ref: React.createRef()})))
                             if (picture)
                                 setInitialIndex(+picture)
                         })
@@ -191,8 +183,10 @@ const Gallery: React.FC = () => {
     }, [id])
 
     const updateURL = useCallback((index) => {
-        history.push(`/gallery/${id}?p=${index}`)
+        history.push(`/gallery/${id}/${index}`)
     }, [id])
+
+    const gallerySidebar = useCallback((gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />, [gallery])
 
     return (
         <div className="w-5/6 mx-auto flex flex-col m-6 mb-20">
@@ -285,15 +279,14 @@ const Gallery: React.FC = () => {
                     />
                 }
             </div>
-            {initialIndex != undefined && gallery && (
-                <Lightbox
-                    photos={photos}
-                    initialIndex={initialIndex}
-                    onClose={closeLightbox}
-                    onChange={updateURL}
-                    Sidebar={gProps => <GallerySidebar gallery={gallery} {...gProps} />}
-                />
-            )}
+            <AnimatedLightbox
+                show={initialIndex != undefined && gallery != undefined}
+                initialIndex={initialIndex as number}
+                photos={photos}
+                onChange={updateURL}
+                onClose={closeLightbox}
+                Sidebar={gallerySidebar}
+            />
         </div>
     )
 }

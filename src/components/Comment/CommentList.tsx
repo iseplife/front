@@ -19,9 +19,10 @@ interface CommentListProps {
     autofocusInput?: boolean
     showOne?: boolean
     className?: string
+    lightboxView?: boolean
 }
 
-const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className}) => {
+const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className, lightboxView}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
     const [t] = useTranslation(["post"])
@@ -108,6 +109,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
             {loading && <div className="flex-1"> <Loading size="sm"/> </div>}
             {comments.map(c =>
                 <Comment
+                    lightboxView={lightboxView}
                     key={c.id}
                     data={c}
                     allowReplies={depth === 0}

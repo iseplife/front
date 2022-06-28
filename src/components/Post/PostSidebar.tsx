@@ -19,7 +19,7 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
     return (
         <div>
             <div className="flex flex-col p-4">
-                <div className="w-full flex justify-between mb-1">
+                <div className="w-full flex justify-between mb-1 text-neutral-200 md:text-black">
                     <div className="flex">
                         <StudentAvatar
                             id={post.author.id}
@@ -31,20 +31,20 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                         />
                         <div className="items-center ml-3">
                             <div className="font-bold -mb-0.5 text-base">{post.author.name}</div>
-                            <div className="text-md">{ formattedDate }</div>
+                            <div className="text-md">
+                                {isFuture(post.publicationDate) ?
+                                    `${t("post:planned_for")} ${format(new Date(post.publicationDate), "dd/MM/yy, HH:mm")}` :
+                                    formattedDate
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center text-lg -mt-4">
-                        <span className="mx-2 text-xs">
-                            {isFuture(post.publicationDate) && t("post:planned_for")}
-                            {format(new Date(post.publicationDate), "HH:mm  dd/MM/yy")}
-                        </span>
-                    </div>
                 </div>
-                <div className="text-base ml-2 mt-2">
+                <div className="text-base ml-2 mt-2 text-neutral-100 md:text-black">
                     {post.description}
                 </div>
                 <PostThread
+                    lightboxView={true}
                     thread={post.thread}
                     liked={post.liked}
                     likesCount={post.nbLikes}
