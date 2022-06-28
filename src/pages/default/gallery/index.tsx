@@ -28,13 +28,14 @@ const parserSelectablePhoto: ParserFunction<GalleryPhoto> = async (img: ImageTyp
         id: img.id,
         color: img.color,
         src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
-        width: 100 * img.ratio,
-        height: 100,
+        ratio: img.ratio,
         selected: false,
         thread: img.thread,
         nsfw: img.nsfw,
         status: img.status,
-        srcSet: img.name
+        srcSet: img.name,
+        width: img.ratio * 100,
+        height: 100,
     }
 }
 

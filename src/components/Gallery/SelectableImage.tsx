@@ -54,8 +54,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin,
                 status={photo.status}
                 style={photo.selected ? {...selectedImgStyle} : imgStyle}
                 src={photo.src}
-                height={photo.height}
-                width={photo.width}
+                ratio={photo.ratio}
                 alt={photo.alt}
             />
             {photo.selected && <>

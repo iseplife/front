@@ -53,8 +53,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                 style={{backgroundColor: `#${img.color}`}}
                             >
                                 <SafeImage
-                                    width={100 * img.ratio}
-                                    height={100}
+                                    ratio={img.ratio}
                                     className="h-full w-full bg-gray-400 object-cover opacity-50"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}
@@ -69,8 +68,7 @@ const EmbedGallery: React.FC<EmbedGalleryProps> = ({gallery}) => {
                                 style={{backgroundColor: `#${img.color}`}}
                             >
                                 <SafeImage
-                                    width={100 * img.ratio}
-                                    height={100}
+                                    ratio={img.ratio}
                                     className="h-full w-full bg-gray-400 object-cover hover:opacity-75"
                                     src={mediaPath(img.name, GallerySizes.PREVIEW)}
                                     status={img.status}

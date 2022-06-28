@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
-import {parsePhotosAsync, SafePhoto} from "../../../util"
+import {parsePhotosAsync} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 import {Image, MediaStatus} from "../../../data/media/types"
 import {message} from "antd"
@@ -38,15 +38,15 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
         return photos.length == 1 ?
             <div className="rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer max-h-[400px]" style={{
                 backgroundColor: `#${first.color}`,
-                ...(first.width > first.height && {
+                ...(first.ratio > 1 && {
                     width: "100%",
                 }),
-                aspectRatio: (first.width / first.height).toString(),
+                aspectRatio: first.ratio.toString(),
             }}
             ref={first.ref}
             onClick={() => setLightboxPhotoIndex(0)}
             >
-                <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} height={first.height} width={first.width} nsfw={first.nsfw} status={first.status} />
+                <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} ratio={first.ratio} nsfw={first.nsfw} status={first.status} />
             </div>
             :
             <div className={`grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border ${photos.length >= 3 ? "h-64 lg:h-80" : "h-32 lg:h-40"}`}>
@@ -62,7 +62,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                         key={index}
                         onClick={() => setLightboxPhotoIndex(index)}
                         >
-                            <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} height={photo.height} width={photo.width} nsfw={photo.nsfw} status={photo.status} />
+                            <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} ratio={photo.ratio} nsfw={photo.nsfw} status={photo.status} />
                             {index == 3 && photos.length > 4 &&
                                 <div className="w-full h-full absolute top-0 left-0 bg-neutral-800/60 backdrop-blur-lg text-white grid place-items-center text-4xl font-bold">
                                     + {photos.length - 3}
@@ -76,7 +76,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
 
 
     return (
-        <div className="flex flex-col mx-3">
+        <div className="block mx-3">
             {imagesComponent}
             <AnimatedLightbox
                 show={lightboxPhotoIndex !== undefined}

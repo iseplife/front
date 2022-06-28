@@ -12,10 +12,11 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     lowQualitySrc?: string
     src: string
     skipNsfw?: boolean
+    ratio: number
 }
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, status, onLoaded, skipNsfw, src, width, height, lowQualitySrc} = props
+    const {nsfw, status, onLoaded, skipNsfw, src, ratio, lowQualitySrc} = props
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode && !skipNsfw)
     const ready = useMemo(() => status === MediaStatus.READY, [status])
@@ -41,7 +42,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     }, [ready, onLoaded])
 
     return <>
-        <img width={width} height={height} className="w-full h-full invisible" />
+        <img width={props.width} height={props.height} className="w-full h-full invisible" />
         {!ready && 
             <div className="w-full h-full grid place-items-center absolute top-0 scale-50 drop-shadow-xl">
                 <LoadingSpinner />

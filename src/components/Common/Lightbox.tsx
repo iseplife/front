@@ -112,8 +112,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
                         src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
                         alt={currentPhoto.alt}
-                        width={currentPhoto.width}
-                        height={currentPhoto.height}
+                        ratio={currentPhoto.ratio}
                     /> :
                     <div>{t("error")}</div>
                 }

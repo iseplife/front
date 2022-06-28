@@ -151,7 +151,7 @@ function mediaPath(fullPath: string | undefined, size?: string): string | undefi
 
 export {mediaPath}
 
-export type SafePhoto = PhotoProps<{nsfw: boolean, color: string, status: MediaStatus, id: number}>
+export type SafePhoto = PhotoProps<{nsfw: boolean, color: string, status: MediaStatus, id: number, ratio: number}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
 
 export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
@@ -165,10 +165,11 @@ export const defaultPhotoParser: ParserFunction = async (img: ImageType, key: st
     return {
         key,
         id: img.id,
+        width: img.ratio * 100,
+        height: 100,
         color: img.color,
         src: mediaPath(img.name, GallerySizes.PREVIEW) as string,
-        width: 100 * img.ratio,
-        height: 100,
+        ratio: img.ratio,
         status: img.status,
         nsfw: img.nsfw,
         srcSet: img.name,
