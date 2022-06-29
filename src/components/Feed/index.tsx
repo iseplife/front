@@ -46,6 +46,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
+    const [text, setText] = useState<string>("")
+
     const posts = useLiveQuery(async () => (
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     ), [id, loadedPosts, loading])
@@ -202,7 +204,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         >
             <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
             {allowPublication && (
-                <BasicPostForm user={user} feedId={id} onPost={onPostCreation}>
+                <BasicPostForm setText={setText} user={user} feedId={id} onPost={onPostCreation}>
                     <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
@@ -249,6 +251,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 onCancel={() => setCompleteFormType(undefined)}
                             >
                                 <PostCreateForm
+                                    text={text}
                                     type={completeFormType}
                                     feed={id}
                                     user={user}

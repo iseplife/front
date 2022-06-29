@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import {BasicPostCreation, PostUpdate} from "../../../data/post/types"
 import {Field, Form, FormikErrors, FormikProps, withFormik} from "formik"
 import {Divider, message} from "antd"
@@ -18,17 +18,29 @@ export type BasicPostFormValues = {
     feed: number
     linkedClub?: number
     selectedClub?: Author
+    setText: (value: string) => void
 }
 
 
 const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSubmitting, setValues, values }) => {
     const {t} = useTranslation(["post"])
     const {state: {user}} = useContext(AppContext)
+    const textRef = useRef<HTMLInputElement>(null)
+    const [selectedClub, setSelectedClub] = useState<Author>()
+
+    useEffect(() => {
+        if(values.selectedClub != selectedClub)
+            setValues(values => ({...values, selectedClub}))
+    }, [selectedClub, values.selectedClub])
+
+    useEffect(() => {
+        values.setText(values.description)
+    }, [textRef?.current, values.setText, values.description])
+
     return (
         <Form className="flex flex-col items-center text-gray-500 rounded-lg shadow bg-white">
             <div className="flex flex-col w-full py-3 px-4 overflow-y-auto" style={{ minHeight: "5rem" }}>
                 <Field
-                    type="textarea"
                     name="description"
                     placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
                     className="text-gray-700 placeholder-gray-500 flex-1 mb-4 bg-transparent resize-none focus:outline-none bg-black bg-opacity-5 rounded-full px-3 py-1.5"
@@ -39,7 +51,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
                     {children}
                     <div className="flex-1 flex justify-end items-center mt-1 -mb-1">
                         <AuthorPicker
-                            callback={author => setValues({ ...values, selectedClub: author })}
+                            callback={setSelectedClub}
                             className="text-gray-700 rounded-lg hover:bg-gray-100 transition-colors py-1 mt-1"
                         />
                         <Divider type="vertical" className="mr-3 ml-2 mt-0.5 -mb-0.5" />
@@ -63,6 +75,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
 type BasicPostForm = {
     feedId?: number
     onPost: (post: PostUpdate) => void
+    setText: (value: string) => void
     user: LoggedStudentPreview
 }
 const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
@@ -70,6 +83,7 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
         return {
             description: "",
             feed: props.feedId!,
+            setText: props.setText,
             private: true,
         }
     },

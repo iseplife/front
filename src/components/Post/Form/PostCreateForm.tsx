@@ -14,15 +14,17 @@ type PostCreateFormProps = {
     type: EmbedEnumType
     feed?: number
     user: LoggedStudentPreview
+    text?: string
     onSubmit: (post: PostUpdate) => void
     onClose: () => void
 }
 const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreation>>({
-    mapPropsToValues: ({type}) => ({
+    mapPropsToValues: ({type, text}) => ({
         description: "",
         publicationDate: new Date(),
         embed: DEFAULT_EMBED[type],
         private: true,
+        text
     }),
 
     validate: (values) => {
