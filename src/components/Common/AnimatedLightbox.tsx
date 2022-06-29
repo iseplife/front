@@ -4,6 +4,7 @@ import Lightbox from "./Lightbox"
 import { RefObject, useEffect } from "react"
 import { useCallback } from "react"
 import { useState } from "react"
+import { GallerySizes } from "../../constants/MediaSizes"
 
 export interface SidebarProps<T extends SafePhoto> {
   currentImage: T
@@ -104,6 +105,9 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                 
                 document.documentElement.appendChild(clone)
                 clone.querySelector("img:not(.absolute)")?.remove()
+                const cloneImage = clone.querySelector<HTMLImageElement>("img")?.cloneNode(true) as HTMLImageElement
+                cloneImage.src = cloneImage.src.replace(GallerySizes.PREVIEW, GallerySizes.LIGHTBOX)
+                clone.appendChild(cloneImage)
 
                 clone.querySelector<HTMLImageElement>("img.absolute")!.onload = () => {
                     setClone(clone)
