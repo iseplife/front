@@ -248,7 +248,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        this.addPostToFeed(packet.post, packet.post.context.id, packet.hasWriteAccess)
+        this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
         if (packet.follow) {
             this.addData({
                 ...packet.post,

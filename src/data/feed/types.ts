@@ -7,6 +7,7 @@ export enum FeedType {
 
 export type Feed = {
     id: number
+    feedId: number
     name: string
     type: FeedType
 }
