@@ -29,7 +29,6 @@ export type PostFormValues<T extends EmbedFormType> = {
 const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const {t} = useTranslation("post")
     const inputRef = useRef<HTMLInputElement>(null)
-    const textInputRef = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
         // We trigger upload window only if it a creation's form and the embed chose isn't a poll
@@ -38,9 +37,9 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
     }, [])
 
     useEffect(() => {
-        if(values.text && textInputRef.current)
-            textInputRef.current.value = values.text
-    }, [values.text, textInputRef.current])
+        if(values.text)
+            setValues(values => ({...values, description: values.text ?? ""}))
+    }, [values.text])
 
 
     const handleFile = useCallback((type: EmbedEnumType) => (file: File, files: File[]) => {
@@ -82,10 +81,10 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     />
                 </div>
 
-                <textarea
+                <Field
+                    as="textarea"
                     name="description"
                     placeholder="What's on your mind ?"
-                    ref={textInputRef}
                     className="text-gray-800 flex-1 mb-4 bg-transparent resize-none focus:outline-none border-b"
                 />
 

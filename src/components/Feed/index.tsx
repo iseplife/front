@@ -112,9 +112,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         })
     }, [id])
 
-    const onPostCreation = useCallback((post: PostUpdate) => (
+    const onPostCreation = useCallback((post: PostUpdate) => {
         setFirstLoaded(feedsManager.calcId(post))
-    ), [])
+        console.log("new post", {...post})
+        feedsManager.addPostToFeed(post, post.feedId)
+        feedsManager.addPostToFeed(post, undefined)
+    }, [])
 
     const onPostRemoval = useCallback(async (id: number) => {
         await feedsManager.deletePost(id)

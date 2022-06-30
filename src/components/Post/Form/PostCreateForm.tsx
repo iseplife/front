@@ -41,10 +41,13 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         props.feed = props.feed ?? values.selectedClub?.feedId ?? props.user.feedId
 
         try {
-            if (embed) {
+            console.log(embed)
+            embed_block: if (embed) {
                 let res: AxiosResponse<{ id: number }>
                 switch (embed.type) {
                     case EmbedEnumType.IMAGE: {
+                        if(embed.data.length == 0)
+                            break embed_block
                         const ids = []
                         for (const f of embed.data) {
                             const res = await createMedia(f, embed.type, values.selectedClub?.id)
@@ -59,12 +62,18 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                         break
                     }
                     case EmbedEnumType.DOCUMENT:
+                        if(embed.data?.file == undefined)
+                            break embed_block
                         res = await createMedia(embed.data, embed.type, values.selectedClub?.id)
                         break
                     case EmbedEnumType.VIDEO:
+                        if(embed.data.length == 0)
+                            break embed_block
                         res = await createMedia(embed.data[0], embed.type, values.selectedClub?.id)
                         break
                     case EmbedEnumType.POLL:
+                        if(embed.data.choices.length == 0)
+                            break embed_block
                         res = await createPoll(embed.data)
                         break
                     case EmbedEnumType.GALLERY:

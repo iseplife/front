@@ -266,7 +266,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await this.addData({
             ...post,
             lastLoadId: this.getLastLoad(feed),
-            loadedFeed: feed,
+            loadedFeed: feed ?? mainFeedId,
             hasWriteAccess: hasWriteAccess ?? (post as Post).hasWriteAccess,
             publicationDateId: this.calcId(post),
         } as ManagerPost)
