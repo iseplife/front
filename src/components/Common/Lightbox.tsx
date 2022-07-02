@@ -47,6 +47,28 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const photoRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
+        const fnc = (event: KeyboardEvent) => {
+            switch(event.key){
+                case "Escape":
+                    onClose()
+                    break
+                case "ArrowRight":
+                    setCurrentIndex(initialIndex => Math.min(photos.length - 1, initialIndex + 1))
+                    break
+                case "ArrowLeft":
+                    setCurrentIndex(initialIndex => Math.max(0, initialIndex - 1))
+                    break
+                default:
+                    break
+            }
+        }
+        
+        window.addEventListener("keyup", fnc)
+
+        return () => window.removeEventListener("keyup", fnc)
+    }, [photos.length])
+
+    useEffect(() => {
         const handleResize = () => {
             const ratio = currentPhoto.width / currentPhoto.height
 
