@@ -155,9 +155,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
 const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any, alerts?: number }> = ({ route, selectedIcon, notSelectedIcon, alerts }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
-    
-    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
-    
+        
     return <Link to={route}>
         <button className="border-0 grid place-items-center h-full w-full text-2xl">
             <div className="relative">
@@ -165,8 +163,8 @@ const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelect
                     <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
                 </div>
                 
-                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts || showPushAsk ? "scale-100" : "scale-0")}>
-                    {Math.min((alerts ?? 0) + +(showPushAsk ?? false), 9)}
+                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts ? "scale-100" : "scale-0")}>
+                    {Math.min(alerts ?? 0, 9)}
                 </div>
             </div>
         </button>
@@ -178,12 +176,13 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const {state: {payload}} = useContext(AppContext)
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
+    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
     return (
         <>
             <div className="md:hidden grid grid-cols-4 shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
                 <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
                 <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
-                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} alerts={unwatchedNotifications} />
+                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} alerts={+(showPushAsk ?? false) + unwatchedNotifications} />
                 <div className="cursor-pointer grid place-items-center h-full w-full" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}
