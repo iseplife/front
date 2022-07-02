@@ -25,6 +25,7 @@ export type PostFormValues<T extends EmbedFormType> = {
     linkedClub?: number
     selectedClub?: Author
     text?: string
+    edit?: boolean
 }
 const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const {t} = useTranslation("post")
@@ -117,13 +118,13 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             </div>
                         </div>
                     )}
-                    <div className="flex-1 flex justify-end items-center">
+                    {values.edit && <div className="flex-1 flex justify-end items-center">
                         <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
                             className="mr-3 text-gray-700 rounded hover:bg-gray-100"
                         />
                         <Divider type="vertical"/>
-                    </div>
+                    </div>}
                     <div className="flex items-center">
                         <button
                             type="submit"

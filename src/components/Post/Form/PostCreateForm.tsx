@@ -24,7 +24,8 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         publicationDate: new Date(),
         embed: DEFAULT_EMBED[type],
         private: true,
-        text
+        text,
+        edit: true
     }),
 
     validate: (values) => {
