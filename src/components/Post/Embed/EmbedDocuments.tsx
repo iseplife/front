@@ -8,7 +8,6 @@ type EmbedDocumentsProps = {
     data: Document
 }
 const EmbedDocuments: React.FC<EmbedDocumentsProps> = ({ data }) => {
-    console.log(data)
     const sizeKo = useMemo(() => Math.floor(data.sizeBytes / 1024), [data.sizeBytes])
     const sizeMb = useMemo(() => (sizeKo / 1024).toFixed(sizeKo > 1024 * 10 ? 0 : 2), [sizeKo])
     return (

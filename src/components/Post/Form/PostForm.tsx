@@ -92,35 +92,36 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     className="text-gray-800 flex-1 mb-4 bg-transparent resize-none focus:outline-none border-b"
                 />
 
-                {values.embed && (
-                    <>
-                        <EmbedForm/>
-                        <input
-                            type="file" ref={inputRef}
-                            hidden
-                            multiple={values.embed.type === EmbedEnumType.IMAGE}
-                            accept={ACCEPTED_FILETYPE[values.embed.type]}
-                            onChange={handleInputFile(values.embed.type)}
-                        />
-                    </>
-                )}
                 <div className="flex justify-between">
-                    {!values.embed && (
-                        <div className="flex items-center">
-                            <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)} accept=".png,.jpg,.jpeg,.gif">
-                                <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
-                            </Upload>
-                            <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.VIDEO)} accept=".mp4,.webm">
-                                <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
-                            </Upload>
-                            <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
-                                <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
-                            </Upload>
-                            <div onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}>
-                                <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                    {values.embed ? 
+                        (
+                            <>
+                                <EmbedForm/>
+                                <input
+                                    type="file" ref={inputRef}
+                                    hidden
+                                    multiple={values.embed.type === EmbedEnumType.IMAGE}
+                                    accept={ACCEPTED_FILETYPE[values.embed.type]}
+                                    onChange={handleInputFile(values.embed.type)}
+                                />
+                            </>
+                        ) : (
+                            <div className="flex items-center">
+                                <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)} accept=".png,.jpg,.jpeg,.gif">
+                                    <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                </Upload>
+                                <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.VIDEO)} accept=".mp4,.webm">
+                                    <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                </Upload>
+                                <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
+                                    <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                </Upload>
+                                <div onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}>
+                                    <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )
+                    }
                     {!values.edit && <div className="flex-1 flex justify-end items-center">
                         <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
