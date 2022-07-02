@@ -337,6 +337,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 this.addData({
                     ...post,
                     ...res.data,
+                    waitingForUpdate: false,
                 })
         } else
             throw new Error("No connection")
