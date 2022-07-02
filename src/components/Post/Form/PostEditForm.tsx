@@ -70,7 +70,8 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
             id: post.id,
             description: post.description,
             publicationDate: post.publicationDate,
-            embed: embed
+            embed: embed,
+            edit: true,
         }
     },
 

@@ -4,7 +4,7 @@ import {Field, Form, FormikProps,} from "formik"
 import {DatePicker, Divider, Upload} from "antd"
 import EmbedForm from "./EmbedForm"
 import moment from "moment"
-import {isPast} from "date-fns"
+import {isFuture, isPast} from "date-fns"
 import {useTranslation} from "react-i18next"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {
@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { Author } from "../../../data/request.type"
 import AuthorPicker from "../../Common/AuthorPicker"
+import { useMemo } from "react"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -64,10 +65,12 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
         handleFile(type)(files[0], files)
     }, [handleFile])
 
+    const originalPublicationDate = useMemo(() => values.publicationDate, [])
+
     return (
         <Form className="flex flex-col items-center text-gray-500">
             <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 overflow-y-auto" style={{minHeight: "5rem"}}>
-                <div className="flex justify-between items-center mb-2">
+                {(!values.edit || isFuture(originalPublicationDate)) && <div className="flex justify-between items-center mb-2">
                     <DatePicker
                         format="DD/MM/YYYY HH:mm"
                         showTime
@@ -80,7 +83,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                         className="hover:border-indigo-400 text-gray-500 border-gray-200"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
-                </div>
+                </div>}
 
                 <Field
                     as="textarea"
@@ -118,7 +121,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             </div>
                         </div>
                     )}
-                    {values.edit && <div className="flex-1 flex justify-end items-center">
+                    {!values.edit && <div className="flex-1 flex justify-end items-center">
                         <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
                             className="mr-3 text-gray-700 rounded hover:bg-gray-100"

@@ -17,15 +17,16 @@ type PostCreateFormProps = {
     text?: string
     onSubmit: (post: PostUpdate) => void
     onClose: () => void
+    edit?: boolean
 }
 const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreation>>({
-    mapPropsToValues: ({type, text}) => ({
+    mapPropsToValues: ({type, text, edit}) => ({
         description: "",
         publicationDate: new Date(),
         embed: DEFAULT_EMBED[type],
         private: true,
         text,
-        edit: true
+        edit
     }),
 
     validate: (values) => {
