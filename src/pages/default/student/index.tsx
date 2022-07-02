@@ -6,8 +6,6 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import Feed from "../../../components/Feed"
 import StudentClubs from "../../../components/Student/StudentClubs"
 import SubscriptionHandler from "../../../components/Subscription"
-import SubscriptionButton from "../../../components/Subscription/SubscriptionButton"
-import SubscriptionExtensiveButton from "../../../components/Subscription/SubscriptionExtensiveButton"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
 import { Subscription } from "../../../data/feed/types"
@@ -81,17 +79,31 @@ const Student: React.FC = () => {
                     <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">
                         <img className="w-32 h-32 rounded-full" src={student?.picture ? mediaPath(student?.picture, AvatarSizes.FULL) : "/img/icons/discovery/user.svg"} />
                         <div>
-                            <div className="text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
-                            <div className="text-xl text-neutral-500">Promo {student?.promo}</div>
-                        
-                            {student && student?.id != myId && <div className="flex mt-3">
-                                <SubscriptionHandler
-                                    type={SubscribableType.STUDENT}
-                                    subscribable={student.id}
-                                    subscription={student.subscribed}
-                                    onUpdate={handleSubscription}
-                                />
-                            </div>}
+                            {
+                                student ? <>
+                                    <div className="text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
+                                    <div className="text-xl text-neutral-500">Promo {student?.promo}</div>
+                                </> : <>
+                                    <div className="text-3xl font-bold h-8 w-32 bg-neutral-200 rounded-full absolute"></div>
+                                    <div className="text-3xl font-bold">&nbsp;</div>
+                                    <div className="text-xl text-neutral-500 flex">Promo ...</div>
+                                </>
+                            }
+                            <div className="flex mt-3">
+                                {student ? 
+                                    student?.id != myId &&
+                                        <SubscriptionHandler
+                                            type={SubscribableType.STUDENT}
+                                            subscribable={student.id}
+                                            subscription={student.subscribed}
+                                            onUpdate={handleSubscription}
+                                        />
+                                    : <div className="flex">
+                                        <div className="w-24 h-10 rounded-full bg-neutral-200" />
+                                        <div className="w-10 h-10 rounded-full bg-neutral-200 ml-2" />
+                                    </div>
+                                }
+                            </div>
                         </div>
                         
                     </div>
