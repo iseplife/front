@@ -46,14 +46,23 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
 
     const handleFile = useCallback((type: EmbedEnumType) => (file: File, files: File[]) => {
         if (files.length > 0) {
-            if (type === EmbedEnumType.IMAGE) {
-                if (files.length > 5) {
-                    setFieldError("embed", "Vous ne pouvez pas publier plus de 5 photos")
-                    return false
-                }
-                setFieldValue("embed", {type, data: files.map(f => ({file: f, nsfw: false}))} as EmbedCreation)
-            } else {
-                setFieldValue("embed", {type, data: [{file: files[0], nsfw: false}]} as EmbedCreation)
+            switch(type){
+                case EmbedEnumType.IMAGE:
+                    if (files.length > 5) {
+                        setFieldError("embed", "Vous ne pouvez pas publier plus de 5 photos")
+                        return false
+                    }
+                    setFieldValue("embed", {type, data: files.map(f => ({file: f, nsfw: false}))} as EmbedCreation)
+                    break
+                case EmbedEnumType.DOCUMENT:
+                    setFieldValue("embed", {
+                        type: EmbedEnumType.DOCUMENT,
+                        data: {file, nsfw: false}
+                    })
+                    break
+                default:
+                    setFieldValue("embed", {type, data: [{file: files[0], nsfw: false}]} as EmbedCreation)
+                    break
             }
         }
         return false
