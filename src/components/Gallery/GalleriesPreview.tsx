@@ -11,29 +11,31 @@ import {AxiosPromise} from "axios"
 import {Page} from "../../data/request.type"
 
 interface GalleriesPreviewProps {
+    loading?: boolean
     getGalleriesCallback: (page?: number) => AxiosPromise<Page<GalleryPreview>>
     className?: string
 }
 
-const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({getGalleriesCallback, className = ""}) => {
+const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({ loading: _loading = false, getGalleriesCallback, className = "" }) => {
     const {t} = useTranslation("gallery")
-    const [loading, setLoading] = useState<boolean>()
+    const [loading, setLoading] = useState<boolean>(_loading)
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
-
+    
     const [galleriesVisible, setGalleriesVisible] = useState<boolean>(false)
     const openModal = useCallback(() => setGalleriesVisible(true), [])
     const closeModal = useCallback(() => setGalleriesVisible(false), [])
-
+    
     useEffect(() => {
-        setLoading(true)
-        getGalleriesCallback()
-            .then(res => {
-                setGalleriesPreview(res.data.content)
-            })
-            .catch(e => message.error(e))
-            .finally(() => setLoading(false))
-
-    }, [getGalleriesCallback])
+        if (!_loading) {
+            setLoading(true)
+            getGalleriesCallback()
+                .then(res => {
+                    setGalleriesPreview(res.data.content)
+                })
+                .catch(e => message.error(e))
+                .finally(() => setLoading(false))
+        }
+    }, [getGalleriesCallback, _loading])
 
     return (
         <div className={`flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5 hidden sm:flex ${className}`}>
