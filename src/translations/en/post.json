@@ -22,5 +22,8 @@
 		"edited": "Update post",
 		"deleted": "Post deleted"
 	},
-	"just_now": "Just now"
+	"just_now": "Just now",
+	"selected_post": "Selected post",
+	"copy_link": "Share",
+	"copied": "Linked copied into clipboard !"
 }

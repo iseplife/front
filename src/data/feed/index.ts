@@ -4,10 +4,13 @@ import {Page} from "../request.type"
 import {Feed} from "./types"
 import {apiClient} from "../http"
 
-export const getFeedPost = (id?: number, page = 0): AxiosPromise<Page<Post>> => (
+export const getFeedPosts = (id?: number, page = 0): AxiosPromise<Page<Post>> => (
     apiClient.get(`/feed/${id ?? "main"}/post`, {
         params: {page}
     })
+)
+export const getFeedPost = (feedId: number, postId: number): AxiosPromise<Post> => (
+    apiClient.get(`/feed/${feedId}/${postId}`)
 )
 export const getFeedPostsBefore = (id?: number, lastDate = 0): AxiosPromise<Page<Post>> => (
     apiClient.get(`/feed/${id ?? "main"}/prevposts`, {

@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {PostUpdate} from "../../data/post/types"
 import Embed from "./Embed"
-import {Modal} from "antd"
+import {message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import PostEditForm from "./Form/PostEditForm"
-import {faHouseCircleCheck, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faHouseCircleCheck, faShare, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
 import {homepageForcedPost, pinPost} from "../../data/post"
@@ -14,6 +14,9 @@ import { PostContextTag } from "./context/PostContextTag"
 import PostAuthor from "./PostAuthor"
 import useAdminRole from "../../hooks/useAdminRole"
 import PostThread from "./PostThread"
+import DropdownPanelElement from "../Common/DropdownPanelElement"
+import { useHistory } from "react-router-dom"
+import { copyToClipboard } from "../../util"
 
 
 type PostProps = {
@@ -25,9 +28,10 @@ type PostProps = {
     onPin: (id: number, pinned: boolean, homepage?: boolean) => void
     onDelete: (id: number) => Promise<void>
     onUpdate: (id: number, postUpdate: PostUpdate) => void
+    className?: string
 }
 
-const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, className = "shadow-sm"}) => {
     const {t} = useTranslation(["common", "post"])
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
@@ -95,6 +99,14 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
     const setRef = useCallback(ele => { post = ele ?? post }, [post])
     const applyUpdates = useCallback(() => feedsManager.applyUpdates(data.id), [data?.id])
 
+    const h = useHistory()
+
+    const copyLink = useCallback(() => {
+        const splitted = [window.location.host, data.context.type.toLowerCase(), data.context.id, "post", data.id.toString()]
+        copyToClipboard(splitted.join("/"))
+        message.success(t("post:copied"))
+    }, [feedId, data.id, h.location.pathname])
+
     return (
         <div>
             {isEdited && (
@@ -108,7 +120,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                     <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
                 </Modal>
             )}
-            <div className="flex flex-col p-4 shadow-sm rounded-lg bg-white my-5 relative" ref={setRef}>
+            <div className={`flex flex-col p-4 rounded-lg bg-white my-5 relative ${className}`} ref={setRef}>
                 <div className="w-full flex justify-between mb-1">
                     <PostAuthor author={data.author} publicationDate={data.publicationDate}/>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
@@ -127,21 +139,28 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                                 className="mr-2.5 text-gray-400 ml-1"
                             />
                         )}
-                        {data.hasWriteAccess && (
+                        {(
                             <DropdownPanel
-                                panelClassName="w-32 right-0 lg:left-0"
+                                panelClassName="w-32 right-0 lg:left-0 select-none text-base font-medium"
                                 closeOnClick={true}
                                 buttonClassName="mr-0 ml-1"
                             >
-                                <PostToolBar
-                                    feed={feedId}
-                                    pinned={data.pinned}
-                                    homepageForced={superVisibility}
-                                    triggerPin={togglePin}
-                                    triggerHomepageForced={toggleHomepageForced}
-                                    triggerEdition={() => toggleEdition(true)}
-                                    triggerDeletion={confirmDeletion}
+                                <DropdownPanelElement
+                                    title={t("post:copy_link")}
+                                    onClick={copyLink}
+                                    icon={faShare}
                                 />
+                                {data.hasWriteAccess &&
+                                    <PostToolBar
+                                        feed={feedId}
+                                        pinned={data.pinned}
+                                        homepageForced={superVisibility}
+                                        triggerPin={togglePin}
+                                        triggerHomepageForced={toggleHomepageForced}
+                                        triggerEdition={() => toggleEdition(true)}
+                                        triggerDeletion={confirmDeletion}
+                                    />
+                                }
                             </DropdownPanel>
                         )}
                     </div>

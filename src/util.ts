@@ -202,6 +202,17 @@ export const setStyles = (element: HTMLElement, style: CSSProperties) => {
 
 export const waitForFrame = async () => new Promise(requestAnimationFrame)
 
+export const copyToClipboard = (str: string) => {
+    const el = document.createElement("textarea")
+    el.value = str
+    el.setAttribute("readonly", "")
+    el.style.position = "absolute"
+    el.style.left = "-9999px"
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand("copy")
+    document.body.removeChild(el)
+}
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>

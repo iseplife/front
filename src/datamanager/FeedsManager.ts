@@ -1,7 +1,7 @@
 import DataManager from "./DataManager"
 import {getWebSocket, WSServerClient} from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
-import {getFeedPost, getFeedPostsBefore} from "../data/feed"
+import {getFeedPosts, getFeedPostsBefore} from "../data/feed"
 import {BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
 import {Page} from "../data/request.type"
 import {addMonths, isBefore} from "date-fns"
@@ -23,7 +23,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private loadedFeeds = new Set<FeedId>()
 
     constructor(wsServerClient: WSServerClient) {
-        super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]"], wsServerClient)
+        super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]", "[loadedFeed+id]"], wsServerClient)
         this.setContext("no_connection", {bugged: new Set()})
     }
 
@@ -88,6 +88,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public getFeedPosts(feed: FeedId, limit: number) {
         return this.getTable().where({"loadedFeed": feed ?? mainFeedId}).reverse().limit(limit).toArray()
     }
+    public getFeedPost(feed: FeedId, postId: number) {
+        return this.getTable().where({"loadedFeed": feed ?? mainFeedId, "id": postId}).first()
+    }
 
     public async loadMore(feed: FeedId) {
         await this._waitFetching()
@@ -138,7 +141,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await this._waitFetching()
         let posts: Page<Post>
         try {
-            posts = (await (lastLoadedDate ? getFeedPostsBefore(feed, lastLoadedDate.getTime()) : getFeedPost(feed, 0))).data
+            posts = (await (lastLoadedDate ? getFeedPostsBefore(feed, lastLoadedDate.getTime()) : getFeedPosts(feed, 0))).data
         } catch (e) {
             this.setWithoutConnection(feed, true)
             throw e
