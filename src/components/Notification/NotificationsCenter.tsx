@@ -22,7 +22,7 @@ interface NotificationsCenterProps {
 const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, className}) => {
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
-    const [empty, setEmpty] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
 
@@ -31,12 +31,8 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     }, [])
 
     const notifications = useLiveQuery(async () => {
-        if(minNotificationId != undefined) {
-            const notifs = await notificationManager.getNotifications(minNotificationId)
-            setEmpty(notifs.length == 0)
-
-            return notifs
-        }
+        if(minNotificationId != undefined)
+            return await notificationManager.getNotifications(minNotificationId)
     }, [minNotificationId])
 
     const recentNotifications = useMemo(() => {
@@ -52,9 +48,19 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         oldNotifications.length + recentNotifications.length
     ), [oldNotifications, recentNotifications])
     
-    const loadMoreNotifications = useCallback(async (count: number) => 
-        count != 0 && minNotificationId != undefined && await notificationManager.loadMore(minNotificationId)
-    , [minNotificationId])
+    const empty = useMemo(() => notifications?.length == 0 && !loading, [notifications?.length, loading])
+
+    const loadMoreNotifications = useCallback(async (count: number) => {
+        if (count != 0 && minNotificationId != undefined) {
+            try {
+                setLoading(true)
+                return await notificationManager.loadMore(minNotificationId)
+            } finally {
+                setLoading(false)
+            }
+        }
+        return false
+    }, [minNotificationId])
 
     useEffect(() => {
         if (notifications) {
@@ -104,7 +110,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             <InfiniteScroller
                 watch="DOWN"
                 callback={loadMoreNotifications}
-                empty={empty}
+                empty={empty && !setLoading}
                 triggerDistance={150}
                 scrollElement={!fullPage && scrollElement.current?.parentElement}
                 loadingComponent={
@@ -112,7 +118,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                 }
             >
                 {showPushAsk && 
-                    <div className="w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
+                    <div className="mb-0.5 w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
                         <div className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center bg-red-400 text-white">
                             <FontAwesomeIcon icon={faBell}/>
                         </div>
