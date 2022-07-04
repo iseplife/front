@@ -73,7 +73,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSub
 
 
 type BasicPostForm = {
-    feedId?: number
+    feed?: number
     onPost: (post: PostUpdate) => void
     setText: (value: string) => void
     user: LoggedStudentPreview
@@ -82,7 +82,7 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     mapPropsToValues: (props) => {
         return {
             description: "",
-            feed: props.feedId!,
+            feed: props.feed!,
             setText: props.setText,
             private: true,
         }
@@ -98,7 +98,7 @@ const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
 
 
     handleSubmit: async (values, { props, resetForm }) => {
-        values.feed = values.feed ?? props.feedId ?? values.selectedClub?.feedId ?? props.user.feedId
+        values.feed = values.feed ?? props.feed ?? values.selectedClub?.feedId ?? props.user.feedId
         values.linkedClub = values.selectedClub?.id
         const res = await createPost(values as BasicPostCreation)
 

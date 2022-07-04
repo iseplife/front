@@ -205,7 +205,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         >
             <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
             {allowPublication && (
-                <BasicPostForm setText={setText} user={user} feedId={id} onPost={onPostCreation}>
+                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation}>
                     <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
