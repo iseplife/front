@@ -76,9 +76,10 @@ class WSServerClient {
         
         this._connected = false
 
-        WSServerClient.reconnectTimeout = window.setTimeout(() => 
-            this.connect(this.context, true)
-        , 1000)
+        if(instance == this)
+            WSServerClient.reconnectTimeout = window.setTimeout(() => 
+                this.connect(this.context, true)
+            , 1000)
         
     }
 
@@ -112,7 +113,6 @@ class WSServerClient {
     }
 
     public disconnect() {
-        console.debug("disconnect")
         for(const listener of this.listeners)
             listener.unregister()
         
@@ -123,7 +123,7 @@ class WSServerClient {
 let instance: WSServerClient
 
 function initWebSocket(ip: string) {
-    return instance ?? (instance = new WSServerClient(ip))
+    return instance || (instance = new WSServerClient(ip))
 }
 function getWebSocket() {
     return instance

@@ -31,8 +31,8 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
     }, [author.id, author.authorType])
 
     return (
-        <div className={`flex ${className}`}>
-            <AvatarWrapper>
+        <AvatarWrapper>
+            <div className={`flex ${className} text-black/[85%] group`}>
                 <StudentAvatar
                     id={author.id}
                     name={author.name}
@@ -40,17 +40,17 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
                     pictureSize={AvatarSizes.THUMBNAIL}
                     size="default"
                 />
-            </AvatarWrapper>
-            <div className="items-center ml-2">
-                <div className="font-bold -mb-0.5 -mt-0.5">{author.name}</div>
-                <div className="text-xs whitespace-nowrap">
-                    {isFuture(publicationDate) ?
-                        `${t("planned_for")} ${format(new Date(publicationDate), "dd/MM/yy, HH:mm")}` :
-                        formattedDate
-                    }
+                <div className="items-center ml-2">
+                    <div className="font-bold -mb-0.5 -mt-0.5 group-hover:underline">{author.name}</div>
+                    <div className="text-xs whitespace-nowrap">
+                        {isFuture(publicationDate) ?
+                            `${t("planned_for")} ${format(new Date(publicationDate), "dd/MM/yy, HH:mm")}` :
+                            formattedDate
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        </AvatarWrapper>
     )
 }
 

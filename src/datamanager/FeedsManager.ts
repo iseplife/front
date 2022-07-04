@@ -248,7 +248,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        this.addPostToFeed(packet.post, packet.post.context.id, packet.hasWriteAccess)
+        this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
         if (packet.follow) {
             this.addData({
                 ...packet.post,
@@ -266,7 +266,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await this.addData({
             ...post,
             lastLoadId: this.getLastLoad(feed),
-            loadedFeed: feed,
+            loadedFeed: feed ?? mainFeedId,
             hasWriteAccess: hasWriteAccess ?? (post as Post).hasWriteAccess,
             publicationDateId: this.calcId(post),
         } as ManagerPost)
@@ -337,6 +337,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 this.addData({
                     ...post,
                     ...res.data,
+                    waitingForUpdate: false,
                 })
         } else
             throw new Error("No connection")

@@ -47,11 +47,12 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                 case EmbedEnumType.VIDEO:
                 case EmbedEnumType.DOCUMENT:
                     postEmbed = post.embed as EmbedMedia
-                    embed.data = [{
+                    embed.data = {
                         id: postEmbed.id,
                         file: mediaPath(postEmbed.name, PostSizes.PREVIEW) as string,
+                        title: postEmbed.title,
                         nsfw: postEmbed.nsfw
-                    }]
+                    }
                     break
                 case EmbedEnumType.POLL:
                     postEmbed = post.embed as EmbedPoll
@@ -70,7 +71,8 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
             id: post.id,
             description: post.description,
             publicationDate: post.publicationDate,
-            embed: embed
+            embed: embed,
+            edit: true,
         }
     },
 

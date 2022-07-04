@@ -31,7 +31,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             embed.images = embed.images.map(img => img.id == id ? {...img, status: MediaStatus.READY} : img)
             feedsManager.updatePost(post.id, { embed })
         }
-    , [])
+    , [post.embed, post.id])
 
     const imagesComponent = useMemo(() => {
         const first = photos[0]
