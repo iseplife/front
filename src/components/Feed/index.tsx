@@ -74,29 +74,32 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     useEffect(() => {
         if (!loading) {
             feedsManager.subscribe(id).then(setBaseLastLoad)
-            
-            const splitted = history.location.pathname.split("/")
-            splitted.shift()
-            requestAnimationFrame(() => {
-                if (id && splitted.length >= 4 && splitted[2].toLowerCase() == "post") {
-                    const postId = +splitted[3]
-                    if (postId && !isNaN(postId)) {
-                        setSelectedPostId(postId)
-                        getFeedPost(id, postId)
-                            .then(async ({data: post}) => {
-                                const currentPost = await feedsManager.getFeedPost(id, post.id)
-                                if (!currentPost || !feedsManager.isFresh(currentPost, id))
-                                    feedsManager.addPostToFeed(post, id)
-                            }).catch(e => setSelectedPostLoadingError(true))
-                    }
-                }
-            })
-
             return () => {
                 feedsManager.unsubscribe(id)
             }
         }
     }, [id, loading])
+
+    useEffect(() => {
+        const splitted = history.location.pathname.split("/")
+        splitted.shift()
+        if (splitted.length >= 4 && splitted[2].toLowerCase() == "post") {
+            const postId = +splitted[3]
+            if (postId && !isNaN(postId))
+                setSelectedPostId(postId)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!fetching && !loading && id && selectedPostId && !selectedPost) {
+            getFeedPost(id, selectedPostId)
+                .then(async ({data: post}) => {
+                    const currentPost = await feedsManager.getFeedPost(id, post.id)
+                    if (!currentPost || !feedsManager.isFresh(currentPost, id))
+                        feedsManager.addPostToFeed(post, id)
+                }).catch(e => setSelectedPostLoadingError(true))
+        }
+    }, [id, fetching, loading, selectedPostId, selectedPost])
 
 
     const loadMorePost = useCallback(async () => {
@@ -232,7 +235,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
                     {!selectedPost ? 
-                        <CardTextSkeleton loading={true} number={1} className="my-3"/>
+                        <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/>
                         : <div
                             key={selectedPost.publicationDateId}
                             className={`${!feedsManager.isFresh(selectedPost, id) && "opacity-60 pointer-events-none"}`}

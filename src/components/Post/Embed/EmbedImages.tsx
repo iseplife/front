@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
-import {parsePhotosAsync} from "../../../util"
+import {getPostLink, parsePhotosAsync} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 import {Image, MediaStatus} from "../../../data/media/types"
 import {message} from "antd"
@@ -7,6 +7,7 @@ import PostSidebar from "../PostSidebar"
 import {EmbedPseudoGallery, Post} from "../../../data/post/types"
 import { AnimatedLightbox, AnimatedSafePhoto } from "../../Common/AnimatedLightbox"
 import { feedsManager } from "../../../datamanager/FeedsManager"
+import { useHistory } from "react-router-dom"
 
 type EmbedImagesProps = {
     images: Array<Image>
@@ -14,7 +15,7 @@ type EmbedImagesProps = {
 }
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     const [photos, setPhotos] = useState<AnimatedSafePhoto[]>([])
-    const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
+    const [lightboxPhotoIndex, _setLightboxPhotoIndex] = useState<number>()
 
     useEffect(() => {
         parsePhotosAsync(images).then(photos => 
@@ -24,7 +25,60 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
             console.error(e)
         })
     }, [images])
-    
+
+    const h = useHistory()
+
+    const originalLink = useMemo(() => {
+        let splitted = h.location.pathname.split("/")
+        splitted = splitted.slice(1, 3)
+        return `/${splitted.join("/")}`
+    }, [])
+
+    const [openned, setOpenned] = useState(false)
+
+    useEffect(() => {
+        const fnc = () => window.location.pathname == originalLink && lightboxPhotoIndex !== undefined && _setLightboxPhotoIndex(undefined)
+        window.addEventListener("popstate", fnc)
+        return () => window.removeEventListener("popstate", fnc)
+    }, [lightboxPhotoIndex, originalLink])
+
+    const setLightboxPhotoIndex = useCallback((index?: number) => {
+        const link = index === undefined ? originalLink : `/${getPostLink(post, false)}/${index}`
+        if (lightboxPhotoIndex !== undefined && index === undefined) {
+            setOpenned(openned => {
+                if(openned)
+                    window.history.back()
+                else
+                    window.history.replaceState(null, "", link)
+                return false
+            })
+        } else
+            window.history.replaceState(null, "", link)
+        _setLightboxPhotoIndex(index)
+    }, [post.id, post.context, originalLink, lightboxPhotoIndex])
+
+    const open = useCallback((index: number) => {
+        setOpenned(true)
+        const link = `/${getPostLink(post, false)}/${index}`
+        window.history.pushState(null, "", link)
+        _setLightboxPhotoIndex(index)
+    }, [post.id, post.context])
+
+    useEffect(() => {
+        const splitted = h.location.pathname.split("/")
+        splitted.shift()
+        const postIndex = splitted.indexOf("post")
+        if (
+            !document.querySelector(".lightbox")
+            && splitted[splitted.length - 2] == post.id.toString()
+            && postIndex != -1 && splitted.length == postIndex + 3
+            && photos.length
+        ) {
+            const index = +splitted[splitted.length - 1]
+            _setLightboxPhotoIndex(index)
+        }
+    }, [!!photos.length])
+
     const onLoadFactory = useCallback((id: number) => 
         () => {
             const embed = post.embed as EmbedPseudoGallery
@@ -44,7 +98,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                 aspectRatio: first.ratio.toString(),
             }}
             ref={first.ref}
-            onClick={() => setLightboxPhotoIndex(0)}
+            onClick={() => open(0)}
             >
                 <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} ratio={first.ratio} nsfw={first.nsfw} status={first.status} />
             </div>
@@ -60,7 +114,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                         }
                         ref={photo.ref}
                         key={index}
-                        onClick={() => setLightboxPhotoIndex(index)}
+                        onClick={() => open(index)}
                         >
                             <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} ratio={photo.ratio} nsfw={photo.nsfw} status={photo.status} />
                             {index == 3 && photos.length > 4 &&
@@ -82,8 +136,9 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
                 show={lightboxPhotoIndex !== undefined}
                 initialIndex={lightboxPhotoIndex as number}
                 photos={photos}
-                onClose={() => setLightboxPhotoIndex(undefined)}
+                onClose={() => setLightboxPhotoIndex()}
                 Sidebar={() => <PostSidebar post={post} />}
+                onChange={setLightboxPhotoIndex}
             />
         </div>
     )

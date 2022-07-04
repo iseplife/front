@@ -16,7 +16,7 @@ import useAdminRole from "../../hooks/useAdminRole"
 import PostThread from "./PostThread"
 import DropdownPanelElement from "../Common/DropdownPanelElement"
 import { useHistory } from "react-router-dom"
-import { copyToClipboard } from "../../util"
+import { copyToClipboard, getPostLink } from "../../util"
 
 
 type PostProps = {
@@ -102,10 +102,9 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
     const h = useHistory()
 
     const copyLink = useCallback(() => {
-        const splitted = [window.location.host, data.context.type.toLowerCase(), data.context.id, "post", data.id.toString()]
-        copyToClipboard(splitted.join("/"))
+        copyToClipboard(getPostLink(data))
         message.success(t("post:copied"))
-    }, [feedId, data.id, h.location.pathname])
+    }, [feedId, data.id, data.context, h.location.pathname])
 
     return (
         <div>

@@ -9,6 +9,7 @@ import {TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
 import { CSSProperties } from "react"
+import { Post } from "./data/post/types"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -201,6 +202,9 @@ export const setStyles = (element: HTMLElement, style: CSSProperties) => {
 }
 
 export const waitForFrame = async () => new Promise(requestAnimationFrame)
+
+export const getPostLink = (post: Post, withHost = true) => 
+    [...(withHost ? [window.location.host] : []), post.context.type.toLowerCase(), post.context.id, "post", post.id.toString()].join("/")
 
 export const copyToClipboard = (str: string) => {
     const el = document.createElement("textarea")
