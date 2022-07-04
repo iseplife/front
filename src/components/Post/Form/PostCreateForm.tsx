@@ -43,7 +43,6 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
         props.feed = props.feed ?? values.selectedClub?.feedId ?? props.user.feedId
 
         try {
-            console.log(embed)
             embed_block: if (embed) {
                 let res: AxiosResponse<{ id: number }>
                 switch (embed.type) {
