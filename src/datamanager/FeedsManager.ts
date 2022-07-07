@@ -11,8 +11,24 @@ import WSPSFeedPostEdited from "../realtime/protocol/packets/server/WSPSFeedPost
 import WSPSFeedPostLikesUpdate from "../realtime/protocol/packets/server/WSPSFeedPostLikesUpdate"
 import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPostRemoved"
 import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
+import { BroadcastChannel } from "broadcast-channel"
+
+type FeedsChannelMessage = {
+    type: "ask"
+    id: number
+    pageId: number
+} | {
+    type: "response"
+    id: number
+    pageId: number
+    doNotRenew: boolean
+}
+
+const pageId = Math.random()
 
 export default class FeedsManager extends DataManager<ManagerPost> {
+
+    private initLoadSyncWait?: Promise<void>
 
     private static baseDateMs = 1615849200000// Wed Mar 16 2021 00:00:00 GMT+0100
 
@@ -22,18 +38,63 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     private loadedFeeds = new Set<FeedId>()
 
+    private channel = new BroadcastChannel<FeedsChannelMessage>("feeds-manager", { webWorkerSupport: false })
+
     constructor(wsServerClient: WSServerClient) {
         super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]", "[loadedFeed+id]"], wsServerClient)
-        this.setContext("no_connection", {bugged: new Set()})
+        this.setContext("no_connection", { bugged: new Set() })
+        this.channel.addEventListener("message", message => {
+            if (message.type == "ask" && message.pageId != pageId && getWebSocket()?.connected) {
+                this.channel.postMessage({
+                    type: "response",
+                    id: message.id,
+                    doNotRenew: true,
+                    pageId,
+                })
+            }
+        })
     }
 
     protected async initData() {
-        const now = Date.now()
+        let now = Date.now()
+        await (this.initLoadSyncWait = new Promise<void>(resolve => {
+            let responded = false
+            const id = Math.random()
+            console.time("ask")
+            const handler = async (message: FeedsChannelMessage) => {
+                if (message.type == "response" && message.id == id) {
+                    console.timeEnd("ask")
+                    responded = true
+                    this.channel.removeEventListener("message", handler)
+
+                    if(message.doNotRenew)
+                        now = await this.getGeneralLastLoad()
+                    
+                    resolve()
+                }
+            }
+            this.channel.addEventListener("message", handler)
+            this.channel.postMessage({
+                type: "ask",
+                id,
+                pageId,
+            })
+
+            setTimeout(() => {
+                if (!responded) {
+                    console.timeEnd("ask")
+                    this.channel.removeEventListener("message", handler)
+                    resolve()
+                }
+            }, 170)
+        }))
+
+        this.initLoadSyncWait = undefined
 
         for (const feedId in this.lastLoadIdByFeed)
             if (!this.loadedFeeds.has(+feedId))
                 this.lastLoadIdByFeed[feedId] = now
-
+        
         this.setContext("lastLoad", {lastLoad: now})
 
         this.getTable()
@@ -70,7 +131,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public countFreshFeedPosts(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).count()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).count()
     }
 
     public async countFreshPostsAfter(feed: FeedId, publicationDateId: number) {
@@ -82,7 +143,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async getFirstPostedFresh(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).first()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).first()
     }
 
     public getFeedPosts(feed: FeedId, limit: number) {
@@ -108,7 +169,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public async subscribe(feed: FeedId) {
         this.loadedFeeds.add(feed ?? mainFeedId)
-        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
@@ -130,6 +190,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId]))
         this.addBulkData(postsToAdd)
 
+        await this.initLoadSyncWait
+
+        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
         return lastLoad
     }
 
@@ -244,7 +307,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public isFresh(post: ManagerPost, feed: FeedId) {
-        return post.lastLoadId == this.getLastLoad(feed)
+        return post.lastLoadId >= this.getLastLoad(feed)
     }
 
     @PacketHandler(WSPSFeedPostCreated)

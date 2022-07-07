@@ -23,6 +23,8 @@ class WSServerClient {
     private _connected!: boolean
     get connected() { return this._connected }
 
+    public lastDisconnect = 0
+
     private _logged = false
 
     private context!: React.ContextType<typeof AppContext>
@@ -68,6 +70,7 @@ class WSServerClient {
 
     private _dispatchDisconnected() {
         if (this._connected) {
+            this.lastDisconnect = Date.now()
             const event = new Event(WSEventType.DISCONNECTED)
             window.dispatchEvent(event)
             console.debug("[WebSocket] Disconnected")
