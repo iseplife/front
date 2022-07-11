@@ -32,7 +32,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                     <SafeImage
                                         ratio={img.ratio}
                                         className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
-                                        src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                        src={mediaPath(img.name, GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
                                         status={img.status}
                                     />
@@ -50,7 +50,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                     <SafeImage
                                         ratio={img.ratio}
                                         className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
-                                        src={mediaPath(img.name, GallerySizes.PREVIEW)}
+                                        src={mediaPath(img.name, GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
                                         status={img.status}
                                     />
