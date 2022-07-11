@@ -200,10 +200,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const fullReload = useCallback(async () => {
         setNeedFullReload(false)
         setFirstLoaded(Number.MAX_VALUE)
-        await feedsManager.subscribe(id)
+        await feedsManager.subscribe(id, true)
         setLoadedPosts(0)
         loadMorePost()
     }, [id])
+
+    useEffect(() => {
+        if(!loading)
+            return feedsManager.fullReloadFromOtherTabs(id, () => 
+                setNeedFullReload(false)
+            )
+    }, [id, loading])
 
     const [feedMargin, setFeedMargin] = useState(0)
     const feedElement = useRef<HTMLDivElement>(null)
