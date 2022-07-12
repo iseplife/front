@@ -223,6 +223,13 @@ export const arrayEquals = (array: unknown[], array1: unknown[]) =>
     && array.length == array1.length
     && array.every((element, index) => array1[index] == element)
 
+export const downloadFile = (url: string, name: string) => {
+    const a = document.createElement("a")
+    a.download = name
+    a.href = url
+    a.click()
+}
+
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>
 

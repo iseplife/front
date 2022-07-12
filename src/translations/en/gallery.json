@@ -29,5 +29,7 @@
   "no_gallery": "No galleries around here...",
   "empty": "This gallery is empty...",
   "created": "Gallery successfully created !",
-  "see_all": "See all"
+  "see_all": "See all",
+  "failed_download": "Failed to download the image",
+  "downloading": "Downloading..."
 }

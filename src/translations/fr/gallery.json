@@ -29,5 +29,7 @@
   "no_gallery": "Aucune galerie par ici...",
   "empty": "Galerie vide...",
   "created": "Galerie créée avec succès !",
-  "see_all": "Voir tout"
+  "see_all": "Voir tout",
+  "failed_download": "Echec du téléchargement de l'image",
+  "downloading": "Téléchargement..."
 }
