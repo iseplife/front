@@ -119,9 +119,14 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                     </div>
                     <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-2 items-center">
                         <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
-                        <div className="z-10 hidden md:block">
+                        <div className="z-10 hidden md:flex items-center">
                             {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
-                            <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
+                            {
+                                downloadProgress == -1 ?
+                                    <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
+                                    :
+                                    <Loading className="ml-2" />
+                            }
                         </div>
                     </button>
                 </div>
