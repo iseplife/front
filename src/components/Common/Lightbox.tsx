@@ -38,7 +38,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         >
             <Sidebar currentImage={currentPhoto} />
         </div>
-    ), [Sidebar])
+    ), [Sidebar, currentPhoto])
 
     useEffect(() => 
         _setCurrentIndex(initialIndex)

@@ -1,18 +1,19 @@
 import React, {useCallback, useEffect, useState} from "react"
-import {AvatarSizes} from "../../../constants/MediaSizes"
-import {format} from "date-fns"
+import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCommentAlt, faHeart} from "@fortawesome/free-regular-svg-icons"
-import {faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
-import {Divider} from "antd"
+import {faCloudDownload, faDownload, faFileDownload, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
+import {Divider, message} from "antd"
 import CommentList from "../../../components/Comment/CommentList"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
 import {getThread, toggleThreadLike} from "../../../data/thread"
 import {SidebarProps} from "../../../components/Common/Lightbox"
 import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
-import { formatDateWithTimer } from "../../../util"
+import { downloadFile, formatDateWithTimer, mediaPath } from "../../../util"
 import { useTranslation } from "react-i18next"
+import LoadingSpinner from "../../../components/Common/LoadingSpinner"
+import Loading from "../../../components/Common/Loading"
 
 type GallerySidebarProps = {
     gallery: Gallery
@@ -22,7 +23,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     const [nbLikes, setNbLikes] = useState<number>(0)
     const [nbComments, setNbComments] = useState<number>(0)
 
-    const {t} = useTranslation("common")
+    const {t} = useTranslation(["common", "gallery"])
 
     const [formattedDate, setFormattedDate] = useState("")
     useEffect(() => formatDateWithTimer(gallery.creation, t, setFormattedDate), [gallery.creation])
@@ -43,6 +44,61 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
         })
     }, [currentImage.thread])
 
+    const [downloadProgress, setDownloadProgress] = useState(-1)
+    const [,setStopProgress] = useState<()=>void>()
+
+    useEffect(() => {
+        setStopProgress(stopProgress => {
+            stopProgress?.()
+            setDownloadProgress(-1)
+            return undefined
+        })
+    }, [currentImage.id])
+
+    const downloadCallback = useCallback(async () => {
+        const link = mediaPath(currentImage.srcSet as string, GallerySizes.DOWNLOAD)
+
+        var req = new XMLHttpRequest()
+        req.open("GET", link, true)
+        req.responseType = "blob"
+
+        req.onprogress = evt => {
+            if (evt.lengthComputable){
+                const percentComplete = (evt.loaded / evt.total)
+                setDownloadProgress(percentComplete)
+            }
+        }
+        req.send()
+        
+        setStopProgress(() => () => req.onprogress = undefined!)
+        
+        setDownloadProgress(0)
+        try{
+            await new Promise<void>((resolve, reject) => {
+                req.onreadystatechange = () =>
+                    req.readyState == 4 && resolve()
+                req.onerror = reject
+            })
+        }catch(e){
+            message.error(t("gallery:failed_download"))
+        }finally{
+            req.onprogress = undefined!
+            setDownloadProgress(-1)
+        }
+        const image = new Image()
+        image.src = URL.createObjectURL(req.response)
+
+        await new Promise(resolve => image.onload = resolve)
+        URL.revokeObjectURL(image.src)
+
+        const canva = document.createElement("canvas")
+        canva.width = image.width
+        canva.height = image.height
+        const context = canva.getContext("2d")!
+        context.drawImage(image, 0, 0)
+        downloadFile(canva.toDataURL("image/jpeg"), `${gallery.name}-${currentImage.id}.png`)
+    }, [gallery.name, currentImage.src])
+
     return (
         <div>
             <div className="flex flex-col p-4">
@@ -61,7 +117,36 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                             <div className="text-md">{ formattedDate }</div>
                         </div>
                     </div>
+                    <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-2 items-center">
+                        <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                        <div className="z-10 hidden md:flex items-center">
+                            {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
+                            {
+                                downloadProgress == -1 ?
+                                    <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
+                                    :
+                                    <Loading className="ml-2" />
+                            }
+                        </div>
+                    </button>
                 </div>
+                <button
+                    onClick={downloadProgress == -1 ? downloadCallback : undefined}
+                    className="md:hidden absolute m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
+                >
+                    <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                    <div className="
+                        grid place-items-center ml-[1.5px] rounded-full
+                        cursor-pointer z-50 text-white transition-all duration-300 false
+                    ">
+                        {
+                            downloadProgress == -1 ?
+                                <FontAwesomeIcon icon={faCloudDownload} />
+                                :
+                                <Loading className="ml-0.5" />
+                        }
+                    </div>
+                </button>
                 <div className="text-base ml-2 mt-2 hidden md:block">
                     {gallery.name}
                 </div>
