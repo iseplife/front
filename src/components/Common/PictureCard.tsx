@@ -13,16 +13,36 @@ type PictureCardProps<MediaType> = {
     toggleNsfw: (media: MediaType) => void
 }
 
+let current: Promise<string> | undefined = undefined
+
+const optiImage = async (url: string) => {
+    if (current)
+        await current
+    return await (current = (async () => {
+        const canva = document.createElement("canvas")
+        const context = canva.getContext("2d")
+        const img = new Image()
+        img.src = url
+        await new Promise(resolve => img.onload = resolve)
+        canva.width = 150
+        canva.height = 150 / img.width * img.height
+        context?.drawImage(img, 0, 0, canva.width, canva.height)
+        return canva.toDataURL()
+    })())
+}
+
 const PictureCard = <MediaType extends (File | string)>({file, onDelete, nsfw, toggleNsfw, className}: PictureCardProps<MediaType>) => {
     const [image, setImage] = useState<string>()
 
     useEffect(() => {
         if (file instanceof File) {
             const reader = new FileReader()
-            reader.onload = () => {
-                setImage(reader.result as string)
+            reader.onload = async () => {
+                const url = URL.createObjectURL(new Blob([reader.result as ArrayBuffer]))
+                setImage(await optiImage(url))
+                URL.revokeObjectURL(url)
             }
-            reader.readAsDataURL(file)
+            reader.readAsArrayBuffer(file)
         } else {
             setImage(file as string)
         }
