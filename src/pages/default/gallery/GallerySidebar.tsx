@@ -12,6 +12,8 @@ import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
 import { downloadFile, formatDateWithTimer, mediaPath } from "../../../util"
 import { useTranslation } from "react-i18next"
+import LoadingSpinner from "../../../components/Common/LoadingSpinner"
+import Loading from "../../../components/Common/Loading"
 
 type GallerySidebarProps = {
     gallery: Gallery
@@ -43,7 +45,15 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     }, [currentImage.thread])
 
     const [downloadProgress, setDownloadProgress] = useState(-1)
-    const [stopProgress, setStopProgress] = useState<()=>void>()
+    const [,setStopProgress] = useState<()=>void>()
+
+    useEffect(() => {
+        setStopProgress(stopProgress => {
+            stopProgress?.()
+            setDownloadProgress(-1)
+            return undefined
+        })
+    }, [currentImage.id])
 
     const downloadCallback = useCallback(async () => {
         const link = mediaPath(currentImage.srcSet as string, GallerySizes.DOWNLOAD)
@@ -59,6 +69,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
             }
         }
         req.send()
+        
         setStopProgress(() => () => req.onprogress = undefined!)
         
         setDownloadProgress(0)
@@ -106,14 +117,31 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                             <div className="text-md">{ formattedDate }</div>
                         </div>
                     </div>
-                    <button onClick={downloadCallback} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-2 items-center">
+                    <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-2 items-center">
                         <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
-                        <div className="z-10">
+                        <div className="z-10 hidden md:block">
                             {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
                             <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
                         </div>
                     </button>
                 </div>
+                <button
+                    onClick={downloadProgress == -1 ? downloadCallback : undefined}
+                    className="md:hidden absolute m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
+                >
+                    <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                    <div className="
+                        grid place-items-center ml-[1.5px] rounded-full
+                        cursor-pointer z-50 text-white transition-all duration-300 false
+                    ">
+                        {
+                            downloadProgress == -1 ?
+                                <FontAwesomeIcon icon={faCloudDownload} />
+                                :
+                                <Loading className="ml-0.5" />
+                        }
+                    </div>
+                </button>
                 <div className="text-base ml-2 mt-2 hidden md:block">
                     {gallery.name}
                 </div>
