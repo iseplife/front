@@ -19,6 +19,7 @@ import GeneralEventType from "../../constants/GeneralEventType"
 import {getAuthorizedAuthors} from "../../data/post"
 import { wsURI } from "../../data/http.constants"
 import useAdminRole from "../../hooks/useAdminRole"
+import { arrayEquals } from "../../util"
 
 
 
@@ -52,8 +53,18 @@ const Template: React.FC = () => {
         return () => logoutWebSocket()
     }, [])
 
+    const [,setPreviousUrl] = useState<string[]>([])
+
     useLayoutEffect(() => {
-        document.getElementById("main")?.scrollTo(0, 0)
+        setPreviousUrl(previousUrl => {
+            const newSplitted = pathname.split("/")
+            newSplitted.shift()
+
+            if(!arrayEquals(newSplitted.slice(0, 2), previousUrl.slice(0, 2)))
+                document.getElementById("main")?.scrollTo(0, 0)
+
+            return newSplitted
+        })
     }, [pathname])
 
     return loading ?

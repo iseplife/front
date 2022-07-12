@@ -218,6 +218,11 @@ export const copyToClipboard = (str: string) => {
     document.body.removeChild(el)
 }
 
+export const arrayEquals = (array: unknown[], array1: unknown[]) => 
+    Array.isArray(array) && Array.isArray(array1)
+    && array.length == array1.length
+    && array.every((element, index) => array1[index] == element)
+
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>
 

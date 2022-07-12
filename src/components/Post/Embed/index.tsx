@@ -11,8 +11,9 @@ import { Video as VideoType } from "../../../data/media/types"
 type EmbedProps = {
     embed: EmbedType
     post: Post
+    selected?: boolean
 }
-const Embed: React.FC<EmbedProps> = ({embed, post}) => {
+const Embed: React.FC<EmbedProps> = ({embed, post, selected}) => {
     
     switch (embed.embedType) {
         case EmbedEnumType.VIDEO:
@@ -24,7 +25,7 @@ const Embed: React.FC<EmbedProps> = ({embed, post}) => {
         case EmbedEnumType.GALLERY:
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
-            return <EmbedImages images={embed.images} post={post}/>
+            return <EmbedImages images={embed.images} post={post} selected={selected}/>
         default:
             return null
     }

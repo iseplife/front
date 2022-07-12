@@ -28,10 +28,11 @@ type PostProps = {
     onPin: (id: number, pinned: boolean, homepage?: boolean) => void
     onDelete: (id: number) => Promise<void>
     onUpdate: (id: number, postUpdate: PostUpdate) => void
+    selected?: boolean
     className?: string
 }
 
-const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, className = "shadow-sm"}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, selected, className = "shadow-sm"}) => {
     const {t} = useTranslation(["common", "post"])
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
@@ -68,7 +69,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
     useEffect(() => setSuperVisibility(data.homepageForced), [data.homepageForced])
 
     let post!: HTMLDivElement
-    useEffect(() => {
+    /* useEffect(() => {
         //Petite opti
         const scrollListener = () => {
             const boundings = post.getBoundingClientRect()
@@ -84,7 +85,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         return () => {
             main?.removeEventListener("scroll", scrollListener)
         }
-    }, [data.id])
+    }, [data.id]) */
 
     useEffect(() => {
         if (showEditMenu) {
@@ -167,7 +168,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                 <div>
                     <span>{data.description}</span>
                     {data.embed &&
-                        <div className="mt-2"><Embed embed={data.embed} post={data}/></div>
+                        <div className="mt-2"><Embed embed={data.embed} post={data} selected={selected} /></div>
                     }
                 </div>
                 <PostThread

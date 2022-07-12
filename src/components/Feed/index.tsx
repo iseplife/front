@@ -24,7 +24,7 @@ import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
 import {isAfter, isBefore} from "date-fns"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 
 type FeedProps = {
     loading?: boolean,
@@ -49,7 +49,6 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
     const [text, setText] = useState<string>("")
 
-    const history = useHistory()
     const [selectedPostId, setSelectedPostId] = useState(0)
     const [selectedPostLoadingError, setSelectedPostLoadingError] = useState(false)
 
@@ -81,7 +80,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [id, loading])
 
     useEffect(() => {
-        const splitted = history.location.pathname.split("/")
+        const splitted = location.pathname.split("/")
         splitted.shift()
         if (splitted.length >= 4 && splitted[2].toLowerCase() == "post") {
             const postId = +splitted[3]
@@ -91,7 +90,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [])
 
     useEffect(() => {
-        if (!fetching && !loading && id && selectedPostId && !selectedPost) {
+        if (!fetching && !loading && id && selectedPostId && (!selectedPost || !feedsManager.isFresh(selectedPost!, id))) {
             getFeedPost(id, selectedPostId)
                 .then(async ({data: post}) => {
                     const currentPost = await feedsManager.getFeedPost(id, post.id)
@@ -243,6 +242,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                             <Post
                                 feedId={id}
                                 data={selectedPost}
+                                selected={true}
                                 onDelete={onPostRemoval}
                                 onUpdate={onPostUpdate}
                                 onPin={onPostPin}

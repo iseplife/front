@@ -7,13 +7,14 @@ import PostSidebar from "../PostSidebar"
 import {EmbedPseudoGallery, Post} from "../../../data/post/types"
 import { AnimatedLightbox, AnimatedSafePhoto } from "../../Common/AnimatedLightbox"
 import { feedsManager } from "../../../datamanager/FeedsManager"
-import { useHistory } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 type EmbedImagesProps = {
     images: Array<Image>
     post: Post
+    selected?: boolean
 }
-const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
+const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
     const [photos, setPhotos] = useState<AnimatedSafePhoto[]>([])
     const [lightboxPhotoIndex, _setLightboxPhotoIndex] = useState<number>()
 
@@ -26,10 +27,10 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
         })
     }, [images])
 
-    const h = useHistory()
+    const {pathname} = useLocation()
 
     const originalLink = useMemo(() => {
-        let splitted = h.location.pathname.split("/")
+        let splitted = pathname.split("/")
         splitted = splitted.slice(1, 3)
         return `/${splitted.join("/")}`
     }, [])
@@ -65,19 +66,23 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post}) => {
     }, [post.id, post.context])
 
     useEffect(() => {
-        const splitted = h.location.pathname.split("/")
+        const splitted = pathname.split("/")
         splitted.shift()
         const postIndex = splitted.indexOf("post")
         if (
-            !document.querySelector(".lightbox")
-            && splitted[splitted.length - 2] == post.id.toString()
+            splitted[splitted.length - 2] == post.id.toString()
             && postIndex != -1 && splitted.length == postIndex + 3
             && photos.length
         ) {
-            const index = +splitted[splitted.length - 1]
-            _setLightboxPhotoIndex(index)
+            setTimeout(() => {
+                console.log("open", selected, !document.querySelector(".lightbox"))
+                if(!document.querySelector(".lightbox")){
+                    const index = +splitted[splitted.length - 1]
+                    _setLightboxPhotoIndex(index)
+                }
+            }, selected ? 300 : 0)
         }
-    }, [!!photos.length])
+    }, [!!photos.length, pathname, selected])
 
     const onLoadFactory = useCallback((id: number) => 
         () => {
