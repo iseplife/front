@@ -42,7 +42,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const [fetching, setFetching] = useState(true)
     const [error, setError] = useState<boolean>(false)
     const [baseLastLoad, setBaseLastLoad] = useState<number>(-1)
-    const loadingInformations = useMemo(() => loading || baseLastLoad == -1, [baseLastLoad, loading])
+    const [generalLoading, setGeneralLoading] = useState(true)
+    const loadingInformations = useMemo(() => loading || baseLastLoad == -1 || generalLoading, [baseLastLoad, loading, generalLoading])
     const [needFullReload, setNeedFullReload] = useState(false)
     const [firstLoaded, setFirstLoaded] = useState(Number.MAX_VALUE)
     const [loadedPosts, setLoadedPosts] = useState(0)
@@ -64,15 +65,16 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [baseLastLoad])
 
     useEffect(() => {
-        if (!loadingInformations)
-            feedsManager.getLastPostedFresh(id).then(post =>
+        if (!loadingInformations){
+            feedsManager.getLastPostedFresh(id).then(post => 
                 setFirstLoaded(firstLoaded => post?.publicationDateId ?? firstLoaded)
             )
+        }
     }, [loadingInformations, id])
 
     useEffect(() => {
         if (!loading) {
-            feedsManager.subscribe(id).then(setBaseLastLoad)
+            feedsManager.subscribe(id).then(setBaseLastLoad).then(() => setGeneralLoading(false))
             return () => {
                 feedsManager.unsubscribe(id)
             }
@@ -198,10 +200,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const fullReload = useCallback(async () => {
         setNeedFullReload(false)
         setFirstLoaded(Number.MAX_VALUE)
-        await feedsManager.subscribe(id)
+        await feedsManager.subscribe(id, true)
         setLoadedPosts(0)
         loadMorePost()
     }, [id])
+
+    useEffect(() => {
+        if(!loading)
+            return feedsManager.fullReloadFromOtherTabs(id, () => 
+                setNeedFullReload(false)
+            )
+    }, [id, loading])
 
     const [feedMargin, setFeedMargin] = useState(0)
     const feedElement = useRef<HTMLDivElement>(null)

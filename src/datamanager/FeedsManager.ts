@@ -11,8 +11,35 @@ import WSPSFeedPostEdited from "../realtime/protocol/packets/server/WSPSFeedPost
 import WSPSFeedPostLikesUpdate from "../realtime/protocol/packets/server/WSPSFeedPostLikesUpdate"
 import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPostRemoved"
 import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
+import { BroadcastChannel } from "broadcast-channel"
+
+type FeedsChannelMessage = {
+    type: "ask"
+    id: number
+    pageId: number
+    reloading: boolean
+    reloadingId: number
+} | {
+    type: "response"
+    id: number
+    pageId: number
+    doNotRenew: boolean
+    reloading: boolean
+} | {
+    type: "update"
+    feedId: number
+    lastLoadId: number
+}
+
+const pageId = Math.random()
 
 export default class FeedsManager extends DataManager<ManagerPost> {
+
+    private reloading = false
+
+    private initLoadSyncWait?: Promise<void>
+
+    private reloadingPriorityId = Math.random()
 
     private static baseDateMs = 1615849200000// Wed Mar 16 2021 00:00:00 GMT+0100
 
@@ -22,18 +49,78 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     private loadedFeeds = new Set<FeedId>()
 
+    private channel = new BroadcastChannel<FeedsChannelMessage>("feeds-manager", { webWorkerSupport: false })
+
+    private globalChannelHandler!: (msg: FeedsChannelMessage) => void
+
     constructor(wsServerClient: WSServerClient) {
         super("feeds", ["[loadedFeed+publicationDateId]", "[loadedFeed+waitingForUpdate]", "publicationDate", "loadedFeed", "thread", "id", "[loadedFeed+lastLoadId]", "[lastLoadId+loadedFeed+publicationDateId]", "[loadedFeed+id]"], wsServerClient)
-        this.setContext("no_connection", {bugged: new Set()})
+        this.setContext("no_connection", { bugged: new Set() })
+        if(wsServerClient){
+            this.channel.addEventListener("message", this.globalChannelHandler = message => {
+                if (message.type == "ask" && message.pageId != pageId && getWebSocket()?.connected) {
+                    if(!this.reloading || message.reloadingId <= this.reloadingPriorityId){
+                        this.channel.postMessage({
+                            type: "response",
+                            id: message.id,
+                            doNotRenew: true,
+                            pageId,
+                            reloading: this.reloading,
+                        })
+                    }
+                }else if(message.type == "update")
+                    this.lastLoadIdByFeed[message.feedId] = message.lastLoadId
+            })
+        }else
+            this.channel.close()
+       
     }
 
-    protected async initData() {
-        const now = Date.now()
+    protected async initData(reconnect?: boolean) {
+        this.reloading = !!reconnect
+        let now = Date.now()
+        await (this.initLoadSyncWait = new Promise<void>(resolve => {
+            let responded = false
+            const id = Math.random()
+            console.time("ask")
+            const handler = async (message: FeedsChannelMessage) => {
+                if (message.type == "response" && message.id == id
+                || (message.type == "ask" && message.id != id && message.reloadingId != this.reloadingPriorityId && message.reloadingId > this.reloadingPriorityId)) {
+                    console.timeEnd("ask")
+                    responded = true
+                    this.channel.removeEventListener("message", handler)
+
+                    if(!("doNotRenew" in message) || message.doNotRenew)
+                        now = await this.getGeneralLastLoad()
+                    
+                    resolve()
+                }
+            }
+            this.channel.addEventListener("message", handler)
+            this.channel.postMessage({
+                type: "ask",
+                id,
+                pageId,
+                reloading: this.reloading,
+                reloadingId: this.reloadingPriorityId
+            })
+
+            setTimeout(() => {
+                if (!responded) {
+                    console.timeEnd("ask")
+                    this.channel.removeEventListener("message", handler)
+                    resolve()
+                }
+            }, reconnect ? 200 : 170)
+        }))
+
+        this.initLoadSyncWait = undefined
+        this.reloading = false
 
         for (const feedId in this.lastLoadIdByFeed)
             if (!this.loadedFeeds.has(+feedId))
                 this.lastLoadIdByFeed[feedId] = now
-
+        
         this.setContext("lastLoad", {lastLoad: now})
 
         this.getTable()
@@ -41,6 +128,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             .below(addMonths(new Date(), -4))
             .delete()
             .then(deleted => console.debug("[Feed] deleted", deleted, "old posts"))
+
+    }
+
+    public fullReloadFromOtherTabs(feedId: FeedId, callback: () => void) {
+        const fnc = (message: FeedsChannelMessage) => {
+            if(message.type == "update" && message.feedId == (feedId ?? mainFeedId))
+                callback()
+        }
+        this.channel.addEventListener("message", fnc)
+
+        return () => this.channel.removeEventListener("message", fnc)
     }
 
     private async _waitFetching() {
@@ -70,7 +168,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public countFreshFeedPosts(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).count()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).count()
     }
 
     public async countFreshPostsAfter(feed: FeedId, publicationDateId: number) {
@@ -82,7 +180,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async getFirstPostedFresh(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).equals([feed ?? mainFeedId, this.getLastLoad(feed)]).first()
+        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).first()
     }
 
     public getFeedPosts(feed: FeedId, limit: number) {
@@ -106,9 +204,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         return this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0
     }
 
-    public async subscribe(feed: FeedId) {
+    public async subscribe(feed: FeedId, fullReload?: boolean) {
         this.loadedFeeds.add(feed ?? mainFeedId)
-        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
         const postsToDelete = [] as ManagerPost[]
         const postsToAdd = [] as ManagerPost[]
 
@@ -130,6 +227,16 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId]))
         this.addBulkData(postsToAdd)
 
+        await this.initLoadSyncWait
+
+        const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
+        
+        if(fullReload)
+            this.channel.postMessage({
+                type: "update",
+                feedId: feed ?? mainFeedId,
+                lastLoadId: lastLoad
+            })
         return lastLoad
     }
 
@@ -244,7 +351,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public isFresh(post: ManagerPost, feed: FeedId) {
-        return post.lastLoadId == this.getLastLoad(feed)
+        return post.lastLoadId >= this.getLastLoad(feed)
     }
 
     @PacketHandler(WSPSFeedPostCreated)
@@ -386,6 +493,12 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public outdateFeed(feed: FeedId) {
         this.lastLoadIdByFeed[feed ?? mainFeedId] = Date.now()
+    }
+
+    public async _unregister() {
+        this.channel.removeEventListener("message", this.globalChannelHandler)
+        this.channel.close()
+        super.unregister()
     }
 
 }

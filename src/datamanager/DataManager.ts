@@ -89,7 +89,7 @@ export default abstract class DataManager<T> extends PacketListener {
                 console.debug("Loading data on reconnect for", this)
                 this.needDataLoad = false
 
-                this.initData()
+                this.initData(true)
             }
         })
         this.registerEvent(WSEventType.DISCONNECTED, () => 
@@ -97,14 +97,27 @@ export default abstract class DataManager<T> extends PacketListener {
         )
     }
 
+    registered = true
+
+    protected _unregister(){
+        //To override
+    }
+
     public async unregister() {
+        if(!this.registered)
+            return
+
+        this.registered = false
+
         this.database.delete()
         this.database.close()
-        
-        super.unregister()
 
         this.registredEventsListener.forEach(event => window.removeEventListener(...event))
+
+        this._unregister()
+        
+        super.unregister()
     }
     
-    protected abstract initData(): Promise<void>
+    protected abstract initData(reloading?: boolean): Promise<void>
 }

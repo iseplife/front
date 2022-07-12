@@ -75,7 +75,6 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
             && photos.length
         ) {
             setTimeout(() => {
-                console.log("open", selected, !document.querySelector(".lightbox"))
                 if(!document.querySelector(".lightbox")){
                     const index = +splitted[splitted.length - 1]
                     _setLightboxPhotoIndex(index)
