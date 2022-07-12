@@ -68,7 +68,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                             reloading: this.reloading,
                         })
                     }
-                }else if(message.type == "update")
+                }else if(message.type == "update" && message.lastLoadId)
                     this.lastLoadIdByFeed[message.feedId] = message.lastLoadId
             })
         }else
@@ -91,7 +91,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                     this.channel.removeEventListener("message", handler)
 
                     if(!("doNotRenew" in message) || message.doNotRenew)
-                        now = await this.getGeneralLastLoad()
+                        now = await this.getGeneralLastLoad() ?? 0
                     
                     resolve()
                 }
