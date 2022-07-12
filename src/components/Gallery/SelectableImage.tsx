@@ -1,5 +1,5 @@
-import React, {CSSProperties, useEffect, useMemo} from "react"
-import {RenderImageProps} from "react-photo-gallery"
+import React, {CSSProperties, useCallback, useMemo} from "react"
+import {PhotoProps, RenderImageProps} from "react-photo-gallery"
 import {GalleryPhoto} from "../../pages/default/gallery"
 import SafeImage from "../Common/SafeImage"
 import {faCheckCircle} from "@fortawesome/free-regular-svg-icons"
@@ -17,12 +17,17 @@ type SelectableImageProps = {
     selectable: boolean
     photoRef: React.RefObject<HTMLDivElement>,
     onSelect: (key: string) => void
+    onLoaded: (photo: PhotoProps<GalleryPhoto>) => void
 } & RenderImageProps<GalleryPhoto>
-const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin, direction, top, left, selectable, photoRef, onClick, onSelect}) => {
+const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin, direction, top, left, selectable, photoRef, onClick, onSelect, onLoaded: _onLoaded}) => {
     //calculate x,y scale
     const sx = (100 - (30 / photo.width) * 100) / 100
     const sy = (100 - (30 / photo.height) * 100) / 100
     selectedImgStyle.transform = `translateZ(0px) scale3d(${sx}, ${sy}, 1)`
+
+    const onLoaded = useCallback(() => 
+        _onLoaded(photo)
+    , [_onLoaded, photo])
 
     const container: CSSProperties = useMemo(() => ({
         position: direction === "column" ? "absolute" : "relative",
@@ -56,6 +61,7 @@ const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin,
                 src={photo.src}
                 ratio={photo.ratio}
                 alt={photo.alt}
+                onLoaded={onLoaded}
             />
             {photo.selected && <>
                 <div className="bg-neutral-300/40 w-full h-full absolute top-0" />

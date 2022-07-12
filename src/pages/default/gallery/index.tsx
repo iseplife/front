@@ -2,7 +2,7 @@ import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
 import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
-import PhotoGallery, {renderImageClickHandler} from "react-photo-gallery"
+import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
 import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gallery"
 import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
 import {useTranslation} from "react-i18next"
@@ -118,6 +118,10 @@ const Gallery: React.FC = () => {
             history.push(`/gallery/${id}/${photo.index}`)
     }, [id, gallery])
 
+    const onLoaded = useCallback((photo: PhotoProps<GalleryPhoto>) => 
+        setPhotos(photos => photos.map(old => old.id == photo.id ? {...old, status: MediaStatus.READY} : old))
+    , [id, gallery])
+
     const exitEditMode = useCallback(() => {
         setEditMode(false)
         setPhotos(prevState => prevState.map(photo => ({...photo, selected: false})))
@@ -155,6 +159,7 @@ const Gallery: React.FC = () => {
             direction="row"
             onSelect={handleSelect}
             onClick={openLightbox}
+            onLoaded={onLoaded}
         />
     ), [editMode, handleSelect, openLightbox])
 
