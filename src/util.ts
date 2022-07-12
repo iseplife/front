@@ -9,6 +9,7 @@ import {TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
 import { CSSProperties } from "react"
+import { Post } from "./data/post/types"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -202,6 +203,25 @@ export const setStyles = (element: HTMLElement, style: CSSProperties) => {
 
 export const waitForFrame = async () => new Promise(requestAnimationFrame)
 
+export const getPostLink = (post: Post, withHost = true) => 
+    [...(withHost ? [window.location.host] : []), post.context.type.toLowerCase(), post.context.id, "post", post.id.toString()].join("/")
+
+export const copyToClipboard = (str: string) => {
+    const el = document.createElement("textarea")
+    el.value = str
+    el.setAttribute("readonly", "")
+    el.style.position = "absolute"
+    el.style.left = "-9999px"
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand("copy")
+    document.body.removeChild(el)
+}
+
+export const arrayEquals = (array: unknown[], array1: unknown[]) => 
+    Array.isArray(array) && Array.isArray(array1)
+    && array.length == array1.length
+    && array.every((element, index) => array1[index] == element)
 
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>

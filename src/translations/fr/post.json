@@ -22,5 +22,8 @@
 		"edited": "Mettre à jour",
 		"deleted": "Post supprimé"
 	},
-	"just_now": "À l'instant"
+	"just_now": "À l'instant",
+	"selected_post": "Publication sélectionnée",
+	"copy_link": "Partager",
+	"copied": "Lien copié dans le presse papier !"
 }

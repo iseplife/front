@@ -122,7 +122,7 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
     }, [props.initialIndex, props.show])
 
     return <Animated.div
-        className="fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
+        className="lightbox fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
         show={show}
         mountAnim={`
             0% { opacity: 0;}

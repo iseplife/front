@@ -8,7 +8,7 @@ import React, {
     useState
 } from "react"
 import {EmbedEnumType, Post as PostType, PostUpdate} from "../../data/post/types"
-import {getFeedPostPinned} from "../../data/feed"
+import {getFeedPost, getFeedPostPinned} from "../../data/feed"
 import InfiniteScroller from "../Common/InfiniteScroller"
 import Post from "../Post"
 import {Divider, message, Modal} from "antd"
@@ -24,6 +24,7 @@ import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
 import {isAfter, isBefore} from "date-fns"
+import { useHistory, useLocation } from "react-router-dom"
 
 type FeedProps = {
     loading?: boolean,
@@ -47,6 +48,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const [loadedPosts, setLoadedPosts] = useState(0)
     const [, setNextLoadedPosts] = useState(FeedsManager.PAGE_SIZE)
     const [text, setText] = useState<string>("")
+
+    const [selectedPostId, setSelectedPostId] = useState(0)
+    const [selectedPostLoadingError, setSelectedPostLoadingError] = useState(false)
+
+    const selectedPost = useLiveQuery(async () => selectedPostId && await feedsManager.getFeedPost(id, selectedPostId), [id, selectedPostId])
 
     const posts = useLiveQuery(async () => (
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
@@ -72,6 +78,27 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             }
         }
     }, [id, loading])
+
+    useEffect(() => {
+        const splitted = location.pathname.split("/")
+        splitted.shift()
+        if (splitted.length >= 4 && splitted[2].toLowerCase() == "post") {
+            const postId = +splitted[3]
+            if (postId && !isNaN(postId))
+                setSelectedPostId(postId)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!fetching && !loading && id && selectedPostId && (!selectedPost || !feedsManager.isFresh(selectedPost!, id))) {
+            getFeedPost(id, selectedPostId)
+                .then(async ({data: post}) => {
+                    const currentPost = await feedsManager.getFeedPost(id, post.id)
+                    if (!currentPost || !feedsManager.isFresh(currentPost, id))
+                        feedsManager.addPostToFeed(post, id)
+                }).catch(e => setSelectedPostLoadingError(true))
+        }
+    }, [id, fetching, loading, selectedPostId, selectedPost])
 
 
     const loadMorePost = useCallback(async () => {
@@ -203,6 +230,30 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             style={{...style, maxWidth: `calc(100vw - ${feedMargin}px)`}}
             ref={feedElement}
         >
+            {
+                !!selectedPostId && <>
+                    <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
+                    {!selectedPost ? 
+                        <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/>
+                        : <div
+                            key={selectedPost.publicationDateId}
+                            className={`${!feedsManager.isFresh(selectedPost, id) && "opacity-60 pointer-events-none"}`}
+                        >
+                            <Post
+                                feedId={id}
+                                data={selectedPost}
+                                selected={true}
+                                onDelete={onPostRemoval}
+                                onUpdate={onPostUpdate}
+                                onPin={onPostPin}
+                                toggleEdition={(toggle) => setEditPost(toggle ? selectedPost.id : 0)}
+                                isEdited={editPost === selectedPost.id}
+                                className="shadow-md"
+                            />
+                        </div>
+                    }
+                </>
+            }
             <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
             {allowPublication && (
                 <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation}>
