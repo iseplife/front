@@ -8,6 +8,7 @@ import DropdownPanelElement from "../../Common/DropdownPanelElement"
 import { faArrowDown, faArrowUp, faSearch, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { AppContext } from "../../../context/app/context"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Link } from "react-router-dom"
 
 type GroupMembersPanelProps = {
     orga: GroupMember[][]
@@ -66,32 +67,33 @@ const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, on
                                     panelClassName="w-32 right-0 lg:left-0"
                                     buttonClassName="mr-0 ml-auto"
                                     clickable={false}
-                                >
-                                </DropdownPanel>
+                                />
                             </div>
                         )
                         :
                         orga[index].filter(member => index == 0 || (member.student.firstName+" "+member.student.lastName).toLowerCase().includes(search)).map(member =>
-                            <div key={member.id} className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
-                                <StudentAvatar 
-                                    id={member.student.id}
-                                    name={member.student.firstName+" "+member.student.lastName}
-                                    picture={member.student.picture}
-                                    size="default"
-                                />
-                                <div className="ml-2">{member.student.firstName+" "+member.student.lastName}</div>
-                                
-                                {member.student.id != user.id && 
-                                    <DropdownPanel
-                                        panelClassName="w-32 right-0 lg:left-0"
-                                        closeOnClick={true}
-                                        buttonClassName="mr-0 ml-auto"
-                                    >
-                                        <DropdownPanelElement onClick={index ? onPromote(member.id) : onDemote(member.id)} icon={index ? faArrowUp : faArrowDown} title={t(index == 0 ? "demote" : "promote")}></DropdownPanelElement>
-                                        <DropdownPanelElement onClick={onDelete(member.id)} icon={faTrashAlt} title={t("kick")} color="red"></DropdownPanelElement>
-                                    </DropdownPanel>
-                                }
-                            </div>
+                            <Link to={() => `/student/${member.student.id}`}>
+                                <div key={member.id} className="w-full flex items-center font-semibold text-neutral-600 hover:bg-black/5 p-2 rounded-lg transition-colors cursor-pointer">
+                                    <StudentAvatar 
+                                        id={member.student.id}
+                                        name={member.student.firstName+" "+member.student.lastName}
+                                        picture={member.student.picture}
+                                        size="default"
+                                    />
+                                    <div className="ml-2">{member.student.firstName+" "+member.student.lastName}</div>
+                                    
+                                    {member.student.id != user.id && 
+                                        <DropdownPanel
+                                            panelClassName="w-32 right-0 lg:left-0"
+                                            closeOnClick={true}
+                                            buttonClassName="mr-0 ml-auto"
+                                        >
+                                            <DropdownPanelElement onClick={index ? onPromote(member.id) : onDemote(member.id)} icon={index ? faArrowUp : faArrowDown} title={t(index == 0 ? "demote" : "promote")}></DropdownPanelElement>
+                                            <DropdownPanelElement onClick={onDelete(member.id)} icon={faTrashAlt} title={t("kick")} color="red"></DropdownPanelElement>
+                                        </DropdownPanel>
+                                    }
+                                </div>
+                            </Link>
                         )
                     }
                 </div>

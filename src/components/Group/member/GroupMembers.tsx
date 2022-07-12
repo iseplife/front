@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React from "react"
 import {Skeleton} from "antd"
 import MemberList, { MEMBER_PREVIEW_COUNT } from "../MemberList"
 import {useTranslation} from "react-i18next"
@@ -6,7 +6,6 @@ import {GroupMember} from "../../../data/group/types"
 import AdminAction from "./AdminAction"
 import AddMember from "./AddMember"
 import CompressedMembers from "../../Common/CompressedMembers"
-import { GroupPanel } from "../../../pages/default/group"
 
 type GroupMembersProps = {
     orga: GroupMember[][]

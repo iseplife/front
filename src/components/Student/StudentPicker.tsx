@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react"
-import {Avatar, Select, Spin, Tag} from "antd"
+import {Avatar, Select, Spin, Tag, SelectProps} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {mediaPath} from "../../util"
@@ -14,14 +14,17 @@ type Option = {
     value: number
 }
 
+export type SelectRef = {blur: ()=>void, focus: ()=>void}
 
 type StudentPickerProps = {
     onChange: (id: number, metadata: SearchItem) => void
     placeholder?: string
     multiple?: boolean
     className?: string
+    selectRef?: React.Ref<SelectRef>
+    noSelect?: boolean
 }
-const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false, className, placeholder}) => {
+const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false, selectRef, noSelect, className, placeholder}) => {
     const {t} = useTranslation("search")
     const [value, setValue] = useState<number>()
     const [options, setOptions] = useState<Option[]>([])
@@ -69,17 +72,18 @@ const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false
         <Select
             placeholder={placeholder ?? t("search_student")}
             mode={multiple ? "multiple": undefined}
-            allowClear={!multiple}
+            allowClear={!multiple && !noSelect}
             showSearch
             value={value}
             showArrow={false}
             filterOption={false}
             autoClearSearchValue={false}
             loading={fetching}
+            ref={selectRef}
             notFoundContent={fetching ? <Spin size="small"/> : null}
             onSearch={handleSearch}
             onChange={selected => {
-                setValue(selected)
+                setValue(noSelect ? null! : selected)
                 setFetching(false)
                 onChange(selected, metadata.get(selected) as SearchItem)
             }}

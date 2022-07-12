@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
-import StudentSelector from "../../Student/StudentSelector"
 import {useTranslation} from "react-i18next"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
-import StudentPicker from "../../Student/StudentPicker"
+import StudentPicker, { SelectRef } from "../../Student/StudentPicker"
 
 type AddMemberProps = {
     onAdd: (id: number) => void
@@ -15,19 +14,21 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
     const [selected, setSelected] = useState(false)
     const selectorRef = useRef<HTMLButtonElement>(null)
 
-    const input = selectorRef.current?.querySelector("input")
+    const selectRef = React.createRef<SelectRef>()
 
     useEffect(() => {
-        if(input && selected){
-            input.focus()
+        if(selectRef.current && selected){
+            selectRef.current.focus()
 
-            const fnc = (event: MouseEvent) => setSelected(false)
+            const fnc = (event: MouseEvent) =>
+                (event.x || event.y) && setSelected(false)
+                
             setTimeout(() => window.addEventListener("click", fnc))
             
             return () => window.removeEventListener("click", fnc)
-        }else if(input)
-            input.blur()
-    }, [input, selected])
+        }else if(selectRef.current)
+            selectRef.current.blur()
+    }, [selectRef, selected])
     return (
         <div className={"flex justify-center mt-1 "+(selected && "mr-2")}>
             <button
@@ -40,6 +41,8 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
                     className="w-full ml-2 opacity-40 rounded-lg overflow-hidden"
                     placeholder={t("add_member")}
                     onChange={onSelect}
+                    selectRef={selectRef}
+                    noSelect={true}
                 />
             </button>
         </div>

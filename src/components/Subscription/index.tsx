@@ -16,13 +16,13 @@ const SubscriptionHandler: React.FC<SubscriptionHandlerProps> = ({subscribable, 
     const subCallback = useCallback(sub => onUpdate(sub ? { extensive: false } : undefined), [onUpdate])
     return (
         <>
-            <SubscriptionButton
+            {type != SubscribableType.GROUP && <SubscriptionButton
                 loading={!subscribable}
                 id={subscribable}
                 subscribed={subscription != undefined}
                 type={type}
                 updateSubscription={subCallback}
-            />
+            />}
             {subscription &&
                 <SubscriptionExtensiveButton
                     id={subscribable}

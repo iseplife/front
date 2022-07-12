@@ -27,7 +27,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
     const wrapperProps = useMemo(() => showPreview ?
         {
             className: `text-center no-underline cursor-pointer my-auto flex items-center ${className}`,
-            to: (location: Location) => `${location.pathname}/student/${id}`
+            to: () => `/student/${id}`
         } :
         {
             className: `text-center no-underline my-auto flex md:text-gray-500 hover:text-gray-600 flex ${className}`

@@ -14,7 +14,10 @@ const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
     const {icon, title, closeOnClick, panelClassName, buttonClassName, clickable = true, children} = props
     const panelRef = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState(false)
-    const toggleOpen = useCallback(() => clickable && setOpen(prev => !prev), [clickable])
+    const toggleOpen = useCallback((e: React.MouseEvent) => {
+        e.preventDefault()
+        clickable && setOpen(prev => !prev)
+    }, [clickable])
 
     useEffect(() => {
         if (open) {
