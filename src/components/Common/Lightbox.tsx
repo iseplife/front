@@ -164,7 +164,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const [swiping, setSwiping] = useState(false)
 
     const touchZoneRef = useRef<HTMLDivElement>(null)
-
+    const pinchZoomRef = useRef<ReactZoomPanPinchRef>(null)
 
     useEffect(() => {
         const nextPhoto = nextPhotoRef.current!,
@@ -209,7 +209,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         }
 
         const touchStart = (event: TouchEvent) => {
-            if (zooming)
+            if (pinchZoomRef.current?.state.scale != 1)
                 return
             
             if (event.touches.length > 1) {
@@ -319,6 +319,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 maxPositionX={0}
                 alignmentAnimation={{ sizeX: 0 }}
                 disabled={swiping}
+                ref={pinchZoomRef}
             >
                 <TransformComponent wrapperClass="w-full h-full relative" contentClass="select-none w-full h-full grid relative place-items-center">
                     <div className="w-full h-full absolute top-0 left-0" onClick={onClose}/>
