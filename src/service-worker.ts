@@ -37,11 +37,9 @@ const CACHE_SCRIPT_NAME = `${CACHE_PREFIX}-scripts`
 const CACHE_STYLES_NAME = `${CACHE_PREFIX}-styles`
 const CACHE_DOCUMENTS_NAME = `${CACHE_PREFIX}-documents`
 const CACHE_FONTS_NAME = `${CACHE_PREFIX}-fonts`
-const CACHE_IMAGES_NAME = `${CACHE_PREFIX}-images`
 registerCacheFirstRouteUsing("style", CACHE_STYLES_NAME, 60, 7)
 registerCacheFirstRouteUsing("script", CACHE_SCRIPT_NAME, 10, 7)
 registerCacheFirstRouteUsing("document", CACHE_DOCUMENTS_NAME, 5, 7)
 registerCacheFirstRouteUsing("font", CACHE_FONTS_NAME, 10, 60 * 24 * 30)
-registerCacheFirstRouteUsing("image", CACHE_IMAGES_NAME, 450, 60 * 24 * 12, ["mapbox/"])
 
 initPushWorker()
