@@ -13,7 +13,7 @@ class PushService {
     notificationsRefused = !!localStorage.getItem("notifications.refuse")
 
     constructor() {
-        navigator.serviceWorker.ready.then(registration => {
+        navigator.serviceWorker?.ready.then(registration => {
             this.registration = registration
         })
     }
