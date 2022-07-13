@@ -97,8 +97,6 @@ export default abstract class DataManager<T> extends PacketListener {
         )
     }
 
-    registered = true
-
     protected _unregister(){
         //To override
     }
