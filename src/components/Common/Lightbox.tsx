@@ -127,7 +127,9 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const panStop = useCallback((event: ReactZoomPanPinchRef) => {
         if ([100, -100].includes(event.state.positionY) && Math.abs(event.state.positionX) < 50)
             onClose()
-    }, [onClose])
+
+        zoomEnd(event)
+    }, [onClose, zoomEnd])
     
     const hideButtons = useMemo(() => showImage == false || zooming, [showImage, zooming])
 
@@ -146,60 +148,58 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             maxPositionX={0}
             alignmentAnimation={{ sizeX: 0 }}
         >
-            <TransformComponent>
-                <div className="select-none w-full h-[77vh] md:h-full grid place-items-center relative">
-                    <div className="w-full h-full absolute top-0 left-0" onClick={onClose}/>
-                    <div
-                        className={`
-                            absolute w-9 h-9 grid place-items-center m-3.5 bg-gray-800 bg-opacity-60
-                            hover:bg-gray-700 hover:bg-opacity-50 rounded-full
-                            cursor-pointer z-50 top-0 left-0 text-white transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
-                        `}
-                        onClick={onClose}
-                    >
-                        <FontAwesomeIcon icon={cFaCross}/>
-                    </div>
-                    <div className={"relative m-auto " + (showImage == false && "opacity-0")} style={{width, height}} ref={photoRef}>
-                        {currentPhoto && height !== 0 && width !== 0 ?
-                            <SafeImage
-                                skipNsfw={initialIndex == currentIndex}
-                                key={currentIndex}
-                                nsfw={currentPhoto.nsfw}
-                                status={currentPhoto.status}
-                                lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
-                                src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
-                                highQualitySrc={bigZoom && gallery && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
-                                alt={currentPhoto.alt}
-                                ratio={currentPhoto.ratio}
-                            /> :
-                            <div>{t("error")}</div>
-                        }
-                    </div>
-                    {currentIndex + 1 < photos.length &&
-                        <div
-                            className={`
-                                absolute right-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
-                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
-                                z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
-                            `}
-                            onClick={() => setCurrentIndex(idx => (idx + 1) % photos.length)}
-                        >
-                            <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4 transform rotate-180"/>
-                        </div>
-                    }
-                    {currentIndex > 0 && 
-                        <div
-                            className={`
-                                absolute left-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
-                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
-                                z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
-                            `}
-                            onClick={() => setCurrentIndex(idx => (idx + photos.length - 1) % photos.length)}
-                        >
-                            <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4"/>
-                        </div>
+            <TransformComponent wrapperClass="select-none w-full h-[77vh] md:h-full relative" contentClass="select-none w-full h-full grid relative place-items-center">
+                <div className="w-full h-full absolute top-0 left-0" onClick={onClose}/>
+                <div
+                    className={`
+                        absolute w-9 h-9 grid place-items-center m-3.5 bg-gray-800 bg-opacity-60
+                        hover:bg-gray-700 hover:bg-opacity-50 rounded-full
+                        cursor-pointer z-50 top-0 left-0 text-white transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
+                    `}
+                    onClick={onClose}
+                >
+                    <FontAwesomeIcon icon={cFaCross}/>
+                </div>
+                <div className={"relative m-auto " + (showImage == false && "opacity-0")} style={{width, height}} ref={photoRef}>
+                    {currentPhoto && height !== 0 && width !== 0 ?
+                        <SafeImage
+                            skipNsfw={initialIndex == currentIndex}
+                            key={currentIndex}
+                            nsfw={currentPhoto.nsfw}
+                            status={currentPhoto.status}
+                            lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
+                            src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
+                            highQualitySrc={bigZoom && gallery && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
+                            alt={currentPhoto.alt}
+                            ratio={currentPhoto.ratio}
+                        /> :
+                        <div>{t("error")}</div>
                     }
                 </div>
+                {currentIndex + 1 < photos.length &&
+                    <div
+                        className={`
+                            absolute right-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
+                            hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
+                            z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
+                        `}
+                        onClick={() => setCurrentIndex(idx => (idx + 1) % photos.length)}
+                    >
+                        <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4 transform rotate-180"/>
+                    </div>
+                }
+                {currentIndex > 0 && 
+                    <div
+                        className={`
+                            absolute left-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
+                            hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
+                            z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
+                        `}
+                        onClick={() => setCurrentIndex(idx => (idx + photos.length - 1) % photos.length)}
+                    >
+                        <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4"/>
+                    </div>
+                }
             </TransformComponent>
         </TransformWrapper>
         {sidePanel}
