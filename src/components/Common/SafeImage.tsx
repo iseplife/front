@@ -63,7 +63,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 msFilter: "blur(12px)"
             } : {}} />
             {highQualitySrc &&
-                <img src={highQualitySrc} alt="High quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                <img crossOrigin="" src={highQualitySrc} alt="High quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
                     WebkitFilter: "blur(12px)",
                     filter: "blur(12px)",
                     msFilter: "blur(12px)"

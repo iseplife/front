@@ -296,11 +296,46 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         element.addEventListener("touchmove", touchMove, { capture: true })
         element.addEventListener("touchend", touchEnd)
 
+        let lastClick = 0
+        const doubleClickHandler = (event: MouseEvent) => {
+            let current = event.target as HTMLElement
+            while (current != element) {
+                if (current.nodeName == "BUTTON")
+                    return
+                current = current.parentElement!
+            }
+            const now = Date.now()
+            const pinchZoom = pinchZoomRef.current!
+            if (now - lastClick < 300) {
+                if (pinchZoom.state.scale > 1) {
+                    pinchZoom.resetTransform()
+                    setZooming(false)
+                } else
+                    pinchZoom.zoomIn(1.3)
+                lastClick = 0
+            } else
+                lastClick = now
+        }
+
+        element.addEventListener("click", doubleClickHandler)
+
         return () => {
             element.removeEventListener("touchstart", touchStart)
             element.removeEventListener("touchmove", touchMove)
             element.removeEventListener("touchend", touchEnd)
+            element.removeEventListener("click", doubleClickHandler)
         }
+    }, [])
+
+    const clickLeft = useCallback((event: React.MouseEvent) => {
+        setCurrentIndex(idx => (idx + 1) % photos.length)
+        event.preventDefault()
+        return false
+    }, [])
+    const clickRight = useCallback((event: React.MouseEvent) => {
+        setCurrentIndex(idx => (idx + photos.length - 1) % photos.length)
+        event.preventDefault()
+        return false
     }, [])
 
     return <div
@@ -318,6 +353,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 onPanningStop={panStop}
                 maxPositionX={0}
                 alignmentAnimation={{ sizeX: 0 }}
+                doubleClick={{disabled: true}}
                 disabled={swiping}
                 ref={pinchZoomRef}
             >
@@ -380,28 +416,28 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         </>
                     }
                     {currentIndex + 1 < photos.length &&
-                        <div
+                        <button
                             className={`
                                 absolute right-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
                                 hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
                                 z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
                             `}
-                            onClick={() => setCurrentIndex(idx => (idx + 1) % photos.length)}
+                            onClick={clickLeft}
                         >
                             <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4 transform rotate-180"/>
-                        </div>
+                        </button>
                     }
                     {currentIndex > 0 && 
-                        <div
+                        <button
                             className={`
                                 absolute left-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
                                 hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
                                 z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
                             `}
-                            onClick={() => setCurrentIndex(idx => (idx + photos.length - 1) % photos.length)}
+                            onClick={clickRight}
                         >
                             <FontAwesomeIcon icon={cFaArrow} className="text-white w-4 h-4"/>
-                        </div>
+                        </button>
                     }
                 </TransformComponent>
             </TransformWrapper>
