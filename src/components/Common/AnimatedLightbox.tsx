@@ -15,6 +15,7 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
   initialIndex: number
   photos: T[]
   Sidebar?: React.FC<SidebarProps<T>>
+  gallery?: boolean
   onClose: () => void
   onChange?: (index: number) => void
 }
@@ -81,8 +82,10 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
             setShow(false)
     }, [props.show])
 
+    const [wasShown, setWasShown] = useState(false)
+
     useEffect(() => {
-        if (props.show && props.initialIndex !== undefined) {
+        if (!wasShown && props.show && props.initialIndex !== undefined) {
             const photo = props.photos[props.initialIndex]
             if(photo?.ref.current){
                 const clone = photo.ref.current.cloneNode(true) as HTMLDivElement
@@ -119,7 +122,8 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                 setShowImage(true)
             }
         }
-    }, [props.initialIndex, props.show])
+        setWasShown(props.show)
+    }, [props.initialIndex, props.show, wasShown])
 
     return <Animated.div
         className="lightbox fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"

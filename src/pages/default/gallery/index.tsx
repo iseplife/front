@@ -187,9 +187,9 @@ const Gallery: React.FC = () => {
         }
     }, [id])
 
-    const updateURL = useCallback((index) => {
+    const updateURL = useCallback((index) => 
         history.push(`/gallery/${id}/${index}`)
-    }, [id])
+    , [id])
 
     const gallerySidebar = useCallback((gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />, [gallery])
 
@@ -229,7 +229,7 @@ const Gallery: React.FC = () => {
                             </Tooltip>
                         </div>
                     }
-                    {gallery?.hasRight && editMode ?
+                    {gallery?.hasRight && (editMode ?
                         <div className="flex flex-col items-end">
                             <Button
                                 type="primary"
@@ -270,7 +270,7 @@ const Gallery: React.FC = () => {
                                 />
                             </Button>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
             <div className="p-1">
@@ -291,6 +291,7 @@ const Gallery: React.FC = () => {
                 onChange={updateURL}
                 onClose={closeLightbox}
                 Sidebar={gallerySidebar}
+                gallery={true}
             />
         </div>
     )
