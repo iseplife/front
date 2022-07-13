@@ -81,12 +81,12 @@ const Student: React.FC = () => {
                         <div>
                             {
                                 student ? <>
-                                    <div className="text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
-                                    <div className="text-xl text-neutral-500">Promo {student?.promo}</div>
+                                    <div className="text-2xl sm:text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
+                                    <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo}</div>
                                 </> : <>
-                                    <div className="text-3xl font-bold h-8 w-32 bg-neutral-200 rounded-full absolute"></div>
-                                    <div className="text-3xl font-bold">&nbsp;</div>
-                                    <div className="text-xl text-neutral-500 flex">Promo ...</div>
+                                    <div className="text-2xl sm:text-3xl font-bold h-8 w-32 bg-neutral-200 rounded-full absolute"></div>
+                                    <div className="text-2xl sm:text-3xl font-bold">&nbsp;</div>
+                                    <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
                                 </>
                             }
                             <div className="flex mt-3">
