@@ -11,7 +11,7 @@ import { notificationManager } from "../../datamanager/NotificationManager"
 import { setNotificationsWatched } from "../../data/notification"
 import pushService from "../../services/PushService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBell } from "@fortawesome/free-solid-svg-icons"
+import { faBell, faMoon } from "@fortawesome/free-solid-svg-icons"
 import {faSadCry} from "@fortawesome/free-regular-svg-icons"
 
 interface NotificationsCenterProps {
@@ -24,7 +24,8 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const { state: { user } } = useContext(AppContext)
     const [loading, setLoading] = useState<boolean>(false)
 
-    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
+    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed(), [])
+    const pushRejected = useLiveQuery(async () => await notificationManager.isRejected(), [])
 
     const minNotificationId = useLiveQuery(async () => {
         return await notificationManager.getMinFresh()
@@ -101,6 +102,10 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         }
     }, [])
 
+    const unReject = useCallback(() =>
+        notificationManager.setRejected(false)
+    , [])
+
     const scrollElement = useRef<HTMLDivElement>(null)
     return (
         <div ref={scrollElement} className={`${className} text-neutral-800 px-1`}>
@@ -136,6 +141,12 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                                 </button>
                             </div>
                         </div>   
+                    </div>
+                }
+                {pushRejected && 
+                    <div onClick={unReject} className="bg-indigo-400/30 rounded-lg mb-0.5 w-full text-sm px-3 py-2 flex items-center justify-center text-indigo-400 cursor-pointer">
+                        <FontAwesomeIcon icon={faMoon} className="text-base mr-0.5" />
+                        {t("rejected")}
                     </div>
                 }
 

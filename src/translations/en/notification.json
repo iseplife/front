@@ -7,6 +7,7 @@
   "receive_here": "Receive them directly to your device!",
   "refuse": "Decline",
   "accept": "Accept",
+  "rejected": "Push notifications disabled",
   "in_menu": {
     "NEW_STUDENT_POST": "<bold>{{author_name}}</bold> published a new post.",
     "NEW_CLUB_POST": "<bold>{{author_name}}</bold> published a new post.",

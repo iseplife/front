@@ -20,10 +20,8 @@ export default class NotificationManager extends DataManager<Notification> {
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
     }
 
-    id = Math.random()
 
     public register(): void {
-        console.debug("register", this.id)
         super.register()
     }
 
@@ -34,6 +32,13 @@ export default class NotificationManager extends DataManager<Notification> {
     private async _waitFetching() {
         if (this._fetching)
             await new Promise<void>(executor => this._waitingForFetchEnd.push(executor))
+    }
+
+    public async isRejected() {
+        return (await this.getContext("rejected"))?.rejected ?? false
+    }
+    public async setRejected(rejected: boolean) {
+        this.setContext("rejected", { rejected })
     }
 
     protected async loadPage(page: number) {
@@ -99,8 +104,8 @@ export default class NotificationManager extends DataManager<Notification> {
         return (await this.getTable().where("id").anyOf(ids).count()) > 0
     }
 
-    public async isWebPushEnabled(){
-        return (await this.getContext("webpush.enabled"))?.enabled as boolean
+    public async isWebPushEnabled(skipRejected?: boolean) {
+        return (await this.getContext("webpush.enabled"))?.enabled as boolean && (skipRejected || !await this.isRejected())
     }
     public async setWebPushEnabled(enabled: boolean){
         this.setContext("webpush.enabled", { enabled })

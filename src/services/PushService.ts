@@ -10,15 +10,13 @@ class PushService {
 
     lastCheckSubbed = false
 
-    notificationsRefused = !!localStorage.getItem("notifications.refuse")
-
     constructor() {
         navigator.serviceWorker?.ready.then(registration => {
             this.registration = registration
         })
     }
     async initData() {
-        notificationManager.setWebPushEnabled("PushManager" in window && !this.notificationsRefused)
+        notificationManager.setWebPushEnabled("PushManager" in window)
         notificationManager.setSubscribed(await this.checkSubscription())
     }
 
@@ -75,10 +73,8 @@ class PushService {
         return isSubscribed
     }
 
-    public refuse(){
-        localStorage.setItem("notifications.refuse", "true")
-        this.notificationsRefused = true
-        notificationManager.setWebPushEnabled(false)
+    public refuse() {
+        notificationManager.setRejected(true)
     }
 }
 
