@@ -187,9 +187,9 @@ const Gallery: React.FC = () => {
         }
     }, [id])
 
-    const updateURL = useCallback((index) => {
+    const updateURL = useCallback((index) => 
         history.push(`/gallery/${id}/${index}`)
-    }, [id])
+    , [id])
 
     const gallerySidebar = useCallback((gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />, [gallery])
 
