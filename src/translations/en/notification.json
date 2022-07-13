@@ -10,6 +10,8 @@
   "in_menu": {
     "NEW_STUDENT_POST": "<bold>{{author_name}}</bold> published a new post.",
     "NEW_CLUB_POST": "<bold>{{author_name}}</bold> published a new post.",
-    "NEW_GROUP_POST": "<bold>{{author_name}}</bold> published a new post in the group <bold>{{group_name}}</bold>."
+    "NEW_GROUP_POST": "<bold>{{author_name}}</bold> published a new post in the group <bold>{{group_name}}</bold>.",
+    "NEW_EVENT_POST": "<bold>{{author_name}}</bold> published a new post in the event <bold>{{event_name}}</bold>.",
+    "NEW_EVENT": "<bold>{{club}}</bold> created the event <bold>{{title}}</bold>."
   }
 }
