@@ -264,7 +264,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 let distance = touch.clientX - currentTouch.start.x
 
                 if (distance > 0 && prevPhoto) {
-                    if (distance > window.innerWidth / 3 || (distance > window.innerWidth / 5 && Date.now() - currentTouch.startTime < 300)) {
+                    if (distance > window.innerWidth / 4 || (distance > window.innerWidth / 8 && Date.now() - currentTouch.startTime < 300)) {
                         prevPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
                         prevPhoto.style.transform = currPhoto.style.transform = "translateX(calc(100vw + 10px))"
                         prevPhoto.ontransitionend = () => {
@@ -277,7 +277,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         cancel()
                 } else if (distance < 0 && nextPhoto) {
                     distance = Math.abs(distance)
-                    if (distance > window.innerWidth / 3 || (distance > window.innerWidth / 5 && Date.now() - currentTouch.startTime < 300)) {
+                    if (distance > window.innerWidth / 4 || (distance > window.innerWidth / 8 && Date.now() - currentTouch.startTime < 300)) {
                         nextPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
                         nextPhoto.style.transform = currPhoto.style.transform = "translateX(calc(-100vw - 10px))"
                         nextPhoto.ontransitionend = () => {
