@@ -15,6 +15,7 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
   initialIndex: number
   photos: T[]
   Sidebar?: React.FC<SidebarProps<T>>
+  gallery?: boolean
   onClose: () => void
   onChange?: (index: number) => void
 }

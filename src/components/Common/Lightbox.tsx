@@ -19,11 +19,12 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
     firstImageCreatedCallback?: (element: HTMLDivElement, photo: AnimatedSafePhoto) => void
     photos: T[]
     Sidebar?: React.FC<SidebarProps<T>>
+    gallery?: boolean
     onClose: () => void
     onChange?: (index: number) => void
 }
 const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
-    const {photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, onClose, onChange} = props
+    const {photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, gallery, onClose, onChange} = props
     const [currentIndex, _setCurrentIndex] = useState<number>(initialIndex)
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
@@ -97,6 +98,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     }, [currentPhoto, rightPanel, firstImageCreatedCallback])
 
     const setCurrentIndex = useCallback((fct: (index: number) => number) => {
+        setBigZoom(false)
         _setCurrentIndex((index: number) => {
             const result = fct(index)
             if (onChange) onChange(result)
@@ -105,22 +107,29 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         
     }, [initialIndex, onChange])
 
-    const [zoomHideButtons, setZoomHideButtons] = useState(false)
+    const [zooming, setZooming] = useState(false)
 
-    const zoomStart = useCallback((event: ReactZoomPanPinchRef) => {
-        setZoomHideButtons(true)
-    }, [])
+    const [bigZoom, setBigZoom] = useState(false)
+
+    const zoomStart = useCallback((event: ReactZoomPanPinchRef) =>
+        setZooming(true)
+    , [])
     const zoomEnd = useCallback((event: ReactZoomPanPinchRef) => {
-        console.log(event.state.scale)
-        setZoomHideButtons(event.state.scale > 1)
+        const scale = event.state.scale
+        setBigZoom(bigZoom => bigZoom || scale > 2)
+        setZooming(scale > 1)
     }, [])
+
+    useEffect(() => 
+        setBigZoom(false)
+    , [currentIndex])
 
     const panStop = useCallback((event: ReactZoomPanPinchRef) => {
         if ([100, -100].includes(event.state.positionY) && Math.abs(event.state.positionX) < 50)
             onClose()
     }, [onClose])
     
-    const hideButtons = useMemo(() => showImage == false || zoomHideButtons, [showImage, zoomHideButtons])
+    const hideButtons = useMemo(() => showImage == false || zooming, [showImage, zooming])
 
     return <div
         className={`
@@ -159,6 +168,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                                 status={currentPhoto.status}
                                 lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
                                 src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
+                                highQualitySrc={bigZoom && gallery && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
                                 alt={currentPhoto.alt}
                                 ratio={currentPhoto.ratio}
                             /> :

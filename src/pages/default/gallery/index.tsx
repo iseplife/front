@@ -291,6 +291,7 @@ const Gallery: React.FC = () => {
                 onChange={updateURL}
                 onClose={closeLightbox}
                 Sidebar={gallerySidebar}
+                gallery={true}
             />
         </div>
     )

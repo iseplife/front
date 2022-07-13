@@ -11,12 +11,13 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
     onLoaded?: () => void
     lowQualitySrc?: string
     src: string
+    highQualitySrc?: string | false
     skipNsfw?: boolean
     ratio: number
 }
 
 const SafeImage: React.FC<SafeImageProps> = (props) => {
-    const {nsfw, status, onLoaded, skipNsfw, src, ratio, lowQualitySrc} = props
+    const {nsfw, status, onLoaded, skipNsfw, src, lowQualitySrc, highQualitySrc} = props
     const safeMode = useMemo(() => Boolean(localStorage.getItem("nsfw") || true), [])
     const [hidden, setHidden] = useState<boolean>(nsfw && safeMode && !skipNsfw)
     const ready = useMemo(() => status === MediaStatus.READY, [status])
@@ -50,7 +51,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
         }
         {ready && <>
             {lowQualitySrc &&
-                <img src={lowQualitySrc} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                <img src={lowQualitySrc} alt="Low quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
                     WebkitFilter: "blur(12px)",
                     filter: "blur(12px)",
                     msFilter: "blur(12px)"
@@ -61,6 +62,13 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                 filter: "blur(12px)",
                 msFilter: "blur(12px)"
             } : {}} />
+            {highQualitySrc &&
+                <img src={highQualitySrc} alt="High quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                    WebkitFilter: "blur(12px)",
+                    filter: "blur(12px)",
+                    msFilter: "blur(12px)"
+                } : {}} />
+            }
             {hidden && 
                 <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-indigo-300 text-xl bg-neutral-800/50" onClick={unhideCallback}>
                     <span><FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW</span>
