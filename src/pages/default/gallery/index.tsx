@@ -229,7 +229,7 @@ const Gallery: React.FC = () => {
                             </Tooltip>
                         </div>
                     }
-                    {gallery?.hasRight && editMode ?
+                    {gallery?.hasRight && (editMode ?
                         <div className="flex flex-col items-end">
                             <Button
                                 type="primary"
@@ -270,7 +270,7 @@ const Gallery: React.FC = () => {
                                 />
                             </Button>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
             <div className="p-1">
