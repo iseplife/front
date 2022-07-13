@@ -8,6 +8,7 @@ import GroupListener from "../listeners/GroupListener"
 import React from "react"
 import { AppContext } from "../../context/app/context"
 import PacketProtocol from "../protocol/PacketProtocol"
+import WSPCKeepAlive from "../protocol/packets/client/WSPCKeepAlive"
 
 class WSServerClient {
     private static reconnectTimeout: number
@@ -16,7 +17,6 @@ class WSServerClient {
     private messageDecoder!: MessageDecoder
     private queue: PacketOut[] = []
     private buffer: DataWriter = new DataWriter(new ArrayBuffer(1024 * 2))
-    private accessToken!: string
 
     public listeners: PacketListener[] = []
 
@@ -47,7 +47,6 @@ class WSServerClient {
         if(!retry)
             clearTimeout(WSServerClient.reconnectTimeout)
         this.context = context
-        this.accessToken = context.state.jwt
         this.socket = new WebSocket(this.ip)
         this.initSocket(retry)
     }
@@ -57,7 +56,7 @@ class WSServerClient {
         this.socket.onopen = () => {
             window.dispatchEvent(new Event(WSEventType.CONNECTED))
 
-            this.socket.send(this.accessToken)
+            this.socket.send(this.context.state.jwt)
             this._connected = true
             this._dispatchConnected()
         }
@@ -135,5 +134,10 @@ function logoutWebSocket() {
     instance?.disconnect()
     instance = undefined!
 }
+
+setInterval(() => {
+    if (instance?.connected)
+        instance.sendPacket(new WSPCKeepAlive())
+}, 30_000)
 
 export { WSServerClient, getWebSocket, initWebSocket, logoutWebSocket}

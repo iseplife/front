@@ -8,6 +8,7 @@ import WSPSFeedPostRemoved from "./packets/server/WSPSFeedPostRemoved"
 import WSPSGroupJoined from "./packets/server/WSPSGroupJoined"
 import WSPSGroupLeft from "./packets/server/WSPSGroupLeft"
 import WSPSNotificationReceived from "./packets/server/WSPSNotificationReceived"
+import WSPCKeepAlive from "./packets/client/WSPCKeepAlive"
 
 class PacketProtocol implements Protocol {
 
@@ -38,6 +39,7 @@ class PacketProtocol implements Protocol {
         packetsServer.push(WSPSFeedPostEdited)
         packetsServer.push(WSPSFeedPostLikesUpdate)
         const packetsClient: any[] = []
+        packetsClient.push(WSPCKeepAlive)
 
         for (const packet of packetsServer) {
             packet.prototype.id = this.registerPacketServer(packet)
