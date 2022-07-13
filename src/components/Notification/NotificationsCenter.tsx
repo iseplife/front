@@ -110,7 +110,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
             <InfiniteScroller
                 watch="DOWN"
                 callback={loadMoreNotifications}
-                empty={empty && !setLoading}
+                empty={empty && !loading}
                 triggerDistance={150}
                 scrollElement={!fullPage && scrollElement.current?.parentElement}
                 loadingComponent={
