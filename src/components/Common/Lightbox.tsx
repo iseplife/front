@@ -240,12 +240,15 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                             setSwiping(true)
                     }
                 } else {
-                    if (nextPhotoRef.current)
-                        nextPhotoRef.current!.style.transform = `translateX(${touch.clientX - currentTouch.start.x - 10}px)`
-                    if (prevPhotoRef.current)
-                        prevPhotoRef.current!.style.transform = `translateX(${touch.clientX - currentTouch.start.x + 10}px)`
-                    
-                    photoRef.current!.style.transform = `translateX(${touch.clientX - currentTouch.start.x}px)`
+                    const diffStartX = touch.clientX - currentTouch.start.x
+                    if ((diffStartX < 0 && nextPhotoRef.current) || (diffStartX > 0 && prevPhotoRef.current)){
+                        if (nextPhotoRef.current)
+                            nextPhotoRef.current!.style.transform = `translateX(${diffStartX - 10}px)`
+                        if (prevPhotoRef.current)
+                            prevPhotoRef.current!.style.transform = `translateX(${diffStartX+ 10}px)`
+                        
+                        photoRef.current!.style.transform = `translateX(${diffStartX}px)`
+                    }
                 }
             }
         }
@@ -260,7 +263,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 
                 let distance = touch.clientX - currentTouch.start.x
 
-                if (distance > 0) {
+                if (distance > 0 && prevPhoto) {
                     if (distance > window.innerWidth / 3 || (distance > window.innerWidth / 5 && Date.now() - currentTouch.startTime < 300)) {
                         prevPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
                         prevPhoto.style.transform = currPhoto.style.transform = "translateX(calc(100vw + 10px))"
@@ -272,7 +275,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         }
                     } else
                         cancel()
-                } else if (distance < 0) {
+                } else if (distance < 0 && nextPhoto) {
                     distance = Math.abs(distance)
                     if (distance > window.innerWidth / 3 || (distance > window.innerWidth / 5 && Date.now() - currentTouch.startTime < 300)) {
                         nextPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
