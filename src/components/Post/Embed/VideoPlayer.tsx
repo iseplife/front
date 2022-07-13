@@ -16,6 +16,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({src, thumbnail}) => {
                 controls
                 preload="auto"
                 className="w-full h-full"
+                crossOrigin=""
             >
                 <source src={mediaPath(src)} type="video/mp4" />
             </video>
