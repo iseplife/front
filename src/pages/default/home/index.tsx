@@ -5,13 +5,20 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
+import {useHistory} from "react-router-dom"
 
 const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
+    const history = useHistory()
+
+    const handleClickStudent = () => {
+     history.push(`/student/${user.id}`)
+    }
+
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
-                <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex">
+                <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex"  onClick={handleClickStudent}>
                     <StudentAvatar
                         id={user.id}
                         name={user.firstName + " " + user.lastName}
