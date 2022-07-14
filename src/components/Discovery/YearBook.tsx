@@ -151,14 +151,9 @@ const YearBook: React.FC = () => {
                                 className={loading && "opacity-50"}
                             />
                         )}
-                        {loading && filteredStudent.length == 0 && <>
-                            <StudentCardSkeleton/>
-                            <StudentCardSkeleton/>
-                            <StudentCardSkeleton/>
-                            <StudentCardSkeleton/>
-                            <StudentCardSkeleton/>
-                            <StudentCardSkeleton/>
-                        </>}
+                        {loading &&
+                            [...Array(18)].map(() => <StudentCardSkeleton/>)
+                        }
                     </>
                 }
             </InfiniteScroller>

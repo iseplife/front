@@ -11,11 +11,10 @@ type ClubCardProps = {
 const ClubCard: React.FC<ClubCardProps> = ({club}) => (
     <Link to={`/club/${club.id}`}>
         <div
-            className="mx-1 bg-white rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-4 items-end flex aspect-[18/20]"
+            className="mx-1 bg-white rounded-2xl overflow-hidden hover:shadow-md h-52 px-4 items-end flex aspect-[18/20] bg-[length:112%] hover:bg-[length:118%] transition-all"
             style={{
                 backgroundImage: `url("${mediaPath(club.logoUrl, AvatarSizes.FULL)}")`,
                 backgroundRepeat: "no-repeat",
-                backgroundSize: "147%",
                 backgroundPosition: "center",
             }}
         >
