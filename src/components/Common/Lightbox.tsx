@@ -310,8 +310,11 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 if (pinchZoom.state.scale > 1) {
                     pinchZoom.resetTransform()
                     setZooming(false)
-                } else
+                } else {
                     pinchZoom.zoomIn(1.3)
+                    setBigZoom(true)
+                    setZooming(true)
+                }
                 lastClick = 0
             } else
                 lastClick = now
