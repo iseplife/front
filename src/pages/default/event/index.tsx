@@ -26,7 +26,7 @@ import {Subscription} from "../../../data/feed/types"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import SubscriptionHandler from "../../../components/Subscription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faUserGroup} from "@fortawesome/free-solid-svg-icons"
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 
 interface ParamTypes {
     id?: string
@@ -113,7 +113,6 @@ const Event: React.FC = () => {
         setTimeout(() => setShowLoadingMap(true), 200)
     }, [])// Wait for fast connections
 
-
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
             {(event || showLoadingMap) &&
@@ -123,7 +122,7 @@ const Event: React.FC = () => {
                         id="mapbox/streets-v11"
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
-                    {coordinates && <Marker position={coordinates}/>}
+                    {coordinates && <Marker position={coordinates} />}
                 </Map>
             }
             <div className="container mx-auto px-4">

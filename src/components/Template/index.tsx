@@ -21,6 +21,13 @@ import { wsURI } from "../../data/http.constants"
 import useAdminRole from "../../hooks/useAdminRole"
 import { arrayEquals } from "../../util"
 
+//Map icon fix
+import { Marker as LeafletMarker } from "react-leaflet"
+import {icon} from "leaflet"
+import marker_icon from "leaflet/dist/images/marker-icon.png"
+import "leaflet/dist/leaflet.css"
+(LeafletMarker as any as React.FC).defaultProps = { icon: icon({ iconUrl: marker_icon, className: "left-[-12px] top-[-41px] width-[25px] height-[41px]" }) }
+//Map icon fix
 
 
 const Template: React.FC = () => {
