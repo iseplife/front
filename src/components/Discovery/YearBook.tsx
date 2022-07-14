@@ -6,11 +6,10 @@ import StudentCard from "./StudentCard"
 import {FilterReducerAction, StudentPreview} from "../../data/student/types"
 import {SearchItem} from "../../data/searchbar/types"
 import YearBookSearchBar from "./YearBookSearchBar"
-import {EntitySet, mediaPath} from "../../util"
+import {EntitySet} from "../../util"
 import {faUserAstronaut} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import StudentCardSkeleton from "./StudentCardSkeleton"
-import {AvatarSizes} from "../../constants/MediaSizes"
 
 export type StudentFilter = {
     promos: number[]
@@ -72,6 +71,7 @@ const YearBook: React.FC = () => {
     const [filter, setFilter] = useReducer(reducer, DEFAULT_FILTER)
 
     const [loading, setLoading] = useState(false)
+    const [loadingFilterChange, setLoadingFilterChange] = useState(false)
 
     const scrollerRef = useRef<InfiniteScrollerRef>(null)
 
@@ -82,6 +82,8 @@ const YearBook: React.FC = () => {
     // Infinite Scroller next students
     const getNextStudents: loaderCallback = useCallback(async (page: number) => {
         setLoading(true)
+        if(page == 0)
+            setLoadingFilterChange(true)
         const res = await searchStudents(page, filter.name, filter.promos.toString(), filter.atoz)
         if (res.status === 200) {
             const parsedResults = parseSearchResults(res.data.content)
@@ -99,6 +101,8 @@ const YearBook: React.FC = () => {
                 })
 
                 setLoading(false)
+                if(page == 0)
+                    setLoadingFilterChange(false)
                 students.addAll(parsedResults)
 
                 setFilteredStudents(() => (
@@ -113,6 +117,8 @@ const YearBook: React.FC = () => {
             return res.data.last
         }
         setLoading(false)
+        if(page == 0)
+            setLoadingFilterChange(false)
         return false
     }, [filter])
 
@@ -134,6 +140,7 @@ const YearBook: React.FC = () => {
                 watch="DOWN"
                 callback={getNextStudents}
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 place-items-center mt-10 gap-5"
+                loadingComponent={<></>}
             >
                 {filteredStudent.length == 0 && !loading ?
                     <div className="mt-10 mb-2 mx-auto flex flex-col items-center justify-center text-xl text-gray-400">
@@ -148,10 +155,10 @@ const YearBook: React.FC = () => {
                                 picture={s.picture}
                                 promo={s.promo}
                                 fullname={s.firstName + " " + s.lastName}
-                                className={loading && "opacity-50"}
+                                className={loadingFilterChange && "opacity-50"}
                             />
                         )}
-                        {loading &&
+                        {loading && (!loadingFilterChange || filteredStudent.length == 0) &&
                             [...Array(18)].map(() => <StudentCardSkeleton/>)
                         }
                     </>

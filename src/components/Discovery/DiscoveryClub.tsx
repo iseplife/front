@@ -3,7 +3,7 @@ import {getAllClubs} from "../../data/club"
 import {ClubPreview} from "../../data/club/types"
 import ClubCard from "./ClubCard"
 
-const ClubLoader = [1, 2, 3, 4].map(() =>
+const ClubLoader = [...Array(18)].map(() =>
     <div className="mx-1 bg-neutral-300 animate-pulse rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-4 items-end flex aspect-[18/20]">
         <div className="bg-white/40 rounded-xl backdrop-blur grid place-items-center px-3 py-1 mb-3 mt-auto w-full text-neutral-800 font-semibold text-2xl h-9" />
     </div>
