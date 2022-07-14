@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useState} from "react"
 import {ClubMember, ClubMemberCreationForm, ClubRole, ClubRoleIcon, ClubRoles} from "../../../data/club/types"
 import {useTranslation} from "react-i18next"
 import StudentPicker from "../../Student/StudentPicker"
-import {Avatar, message, Select} from "antd"
+import {message, Select} from "antd"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {addClubMember} from "../../../data/club"
 import {Field, Form, Formik, FormikHelpers} from "formik"
@@ -11,6 +11,7 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import {SearchItem} from "../../../data/searchbar/types"
 import MemberCardToolbar from "./MemberCardToolbar"
 import {faPlus, faUser, faUserGroup} from "@fortawesome/free-solid-svg-icons"
+import { WebPAvatarPolyfill } from "../../Common/WebPPolyfill"
 
 const {Option} = Select
 
@@ -55,7 +56,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
                         {clicked ?
                             student ?
                                 <>
-                                    <Avatar
+                                    <WebPAvatarPolyfill
                                         src={mediaPath(student.thumbURL, AvatarSizes.DEFAULT)}
                                         icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
                                         alt={student.name}

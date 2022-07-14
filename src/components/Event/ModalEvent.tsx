@@ -9,10 +9,10 @@ import Tag from "../Common/Tag"
 import {useTranslation} from "react-i18next"
 import {EventTypeColor, EventTypeEmoji} from "../../constants/EventType"
 import {Link} from "react-router-dom"
-import {Avatar} from "antd"
 import {faEuroSign, faSignOutAlt} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faClock, faUser} from "@fortawesome/free-regular-svg-icons"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 type ModalEventHeaderProps = {
     event: EventPreview
@@ -91,7 +91,7 @@ export const ModalEventContent: React.FC<ModalEventProps> = ({id}) => {
                             to={`/club/${event.club.id}`}
                             className="flex items-center text-gray-700 font-bold"
                         >
-                            <Avatar
+                            <WebPAvatarPolyfill
                                 icon={<FontAwesomeIcon icon={faUser}/>}
                                 src={event.club.logoUrl}
                                 className="cursor-pointer mr-1 -ml-2"

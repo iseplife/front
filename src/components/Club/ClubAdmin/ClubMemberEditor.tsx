@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from "react"
-import {Avatar, message, Modal, Select} from "antd"
+import {message, Modal, Select} from "antd"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -9,6 +9,7 @@ import {deleteClubMember, updateClubMember} from "../../../data/club"
 import {Field, Form, Formik} from "formik"
 import MemberCardToolbar from "./MemberCardToolbar"
 import {faUser} from "@fortawesome/free-solid-svg-icons"
+import { WebPAvatarPolyfill } from "../../Common/WebPPolyfill"
 
 const {Option} = Select
 const isValuesUpdated = (a: ClubMemberUpdateForm, b: ClubMemberUpdateForm): boolean => {
@@ -58,7 +59,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                         title={m.student.firstName + " " + m.student.lastName}
                         className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden"
                     >
-                        <Avatar
+                        <WebPAvatarPolyfill
                             src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
                             icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
                             alt={m.student.firstName + " " + m.student.lastName}

@@ -1,11 +1,11 @@
 import React, {useMemo} from "react"
 import {SearchItemType} from "../../data/searchbar/types"
-import {Avatar} from "antd"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faUser, faUsers, IconDefinition} from "@fortawesome/free-solid-svg-icons"
 import {faCalendar} from "@fortawesome/free-regular-svg-icons"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 type AvatarSearchTypeProps = {
     type: SearchItemType
@@ -28,13 +28,13 @@ const AvatarSearchType: React.FC<AvatarSearchTypeProps> = ({thumbURL, text, type
 
     return (
         <>
-            <Avatar
+            <WebPAvatarPolyfill
                 src={mediaPath(thumbURL, AvatarSizes.THUMBNAIL)}
                 size="small"
                 shape="circle"
             >
                 {text.split(" ")[0].slice(0, 1)}
-            </Avatar>
+            </WebPAvatarPolyfill>
             <div className="z-10">
                 <FontAwesomeIcon
                     className="-ml-2 mt-3 bg-white rounded-full border-4 border-transparent text-gray-600"

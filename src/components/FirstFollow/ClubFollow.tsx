@@ -4,6 +4,7 @@ import { SubscribableType } from "../../data/subscription/SubscribableType"
 import { ClubPreview } from "../../data/club/types"
 import { mediaPath } from "../../util"
 import { AvatarSizes } from "../../constants/MediaSizes"
+import WebPPolyfill from "../Common/WebPPolyfill"
 
 type ClubFollowProps = {
     club: ClubPreview
@@ -19,7 +20,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
     return (
         <>
             <div className="flex">
-                <img
+                <WebPPolyfill
                     src={mediaPath(club.logoUrl, AvatarSizes.THUMBNAIL)}
                     className="rounded-full h-14 w-14 sm:w-16 sm:h-16 "
                 />

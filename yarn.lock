@@ -11431,6 +11431,11 @@ webidl-conversions@^6.1.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-6.1.0.tgz#9111b4d7ea80acd40f5270d666621afa78b69514"
   integrity sha512-qBIvFLGiBpLjfwmYAaHPXsn+ho5xZnGvyGvsarywGNc8VyQJUMHJ8OBKGGrPER0okBeMDaan4mNBlgBROxuI8w==
 
+webp-hero@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/webp-hero/-/webp-hero-0.0.2.tgz#7adf20435ecfca73c764a3ad532a4304f15db52d"
+  integrity sha512-XDN8k2DZerXAawblkGKbcRXAz3WjY6Id5fTmrsOvblzFg5jELfoDCOxRDHD3zIGJo3OPEjLRsVS6Kzl36HxjqA==
+
 webpack-dev-middleware@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-5.3.0.tgz#8fc02dba6e72e1d373eca361623d84610f27be7c"

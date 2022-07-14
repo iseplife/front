@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
+import WebPPolyfill from "../../../components/Common/WebPPolyfill"
 import Feed from "../../../components/Feed"
 import StudentClubs from "../../../components/Student/StudentClubs"
 import SubscriptionHandler from "../../../components/Subscription"
@@ -77,7 +78,7 @@ const Student: React.FC = () => {
                 
                 <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3">
                     <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">
-                        <img className="w-32 h-32 rounded-full" src={student?.picture ? mediaPath(student?.picture, AvatarSizes.FULL) : "/img/icons/discovery/user.svg"} />
+                        <WebPPolyfill className="w-32 h-32 rounded-full" src={student?.picture ? mediaPath(student?.picture, AvatarSizes.FULL) : "/img/icons/discovery/user.svg"} />
                         <div>
                             {
                                 student ? <>

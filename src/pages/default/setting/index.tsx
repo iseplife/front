@@ -7,10 +7,10 @@ import {Student} from "../../../data/student/types"
 import Loading from "../../../components/Common/Loading"
 import Error from "../../../components/Common/Error"
 import StudentSettings from "../../../components/Student/StudentSettings"
-import {Avatar} from "antd"
 import {AppContext} from "../../../context/app/context"
 import {faUser} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 
 const Setting: React.FC = () => {
     const {t} = useTranslation("setting")
@@ -29,7 +29,7 @@ const Setting: React.FC = () => {
         <div className="container mx-auto h-full flex flex-col">
             <div className="flex bg-white text-gray-700 rounded-lg p-5 m-5 h-32 shadow">
                 <div>
-                    <Avatar
+                    <WebPAvatarPolyfill
                         src={mediaPath(user.picture, AvatarSizes.DEFAULT)}
                         icon={<FontAwesomeIcon icon={faUser}/>}
                         className="rounded-lg mr-5"

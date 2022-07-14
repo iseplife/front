@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEyeSlash} from "@fortawesome/free-regular-svg-icons"
 import {MediaStatus} from "../../data/media/types"
 import LoadingSpinner from "./LoadingSpinner"
+import WebPPolyfill from "./WebPPolyfill"
 
 
 type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
@@ -27,13 +28,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
             let id: number
             const check = () => {
                 if (id == -1) return
-                const img = new Image()
-                img.onload = onLoaded!
-                img.onerror = () => {
-                    if(id != -1)
-                        id = window.setTimeout(check, 1000)
-                }
-                img.src = lowQualitySrc ?? src
+                fetch(lowQualitySrc ?? src).then(onLoaded).catch(() => id != -1 && window.setTimeout(check, 1000))
             }
 
             id = window.setTimeout(check, 800)
@@ -51,19 +46,19 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
         }
         {ready && <>
             {lowQualitySrc &&
-                <img src={lowQualitySrc} alt="Low quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                <WebPPolyfill src={lowQualitySrc} alt="Low quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
                     WebkitFilter: "blur(12px)",
                     filter: "blur(12px)",
                     msFilter: "blur(12px)"
                 } : {}} />
             }
-            <img src={src} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+            <WebPPolyfill src={src} alt="Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
                 WebkitFilter: "blur(12px)",
                 filter: "blur(12px)",
                 msFilter: "blur(12px)"
             } : {}} />
             {highQualitySrc &&
-                <img crossOrigin="" src={highQualitySrc} alt="High quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
+                <WebPPolyfill crossOrigin="" src={highQualitySrc} alt="High quality Image" className="w-full h-full absolute top-0 object-cover" style={hidden ? {
                     WebkitFilter: "blur(12px)",
                     filter: "blur(12px)",
                     msFilter: "blur(12px)"

@@ -6,7 +6,7 @@ import {getEvent, getEventGalleries} from "../../../data/event"
 
 import {Event as EventType} from "../../../data/event/types"
 import "./Event.css"
-import {Avatar, Skeleton} from "antd"
+import {Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
 import Feed from "../../../components/Feed"
 import {_format, mediaPath} from "../../../util"
@@ -27,6 +27,7 @@ import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import SubscriptionHandler from "../../../components/Subscription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
+import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 
 interface ParamTypes {
     id?: string
@@ -212,7 +213,7 @@ const Event: React.FC = () => {
                             <div className="flex items-center font-normal">
                                 {event ?
                                     <>
-                                        <Avatar
+                                        <WebPAvatarPolyfill
                                             src={mediaPath(event?.club.logoUrl, AvatarSizes.THUMBNAIL)}
                                             icon={<FontAwesomeIcon icon={faUserGroup} />}
                                             size="large"

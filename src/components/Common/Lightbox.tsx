@@ -35,7 +35,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const rightPanel = useRef<HTMLDivElement>(null)
     const sidePanel = useMemo(() => Sidebar && (
         <div
-            className="md:bg-white flex-shrink-0 w-full md:w-96 rounded-t-xl md:rounded-none md:rounded-tl-md md:rounded-bl-md overflow-auto md:block z-50 bg-neutral-500/50"
+            className="md:bg-white flex-shrink-0 w-full md:w-96 rounded-t-xl md:overflow-auto md:rounded-none md:rounded-tl-md md:rounded-bl-md md:block z-50 bg-neutral-500/50"
             ref={rightPanel}
         >
             <Sidebar currentImage={currentPhoto} />
@@ -389,8 +389,8 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         }
                     </div>
                     {prevPhoto &&
-                        <>
-                            <div className="m-auto absolute left-[calc(-100vw-10px)]" ref={prevPhotoRef}>
+                        <div className="absolute w-full h-full grid place-items-center left-[calc(-100vw-10px)]">
+                            <div className="m-auto relative" ref={prevPhotoRef}>
                                 <SafeImage
                                     skipNsfw={initialIndex == currentIndex - 1}
                                     key={currentIndex - 1}
@@ -401,11 +401,11 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                                     ratio={prevPhoto.ratio}
                                 />
                             </div>
-                        </>
+                        </div>
                     }
                     {nextPhoto &&
-                        <>
-                            <div className="m-auto absolute left-[calc(100vw+10px)]" ref={nextPhotoRef}>
+                        <div className="absolute w-full h-full grid place-items-center left-[calc(100vw+10px)]">
+                            <div className="m-auto relative" ref={nextPhotoRef}>
                                 <SafeImage
                                     skipNsfw={initialIndex == currentIndex + 1}
                                     key={currentIndex + 1}
@@ -416,13 +416,13 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                                     ratio={nextPhoto.ratio}
                                 />
                             </div>
-                        </>
+                        </div>
                     }
                     {currentIndex + 1 < photos.length &&
                         <button
                             className={`
-                                absolute right-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
-                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
+                                absolute right-0 h-9 w-9 flex items-center justify-center m-3 bg-gray-800 bg-opacity-60 
+                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer text-center 
                                 z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
                             `}
                             onClick={clickLeft}
@@ -433,8 +433,8 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                     {currentIndex > 0 && 
                         <button
                             className={`
-                                absolute left-0 h-9 w-9 grid place-items-center m-3 bg-gray-800 bg-opacity-60 
-                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer 
+                                absolute left-0 h-9 w-9 flex items-center justify-center m-3 bg-gray-800 bg-opacity-60 
+                                hover:bg-gray-700 hover:bg-opacity-50 rounded-full cursor-pointer text-center 
                                 z-50 transition-all duration-300 ${hideButtons && "opacity-0 pointer-events-none"}
                             `}
                             onClick={clickRight}

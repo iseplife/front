@@ -1,11 +1,11 @@
 import React, {useMemo} from "react"
 import {ClubMember, ClubRoleIcon} from "../../../data/club/types"
-import {Avatar} from "antd"
 import {useHistory} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {faUser} from "@fortawesome/free-regular-svg-icons"
+import { WebPAvatarPolyfill } from "../../Common/WebPPolyfill"
 
 
 type MemberCardProps = {
@@ -28,7 +28,7 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
             title={m.student.firstName + " " + m.student.lastName}
             className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 cursor-pointer hover:shadow-outline hover:opacity-50 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden"
         >
-            <Avatar
+            <WebPAvatarPolyfill
                 src={mediaPath(m.student.picture, AvatarSizes.DEFAULT)}
                 icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
                 alt={m.student.firstName + " " + m.student.lastName}

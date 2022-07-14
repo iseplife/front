@@ -1,7 +1,7 @@
 import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import {Gallery as GalleryType} from "../../../data/gallery/types"
-import {Avatar, Button, message, Modal, Skeleton, Tooltip} from "antd"
+import {Button, message, Modal, Skeleton, Tooltip} from "antd"
 import PhotoGallery, {PhotoProps, renderImageClickHandler} from "react-photo-gallery"
 import {deleteGallery, deleteGalleryImages, getGallery} from "../../../data/gallery"
 import LoadingGallery from "../../../components/Gallery/LoadingGallery/LoadingGallery"
@@ -17,6 +17,7 @@ import {faSignOutAlt, faUserGroup} from "@fortawesome/free-solid-svg-icons"
 import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
+import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -219,7 +220,7 @@ const Gallery: React.FC = () => {
                             </span>
                             <Tooltip title={gallery?.club.name}>
                                 <Link to={"/club/1"}>
-                                    <Avatar
+                                    <WebPAvatarPolyfill
                                         src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
                                         shape="circle"
                                         className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"

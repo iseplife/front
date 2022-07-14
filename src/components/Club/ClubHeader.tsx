@@ -5,14 +5,13 @@ import ClubCover from "./ClubDescription/ClubCover"
 import {ClubContext} from "../../context/club/context"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
-import {Avatar} from "antd"
 import { ClubActionType } from "../../context/club/action"
 import { SubscribableType } from "../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../Subscription"
 import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faUser} from "@fortawesome/free-regular-svg-icons"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -39,7 +38,7 @@ const ClubHeader: React.FC = () => {
             <ClubCover/>
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
-                    <Avatar
+                    <WebPAvatarPolyfill
                         src={imageSrc}
                         icon={<FontAwesomeIcon icon={faUserGroup} />}
                         shape="circle"

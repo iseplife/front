@@ -1,12 +1,12 @@
 import {faUser} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {Avatar} from "antd"
 import React, {useEffect, useState} from "react"
 import {Trans, useTranslation} from "react-i18next"
 import {Link} from "react-router-dom"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {Notification as NotificationType} from "../../data/notification/types"
 import {formatDateWithTimer, mediaPath} from "../../util"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 
 type NotificationProps = {
@@ -25,7 +25,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
     return (
         <Link to={notification.link} className="text-neutral-800 hover:text-neutral-800">
             <div className={`${className} w-full px-4 py-2.5 items-center left-32 flex cursor-pointer rounded-lg transition-colors ${props.backgroundHover ?? true ? "hover:bg-gray-200 hover:bg-opacity-60" : ""}`}>
-                <Avatar
+                <WebPAvatarPolyfill
                     src={mediaPath(notification.icon, AvatarSizes.THUMBNAIL)}
                     icon={<FontAwesomeIcon icon={faUser}/>}
                     alt={"notification"}

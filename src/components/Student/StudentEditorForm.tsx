@@ -1,6 +1,6 @@
 import React, {useCallback, useLayoutEffect, useState} from "react"
 import {createStudent, deleteCustomPicture, updateOriginalPicture, updateStudentAdmin} from "../../data/student"
-import {Avatar, Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
+import {Button, Divider, Input, InputNumber, message, Modal, Select} from "antd"
 import Loading from "../Common/Loading"
 import {Form, FormikProps, withFormik} from "formik"
 import {StudentAdmin, StudentPicture} from "../../data/student/types"
@@ -13,6 +13,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSave, faUser} from "@fortawesome/free-regular-svg-icons"
 import {getRoles} from "../../data/security"
 import {useTranslation} from "react-i18next"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 const {Option} = Select
 
@@ -65,7 +66,7 @@ const StudentEditionForm: React.FC<FormikProps<StudentAdminEditionForm>> = ({val
             {values.pictures?.custom && (
                 <div className="text-center">
                     <span className="text-center no-underline mr-3">
-                        <Avatar
+                        <WebPAvatarPolyfill
                             src={mediaPath(values.pictures?.custom, AvatarSizes.THUMBNAIL)}
                             icon={<FontAwesomeIcon icon={faUser} />}
                             alt={values.firstName + " " + values.lastName}

@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react"
-import {Avatar, Select, Spin, Tag, SelectProps} from "antd"
+import {Select, Spin, Tag} from "antd"
 import {searchAllStudents} from "../../data/student"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {mediaPath} from "../../util"
@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faUser} from "@fortawesome/free-regular-svg-icons"
 import {SearchItem} from "../../data/searchbar/types"
 import {useTranslation} from "react-i18next"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 const TRIGGER_LENGTH = 2
 type Option = {
@@ -45,7 +46,7 @@ const StudentPicker: React.FC<StudentPickerProps> = ({onChange, multiple = false
                         value: o.id,
                         label: (
                             <span className="truncate flex flex-row items-center">
-                                <Avatar
+                                <WebPAvatarPolyfill
                                     src={mediaPath(o.thumbURL, AvatarSizes.THUMBNAIL)}
                                     icon={<FontAwesomeIcon icon={faUser} />}
                                     alt={o.name}

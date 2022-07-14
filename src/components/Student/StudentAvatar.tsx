@@ -1,11 +1,11 @@
 import React, {memo, ReactNode, useMemo} from "react"
-import {Avatar} from "antd"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {Link} from "react-router-dom"
 import {AvatarSize} from "antd/lib/avatar/SizeContext"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faUser} from "@fortawesome/free-regular-svg-icons"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 
 const BasicWrapper: React.FC = (props) => <span {...props}/>
@@ -36,7 +36,7 @@ const StudentAvatar: React.FC<StudentAvatarProps> = ({id, name, picture, picture
 
     return (
         <Wrapper {...wrapperProps as any}>
-            <Avatar
+            <WebPAvatarPolyfill
                 src={mediaPath(picture, pictureSize)}
                 icon={<FontAwesomeIcon icon={faUser} />}
                 alt={name}

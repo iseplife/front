@@ -14,6 +14,7 @@ import { downloadFile, formatDateWithTimer, mediaPath } from "../../../util"
 import { useTranslation } from "react-i18next"
 import LoadingSpinner from "../../../components/Common/LoadingSpinner"
 import Loading from "../../../components/Common/Loading"
+import { isWebPSupported, polyfillWebp } from "../../../components/Common/WebPPolyfill"
 
 type GallerySidebarProps = {
     gallery: Gallery
@@ -65,7 +66,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
         req.onprogress = evt => {
             if (evt.lengthComputable){
                 const percentComplete = (evt.loaded / evt.total)
-                setDownloadProgress(percentComplete)
+                setDownloadProgress(percentComplete * (isWebPSupported ? 1 : 0.8))
             }
         }
         req.send()
@@ -83,20 +84,28 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
             message.error(t("gallery:failed_download"))
         }finally{
             req.onprogress = undefined!
-            setDownloadProgress(-1)
         }
-        const image = new Image()
-        image.src = URL.createObjectURL(req.response)
 
-        await new Promise(resolve => image.onload = resolve)
-        URL.revokeObjectURL(image.src)
-
-        const canva = document.createElement("canvas")
-        canva.width = image.width
-        canva.height = image.height
-        const context = canva.getContext("2d")!
-        context.drawImage(image, 0, 0)
-        downloadFile(canva.toDataURL("image/jpeg"), `${gallery.name}-${currentImage.id}.png`)
+        let downloadLink: string
+        
+        if (isWebPSupported) {
+            const originalResponseLink = URL.createObjectURL(req.response)
+            const image = new Image()
+            image.src = originalResponseLink
+            await new Promise(resolve => image.onload = resolve)
+            setDownloadProgress(-1)
+            URL.revokeObjectURL(originalResponseLink)
+    
+            const canva = document.createElement("canvas")
+            canva.width = image.width
+            canva.height = image.height
+            const context = canva.getContext("2d")!
+            context.drawImage(image, 0, 0)
+            downloadLink = canva.toDataURL("image/jpeg")
+        } else 
+            downloadLink = await polyfillWebp(link, true)
+        
+        downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`)
     }, [gallery.name, currentImage.src])
 
     return (

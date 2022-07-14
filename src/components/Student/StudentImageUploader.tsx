@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {useTranslation} from "react-i18next"
-import {Avatar, Button, message, Upload} from "antd"
+import {Button, message, Upload} from "antd"
 import {mediaPath} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {updateCustomPicture} from "../../data/student"
@@ -11,6 +11,7 @@ import {AppActionType} from "../../context/app/action"
 import {faUpload} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faSave, faUser} from "@fortawesome/free-regular-svg-icons"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 type StudentImageUploaderProps = {
     original?: string
@@ -68,7 +69,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                         style={{bottom: 5, right: 5}}
                     >
                         {t("default")}
-                        <Avatar
+                        <WebPAvatarPolyfill
                             src={mediaPath(original, AvatarSizes.DEFAULT)}
                             icon={<FontAwesomeIcon icon={faUser}/>}
                             className="rounded"
@@ -82,7 +83,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
                     )}
                 </> :
                 <>
-                    <Avatar
+                    <WebPAvatarPolyfill
                         src={mediaPath(original, AvatarSizes.DEFAULT)}
                         icon={<FontAwesomeIcon icon={faUser}/>}
                         className="rounded"
