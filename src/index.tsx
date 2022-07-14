@@ -21,6 +21,7 @@ import {RouteComponentProps} from "react-router"
 import "./index.css"
 import "antd/dist/antd.min.css"
 import Maintenance from "./pages/errors/Maintenance"
+import HeightFix from "./components/Fix/HeightFix"
 
 initializeAPIClient()
 const App: React.FC = () => {
@@ -68,7 +69,8 @@ const App: React.FC = () => {
             <RecoilRoot>
                 {isLoggedIn != undefined && (
                     <Router>
-                        <Interceptor/>
+                        <Interceptor />
+                        <HeightFix />
                         <Switch>
                             <Route path="/maintenance" component={Maintenance}/>
                             {maintenance && <Redirect to="/maintenance" />}
