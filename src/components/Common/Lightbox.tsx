@@ -7,6 +7,7 @@ import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
 import { useTranslation } from "react-i18next"
 import { AnimatedSafePhoto } from "./AnimatedLightbox"
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch"
+import { isWebPSupported } from "./WebPPolyfill"
 
 export interface SidebarProps<T extends SafePhoto> {
     currentImage: T
@@ -381,7 +382,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                                 status={currentPhoto.status}
                                 lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
                                 src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
-                                highQualitySrc={bigZoom && gallery && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
+                                highQualitySrc={bigZoom && gallery && isWebPSupported && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
                                 alt={currentPhoto.alt}
                                 ratio={currentPhoto.ratio}
                             /> :
