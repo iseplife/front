@@ -8,11 +8,11 @@
     "url": "git+https://github/iseplife/front"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "craco start",
+    "build": "craco build",
     "start-sw": "yarn run build && serve build",
-    "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,6 +32,7 @@
   "dependencies": {
     "@ant-design/icons": "4.0.0",
     "@ant-design/icons-svg": "^4.1.0",
+    "@craco/craco": "^6.4.5",
     "@fingerprintjs/fingerprintjs": "^3.3.3",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
@@ -41,6 +42,7 @@
     "antd": "^4.4.1",
     "axios": "^0.24.0",
     "broadcast-channel": "^4.13.0",
+    "craco-esbuild": "^0.5.1",
     "date-fns": "^2.8.1",
     "dexie": "^3.2.1",
     "dexie-react-hooks": "^1.1.1",

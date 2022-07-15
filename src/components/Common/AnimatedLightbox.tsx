@@ -1,9 +1,7 @@
 import { SafePhoto, setStyles, waitForFrame } from "../../util"
 import Animated from "react-mount-animation"
 import Lightbox from "./Lightbox"
-import { RefObject, useEffect } from "react"
-import { useCallback } from "react"
-import { useState } from "react"
+import React, { useEffect, useCallback, useState } from "react"
 import { GallerySizes } from "../../constants/MediaSizes"
 
 export interface SidebarProps<T extends SafePhoto> {
