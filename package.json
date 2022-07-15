@@ -44,7 +44,7 @@
     "broadcast-channel": "^4.13.0",
     "craco-esbuild": "^0.5.1",
     "date-fns": "^2.8.1",
-    "dexie": "^3.2.1",
+    "dexie": "^3.2.2",
     "dexie-react-hooks": "^1.1.1",
     "fast-average-color": "^7.1.0",
     "formik": "^2.0.7",
