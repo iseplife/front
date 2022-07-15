@@ -23,6 +23,8 @@ import "antd/dist/antd.min.css"
 import Maintenance from "./pages/errors/Maintenance"
 import HeightFix from "./components/Fix/HeightFix"
 
+window.React = React
+
 initializeAPIClient()
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)

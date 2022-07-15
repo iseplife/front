@@ -9,7 +9,6 @@ import {RcFile} from "antd/es/upload"
 import {faArrowLeft, faSearch, faSyncAlt, faUpload} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons"
-import { ChangeEvent } from "react-router/node_modules/@types/react"
 
 const importTableConfig = [
     {title: "Photo", dataIndex: "picture", className: "w-16"},
@@ -158,7 +157,7 @@ const StudentsImport: React.FC = () => {
     }, [])
 
 
-    const handleSearchStudent = (e:ChangeEvent<HTMLInputElement>) => {
+    const handleSearchStudent = (e:React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
         
         if(val == ""){

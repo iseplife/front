@@ -15,7 +15,7 @@ const PollForm: React.FC = () => {
     const {values, setFieldValue} = useFormikContext<PostFormValues<EmbedForm>>()
     const poll = (values.embed as EmbedPollForm).data
 
-    const optionValidation = useCallback(value => {
+    const optionValidation = useCallback((value: any) => {
         if(value)
             return (value.length === 0 || value.length > 200) ? "Field required" : null
     }, [])

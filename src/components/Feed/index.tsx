@@ -24,7 +24,6 @@ import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
 import {isAfter, isBefore} from "date-fns"
-import { useHistory, useLocation } from "react-router-dom"
 
 type FeedProps = {
     loading?: boolean,

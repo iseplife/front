@@ -15,7 +15,7 @@ type Option = {
     value: number
 }
 
-export type SelectRef = {blur: ()=>void, focus: ()=>void}
+export type SelectRef = {blur: ()=>void, focus: ()=>void, scrollTo: any}
 
 type StudentPickerProps = {
     onChange: (id: number, metadata: SearchItem) => void

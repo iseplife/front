@@ -12,6 +12,7 @@ import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
+import { Subscription } from "../../data/feed/types"
 
 const ClubHeader: React.FC = () => {
     const {club, dispatch} = useContext(ClubContext)
@@ -22,7 +23,7 @@ const ClubHeader: React.FC = () => {
     ), [club.logoUrl])
 
     
-    const onSubscriptionUpdate = useCallback((subscribed) => {
+    const onSubscriptionUpdate = useCallback((subscribed: Subscription) => {
         dispatch({
             type: ClubActionType.UPDATE_CLUB,
             payload: {

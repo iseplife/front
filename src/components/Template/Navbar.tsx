@@ -143,6 +143,7 @@ type DrawerItemProps = {
     icon: IconDefinition
     className?: string
     link: string
+    children: React.ReactNode
 }
 const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, link}) => (
     <Link to={link}>

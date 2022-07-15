@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react"
 import {Select, Tag} from "antd"
-import {CustomTagProps} from "rc-select/lib/interface/generator"
+import {CustomTagProps} from "rc-select/lib/BaseSelect"
 import {useTranslation} from "react-i18next"
 import {getUserFeed} from "../../data/feed"
 

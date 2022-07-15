@@ -9,6 +9,7 @@ type DropdownPanelProps = {
     panelClassName?: string
     buttonClassName?: string
     clickable?: boolean
+    children?: React.ReactNode
 }
 const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
     const {icon, title, closeOnClick, panelClassName, buttonClassName, clickable = true, children} = props

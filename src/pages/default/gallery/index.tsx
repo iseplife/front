@@ -188,7 +188,7 @@ const Gallery: React.FC = () => {
         }
     }, [id])
 
-    const updateURL = useCallback((index) => 
+    const updateURL = useCallback((index: number) => 
         history.push(`/gallery/${id}/${index}`)
     , [id])
 

@@ -1,10 +1,9 @@
-import React from "react"
-
 import "./ImageOverlay.css"
 
 type ImageOverlayProps = {
     src: string
     className?: string
+    children?: React.ReactNode
 }
 const ImageOverlay: React.FC<ImageOverlayProps> = ({src, className, children}) => {
     return (

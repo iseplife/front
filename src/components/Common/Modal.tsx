@@ -1,4 +1,3 @@
-import React from "react"
 import {createPortal} from "react-dom"
 
 const style = {
@@ -10,6 +9,7 @@ export type ModalProps = {
     onClose: () => void
     height?: string
     width?: string
+    children: React.ReactNode
 }
 const Modal: React.FC<ModalProps> = ({children, open = false, onClose, width, height}) => {
     return open ?

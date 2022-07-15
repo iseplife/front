@@ -1,7 +1,7 @@
 import {AxiosPromise, AxiosResponse} from "axios"
 import {Media, MediaUploadNSFW} from "./types"
 import { apiClient } from "../http"
-import FastAverageColor from "fast-average-color"
+import { FastAverageColor } from "fast-average-color"
 import { EmbedEnumType } from "../post/types"
 
 const fac = new FastAverageColor()

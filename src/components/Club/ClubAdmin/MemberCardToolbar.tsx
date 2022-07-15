@@ -9,6 +9,7 @@ type MemberCardToolbarProps = {
     onUndo?: () => void
     onDelete?: () => void
     visible?: boolean
+    children?: React.ReactNode
 }
 const MemberCardToolbar: React.FC<MemberCardToolbarProps> = ({visible = true, onUndo, onDelete, isEdited, children}) => {
     const {resetForm, isSubmitting, initialValues, submitForm} = useFormikContext()

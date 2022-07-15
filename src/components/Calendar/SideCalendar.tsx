@@ -54,7 +54,7 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
                     className="hidden md:block"
                     locale={i18n.language}
                     value={date}
-                    onChange={(d) => handleDate(Array.isArray(d) ? d[0] : d)}
+                    onChange={(d: Date) => handleDate(Array.isArray(d) ? d[0] : d)}
                 />
                 <hr className="my-1"/>
                 <div className="mt-2">

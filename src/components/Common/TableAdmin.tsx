@@ -1,4 +1,4 @@
-import React, {CSSProperties, useMemo} from "react"
+import {CSSProperties, useMemo} from "react"
 import {Pagination} from "antd"
 import Loading from "../Common/Loading"
 import {PageStatus} from "../../pages/admin/student"
@@ -30,7 +30,7 @@ export interface RowProps<D> {
 }
 
 
-const TableHeader: React.FC<{ className?: string }> = ({className = "", children}) => (
+const TableHeader: React.FC<{ className?: string, children: React.ReactNode }> = ({className = "", children}) => (
     <th className={`${className} px-6 py-1 border-b border-gray-200 text-left text-xs leading-4 font-medium uppercase tracking-wider`}>
         {children}
     </th>

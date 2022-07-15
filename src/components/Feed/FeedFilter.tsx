@@ -35,6 +35,9 @@ const FeedFilter: React.FC = () => {
         )
     }, [feeds, filter.feeds, toggleFeed])
 
+    const selectCallback = useCallback((id: number) => 
+        toggleFeed(id)
+    , [toggleFeed])
 
     return (
         <div id="feeds-filter">
@@ -44,12 +47,10 @@ const FeedFilter: React.FC = () => {
                 placeholder={t("feed_filter")}
                 showArrow={false}
                 filterOption={(filter, option) => option ?
-                    option.children.toLocaleLowerCase().includes(filter.toLowerCase()) :
+                    !!option.children?.toLocaleString().toLowerCase().includes(filter.toLowerCase()) :
                     false
                 }
-                onSelect={id => {
-                    toggleFeed(id)
-                }}
+                onSelect={selectCallback}
                 className="rounded-scroller w-full hover:border-indigo-400"
             >
                 {Object.entries(feeds).map(([id, name])=> (

@@ -1,6 +1,5 @@
 import {isToday} from "date-fns"
-import React from "react"
-import {TFunction} from "i18next"
+import {TFunction} from "react-i18next"
 
 type WeekDayProps = {
     date: Date,

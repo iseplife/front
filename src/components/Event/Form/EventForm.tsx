@@ -4,7 +4,7 @@ import {EventForm as EventFormType, ExtendedMarker} from "../../../data/event/ty
 import EventType, {EventTypeEmoji, EventTypes} from "../../../constants/EventType"
 import {Button, DatePicker, Input, Select} from "antd"
 import {useTranslation} from "react-i18next"
-import {Marker, TileLayer, Map} from "react-leaflet"
+import {Marker, TileLayer, MapContainer, useMapEvents} from "react-leaflet"
 import Locker from "../../Common/Locker"
 import FeedSelector from "../../Feed/FeedSelector"
 import HelperIcon from "../../Common/HelperIcon"
@@ -28,10 +28,15 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
         } : undefined
     )
 
-    const handleMarkerChange = useCallback((e: { latlng: ExtendedMarker }) => {
-        setMarker(e.latlng)
-        setFieldValue("coordinates", [e.latlng.lat, e.latlng.lng])
-    }, [])
+    const MapEventsInjector = () => {
+        useMapEvents({
+            click: (e: { latlng: ExtendedMarker }) => {
+                setMarker(e.latlng)
+                setFieldValue("coordinates", [e.latlng.lat, e.latlng.lng])
+            }
+        })
+        return <></>
+    }
 
     return (
         <Form className="flex flex-col flex-wrap">
@@ -150,12 +155,12 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         </div>
                     </div>
                 </div>
-                <Map
+                <MapContainer
                     className="mt-5 rounded h-32"
                     center={values.coordinates ?? [48.857, 2.348]}
-                    onClick={handleMarkerChange}
                     zoom={12}
                 >
+                    <MapEventsInjector />
                     <TileLayer
                         id="mapbox/streets-v11"
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -163,7 +168,7 @@ const EventForm: React.FC<FormikProps<EventFormType>> = ({values, setFieldValue,
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
                     {marker && <Marker position={marker}/>}
-                </Map>
+                </MapContainer>
             </div>
             <div className="flex flex-wrap justify-between items-end mt-2">
                 <div className="lg:w-1/2 w-full">

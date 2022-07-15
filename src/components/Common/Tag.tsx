@@ -4,6 +4,7 @@ type TagProps = {
     className?: string
     selected: boolean
     onClick?: () => void
+    children?: React.ReactNode
 }
 
 const Tag: React.FC<TagProps> = ({children, className, selected, onClick}) => {

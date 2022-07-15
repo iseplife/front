@@ -10,7 +10,7 @@ type AddMemberProps = {
 const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
     const {t} = useTranslation("group")
 
-    const onSelect = useCallback((id, metq)=> onAdd(id), [onAdd])
+    const onSelect = useCallback((id: number)=> onAdd(id), [onAdd])
     const [selected, setSelected] = useState(false)
     const selectorRef = useRef<HTMLButtonElement>(null)
 

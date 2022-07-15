@@ -38,7 +38,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
         }
     })
 
-    const onFilesUploaded = useCallback((ids) => {
+    const onFilesUploaded = useCallback((ids: number[]) => {
         formik.setFieldValue("images", ids)
         formik.submitForm()
     }, [formik])

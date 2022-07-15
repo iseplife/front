@@ -31,7 +31,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
         year: year
     }), [year])
 
-    const onStudentSelect = useCallback((setFieldValue) => (id: number, metadata: SearchItem) => {
+    const onStudentSelect = useCallback((setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (id: number, metadata: SearchItem) => {
         setFieldValue("student", id)
         setStudent(metadata)
     }, [])
@@ -74,7 +74,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
                                             />
                                             <Select
                                                 value={values.role}
-                                                onChange={value => setFieldValue("role", value)}
+                                                onChange={(value: any) => setFieldValue("role", value)}
                                             >
                                                 {ClubRoles.map(r =>
                                                     <Option key={r} value={r}>

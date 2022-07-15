@@ -28,7 +28,7 @@ const YearBookSearchBar: React.FC<StudentSearchBarProps> = ({filter, onFilterUpd
 
     const [, setLastUpdate] = useState(0)
 
-    const inputUpdate = useCallback(value => {
+    const inputUpdate = useCallback((value: React.ChangeEvent<HTMLInputElement>) => {
         setLastUpdate(lastUpdate => {
             clearTimeout(lastUpdate)
             return window.setTimeout(() => onFilterUpdate({type: "UPDATE_SEARCH", name: value.target.value}), 200)

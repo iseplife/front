@@ -97,7 +97,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         }
     }, [showEditMenu])
 
-    const setRef = useCallback(ele => { post = ele ?? post }, [post])
+    const setRef = useCallback((ele: HTMLDivElement) => { post = ele ?? post }, [post])
     const applyUpdates = useCallback(() => feedsManager.applyUpdates(data.id), [data?.id])
 
     const h = useHistory()

@@ -165,7 +165,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             }
             onSearch={setCurrentValue}
             onSelect={handleSelect}
-            dropdownRender={menu => customDropdownRender(menu)}
+            dropdownRender={(menu: React.ReactNode) => customDropdownRender(menu)}
         >
             {data.map(({id, type, name, thumbURL, status,}) => filter[type] &&
                 <Option key={`${type}-${id}`} value={`${type.toLowerCase()}/${id}`}>

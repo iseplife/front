@@ -18,7 +18,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
     const [formattedDate, setFormattedDate] = useState<string>("")
     useEffect(() => formatDateWithTimer(publicationDate, t, setFormattedDate), [publicationDate])
 
-    const AvatarWrapper = useCallback<React.FC>(({children}) => {
+    const AvatarWrapper = useCallback<React.FC<{children: React.ReactNode}>>(({children}) => {
         switch (author.authorType) {
             case "CLUB":
                 return <Link to={`/club/${author.id}`}>{children}</Link>

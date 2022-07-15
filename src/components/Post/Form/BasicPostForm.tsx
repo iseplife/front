@@ -22,7 +22,7 @@ export type BasicPostFormValues = {
 }
 
 
-const InnerForm: React.FC<FormikProps<BasicPostFormValues>> = ({ children, isSubmitting, setValues, values }) => {
+const InnerForm: React.FC<FormikProps<BasicPostFormValues> & {children: React.ReactNode}> = ({ children, isSubmitting, setValues, values }) => {
     const {t} = useTranslation(["post"])
     const {state: {user}} = useContext(AppContext)
     const textRef = useRef<HTMLInputElement>(null)
@@ -77,6 +77,7 @@ type BasicPostForm = {
     onPost: (post: PostUpdate) => void
     setText: (value: string) => void
     user: LoggedStudentPreview
+    children?: React.ReactNode
 }
 const BasicPostForm = withFormik<BasicPostForm, BasicPostFormValues>({
     mapPropsToValues: (props) => {

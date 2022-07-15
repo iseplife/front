@@ -1,7 +1,7 @@
 import EventMapPlace from "../../../components/Event/EventMapPlace"
 import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Link, useHistory, useParams} from "react-router-dom"
-import {Map, Marker, TileLayer} from "react-leaflet"
+import {MapContainer, Marker, TileLayer} from "react-leaflet"
 import {getEvent, getEventGalleries} from "../../../data/event"
 
 import {Event as EventType} from "../../../data/event/types"
@@ -79,8 +79,8 @@ const Event: React.FC = () => {
     }, [event])
 
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
-
-    const galleriesCallback = useCallback((page) => {
+    
+    const galleriesCallback = useCallback((page?: number) => {
         return getEventGalleries((event as EventType).id, page)
     }, [event?.id])
 
@@ -117,14 +117,14 @@ const Event: React.FC = () => {
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
             {(event || showLoadingMap) &&
-                <Map className="w-full h-full" center={coordinates || [48.8453227, 2.3280245]} zoom={14}>
+                <MapContainer className="w-full h-full" center={coordinates || [48.8453227, 2.3280245]} zoom={14}>
                     <TileLayer
                         url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                         id="mapbox/streets-v11"
                         accessToken="pk.eyJ1Ijoid2FydGh5IiwiYSI6ImNrNmRzMmdvcDA5ejczZW52M2JqZWxpMzEifQ.LXqt7uNt4fHA9m4UiQofSA"
                     />
                     {coordinates && <Marker position={coordinates} />}
-                </Map>
+                </MapContainer>
             }
             <div className="container mx-auto px-4">
                 <EventMapPlace position={event?.position} location={event?.location} loading={!event}/>
