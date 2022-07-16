@@ -69,8 +69,9 @@ build-dev:
     REACT_APP_API_URL: "dev.iseplife.fr/api"
   before_script:
     - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+    - yarn set version berry
   script:
-    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
+    - yarn install --immutable
     - yarn run build
   retry: 2
   artifacts:
