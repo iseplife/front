@@ -44,7 +44,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
                     <div className="font-bold -mb-0.5 -mt-0.5 group-hover:underline">{author.name}</div>
                     <div className="text-xs whitespace-nowrap">
                         {isFuture(publicationDate) ?
-                            `${t("planned_for")} ${format(new Date(publicationDate), "dd/MM/yy, HH:mm")}` :
+                            `${t("planned_for")} ${format(new Date(publicationDate), "dd/MM/yy HH:mm")}` :
                             formattedDate
                         }
                     </div>
