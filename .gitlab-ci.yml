@@ -56,6 +56,12 @@ test:
 build-dev:
   stage: build
   image: node:16.13-alpine
+  cache:
+    - key:
+        files:
+          - yarn.lock
+      paths:
+        - .yarn/
   variables:
     CI: "false"
     REACT_APP_HTTP_PROTOCOL: "https"
