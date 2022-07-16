@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useState} from "react"
+import React, {useContext, useMemo, useState} from "react"
 import {Divider, Drawer} from "antd"
 import {Link, useLocation} from "react-router-dom"
 import {useTranslation} from "react-i18next"
@@ -18,7 +18,6 @@ import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCo
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
-import pushService from "../../services/PushService"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -95,8 +94,6 @@ const NotificationHeaderButton: React.FC = () => {
 }
 
 const Header: React.FC<HeaderProps> = ({user}) => {
-    const [t] = useTranslation("notifications")
-
     return (
         <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center">
             <Link to="/" className="flex">
@@ -132,6 +129,9 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                     panelClassName="w-60 right-6"
                 >
                     <ProfilePanel/>
+                    <div className="text-center mb-1 -mt-3 mx-auto text-gray-400">
+                        {process.env.REACT_APP_VERSION}
+                    </div>
                 </DropdownPanel>
             </div>
         </div>
@@ -213,6 +213,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                     <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
                         {t("logout")}
                     </DrawerItem>
+                    <span>{process.env.REACT_APP_VERSION}</span>
                 </div>
             </Drawer>
         </>

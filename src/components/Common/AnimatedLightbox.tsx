@@ -76,8 +76,9 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
             setClone(undefined!)
             setShowImage(false)
             setAnimationDone(false)
-        }else
+        }else {
             setShow(false)
+        }
     }, [props.show])
 
     const [wasShown, setWasShown] = useState(false)
@@ -123,28 +124,30 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
         setWasShown(props.show)
     }, [props.initialIndex, props.show, wasShown])
 
-    return <Animated.div
-        className="lightbox fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
-        show={show}
-        mountAnim={`
-            0% { opacity: 0;}
-            100% {opacity: 1; }
-        `}
-        unmountAnim={`
-            0% { opacity: 1; margin-top: 0px; pointer-events: none; }
-            100% {opacity: 0; margin-top: 70px; pointer-events: none; }
-        `}
-        time={0.3}
-        unmountTimingFunction="ease-out"
-    >
-        <Lightbox
-            animated={true}
-            showImage={showImage}
-            firstImageCreatedCallback={firstImageCreatedCallback}
-            {...props}
-            initialIndex={lastLightboxPhotoIndex!}
-        />
-    </Animated.div>
+    return (
+        <Animated.div
+            className="lightbox fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
+            show={show}
+            mountAnim={`
+                0% { opacity: 0;}
+                100% {opacity: 1; }
+            `}
+            unmountAnim={`
+                0% { opacity: 1; margin-top: 0px; pointer-events: none; }
+                100% {opacity: 0; margin-top: 70px; pointer-events: none; }
+            `}
+            time={0.3}
+            unmountTimingFunction="ease-out"
+        >
+            <Lightbox
+                animated={true}
+                showImage={showImage}
+                firstImageCreatedCallback={firstImageCreatedCallback}
+                {...props}
+                initialIndex={lastLightboxPhotoIndex!}
+            />
+        </Animated.div>
+    )
 }
 
 export type AnimatedSafePhoto = SafePhoto & { ref: React.RefObject<HTMLDivElement> }
