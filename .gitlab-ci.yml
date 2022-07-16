@@ -122,7 +122,7 @@ docker-build:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
     - docker login registry.dev.juniorisep.com -u $ACCESS_TOKEN -p $ACCESS_TOKEN
   script:
-    - docker build -t iseplife/front:$FRONT_VERSION -t iseplife/api:latest -t registry.dev.juniorisep.com/iseplife/front -t .
+    - docker build -t iseplife/front:$FRONT_VERSION -t iseplife/api:latest -t registry.dev.juniorisep.com/iseplife/front .
     - docker push iseplife/front:$FRONT_VERSION
     - docker push iseplife/front:latest
     - docker push registry.dev.juniorisep.com/iseplife/front
