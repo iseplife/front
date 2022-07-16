@@ -50,29 +50,42 @@ test:
 #  rules:
 #    - if: '$CI_COMMIT_REF_NAME == "master"'
 
-
-
 # DEV PIPELINE #
 build-dev:
   stage: build
   image: node:16.13-alpine
-  cache:
-    - key:
-        files:
-          - yarn.lock
-      paths:
-        - .yarn/
   variables:
     CI: "false"
     REACT_APP_HTTP_PROTOCOL: "https"
     REACT_APP_WS_PROTOCOL: "wss"
     REACT_APP_API_URL: "dev.iseplife.fr/api"
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/
+      - yarn.lock.sha256sum
   before_script:
     - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
     - yarn set version berry
   script:
     - yarn install --immutable
     - yarn run build
+    - |
+      YARN_LOCK_SHA256_HASH=$( sha256sum yarn.lock | awk '{ print $1 }')
+      echo "Current sha256 hash is $YARN_LOCK_SHA256_HASH"
+      echo "Checking sha256 hash of yarn.lock"
+
+      if ! sha256sum -c yarn.lock.sha256sum; then
+        echo "yarn.lock checksum does not match cache"
+        sha256sum yarn.lock > yarn.lock.sha256sum
+      else
+        echo "Cache is the same as before, removing cache files to prevent cache from updating"
+        rm -rf node_modules
+        rm -rf .yarn
+        rm -rf yarn.lock.sha256sum
+      fi
   retry: 2
   artifacts:
     paths:
