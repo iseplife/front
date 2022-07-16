@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
-import {useParams} from "react-router"
+import {useParams} from "react-router-dom"
 import {getClub, getClubGalleries} from "../../../data/club"
 import {message} from "antd"
 import {useHistory} from "react-router-dom"
