@@ -27,3 +27,10 @@ yarn-error.log*
 .yarn
 
 public/css/index.css
+
+.yarnrc.yml
+.vscode
+
+.pnp.cjs
+
+.pnp.loader.mjs

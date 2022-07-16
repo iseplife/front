@@ -1,12 +1,19 @@
 import React, {useEffect, useMemo, useState} from "react"
 import {Select, Tag} from "antd"
-import {CustomTagProps} from "rc-select/lib/BaseSelect"
 import {useTranslation} from "react-i18next"
 import {getUserFeed} from "../../data/feed"
 
 type OptionType = {
     value: number
     label: string
+}
+
+export type CustomTagProps = {
+    label: React.ReactNode
+    value: any
+    disabled: boolean
+    onClose: (event?: React.MouseEvent<HTMLElement, MouseEvent>) => void
+    closable: boolean
 }
 
 type FeedSelectorProps = {
