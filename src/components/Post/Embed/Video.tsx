@@ -25,14 +25,14 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
         if(!ready){
             let id: number
             const check = () => {
+                if (id == -1)
+                    return
                 const video = new Audio(mediaPath(data.name))
                 video.oncanplaythrough = onLoaded!
-                video.onerror = () => id = window.setTimeout(check, 800)
+                video.onerror = () => id != -1 && window.setTimeout(check, 1000)
             }
 
-            id = window.setTimeout(check, 800)
-
-            return () => clearTimeout(id)
+            return () => { id = -1 }
         }
     }, [ready, onLoaded, data.name])
 
