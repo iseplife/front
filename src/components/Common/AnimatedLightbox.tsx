@@ -128,13 +128,13 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
         <Animated.div
             className="lightbox fixed left-0 z-[999] top-0 bg-black/80 backdrop-blur-md backdrop-filter sm:backdrop-filter-none w-screen h-screen"
             show={show}
+            style={{animationFillMode: "forwards"}}
             mountAnim={`
-                0% { opacity: 0;}
-                100% {opacity: 1; }
+                0% { opacity: 0; }
+                100% {}
             `}
             unmountAnim={`
-                0% { opacity: 1; margin-top: 0px; pointer-events: none; }
-                100% {opacity: 0; margin-top: 70px; pointer-events: none; }
+                100% { opacity: 0; margin-top: 70px; pointer-events: none; }
             `}
             time={0.3}
             unmountTimingFunction="ease-out"
