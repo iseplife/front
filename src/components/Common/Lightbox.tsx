@@ -36,7 +36,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const rightPanel = useRef<HTMLDivElement>(null)
     const sidePanel = useMemo(() => Sidebar && (
         <div
-            className="md:bg-white flex-shrink-0 w-full md:w-96 rounded-t-xl md:overflow-auto md:rounded-none md:rounded-tl-md md:rounded-bl-md md:block z-50 bg-neutral-500/50"
+            className="md:bg-white w-full md:w-96 rounded-t-xl md:overflow-auto md:rounded-none md:rounded-tl-md md:rounded-bl-md md:block z-50 bg-neutral-500/50"
             ref={rightPanel}
         >
             <Sidebar currentImage={currentPhoto} />
@@ -350,7 +350,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             ${!animated && " fixed top-0 left-0 bg-black/80 backdrop-blur-md backdrop-filter"}
         `}
     >
-        <div className="w-full h-[77vh] md:h-full relative" ref={touchZoneRef}>
+        <div className="w-full md:w-[calc(100%-24rem)] h-[77vh] md:h-full relative" ref={touchZoneRef}>
             <TransformWrapper
                 onZoomStart={zoomStart}
                 onZoomStop={zoomEnd}
