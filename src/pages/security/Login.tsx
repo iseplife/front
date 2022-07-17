@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
-    
+
     const formik = useFormik<LoginFormInputs>({
         initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
@@ -115,7 +115,7 @@ const Login: React.FC = () => {
                 </div>
             </div>
             <span className="absolute right-5 my-2 text-gray-400">
-                {process.env.SPA_VERSION}
+                {process.env.REACT_APP_VERSION}
             </span>
         </div>
     )

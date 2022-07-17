@@ -1,6 +1,5 @@
-const {override, fixBabelImports, addLessLoader} = require("customize-cra")
-const {rewireWorkboxGenerate, defaultInjectConfig, rewireWorkboxInject} = require("react-app-rewire-workbox")
-const path = require("path")
+const {override, fixBabelImports} = require("customize-cra")
+const { defaultInjectConfig, rewireWorkboxInject} = require("react-app-rewire-workbox")
 
 module.exports = override(
     fixBabelImports("import", {

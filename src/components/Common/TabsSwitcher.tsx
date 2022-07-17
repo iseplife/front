@@ -1,5 +1,4 @@
-import React, {useContext, useMemo} from "react"
-import {ClubContext} from "../../context/club/context"
+import React, {useMemo} from "react"
 
 interface TabSwitcherProps {
     currentTab: number,

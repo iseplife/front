@@ -168,7 +168,9 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                 <div>
                     <span>{data.description}</span>
                     {data.embed &&
-                        <div className="mt-2"><Embed embed={data.embed} post={data} selected={selected} /></div>
+                        <div className="mt-2">
+                            <Embed embed={data.embed} post={data} selected={selected} />
+                        </div>
                     }
                 </div>
                 <PostThread

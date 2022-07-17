@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useReducer, useState} from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 import * as serviceWorker from "./serviceWorker"
 import "./i18n"
 import {
@@ -87,5 +87,6 @@ const App: React.FC = () => {
     )
 }
 
-ReactDOM.render(<App/>, document.getElementById("root"))
+const root = createRoot(document.getElementById("root")!)
+root.render(<App/>)
 serviceWorker.register()

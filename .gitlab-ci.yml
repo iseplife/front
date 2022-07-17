@@ -90,7 +90,6 @@ build-dev:
       - .yarn/
       - yarn.lock.sha256sum
   before_script:
-    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
     - yarn set version berry
   script:
     - yarn install --immutable
@@ -115,15 +114,16 @@ build-dev:
       - build/
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+
 docker-build:
   stage: docker
   before_script:
-    - FRONT_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
+    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
     - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
     - docker login registry.dev.juniorisep.com -u $ACCESS_TOKEN -p $ACCESS_TOKEN
   script:
-    - docker build -t iseplife/front:$FRONT_VERSION -t iseplife/api:latest -t registry.dev.juniorisep.com/iseplife/front .
-    - docker push iseplife/front:$FRONT_VERSION
+    - docker build -t iseplife/front:$SPA_VERSION -t iseplife/api:latest .
+    - docker push iseplife/front:$SPA_VERSION
     - docker push iseplife/front:latest
     - docker push registry.dev.juniorisep.com/iseplife/front
   dependencies:

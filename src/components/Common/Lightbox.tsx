@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
-import {mediaPath, SafePhoto, setStyles} from "../../util"
+import {mediaPath, SafePhoto} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
