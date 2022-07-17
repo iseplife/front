@@ -132,6 +132,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
             </div>
     }, [photos])
 
+    const sideBar = useCallback(() => <PostSidebar post={post} />, [post])
 
     return (
         <div className="block mx-3">
@@ -141,7 +142,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
                 initialIndex={lightboxPhotoIndex as number}
                 photos={photos}
                 onClose={() => setLightboxPhotoIndex()}
-                Sidebar={() => <PostSidebar post={post} />}
+                Sidebar={sideBar!}
                 onChange={setLightboxPhotoIndex}
             />
         </div>

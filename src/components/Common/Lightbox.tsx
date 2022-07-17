@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {mediaPath, SafePhoto} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
@@ -99,7 +99,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
 
     const [, setCallbackCalled] = useState(false)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handleResize = () => {
             if (currentPhoto && photoRef.current)
                 resize(currentPhoto, photoRef)
@@ -167,7 +167,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const touchZoneRef = useRef<HTMLDivElement>(null)
     const pinchZoomRef = useRef<ReactZoomPanPinchRef>(null)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const nextPhoto = nextPhotoRef.current!,
             prevPhoto = prevPhotoRef.current!,
             currPhoto = photoRef.current!
@@ -176,7 +176,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             nextPhoto.style.transition = nextPhoto.style.transform = ""
         if (prevPhoto)
             prevPhoto.style.transition = prevPhoto.style.transform = ""
-        currPhoto!.style.transition = currPhoto!.style.transform = ""
+        currPhoto.style.transition = currPhoto!.style.transform = ""
     }, [currentIndex])
 
     useEffect(() => {
@@ -263,11 +263,12 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 setSwiping(false)
                 
                 let distance = touch.clientX - currentTouch.start.x
+                const rightPanelCur = rightPanel.current!
 
                 if (distance > 0 && prevPhoto) {
                     if (distance > window.innerWidth / 4 || (distance > window.innerWidth / 8 && Date.now() - currentTouch.startTime < 300)) {
                         prevPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
-                        prevPhoto.style.transform = currPhoto.style.transform = "translateX(calc(100vw + 10px))"
+                        prevPhoto.style.transform = currPhoto.style.transform = "translateX("+(rightPanelCur.getBoundingClientRect().top > 10 ? "100vw" : rightPanelCur.clientWidth+"px")+")"
                         prevPhoto.ontransitionend = () => {
                             prevPhoto.ontransitionend = undefined!
                             requestAnimationFrame(() =>
@@ -280,7 +281,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                     distance = Math.abs(distance)
                     if (distance > window.innerWidth / 4 || (distance > window.innerWidth / 8 && Date.now() - currentTouch.startTime < 300)) {
                         nextPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
-                        nextPhoto.style.transform = currPhoto.style.transform = "translateX(calc(-100vw - 10px))"
+                        nextPhoto.style.transform = currPhoto.style.transform = "translateX(-"+(rightPanelCur.getBoundingClientRect().top > 10 ? "100vw" : window.innerWidth-rightPanel.current!.clientWidth+"px")+")"
                         nextPhoto.ontransitionend = () => {
                             nextPhoto.ontransitionend = undefined!
                             requestAnimationFrame(() =>
@@ -350,7 +351,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             ${!animated && " fixed top-0 left-0 bg-black/80 backdrop-blur-md backdrop-filter"}
         `}
     >
-        <div className="w-full md:w-[calc(100%-24rem)] h-[77vh] md:h-full relative" ref={touchZoneRef}>
+        <div className="w-screen md:w-[calc(100%-24rem)] h-[77vh] md:h-full relative" ref={touchZoneRef}>
             <TransformWrapper
                 onZoomStart={zoomStart}
                 onZoomStop={zoomEnd}
@@ -390,7 +391,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         }
                     </div>
                     {prevPhoto &&
-                        <div className="absolute w-full h-full grid place-items-center left-[calc(-100vw-10px)]">
+                        <div className="absolute w-full h-full grid place-items-center left-[calc(-100vw-10px)] md:left-[calc(-100vw+24rem-10px)]">
                             <div className="m-auto relative" ref={prevPhotoRef}>
                                 <SafeImage
                                     skipNsfw={initialIndex == currentIndex - 1}
@@ -405,7 +406,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                         </div>
                     }
                     {nextPhoto &&
-                        <div className="absolute w-full h-full grid place-items-center left-[calc(100vw+10px)]">
+                        <div className="absolute w-full h-full grid place-items-center left-[calc(100vw+10px)] md:left-[calc(100vw-24rem+10px)]">
                             <div className="m-auto relative" ref={nextPhotoRef}>
                                 <SafeImage
                                     skipNsfw={initialIndex == currentIndex + 1}
