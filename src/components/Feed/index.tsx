@@ -172,7 +172,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             if(!homepage || (homepage && !id)) {
                 // We move post into common posts while removing it from pinned posts
                 setPostsPinned(prev => prev.filter((p, i) => i !== index))
-                feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.context.id)
+                feedsManager.addPostToFeed(unpinnedPost, unpinnedPost.context.feedId)
             }
             message.success(t("post:post_unpinned"))
         }
