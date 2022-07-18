@@ -27,7 +27,9 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
             const check = () => {
                 if (id == -1)
                     return
-                const video = new Audio(mediaPath(data.name))
+                const video = new Audio()
+                video.crossOrigin = "anonymous"
+                video.src = mediaPath(data.name)
                 video.oncanplaythrough = onLoaded!
                 video.onerror = () => id != -1 && window.setTimeout(check, 1000)
             }
