@@ -23,7 +23,6 @@ const Login: React.FC = () => {
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
-
     const formik = useFormik<LoginFormInputs>({
         initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
@@ -34,13 +33,6 @@ const Login: React.FC = () => {
                     token: res.data.token
                 })
                 localStorage.setItem("logged", "1")
-
-                const {from} = (history.location.state as LocationState) || {
-                    from: {
-                        pathname: parseToken(res.data.token).payload.lastConnection ? "/" : "/discovery"
-                    }
-                }
-                history.replace(from)
             }).catch(e => {
                 setLoadingStatus(false)
                 let msg

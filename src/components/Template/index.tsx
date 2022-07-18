@@ -33,32 +33,7 @@ import "leaflet/dist/leaflet.css"
 const Template: React.FC = () => {
     const context = useContext<AppContextType>(AppContext)
     const { pathname } = useLocation()
-    const [loading, setLoading] = useState<boolean>(true)
     const isAdmin = useAdminRole()
-
-    useEffect(() => {
-        Promise.all([getLoggedUser(), getAuthorizedAuthors()]).then(([userRes, authorsRes]) => {
-            const socket = initWebSocket(wsURI)
-            context.dispatch({
-                type: AppActionType.SET_INITIALIZATION,
-                payload: {
-                    user: userRes.data,
-                    authors: authorsRes.data
-                }
-            })
-
-            if (localStorage.getItem("logged_id") != userRes.data.id.toString())
-                window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
-            
-            localStorage.setItem("logged_id", userRes.data.id.toString())
-            window.dispatchEvent(new LoggedEvent(context))
-
-            notificationManager.setUnwatched(userRes.data.unwatchedNotifications)
-            socket.connect(context)
-        }).finally(() => setLoading(false))
-
-        return () => logoutWebSocket()
-    }, [])
 
     const [,setPreviousUrl] = useState<string[]>([])
 
@@ -74,23 +49,21 @@ const Template: React.FC = () => {
         })
     }, [pathname])
 
-    return loading ?
-        <LoadingPage/> :
-        <Switch>
-            <Route path="/admin" render={({location}) =>
-                (
-                    isAdmin ?
-                        <AdminTemplate/> :
-                        <Redirect
-                            to={{
-                                pathname: "/404",
-                                state: {from: location}
-                            }}
-                        />
-                )}
-            />
-            <Route path="/" component={DefaultTemplate}/>
-        </Switch>
+    return <Switch>
+        <Route path="/admin" render={({location}) =>
+            (
+                isAdmin ?
+                    <AdminTemplate/> :
+                    <Redirect
+                        to={{
+                            pathname: "/404",
+                            state: {from: location}
+                        }}
+                    />
+            )}
+        />
+        <Route path="/" component={DefaultTemplate}/>
+    </Switch>
 }
 
 export default Template
