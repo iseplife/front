@@ -47,10 +47,12 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
         const link = index === undefined ? originalLink : `/${getPostLink(post, false)}/${index}`
         if (lightboxPhotoIndex !== undefined && index === undefined) {
             setOpenned(openned => {
-                if(openned)
-                    window.history.back()
-                else
+                if(!openned){
+                    const currentUrl = window.location.pathname
                     window.history.replaceState(null, "", link)
+                    window.history.pushState(null, "", currentUrl)
+                }
+                window.history.back()
                 return false
             })
         } else
