@@ -50,7 +50,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
                                     <SafeImage
                                         ratio={img.ratio}
                                         className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
-                                        src={mediaPath(img.name, GallerySizes.THUMBNAIL)}
+                                        src={mediaPath(img.name, i === 0 ? GallerySizes.PREVIEW : GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
                                         status={img.status}
                                     />
