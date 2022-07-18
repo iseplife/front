@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
 import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import {Modal, Radio} from "antd"
+import {Radio} from "antd"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
@@ -8,7 +8,6 @@ import {add, parse, format, Locale} from "date-fns"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil"
 import {getMonthEvents} from "../../../data/event"
-import {ModalEventHeader, ModalEventContent} from "../../../components/Event/ModalEvent"
 import {EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
@@ -20,6 +19,7 @@ import {getUserFeed} from "../../../data/feed"
 import {AppContext} from "../../../context/app/context"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faArrowLeft, faArrowRight, faSyncAlt} from "@fortawesome/free-solid-svg-icons"
+import { useHistory } from "react-router-dom"
 
 const initFilter = (): EventFilter => {
     return (
@@ -86,14 +86,17 @@ const Events: React.FC = () => {
         Boolean(state.payload.clubsPublisher.length)
     ), [state.payload.clubsPublisher.length])
 
-    const [selectedEvent, setSelectedEvent] = useState<EventPreview | null>(null)
     const [feeds, setFeeds] = useState<CalendarContextType["feeds"]>({})
     const setEvents = useSetRecoilState(eventsState)
     const filteredEvents = useRecoilValue(filteredEventsState)
     const [loading, setLoading] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date())
     const [view, setView] = useState<View>("week")
-    const {t, i18n} = useTranslation("event")
+    const { t, i18n } = useTranslation("event")
+    const h = useHistory()
+    const goToEvent = useCallback((event: EventPreview) => 
+        h.push(`/event/${event.id}`)
+    , [])
 
     const fetchMonthEvents = useCallback(() => {
         setLoading(true)
@@ -197,7 +200,7 @@ const Events: React.FC = () => {
                             eventWrapper: EventWrapper
                         }}
                         className="mb-12 bg-white shadow rounded-lg"
-                        onSelectEvent={setSelectedEvent}
+                        onSelectEvent={goToEvent}
                         date={date}
                         onNavigate={(d) => setDate(d)}
                         culture={i18n.language}
@@ -207,17 +210,6 @@ const Events: React.FC = () => {
                         onView={(v) => setView(v)}
                         view={view}
                     />
-                    {selectedEvent && (
-                        <Modal
-                            className="md:w-1/2 w-4/5"
-                            visible={true}
-                            title={<ModalEventHeader event={selectedEvent}/>}
-                            footer={null}
-                            onCancel={() => setSelectedEvent(null)}
-                        >
-                            <ModalEventContent id={selectedEvent.id}/>
-                        </Modal>
-                    )}
                 </div>
             </div>
         </CalendarContext.Provider>
