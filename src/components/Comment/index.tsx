@@ -76,7 +76,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
             <div className="w-full">
                 <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightboxView ? "bg-gray-100/20 text-neutral-100 md:text-black md:bg-gray-100" : "bg-gray-100"}`}>
                     <div className="items-center flex">
-                        <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className={`${lightboxView ? "text-neutral-100" : "text-black" } text-xs flex-1 mr-3 font-bold hover:underline`}>{data.author.name}</Link>
+                        <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className={`${lightboxView ? "text-neutral-100 md:text-black" : "text-black" } text-xs flex-1 mr-3 font-bold hover:underline`}>{data.author.name}</Link>
                         {data.hasWriteAccess && (
                             <div className="flex items-center justify-end pt-1">
                                 {editMode ?
@@ -154,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     {showComments ?
                         //TODO faire passer le panneau de droite au dessus lors du passage en lg ou xl (qd ça commence à wrap des noms de groupe / prénom-nom)
                         <>
-                            <div className={`border border-1 ${lightboxView ? "border-gray-400" : "border-gray-200"} ml-5 my-4`} />
+                            <div className={`${lightboxView ? "bg-gray-400 md:bg-gray-200" : "bg-gray-200"} ml-5 my-4 w-0.5`} />
                             <CommentList
                                 id={data.thread}
                                 depth={1}
