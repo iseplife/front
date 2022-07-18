@@ -9,9 +9,10 @@ import AuthorPicker from "../Common/AuthorPicker"
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>
     focus?: boolean
+    lightboxView: boolean | undefined
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
+const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus, lightboxView}) => {
     const {t} = useTranslation()
     const [isSubmitting, setSubmitting] = useState<boolean>(false)
 
@@ -43,7 +44,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus}) => {
             <input
                 id="message"
                 placeholder={t("write_comment")}
-                className="message border-none flex-1 bg-transparent focus:outline-none text-white md:text-black"
+                className={`message border-none flex-1 bg-transparent focus:outline-none ${lightboxView ? "text-white md:text-neutral-800" : "text-neutral-800"}`}
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.message}

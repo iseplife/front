@@ -11,6 +11,7 @@ import {faCircleNotch, faHeart as faSolidHeart, faPen, faSave, faUndo} from "@fo
 import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import TextArea from "antd/lib/input/TextArea"
 import { Link } from "react-router-dom"
+import { cFaPreviousArrow } from "../../constants/CustomFontAwesome"
 
 
 interface CommentProps {
@@ -75,7 +76,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
             <div className="w-full">
                 <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightboxView ? "bg-gray-100/20 text-neutral-100 md:text-black md:bg-gray-100" : "bg-gray-100"}`}>
                     <div className="items-center flex">
-                        <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className="text-black text-xs flex-1 mr-3 font-bold hover:underline">{data.author.name}</Link>
+                        <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className={`${lightboxView ? "text-neutral-100" : "text-black" } text-xs flex-1 mr-3 font-bold hover:underline`}>{data.author.name}</Link>
                         {data.hasWriteAccess && (
                             <div className="flex items-center justify-end pt-1">
                                 {editMode ?
@@ -153,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     {showComments ?
                         //TODO faire passer le panneau de droite au dessus lors du passage en lg ou xl (qd ça commence à wrap des noms de groupe / prénom-nom)
                         <>
-                            <div className="border border-1 border-gray-200 ml-5 my-4"/>
+                            <div className={`border border-1 ${lightboxView ? "border-gray-400" : "border-gray-200"} ml-5 my-4`} />
                             <CommentList
                                 id={data.thread}
                                 depth={1}
@@ -162,6 +163,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                 className="flex-1"
                                 bottomInput={true}
                                 autofocusInput={true}
+                                lightboxView={lightboxView}
                             />
                         </> :
                         (data.comments > 0 && (
@@ -169,9 +171,10 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                 className="ml-2 mt-1 flex group cursor-pointer"
                                 onClick={() => setShowComments(true)}
                             >
-                                <img alt="see_more" src="/img/icons/following-arrow.svg" className="w-4 h-4 mr-2"/>
                                 <label
-                                    className="-mt-0.5 text-gray-500 font-semibold group-hover:underline pointer-events-none">
+                                    className={`-mt-0.5 ${lightboxView ? "text-gray-400" : "text-gray-500"} font-semibold group-hover:underline pointer-events-none`}
+                                >
+                                    <FontAwesomeIcon icon={cFaPreviousArrow} className="mr-2 rotate-180 text-base" />
                                     {`${data.comments} ${t("post:response")}${data.comments > 1 ? "s" : ""}`}
                                 </label>
                             </div>
