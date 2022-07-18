@@ -113,10 +113,13 @@ const Gallery: React.FC = () => {
         else
             setInitialIndex(undefined)
     }, [history.location.pathname])
+    const [openned, setOpenned] = useState(false)
 
     const openLightbox: renderImageClickHandler = useCallback((e, photo) => {
-        if (photo && gallery)
+        if (photo && gallery) {
             history.push(`/gallery/${id}/${photo.index}`)
+            setOpenned(true)
+        }
     }, [id, gallery])
 
     const onLoaded = useCallback((photo: PhotoProps<GalleryPhoto>) => 
@@ -129,7 +132,15 @@ const Gallery: React.FC = () => {
     }, [])
 
     const closeLightbox = useCallback(() => 
-        history.push(`/gallery/${id}`)
+        setOpenned(openned => {
+            if(!openned){
+                const currentUrl = window.location.pathname
+                window.history.replaceState(null, "", `/gallery/${id}`)
+                window.history.pushState(null, "", currentUrl)
+            }
+            history.goBack()
+            return false
+        })
     , [id])
 
     const removeGallery = useCallback(() =>
@@ -189,7 +200,7 @@ const Gallery: React.FC = () => {
     }, [id])
 
     const updateURL = useCallback((index: number) => 
-        history.push(`/gallery/${id}/${index}`)
+        window.history.replaceState(null, "", `/gallery/${id}/${index}`)
     , [id])
 
     const gallerySidebar = useCallback((gProps: any) => <GallerySidebar gallery={gallery} {...gProps} />, [gallery])
