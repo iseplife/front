@@ -66,6 +66,8 @@ const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
     useEffect(() => {
         if (!isWebPSupported)
             polyfillWebp(propsSrc).then(setSrc)
+        else
+            setSrc(propsSrc)
     }, [propsSrc])
     return <>
         {src && <img {...props} src={src} />}
@@ -74,11 +76,15 @@ const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
 
 export const WebPAvatarPolyfill: React.FC<AvatarProps & React.RefAttributes<HTMLElement>> = (props) => {
     const propsSrc = props.src as string
-    const [src, setSrc] = useState(isWebPSupported ? props.src : loadedCache[propsSrc])
+    const [src, setSrc] = useState(isWebPSupported ? propsSrc : loadedCache[propsSrc])
+
     useEffect(() => {
         if (!isWebPSupported && propsSrc?.length)
             polyfillWebp(propsSrc).then(setSrc)
+        else
+            setSrc(propsSrc)
     }, [propsSrc])
+
     return <>
         {<Avatar {...props} src={src} />}
     </>
