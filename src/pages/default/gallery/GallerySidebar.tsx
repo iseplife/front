@@ -195,6 +195,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                     numberComments={nbComments}
                     depth={0}
                     loadComment={nbComments !== 0}
+                    lightboxView={true}
                 />
             </div>
         </div>

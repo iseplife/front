@@ -85,7 +85,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
         </div> :
         <div className={`ml-4 ${className}`}>
             {showInput && !bottomInput &&
-            <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>}
+            <CommentForm lightboxView={lightboxView} handleUpload={sendComment} focus={autofocusInput && showInput}/>}
             {trendingComment && (
                 <>
                     <Comment
@@ -94,6 +94,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                         allowReplies={depth === 0}
                         handleDeletion={deleteComment}
                         handleEdit={editComment}
+                        lightboxView={lightboxView}
                     />
 
                     {!showComments && numberComments > 1 && (
@@ -118,7 +119,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 />
             )}
             {showInput && bottomInput && (
-                <CommentForm handleUpload={sendComment} focus={autofocusInput && showInput}/>
+                <CommentForm lightboxView={lightboxView} handleUpload={sendComment} focus={autofocusInput && showInput}/>
             )}
         </div>
 }

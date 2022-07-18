@@ -96,7 +96,8 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                         numberComments={commentsCount}
                         id={thread}
                         depth={0}
-                        loadComment={commentsCount !== 0}/>
+                        loadComment={commentsCount !== 0}
+                    />
                 </>
             )}
         </>
