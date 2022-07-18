@@ -1,4 +1,4 @@
-import React, {useMemo} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 
 interface TabSwitcherProps {
     currentTab: number,
@@ -7,13 +7,36 @@ interface TabSwitcherProps {
     className?: string,
 }
 
-const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, tabs, className}) => {
-    const tabsEntries = useMemo(() => Object.entries(tabs), [tabs])
+const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, setCurrentTab, tabs, className }) => {
+    const [loading, setLoading] = useState(true)
+    const [currentTab, setCurrentTabIndex] = useState<number>(history.state?.currentTab ?? _currentTab)
+    useEffect(() => {
+        setLoading(loading => {
+            if (loading)
+                setCurrentTab(currentTab)()
+            else
+                setCurrentTabIndex(_currentTab)
+            return false
+        })
+    }, [_currentTab])
+
+
+    const tabsEntriesWithCallback: [string, React.ReactElement, () => void][] = useMemo(() => 
+        Object.entries(tabs).map(([tabName, tab], index) => [
+            tabName,
+            tab,
+            () => {
+                setCurrentTab(index)()
+                history.replaceState({currentTab: index}, "")
+            }
+        ])
+    , [tabs, setCurrentTab])
+
     return (
         <div className={`mx-4 md:mx-10 ${className} relative`}>
             <div className="w-full max-w-full overflow-x-auto absolute scrollbar-thin">
                 <div className="flex font-semibold text-neutral-600">
-                    {tabsEntries.map(([tabName], index) => {
+                    {tabsEntriesWithCallback.map(([tabName, tab, callback], index) => {
                         const splitted = tabName.split(":")
                         let type = splitted[0]
                         if (splitted.length > 1)
@@ -23,7 +46,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, ta
                         return <>
                             <div
                                 key={index}
-                                onClick={setCurrentTab(index)}
+                                onClick={callback}
                                 className={
                                     `${type}:hidden rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer mr-2.5 `
                                     + (index == currentTab && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")
@@ -38,7 +61,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({currentTab, setCurrentTab, ta
             <div className="py-1 mr-2.5 pointer-events-none invisible">
                 Tab
             </div>
-            { tabsEntries[currentTab][1] }
+            { !loading && tabsEntriesWithCallback[currentTab]?.[1] }
         </div>
     )
 }
