@@ -228,6 +228,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         }
         const touchMove = (event: TouchEvent) => {
             if (currentTouch) {
+                event.preventDefault()
                 const touch = event.touches[0]
                 const diffX = touch.clientX - currentTouch.last.x,
                     diffY = touch.clientY - currentTouch.last.y;
