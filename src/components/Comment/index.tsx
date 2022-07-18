@@ -10,6 +10,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCircleNotch, faHeart as faSolidHeart, faPen, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import TextArea from "antd/lib/input/TextArea"
+import { Link } from "react-router-dom"
 
 
 interface CommentProps {
@@ -62,7 +63,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 
     return (
         <div className="flex my-1">
-            <div className="mr-2">
+            <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className="mr-2">
                 <StudentAvatar
                     id={data.author.id}
                     name={data.author.name}
@@ -70,11 +71,11 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     pictureSize={AvatarSizes.THUMBNAIL}
                     size="small"
                 />
-            </div>
+            </Link>
             <div className="w-full">
                 <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightboxView ? "bg-gray-100/20 text-neutral-100 md:text-black md:bg-gray-100" : "bg-gray-100"}`}>
                     <div className="items-center flex">
-                        <span className="text-xs flex-1 mr-3 font-bold">{data.author.name}</span>
+                        <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className="text-black text-xs flex-1 mr-3 font-bold hover:underline">{data.author.name}</Link>
                         {data.hasWriteAccess && (
                             <div className="flex items-center justify-end pt-1">
                                 {editMode ?
