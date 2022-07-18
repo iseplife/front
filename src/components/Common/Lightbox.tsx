@@ -237,8 +237,10 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 if (currentTouch.trigger > 0) {
                     if (Math.abs(diffX) > Math.abs(diffY) * 1.3) {
                         currentTouch.trigger -= Math.abs(diffX)
-                        if (currentTouch.trigger <= 0)
+                        if (currentTouch.trigger <= 0) {
                             setSwiping(true)
+                            pinchZoomRef.current?.resetTransform()
+                        }
                     }
                 } else {
                     const diffStartX = touch.clientX - currentTouch.start.x
