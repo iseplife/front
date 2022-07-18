@@ -9,6 +9,9 @@ import React from "react"
 import { AppContext } from "../../context/app/context"
 import PacketProtocol from "../protocol/PacketProtocol"
 import WSPCKeepAlive from "../protocol/packets/client/WSPCKeepAlive"
+import { refresh } from "../../data/security"
+import { AppActionType } from "../../context/app/action"
+import { refreshToken } from "../../components/Template/Interceptor"
 
 class WSServerClient {
     private static reconnectTimeout: number
@@ -85,8 +88,8 @@ class WSServerClient {
         
     }
 
-    private _dispatchConnected(){
-        const event = new Event(WSEventType.DISCONNECTED)
+    private _dispatchConnected() {
+        const event = new Event(WSEventType.CONNECTED)
         window.dispatchEvent(event)
     }
 
@@ -95,11 +98,17 @@ class WSServerClient {
         new GroupListener(this, this.context).register()
     }
 
-    public setLogged() {        
+    public setLogged() {
         this._logged = true
         for (const packet of this.queue)
             this.forcePacket(packet)
         this.queue = []
+    }
+
+    public setBadToken() {
+        refreshToken().then(({data: {token}}) => 
+            this.socket.send(token)
+        ).catch(() => this.socket.close())
     }
 
     public sendPacket(packet: PacketOut) {

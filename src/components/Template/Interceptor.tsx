@@ -14,6 +14,8 @@ type InterceptState = {
     error?: string
 }
 
+export let refreshToken: () => AxiosPromise<TokenSet>
+
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     refreshingPromise?: AxiosPromise<TokenSet>
     intercept?: number[]
@@ -22,6 +24,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     state: InterceptState = {}
 
     componentDidMount() {
+        refreshToken = this.refreshToken.bind(this)
         this.intercept = [
             apiClient.interceptors.request.use(
                 this.axiosRequestInterceptor, e => Promise.reject(e)
@@ -56,30 +59,27 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+            console.debug(`[Interceptor] Refreshing on request : "${request.url}"`)
             return new Promise<AxiosRequestConfig>((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
-                this.refreshToken(reject).then(res => {
+                this.refreshToken().then(res => {
                     request.headers = request.headers ?? {}
                     request.headers["Authorization"] = `Bearer ${res.data.token}`
                     execute(request)
-                })
+                }).catch(reject)
             })
         }
         return request
     }
 
-    refreshToken(reject: (e: Error) => void): AxiosPromise<TokenSet> {
+    refreshToken(): AxiosPromise<TokenSet> {
         if (!this.refreshingPromise)
             (this.refreshingPromise = refresh()).then(res => {
-                try {
-                    this.context.dispatch({
-                        type: AppActionType.SET_TOKEN,
-                        token: res.data.token
-                    })
-                } catch (e) {
-                    reject(new Error("JWT cookie unreadable"))
-                }
+                this.context.dispatch({
+                    type: AppActionType.SET_TOKEN,
+                    token: res.data.token
+                })
 
                 this.refreshingPromise = undefined
             }).catch(() => {
@@ -111,7 +111,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     break
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
-                    if (!error.request?.url.startsWith("/auth")) {
+                    if (!error.request?.url?.startsWith("/auth")) {
                         this.props.history.push("/login")
                         this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
 
