@@ -24,11 +24,11 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
     const ready = useMemo(() => status === MediaStatus.READY, [status])
     const unhideCallback = useCallback(() => setHidden(false), [])
     useEffect(() => {
-        if(!ready){
+        if(!ready && onLoaded) {
             let id: number
             const check = () => {
                 if (id == -1) return
-                fetch(lowQualitySrc ?? src).then(onLoaded).catch(() => id != -1 && window.setTimeout(check, 1000))
+                fetch(lowQualitySrc ?? src).then(() => setTimeout(onLoaded, 700)).catch(() => id != -1 && window.setTimeout(check, 1000))
             }
 
             id = window.setTimeout(check, 800)

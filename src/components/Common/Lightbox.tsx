@@ -269,9 +269,10 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 const rightPanelCur = rightPanel.current!
 
                 if (distance > 0 && prevPhoto) {
+                    alert(distance)
                     if (distance > window.innerWidth / 4 || (distance > window.innerWidth / 8 && Date.now() - currentTouch.startTime < 300)) {
                         prevPhoto.style.transition = currPhoto.style.transition = "transform .1s ease-out"
-                        prevPhoto.style.transform = currPhoto.style.transform = "translateX("+(rightPanelCur.getBoundingClientRect().top > 10 ? "100vw" : rightPanelCur.clientWidth+"px")+")"
+                        prevPhoto.style.transform = currPhoto.style.transform = "translateX("+(rightPanelCur.getBoundingClientRect().top > 10 ? "100vw" : window.innerWidth-rightPanelCur.clientWidth+"px")+")"
                         prevPhoto.ontransitionend = () => {
                             prevPhoto.ontransitionend = undefined!
                             requestAnimationFrame(() =>
