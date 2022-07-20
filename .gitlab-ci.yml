@@ -113,6 +113,7 @@ build-dev:
 
 docker-build:
   stage: docker
+  image: docker:latest
   before_script:
     - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
     - docker login -u $DOCKER_LOGIN -p $DOCKER_TOKEN
