@@ -83,9 +83,11 @@ const App: React.FC = () => {
     // Check user's state (logged in or not)
     useEffect(() => {
         setLoading(true)
-        if (state.payload && state.token_expiration >= new Date().getTime())
+        if (state.payload && state.token_expiration >= new Date().getTime()) {
             setLoggedIn(true)
-        else if(localStorage.getItem("logged") == "1") {
+            if (state.payload.id == state.user?.id)
+                setLoading(false)
+        } else if(localStorage.getItem("logged") == "1") {
             refresh().then(res => {
                 dispatch({
                     type: AppActionType.SET_TOKEN,
@@ -100,7 +102,7 @@ const App: React.FC = () => {
             setLoggedIn(false)
             setLoading(false)
         }
-    }, [state.payload, state.token_expiration, getUserInfos])
+    }, [state.payload, state.token_expiration, state.user, getUserInfos])
 
     useEffect(() => {
         if(isLoggedIn)
