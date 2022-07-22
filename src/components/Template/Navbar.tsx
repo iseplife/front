@@ -205,7 +205,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 visible={visible}
             >
                 <div>
-                    <StudentLargeCard student={user} className="bg-neutral-200" onClick={close} />
+                    <StudentLargeCard student={user} className="bg-neutral-100 active:bg-neutral-200 transition-colors" onClick={close} />
                     <div className="justify-around grid grid-cols-3" onClick={close}>
                         {payload.roles.includes(Roles.ADMIN) && (
                             <DrawerItem icon={faUserShield} link="/admin">
