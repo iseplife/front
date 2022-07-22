@@ -66,10 +66,6 @@ const Student: React.FC = () => {
         if (student)
             setStudent({...student, subscribed: sub })
     }, [student])
-    const handleExtensive = useCallback((newExtensive: boolean) => {
-        if(student)
-            setStudent({...student, subscribed: {extensive: newExtensive}})
-    }, [student])
 
     return (
         <>
