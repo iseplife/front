@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from "react"
+import React, {useCallback, useContext, useMemo, useState} from "react"
 import {Divider, Drawer} from "antd"
 import {Link, useLocation} from "react-router-dom"
 import {useTranslation} from "react-i18next"
@@ -18,6 +18,7 @@ import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCo
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
+import StudentLargeCard from "../Student/StudentLargeCard"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -178,6 +179,8 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const {t} = useTranslation()
     const [visible, setVisible] = useState<boolean>(false)
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
+    const close = useCallback(() => setVisible(false), [])
+    
     return (
         <>
             <div className="md:hidden grid grid-cols-4 shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
@@ -198,22 +201,25 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 placement="bottom"
                 height="auto"
                 closable={false}
-                onClose={() => setVisible(false)}
+                onClose={close}
                 visible={visible}
             >
-                <div className="justify-around grid grid-cols-3" onClick={() => setVisible(false)}>
-                    {payload.roles.includes(Roles.ADMIN) && (
-                        <DrawerItem icon={faUserShield} link="/admin">
-                            {t("administration")}
+                <div>
+                    <StudentLargeCard student={user} className="bg-neutral-200" onClick={close} />
+                    <div className="justify-around grid grid-cols-3" onClick={close}>
+                        {payload.roles.includes(Roles.ADMIN) && (
+                            <DrawerItem icon={faUserShield} link="/admin">
+                                {t("administration")}
+                            </DrawerItem>
+                        )}
+                        <DrawerItem icon={faCogs} link="/setting" className="text-red-600">
+                            {t("setting")}
                         </DrawerItem>
-                    )}
-                    <DrawerItem icon={faCogs} link="/setting" className="text-red-600">
-                        {t("setting")}
-                    </DrawerItem>
-                    <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
-                        {t("logout")}
-                    </DrawerItem>
-                    <span>{process.env.REACT_APP_VERSION}</span>
+                        <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
+                            {t("logout")}
+                        </DrawerItem>
+                        <span className="absolute bottom-1 right-2">{process.env.REACT_APP_VERSION}</span>
+                    </div>
                 </div>
             </Drawer>
         </>
