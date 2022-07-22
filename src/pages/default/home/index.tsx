@@ -5,26 +5,15 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
+import { Link } from "react-router-dom"
+import StudentLargeCard from "../../../components/Student/StudentLargeCard"
 
 const Home: React.FC = () => {
     const {state: {user}} = useContext(AppContext)
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
-                <div className="p-2 mb-5 items-center hover:bg-black transition-colors hover:bg-opacity-5 rounded-lg cursor-pointer hidden sm:flex">
-                    <StudentAvatar
-                        id={user.id}
-                        name={user.firstName + " " + user.lastName}
-                        picture={user.picture}
-                        pictureSize={AvatarSizes.THUMBNAIL}
-                        size="large"
-                    />
-                    <div>
-                        <h3 className="mx-2 mb-0 font-bold text-md text-gray-700 leading-4 mt-1 hidden lg:block">{user.firstName + " " + user.lastName}</h3>
-                        <h3 className="mx-2 mb-0 font-bold text-md text-gray-700 leading-4 mt-1 block lg:hidden">{user.firstName}</h3>
-                        <h6 className="mx-2 -mt-0.5 uppercase text-xs text-gray-600">{`Promo ${user.promo}`}</h6>
-                    </div>
-                </div>
+                <StudentLargeCard student={user} className="hidden sm:flex" />
                 <IncomingEvents className="lg:hidden block" />
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"/>
                 <UserGroups/>
