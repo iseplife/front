@@ -34,7 +34,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, set
 
     return (
         <div className={`mx-4 md:mx-10 ${className} relative`}>
-            <div className="w-full max-w-full overflow-x-auto absolute scrollbar-thin">
+            <div className="w-full max-w-full overflow-x-auto absolute scrollbar-thin select-none">
                 <div className="flex font-semibold text-neutral-600">
                     {tabsEntriesWithCallback.map(([tabName, tab, callback], index) => {
                         const splitted = tabName.split(":")
