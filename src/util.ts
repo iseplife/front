@@ -155,10 +155,10 @@ export {mediaPath}
 export type SafePhoto = PhotoProps<{nsfw: boolean, color: string, status: MediaStatus, id: number, ratio: number}>
 export type SelectablePhoto = SafePhoto & {selected: boolean}
 
-export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string) => Promise<T>
+export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, key: string, quality?: string) => Promise<T>
 export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: ImageType[], parser?: ParserFunction<T>, quality?: string): Promise<T[]> => {
     return await Promise.all(
-        images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id)))
+        images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id), quality))
     ) as Awaited<T[]>
 }
 
