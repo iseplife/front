@@ -18,5 +18,6 @@ export enum CoverSizes {
 export enum PostSizes {
     THUMBNAIL = "autox500",
     PREVIEW = "autox500",
+    PREVIEW_HQ = "autox800",
     LIGHTBOX = "1920xauto"
 }

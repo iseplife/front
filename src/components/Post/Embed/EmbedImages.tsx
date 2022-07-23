@@ -8,6 +8,7 @@ import {EmbedPseudoGallery, Post} from "../../../data/post/types"
 import { AnimatedLightbox, AnimatedSafePhoto } from "../../Common/AnimatedLightbox"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { useLocation } from "react-router-dom"
+import { PostSizes } from "../../../constants/MediaSizes"
 
 type EmbedImagesProps = {
     images: Array<Image>
@@ -19,7 +20,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
     const [lightboxPhotoIndex, _setLightboxPhotoIndex] = useState<number>()
 
     useEffect(() => {
-        parsePhotosAsync(images).then(photos => 
+        parsePhotosAsync(images, undefined, window.devicePixelRatio > 1.3 ? PostSizes.PREVIEW_HQ : PostSizes.PREVIEW).then(photos => 
             setPhotos(photos.map(photo => ({ ...photo, ref: React.createRef<HTMLDivElement>() })))
         ).catch(e => {
             message.error("Error while parsing...")
