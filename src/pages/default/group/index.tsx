@@ -101,7 +101,7 @@ const Group: React.FC = () => {
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed id={group?.feedId} loading={!group} />,
-        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} />,
+        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} hasRight={group?.hasRight} />,
     }), [group, onDelete, onPromote, onDemote, orga])
 
 

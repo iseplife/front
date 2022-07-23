@@ -15,11 +15,12 @@ type GroupMembersPanelProps = {
     onDelete: (id: number) => () => void
     onPromote: (id: number) => () => void
     onDemote: (id: number) => () => void
+    hasRight?: boolean
     style?: CSSProperties
     className?: string
 }
 const sections = ["admins", "members", ]
-const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, onPromote, onDemote, style, className}) => {
+const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, onPromote, onDemote, hasRight, style, className}) => {
     const {t} = useTranslation("group")
     const loading = useMemo(()=>orga[0].length == 0, [orga])
 
@@ -63,11 +64,11 @@ const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, on
                                     title={false}
                                     paragraph={{ rows: 1, width: length }}
                                 />
-                                <DropdownPanel
+                                {hasRight && <DropdownPanel
                                     panelClassName="w-32 right-0 lg:left-0"
                                     buttonClassName="mr-0 ml-auto"
                                     clickable={false}
-                                />
+                                />}
                             </div>
                         )
                         :
@@ -82,7 +83,7 @@ const GroupMembersPanel: React.FC<GroupMembersPanelProps> = ({orga, onDelete, on
                                     />
                                     <div className="ml-2">{member.student.firstName+" "+member.student.lastName}</div>
                                     
-                                    {member.student.id != user.id && 
+                                    {member.student.id != user.id && hasRight && 
                                         <DropdownPanel
                                             panelClassName="w-32 right-0 lg:left-0"
                                             closeOnClick={true}
