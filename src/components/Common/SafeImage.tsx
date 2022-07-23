@@ -28,7 +28,11 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
             let id: number
             const check = () => {
                 if (id == -1) return
-                fetch(lowQualitySrc ?? src).then(() => setTimeout(onLoaded, 700)).catch(() => id != -1 && window.setTimeout(check, 1000))
+                const img = new Image()
+                img.crossOrigin = "anonymous"
+                img.onerror = () => id != -1 && window.setTimeout(check, 1000)
+                img.onload = () => setTimeout(onLoaded, 700)
+                img.src = lowQualitySrc ?? src
             }
 
             id = window.setTimeout(check, 800)
