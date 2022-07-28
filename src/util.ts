@@ -230,6 +230,10 @@ export const downloadFile = (url: string, name: string) => {
     a.click()
 }
 
+export const TailwindUtils = {
+    isMd: () => window.innerWidth >= 768
+}
+
 export class EntitySet<T extends Entity> {
     private items: Map<number, T>
 

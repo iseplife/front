@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
-import {mediaPath, SafePhoto} from "../../util"
+import {mediaPath, SafePhoto, TailwindUtils} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
@@ -78,8 +78,8 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             return
         const ratio = photo.width / photo.height
 
-        const lbHeight = window.innerHeight
-        const rpWidth = window.innerWidth >= 768 ?
+        const lbHeight = !TailwindUtils.isMd() ? touchZoneRef.current!.getBoundingClientRect().height : window.innerHeight
+        const rpWidth = TailwindUtils.isMd() ?
             rightPanel?.current?.getBoundingClientRect().width ?? 0 :
             0
 
