@@ -19,9 +19,9 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
 }
 const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const [show, setShow] = useState(false)
-    const [clone, setClone] = useState<HTMLDivElement>(undefined!)
+    const [, setClone] = useState<HTMLDivElement>(undefined!)
     const [showImage, setShowImage] = useState(false)
-    const [animationDone, setAnimationDone] = useState(false)
+    const [, setAnimationDone] = useState(false)
     const [lastLightboxPhotoIndex, setLastLightboxPhotoIndex] = useState<number>()
 
     useEffect(() => {
@@ -39,9 +39,10 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                         await waitForFrame()
 
                         const box = element.getBoundingClientRect()
+                        const lightbox = document.querySelector(".lightbox")
 
                         setStyles(clone, {
-                            top: `${box.top}px`,
+                            top: `${box.top-(lightbox?.getBoundingClientRect().top ?? 0)}px`,
                             left: `${box.left}px`,
                             width: `${box.width}px`,
                             height: `${box.height}px`,
@@ -49,19 +50,20 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                             borderRadius: "0.1px"
                         })
 
+
                         clone.ontransitionend = async () => {
                             clone.ontransitionend = undefined!
 
                             setShowImage(true)
 
                             await waitForFrame()
-                            
+
                             setTimeout(() => {
                                 clone.ontransitionend = () => 
                                     clone.remove()
-                                
                                 clone.style.opacity = "0"
-                            }, 100)
+                            }, 50)
+                            
                         }
                     }   
                 })()
@@ -72,12 +74,21 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
     }, [])
     
     useEffect(() => {
-        if(props.show){
+        if (props.show) {
             setClone(undefined!)
             setShowImage(false)
             setAnimationDone(false)
         }else {
             setShow(false)
+            
+            setClone(clone => {
+                if (clone) {
+                    clone.ontransitionend = undefined!
+                    clone.style.opacity = "0"
+                    clone.ontransitionend = () => clone.remove()
+                }
+                return clone
+            })
         }
     }, [props.show])
 
@@ -104,6 +115,9 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                     visibility: "hidden",
                     transition: "top .2s ease-out, left .2s ease-out, width .2s ease-out, height .2s ease-out, opacity .1s, border-radius .25s"
                 })
+
+                clone.addEventListener("touchstart", (event) => event.preventDefault())
+
                 
                 document.documentElement.appendChild(clone)
                 clone.querySelector("img:not(.absolute)")?.remove()
@@ -111,10 +125,14 @@ const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) 
                 cloneImage.src = cloneImage.src.replace(GallerySizes.PREVIEW, GallerySizes.LIGHTBOX)
                 clone.appendChild(cloneImage)
 
-                clone.querySelector<HTMLImageElement>("img.absolute")!.onload = () => {
-                    setClone(clone)
+                setClone(clone)
+
+                const copiedImage = photo.ref.current.querySelector<HTMLImageElement>("img.absolute")
+                if(copiedImage?.complete && copiedImage?.naturalHeight)
+                    clone.querySelector<HTMLImageElement>("img.absolute")!.onload = () =>
+                        setShow(true)
+                else
                     setShow(true)
-                }
             } else {
                 setAnimationDone(true)
                 setShow(true)
