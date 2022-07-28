@@ -50,16 +50,16 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({ loading: _loading =
                         onClick={openModal}
                     >
                         {t("gallery:see_all")}
-                        <Modal
-                            title={<h1 className="text-gray-800 font-bold text-xl m-0">{t("galleries")}</h1>}
-                            visible={galleriesVisible}
-                            onCancel={closeModal}
-                            footer={null}
-                        >
-                            <GalleriesModal getGalleriesCallback={getGalleriesCallback}/>
-                        </Modal>
                     </div>
                 )}
+                <Modal
+                    title={<h1 className="text-gray-800 font-bold text-xl m-0">{t("galleries")}</h1>}
+                    visible={galleriesVisible}
+                    onCancel={closeModal}
+                    footer={null}
+                >
+                    <GalleriesModal getGalleriesCallback={getGalleriesCallback}/>
+                </Modal>
             </div>
 
             {loading ? <GalleriesPreviewSkeleton/> :
