@@ -1,23 +1,13 @@
-import React, {useContext, useEffect, useLayoutEffect, useMemo, useState} from "react"
+import React, {useContext, useLayoutEffect, useState} from "react"
 import {
     Redirect,
     Route,
     Switch, useLocation
 } from "react-router-dom"
-import {getLoggedUser} from "../../data/student"
 
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
-import LoadingPage from "../../pages/LoadingPage"
 import {AppContext, AppContextType} from "../../context/app/context"
-import {AppActionType} from "../../context/app/action"
-import {Roles} from "../../data/security/types"
-import {initWebSocket, logoutWebSocket} from "../../realtime/websocket/WSServerClient"
-import { notificationManager } from "../../datamanager/NotificationManager"
-import LoggedEvent from "../../events/LoggedEvent"
-import GeneralEventType from "../../constants/GeneralEventType"
-import {getAuthorizedAuthors} from "../../data/post"
-import { wsURI } from "../../data/http.constants"
 import useAdminRole from "../../hooks/useAdminRole"
 import { arrayEquals } from "../../util"
 

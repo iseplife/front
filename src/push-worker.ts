@@ -32,7 +32,7 @@ export const initPushWorker = () => {
                     icon: mediaPath(json.icon, AvatarSizes.THUMBNAIL),
                     silent: false,
                     data: {
-                        url: json.link
+                        url: `/${json.link}`
                     }
                 }))
                 break

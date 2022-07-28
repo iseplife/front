@@ -34,9 +34,10 @@ const ClubMembers: React.FC = () => {
 
     useEffect(() => {
         setLoading(true)
-        getMembers(id, selectedYear).then(res =>
-            setMembers(res.data)
-        ).finally(() => setLoading(false))
+        if(id)
+            getMembers(id, selectedYear).then(res =>
+                setMembers(res.data)
+            ).finally(() => setLoading(false))
     }, [id, selectedYear])
 
     return (

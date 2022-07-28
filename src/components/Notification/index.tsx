@@ -23,7 +23,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
     ), [notification.creation])
 
     return (
-        <Link to={notification.link} className="text-neutral-800 hover:text-neutral-800">
+        <Link to={`/${notification.link}`} className="text-neutral-800 hover:text-neutral-800">
             <div className={`${className} w-full px-4 py-2.5 items-center left-32 flex cursor-pointer rounded-lg transition-colors ${props.backgroundHover ?? true ? "hover:bg-gray-200 hover:bg-opacity-60" : ""}`}>
                 <WebPAvatarPolyfill
                     src={mediaPath(notification.icon, AvatarSizes.THUMBNAIL)}

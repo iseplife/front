@@ -16,9 +16,10 @@ const ClubSchoolSessionsSelect: React.FC<ClubSchoolSessionsSelectProps> = ({club
 
     useEffect(() => {
         setLoading(true)
-        getClubSchoolSessions(club).then(res => {
-            setSchoolSessions(res.data)
-        }).finally(() => setLoading(false))
+        if(club)
+            getClubSchoolSessions(club).then(res => {
+                setSchoolSessions(res.data)
+            }).finally(() => setLoading(false))
     }, [club])
 
     return (
