@@ -1,6 +1,7 @@
 import {ClubPreview} from "../club/types"
 import EventType from "../../constants/EventType"
 import {Feed, Subscription} from "../feed/types"
+import { GalleryPreview } from "../gallery/types"
 
 export type Event = {
     id: number
@@ -34,6 +35,9 @@ export type EventPreview = {
     cover?: string
     targets: number[]
     published: boolean
+}
+export type EventTabPreview = EventPreview & {
+    galleries?: GalleryPreview[]
 }
 
 export type EventForm = {

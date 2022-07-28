@@ -7,19 +7,35 @@ import {GallerySizes} from "../../constants/MediaSizes"
 import SafeImage from "../Common/SafeImage"
 import {faImages, faPlus} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { EventPreview } from "../../data/event/types"
 
 const PREVIEW_GALLERY_COUNT = 5
 
 type GalleryCardProps = {
     gallery: GalleryPreview
+    event?: EventPreview
     className?: string
 }
-const GalleryCard: React.FC<GalleryCardProps> = ({gallery, className}) => {
+const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className}) => {
     const {t} = useTranslation("gallery")
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
     return (
         <div className={`my-2 ${className}`}>
-            <Link to={`/gallery/${gallery.id}`}><h3 className="text-gray-600 m-0">{gallery.name}</h3></Link>
+            <Link to={`/gallery/${gallery.id}`}>
+                <div className={`text-gray-600 m-0 flex items-center ${event && "mb-1"}`}>
+                    {event &&
+                        <div className="w-6 h-6 2xl:h-5 2xl:w-5 relative mr-2 flex-shrink-0">
+                            <div className="bg-neutral-100 w-full h-full mx-auto sm:mx-0 rounded shadow overflow-hidden relative flex flex-col flex-shrink-0">
+                                <div className="bg-red-500 w-full h-2 2xl:h-1.5 flex-shrink-0" />
+                            </div>
+                        </div>
+                    }
+                    <div className="whitespace-nowrap 2xl:flex w-full overflow-hidden text-ellipsis leading-4">
+                        {event && <b className="mr-2 block">{event?.title}</b>}
+                        <div className={`w-full text-ellipsis overflow-hidden ${!event && "font-semibold"}`}>{gallery.name}</div>
+                    </div>
+                </div>
+            </Link>
             <div className="flex flex-col flex-wrap content-start h-20 w-full">
                 {previewLength ?
                     gallery.preview.slice(0, previewLength).map((img, i) => (

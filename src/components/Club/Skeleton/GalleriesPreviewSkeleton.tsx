@@ -3,9 +3,9 @@ import React from "react"
 
 const GalleriesPreviewSkeleton: React.FC = () => (
     <>
-        <Skeleton.Input className="w-full rounded my-1 mt-3" active size="large"/>
-        <Skeleton.Input className="w-full rounded my-1" active size="large"/>
-        <Skeleton.Input className="w-full rounded my-1" active size="large"/>
+        <div className="w-full rounded h-32 lg:h-28 my-1 mt-3 bg-neutral-200 animate-pulse"></div>
+        <div className="w-full rounded h-32 lg:h-28 my-1 bg-neutral-200 animate-pulse"></div>
+        <div className="w-full rounded h-32 lg:h-28 my-1 bg-neutral-200 animate-pulse"></div>
     </>
 )
 

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router-dom"
-import {getClub, getClubGalleries} from "../../../data/club"
+import {getClub} from "../../../data/club"
 import {message} from "antd"
 import {useHistory} from "react-router-dom"
 import Feed from "../../../components/Feed"
@@ -14,10 +14,12 @@ import ClubHeader from "../../../components/Club/ClubHeader"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { useTranslation } from "react-i18next"
-import GalleriesTab from "../../../components/Gallery/GalleriesTab"
+import EventsTab from "../../../components/Event/EventsTab"
+import { getEventsFrom } from "../../../data/event"
 
-enum ClubTab {
+export enum ClubTab {
     HOME_TAB,
+    EVENTS_TAB,
     MEMBERS_TAB,
     ADMIN_TAB
 }
@@ -56,7 +58,7 @@ const Club: React.FC = () => {
             id={club.feed}
             allowPublication={false}
         />,
-        [`sm:${t("galleries")}`]: <GalleriesTab elementId={club.id} getGalleriesCallback={getClubGalleries} />,
+        [t("events")]: <EventsTab elementId={club.id} getEventsCallback={getEventsFrom} />,
         [t("members")]: <ClubMembers />,
         ...(club.canEdit && { "Administration": <ClubAdmin /> })
     }), [club.feed, club.canEdit])
@@ -66,7 +68,7 @@ const Club: React.FC = () => {
             <ClubHeader />
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
                 <div className="flex-1 mx-4 -mt-4 sm:mt-0">
-                    <ClubPresentation/>
+                    <ClubPresentation setTab={setTab} />
                 </div>
                 <TabsSwitcher
                     className="sm:-mt-10 mx-4 md:mx-10 sm:col-span-2"

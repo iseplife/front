@@ -3,6 +3,8 @@ import { StudentPreview} from "../student/types"
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import {faPenNib, faUser, faUserShield} from "@fortawesome/free-solid-svg-icons"
 import {Subscription} from "../feed/types"
+import { GalleryPreview } from "../gallery/types"
+import { EventPreview } from "../event/types"
 
 export enum ClubRole {
     MEMBER = "MEMBER",
@@ -84,4 +86,10 @@ export type ClubAdminForm = ClubForm & {
     type: ClubType
     admins: number[]
     logo?: File
+}
+
+
+export type EventGalleryPreview = {
+    event: EventPreview
+    gallery: GalleryPreview
 }

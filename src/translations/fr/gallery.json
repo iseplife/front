@@ -31,5 +31,6 @@
   "created": "Galerie créée avec succès !",
   "see_all": "Voir tout",
   "failed_download": "Echec du téléchargement de l'image",
-  "downloading": "Téléchargement..."
+  "downloading": "Téléchargement...",
+  "see_events": "Voir les événements"
 }
