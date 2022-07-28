@@ -41,15 +41,34 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
         }
     }, [file])
 
-    const handleSubmit = useCallback(() => {
-        if(file !== undefined){
-            updateCustomPicture(file).then(res => {
+    const handleSubmit = useCallback(async () => {
+        if(file){
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            const dataUrl = await new Promise<string>(resolve => reader.onload = result => resolve(reader.result as string))
+
+            const image = new Image()
+            image.src = dataUrl
+            await new Promise(resolve => image.onload = resolve)
+
+            const canva = document.createElement("canvas")
+            canva.width = canva.height = 600
+            const ratio = image.height / image.width
+            const ratioInv = 1 / ratio
+            if(ratio > 1) // higher
+                canva.getContext("2d")?.drawImage(image, 0, (600 - ratio * 600) / 2, 600, 600 * ratio)
+            else // wider
+                canva.getContext("2d")?.drawImage(image, (600 - ratioInv * 600) / 2, 0, 600 * ratioInv, 600)
+            
+            const blob = await new Promise<Blob>(resolve => canva.toBlob(blob => resolve(blob as Blob)))
+
+            updateCustomPicture(blob).then(res => {
                 message.success(t("picture_updated"))
                 dispatch({ type: AppActionType.SET_PICTURE, payload: res.data })
                 setFile(undefined)
-            }).catch(() => message.error((t("common:error"))))
+            }).catch(() => message.error(t("common:error")))
         }else{
-            message.error((t("common:error")))
+            message.error(t("common:error"))
         }
     }, [file])
 

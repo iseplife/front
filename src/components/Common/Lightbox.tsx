@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
-import {mediaPath, SafePhoto} from "../../util"
+import {mediaPath, SafePhoto, TailwindUtils} from "../../util"
 import SafeImage from "./SafeImage"
 import {GallerySizes} from "../../constants/MediaSizes"
 import { cFaArrow, cFaCross } from "../../constants/CustomFontAwesome"
@@ -21,11 +21,12 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
     photos: T[]
     Sidebar?: React.FC<SidebarProps<T>>
     gallery?: boolean
+    show?: boolean
     onClose: () => void
     onChange?: (index: number) => void
 }
 const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
-    const { photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, gallery, onClose, onChange } = props
+    const { photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, gallery, show, onClose, onChange } = props
     const [currentIndex, _setCurrentIndex] = useState<number>(initialIndex)
     const { t } = useTranslation("common")
 
@@ -78,8 +79,8 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             return
         const ratio = photo.width / photo.height
 
-        const lbHeight = window.innerHeight
-        const rpWidth = window.innerWidth >= 768 ?
+        const lbHeight = !TailwindUtils.isMd() ? touchZoneRef.current!.getBoundingClientRect().height : window.innerHeight
+        const rpWidth = TailwindUtils.isMd() ?
             rightPanel?.current?.getBoundingClientRect().width ?? 0 :
             0
 
@@ -97,8 +98,6 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         }
     }, [])
 
-    const [, setCallbackCalled] = useState(false)
-
     useLayoutEffect(() => {
         const handleResize = () => {
             if (currentPhoto && photoRef.current)
@@ -110,15 +109,12 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         }
         handleResize()
 
-        setCallbackCalled(called => {
-            if (!called)
-                requestAnimationFrame(_ => firstImageCreatedCallback?.(photoRef.current!, currentPhoto))
-            return true
-        })
-
         window.addEventListener("resize", handleResize)
         return () => window.removeEventListener("resize", handleResize)
-    }, [currentPhoto, rightPanel, resize, photoRef.current, nextPhotoRef.current, prevPhotoRef.current])
+    }, [show, currentPhoto, rightPanel, resize, photoRef.current, nextPhotoRef.current, prevPhotoRef.current])
+    useEffect(() => {
+        requestAnimationFrame(_ => firstImageCreatedCallback?.(photoRef.current!, currentPhoto))
+    }, [show])
 
     const setCurrentIndex = useCallback((fct: (index: number) => number) => {
         setBigZoom(false)
