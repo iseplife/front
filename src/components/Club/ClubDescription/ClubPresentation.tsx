@@ -1,15 +1,20 @@
 import React, { useCallback, useContext } from "react"
 import About from "../About"
 import {useTranslation} from "react-i18next"
-import GalleriesPreview from "../../Gallery/GalleriesPreview"
 import { ClubContext } from "../../../context/club/context"
-import { getClubGalleries } from "../../../data/club"
+import { getClubEventsGalleries } from "../../../data/club"
+import ClubEventsGalleriesPreview from "../../Gallery/ClubEventsGalleriesPreview"
+import { ClubTab } from "../../../pages/default/club"
 
-const ClubPresentation: React.FC = () => {
+const ClubPresentation: React.FC<{ setTab: (tab: ClubTab) => void }> = ({setTab}) => {
     const {t} = useTranslation(["club", "gallery"])
     const { club: { id } } = useContext(ClubContext)
 
-    const clubGalleriesCallback = useCallback((page?: number) => getClubGalleries(id, page), [getClubGalleries, id])
+    const clubEventsGalleriesCallback = useCallback((page?: number) => getClubEventsGalleries(id, page), [getClubEventsGalleries, id])
+
+    const openEventTab = useCallback(() => {
+        setTab(ClubTab.EVENTS_TAB)
+    }, [setTab])
 
     return (
         <div key="desktop-display" className="w-full">
@@ -17,7 +22,7 @@ const ClubPresentation: React.FC = () => {
                 <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
                 <About/>
             </div>
-            <GalleriesPreview loading={!id} getGalleriesCallback={clubGalleriesCallback} />
+            <ClubEventsGalleriesPreview seeAll={openEventTab} loading={!id} getGalleriesCallback={clubEventsGalleriesCallback} />
         </div>
 
     )

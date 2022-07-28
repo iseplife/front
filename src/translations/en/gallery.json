@@ -31,5 +31,6 @@
   "created": "Gallery successfully created !",
   "see_all": "See all",
   "failed_download": "Failed to download the image",
-  "downloading": "Downloading..."
+  "downloading": "Downloading...",
+  "see_events": "See events"
 }

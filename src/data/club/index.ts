@@ -6,11 +6,11 @@ import {
     ClubMember,
     ClubMemberCreationForm,
     ClubMemberUpdateForm,
-    ClubPreview
+    ClubPreview,
+    EventGalleryPreview
 } from "./types"
 import {StudentPreview} from "../student/types"
 import {Page} from "../request.type"
-import {GalleryPreview} from "../gallery/types"
 import {apiClient} from "../http"
 import {MediaName} from "../media/types"
 
@@ -51,7 +51,7 @@ export const getMembers = (id: number, year ?: number): AxiosPromise<ClubMember[
     params: {y: year}
 })
 
-export const getClubGalleries = (id: number, page = 0): AxiosPromise<Page<GalleryPreview>> => apiClient.get(`/club/${id}/galleries`, {params: {page}})
+export const getClubEventsGalleries = (id: number, page = 0): AxiosPromise<Page<EventGalleryPreview>> => apiClient.get(`/club/${id}/events-galleries`, {params: {page}})
 
 export const addClubMember = (id: number, member: ClubMemberCreationForm): AxiosPromise<ClubMember> => apiClient.post(`club/${id}/member`, member)
 
