@@ -154,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                     {showComments ?
                         //TODO faire passer le panneau de droite au dessus lors du passage en lg ou xl (qd ça commence à wrap des noms de groupe / prénom-nom)
                         <>
-                            <div className={`${lightboxView ? "bg-gray-400 md:bg-gray-200" : "bg-gray-200"} ml-5 my-4 w-0.5`} />
+                            <div className={`${lightboxView ? "bg-gray-400 md:bg-gray-200" : "bg-gray-200"} ml-2.5 -mr-1 sm:ml-5 my-4 w-0.5`} />
                             <CommentList
                                 id={data.thread}
                                 depth={1}

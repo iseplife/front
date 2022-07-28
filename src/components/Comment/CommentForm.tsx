@@ -29,12 +29,14 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus, lightboxV
         initialValues: {
             message: ""
         },
-        onSubmit: (comment, {resetForm}) => {
-            setSubmitting(true)
-            handleUpload(comment).then(() => {
-                setSubmitting(false)
-                resetForm({})
-            })
+        onSubmit: (comment, { resetForm }) => {
+            if (comment.message.split("").filter(letter => letter != " " && letter != "\t").length > 3) {
+                setSubmitting(true)
+                handleUpload(comment).then(() => {
+                    setSubmitting(false)
+                    resetForm({})
+                })
+            }
         },
     })
 
@@ -44,7 +46,7 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus, lightboxV
             <input
                 id="message"
                 placeholder={t("write_comment")}
-                className={`message border-none flex-1 bg-transparent focus:outline-none ${lightboxView ? "text-white md:text-neutral-800" : "text-neutral-800"}`}
+                className={`message border-none flex-1 bg-transparent w-full focus:outline-none ${lightboxView ? "text-white md:text-neutral-800" : "text-neutral-800"}`}
                 type="text"
                 onChange={formik.handleChange}
                 value={formik.values.message}
