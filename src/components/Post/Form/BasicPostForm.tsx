@@ -43,7 +43,7 @@ const InnerForm: React.FC<FormikProps<BasicPostFormValues> & {children: React.Re
                 <Field
                     name="description"
                     placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
-                    className="text-gray-700 placeholder-gray-500 flex-1 mb-4 bg-transparent resize-none focus:outline-none bg-black bg-opacity-5 rounded-full px-3 py-1.5"
+                    className="text-gray-700 placeholder-gray-500 flex-1 mb-4 resize-none focus:outline-none bg-black bg-opacity-5 rounded-full px-3 py-1.5"
                 />
 
 
