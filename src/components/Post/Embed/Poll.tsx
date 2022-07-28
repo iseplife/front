@@ -52,7 +52,7 @@ const Poll: React.FC<PollProps> = ({data}) => {
                     {dateText}
                 </span>
             </div>
-            <div className="flex flex-col items-center mx-5">
+            <div className="flex flex-col items-center">
                 {poll.choices.map(choice => (
                     <PollChoice
                         key={choice.id}
