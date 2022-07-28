@@ -66,7 +66,7 @@ const App: React.FC = () => {
             notificationManager.setUnwatched(userRes.data.unwatchedNotifications)
             socket.connect({ state, dispatch })
             if (window.location.pathname.toLowerCase() == "/login") {
-                const from = (window.history.state as LocationState)?.from || {
+                const from = (window.history.state?.state as LocationState)?.from || {
                     pathname: state.payload.lastConnection ? "/" : "/discovery"
                 }
                 history.pushState(null, "", from.pathname)
