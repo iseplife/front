@@ -1,6 +1,6 @@
 import React, {useMemo} from "react"
 import {ClubMember, ClubRoleIcon} from "../../../data/club/types"
-import {useHistory} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
@@ -15,15 +15,11 @@ type MemberCardProps = {
     onClick?: (id: number) => void
 }
 const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showRole = false}) => {
-    const history = useHistory()
-    const handleClick = useMemo(() => (
-        onClick ?
-            () => onClick(id) :
-            () => history.replace(`${history.location.pathname}/student/${m.student.id}`)
-    ), [id, onClick])
+    const handleClick = useMemo(() => () => onClick?.(id), [id, onClick])
 
     return (
-        <div
+        <Link
+            to={`/student/${m.student.id}`}
             onClick={handleClick}
             title={m.student.firstName + " " + m.student.lastName}
             className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 cursor-pointer hover:shadow-outline hover:opacity-50 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden"
@@ -43,7 +39,7 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
                     {m.position} {showRole && <FontAwesomeIcon className="ml-2" icon={ClubRoleIcon[m.role]}/>}
                 </span>
             </div>
-        </div>
+        </Link>
     )
 })
 MemberCard.displayName = "MemberCard"
