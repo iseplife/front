@@ -29,12 +29,14 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus, lightboxV
         initialValues: {
             message: ""
         },
-        onSubmit: (comment, {resetForm}) => {
-            setSubmitting(true)
-            handleUpload(comment).then(() => {
-                setSubmitting(false)
-                resetForm({})
-            })
+        onSubmit: (comment, { resetForm }) => {
+            if (comment.message.split("").filter(letter => letter != " " && letter != "\t").length > 3) {
+                setSubmitting(true)
+                handleUpload(comment).then(() => {
+                    setSubmitting(false)
+                    resetForm({})
+                })
+            }
         },
     })
 
