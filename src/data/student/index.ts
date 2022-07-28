@@ -19,7 +19,7 @@ export const didFirstFollow = (): AxiosPromise<LoggedStudentPreview> => apiClien
 
 export const updateSettings = (settings: Partial<StudentSettings>): AxiosPromise<Student> => apiClient.patch("/student/me/setting", settings)
 
-export const updateCustomPicture = (image: File | null): AxiosPromise<StudentPicture> => {
+export const updateCustomPicture = (image: Blob): AxiosPromise<StudentPicture> => {
     const fd = new FormData()
     fd.append("file", image as Blob)
 
