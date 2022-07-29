@@ -18,7 +18,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
     const [formattedDate, setFormattedDate] = useState<string>("")
     useEffect(() => formatDateWithTimer(publicationDate, t, setFormattedDate), [publicationDate])
 
-    const checkFuturePost = (publicationDate: Date) => isFuture(addSeconds(publicationDate, -5)) // -5s for potential clocks diff
+    const checkFuturePost = (publicationDate: Date) => isFuture(addSeconds(publicationDate, publicationDate.getMilliseconds() ? -75 : -10)) // for potential clocks diff
 
     const [futurePost, setFuturePost] = useState(checkFuturePost(publicationDate))
 
