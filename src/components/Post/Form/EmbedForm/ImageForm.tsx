@@ -63,7 +63,7 @@ const ImageForm: React.FC = () => {
                     onDelete={handleDelete}
                     nsfw={f.nsfw}
                     toggleNsfw={toggleNSFW}
-                    className="rounded mx-2"
+                    className="mx-2"
                 />
             )}
 

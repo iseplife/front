@@ -101,6 +101,10 @@ abbr[title] {
     border-top-right-radius: 0.5rem !important;
 }
 
+.ant-upload-select {
+    @apply !rounded-xl;
+}
+
 /********/
 
 * {

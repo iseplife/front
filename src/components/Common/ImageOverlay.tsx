@@ -7,9 +7,9 @@ type ImageOverlayProps = {
 }
 const ImageOverlay: React.FC<ImageOverlayProps> = ({src, className, children}) => {
     return (
-        <div className={`image-display relative bg-gray-400 ${className}`}>
+        <div className={`relative bg-neutral-700 ${className}`}>
             <div
-                className="w-full h-full rounded"
+                className="w-full h-full rounded opacity-50"
                 style={{
                     backgroundImage: `url("${src}")`,
                     backgroundRepeat: "no-repeat",
@@ -17,7 +17,7 @@ const ImageOverlay: React.FC<ImageOverlayProps> = ({src, className, children}) =
                     backgroundPosition: "center",
                 }}
             />
-            <span className="flex justify-center image-options absolute text-gray-400 z-10 whitespace-no-wrap">
+            <span className="flex justify-center image-options opacity-100 absolute text-gray-400 z-10 whitespace-no-wrap">
                 {children}
             </span>
 
