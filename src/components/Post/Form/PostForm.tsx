@@ -78,7 +78,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
 
     return (
         <Form className="flex flex-col items-center text-gray-500">
-            <div className="flex flex-col bg-white rounded-lg w-5/6 py-3 overflow-y-auto" style={{minHeight: "5rem"}}>
+            <div className="flex flex-col bg-white rounded-lg w-full sm:w-5/6 pt-3" style={{minHeight: "5rem"}}>
                 {(!values.edit || isFuture(originalPublicationDate)) && <div className="flex justify-between items-center mb-2">
                     <DatePicker
                         format="DD/MM/YYYY HH:mm"
@@ -131,20 +131,23 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             </div>
                         )
                     }
+                </div>
+                <Divider type="horizontal" className="mt-2 mb-4"/>
+                <div className="flex">
                     {!values.edit && <div className="flex-1 flex justify-end items-center">
                         <AuthorPicker
                             callback={author => setValues({...values, selectedClub: author})} 
-                            className="mr-3 text-gray-700 rounded hover:bg-gray-100"
+                            className="text-gray-700 rounded hover:bg-gray-100"
                         />
                         <Divider type="vertical"/>
                     </div>}
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-end">
                         <button
                             type="submit"
                             disabled={isSubmitting || !values.description.length}
-                            className={values.description.length ? "cursor-pointer hover:text-gray-700" : "cursor-default text-gray-300"}
+                            className={(values.description.length ? "cursor-pointer hover:bg-gray-100" : "cursor-default text-gray-300") + " text-xl rounded-full h-10 w-10 justify-center items-center flex pr-0.5 -m-1.5 -ml-0.5 transition-colors"}
                         >
-                            <FontAwesomeIcon icon={isSubmitting ? faCircleNotch: faPaperPlane} spin={isSubmitting}/>
+                            <FontAwesomeIcon icon={isSubmitting ? faCircleNotch : faPaperPlane} spin={isSubmitting} />
                         </button>
                     </div>
                 </div>
