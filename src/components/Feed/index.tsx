@@ -304,10 +304,9 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                         </div>
                         {completeFormType && (
                             <Modal
-                                className="md:w-1/2 w-4/5"
+                                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
                                 visible={true}
                                 footer={null}
-                                title={<span className="text-gray-800 font-bold text-2xl">{t("post:create")}</span>}
                                 onCancel={() => setCompleteFormType(undefined)}
                             >
                                 <PostCreateForm

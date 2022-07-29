@@ -69,13 +69,13 @@ const PictureCard = <MediaType extends (File | string)>({file, onDelete, nsfw, t
         }>
             <div className={`h-20 w-20 m-2 ${className}`}>
                 {image && (
-                    <ImageOverlay src={image} className="h-full w-full rounded">
+                    <ImageOverlay src={image} className="h-full w-full rounded-xl overflow-hidden">
                         <FontAwesomeIcon
-                            icon={faLowVision} size="lg" className="mx-1 text-white hover:text-yellow-400"
+                            icon={faLowVision} size="lg" className="mx-1 text-white hover:text-blue-200 cursor-pointer"
                             onClick={handleNSFW}
                         />
                         <FontAwesomeIcon
-                            icon={faTrashAlt} size="lg" className="mx-1 text-white hover:text-red-400"
+                            icon={faTrashAlt} size="lg" className="mx-1 text-white hover:text-red-400 cursor-pointer"
                             onClick={handleDelete}
                         />
                     </ImageOverlay>

@@ -167,7 +167,7 @@ export const DEFAULT_EMBED: Record<EmbedEnumType, EmbedCreation> = {
         type: EmbedEnumType.POLL,
         data: {
             title: "",
-            choices: [{content: ""}],
+            choices: [{content: ""}, {content: ""}],
             multiple: false,
             anonymous: true,
             endsAt: new Date(Date.now() + (6.048e+8)) // One week from now

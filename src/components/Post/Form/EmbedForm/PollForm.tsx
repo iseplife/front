@@ -21,7 +21,7 @@ const PollForm: React.FC = () => {
     }, [])
 
     return (
-        <div className="w-full">
+        <div className="w-full rounded-xl border border-neutral-200 px-3 py-0.5">
             <div className="flex items-center">
                 <FontAwesomeIcon
                     className="text-red-800 cursor-pointer hover:text-red-400"

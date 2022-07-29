@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from "react"
+import React, {useCallback, useContext, useEffect, useRef} from "react"
 import {ACCEPTED_FILETYPE, DEFAULT_EMBED, EmbedCreation, EmbedEnumType, EmbedForm as EmbedFormType,} from "../../../data/post/types"
 import {Field, Form, FormikProps,} from "formik"
 import {DatePicker, Divider, Upload} from "antd"
@@ -17,6 +17,7 @@ import {
 import { Author } from "../../../data/request.type"
 import AuthorPicker from "../../Common/AuthorPicker"
 import { useMemo } from "react"
+import { AppContext } from "../../../context/app/context"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -31,6 +32,7 @@ export type PostFormValues<T extends EmbedFormType> = {
 const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmitting, setFieldValue, setValues, values, setFieldError}) => {
     const {t} = useTranslation("post")
     const inputRef = useRef<HTMLInputElement>(null)
+    const {state: {user}} = useContext(AppContext)
 
     useEffect(() => {
         // We trigger upload window only if it a creation's form and the embed chose isn't a poll
@@ -77,28 +79,14 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
     const originalPublicationDate = useMemo(() => values.publicationDate, [])
 
     return (
-        <Form className="flex flex-col items-center text-gray-500">
-            <div className="flex flex-col bg-white rounded-lg w-full sm:w-5/6 pt-3" style={{minHeight: "5rem"}}>
-                {(!values.edit || isFuture(originalPublicationDate)) && <div className="flex justify-between items-center mb-2">
-                    <DatePicker
-                        format="DD/MM/YYYY HH:mm"
-                        showTime
-                        defaultValue={moment()}
-                        value={moment(values.publicationDate)}
-                        disabledDate={c => isPast(c.toDate())}
-                        onChange={date => setFieldValue("publicationDate", date!.toDate())}
-                        bordered={false}
-                        placeholder={t("publication_date")}
-                        className="hover:border-indigo-400 text-gray-500 border-gray-200"
-                        style={{borderBottom: "1px solid #d9d9d9"}}
-                    />
-                </div>}
-
+        <Form className={`flex flex-col items-center text-gray-500 ${!values.edit && "pt-6"}`}>
+            <div className="flex flex-col bg-white rounded-lg w-full sm:w-11/12 pt-3" style={{minHeight: "5rem"}}>
                 <Field
                     as="textarea"
+                    autoFocus={true}
                     name="description"
-                    placeholder="What's on your mind ?"
-                    className="text-gray-800 flex-1 mb-4 bg-transparent resize-none focus:outline-none border-b"
+                    placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
+                    className="px-1 text-base text-gray-800 flex-1 mb-4 bg-transparent resize-none focus:outline-none"
                 />
 
                 <div className="flex justify-between">
@@ -116,17 +104,35 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             </>
                         ) : (
                             <div className="flex items-center">
-                                <Upload showUploadList={false} multiple beforeUpload={handleFile(EmbedEnumType.IMAGE)} accept=".png,.jpg,.jpeg,.gif">
-                                    <FontAwesomeIcon icon={faImages} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <Upload
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                    showUploadList={false}
+                                    multiple
+                                    beforeUpload={handleFile(EmbedEnumType.IMAGE)}
+                                    accept=".png,.jpg,.jpeg,.gif"
+                                >
+                                    <FontAwesomeIcon icon={faImages} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
-                                <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.VIDEO)} accept=".mp4,.webm">
-                                    <FontAwesomeIcon icon={faVideo} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <Upload
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                    showUploadList={false}
+                                    beforeUpload={handleFile(EmbedEnumType.VIDEO)}
+                                    accept=".mp4,.webm"
+                                >
+                                    <FontAwesomeIcon icon={faVideo} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
-                                <Upload showUploadList={false} beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}>
-                                    <FontAwesomeIcon icon={faPaperclip} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <Upload
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                    showUploadList={false}
+                                    beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}
+                                >
+                                    <FontAwesomeIcon icon={faPaperclip} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
-                                <div onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}>
-                                    <FontAwesomeIcon icon={faChartBar} className="text-gray-500 cursor-pointer mx-1 hover:text-gray-700"/>
+                                <div
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
+                                    onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}
+                                >
+                                    <FontAwesomeIcon icon={faChartBar} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </div>
                             </div>
                         )
@@ -134,14 +140,28 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                 </div>
                 <Divider type="horizontal" className="mt-2 mb-4"/>
                 <div className="flex">
-                    {!values.edit && <div className="flex-1 flex justify-end items-center">
-                        <AuthorPicker
-                            callback={author => setValues({...values, selectedClub: author})} 
-                            className="text-gray-700 rounded hover:bg-gray-100"
+                    {(!values.edit || isFuture(originalPublicationDate)) && <div className="flex justify-between items-center mb-2">
+                        <DatePicker
+                            format="DD/MM/YYYY HH:mm"
+                            showTime
+                            defaultValue={moment()}
+                            value={moment(values.publicationDate)}
+                            disabledDate={c => isPast(c.toDate())}
+                            onChange={date => setFieldValue("publicationDate", date!.toDate())}
+                            bordered={false}
+                            placeholder={t("publication_date")}
+                            className="hover:border-indigo-400 text-gray-500 border-gray-200"
+                            style={{borderBottom: "1px solid #d9d9d9"}}
                         />
-                        <Divider type="vertical"/>
                     </div>}
-                    <div className="flex items-center justify-end">
+                    <div className="flex-1 flex justify-end items-center">
+                        {!values.edit && <>
+                            <AuthorPicker
+                                callback={author => setValues({...values, selectedClub: author})} 
+                                className="text-gray-700 rounded hover:bg-gray-100"
+                            />
+                            <Divider type="vertical" />
+                        </>}
                         <button
                             type="submit"
                             disabled={isSubmitting || !values.description.length}

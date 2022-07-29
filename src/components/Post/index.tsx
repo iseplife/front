@@ -111,10 +111,10 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         <div>
             {isEdited && (
                 <Modal
-                    className="md:w-1/2 w-4/5"
+                    className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
+                    title={<span className="text-gray-800 font-bold text-lg">{t("post:edit")}</span>}
                     visible={true}
                     footer={null}
-                    title={<span className="text-gray-800 font-bold text-2xl">{t("post:edit")}</span>}
                     onCancel={() => toggleEdition(false)}
                 >
                     <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
