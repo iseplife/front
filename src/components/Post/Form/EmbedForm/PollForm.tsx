@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next"
 import {DatePicker, Switch} from "antd"
 import moment from "moment"
 import {isPast} from "date-fns"
-import {faTimes} from "@fortawesome/free-solid-svg-icons"
+import {faAdd, faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 
@@ -22,25 +22,15 @@ const PollForm: React.FC = () => {
 
     return (
         <div className="w-full">
-            <div className="flex justify-between">
-                <h3 className="text-gray-500">
-                    {t("poll")}
-                </h3>
-
+            <div className="flex items-center">
                 <FontAwesomeIcon
-                    className="cursor-pointer hover:text-red-400"
+                    className="text-red-800 cursor-pointer hover:text-red-400"
                     icon={faTimes}
                     onClick={() => setFieldValue("embed", undefined)}
                 />
-            </div>
-            <div className="flex justify-between">
-                <Field
-                    required
-                    placeholder={t("subject")}
-                    className="border-b border-solid border-gray-200 w-full focus:outline-none"
-                    style={{maxWidth: "16rem"}}
-                    name="embed.data.title"
-                />
+                <div className="text-gray-500 font-bold ml-2">
+                    {t("poll")}
+                </div>
                 <DatePicker
                     format="DD/MM/YYYY HH:mm"
                     showTime
@@ -51,15 +41,15 @@ const PollForm: React.FC = () => {
                     placeholder={t("ends_at")}
                     className="hover:border-indigo-400 text-gray-500 border-gray-200"
                     style={{borderBottom: "1px solid #d9d9d9"}}
-                />
+                />  
             </div>
 
 
             <FieldArray
                 name="embed.data.choices"
                 render={arrayHelpers => (
-                    <div className="flex flex-col p-3 overflow-y-auto" style={{maxHeight: "10rem"}}>
-                        {poll.choices.map((option, index) => (
+                    <div className="flex flex-col p-1 overflow-y-auto" style={{maxHeight: "10rem"}}>
+                        {poll.choices.map((_, index) => <div className="flex items-center">
                             <div
                                 key={index}
                                 className="flex items-center rounded-lg border border-solid border-gray-200 focus-within:border-indigo-400 focus-within:border-2 w-full py-1 px-2 my-1"
@@ -68,9 +58,9 @@ const PollForm: React.FC = () => {
                                 <Field
                                     className="text-gray-700 flex-grow focus:outline-none"
                                     validate={optionValidation}
-                                    name={`embed.data.choices.${index}.content`} placeholder={t("option") + " " + index}
+                                    name={`embed.data.choices.${index}.content`} placeholder={t("option") + " " + (index + 1)}
                                 />
-                                {poll.choices.length > 1 && (
+                                {poll.choices.length > 2 && (
                                     <FontAwesomeIcon
                                         icon={faTimes}
                                         onClick={() => arrayHelpers.remove(index)}
@@ -78,11 +68,12 @@ const PollForm: React.FC = () => {
                                     />
                                 )}
                             </div>
-
-                        ))}
-                        <div className="cursor-pointer mt-2" onClick={() => arrayHelpers.push("")}>
-                            {t("add_choice")} +
-                        </div>
+                            <FontAwesomeIcon
+                                icon={faAdd}
+                                className={`ml-2 p-2 hover:bg-neutral-200/70 transition-colors rounded-full cursor-pointer ${index != poll.choices.length - 1 && "invisible"}`}
+                                onClick={() => arrayHelpers.push("")}
+                            />
+                        </div>)}
                     </div>
                 )}
             />
