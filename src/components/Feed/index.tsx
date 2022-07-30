@@ -232,12 +232,35 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         !loadingInformations && !fetching && !error && !posts?.length && !postsPinned?.length
     ), [loadingInformations, fetching, error, posts, postsPinned])
 
+    const [formVisible, setFormVisible] = useState(false)
+
+    useEffect(() => {
+        if (completeFormType)
+            setFormVisible(true)
+    }, [completeFormType])
+
     return (
         <div
             className={`${className}`}
             style={{...style, maxWidth: `calc(100vw - ${feedMargin}px)`}}
             ref={feedElement}
         >
+            <Modal
+                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
+                visible={!!completeFormType}
+                footer={null}
+                afterClose={() => setFormVisible(false)}
+                onCancel={() => setCompleteFormType(undefined)}
+            >
+                {formVisible && <PostCreateForm
+                    text={text}
+                    type={completeFormType!}
+                    feed={id}
+                    user={user}
+                    onSubmit={onPostCreation}
+                    onClose={() => setCompleteFormType(undefined)}
+                />}
+            </Modal>
             {
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
@@ -302,23 +325,6 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
                             />
                         </div>
-                        {completeFormType && (
-                            <Modal
-                                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
-                                visible={true}
-                                footer={null}
-                                onCancel={() => setCompleteFormType(undefined)}
-                            >
-                                <PostCreateForm
-                                    text={text}
-                                    type={completeFormType}
-                                    feed={id}
-                                    user={user}
-                                    onSubmit={onPostCreation}
-                                    onClose={() => setCompleteFormType(undefined)}
-                                />
-                            </Modal>
-                        )}
                     </div>
                 </BasicPostForm>
             )}

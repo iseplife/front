@@ -10,5 +10,6 @@
 	"vote_updated": "Vote updated",
 	"poll_end": "Poll ends in",
 	"poll_ended": "Poll ended for",
-	"ends_at": "Poll's end date"
+	"ends_at": "Poll's end date",
+	"votes": "votes"
 }
