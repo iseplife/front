@@ -13,6 +13,8 @@ import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPos
 import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
 import { BroadcastChannel } from "broadcast-channel"
 import WSPSFeedPostCommentsUpdate from "../realtime/protocol/packets/server/WSPSFeedPostCommentsUpdate"
+import WSPSFeedPostPollChoiceUpdate from "../realtime/protocol/packets/server/WSPSFeedPostPollChoiceUpdate"
+import { Poll } from "../data/poll/types"
 
 type FeedsChannelMessage = {
     type: "ask"
@@ -442,6 +444,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             .forEach(post =>
                 this.getTable().update([post.loadedFeed, post.publicationDateId], {nbComments: packet.comments})
             )
+    }
+    @PacketHandler(WSPSFeedPostPollChoiceUpdate)
+    private async handleFeedPostPollChoiceUpdate(packet: WSPSFeedPostPollChoiceUpdate) {
+        (await this.getTable().where("id").equals(packet.postId).toArray())
+            .forEach(post => {
+                const poll = (post.embed as Poll)
+                packet.choices.forEach(choice => poll.choices.find(other => other.id == choice.id)!.votesNumber = choice.votes)
+                this.getTable().update([post.loadedFeed, post.publicationDateId], { embed: poll })
+            })
     }
 
     public async createPost(post: BasicPostCreation | PostCreation) {
