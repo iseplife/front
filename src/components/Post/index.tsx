@@ -183,7 +183,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                 />
 
                 {data.waitingForUpdate &&
-                    <div className="bg-black/40 backdrop-blur-md h-full w-full grid place-items-center absolute rounded-lg top-0 left-0">
+                    <div className="bg-black/40 backdrop-blur-md h-full w-full grid place-items-center absolute rounded-lg top-0 left-0 z-50">
                         <button onClick={applyUpdates} className={"rounded-full px-4 py-2 bg-neutral-500 font-semibold text-white text-base mt-1 " + (data.waitFor?.delete && "text-red-400")}>
                             {t(data.waitFor?.delete ? "post:updates.deleted" : "post:updates.edited")}
                         </button>

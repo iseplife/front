@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {useTranslation} from "react-i18next"
 import {Poll as PollType} from "../../../data/poll/types"
 import PollChoice from "./PollChoice"
@@ -12,7 +12,11 @@ type PollProps = {
 }
 const Poll: React.FC<PollProps> = ({data}) => {
     const [poll, setPoll] = useState<PollType>(data)
-    const {t} = useTranslation("poll")
+    const { t } = useTranslation("poll")
+    
+    useEffect(() => {
+        setPoll(data)
+    }, [data])
 
     const total = useMemo(() => (
         poll.choices.reduce((acc, choice) => acc + choice.votesNumber, 0)
