@@ -12,6 +12,7 @@ import WSPSFeedPostLikesUpdate from "../realtime/protocol/packets/server/WSPSFee
 import WSPSFeedPostRemoved from "../realtime/protocol/packets/server/WSPSFeedPostRemoved"
 import WSPSFeedPostCreated from "../realtime/protocol/packets/server/WSPSFeedPostCreated"
 import { BroadcastChannel } from "broadcast-channel"
+import WSPSFeedPostCommentsUpdate from "../realtime/protocol/packets/server/WSPSFeedPostCommentsUpdate"
 
 type FeedsChannelMessage = {
     type: "ask"
@@ -433,6 +434,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         (await this.getTable().where("thread").equals(packet.threadID).toArray())
             .forEach(post =>
                 this.getTable().update([post.loadedFeed, post.publicationDateId], {nbLikes: packet.likes})
+            )
+    }
+    @PacketHandler(WSPSFeedPostCommentsUpdate)
+    private async handleFeedPostCommentsUpdate(packet: WSPSFeedPostCommentsUpdate) {
+        (await this.getTable().where("thread").equals(packet.threadID).toArray())
+            .forEach(post =>
+                this.getTable().update([post.loadedFeed, post.publicationDateId], {nbComments: packet.comments})
             )
     }
 

@@ -10,6 +10,7 @@ import WSPSGroupLeft from "./packets/server/WSPSGroupLeft"
 import WSPSNotificationReceived from "./packets/server/WSPSNotificationReceived"
 import WSPCKeepAlive from "./packets/client/WSPCKeepAlive"
 import WSPSBadToken from "./packets/server/WSPSBadToken"
+import WSPSFeedPostCommentsUpdate from "./packets/server/WSPSFeedPostCommentsUpdate"
 
 class PacketProtocol implements Protocol {
 
@@ -40,6 +41,7 @@ class PacketProtocol implements Protocol {
         packetsServer.push(WSPSFeedPostEdited)
         packetsServer.push(WSPSFeedPostLikesUpdate)
         packetsServer.push(WSPSBadToken)
+        packetsServer.push(WSPSFeedPostCommentsUpdate)
         const packetsClient: any[] = []
         packetsClient.push(WSPCKeepAlive)
 
