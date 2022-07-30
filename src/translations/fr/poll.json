@@ -10,5 +10,6 @@
 	"vote_updated": "Vote mis à jour",
 	"poll_end": "Sondage se termine dans",
 	"poll_ended": "Sondage terminé depuis",
-	"ends_at": "Date de fin du sondage"
+	"ends_at": "Date de fin du sondage",
+	"votes": "votes"
 }
