@@ -75,20 +75,30 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     refreshToken(): AxiosPromise<TokenSet> {
         if (!this.refreshingPromise)
-            (this.refreshingPromise = refresh()).then(res => {
-                this.context.dispatch({
-                    type: AppActionType.SET_TOKEN,
-                    token: res.data.token
-                })
-
-                this.refreshingPromise = undefined
-            }).catch(() => {
-                this.refreshingPromise = undefined
-                this.props.history.push("/login")
-                this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
-
-                message.error(this.props.t("user_disconnected"))
-            })
+            this.refreshingPromise = (async () => {
+                while (true) {
+                    try {
+                        const res = await refresh()
+                        this.context.dispatch({
+                            type: AppActionType.SET_TOKEN,
+                            token: res.data.token
+                        })
+        
+                        this.refreshingPromise = undefined
+                        return res
+                    } catch (e) {
+                        const err = e as AxiosError
+                        if (err.response?.status == 401) {
+                            this.refreshingPromise = undefined
+                            this.props.history.push("/login")
+                            this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+    
+                            message.error(this.props.t("user_disconnected"))
+                        } else
+                            console.log("Error on refresh", err)
+                    }
+                }
+            })()
         return this.refreshingPromise
     }
 
