@@ -206,8 +206,10 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     useEffect(() => {
         if(!loading)
-            return feedsManager.fullReloadFromOtherTabs(id, () => 
-                setNeedFullReload(false)
+            return feedsManager.fullReloadFromOtherTabs(id, () =>
+                setTimeout(() =>
+                    setNeedFullReload(false)
+                , 100)
             )
     }, [id, loading])
 

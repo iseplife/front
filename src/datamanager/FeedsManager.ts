@@ -32,6 +32,17 @@ type FeedsChannelMessage = {
     type: "update"
     feedId: number
     lastLoadId: number
+} | {
+    type: "lastLoadAll"
+    id: number
+    feeds: {
+        feedId: number
+        lastLoadId: number
+    }[]
+} | {
+    type: "askLastLoadAll"
+    id: number
+    targettedPageId: number
 }
 
 const pageId = Math.random()
@@ -62,7 +73,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         if(wsServerClient){
             this.channel.addEventListener("message", this.globalChannelHandler = message => {
                 if (message.type == "ask" && message.pageId != pageId && getWebSocket()?.connected) {
-                    if(!this.reloading || message.reloadingId <= this.reloadingPriorityId){
+                    if (!this.reloading || message.reloadingId <= this.reloadingPriorityId) {
                         this.channel.postMessage({
                             type: "response",
                             id: message.id,
@@ -71,8 +82,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                             reloading: this.reloading,
                         })
                     }
-                }else if(message.type == "update" && message.lastLoadId)
+                } else if (message.type == "update" && message.lastLoadId)
                     this.lastLoadIdByFeed[message.feedId] = message.lastLoadId
+                else if (message.type == "askLastLoadAll" && message.targettedPageId == pageId) {
+                    this.channel.postMessage({
+                        type: "lastLoadAll",
+                        id: message.id,
+                        feeds: Object.entries(this.lastLoadIdByFeed).map(entry => ({ feedId: +entry[0], lastLoadId: entry[1] }))
+                    })
+                }
             })
         }else
             this.channel.close()
@@ -82,6 +100,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     protected async initData(reconnect?: boolean) {
         this.reloading = !!reconnect
         let now = Date.now()
+        let lastLoadLoaded = false
         await (this.initLoadSyncWait = new Promise<void>(resolve => {
             let responded = false
             const id = Math.random()
@@ -93,10 +112,32 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                     responded = true
                     this.channel.removeEventListener("message", handler)
 
-                    if(!("doNotRenew" in message) || message.doNotRenew)
+                    if (!("doNotRenew" in message) || message.doNotRenew) {
                         now = await this.getGeneralLastLoad() ?? 0
-                    
-                    resolve()
+                        
+                        const handler2 = async (message: FeedsChannelMessage) => {
+                            if (message.type == "lastLoadAll" && message.id == pageId) {
+                                this.channel.removeEventListener("message", handler2)
+                                lastLoadLoaded = true
+                                for (const entry of message.feeds)
+                                    this.lastLoadIdByFeed[entry.feedId] = entry.lastLoadId
+                                resolve()
+                            }
+                        }
+                        this.channel.addEventListener("message", handler2)
+                        this.channel.postMessage({
+                            type: "askLastLoadAll",
+                            id: pageId,
+                            targettedPageId: message.pageId,
+                        })
+
+                        setTimeout(() => {
+                            if (!lastLoadLoaded) {
+                                this.channel.removeEventListener("message", handler2)
+                                resolve()
+                            }
+                        }, reconnect ? 200 : 170)
+                    }
                 }
             }
             this.channel.addEventListener("message", handler)
@@ -120,9 +161,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.initLoadSyncWait = undefined
         this.reloading = false
 
-        for (const feedId in this.lastLoadIdByFeed)
-            if (!this.loadedFeeds.has(+feedId))
-                this.lastLoadIdByFeed[feedId] = now
+        if(!lastLoadLoaded)
+            for (const feedId in this.lastLoadIdByFeed)
+                if (!this.loadedFeeds.has(+feedId))
+                    this.lastLoadIdByFeed[feedId] = now
         
         this.setContext("lastLoad", {lastLoad: now})
 
@@ -136,7 +178,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public fullReloadFromOtherTabs(feedId: FeedId, callback: () => void) {
         const fnc = (message: FeedsChannelMessage) => {
-            if(message.type == "update" && message.feedId == (feedId ?? mainFeedId))
+            if (message.type == "update" && message.feedId == (feedId ?? mainFeedId))
                 callback()
         }
         this.channel.addEventListener("message", fnc)
@@ -234,12 +276,11 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
         const lastLoad = this.lastLoadIdByFeed[feed ?? mainFeedId] = Math.max(this.lastLoadIdByFeed[feed ?? mainFeedId] ?? 0, (await this.getGeneralLastLoad()))
         
-        if(fullReload)
-            this.channel.postMessage({
-                type: "update",
-                feedId: feed ?? mainFeedId,
-                lastLoadId: lastLoad
-            })
+        this.channel.postMessage({
+            type: "update",
+            feedId: feed ?? mainFeedId,
+            lastLoadId: lastLoad
+        })
         return lastLoad
     }
 
