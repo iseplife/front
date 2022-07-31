@@ -2,7 +2,7 @@ import DataManager from "./DataManager"
 import {getWebSocket, WSServerClient} from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import {getFeedPosts, getFeedPostsBefore} from "../data/feed"
-import {BasicPostCreation, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
+import {BasicPostCreation, Embed, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
 import {Page} from "../data/request.type"
 import {addMonths, isBefore} from "date-fns"
 import {createPost, deletePost, updatePost} from "../data/post"
@@ -453,6 +453,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 packet.choices.forEach(choice => poll.choices.find(other => other.id == choice.id)!.votesNumber = choice.votes)
                 this.getTable().update([post.loadedFeed, post.publicationDateId], { embed: poll })
             })
+    }
+
+    public async updateEmbed(postId: number, embed: Embed) {
+        (await this.getTable().where("id").equals(postId).toArray())
+            .forEach(post =>
+                this.getTable().update([post.loadedFeed, post.publicationDateId], { embed })
+            )
     }
 
     public async createPost(post: BasicPostCreation | PostCreation) {
