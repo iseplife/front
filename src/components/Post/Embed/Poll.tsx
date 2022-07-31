@@ -6,11 +6,14 @@ import {isPast} from "date-fns"
 import {Divider, message} from "antd"
 import {addVote, getPollVotes, removeVote} from "../../../data/poll"
 import {_formatDistance} from "../../../util"
+import { feedsManager } from "../../../datamanager/FeedsManager"
+import { EmbedPoll } from "../../../data/post/types"
 
 type PollProps = {
+    postId: number
     data: PollType
 }
-const Poll: React.FC<PollProps> = ({data}) => {
+const Poll: React.FC<PollProps> = ({postId, data}) => {
     const [poll, setPoll] = useState<PollType>(data)
     const { t } = useTranslation("poll")
     
@@ -33,13 +36,14 @@ const Poll: React.FC<PollProps> = ({data}) => {
             return
         }
 
-        (voted ? removeVote : addVote)(poll.id, choice).then(() => {
-            message.success(t("vote_updated"))
-            getPollVotes(poll.id).then(res => {
-                setPoll(p => ({
+        (voted ? removeVote : addVote)(poll.id, choice).then(res => {
+            setPoll(p => {
+                const newPoll = {
                     ...p,
                     choices: res.data
-                }))
+                }
+                feedsManager.updateEmbed(postId, newPoll as EmbedPoll)
+                return newPoll
             })
         })
 

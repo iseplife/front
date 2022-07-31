@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Comment as CommentType, CommentForm as CommentFormType} from "../../data/thread/types"
 import Comment from "./index"
 import {commentThread, deleteThreadComment, editThreadComment, getThreadComments} from "../../data/thread"
@@ -22,14 +22,35 @@ interface CommentListProps {
     lightboxView?: boolean
 }
 
-const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className, lightboxView}) => {
+const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments: _showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className, lightboxView}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
     const [t] = useTranslation(["post"])
 
+    console.log(comments.length, numberComments)
+
     useEffect(() => {
         setLoading(loadComment && showComments)
     }, [showComments])
+
+    const loadComments = useCallback(() => {
+        getThreadComments(id).then(r => {
+            if (r.data) {
+                if (trendingComment)
+                    r.data = r.data.filter(comm => comm.id != trendingComment.id)
+
+                setComments(r.data)
+                setLoading(false)
+            }
+        })
+    }, [trendingComment])
+
+    const showMoreComments = useCallback(() => {
+        if (loadComment && showComments) {
+            loadComments()
+        } else
+            _showMoreComments?.()
+    }, [_showMoreComments, loadComment, showComments, loadComments])
 
     const sendComment = useCallback(async (comment: CommentFormType) => {
         const res = await commentThread(id, comment)
@@ -68,16 +89,10 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
             if (numberComments == 1 && trendingComment)
                 setLoading(false)
             else
-                getThreadComments(id).then(r => {
-                    if (r.data) {
-                        if (trendingComment)
-                            r.data = r.data.filter(comm => comm.id != trendingComment.id)
+                loadComments()
+    }, [id, loadComment, showComments, loadComments])
 
-                        setComments(r.data)
-                        setLoading(false)
-                    }
-                })
-    }, [id, loadComment, showComments])
+    const loadedComments = useMemo(() => comments.length + (trendingComment ? 1 : 0), [comments.length, !!trendingComment])
 
     return loading && !trendingComment ?
         <div className="flex-1">
@@ -96,15 +111,6 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                         handleEdit={editComment}
                         lightboxView={lightboxView}
                     />
-
-                    {!showComments && numberComments > 1 && (
-                        <div
-                            className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline"
-                            onClick={showMoreComments}
-                        >
-                            {t("post:see_more_comments")}
-                        </div>
-                    )}
                 </>
             )}
             {loading && <div className="flex-1"> <Loading size="sm"/> </div>}
@@ -118,6 +124,16 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                     handleEdit={editComment}
                 />
             )}
+
+            {((!showComments && numberComments > 1) || (!loading && numberComments > loadedComments)) && (
+                <div
+                    className="font-semibold text-black text-opacity-70 cursor-pointer hover:underline"
+                    onClick={showMoreComments}
+                >
+                    {t("post:see_more_comments")}
+                </div>
+            )}
+
             {showInput && bottomInput && (
                 <CommentForm lightboxView={lightboxView} handleUpload={sendComment} focus={autofocusInput && showInput}/>
             )}

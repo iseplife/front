@@ -14,10 +14,10 @@ export type PollForm = {
 
 
 export type PollChoice = {
-    id: number,
-    content: string,
-    votesNumber: number,
-    voters?: number[]
+    id: number
+    content: string
+    votesNumber: number
+    voted: boolean
 }
 
 export type Poll = {

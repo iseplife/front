@@ -9,6 +9,6 @@ export const updatePoll = (form: PollForm): AxiosPromise<Poll> => apiClient.put(
 
 export const getPollVotes = (poll: number): AxiosPromise<PollChoice[]> => apiClient.get(`/poll/${poll}/vote`)
 
-export const addVote = (poll: number, choice: number): AxiosPromise<void> => apiClient.post(`/poll/${poll}/choice/${choice}`)
+export const addVote = (poll: number, choice: number): AxiosPromise<PollChoice[]> => apiClient.post(`/poll/${poll}/choice/${choice}`)
 
-export const removeVote = (poll: number, choice: number): AxiosPromise<void> => apiClient.delete(`/poll/${poll}/choice/${choice}`)
+export const removeVote = (poll: number, choice: number): AxiosPromise<PollChoice[]> => apiClient.delete(`/poll/${poll}/choice/${choice}`)

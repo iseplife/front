@@ -12,7 +12,6 @@ type PollChoiceProps = {
 const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled}) => {
     const {state: {payload: {id}}} = useContext(AppContext)
 
-    const hasVoted = useMemo(() => (data.voters || []).includes(id), [data.voters, id])
     const percent = useMemo(() => (
         total > 0 ? Math.round((data.votesNumber / total) * 100) : 0
     ), [total, data.votesNumber])
@@ -24,7 +23,7 @@ const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled})
                 border py-1 px-2 border-solid border-gray-200 hover:border-indigo-400
                 flex mx-3 my-1 w-full"
         >
-            <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={hasVoted} onChange={() => onClick(data.id, hasVoted)}>
+            <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={data.voted} onChange={() => onClick(data.id, data.voted)}>
                 <div className="flex w-full">
                     {data.content}
                     <div className="absolute right-2">{percent}%</div>

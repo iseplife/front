@@ -7,7 +7,6 @@
 	"multiple_choice_poll": "Allow multiple answers",
 	"allow_multiple": "Multiple answer possible",
 	"poll_finished": "Poll finished, vote not possible anymore",
-	"vote_updated": "Vote updated",
 	"poll_end": "Poll ends in",
 	"poll_ended": "Poll ended for",
 	"ends_at": "Poll's end date",
