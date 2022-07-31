@@ -36,16 +36,14 @@ const Poll: React.FC<PollProps> = ({postId, data}) => {
             return
         }
 
-        (voted ? removeVote : addVote)(poll.id, choice).then(() => {
-            getPollVotes(poll.id).then(res => {
-                setPoll(p => {
-                    const newPoll = {
-                        ...p,
-                        choices: res.data
-                    }
-                    feedsManager.updateEmbed(postId, newPoll as EmbedPoll)
-                    return newPoll
-                })
+        (voted ? removeVote : addVote)(poll.id, choice).then(res => {
+            setPoll(p => {
+                const newPoll = {
+                    ...p,
+                    choices: res.data
+                }
+                feedsManager.updateEmbed(postId, newPoll as EmbedPoll)
+                return newPoll
             })
         })
 
