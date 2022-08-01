@@ -97,7 +97,10 @@ const NotificationHeaderButton: React.FC = () => {
 const Header: React.FC<HeaderProps> = ({user}) => {
     return (
         <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center">
-            <Link to="/" className="flex">
+            <Link to="/" className="hidden md:flex">
+                <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
+            </Link>
+            <Link to="/discovery" className="flex md:hidden mr-2">
                 <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
             </Link>
 
