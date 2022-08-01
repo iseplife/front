@@ -11,13 +11,13 @@ class PushService {
     lastCheckSubbed = false
 
     constructor() {
-        navigator.serviceWorker?.ready.then(registration => {
+        navigator.serviceWorker?.ready.then(async registration => {
             this.registration = registration
+            notificationManager.setSubscribed(await this.checkSubscription())
         })
     }
     async initData() {
         notificationManager.setWebPushEnabled("PushManager" in window)
-        notificationManager.setSubscribed(await this.checkSubscription())
     }
 
     public async subscribeUser() {
