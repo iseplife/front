@@ -57,7 +57,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     private static baseDateMs = 1615849200000// Wed Mar 16 2021 00:00:00 GMT+0100
 
-    public static PAGE_SIZE = 8
+    public static PAGE_SIZE = 16
 
     lastLoadIdByFeed: { [key: number]: number } = {}
 
