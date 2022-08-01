@@ -8,13 +8,15 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import GalleriesPreviewSkeleton from "../Club/Skeleton/GalleriesPreviewSkeleton"
 import { AxiosPromise } from "axios"
 import { Page } from "../../data/request.type"
+import GalleryModalForm from "./Form/GalleryModalForm"
 
 interface GalleriesTabProps {
     elementId: number
+    feedId?: number
     getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>
 }
 
-const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, getGalleriesCallback}) => {
+const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, feedId, getGalleriesCallback}) => {
     const {t} = useTranslation("gallery")
     const [loading, setLoading] = useState<boolean>()
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
@@ -33,6 +35,9 @@ const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, getGalleriesCallb
     return loading ?
         <GalleriesPreviewSkeleton/> :
         <div>
+            {feedId && <div className="-mb-5 mt-5 mx-auto flex md:hidden">
+                <GalleryModalForm feed={feedId} mobile={true} />
+            </div>}
             {galleriesPreview.map(g => (
                 <div className="flex flex-col px-4 py-2 shadow-sm rounded-lg bg-white my-5">
                     <GalleryCard key={g.id} gallery={g}/>

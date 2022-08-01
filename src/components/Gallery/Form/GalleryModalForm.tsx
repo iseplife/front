@@ -8,9 +8,10 @@ import {faImages} from "@fortawesome/free-regular-svg-icons"
 
 type GalleryModalFormProps = {
     feed: number
+    mobile?: boolean
     onSubmit?: (g: GalleryPreview) => void
 }
-const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => {
+const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit, mobile}) => {
     const {t} = useTranslation("gallery")
     const [visible, setVisible] = useState(false)
 
@@ -21,7 +22,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit}) => 
     return (
         <>
             <Button
-                className="shadow-sm rounded px-3 bg-indigo-200 text-indigo-400 font-bold"
+                className={`rounded-full px-3 bg-indigo-400 text-white font-semibold mx-auto mb-3 ${!mobile && "hidden sm:block" }`}
                 style={{width: "max-content"}}
                 onClick={() => setVisible(true)}
             >

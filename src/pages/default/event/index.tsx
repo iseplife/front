@@ -46,9 +46,9 @@ const Event: React.FC = () => {
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?
-            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries}/> :
+            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries} feedId={event.hasRight ? event?.feed : undefined} /> :
             <></>,
-    }), [feed, event?.id])
+    }), [feed, event?.id, event?.hasRight, event?.feed])
 
     const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
 
