@@ -1,7 +1,6 @@
-import React, {useContext, useMemo} from "react"
+import React, {useCallback, useMemo} from "react"
 import {Checkbox} from "antd"
 import {PollChoice as PollChoiceType} from "../../../data/poll/types"
-import {AppContext} from "../../../context/app/context"
 
 type PollChoiceProps = {
     data: PollChoiceType
@@ -10,11 +9,11 @@ type PollChoiceProps = {
     onClick: (choice: number, voted: boolean) => void
 }
 const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled}) => {
-    const {state: {payload: {id}}} = useContext(AppContext)
-
     const percent = useMemo(() => (
         total > 0 ? Math.round((data.votesNumber / total) * 100) : 0
     ), [total, data.votesNumber])
+
+    const onVote = useCallback(() => onClick(data.id, data.voted), [data.id, data.voted, onClick])
 
     return (
         <div
@@ -23,7 +22,7 @@ const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled})
                 border py-1 px-2 border-solid border-gray-200 hover:border-indigo-400
                 flex mx-3 my-1 w-full"
         >
-            <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={data.voted} onChange={() => onClick(data.id, data.voted)}>
+            <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={data.voted} onChange={onVote}>
                 <div className="flex w-full">
                     {data.content}
                     <div className="absolute right-2">{percent}%</div>
