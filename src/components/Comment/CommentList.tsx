@@ -27,8 +27,6 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
     const [t] = useTranslation(["post"])
 
-    console.log(comments.length, numberComments)
-
     useEffect(() => {
         setLoading(loadComment && showComments)
     }, [showComments])
