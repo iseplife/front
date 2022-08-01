@@ -106,7 +106,7 @@ const Login: React.FC = () => {
                 </div>
             </div>
             <span className="absolute right-5 my-2 text-gray-400">
-                {process.env.REACT_APP_VERSION}
+                {process.env.REACT_APP_VERSION} - {process.env.REACT_APP_COMMIT}
             </span>
         </div>
     )

@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {useCallback, useMemo} from "react"
 import {useTranslation} from "react-i18next"
 import {Poll as PollType} from "../../../data/poll/types"
 import PollChoice from "./PollChoice"
 import {isPast} from "date-fns"
 import {Divider, message} from "antd"
-import {addVote, getPollVotes, removeVote} from "../../../data/poll"
+import {addVote, removeVote} from "../../../data/poll"
 import {_formatDistance} from "../../../util"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { EmbedPoll } from "../../../data/post/types"
@@ -13,14 +13,9 @@ type PollProps = {
     postId: number
     data: PollType
 }
-const Poll: React.FC<PollProps> = ({postId, data}) => {
-    const [poll, setPoll] = useState<PollType>(data)
+const Poll: React.FC<PollProps> = ({postId, data: poll}) => {
     const { t } = useTranslation("poll")
     
-    useEffect(() => {
-        setPoll(data)
-    }, [data])
-
     const total = useMemo(() => (
         poll.choices.reduce((acc, choice) => acc + choice.votesNumber, 0)
     ), [poll.choices])
@@ -37,17 +32,14 @@ const Poll: React.FC<PollProps> = ({postId, data}) => {
         }
 
         (voted ? removeVote : addVote)(poll.id, choice).then(res => {
-            setPoll(p => {
-                const newPoll = {
-                    ...p,
-                    choices: res.data
-                }
-                feedsManager.updateEmbed(postId, newPoll as EmbedPoll)
-                return newPoll
-            })
+            const newPoll = {
+                ...poll,
+                choices: res.data
+            }
+            feedsManager.updateEmbed(postId, newPoll as EmbedPoll)
         })
 
-    }, [poll.endsAt, poll.id])
+    }, [poll])
 
     return (
         <div>

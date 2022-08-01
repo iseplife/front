@@ -492,7 +492,7 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             .forEach(post => {
                 const poll = (post.embed as Poll)
                 packet.choices.forEach(choice => poll.choices.find(other => other.id == choice.id)!.votesNumber = choice.votes)
-                this.getTable().update([post.loadedFeed, post.publicationDateId], { embed: poll })
+                this.getTable().update([post.loadedFeed, post.publicationDateId], { "embed.choices": poll.choices })
             })
     }
 

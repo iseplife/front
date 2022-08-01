@@ -37,6 +37,8 @@ window.React = React
 
 initializeAPIClient()
 new UpdateService().init()
+
+console.log(`Loaded version: ${process.env.REACT_APP_VERSION} - ${process.env.REACT_APP_COMMIT}`)
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
     const [isLoggedIn, setLoggedIn] = useState<boolean>()

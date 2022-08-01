@@ -131,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                 >
                     <ProfilePanel/>
                     <div className="text-center mb-1 -mt-3 mx-auto text-gray-400">
-                        {process.env.REACT_APP_VERSION}
+                        {process.env.REACT_APP_VERSION} - {process.env.REACT_APP_COMMIT}
                     </div>
                 </DropdownPanel>
             </div>
@@ -218,7 +218,9 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                         <DrawerItem icon={faSignOutAlt} link="/logout" className="text-red-600">
                             {t("logout")}
                         </DrawerItem>
-                        <span className="absolute bottom-1 right-2">{process.env.REACT_APP_VERSION}</span>
+                        <span className="absolute bottom-1 right-2">
+                            {process.env.REACT_APP_VERSION} - {process.env.REACT_APP_COMMIT}
+                        </span>
                     </div>
                 </div>
             </Drawer>
