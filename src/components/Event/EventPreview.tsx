@@ -2,8 +2,10 @@ import React from "react"
 import {EventPreview as PreviewType} from "../../data/event/types"
 import {Link} from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { _format } from "../../util"
+import { mediaPath, _format } from "../../util"
 import { EventTypeEmoji } from "../../constants/EventType"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
+import { AvatarSizes } from "../../constants/MediaSizes"
 
 type EventProps = {
     event: PreviewType
@@ -17,7 +19,7 @@ const EventPreview: React.FC<EventProps> = ({ event }) => {
                 className="flex flex-col sm:flex-row px-3 py-2 shadow-sm rounded-lg bg-white items-center"
             >
                 <div className="text-center pb-1">
-                    <div className="w-12 h-12 md:w-14 md:h-14 relative">
+                    <div className="w-12 h-12 md:w-14 md:h-14 relative z-10">
                         <div className="w-full h-full mx-auto sm:mx-0 text-2xl md:text-3xl rounded-md bg-neutral-100 shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                             <div className="bg-red-500 w-full h-4 text-xs text-neutral-100 leading-4 md:leading-5 md:text-sm md:h-5 flex-shrink-0  uppercase">
                                 {_format(event.startsAt, "MMM")}
@@ -32,6 +34,9 @@ const EventPreview: React.FC<EventProps> = ({ event }) => {
                 <span className="flex-1 text-left font-semibold text-lg -mb-1 sm:mb-0 sm:text-xl truncate sm:ml-2.5 xl:ml-3.5">
                     {event.title}
                 </span>
+                <div className="absolute top-1 left-1 sm:left-auto sm:right-1">
+                    <WebPAvatarPolyfill src={mediaPath(event.club.logoUrl, AvatarSizes.THUMBNAIL)} size="small" />
+                </div>
             </div>
         </Link>
     )
