@@ -27,8 +27,12 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed(), [])
     const pushRejected = useLiveQuery(async () => await notificationManager.isRejected(), [])
 
+
     const minNotificationId = useLiveQuery(async () => {
-        return await notificationManager.getMinFresh()
+        console.log("check min notif id")
+        const id = await notificationManager.getMinFresh()
+        console.log("FOUND "+id)
+        return id
     }, [])
 
     const notifications = useLiveQuery(async () => {
@@ -44,6 +48,12 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         const oneWeekAgo = add(new Date(), { weeks: -1 })
         return notifications?.filter(notif => !isAfter(notif.creation, oneWeekAgo)) ?? []
     }, [notifications])
+    console.log({
+        pushRejected,
+        showPushAsk,
+        notifications,
+        minNotificationId
+    })
 
     const loadedNotifications = useMemo(() => (
         oldNotifications.length + recentNotifications.length

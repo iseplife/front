@@ -20,7 +20,7 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     refreshingPromise?: AxiosPromise<TokenSet>
     intercept?: number[]
 
-    context!: React.ContextType<typeof AppContext>
+    declare context: React.ContextType<typeof AppContext>
     state: InterceptState = {}
 
     componentDidMount() {

@@ -114,6 +114,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
                     if (!("doNotRenew" in message) || message.doNotRenew) {
                         now = await this.getGeneralLastLoad() ?? 0
+
+                        console.log("Another tab took control.")
                         
                         const handler2 = async (message: FeedsChannelMessage) => {
                             if (message.type == "lastLoadAll" && message.id == pageId) {
