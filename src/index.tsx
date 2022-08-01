@@ -31,10 +31,12 @@ import LoggedEvent from "./events/LoggedEvent"
 import { notificationManager } from "./datamanager/NotificationManager"
 import LoadingPage from "./pages/LoadingPage"
 import { LocationState } from "./data/request.type"
+import UpdateService from "./services/UpdateService"
 
 window.React = React
 
 initializeAPIClient()
+new UpdateService().init()
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
     const [isLoggedIn, setLoggedIn] = useState<boolean>()
