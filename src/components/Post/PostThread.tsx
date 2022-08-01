@@ -24,6 +24,8 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
     const [noTrendingComment, setNoTrendingComment] = useState<boolean>(false)
     const [alreadyMore, setAlreadyMore] = useState<boolean>(false)
 
+    const showMoreCommentsCallback = useCallback(() => setShowComments(true), [])
+
     const toggleLike = useCallback(async (id: number) => {
         const res = await toggleThreadLike(id)
         if (res.status === 200) {
@@ -90,7 +92,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                     <Divider className="mb-0 mt-4"/>
                     <CommentList
                         lightboxView={lightboxView}
-                        showMoreComments={() => setShowComments(true)}
+                        showMoreComments={showMoreCommentsCallback}
                         showComments={showComments}
                         trendingComment={noTrendingComment ? undefined : trendingComment}
                         numberComments={commentsCount}
