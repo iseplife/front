@@ -3,14 +3,20 @@ import { registerRoute, Route } from "workbox-routing"
 import { StaleWhileRevalidate } from "workbox-strategies"
 import { initPushWorker } from "./push-worker"
 import { ExpirationPlugin } from "workbox-expiration"
+import { BroadcastChannel } from "broadcast-channel"
 
 declare const self: Window & typeof globalThis & ServiceWorkerGlobalScope
 export {}
 
 precacheAndRoute(self.__WB_MANIFEST)
 
+self.skipWaiting()
+
+const broadcastChannel = new BroadcastChannel("service-worker", { webWorkerSupport: true })
+
 self.addEventListener("install", function (event) {
     console.log("Installed Service Worker")
+    broadcastChannel.postMessage("update")
 })
 
 const registerCacheFirstRouteUsing = (
