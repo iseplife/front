@@ -41,7 +41,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 setLoading(false)
             }
         })
-    }, [trendingComment])
+    }, [trendingComment, id])
 
     const showMoreComments = useCallback(() => {
         if (loadComment && showComments) {
