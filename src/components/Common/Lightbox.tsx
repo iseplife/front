@@ -346,7 +346,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
         className={`
             flex flex-wrap md:flex-nowrap md:flex-row 
             w-screen h-screen z-50 
-            max-w-[100vw] overflow-y-auto md:overflow-hidden
+            max-w-[100vw] overflow-y-auto overflow-x-hidden md:overflow-hidden
             ${!animated && " fixed top-0 left-0 bg-black/80 backdrop-blur-md backdrop-filter"}
         `}
     >
