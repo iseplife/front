@@ -14,7 +14,7 @@ type PostAuthorProps = {
     className?: string
 }
 const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, className = ""}) => {
-    const {t} = useTranslation("post")
+    const {t} = useTranslation(["common", "post"])
     const [formattedDate, setFormattedDate] = useState<string>("")
     useEffect(() => formatDateWithTimer(publicationDate, t, setFormattedDate), [publicationDate])
 
@@ -62,7 +62,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
                     <div className="font-bold -mb-0.5 -mt-0.5 group-hover:underline">{author.name}</div>
                     <div className="text-xs whitespace-nowrap">
                         {futurePost ?
-                            `${t("planned_for")} ${format(new Date(publicationDate), "dd/MM/yy HH:mm")}` :
+                            `${t("post:planned_for")} ${format(new Date(publicationDate), "dd/MM/yy HH:mm")}` :
                             formattedDate
                         }
                     </div>
