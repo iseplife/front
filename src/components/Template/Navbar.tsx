@@ -186,7 +186,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     
     return (
         <>
-            <div className="md:hidden grid grid-cols-4 shadow-md w-full h-14 bg-white border-t border-gray-300 border-opacity-80">
+            <div className="md:hidden grid grid-cols-4 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] z-[9999] border-t border-neutral-200/50">
                 <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
                 <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
                 <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} alerts={+(showPushAsk ?? false) + unwatchedNotifications} />
