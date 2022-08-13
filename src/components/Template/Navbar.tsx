@@ -222,7 +222,12 @@ const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selected
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
 
-    const onClick = useCallback(() => selected && (doubleClickAction ?? (() => document.getElementById("main")?.scrollTo({ left: 0, top: 0, behavior: "smooth" })))(), [doubleClickAction, selected])
+    const onClick = useCallback(() => {
+        if(selected){
+            doubleClickAction?.()
+            document.getElementById("main")?.scrollTo({ left: 0, top: 0, behavior: "smooth" })
+        }
+    }, [doubleClickAction, selected])
     
     return <Link to={route} className="w-full h-full grid place-items-center">
         <button className={`border-0 grid place-items-center text-2xl ${className}`} onClick={onClick}>
