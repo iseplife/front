@@ -9,12 +9,12 @@ import SearchBar from "../SearchBar"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
-import {faCogs, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {faCogs, faSearch, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
-import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline } from "../../constants/CustomFontAwesome"
+import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline, cFaSearch, cFaSearchFill } from "../../constants/CustomFontAwesome"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
@@ -157,14 +157,26 @@ const DrawerItem: React.FC<DrawerItemProps> = ({icon, className = "", children, 
         </div>
     </Link>
 )
-const MobileFooterButton: React.FC<{ route: string, selectedIcon: any, notSelectedIcon: any, alerts?: number }> = ({ route, selectedIcon, notSelectedIcon, alerts }) => {
+
+interface MobileFooterButtonProps {
+    route: string
+    selectedIcon: any
+    notSelectedIcon: any
+    className?: string
+    alerts?: number
+    doubleClickAction?: () => void
+}
+
+const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts, className, doubleClickAction }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
-        
-    return <Link to={route}>
-        <button className="border-0 grid place-items-center h-full w-full text-2xl">
+
+    const onClick = useCallback(() => selected && (doubleClickAction ?? (() => document.getElementById("main")?.scrollTo({ left: 0, top: 0, behavior: "smooth" })))(), [doubleClickAction, selected])
+    
+    return <Link to={route} className="w-full h-full grid place-items-center">
+        <button className={`border-0 text-indigo-400 grid place-items-center text-2xl ${className}`} onClick={onClick}>
             <div className="relative">
-                <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-500 rounded-full scale-90 text-indigo-400 "+(selected && "scale-100")}>
+                <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
                     <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
                 </div>
                 
@@ -183,12 +195,22 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const [visible, setVisible] = useState<boolean>(false)
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
     const close = useCallback(() => setVisible(false), [])
+    const focusSearch = useCallback(() => (document.querySelector("input[type=\"search\"]") as HTMLInputElement).focus(), [])
     
     return (
         <>
-            <div className="md:hidden grid grid-cols-4 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] z-[9999] border-t border-neutral-200/50">
+            <div className="md:hidden grid grid-cols-5 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] z-[9999] border-t border-neutral-200/50">
                 <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
                 <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
+                <div className="mx-auto flex">
+                    <MobileFooterButton
+                        route="/discovery"
+                        className="-mt-6 bg-indigo-400 text-white rounded-full h-[3.2rem] w-[3.2rem] scale-110 text-[1.3rem] shadow-[0px_-4px_15px_1px_rgba(0,0,0,0.1)]"
+                        selectedIcon={cFaSearch}
+                        notSelectedIcon={cFaSearch}
+                        doubleClickAction={focusSearch}
+                    />
+                </div>
                 <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} alerts={+(showPushAsk ?? false) + unwatchedNotifications} />
                 <div className="cursor-pointer grid place-items-center h-full w-full" onClick={() => setVisible(true)}>
                     <StudentAvatar
