@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useMemo, useState} from "react"
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react"
 import {Divider, Drawer} from "antd"
 import {Link, useLocation} from "react-router-dom"
 import {useTranslation} from "react-i18next"
@@ -19,6 +19,7 @@ import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
 import StudentLargeCard from "../Student/StudentLargeCard"
+import { setStyles } from "../../util"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -94,9 +95,57 @@ const NotificationHeaderButton: React.FC = () => {
     </DropdownPanel>
 }
 
-const Header: React.FC<HeaderProps> = ({user}) => {
-    return (
-        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center">
+
+
+export const Header: React.FC<HeaderProps> = ({user}) => {
+    const ref = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const element = document.getElementById("main")!
+
+        let lastScrollY = element.scrollTop
+        let previousDirection = "up"
+        let directionChangeHeight = 0
+        const fnc = () => {
+            const header = ref.current!
+            const scroll = element.scrollTop
+
+            const dir = scroll > lastScrollY ? "down" : "up"
+            const justChanged = previousDirection != dir
+            if(justChanged)
+                directionChangeHeight = scroll
+
+            const bRect = header.getBoundingClientRect()
+
+            if(dir == "up"){
+                const height = bRect.height
+                if(justChanged)
+                    setStyles(header, {
+                        position: "absolute",
+                        top: `${Math.max(0, Math.max(scroll + bRect.top, scroll - height))}px`,
+                    }, false)
+                else if(bRect.top >= 0){
+                    setStyles(header, {
+                        position: "fixed",
+                        top: "0px"
+                    }, false)
+                }
+            }else if(dir == "down" && justChanged)
+                setStyles(header, {
+                    position: "absolute",
+                    top: `${bRect.bottom > 0 ? scroll + bRect.top : scroll}px`,
+                }, false)
+
+            lastScrollY = scroll
+            previousDirection = dir
+        }
+
+        element.addEventListener("scroll", fnc)
+        return () => element.removeEventListener("scroll", fnc)
+    }, [])
+
+    return <>
+        <div className="h-14 flex" />
+        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0" style={{position: "absolute", top: "0px"}} ref={ref}>
             <Link to="/" className="hidden md:flex">
                 <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
             </Link>
@@ -139,7 +188,7 @@ const Header: React.FC<HeaderProps> = ({user}) => {
                 </DropdownPanel>
             </div>
         </div>
-    )
+    </>
 }
 
 
@@ -261,7 +310,6 @@ const Navbar: React.FC<NavbarProps> = ({children}) => {
     const {state: {user}} = useContext(AppContext)
     return (
         <>
-            <Header user={user}/>
             {children}
             <MobileFooter user={user}/>
         </>

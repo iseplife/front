@@ -187,17 +187,18 @@ export const positionToMarker = (position?: EventPosition) => {
     return marker
 }
 
-export const setStyles = (element: HTMLElement, style: CSSProperties) => {
+export const setStyles = (element: HTMLElement, style: CSSProperties, important = true) => {
     for(const entry of Object.entries(style)){
         (element.style as any)[entry[0]] = entry[1]
-        element.style.setProperty(
-            entry[0]
-                .split("")
-                .map(letter => letter == letter.toUpperCase() ? `-${letter}` : letter)
-                .join(""),
-            entry[1],
-            "important"
-        )
+        if(important)
+            element.style.setProperty(
+                entry[0]
+                    .split("")
+                    .map(letter => letter == letter.toUpperCase() ? `-${letter}` : letter)
+                    .join(""),
+                entry[1],
+                "important"
+            )
     }
 }
 
