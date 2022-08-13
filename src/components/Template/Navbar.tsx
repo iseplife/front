@@ -167,14 +167,14 @@ interface MobileFooterButtonProps {
     doubleClickAction?: () => void
 }
 
-const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts, className, doubleClickAction }) => {
+const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts, className = "text-indigo-400", doubleClickAction }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
 
     const onClick = useCallback(() => selected && (doubleClickAction ?? (() => document.getElementById("main")?.scrollTo({ left: 0, top: 0, behavior: "smooth" })))(), [doubleClickAction, selected])
     
     return <Link to={route} className="w-full h-full grid place-items-center">
-        <button className={`border-0 text-indigo-400 grid place-items-center text-2xl ${className}`} onClick={onClick}>
+        <button className={`border-0 grid place-items-center text-2xl ${className}`} onClick={onClick}>
             <div className="relative">
                 <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
                     <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
@@ -199,7 +199,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     
     return (
         <>
-            <div className="md:hidden grid grid-cols-5 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] z-[9999] border-t border-neutral-200/50">
+            <div className="md:hidden grid grid-cols-5 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] border-t border-neutral-200/50">
                 <MobileFooterButton route="/" selectedIcon={cFaHomeFull} notSelectedIcon={cFaHomeOutline} />
                 <MobileFooterButton route="/calendar" selectedIcon={cFaCalendarFull} notSelectedIcon={cFaCalendarOutline} />
                 <div className="mx-auto flex">
