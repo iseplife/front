@@ -4,7 +4,7 @@ import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
 import Discovery from "../../pages/default/discovery"
-import Navbar from "./Navbar"
+import Navbar, { Header } from "./Navbar"
 import Club from "../../pages/default/club"
 import Gallery from "../../pages/default/gallery"
 import Home from "../../pages/default/home"
@@ -19,11 +19,13 @@ import { AppContext } from "../../context/app/context"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user: { didFirstFollow } } } = useContext(AppContext)
+    const {state: {user}} = useContext(AppContext)
     
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <Navbar>
                 <div id="main" className="flex-grow overflow-y-auto bg-gray-100 relative" style={{ height: "calc(100vh - 3rem)" }}>
+                    <Header user={user}/>
                     <Switch>
                         {/* Add your route here */}
                         <Route path="/notifications" strict component={NotificationsPage} />
