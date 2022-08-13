@@ -118,12 +118,14 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
 
             if(dir == "up"){
                 const height = bRect.height
-                if(justChanged)
+                if(justChanged){
+                    const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
+                    directionChangeHeight = top
                     setStyles(header, {
                         position: "absolute",
-                        top: `${Math.max(0, Math.max(scroll + bRect.top, scroll - height))}px`,
+                        top: `${top}px`,
                     }, false)
-                else if(bRect.top >= 0){
+                }else if(directionChangeHeight - scroll > -2){
                     setStyles(header, {
                         position: "fixed",
                         top: "0px"
