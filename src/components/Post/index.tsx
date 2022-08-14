@@ -112,7 +112,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         <div>
             {isEdited && (
                 <Modal
-                    className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
+                    className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0 top-6 md:top-14"
                     title={<span className="text-gray-800 font-bold text-lg">{t("post:edit")}</span>}
                     visible={true}
                     footer={null}

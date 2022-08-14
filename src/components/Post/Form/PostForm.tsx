@@ -18,6 +18,7 @@ import { Author } from "../../../data/request.type"
 import AuthorPicker from "../../Common/AuthorPicker"
 import { useMemo } from "react"
 import { AppContext } from "../../../context/app/context"
+import Textarea from "react-expanding-textarea"
 
 export type PostFormValues<T extends EmbedFormType> = {
     id?: number
@@ -82,13 +83,12 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
         <Form className={`flex flex-col items-center text-gray-500 ${!values.edit && "pt-6"}`}>
             <div className="flex flex-col bg-white rounded-lg w-full sm:w-11/12 pt-3" style={{minHeight: "5rem"}}>
                 <Field
-                    as="textarea"
+                    as={Textarea}
                     autoFocus={true}
                     name="description"
                     placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
-                    className="px-1 text-base text-gray-800 flex-1 mb-4 bg-transparent resize-none focus:outline-none"
+                    className={`px-1 text-base text-gray-800 mb-4 bg-transparent resize-none focus:outline-none ${values.edit ? "max-h-[calc(80vh-300px)]" : "max-h-[calc(80vh-200px)]"} min-h-[35px]`}
                 />
-
                 <div className="flex justify-between">
                     {values.embed ? 
                         (

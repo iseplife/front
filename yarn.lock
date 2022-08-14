@@ -2985,6 +2985,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-linkify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@types/react-linkify@npm:1.0.1"
+  dependencies:
+    "@types/react": "*"
+  checksum: e39435c6f261a3b95b71f18cb3728fbbbb3180e5e911e642f344a1ec15005d1d564b5c67d3f475ca3695dc0a2a3b9971cfbf1074a2050549c6c5d250816b4fee
+  languageName: node
+  linkType: hard
+
 "@types/react-router-dom@npm:^5.3.3":
   version: 5.3.3
   resolution: "@types/react-router-dom@npm:5.3.3"
@@ -7147,6 +7156,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-shallow-equal@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "fast-shallow-equal@npm:1.0.0"
+  checksum: ae89318ce43c0c46410d9511ac31520d59cfe675bad3d0b1cb5f900b2d635943d788b8370437178e91ae0d0412decc394229c03e69925ade929a8c02da241610
+  languageName: node
+  linkType: hard
+
 "fast-url-parser@npm:1.1.3":
   version: 1.1.3
   resolution: "fast-url-parser@npm:1.1.3"
@@ -8752,6 +8768,7 @@ __metadata:
     "@types/react-calendar": ^3.5.1
     "@types/react-dom": ^18.0.6
     "@types/react-leaflet": ^2.8.2
+    "@types/react-linkify": ^1.0.1
     "@types/react-router-dom": ^5.3.3
     "@typescript-eslint/eslint-plugin": ^5.30.6
     "@typescript-eslint/parser": ^5.30.6
@@ -8779,8 +8796,10 @@ __metadata:
     react-big-calendar: ^1.4.2
     react-calendar: ^3.7.0
     react-dom: ^18.2.0
+    react-expanding-textarea: ^2.3.6
     react-i18next: ^11.18.1
     react-leaflet: ^4.0.1
+    react-linkify: ^1.0.0-alpha
     react-mount-animation: ^0.0.11
     react-photo-gallery: ^8.0.0
     react-router-dom: ^5.1.2
@@ -9849,6 +9868,15 @@ __metadata:
   version: 1.2.4
   resolution: "lines-and-columns@npm:1.2.4"
   checksum: 0c37f9f7fa212b38912b7145e1cd16a5f3cd34d782441c3e6ca653485d326f58b3caccda66efce1c5812bde4961bbde3374fae4b0d11bf1226152337f3894aa5
+  languageName: node
+  linkType: hard
+
+"linkify-it@npm:^2.0.3":
+  version: 2.2.0
+  resolution: "linkify-it@npm:2.2.0"
+  dependencies:
+    uc.micro: ^1.0.1
+  checksum: d198871d0b3f3cfdb745dae564bfd6743474f20cd0ef1057e6ca29451834749e7f3da52b59b4de44e98f31a1e5c71bdad160490d4ae54de251cbcde57e4d7837
   languageName: node
   linkType: hard
 
@@ -13091,6 +13119,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-expanding-textarea@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "react-expanding-textarea@npm:2.3.6"
+  dependencies:
+    fast-shallow-equal: ^1.0.0
+    react-with-forwarded-ref: ^0.3.5
+    tslib: ^2.4.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 0c4430247df3e7b677c13ab763d2eb48ef5b76a0454836074facbfbf6e80f2a3eee07fd9e0ed67b8870ff993057f5cd8ea7c80f26cb0421d7ab934e5588b679b
+  languageName: node
+  linkType: hard
+
 "react-fast-compare@npm:^2.0.1":
   version: 2.0.4
   resolution: "react-fast-compare@npm:2.0.4"
@@ -13154,6 +13195,16 @@ __metadata:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
+  languageName: node
+  linkType: hard
+
+"react-linkify@npm:^1.0.0-alpha":
+  version: 1.0.0-alpha
+  resolution: "react-linkify@npm:1.0.0-alpha"
+  dependencies:
+    linkify-it: ^2.0.3
+    tlds: ^1.199.0
+  checksum: abff36e1fdd9db822278292379e070d471d96ddda2d199565edd9ecff3d17faa31a3c83bd2be8fa4c0f9589dd97553ba77c553047b94cfd94e0f528b9e91fafa
   languageName: node
   linkType: hard
 
@@ -13324,6 +13375,17 @@ __metadata:
   bin:
     react-scripts: bin/react-scripts.js
   checksum: 92afa2f245c7092ccc97d5609dc7a2130616262e34da7f15072d9442e2d2e1d4909a91022abd1faac1336eb17c5525a10d9bd43e1ae374c7ec941ca20addca68
+  languageName: node
+  linkType: hard
+
+"react-with-forwarded-ref@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "react-with-forwarded-ref@npm:0.3.5"
+  dependencies:
+    tslib: ^2.0.3
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0 || ^18.0.0
+  checksum: f370b7a8ddaf204cfb1225d49f1d3ea4ae5261071cc803f36391ca4faba6c461c169a910fea0fde5982aa99481d1a11702d6855471d11dd76d4bd5a8e0a505c5
   languageName: node
   linkType: hard
 
@@ -15088,6 +15150,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tlds@npm:^1.199.0":
+  version: 1.231.0
+  resolution: "tlds@npm:1.231.0"
+  bin:
+    tlds: bin.js
+  checksum: a77078c8d329c8a1f91d58459f48174a4d2be2cea1e48b8d732a3122dd394b23c5c18187882ad0139d01076191167242afa2307ec3f63c0ae9dcea0c9e9b48cc
+  languageName: node
+  linkType: hard
+
 "tmpl@npm:1.0.5":
   version: 1.0.5
   resolution: "tmpl@npm:1.0.5"
@@ -15249,7 +15320,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.1, tslib@npm:^2.0.3":
+"tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
@@ -15356,6 +15427,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 9096d8f6c16cb80ef3bf96fcbbd055bf1c4a43bd14f3b7be45a9fbe7ada46ec977f604d5feed3263b4f2aa7d4c7477ce5f9cd87de0d6feedec69a983f3a4f93e
+  languageName: node
+  linkType: hard
+
+"uc.micro@npm:^1.0.1":
+  version: 1.0.6
+  resolution: "uc.micro@npm:1.0.6"
+  checksum: 6898bb556319a38e9cf175e3628689347bd26fec15fc6b29fa38e0045af63075ff3fea4cf1fdba9db46c9f0cbf07f2348cd8844889dd31ebd288c29fe0d27e7a
   languageName: node
   linkType: hard
 
