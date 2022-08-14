@@ -138,7 +138,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
     const sideBar = useCallback(() => <PostSidebar post={post} />, [post])
 
     return (
-        <div className="block mx-3">
+        <div className="mx-1 md:mx-3">
             {imagesComponent}
             <AnimatedLightbox
                 show={lightboxPhotoIndex !== undefined}
