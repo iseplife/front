@@ -72,7 +72,7 @@ const Student: React.FC = () => {
             {/* <ClubHeader /> */}
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-2 lg:grid-cols-5">
                 
-                <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3">
+                <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3 max-w-[calc(100vw-2rem)]">
                     <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">
                         <WebPPolyfill className="w-32 h-32 rounded-full" src={student?.picture ? mediaPath(student?.picture, AvatarSizes.FULL) : "/img/icons/discovery/user.svg"} />
                         <div>
