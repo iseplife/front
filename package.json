@@ -57,6 +57,7 @@
     "react-big-calendar": "^1.4.2",
     "react-calendar": "^3.7.0",
     "react-dom": "^18.2.0",
+    "react-expanding-textarea": "^2.3.6",
     "react-i18next": "^11.18.1",
     "react-leaflet": "^4.0.1",
     "react-mount-animation": "^0.0.11",
