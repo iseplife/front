@@ -5,6 +5,7 @@ import { ClubPreview } from "../../data/club/types"
 import { mediaPath } from "../../util"
 import { AvatarSizes } from "../../constants/MediaSizes"
 import WebPPolyfill from "../Common/WebPPolyfill"
+import CustomText from "../Common/CustomText"
 
 type ClubFollowProps = {
     club: ClubPreview
@@ -24,13 +25,13 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
                     src={mediaPath(club.logoUrl, AvatarSizes.THUMBNAIL)}
                     className="rounded-full h-14 w-14 sm:w-16 sm:h-16 "
                 />
-                <div>
+                <div className="w-full">
                     <div className="flex justify-between">
                         <div className="ml-2 sm:ml-4">
                             <div className="font-bold text-lg sm:text-xl sm:mb-0.5">{club.name}</div>
                             <div className="text-md text-neutral-400 mb-0.5 -mt-1 sm:hidden">Association</div>
                             <div className="text-sm text-black/[65%] font-normal leading-4 sm:w-72 lg:w-96 hidden sm:block">
-                                {club.description}{/* TODO: ellipsis */}
+                                <CustomText description={club.description} descLengthThrottle={400} disableSpacers />{/* TODO: ellipsis */}
                             </div>
                         </div>
                         <div className="mb-1.5 sm:mb-0 sm:h-16 flex sm:items-center ml-8">
@@ -44,7 +45,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
                         </div>
                     </div>
                     <div className="ml-2 text-sm text-black/[65%] font-normal leading-4 sm:hidden">
-                        {club.description}
+                        <CustomText description={club.description} descLengthThrottle={250} disableSpacers />{/* TODO: ellipsis */}
                     </div>
                 </div>
             </div>

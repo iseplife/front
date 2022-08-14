@@ -11,27 +11,14 @@ type EventDescriptionProps = {
 }
 const EventDescription: React.FC<EventDescriptionProps> = ({description, phone, loading}) => {
     const descLengthThrottle = 350
-    const {t} = useTranslation("event")
 
     const skeletonLength = useMemo(() => Array(10).fill(0).map(() => 110 + Math.random() * 80), [])
-
-    const tooLong = (description?.length ?? 0) > descLengthThrottle
-    
-    const [seeAll, setSeeAll] = useState(false)
-    const toggleSeeAll = useCallback(() => setSeeAll(see => !see), [])
 
 
     return <div className="flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white my-5">
         <span className="text-neutral-900 font-semibold text-base">Description</span>
         {!loading && description ?
-            <span>
-                <CustomText {...{description, descLengthThrottle, seeAll, phone}} />
-                {tooLong && !seeAll && phone &&
-                    <label className="ml-1 font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
-                        {t("event:see_more")}
-                    </label>
-                }
-            </span>
+            <CustomText description={description} descLengthThrottle={phone ? descLengthThrottle : undefined} />
             :
             <div className="mt-1">
                 {skeletonLength.map((length, index) =>
