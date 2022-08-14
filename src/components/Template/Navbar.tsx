@@ -9,12 +9,12 @@ import SearchBar from "../SearchBar"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
-import {faCogs, faSearch, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
+import {faCogs, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
-import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline, cFaSearch, cFaSearchFill } from "../../constants/CustomFontAwesome"
+import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline, cFaSearch } from "../../constants/CustomFontAwesome"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
@@ -99,13 +99,14 @@ const NotificationHeaderButton: React.FC = () => {
 
 export const Header: React.FC<HeaderProps> = ({user}) => {
     const ref = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        const element = document.getElementById("main")!
 
-        let lastScrollY = element.scrollTop
+    const onScroll = useMemo(() => {
+        let lastScrollY = 0
         let previousDirection = "up"
         let directionChangeHeight = 0
-        const fnc = () => {
+        return () => {
+            const element = document.getElementById("main")!
+
             const header = ref.current!
             const scroll = element.scrollTop
 
@@ -140,10 +141,16 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
             lastScrollY = scroll
             previousDirection = dir
         }
-
-        element.addEventListener("scroll", fnc)
-        return () => element.removeEventListener("scroll", fnc)
     }, [])
+
+    useEffect(() => {
+        const element = document.getElementById("main")!
+        element.addEventListener("scroll", onScroll)
+        return () => element.removeEventListener("scroll", onScroll)
+    }, [])
+
+    const { pathname } = useLocation()
+    useEffect(() => onScroll(), [pathname])
 
     return <>
         <div className="h-14 flex" />
