@@ -24,9 +24,10 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
             () => undefined
             :
             (href: string, text: string, key: number) => {
-                const localLink = href.startsWith(appUrl)
+                const relatedAppUrl = text.startsWith("http") ? appUrl : appUrl.split("://")[1]
+                const localLink = text.startsWith(relatedAppUrl)
                 return <Link
-                    to={{pathname: localLink ? href.replace(appUrl, "") : href}}
+                    to={{pathname: localLink ? text.replace(relatedAppUrl, "") : href}}
                     target={localLink ? "_self" : "_blank"}
                     key={key}
                 >
