@@ -17,6 +17,7 @@ import PostThread from "./PostThread"
 import DropdownPanelElement from "../Common/DropdownPanelElement"
 import { useHistory } from "react-router-dom"
 import { copyToClipboard, getPostLink } from "../../util"
+import CustomText from "../Common/CustomText"
 
 
 type PostProps = {
@@ -166,7 +167,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                     </div>
                 </div>
                 <div>
-                    <span>{data.description}</span>
+                    <CustomText description={data.description} />
                     {data.embed &&
                         <div className="mt-2">
                             <Embed embed={data.embed} post={data} selected={selected} />
