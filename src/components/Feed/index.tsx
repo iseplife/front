@@ -248,7 +248,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             ref={feedElement}
         >
             <Modal
-                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0"
+                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0 top-6 md:top-14"
                 visible={!!completeFormType}
                 footer={null}
                 afterClose={() => setFormVisible(false)}

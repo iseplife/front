@@ -87,7 +87,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     autoFocus={true}
                     name="description"
                     placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
-                    className="px-1 text-base text-gray-800 mb-4 bg-transparent resize-none focus:outline-none"
+                    className={`px-1 text-base text-gray-800 mb-4 bg-transparent resize-none focus:outline-none ${values.edit ? "max-h-[calc(80vh-300px)]" : "max-h-[calc(80vh-200px)]"} min-h-[35px]`}
                 />
                 <div className="flex justify-between">
                     {values.embed ? 
