@@ -11,7 +11,9 @@ export default class UpdateService {
         this.broadcastChannel.addEventListener("message", (e) => {
             if (e == "update") {
                 if (Date.now() - pageOpenned < 5_000)
-                    location.reload()
+                    setTimeout(() => {
+                        location.reload()
+                    }, 500)
                 else
                     message.info(t("update_available").toString(), 10_000, () =>
                         location.reload()
