@@ -6,6 +6,7 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import {format, isFuture} from "date-fns"
 import {Post} from "../../data/post/types"
 import PostThread from "./PostThread"
+import CustomText from "../Common/CustomText"
 
 type PostSidebarProps = {
     post: Post
@@ -41,7 +42,7 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                     </div>
                 </div>
                 <div className="text-base ml-2 mt-2 text-neutral-100 md:text-black">
-                    {post.description}
+                    <CustomText description={post.description} />
                 </div>
                 <PostThread
                     lightboxView={true}
