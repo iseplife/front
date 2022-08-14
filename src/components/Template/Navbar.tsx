@@ -164,11 +164,11 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
     return <>
         <div className="h-14 flex" />
         <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 sm:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
-            <Link to="/" className="hidden md:flex">
-                <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
-            </Link>
-            <Link to="/discovery" className="flex md:hidden mr-2">
-                <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
+            <Link to="/" className="flex">
+                <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo"/>
+                <div className="items-center ml-1 text-indigo-500/90 font-medium text-base hidden lg:flex">
+                    iseplife
+                </div>
             </Link>
 
             <SearchBar/>
