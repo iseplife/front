@@ -20,7 +20,7 @@ const MemberList: React.FC<MemberListProps> = ({members, className, actions, act
         <div>
             <div className={`${className} flex flex-col overflow-y-auto overflow-x-hidden w-full`} style={{maxHeight: 400}}>
                 {members.map(({id, student}) => (
-                    <Link to={`/student/${student.id}`} key={student.id} className="my-1 flex w-full mr-2 text-gray-500 hover:text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 items-center">
+                    <Link to={`/student/${student.id}`} key={student.id} className="my-[1px] flex w-full mr-2 text-gray-500 hover:text-gray-600 hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2 items-center">
                         <StudentAvatar
                             id={student.id}
                             name={student.firstName + " " + student.lastName}
