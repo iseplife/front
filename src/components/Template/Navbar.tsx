@@ -119,23 +119,32 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
 
             if(dir == "up"){
                 const height = bRect.height
-                if(justChanged){
-                    const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
-                    directionChangeHeight = top
-                    setStyles(header, {
-                        position: "absolute",
-                        top: `${top}px`,
-                    }, false)
-                }else if(directionChangeHeight - scroll > -2){
+                if(directionChangeHeight - scroll >= 0 && !justChanged){
+                    if(header.style.willChange == "top")
+                        setStyles(header, {
+                            position: "fixed",
+                            top: "0px",
+                            willChange: "",
+                        }, false)
+                } else {
+                    if(justChanged){
+                        const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
+                        directionChangeHeight = top
+                        setStyles(header, {
+                            willChange: "top",
+                        }, false)
+                    }
                     setStyles(header, {
                         position: "fixed",
-                        top: "0px"
+                        top: `${directionChangeHeight - scroll}px`,
                     }, false)
+
                 }
             }else if(dir == "down" && justChanged)
                 setStyles(header, {
                     position: "absolute",
                     top: `${bRect.bottom > 0 ? scroll + bRect.top : scroll}px`,
+                    willChange: "",
                 }, false)
 
             lastScrollY = scroll
@@ -154,7 +163,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
 
     return <>
         <div className="h-14 flex" />
-        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0" style={{position: "absolute", top: "0px"}} ref={ref}>
+        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 sm:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
             <Link to="/" className="hidden md:flex">
                 <img className="my-1" src="https://via.placeholder.com/50" alt="iseplife logo"/>
             </Link>
