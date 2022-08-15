@@ -49,6 +49,14 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                     picture: action.payload.custom || action.payload.original
                 }
             }
+        case AppActionType.SET_LAST_EXPLORE:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    lastExploreWatch: action.lastWatch,
+                }
+            }
         default:
             return state
     }

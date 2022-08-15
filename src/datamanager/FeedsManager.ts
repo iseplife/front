@@ -163,10 +163,13 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.initLoadSyncWait = undefined
         this.reloading = false
 
-        if(!lastLoadLoaded)
+        if(!lastLoadLoaded){
             for (const feedId in this.lastLoadIdByFeed)
                 if (!this.loadedFeeds.has(+feedId))
                     this.lastLoadIdByFeed[feedId] = now
+            
+            this.loadBefore(-1)
+        }
         
         this.setContext("lastLoad", {lastLoad: now})
 
@@ -212,6 +215,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
         if (bugged.size != before)
             await this.setContext("no_connection", {bugged})
+    }
+
+    public countExploreSince(lastWatched: Date){
+        return this.getTable().where(["loadedFeed", "publicationDateId"]).between([-1, this.calcIdFromDateId(lastWatched, 999_999)], [-1, this.calcIdFromDateId(new Date(), 999_999)]).count()
     }
 
     public countFreshFeedPosts(feed: FeedId) {
@@ -405,7 +412,11 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
         this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
-        if (packet.follow) {
+
+        if(packet.post.author.authorType == "CLUB")
+            this.addPostToFeed(packet.post, -1, packet.hasWriteAccess)
+        
+        if (packet.follow)
             this.addData({
                 ...packet.post,
                 lastLoadId: this.getLastLoad(undefined),
@@ -415,7 +426,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 waitingForUpdate: false,
                 waitFor: undefined!,
             })
-        }
     }
 
     public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean) {
@@ -589,3 +599,4 @@ export type ManagerPost = {
 } & Post
 type FeedId = number | undefined
 const mainFeedId = 0
+const exploreFeedId = 0

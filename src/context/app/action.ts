@@ -11,7 +11,8 @@ export enum AppActionType {
     SET_PAYLOAD,
     SET_STATE,
     SET_PICTURE,
-    SET_TOKEN_EXPIRATION
+    SET_TOKEN_EXPIRATION,
+    SET_LAST_EXPLORE,
 }
 
 
@@ -56,6 +57,10 @@ interface setTokenAction {
 interface setStateLoggedOutAction {
     type: AppActionType.SET_LOGGED_OUT,
 }
+interface setLastExploreAction {
+    type: AppActionType.SET_LAST_EXPLORE,
+    lastWatch: Date
+}
 
 export type AppContextAction =
     setInitializationAction |
@@ -65,6 +70,7 @@ export type AppContextAction =
     setPictureStateAction |
     setTokenExpirationAction |
     setTokenAction |
-    setStudentAction
+    setStudentAction |
+    setLastExploreAction
 
 
