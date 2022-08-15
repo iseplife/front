@@ -3,6 +3,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState
@@ -31,8 +32,10 @@ type FeedProps = {
     allowPublication?: boolean
     style?: CSSProperties
     className?: string
+    noDivider?: boolean
+    noPinned?: boolean
 }
-const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className}) => {
+const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className, noDivider, noPinned}) => {
     const {state: {user}} = useContext(AppContext)
     const {t} = useTranslation(["common", "post", "error"])
     const [postsPinned, setPostsPinned] = useState<PostType[]>([])
@@ -54,9 +57,26 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     const selectedPost = useLiveQuery(async () => selectedPostId && await feedsManager.getFeedPost(id, selectedPostId), [id, selectedPostId])
 
-    const posts = useLiveQuery(async () => (
+    const _posts = useLiveQuery(async () => (
         !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     ), [id, loadedPosts, loading])
+    const [posts, setPosts] = useState([] as ManagerPost[] | undefined)
+
+    useEffect(() => {
+        setPosts(_posts)
+    }, [_posts])
+
+    useEffect(() => {
+        setFetching(true)
+        setError(false)
+        setBaseLastLoad(-1)
+        setGeneralLoading(true)
+        setNeedFullReload(false)
+        setFirstLoaded(Number.MAX_VALUE)
+        setLoadedPosts(0)
+        setNextLoadedPosts(FeedsManager.PAGE_SIZE)
+        setPosts([])
+    }, [id])
 
     useLiveQuery(async () => {
         const generalLoad = await feedsManager.getGeneralLastLoad()
@@ -184,11 +204,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [])
 
     useEffect(() => {
-        if(!loading)
+        if(!loading && !noPinned)
             getFeedPostPinned(id).then(res => {
                 setPostsPinned(res.data)
             })
-    }, [id, loading])
+    }, [id, loading, noPinned])
 
     const now = new Date()
 
@@ -215,7 +235,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     const [feedMargin, setFeedMargin] = useState(0)
     const feedElement = useRef<HTMLDivElement>(null)
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fnc = () => feedElement?.current && setFeedMargin(parseInt(getComputedStyle(feedElement?.current).marginLeft) * 2 + 1)
 
         fnc()
@@ -287,7 +307,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     }
                 </>
             }
-            <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>
+            {!noDivider && <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>}
             {allowPublication && (
                 <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation}>
                     <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
@@ -387,6 +407,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                             onDelete={onPostRemoval}
                                             onUpdate={onPostUpdate}
                                             onPin={onPostPin}
+                                            noPinned={noPinned}
                                             toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
                                             isEdited={editPost === p.id}
                                         />

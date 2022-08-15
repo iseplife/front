@@ -405,7 +405,11 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
         this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
-        if (packet.follow) {
+
+        if(packet.post.author.authorType == "CLUB")
+            this.addPostToFeed(packet.post, -1, packet.hasWriteAccess)
+        
+        if (packet.follow)
             this.addData({
                 ...packet.post,
                 lastLoadId: this.getLastLoad(undefined),
@@ -415,7 +419,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
                 waitingForUpdate: false,
                 waitFor: undefined!,
             })
-        }
     }
 
     public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean) {
@@ -589,3 +592,4 @@ export type ManagerPost = {
 } & Post
 type FeedId = number | undefined
 const mainFeedId = 0
+const exploreFeedId = 0

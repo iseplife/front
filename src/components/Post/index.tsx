@@ -31,9 +31,10 @@ type PostProps = {
     onUpdate: (id: number, postUpdate: PostUpdate) => void
     selected?: boolean
     className?: string
+    noPinned?: boolean
 }
 
-const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, selected, className = "shadow-sm"}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, selected, noPinned, className = "shadow-sm"}) => {
     const {t} = useTranslation(["common", "post"])
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
@@ -134,7 +135,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                                 className="mr-2.5 text-gray-400 ml-1"
                             />
                         )}
-                        {data.pinned && (
+                        {data.pinned && !noPinned && (
                             <FontAwesomeIcon
                                 icon={faThumbtack}
                                 className="mr-2.5 text-gray-400 ml-1"
@@ -155,6 +156,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                                     <PostToolBar
                                         feed={feedId}
                                         pinned={data.pinned}
+                                        noPinned={noPinned}
                                         homepageForced={superVisibility}
                                         triggerPin={togglePin}
                                         triggerHomepageForced={toggleHomepageForced}

@@ -20,21 +20,22 @@ type PostToolbarProps = {
     triggerHomepageForced: () => void
     triggerEdition: () => void
     triggerDeletion: () => void
+    noPinned?: boolean
 }
-const PostToolbar: React.FC<PostToolbarProps> = ({feed, pinned, homepageForced,  triggerDeletion, triggerPin, triggerEdition, triggerHomepageForced}) => {
+const PostToolbar: React.FC<PostToolbarProps> = ({feed, pinned, noPinned, homepageForced,  triggerDeletion, triggerPin, triggerEdition, triggerHomepageForced}) => {
     const {t} = useTranslation(["common", "post"])
     const isAdmin = useAdminRole()
 
     return (
         <div className="select-none edit-menu text-base font-medium">
-            {feed !== undefined && (
+            {feed !== undefined && !noPinned && (
                 <DropdownPanelElement
                     title={t(`post:${pinned ? "unpin" : "pin"}`)}
                     onClick={triggerPin(false)}
                     icon={pinned ? faUnlink : faThumbtack}
                 />
             )}
-            {isAdmin && (
+            {isAdmin && !noPinned && (
                 <>
                     <DropdownPanelElement
                         title={t("post:homepage_forced")}
