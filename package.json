@@ -47,6 +47,7 @@
     "dexie": "^3.2.2",
     "dexie-react-hooks": "^1.1.1",
     "fast-average-color": "^9.1.1",
+    "favicon-notify": "^0.1.7",
     "formik": "^2.2.9",
     "i18next": "^21.8.14",
     "leaflet": "^1.8.0",

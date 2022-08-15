@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect, useState} from "react"
+import React, {useLayoutEffect, useState} from "react"
 import {
     Redirect,
     Route,
@@ -7,7 +7,6 @@ import {
 
 import DefaultTemplate from "./Default"
 import AdminTemplate from "./Admin"
-import {AppContext, AppContextType} from "../../context/app/context"
 import useAdminRole from "../../hooks/useAdminRole"
 import { arrayEquals } from "../../util"
 
@@ -16,12 +15,12 @@ import { Marker as LeafletMarker } from "react-leaflet"
 import {icon} from "leaflet"
 import marker_icon from "leaflet/dist/images/marker-icon.png"
 import "leaflet/dist/leaflet.css"
+import NotificationFaviconTitle from "../Notification/NotificationFaviconTitle"
 (LeafletMarker as any as React.FC).defaultProps = { icon: icon({ iconUrl: marker_icon, className: "left-[-12px] top-[-41px] width-[25px] height-[41px]" }) }
 //Map icon fix
 
 
 const Template: React.FC = () => {
-    const context = useContext<AppContextType>(AppContext)
     const { pathname } = useLocation()
     const isAdmin = useAdminRole()
 
@@ -39,21 +38,24 @@ const Template: React.FC = () => {
         })
     }, [pathname])
 
-    return <Switch>
-        <Route path="/admin" render={({location}) =>
-            (
-                isAdmin ?
-                    <AdminTemplate/> :
-                    <Redirect
-                        to={{
-                            pathname: "/404",
-                            state: {from: location}
-                        }}
-                    />
-            )}
-        />
-        <Route path="/" component={DefaultTemplate}/>
-    </Switch>
+    return <>
+        <NotificationFaviconTitle />
+        <Switch>
+            <Route path="/admin" render={({location}) =>
+                (
+                    isAdmin ?
+                        <AdminTemplate/> :
+                        <Redirect
+                            to={{
+                                pathname: "/404",
+                                state: {from: location}
+                            }}
+                        />
+                )}
+            />
+            <Route path="/" component={DefaultTemplate}/>
+        </Switch>
+    </>
 }
 
 export default Template
