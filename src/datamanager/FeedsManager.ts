@@ -217,8 +217,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             await this.setContext("no_connection", {bugged})
     }
 
-    public countExploreSince(lastWatched: Date){
-        return this.getTable().where(["loadedFeed", "publicationDateId"]).between([-1, this.calcIdFromDateId(lastWatched ?? new Date(0), 999_999)], [-1, this.calcIdFromDateId(new Date(), 999_999)]).count()
+    public countExploreSince(lastWatched: Date, limit = 1){
+        return this.getTable().where(["loadedFeed", "publicationDateId"]).between([-1, this.calcIdFromDateId(lastWatched ?? new Date(0), 999_999)], [-1, this.calcIdFromDateId(new Date(), 999_999)]).limit(limit).count()
     }
 
     public countFreshFeedPosts(feed: FeedId) {
