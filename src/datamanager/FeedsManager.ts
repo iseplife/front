@@ -261,25 +261,29 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     public async subscribe(feed: FeedId, fullReload?: boolean) {
         this.loadedFeeds.add(feed ?? mainFeedId)
         const postsToDelete = [] as ManagerPost[]
-        const postsToAdd = [] as ManagerPost[]
+        const postsToEdit = [] as ManagerPost[]
 
-        this.getTable().where({
+        await this.getTable().where({
             "loadedFeed": feed ?? mainFeedId,
             "waitingForUpdate": "true"
         }).toArray().then(posts => posts.forEach(post => {
             if (post.waitFor?.delete)
                 postsToDelete.push(post)
             else if (post.waitFor?.modif)
-                postsToAdd.push({
-                    ...post,
-                    ...post.waitFor.modif,
-                    waitingForUpdate: false,
-                })
+                postsToEdit.push(post)
         }))
 
 
         this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId]))
-        this.addBulkData(postsToAdd)
+        const table = this.getTable()
+        this.database.transaction("rw", table, () => {
+            const promises = postsToEdit.map(post => table.update([post.loadedFeed, post.publicationDateId], {
+                ...post.waitFor.modif,
+                waitFor: undefined,
+                waitingForUpdate: false
+            }))
+            return promises[promises.length - 1]
+        })
 
         await this.initLoadSyncWait
 
@@ -411,25 +415,30 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     private async handleFeedPostCreated(packet: WSPSFeedPostCreated) {
         packet.post.publicationDate = new Date(packet.post.publicationDate)
 
-        this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
+        const table = this.getTable()
+        this.database.transaction("rw", table, () => {
+            let latestPromise = this.addPostToFeed(packet.post, packet.post.context.feedId, packet.hasWriteAccess)
 
-        if(packet.post.author.authorType == "CLUB")
-            this.addPostToFeed(packet.post, -1, packet.hasWriteAccess)
-        
-        if (packet.follow)
-            this.addData({
-                ...packet.post,
-                lastLoadId: this.getLastLoad(undefined),
-                loadedFeed: mainFeedId,
-                hasWriteAccess: packet.hasWriteAccess,
-                publicationDateId: this.calcId(packet.post),
-                waitingForUpdate: false,
-                waitFor: undefined!,
-            })
+            if(packet.post.author.authorType == "CLUB")
+                latestPromise = this.addPostToFeed(packet.post, -1, packet.hasWriteAccess)
+            
+            if (packet.follow)
+                latestPromise = this.addData({
+                    ...packet.post,
+                    lastLoadId: this.getLastLoad(undefined),
+                    loadedFeed: mainFeedId,
+                    hasWriteAccess: packet.hasWriteAccess,
+                    publicationDateId: this.calcId(packet.post),
+                    waitingForUpdate: false,
+                    waitFor: undefined!,
+                })
+
+            return latestPromise
+        })
     }
 
     public async addPostToFeed(post: PostUpdate | Post, feed: FeedId, hasWriteAccess?: boolean) {
-        await this.addData({
+        return this.addData({
             ...post,
             lastLoadId: this.getLastLoad(feed),
             loadedFeed: feed ?? mainFeedId,
@@ -543,21 +552,25 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public async applyUpdates(id: number) {
         const postsToDelete = [] as ManagerPost[]
-        const postsToAdd = [] as ManagerPost[]
+        const postsToEdit = [] as ManagerPost[]
         for (const post of (await this.getTable().where("id").equals(id).toArray())) {
             if (post.waitFor?.delete)
                 postsToDelete.push(post)
             else if (post.waitFor?.modif)
-                postsToAdd.push({
-                    ...post,
-                    ...post.waitFor.modif,
-                    waitingForUpdate: false,
-                    waitFor: undefined!,
-                })
+                postsToEdit.push(post)
         }
+        const table = this.getTable()
+        
         await Promise.all([
             this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId])),
-            this.addBulkData(postsToAdd),
+            this.database.transaction("rw", table, () => {
+                const promises = postsToEdit.map(post => table.update([post.loadedFeed, post.publicationDateId], {
+                    ...post.waitFor.modif,
+                    waitFor: undefined,
+                    waitingForUpdate: false
+                }))
+                return promises[promises.length - 1]
+            }),
         ])
     }
     public async updatePost(id: number, update: Partial<Post>) {

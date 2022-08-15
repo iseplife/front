@@ -67,7 +67,7 @@ export default abstract class DataManager<T> extends PacketListener {
     }
 
     protected async addData(data: T) {
-        await this.getTable().put(data)
+        return this.getTable().put(data)
     }
 
     protected async addBulkData(data: T[]) {
