@@ -22,7 +22,7 @@ const Home: React.FC = () => {
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"/>
                 <UserGroups/>
             </div>
-            <div className="w-full sm:col-span-2 overflow-x-hidden">
+            <div className="w-full sm:col-span-2 overflow-x-hidden lg:overflow-x-visible">
                 <Divider className="text-gray-700 text-lg px-4 md:px-10" orientation="left">
                     <div className="flex">
                         <button
