@@ -1,7 +1,6 @@
-import React, {useContext, useState} from "react"
+import React, {useCallback, useContext, useState} from "react"
 import Feed from "../../../components/Feed"
 import UserGroups from "../../../components/Group/UserGroups"
-import {AvatarSizes} from "../../../constants/MediaSizes"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
 import StudentLargeCard from "../../../components/Student/StudentLargeCard"
@@ -9,11 +8,27 @@ import { Divider } from "antd"
 import { useTranslation } from "react-i18next"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { cFaCompassFull } from "../../../constants/CustomFontAwesome"
+import { AppActionType } from "../../../context/app/action"
+import { useLiveQuery } from "dexie-react-hooks"
+import { feedsManager } from "../../../datamanager/FeedsManager"
+import { updateLastExplore } from "../../../data/student"
 
 const Home: React.FC = () => {
     const {t} = useTranslation()
-    const {state: {user}} = useContext(AppContext)
+    const {dispatch, state: {user}} = useContext(AppContext)
     const [discover, setDiscover] = useState(false)
+
+    const switchToDiscover = useCallback(async () => {
+        setDiscover(true)
+        const lastWatch = new Date((await updateLastExplore()).data)
+        dispatch({
+            type: AppActionType.SET_LAST_EXPLORE,
+            lastWatch,
+        })
+    }, [])
+
+    const exploreSince = useLiveQuery(() => feedsManager.countExploreSince(user.lastExploreWatch), [user.lastExploreWatch])
+
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
             <div className="flex-1 mx-4">
@@ -32,11 +47,12 @@ const Home: React.FC = () => {
                             {t("posts")}
                         </button>
                         <button
-                            onClick={() => setDiscover(true)}
-                            className={"rounded-full text-base ml-2.5 bg-black transition-colors px-3 py-[3px] cursor-pointer bg-opacity-[8%] hover:bg-opacity-[12%] text-neutral-700 items-center " + (discover && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}
+                            onClick={switchToDiscover}
+                            className={"flex relative rounded-full text-base ml-2.5 bg-black transition-colors px-3 py-[3px] cursor-pointer bg-opacity-[8%] hover:bg-opacity-[12%] text-neutral-700 items-center " + (discover && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}
                         >
-                            <FontAwesomeIcon icon={cFaCompassFull} className="mr-2" />
-                            Explorer
+                            <FontAwesomeIcon icon={cFaCompassFull} className="mr-1.5" />
+                            {t("explore")}
+                            <div className={`absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center -top-1 -right-1.5 shadow-sm transition-transform ${exploreSince ? "scale-100" : "scale-0"}`} />
                         </button>
                     </div>
                 </Divider>

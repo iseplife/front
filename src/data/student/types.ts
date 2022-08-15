@@ -42,6 +42,7 @@ export interface LoggedStudentPreview extends StudentPreview {
     unwatchedNotifications: number
     totalNotifications: number
     didFirstFollow: number
+    lastExploreWatch: Date
 }
 
 export interface StudentsImportData {
