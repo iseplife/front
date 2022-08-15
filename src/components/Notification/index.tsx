@@ -5,7 +5,7 @@ import {Trans, useTranslation} from "react-i18next"
 import {Link} from "react-router-dom"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {Notification as NotificationType} from "../../data/notification/types"
-import {formatDateWithTimer, mediaPath} from "../../util"
+import {formatDate, formatDateWithTimer, mediaPath} from "../../util"
 import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 
 
@@ -16,11 +16,11 @@ type NotificationProps = {
 const Notification: React.FC<NotificationProps> = (props) => {
     const {t} = useTranslation(["common", "notifications"])
     const {className, ...notification} = props
-    const [formattedDate, setFormattedDate] = useState<string>("")
+    const [formattedDate, setFormattedDate] = useState<string>(formatDate(notification.creation, t)[0])
 
-    useEffect(() => (
-        formatDateWithTimer(notification.creation, t, setFormattedDate)
-    ), [notification.creation])
+    useEffect(() => 
+        formatDateWithTimer(notification.creation, t, setFormattedDate, false)
+    , [notification.creation])
 
     return (
         <Link to={`/${notification.link}`} className="text-neutral-800 hover:text-neutral-800">
