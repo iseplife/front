@@ -34,7 +34,7 @@ export default class NotificationManager extends DataManager<Notification> {
             await new Promise<void>(executor => this._waitingForFetchEnd.push(executor))
     }
 
-    public async isRejected() {
+    public async isRejected(): Promise<boolean> {
         return (await this.getContext("rejected"))?.rejected ?? false
     }
     public async setRejected(rejected: boolean) {
@@ -93,6 +93,10 @@ export default class NotificationManager extends DataManager<Notification> {
 
     public async getNotifications(minId: number): Promise<Notification[]> {
         return this.getTable().where("id").aboveOrEqual(minId).reverse().sortBy("id")
+    }
+    public async getNotificationsAndMinFresh(): Promise<[number, Notification[]]> {
+        const minFresh = await this.getMinFresh()
+        return [minFresh, await this.getTable().where("id").aboveOrEqual(minFresh).reverse().sortBy("id")]
     }
     public async getUnwatched(){
         return (await this.getContext("unwatched"))?.unwatched ?? 0

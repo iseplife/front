@@ -8,7 +8,6 @@ import Notification from "../../components/Notification"
 import InfiniteScroller from "../Common/InfiniteScroller"
 import { useLiveQuery } from "dexie-react-hooks"
 import { notificationManager } from "../../datamanager/NotificationManager"
-import { setNotificationsWatched } from "../../data/notification"
 import pushService from "../../services/PushService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBell, faMoon } from "@fortawesome/free-solid-svg-icons"
@@ -22,29 +21,27 @@ interface NotificationsCenterProps {
 const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, className}) => {
     const { t } = useTranslation("notifications")
     const { state: { user } } = useContext(AppContext)
-    const [loading, setLoading] = useState<boolean>(false)
-
-    const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed(), [])
-    const pushRejected = useLiveQuery(async () => await notificationManager.isRejected(), [])
-
-
-    const minNotificationId = useLiveQuery(async () => {
-        const id = await notificationManager.getMinFresh()
-        return id
-    }, [])
-
-    const notifications = useLiveQuery(async () => {
-        if(minNotificationId != undefined)
-            return await notificationManager.getNotifications(minNotificationId)
-    }, [minNotificationId])
+    const [loading, setLoading] = useState<boolean>(true)
+    
+    const minNotificationId = useLiveQuery(() => notificationManager.getMinFresh())
+    const notifications = useLiveQuery(() => minNotificationId == undefined ? undefined : notificationManager.getNotifications(minNotificationId), [minNotificationId])
+    
+    const [showPushAsk, pushRejected] = useLiveQuery(async () => {
+        const promises = await notificationManager.doInReadTransaction(() =>
+            Promise.all([notificationManager.isWebPushEnabled(), notificationManager.isSubscribed(), notificationManager.isRejected()])
+        , true, true)
+        return [promises[0] && !promises[1], promises[2]]
+    }, [], [false, false, undefined])
 
     const recentNotifications = useMemo(() => {
         const oneWeekAgo = add(new Date(), { weeks: -1 })
-        return notifications?.filter(notif => isAfter(notif.creation, oneWeekAgo)) ?? []
+        return (notifications?.filter(notif => isAfter(notif.creation, oneWeekAgo)) ?? [])
+            .map(notif => <Notification {...notif} key={notif.id} />)
     }, [notifications])
     const oldNotifications = useMemo(() => {
         const oneWeekAgo = add(new Date(), { weeks: -1 })
-        return notifications?.filter(notif => !isAfter(notif.creation, oneWeekAgo)) ?? []
+        return (notifications?.filter(notif => !isAfter(notif.creation, oneWeekAgo)) ?? [])
+            .map(notif => <Notification {...notif} key={notif.id} />)
     }, [notifications])
 
     const loadedNotifications = useMemo(() => (
@@ -54,39 +51,14 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     const empty = useMemo(() => notifications?.length == 0 && !loading, [notifications?.length, loading])
 
     const loadMoreNotifications = useCallback(async (count: number) => {
-        if (count != 0 && minNotificationId != undefined) {
-            try {
-                setLoading(true)
-                return await notificationManager.loadMore(minNotificationId)
-            } finally {
-                setLoading(false)
-            }
+        if (count != 0 && minNotificationId != undefined){
+            setLoading(true)
+            const load = await notificationManager.loadMore(minNotificationId)
+            setLoading(false)
+            return load
         }
         return false
     }, [minNotificationId])
-
-    useEffect(() => {
-        if (notifications) {
-            const unwatched = notifications.filter(notif => !notif.watched)
-            if (unwatched.length) {
-                try {
-                    setNotificationsWatched(unwatched).then(res => res.data).then(unwatchedCount => 
-                        notificationManager.setUnwatched(unwatchedCount)
-                    ).catch(e => console.error(e))
-                }catch(e){
-                    console.error(e)
-                }
-            }
-        }
-    }, [notifications])
-
-    useEffect(() => () => {
-        if (notifications) {
-            const unwatched = notifications.filter(notif => !notif.watched)
-            if (unwatched.length)
-                notificationManager.watch(unwatched)
-        }
-    }, [user.unwatchedNotifications, notifications])
 
     const [subscribing, setSubscribing] = useState(false)
 
@@ -109,6 +81,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     , [])
 
     const scrollElement = useRef<HTMLDivElement>(null)
+    const skeleton = useMemo(() => <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />, [])
     return (
         <div ref={scrollElement} className={`${className} text-neutral-800 px-1`}>
             {subscribing &&
@@ -121,9 +94,10 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                 triggerDistance={150}
                 scrollElement={!fullPage && scrollElement.current?.parentElement}
                 loadingComponent={
-                    <NotificationSkeleton amount={Math.min(user.totalNotifications - loadedNotifications, 45)} loading={true} className="transition-opacity w-full" />
+                    skeleton
                 }
             >
+                {loading && !notifications?.length && skeleton}
                 {showPushAsk && 
                     <div className="mb-0.5 w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
                         <div className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center bg-red-400 text-white">
@@ -158,14 +132,10 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                         <div className="text-sm font-bold mt-2 sm:mb-1">{t("no_notifications")}</div>
                     </div> :
                     <>
-                        {recentNotifications.map(notif =>
-                            <Notification {...notif} key={notif.id} />
-                        )}
+                        {recentNotifications}
                         {!!oldNotifications?.length &&
                             <Divider className="text-gray-700 text-base" orientation="left">{t("long_ago")}</Divider>}
-                        {oldNotifications.map(notif =>
-                            <Notification {...notif} key={notif.id} />
-                        )}
+                        {oldNotifications}
                     </>
                 }
 

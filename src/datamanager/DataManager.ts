@@ -1,5 +1,5 @@
 import WSEventType from "../realtime/websocket/WSEventType"
-import Dexie from "dexie"
+import Dexie, { Table } from "dexie"
 import PacketListener from "../realtime/protocol/listener/PacketListener"
 import { WSServerClient } from "../realtime/websocket/WSServerClient"
 import GeneralEventType from "../constants/GeneralEventType"
@@ -34,8 +34,22 @@ export default abstract class DataManager<T> extends PacketListener {
     protected getTable() {
         return this.database.table<T>("data")
     }
-    protected getContext(type: string) {
-        return this.database.table("context").where("type").equals(type).first()
+    protected getContext(type: string, table = this.getContextTable()) {
+        return table.where("type").equals(type).first()
+    }
+
+    public doInReadTransaction<T>(fnc: () => Promise<T>, contextTable = false, dataTable = false){
+        if(contextTable && dataTable)
+            return this.database.transaction("r", this.getTable(), this.getContextTable(), this.getContextTable(), fnc)
+        if(contextTable)
+            return this.database.transaction("r", this.getContextTable(), this.getContextTable(), fnc)
+        if(dataTable)
+            return this.database.transaction("r", this.getTable(), this.getContextTable(), fnc)
+        throw "bad arguments"
+    }
+
+    protected getContextTable(){
+        return this.database.table("context")
     }
     protected setContext(type: string, object: {[key: string]: unknown} = {}) {
         return this.database.table("context").put({
@@ -46,8 +60,8 @@ export default abstract class DataManager<T> extends PacketListener {
     protected removeContext(type: string) {
         return this.database.table("context").delete(type)
     }
-    public async getMinFresh(): Promise<number> {
-        return (await this.getContext("minFreshId"))?.objectId ?? Number.MAX_SAFE_INTEGER
+    public async getMinFresh(contextTable?: Table): Promise<number> {
+        return (await this.getContext("minFreshId", contextTable))?.objectId ?? Number.MAX_SAFE_INTEGER
     }
     protected async setMinFresh(id: number) {
         await this.setContext("minFreshId", { objectId: id })

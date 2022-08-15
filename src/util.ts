@@ -47,15 +47,16 @@ export const formatDate = (date: Date, t: TFunction): [string, number] => {
         return [_format(date, "d LLL yyyy, HH:mm"), -1]
 }
 
-export const formatDateWithTimer = (date: Date, t: TFunction, setFormattedDate: (date: string) => void) => {
+export const formatDateWithTimer = (date: Date, t: TFunction, setFormattedDate: (date: string) => void, doFirst = true) => {
     let timeoutId: number
-    const updateDate = () => {
+    const updateDate = (first = false) => {
         const [formattedDate, wait] = formatDate(date, t)
-        setFormattedDate(formattedDate)
+        if(doFirst || !first)
+            setFormattedDate(formattedDate)
         if (wait > 0)
             timeoutId = window.setTimeout(() => updateDate(), wait)
     }
-    updateDate()
+    updateDate(true)
     return () => window.clearTimeout(timeoutId)
 }
 
