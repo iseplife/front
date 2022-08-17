@@ -2,7 +2,7 @@ import DataManager from "./DataManager"
 import {getWebSocket, WSServerClient} from "../realtime/websocket/WSServerClient"
 import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import {getFeedPosts, getFeedPostsBefore} from "../data/feed"
-import {BasicPostCreation, Embed, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
+import {BasicPostCreation, Embed, EmbedEnumType, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
 import {Page} from "../data/request.type"
 import {addMonths, isBefore} from "date-fns"
 import {createPost, deletePost, updatePost} from "../data/post"
@@ -260,30 +260,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
     public async subscribe(feed: FeedId, fullReload?: boolean) {
         this.loadedFeeds.add(feed ?? mainFeedId)
-        const postsToDelete = [] as ManagerPost[]
-        const postsToEdit = [] as ManagerPost[]
 
-        await this.getTable().where({
-            "loadedFeed": feed ?? mainFeedId,
-            "waitingForUpdate": "true"
-        }).toArray().then(posts => posts.forEach(post => {
-            if (post.waitFor?.delete)
-                postsToDelete.push(post)
-            else if (post.waitFor?.modif)
-                postsToEdit.push(post)
-        }))
-
-
-        this.getTable().bulkDelete(postsToDelete.map(post => [post.loadedFeed, post.publicationDateId]))
-        const table = this.getTable()
-        this.database.transaction("rw", table, () => {
-            const promises = postsToEdit.map(post => table.update([post.loadedFeed, post.publicationDateId], {
-                ...post.waitFor.modif,
-                waitFor: undefined,
-                waitingForUpdate: false
-            }))
-            return promises[promises.length - 1]
-        })
+        this.applyUpdates(feed ?? mainFeedId)
 
         await this.initLoadSyncWait
 
@@ -556,8 +534,16 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         for (const post of (await this.getTable().where("id").equals(id).toArray())) {
             if (post.waitFor?.delete)
                 postsToDelete.push(post)
-            else if (post.waitFor?.modif)
+            else if (post.waitFor?.modif){
+                const potentialWaitingEmbed = post.waitFor.modif.embed,
+                    potentialEmbed = post.embed
+                if(potentialWaitingEmbed?.embedType == EmbedEnumType.POLL && potentialEmbed?.embedType == EmbedEnumType.POLL)
+                    potentialWaitingEmbed.choices.forEach(choice =>
+                        choice.voted = potentialEmbed.choices.find(oldChoice => oldChoice.id == choice.id)?.voted ?? false
+                    )
+                
                 postsToEdit.push(post)
+            }
         }
         const table = this.getTable()
         
