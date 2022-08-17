@@ -43,9 +43,17 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
     const handleSubmit = useCallback(() => {
         if(file !== undefined){
             updateCustomPicture(file).then(res => {
-                message.success(t("picture_updated"))
-                dispatch({ type: AppActionType.SET_PICTURE, payload: res.data })
+                const timehash = new Date().getTime()
+                dispatch({
+                    type: AppActionType.SET_PICTURE,
+                    payload: {
+                        original: `${res.data.original}?${timehash}`,
+                        custom: `${res.data.custom}?${timehash}`
+                    }
+                })
                 setFile(undefined)
+
+                message.success(t("picture_updated"))
             }).catch(() => message.error((t("common:error"))))
         }else{
             message.error((t("common:error")))

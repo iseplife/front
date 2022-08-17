@@ -20,7 +20,7 @@ export function initializeAPIClient(): AxiosInstance {
     })
 }
 
-export function getAPIStatus(): AxiosPromise {
+export function getAPIStatus(): AxiosPromise<string> {
     return apiClient.get("/health", {
         transformResponse: res => res,
         responseType: "text"

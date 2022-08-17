@@ -22,6 +22,8 @@ import "./index.css"
 import "antd/dist/antd.min.css"
 import Maintenance from "./pages/errors/Maintenance"
 
+const RETRY_MS_INTERVAL = 5000
+
 initializeAPIClient()
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
@@ -40,7 +42,17 @@ const App: React.FC = () => {
 
     // Maintenance redirection if API is down
     useEffect(() => {
-        getAPIStatus().catch(() => setMaintenance(true))
+        let retry
+        getAPIStatus().catch(() => {
+            setMaintenance(true)
+            retry = setInterval(() => {
+                getAPIStatus().then(() => {
+                    location.reload()
+                })
+            }, RETRY_MS_INTERVAL)
+        })
+
+        return clearInterval(retry)
     }, [])
 
     // Check user's state (logged in or not)
@@ -66,13 +78,11 @@ const App: React.FC = () => {
     return (
         <AppContext.Provider value={{state, dispatch}}>
             <RecoilRoot>
+                {maintenance && <Maintenance />}
                 {isLoggedIn != undefined && (
                     <Router>
                         <Interceptor/>
                         <Switch>
-                            <Route path="/maintenance" component={Maintenance}/>
-                            {maintenance && <Redirect to="/maintenance" />}
-
                             <Route path="/login" component={Login}/>
                             <Route path="/" render={renderTemplate}/>
                         </Switch>

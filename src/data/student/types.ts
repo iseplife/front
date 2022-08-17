@@ -1,4 +1,3 @@
-import { GroupPreview } from "../group/types"
 
 export type StudentPicture = {
     original?: string
