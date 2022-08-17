@@ -9,6 +9,8 @@ export function initializeAPIClient(): AxiosInstance {
     return apiClient = axios.create({
         baseURL: apiURI,
         timeout: AXIOS_TIMEOUT,
+        withCredentials: true,
+        
         headers: {
             "Access-Control-Max-Age": "3600"
         },
