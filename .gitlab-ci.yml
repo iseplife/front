@@ -75,10 +75,6 @@ build-dev:
   image: node:16.13-alpine
   variables:
     CI: "false"
-    REACT_APP_HTTP_PROTOCOL: "https"
-    REACT_APP_WS_PROTOCOL: "wss"
-    REACT_APP_API_URL: "dev.iseplife.fr/api"
-    REACT_APP_URL: "https://dev.iseplife.fr"
   cache:
     key:
       files:
