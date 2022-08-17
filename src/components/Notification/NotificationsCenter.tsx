@@ -12,6 +12,7 @@ import pushService from "../../services/PushService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBell, faMoon } from "@fortawesome/free-solid-svg-icons"
 import {faSadCry} from "@fortawesome/free-regular-svg-icons"
+import { setNotificationsWatched } from "../../data/notification"
 
 interface NotificationsCenterProps {
     fullPage?: boolean
@@ -59,6 +60,30 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
         }
         return false
     }, [minNotificationId])
+
+    useEffect(() => {
+        if (notifications) {
+            const unwatched = notifications.filter(notif => !notif.watched)
+            if (unwatched.length) {
+                try {
+                    setNotificationsWatched(unwatched).then(res => res.data).then(unwatchedCount => 
+                        notificationManager.setUnwatched(unwatchedCount)
+                    ).catch(e => console.error(e))
+                }catch(e){
+                    console.error(e)
+                }
+            }
+        }
+    }, [notifications])
+
+    useEffect(() => () => {
+        if (notifications) {
+            const unwatched = notifications.filter(notif => !notif.watched)
+            if (unwatched.length)
+                notificationManager.watch(unwatched)
+        }
+    }, [user.unwatchedNotifications, notifications])
+
 
     const [subscribing, setSubscribing] = useState(false)
 
