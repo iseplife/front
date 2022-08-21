@@ -27,7 +27,7 @@ const Home: React.FC = () => {
         })
     }, [])
 
-    const exploreSince = useLiveQuery(() => feedsManager.countExploreSince(user.lastExploreWatch), [user.lastExploreWatch])
+    const exploreSince = useLiveQuery(() => feedsManager.hasExploreSince(user.lastExploreWatch), [user.lastExploreWatch])
 
     return (
         <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
