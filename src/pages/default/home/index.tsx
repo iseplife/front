@@ -56,7 +56,7 @@ const Home: React.FC = () => {
                         </button>
                     </div>
                 </Divider>
-                <Feed noDivider allowPublication={!discover} id={discover ? -1 : undefined} noPinned={discover} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
+                <Feed key={`feed${discover ? -1 : undefined}`} noDivider allowPublication={!discover} id={discover ? -1 : undefined} noPinned={discover} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
             </div>
             <div className="flex-1 lg:block hidden mr-4">
                 <IncomingEvents allowCreate={false} />

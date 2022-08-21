@@ -20,7 +20,6 @@ import {addGalleryImages, createGallery, deleteGalleryImages} from "../../../dat
 import {MediaUploadNSFW} from "../../../data/media/types"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import {message} from "antd"
-import { PollForm } from "../../../data/poll/types"
 
 type PostEditFormProps = {
     post: Post,

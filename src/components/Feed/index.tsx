@@ -25,6 +25,7 @@ import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
 import {isAfter, isBefore} from "date-fns"
+import ExpiryMap from "expiry-map"
 
 type FeedProps = {
     loading?: boolean,
@@ -35,6 +36,10 @@ type FeedProps = {
     noDivider?: boolean
     noPinned?: boolean
 }
+
+const cache = new ExpiryMap(1000 * 60 * 5)
+//TODO invalidate cache on ws disconnect
+
 const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className, noDivider, noPinned}) => {
     const {state: {user}} = useContext(AppContext)
     const {t} = useTranslation(["common", "post", "error"])
@@ -58,12 +63,20 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const selectedPost = useLiveQuery(async () => selectedPostId && await feedsManager.getFeedPost(id, selectedPostId), [id, selectedPostId])
 
     const _posts = useLiveQuery(async () => (
-        !loading ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
+        !loading && loadedPosts ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     ), [id, loadedPosts, loading])
-    const [posts, setPosts] = useState([] as ManagerPost[] | undefined)
+
+    const [posts, setPosts] = useState(cache.get(`${id}`) as ManagerPost[] | undefined ?? [])
 
     useEffect(() => {
-        setPosts(_posts)
+        if(_posts)
+            setPosts(_posts)
+    }, [_posts])
+
+    //Cache hook for fast first loading
+    useEffect(() => {
+        if(_posts?.length)
+            return () => { cache.set(`${id}`, _posts.length > 15 ? _posts.slice(0, 15) : _posts) }
     }, [_posts])
 
     useEffect(() => {
@@ -75,7 +88,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setFirstLoaded(Number.MAX_VALUE)
         setLoadedPosts(0)
         setNextLoadedPosts(FeedsManager.PAGE_SIZE)
-        setPosts([])
+        setPosts(cache.get(`${id}`) ?? [])
     }, [id])
 
     useLiveQuery(async () => {
@@ -365,7 +378,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     </div>
                 </div>
             }
-            {loadingInformations ? loadingSkeletons :
+            {loadingInformations && !posts?.length ? loadingSkeletons :
                 <InfiniteScroller
                     block={error}
                     triggerDistance={500}
