@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {useTranslation} from "react-i18next"
 import {Divider, Skeleton} from "antd"
 import EventPreviewList from "./EventPreviewList"
@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSadCry } from "@fortawesome/free-regular-svg-icons"
 import { useLiveQuery } from "dexie-react-hooks"
 import { eventsManager } from "../../datamanager/EventsManager"
+import ExpiryMap from "expiry-map"
+import { EventPreview } from "../../data/event/types"
 
 type IncomingEventsProps = {
     feed?: number
@@ -14,9 +16,17 @@ type IncomingEventsProps = {
     allowCreate?: boolean
     className?: string
 }
+
+const cache = new ExpiryMap(1000 * 60 * 60 * 10)
+
 const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, className, wait = false}) => {
     const {t} = useTranslation("event")
-    const events = useLiveQuery(async () => !wait && await eventsManager.getEvents(feed), [feed, wait])
+    const events = useLiveQuery(async () => !wait && await eventsManager.getEvents(feed), [feed, wait], cache.get(`${feed}`) as EventPreview[])
+
+    useEffect(() => {
+        if(events)
+            return () => {cache.set(`${feed}`, events)}
+    }, [events])
 
     return (
         <div className={`${className} flex flex-col justify-center text-left lg:text-center mx-0 lg:mx-4`}>
