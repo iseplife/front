@@ -93,7 +93,7 @@ export default class NotificationManager extends DataManager<Notification> {
 
     public async watch(notifications: Notification[]) {
         notifications.forEach(notif => notif.watched = true)
-        this.getTable().bulkPut(notifications)
+        this.addBulkData(notifications)
     }
 
     public async loadMore(minId: number) {
@@ -102,12 +102,12 @@ export default class NotificationManager extends DataManager<Notification> {
     }
 
     protected addBulkData(data: Notification[]) {
-        const newCache = [...this.notDynamicCache, ...data]
+        const newCache = [...this.notDynamicCache.filter(old => !data.find(notif => notif.id == old.id)), ...data].slice(0, 15)
         this.notDynamicCache = newCache.sort((a, b) => b.id - a.id)
         return super.addBulkData(data)
     }
     protected addData(data: Notification) {
-        const newCache = [...this.notDynamicCache, data]
+        const newCache = [...this.notDynamicCache.filter(old => old.id != data.id), data]
         this.notDynamicCache = newCache.sort((a, b) => b.id - a.id)
         return super.addData(data)
     }
