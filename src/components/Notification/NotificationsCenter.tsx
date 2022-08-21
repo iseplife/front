@@ -26,22 +26,24 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
     
     const minNotificationId = useLiveQuery(() => notificationManager.getMinFresh())
     const notifications = useLiveQuery(() => minNotificationId == undefined ? undefined : notificationManager.getNotifications(minNotificationId), [minNotificationId])
+
+    const cache = useMemo(() => notificationManager.notDynamicCache, [])
     
     const [showPushAsk, pushRejected] = useLiveQuery(async () => {
         const promises = await notificationManager.doInReadTransaction(() =>
             Promise.all([notificationManager.isWebPushEnabled(), notificationManager.isSubscribed(), notificationManager.isRejected()])
         , true, true)
         return [promises[0] && !promises[1], promises[2]]
-    }, [], [false, false, undefined])
+    }, [], [notificationManager.notDynamicContext.pushEnabled && !notificationManager.notDynamicContext.subscribed, notificationManager.notDynamicContext.pushRejected])
 
     const recentNotifications = useMemo(() => {
         const oneWeekAgo = add(new Date(), { weeks: -1 })
-        return (notifications?.filter(notif => isAfter(notif.creation, oneWeekAgo)) ?? [])
+        return ((notifications ?? cache).filter(notif => isAfter(notif.creation, oneWeekAgo)) ?? [])
             .map(notif => <Notification {...notif} key={notif.id} />)
     }, [notifications])
     const oldNotifications = useMemo(() => {
         const oneWeekAgo = add(new Date(), { weeks: -1 })
-        return (notifications?.filter(notif => !isAfter(notif.creation, oneWeekAgo)) ?? [])
+        return ((notifications ?? cache)?.filter(notif => !isAfter(notif.creation, oneWeekAgo)) ?? [])
             .map(notif => <Notification {...notif} key={notif.id} />)
     }, [notifications])
 
@@ -122,7 +124,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     skeleton
                 }
             >
-                {loading && !notifications?.length && skeleton}
+                {loading && !(notifications ?? cache)?.length && skeleton}
                 {showPushAsk && 
                     <div className="mb-0.5 w-full px-4 py-2.5 items-center left-32 flex rounded-lg transition-colors bg-red-100 bg-opacity-50 hover:bg-opacity-70">
                         <div className="w-10 h-10 rounded-full shadow-sm flex-shrink-0 grid place-items-center bg-red-400 text-white">

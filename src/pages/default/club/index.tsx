@@ -54,6 +54,7 @@ const Club: React.FC = () => {
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed
+            key={`cfeed${id}`}
             loading={!club.feed}
             id={club.feed}
             allowPublication={false}

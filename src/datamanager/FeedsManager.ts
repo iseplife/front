@@ -4,7 +4,7 @@ import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import {getFeedPosts, getFeedPostsBefore} from "../data/feed"
 import {BasicPostCreation, Embed, EmbedEnumType, Post, PostCreation, PostUpdate, PostUpdateForm} from "../data/post/types"
 import {Page} from "../data/request.type"
-import {addMonths, isBefore} from "date-fns"
+import {addMonths, isAfter, isBefore} from "date-fns"
 import {createPost, deletePost, updatePost} from "../data/post"
 import GeneralEventType from "../constants/GeneralEventType"
 import WSPSFeedPostEdited from "../realtime/protocol/packets/server/WSPSFeedPostEdited"
@@ -217,8 +217,8 @@ export default class FeedsManager extends DataManager<ManagerPost> {
             await this.setContext("no_connection", {bugged})
     }
 
-    public countExploreSince(lastWatched: Date, limit = 1){
-        return this.getTable().where(["loadedFeed", "publicationDateId"]).between([-1, this.calcIdFromDateId(lastWatched ?? new Date(0), 999_999)], [-1, this.calcIdFromDateId(new Date(), 999_999)]).limit(limit).count()
+    public async hasExploreSince(lastWatched: Date){
+        return isAfter((await this.getTable().where({"loadedFeed": -1}).last())?.publicationDate ?? new Date(), lastWatched)
     }
 
     public countFreshFeedPosts(feed: FeedId) {

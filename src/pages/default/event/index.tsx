@@ -42,7 +42,11 @@ const Event: React.FC = () => {
     const [tab, setTab] = useState<number>(0)
 
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
-    const feed = useMemo(() => (<Feed id={event?.feed} loading={!event?.feed}/>), [event?.feed])
+    const feed = useMemo(() => (<Feed
+        key={`efeed${id}`}
+        id={event?.feed}
+        loading={!event?.feed}
+    />), [event?.feed])
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?
