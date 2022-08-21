@@ -20,6 +20,7 @@ import {addGalleryImages, createGallery, deleteGalleryImages} from "../../../dat
 import {MediaUploadNSFW} from "../../../data/media/types"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import {message} from "antd"
+import { PollForm } from "../../../data/poll/types"
 
 type PostEditFormProps = {
     post: Post,
@@ -144,6 +145,8 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                         break
                     }
                     case EmbedEnumType.POLL: {
+                        if(embed.data.choices.find(choice => (choice as any) == "" || !choice.content.length) != undefined)
+                            return
                         if (props.post.embed == null || embed.type != props.post.embed.embedType) {
                             const res = await createPoll(embed.data)
                             post.attachements = {[EmbedEnumType.POLL]: res.data.id}
