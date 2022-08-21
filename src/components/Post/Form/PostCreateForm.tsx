@@ -75,6 +75,8 @@ const PostCreateForm = withFormik<PostCreateFormProps, PostFormValues<EmbedCreat
                     case EmbedEnumType.POLL:
                         if(embed.data.choices.length == 0)
                             break embed_block
+                        if(embed.data.choices.find(choice => (choice as any) == "" || !choice.content.length) != undefined)
+                            return
                         res = await createPoll(embed.data)
                         break
                     case EmbedEnumType.GALLERY:
