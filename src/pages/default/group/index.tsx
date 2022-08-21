@@ -101,7 +101,7 @@ const Group: React.FC = () => {
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed
-            key={group?.feedId && `feed${group?.feedId}`}
+            key={`feed${group?.feedId ?? "loading"}`}
             id={group?.feedId}
             loading={!group}
         />,

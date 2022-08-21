@@ -66,7 +66,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         !loading && loadedPosts ? feedsManager.getFeedPosts(id, loadedPosts) : undefined
     ), [id, loadedPosts, loading])
 
-    const [posts, setPosts] = useState(cache.get(`${id}`) as ManagerPost[] | undefined ?? [])
+    const [posts, setPosts] = useState(loading ? [] : cache.get(`${id}`) as ManagerPost[] | undefined ?? [])
 
     useEffect(() => {
         if(_posts)
@@ -76,7 +76,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     //Cache hook for fast first loading
     useEffect(() => {
         if(_posts?.length)
-            return () => { cache.set(`${id}`, _posts.length > 15 ? _posts.slice(0, 15) : _posts) }
+            return () => { cache.set(`${id}`, _posts.length > FeedsManager.PAGE_SIZE ? _posts.slice(0, FeedsManager.PAGE_SIZE) : _posts) }
     }, [_posts])
 
     useEffect(() => {
@@ -88,7 +88,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setFirstLoaded(Number.MAX_VALUE)
         setLoadedPosts(0)
         setNextLoadedPosts(FeedsManager.PAGE_SIZE)
-        setPosts(cache.get(`${id}`) ?? [])
+        setPosts(loading ? [] : cache.get(`${id}`) ?? [])
     }, [id])
 
     useLiveQuery(async () => {

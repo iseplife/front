@@ -43,7 +43,7 @@ const Event: React.FC = () => {
 
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
     const feed = useMemo(() => (<Feed
-        key={event?.feed && `feed${event?.feed}`}
+        key={`feed${event?.feed ?? "loading"}`}
         id={event?.feed}
         loading={!event?.feed}
     />), [event?.feed])

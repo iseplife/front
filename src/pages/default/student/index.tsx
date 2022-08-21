@@ -54,7 +54,7 @@ const Student: React.FC = () => {
 
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed 
-            key={student?.feedId && `feed${student?.feedId}`}
+            key={`feed${student?.feedId ?? "loading"}`}
             loading={!student?.feedId}
             id={student?.feedId}
             allowPublication={false}
