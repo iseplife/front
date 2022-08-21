@@ -9,6 +9,9 @@ import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNo
 
 export default class NotificationManager extends DataManager<Notification> {
 
+    notDynamicCache: Notification[] = []
+    notDynamicContext = { pushEnabled: false, subscribed: false, pushRejected: false }
+
     constructor(wsServerClient: WSServerClient) {
         super("notifications", ["id"], wsServerClient)
     }
@@ -18,6 +21,12 @@ export default class NotificationManager extends DataManager<Notification> {
         this.removeContext("maxLoaded")
         await this.loadPage(0)
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
+
+        this.doInReadTransaction(() => {
+            this.isWebPushEnabled().then(enabled => this.notDynamicContext.pushEnabled = enabled)
+            this.isRejected().then(rejected => this.notDynamicContext.pushRejected = rejected)
+            return this.isSubscribed().then(subscribed => this.notDynamicContext.subscribed = subscribed)
+        }, true, false)
     }
 
 
@@ -39,6 +48,7 @@ export default class NotificationManager extends DataManager<Notification> {
     }
     public async setRejected(rejected: boolean) {
         this.setContext("rejected", { rejected })
+        this.notDynamicContext.pushRejected = rejected
     }
 
     protected async loadPage(page: number) {
@@ -91,6 +101,17 @@ export default class NotificationManager extends DataManager<Notification> {
         return await this.loadPage(Math.floor(await this.getTable().where("id").aboveOrEqual(minId).count() / await this.getResultsByPage()))
     }
 
+    protected addBulkData(data: Notification[]) {
+        const newCache = [...this.notDynamicCache, ...data]
+        this.notDynamicCache = newCache.sort((a, b) => b.id - a.id)
+        return super.addBulkData(data)
+    }
+    protected addData(data: Notification) {
+        const newCache = [...this.notDynamicCache, data]
+        this.notDynamicCache = newCache.sort((a, b) => b.id - a.id)
+        return super.addData(data)
+    }
+
     public async getNotifications(minId: number): Promise<Notification[]> {
         return this.getTable().where("id").aboveOrEqual(minId).reverse().sortBy("id")
     }
@@ -113,6 +134,7 @@ export default class NotificationManager extends DataManager<Notification> {
     }
     public async setWebPushEnabled(enabled: boolean){
         this.setContext("webpush.enabled", { enabled })
+        this.notDynamicContext.pushEnabled = enabled
     }
 
     public async isSubscribed(){
@@ -120,6 +142,7 @@ export default class NotificationManager extends DataManager<Notification> {
     }
     public async setSubscribed(subscribed: boolean){
         this.setContext("webpush.subscribed", { subscribed })
+        this.notDynamicContext.subscribed = subscribed
     }
 
     @PacketHandler(WSPSNotificationReceived)
