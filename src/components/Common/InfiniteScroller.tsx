@@ -136,7 +136,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
     }, [downLoader, callback, loaderRef?.current, block])
 
     return (
-        <div className="relative h-auto">
+        <div className={`relative h-auto ${className}`}>
             {(watch !== "DOWN") && !empty && (
                 <div className="mb-3 text-center">
                     { upLoader.over ?
@@ -145,7 +145,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                 </div>
             )}
 
-            <div className={className}>
+            <div>
                 {children}
             </div>
 
