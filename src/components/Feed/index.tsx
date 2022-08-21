@@ -37,7 +37,7 @@ type FeedProps = {
     noPinned?: boolean
 }
 
-const cache = new ExpiryMap(1000 * 60 * 5)
+const cache = new ExpiryMap(1000 * 60 * 60)
 //TODO invalidate cache on ws disconnect
 
 const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, className, noDivider, noPinned}) => {
