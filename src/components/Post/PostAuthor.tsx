@@ -5,7 +5,7 @@ import StudentAvatar from "../Student/StudentAvatar"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {format, isFuture, addSeconds} from "date-fns"
 import {useTranslation} from "react-i18next"
-import {formatDateWithTimer} from "../../util"
+import {formatDate, formatDateWithTimer} from "../../util"
 import {Post} from "../../data/post/types"
 
 type PostAuthorProps = {
@@ -15,7 +15,8 @@ type PostAuthorProps = {
 }
 const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, className = ""}) => {
     const {t} = useTranslation(["common", "post"])
-    const [formattedDate, setFormattedDate] = useState<string>("")
+    
+    const [formattedDate, setFormattedDate] = useState<string>(formatDate(publicationDate, t)[0])
     useEffect(() => formatDateWithTimer(publicationDate, t, setFormattedDate), [publicationDate])
 
     const checkFuturePost = (publicationDate: Date) => isFuture(addSeconds(publicationDate, publicationDate.getMilliseconds() ? -75 : -10)) // for potential clocks diff
