@@ -45,7 +45,8 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
 
     useEffect(() => {
         setLikes(props.likesCount)
-    }, [props.likesCount])
+        setLiked(props.liked)
+    }, [props.likesCount, props.liked])
 
     return (
         <>
