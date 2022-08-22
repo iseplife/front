@@ -28,6 +28,7 @@ import SubscriptionHandler from "../../../components/Subscription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
+import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 
 interface ParamTypes {
     id?: string
@@ -207,37 +208,39 @@ const Event: React.FC = () => {
             </div>
             <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <div className="flex-1 mx-4 sm:mt-0">
-                    <Link to={`/club/${event?.club.id}`}>
-                        <div
-                            className="
-                                flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white
-                                hover:bg-neutral-50 transition-colors my-5 mt-1 sm:mt-5
-                            "
-                        >
-                            <div className="flex items-center font-normal">
-                                {event ?
-                                    <>
-                                        <WebPAvatarPolyfill
-                                            src={mediaPath(event?.club.logoUrl, AvatarSizes.THUMBNAIL)}
-                                            icon={<FontAwesomeIcon icon={faUserGroup} />}
-                                            size="large"
-                                            className="hover:shadow-outline mr-1"
-                                        />
-                                        <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">
-                                            {event?.club.name}
-                                        </div>
-                                    </> :
-                                    <>
-                                        <SkeletonAvatar active size="large"/>
-                                        <Skeleton
-                                            title={false} active paragraph={{rows: 1, width: 120}}
-                                            className="mt-1.5 -mb-1.5 ml-3"
-                                        />
-                                    </>
-                                }
+                    <LinkEntityPreloader preview={event?.club}>
+                        <Link to={`/club/${event?.club.id}`}>
+                            <div
+                                className="
+                                    flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white
+                                    hover:bg-neutral-50 transition-colors my-5 mt-1 sm:mt-5
+                                "
+                            >
+                                <div className="flex items-center font-normal">
+                                    {event ?
+                                        <>
+                                            <WebPAvatarPolyfill
+                                                src={mediaPath(event?.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                                icon={<FontAwesomeIcon icon={faUserGroup} />}
+                                                size="large"
+                                                className="hover:shadow-outline mr-1"
+                                            />
+                                            <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">
+                                                {event?.club.name}
+                                            </div>
+                                        </> :
+                                        <>
+                                            <SkeletonAvatar active size="large"/>
+                                            <Skeleton
+                                                title={false} active paragraph={{rows: 1, width: 120}}
+                                                className="mt-1.5 -mb-1.5 ml-3"
+                                            />
+                                        </>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    </LinkEntityPreloader>
 
                     <div className="sm:hidden">
                         <EventDescription description={event?.description} loading={!event} phone={true}/>

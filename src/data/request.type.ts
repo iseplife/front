@@ -13,6 +13,7 @@ export type Author = {
     feedId: number
     authorType: "CLUB" | "STUDENT" | "ADMIN"
     name: string
+    description: string
     thumbnail: string
 }
 

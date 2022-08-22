@@ -15,7 +15,7 @@ const ClubCover: React.FC = () => {
     const [preview, setPreview] = useState<string>()
     const [image, setImage] = useState<File | null>(null)
     const [uploading, setUploading] = useState(false)
-    const {club, dispatch} = useContext(ClubContext)
+    const {state: {club}, dispatch} = useContext(ClubContext)
     const uploadRef = useRef<HTMLInputElement>(null)
 
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const ClubCover: React.FC = () => {
     const updateCover = useCallback(() => {
         if (image) {
             setUploading(true)
-            uploadCover(club.id, image).then( res => {
+            uploadCover(club!.id, image).then( res => {
                 dispatch({type: ClubActionType.UPDATE_COVER, payload: res.data.name})
                 message.success("image mise à jour")
 
@@ -47,8 +47,8 @@ const ClubCover: React.FC = () => {
     }, [club, image])
 
     const removeCover = useCallback(() => {
-        uploadCover(club.id, null).then(() => {
-            dispatch({type: ClubActionType.UPDATE_CLUB, payload: {...club, coverUrl: undefined}})
+        uploadCover(club!.id, null).then(() => {
+            dispatch({type: ClubActionType.UPDATE_CLUB, payload: {...club!, coverUrl: undefined}})
             message.success("image supprimé")
         })
     }, [club])
@@ -80,13 +80,13 @@ const ClubCover: React.FC = () => {
             <div
                 className="w-full h-full"
                 style={{
-                    backgroundImage: `url("${preview || mediaPath(club.coverUrl, CoverSizes.DEFAULT) || "img/static/default-cover.png"}")`,
+                    backgroundImage: `url("${preview || mediaPath(club?.coverUrl, CoverSizes.DEFAULT) || "img/static/default-cover.png"}")`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}
             />
-            {club.canEdit && !image && (
+            {club?.canEdit && !image && (
                 <div className="absolute flex top-4 right-4">
                     {club?.coverUrl && (
                         <div

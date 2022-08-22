@@ -7,12 +7,12 @@ import {useTranslation} from "react-i18next"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {uploadClubLogo} from "../../../data/club"
-import {ClubContext} from "../../../context/club/context"
+import {ClubContext, ClubContextWithClub} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 
 const ClubLogoForm: React.FC = () => {
     const {t} = useTranslation(["common", "club"])
-    const {club, dispatch} = useContext(ClubContext)
+    const {state: { club }, dispatch} = useContext(ClubContext) as ClubContextWithClub
     const [image, setImage] = useState<File | null>(null)
     const [uploading, setUploading] = useState(false)
     const defaultImage = useMemo(() => (

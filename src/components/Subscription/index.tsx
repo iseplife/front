@@ -3,10 +3,9 @@ import SubscriptionButton from "./SubscriptionButton"
 import {SubscribableType} from "../../data/subscription/SubscribableType"
 import SubscriptionExtensiveButton from "./SubscriptionExtensiveButton"
 import {Subscription as SubscriptionType} from "../../data/feed/types"
-import { feedsManager } from "../../datamanager/FeedsManager"
 
 type SubscriptionHandlerProps = {
-    subscribable: number
+    subscribable?: number
     subscription: SubscriptionType
     onUpdate: (sub: SubscriptionType) => void
     type: SubscribableType
@@ -23,7 +22,7 @@ const SubscriptionHandler: React.FC<SubscriptionHandlerProps> = ({subscribable, 
                 type={type}
                 updateSubscription={subCallback}
             />}
-            {subscription &&
+            {subscription && subscribable &&
                 <SubscriptionExtensiveButton
                     id={subscribable}
                     updateExtensive={extensiveCallback}

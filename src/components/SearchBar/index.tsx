@@ -1,7 +1,7 @@
 import {Divider, Empty, Select} from "antd"
 import React, {useCallback, useEffect, useState} from "react"
 import {globalSearch, searchClub, searchEvent, searchStudent} from "../../data/searchbar"
-import {useHistory} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
 import {SearchItem, SearchItemType} from "../../data/searchbar/types"
 import {useTranslation} from "react-i18next"
 import CustomCheckbox from "./CustomCheckbox"
@@ -11,6 +11,7 @@ import Pills from "../Common/Pills"
 import Loading from "../Common/Loading"
 import Axios, {CancelTokenSource} from "axios"
 import {handleRequestCancellation} from "../../util"
+import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -47,7 +48,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      */
     const handleSelect = useCallback((value: string) => {
         setCurrentValue("")
-        history.push("/" + value)
     }, [])
 
     /**
@@ -167,19 +167,23 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             onSelect={handleSelect}
             dropdownRender={(menu: React.ReactNode) => customDropdownRender(menu)}
         >
-            {data.map(({id, type, name, thumbURL, status,}) => filter[type] &&
-                <Option key={`${type}-${id}`} value={`${type.toLowerCase()}/${id}`}>
-                    <div className="flex justify-between">
-                        <div className="inline-flex">
-                            <AvatarSearchType
-                                type={type}
-                                text={name}
-                                thumbURL={thumbURL}
-                            />
-                            <div className="ml-2 font-bold">{name}</div>
-                        </div>
-                        <Pills status={status} event={type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
-                    </div>
+            {data.map((item) => filter[item.type] &&
+                <Option key={`${item.type}-${item.id}`} value={`${item.type.toLowerCase()}/${item.id}`}>
+                    <LinkEntityPreloader preview={item}>
+                        <Link to={`${item.type.toLowerCase()}/${item.id}`} className="text-[color:inherit]">
+                            <div className="flex justify-between">
+                                <div className="inline-flex">
+                                    <AvatarSearchType
+                                        type={item.type}
+                                        text={item.name}
+                                        thumbURL={item.thumbURL}
+                                    />
+                                    <div className="ml-2 font-bold">{item.name}</div>
+                                </div>
+                                <Pills status={item.status} event={item.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
+                            </div>
+                        </Link>
+                    </LinkEntityPreloader>
                 </Option>
             )}
         </Select>
