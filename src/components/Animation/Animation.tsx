@@ -1,6 +1,6 @@
 
 import { useLottie } from "lottie-react"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Animation as AnimationData } from "react-useanimations/utils"
 
 interface AnimationProps {
@@ -29,9 +29,7 @@ const Animation: React.FC<AnimationProps> = ({ animation, enabled, size, classNa
         lottie.play()
     }, [enabled])
 
-    return <>
-        {lottie.View}
-    </>
+    return lottie.View
 }
 
 export default Animation
