@@ -3,7 +3,7 @@ import { EventPreview } from "../../data/event/types"
 import { SearchItem } from "../../data/searchbar/types"
 
 export default class EntityPreloader {
-    private cache = new ExpiryMap(1000 * 60 * 10)
+    private cache = new ExpiryMap(1000 * 60 * 60 * 3)
 
     public set(key: number, value: any) {
         this.cache.set(key, value)
