@@ -61,7 +61,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, set
             <div className="py-1 mr-2.5 pointer-events-none invisible">
                 Tab
             </div>
-            { !loading && tabsEntriesWithCallback[currentTab]?.[1] }
+            { tabsEntriesWithCallback[currentTab]?.[1] }
         </div>
     )
 }
