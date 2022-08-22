@@ -3,15 +3,17 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
-import WebPPolyfill from "../../../components/Common/WebPPolyfill"
+import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import Feed from "../../../components/Feed"
+import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
 import StudentClubs from "../../../components/Student/StudentClubs"
 import SubscriptionHandler from "../../../components/Subscription"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
 import { Subscription } from "../../../data/feed/types"
+import { Author } from "../../../data/request.type"
 import { getStudent } from "../../../data/student"
-import { StudentOverview } from "../../../data/student/types"
+import { StudentOverview, StudentPreview } from "../../../data/student/types"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import { mediaPath } from "../../../util"
 
@@ -36,6 +38,7 @@ const Student: React.FC = () => {
 
     const {state: {user: {id: myId}}} = useContext(AppContext)
 
+    const cache = entityPreloader.get<StudentPreview, Author>(id)
 
     /**
      * Club initialisation on mounting
@@ -55,13 +58,13 @@ const Student: React.FC = () => {
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed 
             key={`sfeed${id}`}
-            loading={!student?.feedId}
-            id={student?.feedId}
+            loading={!(student ?? cache)?.feedId}
+            id={(student ?? cache)?.feedId}
             allowPublication={false}
         />,
         [t("user:clubs")]: <StudentClubs student={student} />,
         // [t("user:photos")]: <StudentPhotos id={student?.id} />,
-    }), [student?.feedId])
+    }), [student?.feedId, cache?.feedId])
     
     const handleSubscription = useCallback((sub: Subscription) => {
         if (student)
@@ -70,38 +73,41 @@ const Student: React.FC = () => {
 
     return (
         <>
-            {/* <ClubHeader /> */}
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-2 lg:grid-cols-5">
-                
                 <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3 max-w-[calc(100vw-2rem)]">
                     <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">
-                        <WebPPolyfill className="w-32 h-32 rounded-full" src={student?.picture ? mediaPath(student?.picture, AvatarSizes.FULL) : "/img/icons/discovery/user.svg"} />
+                        <WebPAvatarPolyfill className="w-32 h-32 rounded-full absolute" src={cache?.picture ?? cache?.thumbURL ?? cache?.thumbnail ? mediaPath(cache?.picture ?? cache?.thumbURL ?? cache?.thumbnail, AvatarSizes.THUMBNAIL) : "/img/icons/discovery/user.svg"} />
+                        <WebPAvatarPolyfill className="w-32 h-32 rounded-full z-10 bg-transparent" src={student?.picture && mediaPath(student?.picture, AvatarSizes.FULL)} />
                         <div>
-                            {
-                                student ? <>
-                                    <div className="text-2xl sm:text-3xl font-bold">{`${student?.firstName} ${student?.lastName}`}</div>
-                                    <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo}</div>
-                                </> : <>
+                            {student || cache ? 
+                                <div className="text-2xl sm:text-3xl font-bold">{student ? `${student?.firstName} ${student?.lastName}` : (cache?.name ?? `${cache?.firstName} ${cache?.lastName}`)}</div>
+                                :
+                                <>
                                     <div className="text-2xl sm:text-3xl font-bold h-8 w-32 bg-neutral-200 rounded-full absolute"></div>
                                     <div className="text-2xl sm:text-3xl font-bold">&nbsp;</div>
-                                    <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
                                 </>
                             }
-                            <div className="flex mt-3">
-                                {student ? 
-                                    student?.id != myId &&
+                            {student || cache?.promo ?
+                                <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo ?? cache?.promo}</div>
+                                :
+                                <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
+                            }
+                            {id != myId &&
+                                <div className="flex mt-3">
+                                    {student ? 
                                         <SubscriptionHandler
                                             type={SubscribableType.STUDENT}
                                             subscribable={student.id}
                                             subscription={student.subscribed}
                                             onUpdate={handleSubscription}
                                         />
-                                    : <div className="flex">
-                                        <div className="w-24 h-10 rounded-full bg-neutral-200" />
-                                        <div className="w-10 h-10 rounded-full bg-neutral-200 ml-2" />
-                                    </div>
-                                }
-                            </div>
+                                        : <div className="flex">
+                                            <div className="w-24 h-10 rounded-full bg-neutral-200" />
+                                            <div className="w-10 h-10 rounded-full bg-neutral-200 ml-2" />
+                                        </div>
+                                    }
+                                </div>
+                            }
                         </div>
                         
                     </div>

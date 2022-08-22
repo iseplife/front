@@ -7,6 +7,7 @@ import {format, isFuture, addSeconds} from "date-fns"
 import {useTranslation} from "react-i18next"
 import {formatDate, formatDateWithTimer} from "../../util"
 import {Post} from "../../data/post/types"
+import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
 
 type PostAuthorProps = {
     author: Author
@@ -50,26 +51,28 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
     }, [author.id, author.authorType])
 
     return (
-        <AvatarWrapper>
-            <div className={`flex ${className} text-black/[85%] group`}>
-                <StudentAvatar
-                    id={author.id}
-                    name={author.name}
-                    picture={author.thumbnail}
-                    pictureSize={AvatarSizes.THUMBNAIL}
-                    size="default"
-                />
-                <div className="items-center ml-2">
-                    <div className="font-bold -mb-0.5 -mt-0.5 group-hover:underline">{author.name}</div>
-                    <div className="text-xs whitespace-nowrap">
-                        {futurePost ?
-                            `${t("post:planned_for")} ${format(new Date(publicationDate), "dd/MM/yy HH:mm")}` :
-                            formattedDate
-                        }
+        <LinkEntityPreloader preview={author}>
+            <AvatarWrapper>
+                <div className={`flex ${className} text-black/[85%] group`}>
+                    <StudentAvatar
+                        id={author.id}
+                        name={author.name}
+                        picture={author.thumbnail}
+                        pictureSize={AvatarSizes.THUMBNAIL}
+                        size="default"
+                    />
+                    <div className="items-center ml-2">
+                        <div className="font-bold -mb-0.5 -mt-0.5 group-hover:underline">{author.name}</div>
+                        <div className="text-xs whitespace-nowrap">
+                            {futurePost ?
+                                `${t("post:planned_for")} ${format(new Date(publicationDate), "dd/MM/yy HH:mm")}` :
+                                formattedDate
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        </AvatarWrapper>
+            </AvatarWrapper>
+        </LinkEntityPreloader>
     )
 }
 

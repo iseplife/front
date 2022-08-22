@@ -3,10 +3,10 @@ import {ClubContext} from "../../context/club/context"
 import CustomText from "../Common/CustomText"
 
 const About: React.FC = () => {
-    const {club: {description}} = useContext(ClubContext)
+    const {state} = useContext(ClubContext)
 
     return (
-        <CustomText description={description} />
+        <CustomText description={(state.club ?? state.cache)?.description ?? ""} />
     )
 }
 

@@ -8,9 +8,9 @@ import { ClubTab } from "../../../pages/default/club"
 
 const ClubPresentation: React.FC<{ setTab: (tab: ClubTab) => void }> = ({setTab}) => {
     const {t} = useTranslation(["club", "gallery"])
-    const { club: { id } } = useContext(ClubContext)
+    const { state: { club } } = useContext(ClubContext)
 
-    const clubEventsGalleriesCallback = useCallback((page?: number) => getClubEventsGalleries(id, page), [getClubEventsGalleries, id])
+    const clubEventsGalleriesCallback = useCallback((page?: number) => getClubEventsGalleries(club!.id, page), [getClubEventsGalleries, club?.id])
 
     const openEventTab = useCallback(() => {
         setTab(ClubTab.EVENTS_TAB)
@@ -22,7 +22,7 @@ const ClubPresentation: React.FC<{ setTab: (tab: ClubTab) => void }> = ({setTab}
                 <span className="text-neutral-900 font-semibold text-base">{t("about")}</span>
                 <About/>
             </div>
-            <ClubEventsGalleriesPreview seeAll={openEventTab} loading={!id} getGalleriesCallback={clubEventsGalleriesCallback} />
+            <ClubEventsGalleriesPreview seeAll={openEventTab} loading={!club?.id} getGalleriesCallback={clubEventsGalleriesCallback} />
         </div>
 
     )

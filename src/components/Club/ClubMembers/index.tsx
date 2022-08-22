@@ -13,7 +13,7 @@ import {ClubContext} from "../../../context/club/context"
 
 
 const ClubMembers: React.FC = () => {
-    const {club: {id, canEdit}} = useContext(ClubContext)
+    const {state: {club}} = useContext(ClubContext)
     const [loading, setLoading] = useState(true)
     const [members, setMembers] = useState<ClubMember[]>([])
     const [editionMode, setEditionMode] = useState(false)
@@ -34,17 +34,17 @@ const ClubMembers: React.FC = () => {
 
     useEffect(() => {
         setLoading(true)
-        if(id)
-            getMembers(id, selectedYear).then(res =>
+        if(club?.id)
+            getMembers(club?.id, selectedYear).then(res =>
                 setMembers(res.data)
             ).finally(() => setLoading(false))
-    }, [id, selectedYear])
+    }, [club?.id, selectedYear])
 
     return (
         <div className="container mx-auto relative h-full py-4">
             <div className="flex justify-end item-center mb-2">
-                <ClubSchoolSessionsSelect club={id} handleChange={setSelectedYear}/>
-                {canEdit && (
+                <ClubSchoolSessionsSelect club={club!.id} handleChange={setSelectedYear}/>
+                {club?.canEdit && (
                     <div
                         onClick={toggleEditionMode}
                         className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group mx-2"
@@ -67,10 +67,10 @@ const ClubMembers: React.FC = () => {
                             onDelete={onDelete}
                             onUpdate={onUpdate}
                         /> :
-                        <MemberCard key={m.id} id={m.id} m={m} showRole={canEdit}/>
+                        <MemberCard key={m.id} id={m.id} m={m} showRole={club?.canEdit}/>
                     )
                 }
-                {editionMode && <ClubMemberAdder club={id} year={selectedYear} onAdd={onAdd}/>}
+                {editionMode && <ClubMemberAdder club={club!.id} year={selectedYear} onAdd={onAdd}/>}
             </div>
         </div>
     )

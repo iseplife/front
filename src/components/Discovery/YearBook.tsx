@@ -151,10 +151,7 @@ const YearBook: React.FC = () => {
                         {filteredStudent.map(s =>
                             <StudentCard
                                 key={s.id}
-                                id={s.id}
-                                picture={s.picture}
-                                promo={s.promo}
-                                fullname={s.firstName + " " + s.lastName}
+                                student={s}
                                 className={loadingFilterChange && "opacity-50"}
                             />
                         )}

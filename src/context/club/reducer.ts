@@ -2,23 +2,46 @@ import {ClubContextState} from "./context"
 import {ClubActionType, ClubContextAction} from "./action"
 
 
-export const clubContextReducer = (club: ClubContextState, action: ClubContextAction): ClubContextState => {
+export const clubContextReducer = (state: ClubContextState, action: ClubContextAction): ClubContextState => {
     switch (action.type) {
         case ClubActionType.UPDATE_COVER:
             return {
-                ...club,
-                coverUrl: action.payload
+                ...state,
+                club: {
+                    ...state.club!,
+                    coverUrl: action.payload
+                }
             }
         case ClubActionType.UPDATE_LOGO:
             return {
-                ...club,
-                logoUrl: action.payload
+                ...state,
+                club: {
+                    ...state.club!,
+                    logoUrl: action.payload
+                }
+            }
+        case ClubActionType.UPDATE_SUB:
+            return {
+                ...state,
+                club: {
+                    ...state.club!,
+                    subscribed: action.payload
+                }
+            }
+        case ClubActionType.UPDATE_CACHE:
+            return {
+                ...state,
+                cache: action.payload
             }
         case ClubActionType.GET_CLUB:
         case ClubActionType.UPDATE_CLUB:
             return {
-                ...action.payload
+                ...state,
+                club: {
+                    ...state.club,
+                    ...action.payload
+                }
             }
     }
-    return club
+    return state
 }

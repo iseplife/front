@@ -145,9 +145,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                 </div>
             )}
 
-            <div>
-                {children}
-            </div>
+            {children}
 
             <div className="invisible absolute" style={{marginTop: `-${triggerDistance}px`}} ref={loaderRef} />
 

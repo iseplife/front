@@ -16,6 +16,9 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { useTranslation } from "react-i18next"
 import EventsTab from "../../../components/Event/EventsTab"
 import { getEventsFrom } from "../../../data/event"
+import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
+import { ClubPreview } from "../../../data/club/types"
+import { Author } from "../../../data/request.type"
 
 export enum ClubTab {
     HOME_TAB,
@@ -28,10 +31,11 @@ const Club: React.FC = () => {
     const { id: idStr } = useParams<{ id?: string }>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
-    const [club, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
+    const [{club}, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
+
+    const cache = useMemo(() => entityPreloader.get<Author, ClubPreview>(id), [])
 
     const [t] = useTranslation(["club", "common"])
-
 
     const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
@@ -55,17 +59,19 @@ const Club: React.FC = () => {
     const tabs = useMemo(() => ({
         [t("common:posts")]: <Feed
             key={`cfeed${id}`}
-            loading={!club.feed}
-            id={club.feed}
+            loading={!(club?.feed ?? cache?.feedId)}
+            id={club?.feed ?? cache?.feedId}
             allowPublication={false}
         />,
-        [t("events")]: <EventsTab elementId={club.id} getEventsCallback={getEventsFrom} />,
+        [t("events")]: <EventsTab elementId={id} getEventsCallback={getEventsFrom} />,
         [t("members")]: <ClubMembers />,
-        ...(club.canEdit && { "Administration": <ClubAdmin /> })
-    }), [club.feed, club.canEdit])
+        ...(club?.canEdit && { "Administration": <ClubAdmin /> })
+    }), [id, club?.feed, club?.canEdit, cache])
+
+    const clubContext = useMemo(() => ({state: {club, cache}, dispatch}), [club, cache])
 
     return (
-        <ClubContext.Provider value={{club, dispatch}}>
+        <ClubContext.Provider value={clubContext}>
             <ClubHeader />
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
                 <div className="flex-1 mx-4 -mt-4 sm:mt-0">

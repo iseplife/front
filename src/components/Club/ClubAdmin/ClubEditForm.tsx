@@ -5,7 +5,7 @@ import {Button, Input, message} from "antd"
 import {format} from "date-fns"
 import {useTranslation} from "react-i18next"
 import {updateClub} from "../../../data/club"
-import {ClubContext} from "../../../context/club/context"
+import {ClubContext, ClubContextWithClub} from "../../../context/club/context"
 import {ClubActionType} from "../../../context/club/action"
 import {faCircleNotch, faLink} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -17,7 +17,7 @@ const {TextArea} = Input
 
 const ClubEditForm: React.FC = () => {
     const {t} = useTranslation(["club", "common"])
-    const {club, dispatch} = useContext(ClubContext)
+    const {state: { club }, dispatch} = useContext(ClubContext) as ClubContextWithClub
 
     const formik = useFormik<ClubForm>({
         initialValues: {

@@ -90,6 +90,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setPosts(loading ? [] : cache.get(`${id}`) ?? [])
     }, [id])
 
+    console.log("render")
+
     useLiveQuery(async () => {
         const generalLoad = await feedsManager.getGeneralLastLoad()
         setNeedFullReload(needFullReload => needFullReload || (baseLastLoad != -1 && baseLastLoad < generalLoad))
