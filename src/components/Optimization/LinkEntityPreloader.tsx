@@ -15,7 +15,7 @@ const LinkEntityPreloader: React.FC<LinkEntityPreloaderProps> = ({preview, child
     const onClick = useCallback(() =>
         preview && entityPreloader.set(preview.id, preview!)
     , [preview])
-    return <div onClick={onClick}>
+    return <div className="w-full" onClick={onClick}>
         {children}
     </div>
 }

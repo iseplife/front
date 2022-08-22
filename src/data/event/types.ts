@@ -29,6 +29,7 @@ export type EventPreview = {
     club: ClubPreview
     feedId: number
     title: string
+    description: string
     type: EventType
     startsAt: Date
     endsAt: Date

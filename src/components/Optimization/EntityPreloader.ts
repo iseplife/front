@@ -13,7 +13,7 @@ export default class EntityPreloader {
         return this.cache.get(key) as (Partial<T & Z & SearchItem> & (T | Z | SearchItem)) | undefined
     }
     public getEvent(key: number) {
-        return this.cache.get(key) as EventPreview | undefined
+        return this.cache.get(key) as Partial<EventPreview & Omit<SearchItem, "type">> & (EventPreview | Omit<SearchItem, "type">)
     }
 }
 

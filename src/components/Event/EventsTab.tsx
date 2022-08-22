@@ -31,10 +31,10 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
         return false
     }, [elementId, getEventsCallback])
 
-    const loadingComponent = useMemo(() => <div className="-mt-2">{
+    const loadingComponent = useMemo(() => <div>{
         Array(10).fill(
             <div
-                className="text-gray-700 px-3 py-2 shadow-sm rounded-lg bg-white animate-pulse w-full my-4"
+                className="text-gray-700 px-3 py-2 shadow-sm rounded-lg bg-white animate-pulse w-full my-2.5"
             >
                 <div className="flex flex-col sm:flex-row items-center">
                     <div className="pb-1">
@@ -54,7 +54,7 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
         <InfiniteScroller
             watch="DOWN"
             callback={loadNextEvents}
-            className="flex flex-row flex-wrap w-full mt-3"
+            className="flex-row flex-wrap w-full mt-3"
             empty={empty}
             loadingComponent={loadingComponent}
         >
@@ -66,7 +66,7 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
                     </div>
                 ) : (
                     events.map(event => (
-                        <EventTabPreview key={event.id} event={event} className="my-2 block" />
+                        <EventTabPreview key={event.id} event={event} className="my-2.5 block" />
                     ))
                 )
 

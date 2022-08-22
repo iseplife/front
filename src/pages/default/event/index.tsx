@@ -4,7 +4,7 @@ import {Link, useHistory, useParams} from "react-router-dom"
 import {MapContainer, Marker, TileLayer} from "react-leaflet"
 import {getEvent, getEventGalleries} from "../../../data/event"
 
-import {Event as EventType} from "../../../data/event/types"
+import {Event as EventType, EventPreview} from "../../../data/event/types"
 import "./Event.css"
 import {Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
@@ -29,6 +29,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
+import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
 
 interface ParamTypes {
     id?: string
@@ -41,13 +42,15 @@ const Event: React.FC = () => {
     const [event, setEvent] = useState<EventType | undefined>()
     const [showLoadingMap, setShowLoadingMap] = useState(false)
     const [tab, setTab] = useState<number>(0)
-
+    
+    const cache = useMemo(() => id ? entityPreloader.getEvent(parseInt(id)) : undefined, [id])
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
+    console.log(event?.feed ?? cache?.feedId, !(event?.feed ?? cache?.feedId))
     const feed = useMemo(() => (<Feed
         key={`efeed${id}`}
-        id={event?.feed}
-        loading={!event?.feed}
-    />), [event?.feed])
+        id={(event?.feed ?? cache?.feedId)}
+        loading={!(event?.feed ?? cache?.feedId)}
+    />), [event?.feed ?? cache?.feedId])
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?
@@ -58,36 +61,37 @@ const Event: React.FC = () => {
     const coordinates = useMemo(() => event?.position?.coordinates.split(";").map(v => +v) as [number, number], [event?.position?.coordinates])
 
     const date = useMemo(() => {
-        if (event) {
+        const startsAt = event?.startsAt ?? cache?.startsAt
+        const endsAt = event?.endsAt ?? cache?.endsAt
+        if (startsAt && endsAt) {
             let toRespond: string
-            const startMs = event.startsAt.getTime()
-            const fullDay = event.startsAt.getFullYear() == new Date().getFullYear() ? "d LLL" : "d LLL yyyy"
+            const startMs = startsAt.getTime()
+            const fullDay = startsAt.getFullYear() == new Date().getFullYear() ? "d LLL" : "d LLL yyyy"
             const now = startMs < new Date().getTime()
-            const finished = event.endsAt.getTime() < new Date().getTime()
-            if (event.endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
+            const finished = endsAt.getTime() < new Date().getTime()
+            if (endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
                 const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
                 toRespond = t(now && !finished ? "event:date.until_same_day" : "event:date.same_day_this_week", {
-                    day: isSameDay(new Date(), event.startsAt) ?
+                    day: isSameDay(new Date(), startsAt) ?
                         t("event:date.today") : // If same day, we show "Today"
-                        _format(event.startsAt, `EEEE${(delayDays > 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
-                    start: _format(event.startsAt, "HH:mm"),
-                    end: _format(event.endsAt, "HH:mm"),
+                        _format(startsAt, `EEEE${(delayDays > 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
+                    start: _format(startsAt, "HH:mm"),
+                    end: _format(endsAt, "HH:mm"),
                 })
             } else
                 toRespond = t(now && !finished ? "event:date.until_diff_day" : "event:date.diff_days", {
-                    start: _format(event.startsAt, fullDay + " HH:mm"),
-                    end: _format(event.endsAt, fullDay + " HH:mm"),
+                    start: _format(startsAt, fullDay + " HH:mm"),
+                    end: _format(endsAt, fullDay + " HH:mm"),
                 })
 
             return (finished ? t("event:date.before") : "") + toRespond
         }
-    }, [event])
+    }, [event?.startsAt, event?.endsAt, cache?.startsAt, cache?.endsAt])
 
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
-    
-    const galleriesCallback = useCallback((page?: number) => {
-        return getEventGalleries((event as EventType).id, page)
-    }, [event?.id])
+    const galleriesCallback = useCallback((page?: number) => 
+        getEventGalleries((event ?? cache)!.id, page)
+    , [(event ?? cache)?.id])
 
     const participateCallback = useCallback(() => {
         if (event)
@@ -154,20 +158,24 @@ const Event: React.FC = () => {
                     )}
                 </div>
                 <div className="ml-4">
-                    {event ?
+                    {cache?.name ?? (event ?? cache)?.title ?
                         <>
-                            <div
-                                className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0">
-                                {date}
-                            </div>
+                            {date ? 
+                                <div
+                                    className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0 rounded-full">
+                                    {date}
+                                </div>
+                                :
+                                <Skeleton title={false} active paragraph={{rows: 1, width: 200}} className="-mt-0.5"/>
+                            }
                             <div className="text-2xl md:text-3xl font-bold leading-6 flex items-center">
-                                {event.title}
+                                { (event ?? cache)?.title ?? cache?.name }
 
                                 <div className="ml-4 md:flex hidden">
                                     <SubscriptionHandler
                                         type={SubscribableType.EVENT}
-                                        subscribable={event.id}
-                                        subscription={event.subscribed}
+                                        subscribable={event?.id}
+                                        subscription={event?.subscribed}
                                         onUpdate={onSubscriptionUpdate}
                                     />
                                 </div>
@@ -209,7 +217,7 @@ const Event: React.FC = () => {
             <div className="mt-4 sm:mt-3 grid mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <div className="flex-1 mx-4 sm:mt-0">
                     <LinkEntityPreloader preview={event?.club}>
-                        <Link to={`/club/${event?.club.id}`}>
+                        <Link to={`/club/${event?.club.id}`} className={`${!event && "pointer-events-none"}`}>
                             <div
                                 className="
                                     flex flex-col px-4 py-3 shadow-sm rounded-lg bg-white
@@ -217,16 +225,16 @@ const Event: React.FC = () => {
                                 "
                             >
                                 <div className="flex items-center font-normal">
-                                    {event ?
+                                    {event || cache?.club ?
                                         <>
                                             <WebPAvatarPolyfill
-                                                src={mediaPath(event?.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                                src={mediaPath(event?.club.logoUrl ?? cache?.club?.logoUrl, AvatarSizes.THUMBNAIL)}
                                                 icon={<FontAwesomeIcon icon={faUserGroup} />}
                                                 size="large"
                                                 className="hover:shadow-outline mr-1"
                                             />
                                             <div className="mx-2 mb-0 font-semibold text-md text-neutral-900 text-lg">
-                                                {event?.club.name}
+                                                {(event ?? cache)?.club?.name}
                                             </div>
                                         </> :
                                         <>
@@ -243,25 +251,22 @@ const Event: React.FC = () => {
                     </LinkEntityPreloader>
 
                     <div className="sm:hidden">
-                        <EventDescription description={event?.description} loading={!event} phone={true}/>
+                        <EventDescription description={(event ?? cache)?.description} loading={!(event ?? cache)?.description} phone={true}/>
                     </div>
                     <EventMapPlace position={event?.position} location={event?.location} phone={true} loading={!event}/>
                     <div className="hidden sm:block lg:hidden">
-                        <EventDescription description={event?.description} loading={!event}/>
+                        <EventDescription description={(event ?? cache)?.description} loading={!(event ?? cache)?.description} />
                     </div>
 
-                    {event && (
-                        <>
-                            <GalleriesPreview
-                                className="sm:hidden lg:block"
-                                getGalleriesCallback={galleriesCallback}
-                            />
-                            {event.hasRight && (
-                                <div className="text-center">
-                                    <GalleryModalForm feed={event.feed} />
-                                </div>
-                            )}
-                        </>
+                    <GalleriesPreview
+                        className="sm:hidden lg:block"
+                        loading={!(event ?? cache)?.id}
+                        getGalleriesCallback={galleriesCallback}
+                    />
+                    {event?.hasRight && (
+                        <div className="text-center">
+                            <GalleryModalForm feed={event.feed} />
+                        </div>
                     )}
 
                 </div>
@@ -275,7 +280,7 @@ const Event: React.FC = () => {
                     {feed}
                 </div>
                 <div className="flex-1 mx-4 sm:mt-0 hidden lg:block">
-                    <EventDescription description={event?.description} loading={!event}/>
+                    <EventDescription description={(event ?? cache)?.description} loading={!(event ?? cache)?.description} />
                 </div>
             </div>
         </div>
