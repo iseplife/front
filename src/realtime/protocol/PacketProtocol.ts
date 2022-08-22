@@ -12,6 +12,7 @@ import WSPCKeepAlive from "./packets/client/WSPCKeepAlive"
 import WSPSBadToken from "./packets/server/WSPSBadToken"
 import WSPSFeedPostCommentsUpdate from "./packets/server/WSPSFeedPostCommentsUpdate"
 import WSPSFeedPostPollChoiceUpdate from "./packets/server/WSPSFeedPostPollChoiceUpdate"
+import WSPSFeedPostOwnLikeUpdate from "./packets/server/WSPSFeedPostOwnLikeUpdate"
 
 class PacketProtocol implements Protocol {
 
@@ -44,6 +45,8 @@ class PacketProtocol implements Protocol {
         packetsServer.push(WSPSBadToken)
         packetsServer.push(WSPSFeedPostCommentsUpdate)
         packetsServer.push(WSPSFeedPostPollChoiceUpdate)
+        packetsServer.push(WSPSFeedPostOwnLikeUpdate)
+
         const packetsClient: any[] = []
         packetsClient.push(WSPCKeepAlive)
 

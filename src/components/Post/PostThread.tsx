@@ -1,11 +1,12 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faCommentAlt, faHeart} from "@fortawesome/free-regular-svg-icons"
-import {faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
+import {faCommentAlt} from "@fortawesome/free-regular-svg-icons"
 import {Divider} from "antd"
 import CommentList from "../Comment/CommentList"
 import {Comment} from "../../data/thread/types"
 import {toggleThreadLike} from "../../data/thread"
+import heart from "react-useanimations/lib/heart"
+import Animation from "../Animation/Animation"
 
 type PostTheadProps = {
     thread: number
@@ -27,6 +28,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
     const showMoreCommentsCallback = useCallback(() => setShowComments(true), [])
 
     const toggleLike = useCallback(async (id: number) => {
+        setLiked(liked => !liked)
         const res = await toggleThreadLike(id)
         if (res.status === 200) {
             setLiked(res.data)
@@ -45,7 +47,8 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
 
     useEffect(() => {
         setLikes(props.likesCount)
-    }, [props.likesCount])
+        setLiked(props.liked)
+    }, [props.likesCount, props.liked])
 
     return (
         <>
@@ -78,10 +81,12 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                         </div>
                         <div
                             className="-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
-                            <FontAwesomeIcon
-                                icon={liked ? faSolidHeart : faHeart}
-                                className={`${liked ? "text-red-400" : "hover:text-red-600"} transition-colors`}
-                                size="1x"
+                            
+                            <Animation
+                                animation={heart}
+                                enabled={liked}
+                                size={30.5}
+                                className={`${liked && "text-red-400"} group-hover:text-red-500 transition-colors`}
                             />
                         </div>
                     </span>

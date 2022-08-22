@@ -8808,6 +8808,7 @@ __metadata:
     leaflet: ^1.8.0
     lightbox-react: ^0.3.8
     lodash: ^4.17.21
+    lottie-react: ^2.3.1
     moment: ^2.29.4
     pastel-color: ^1.0.3
     react: ^18.2.0
@@ -8822,6 +8823,7 @@ __metadata:
     react-photo-gallery: ^8.0.0
     react-router-dom: ^5.1.2
     react-scripts: ^5.0.1
+    react-useanimations: ^2.0.8
     react-zoom-pan-pinch: ^2.1.3
     recoil: ^0.7.4
     serve: ^14.0.1
@@ -10032,6 +10034,25 @@ __metadata:
   bin:
     loose-envify: cli.js
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
+  languageName: node
+  linkType: hard
+
+"lottie-react@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "lottie-react@npm:2.3.1"
+  dependencies:
+    lottie-web: ^5.9.4
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 3f83511eec9ef80c6500658fcb188f757c663c5de49de5cfd55d061d5de72b9242fd0a3b7ec7ce84bbad5acbcd7293468228a0f6cbe28e50e4c44e5b25df1c8d
+  languageName: node
+  linkType: hard
+
+"lottie-web@npm:^5.5.7, lottie-web@npm:^5.9.4":
+  version: 5.9.6
+  resolution: "lottie-web@npm:5.9.6"
+  checksum: aed6a1d0c24eefb6c42a42aae18f29737746551cfdc86319f1b9675f5bc276ba26971e8d2b0e1498df880571fe4bfe2fc87885a1d4f8a318d5e4e5b939b7a474
   languageName: node
   linkType: hard
 
@@ -13409,6 +13430,17 @@ __metadata:
   bin:
     react-scripts: bin/react-scripts.js
   checksum: 92afa2f245c7092ccc97d5609dc7a2130616262e34da7f15072d9442e2d2e1d4909a91022abd1faac1336eb17c5525a10d9bd43e1ae374c7ec941ca20addca68
+  languageName: node
+  linkType: hard
+
+"react-useanimations@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "react-useanimations@npm:2.0.8"
+  dependencies:
+    lottie-web: ^5.5.7
+  peerDependencies:
+    react: ^16.9.0
+  checksum: 38e8f79c0bde4b4ae8249f85058d4475cae8275fdbdbb992a6472fbead8f8aaa23aa1e5506a0ab4a7a6a1aed0d24f3782859270d2d6f2230b1c8e6298ef282cd
   languageName: node
   linkType: hard
 
