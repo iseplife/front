@@ -13,7 +13,7 @@ import {ClubContext} from "../../../context/club/context"
 
 
 const ClubMembers: React.FC = () => {
-    const {state: {club}} = useContext(ClubContext)
+    const {state: {club, cache}} = useContext(ClubContext)
     const [loading, setLoading] = useState(true)
     const [members, setMembers] = useState<ClubMember[]>([])
     const [editionMode, setEditionMode] = useState(false)
@@ -43,7 +43,7 @@ const ClubMembers: React.FC = () => {
     return (
         <div className="container mx-auto relative h-full py-4">
             <div className="flex justify-end item-center mb-2">
-                <ClubSchoolSessionsSelect club={club!.id} handleChange={setSelectedYear}/>
+                {(club ?? cache)?.id && <ClubSchoolSessionsSelect club={(club ?? cache)!.id} handleChange={setSelectedYear}/>}
                 {club?.canEdit && (
                     <div
                         onClick={toggleEditionMode}
