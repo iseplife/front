@@ -32,8 +32,11 @@ import { notificationManager } from "./datamanager/NotificationManager"
 import LoadingPage from "./pages/LoadingPage"
 import { LocationState } from "./data/request.type"
 import UpdateService from "./services/UpdateService"
+import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
 
 window.React = React
+
+window.ResizeObserver ??= ResizeObserverPolyfill
 
 initializeAPIClient()
 new UpdateService().init()
