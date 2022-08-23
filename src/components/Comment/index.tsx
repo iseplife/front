@@ -115,7 +115,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                         )}
                     </div>
 
-                    <div className="flex-1 my-1">
+                    <div className="flex-1 my-1 break-words">
                         {editMode ?
                             <TextArea
                                 autoFocus
