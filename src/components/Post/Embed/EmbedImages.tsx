@@ -104,26 +104,30 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
                 <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} ratio={first.ratio} nsfw={first.nsfw} status={first.status} />
             </div>
             :
-            <div className={`grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border ${photos.length >= 3 ? "h-64 lg:h-80" : "h-32 lg:h-40"}`}>
+            <div className={`grid grid-cols-2 w-full gap-0.5 rounded-xl overflow-hidden border-[#dbe2e6] border ${photos.length >= 3 ? "h-64 lg:h-80" : "h-36 sm:h-40 lg:h-40"}`}>
                 {
                     photos.slice(0, 4).map((photo, index) => {
                         const longPhoto = photos.length == 3 && index == 0
                         
-                        return <div style={{ backgroundColor: `#${photo.color}` }} className={
-                            "relative overflow-hidden cursor-pointer h-full " +
-                            (longPhoto && "row-span-2")
-                        }
-                        ref={photo.ref}
-                        key={index}
-                        onClick={() => open(index)}
-                        >
-                            <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} ratio={photo.ratio} nsfw={photo.nsfw} status={photo.status} />
-                            {index == 3 && photos.length > 4 &&
-                                <div className="w-full h-full absolute top-0 left-0 bg-neutral-800/60 backdrop-blur-lg text-white grid place-items-center text-4xl font-bold">
-                                    + {photos.length - 3}
-                                </div>
-                            }
-                        </div>
+                        return (
+                            <div 
+                                style={{ backgroundColor: `#${photo.color}` }}
+                                className={
+                                    "relative overflow-hidden cursor-pointer h-full " +
+                                    (longPhoto && "row-span-2")
+                                }
+                                ref={photo.ref}
+                                key={index}
+                                onClick={() => open(index)}
+                            >
+                                <SafeImage onLoaded={onLoadFactory(photo.id)} src={photo.src} ratio={photo.ratio} nsfw={photo.nsfw} status={photo.status} />
+                                {index == 3 && photos.length > 4 &&
+                                    <div className="w-full h-full absolute top-0 left-0 bg-neutral-800/60 backdrop-blur-lg text-white grid place-items-center text-4xl font-bold">
+                                        + {photos.length - 3}
+                                    </div>
+                                }
+                            </div>
+                        )
                     })
                 }
             </div>
