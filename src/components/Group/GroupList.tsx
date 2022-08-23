@@ -22,10 +22,11 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
         <>
             {/* Mobile View */}
             <div className="grid">
-                <div className="lg:hidden flex relative flex-row hidden-scroller whitespace-no-wrap w-full max-w-full overflow-x-auto sm:overflow-x-clip m-0 sm:grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3.5 sm:gap-y-3 md:gap-2 md:gap-y-2 pl-1 sm:pl-0">
-                    {groups?.length ? groups.map(g => (
-                        <Link key={g.id} to={`/group/${g.id}`} className="text-white hover:opacity-80 transition-opacity aspect-square">
+                <div className="lg:hidden flex relative flex-row hidden-scroller whitespace-no-wrap w-full max-w-[calc(100vw-16px*2)] sm:max-w-full overflow-x-auto sm:overflow-x-clip m-0 sm:grid grid-cols-2 md:grid-cols-3 sm:gap-3.5 sm:gap-y-3 md:gap-2 md:gap-y-2 pl-1 sm:pl-0">
+                    {groups?.length ? groups.map((g, i) => (
+                        <Link key={g.id} to={`/group/${g.id}`} className= {`text-white hover:opacity-80 transition-opacity aspect-square ${i && "ml-2.5"}`}>
                             <div className="px-2 flex-shrink-0 rounded-lg h-20 w-20 sm:h-full sm:w-full text-xs font-semibold relative flex" style={{ backgroundColor: getPastelColor(g.name).hex }}>
+                                <div className="pb-[100%]"></div>
                                 <div className="absolute bottom-1 box-border w-full pr-4 break-words">{g.name}</div>
                             </div>
                         </Link>
@@ -34,7 +35,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                     )}
                 </div>
             </div>
-                
+            
 
             {/* Desktop View */}
             <div className="hidden lg:block">

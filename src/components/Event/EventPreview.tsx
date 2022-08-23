@@ -15,7 +15,7 @@ const EventPreview: React.FC<EventProps> = ({ event }) => {
     const {t} = useTranslation("event")
     return (
         <LinkEntityPreloader preview={event}>
-            <Link to={`/event/${event.id}`} className="w-full max-w-sm text-gray-700 hover:text-gray-500">
+            <Link to={`/event/${event.id}`} className="w-full max-w-sm text-gray-700 hover:text-gray-500 relative">
                 <div
                     title={event.title}
                     className="flex flex-col sm:flex-row px-3 py-2 shadow-sm rounded-lg bg-white items-center"

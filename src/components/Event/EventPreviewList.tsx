@@ -38,7 +38,7 @@ const EventPreviewList: React.FC<EventPreviewListProps> = ({ events }) => {
 
     return (
         <div className="grid rounded-lg overflow-hidden relative sm:mb-4">
-            <div ref={ref} onScroll={scrollCallback} className="flex relative flex-row hidden-scroller w-full max-w-full overflow-x-auto m-0 gap-2.5 pl-1 sm:pl-0 sm:flex-col">
+            <div ref={ref} onScroll={scrollCallback} className="grid grid-flow-col sm:grid-flow-row relative flex-row hidden-scroller w-full max-w-[calc(100vw-16px*2)] sm:max-w-full overflow-x-auto m-0 gap-2.5 pl-1 sm:pl-0">
                 {events.map(e => (
                     <EventPreview key={e.id} event={e} />
                 ))}
