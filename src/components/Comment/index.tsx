@@ -12,6 +12,7 @@ import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import TextArea from "antd/lib/input/TextArea"
 import { Link } from "react-router-dom"
 import { cFaPreviousArrow } from "../../constants/CustomFontAwesome"
+import CustomText from "../Common/CustomText"
 
 
 interface CommentProps {
@@ -122,7 +123,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                 value={editedMessage}
                                 className="bg-transparent border-none focus"
                                 onChange={(e) => setEditedMessage(e.target.value)}
-                            /> : data.message
+                            /> : <CustomText description={data.message} disableSpacers />
                         }
                     </div>
 
