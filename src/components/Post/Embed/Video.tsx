@@ -67,8 +67,9 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                 height: data.ratio <= 1 ? "400px" : "",
                 aspectRatio: data.ratio.toString(),
             }}>
+                <div style={{paddingBottom: `${(1/data.ratio)*100}%`}} />
                 { ready ?
-                    <div className="w-full h-full relative">
+                    <div className="w-full h-full absolute top-0">
                         <div onClick={onClick} className={`w-full h-full bg-cover absolute z-10 transition-opacity duration-500 ${clicked ? "opacity-0 pointer-events-none" : "opacity-100"}`} style={{backgroundImage: `url(${thumb})`}}>
                             <div className="absolute w-full h-full bg-neutral-800/50 text-6xl items-center justify-center text-white flex">
                                 <FontAwesomeIcon icon={faPlayCircle} />
@@ -77,7 +78,7 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                         {clicked && <VideoPlayer src={data.name} thumbnail={thumb} autoPlay />}
                     </div>
                     :
-                    <div className="w-full h-full grid place-items-center bg-neutral-300 relative">
+                    <div className="w-full h-full grid place-items-center bg-neutral-300 absolute top-0">
                         <LoadingSpinner className="drop-shadow-xl h-full scale-50" />
                     </div>
                 }

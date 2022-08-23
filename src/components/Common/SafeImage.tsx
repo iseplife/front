@@ -48,6 +48,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
             </div>
         }
         <div className="w-full h-full absolute top-0">
+            <div style={{paddingBottom: `${(1/ratio)*100}%`}} />
             <img src={src} className="absolute w-full h-full object-cover" />
             {ready && <>
                 {lowQualitySrc &&
