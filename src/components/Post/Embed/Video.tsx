@@ -23,6 +23,8 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
         feedsManager.updatePost(postId, { embed: postEmbed })
     }, [postId, postEmbed])
 
+    const thumb = useMemo(() => mediaPath(data.name.replace("vid/", "vid/thumb/")), [])
+
     useEffect(() => {
         if(!ready){
             let id: number
@@ -32,9 +34,20 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                 const video = new Audio()
                 video.crossOrigin = "anonymous"
                 video.src = mediaPath(data.name)
-                video.oncanplaythrough = onLoaded!
-                video.onerror = () => id != -1 && window.setTimeout(check, 1000)
+                video.oncanplaythrough = () => {
+                    const img = new Image()
+                    img.crossOrigin = "anonymous"
+                    img.onload = onLoaded
+                    img.src = thumb
+                    img.onerror = () => id != -1 && window.setTimeout(check, 3000)
+                }
+                video.onerror = () => id != -1 && window.setTimeout(check, 3000)
+
             }
+
+            setTimeout(() =>
+                check()
+            , 4000)
 
             return () => { id = -1 }
         }
@@ -42,7 +55,6 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
 
     const [clicked, setClicked] = useState(false)
     const onClick = useCallback(() => setClicked(true), [])
-    const thumb = useMemo(() => mediaPath(data.name.replace("vid/", "vid/thumb/")), [])
 
     return (
         <div>
