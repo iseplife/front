@@ -9,13 +9,14 @@ import { entityPreloader } from "./EntityPreloader"
 interface LinkEntityPreloaderProps {
     preview: Author | StudentPreview | ClubPreview | EventPreview | SearchItem | undefined
     children: ReactElement
+    noWidth?: boolean
 }
 
-const LinkEntityPreloader: React.FC<LinkEntityPreloaderProps> = ({preview, children}) => {
+const LinkEntityPreloader: React.FC<LinkEntityPreloaderProps> = ({preview, children, noWidth}) => {
     const onClick = useCallback(() =>
         preview && entityPreloader.set(preview.id, preview!)
     , [preview])
-    return <div className="w-full" onClick={onClick}>
+    return <div className={noWidth ? "" : "w-full"} onClick={onClick}>
         {children}
     </div>
 }

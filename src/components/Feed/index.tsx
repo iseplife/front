@@ -264,7 +264,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
     ), [posts, firstLoaded])
 
-    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3"/>, [])
+    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-2"/>, [])
 
     const empty = useMemo(() => (
         !loadingInformations && !fetching && !error && !posts?.length && !postsPinned?.length
@@ -425,7 +425,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 triggerDistance={1500}
                 watch="DOWN" callback={loadMorePost} empty={empty}
                 loadingComponent={error || loadingSkeletons}
-                className={`transition-opacity ${!posts?.length && !empty && "opacity-0"}`}
+                className={`transition-opacity ${!allowPublication && "-mt-2"} ${!posts?.length && !empty && "opacity-0"}`}
             >
                 {empty ?
                     <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
@@ -435,7 +435,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     : (
                         <>
                             {postsPinned.length !== 0 && (
-                                <>
+                                <div className="mt-4">
                                     {postsPinned.map(p => (
                                         <Post
                                             feedId={id}
@@ -447,13 +447,14 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                             isEdited={editPost === p.id}
                                         />
                                     ))}
-                                    <Divider className="text-gray-700"/>
-                                </>
+                                    <Divider className="text-gray-700 mb-4"/>
+                                </div>
                             )}
 
                             <Virtuoso
                                 increaseViewportBy={800}
                                 customScrollParent={document.getElementById("main")!}
+                                className="mt-2"
                                 totalCount={posts.length}
                                 itemContent={renderPost}
                             />
