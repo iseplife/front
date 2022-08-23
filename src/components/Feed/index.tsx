@@ -277,27 +277,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             setFormVisible(true)
     }, [completeFormType])
 
-    // const renderPost = useCallback(({ data, index, style }: ListChildComponentProps<typeof windowData>) => (
-    //     <div style={style}>
-    //         <FeedPost
-    //             key={data.posts[index].publicationDateId}
-    //             index={index}
-    //             windowWidth={data.windowWidth}
-    //             data={data.posts}
-    //             onDelete={data.onPostRemoval}
-    //             onUpdate={data.onPostUpdate}
-    //             onPin={data.onPostPin}
-    //             isEdited={data.editPost === data.posts[index].id}
-    //             feedId={id}
-    //             error={data.error}
-    //             firstLoaded={data.firstLoaded}
-    //             setEditPost={data.setEditPost}
-    //             setSize={data.setSize}
-    //         />
-    //     </div>
-    // ), [id])
+    const alreadyLoaded = useRef<{[key: number]: boolean}>({})
+
+    useEffect(() => {
+        alreadyLoaded.current = {}
+    }, [id])
+
     const renderPost = useCallback((index: number) => {
         const post = posts[index]
+        const wasLoaded = alreadyLoaded.current[post.publicationDateId]
+        if(!wasLoaded)
+            alreadyLoaded.current[post.publicationDateId] = true
         return <FeedPost
             feedId={id}
             data={post}
@@ -309,8 +299,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             error={error}
             firstLoaded={firstLoaded}
             setEditPost={setEditPost}
+            loadAnimation={!wasLoaded}
         />
     }, [posts, onPostRemoval, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
+    const postKeyGenerator = useCallback((index: number) => 
+        posts[index].publicationDateId
+    , [posts])
     return (
         <div
             className={`${className}`}
@@ -424,7 +418,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 block={error || baseLastLoad == -1}
                 triggerDistance={1500}
                 watch="DOWN" callback={loadMorePost} empty={empty}
-                loadingComponent={error || loadingSkeletons}
+                loadingComponent={error || 
+                    <div className="w-full relative h-screen">
+                        <LoadingSpinner className="absolute left-1/2 -translate-x-1/2 scale-50 top-0" />
+                    </div>
+                }
                 className={`transition-opacity ${!allowPublication && "-mt-2"} ${!posts?.length && !empty && "opacity-0"}`}
             >
                 {empty ?
@@ -452,6 +450,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                             )}
 
                             <Virtuoso
+                                computeItemKey={postKeyGenerator}
                                 increaseViewportBy={800}
                                 customScrollParent={document.getElementById("main")!}
                                 className="mt-2"
@@ -459,17 +458,6 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 itemContent={renderPost}
                             />
 
-                            {/* <ReactMainScroller 
-                                key="vsl"
-                                passRef={setListRef}
-                                style={style}
-                                width="100%"
-                                height={1000}
-                                itemSize={getSize}
-                                itemCount={posts.length}
-                                itemData={windowData}
-                                children={renderPost}
-                            /> */}
                             {error && (
                                 <div className="flex flex-col text-center">
                                     <label className="text-neutral-800">{t("error:no_connection_retry")}</label>
