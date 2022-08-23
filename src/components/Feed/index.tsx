@@ -24,9 +24,14 @@ import {AppContext} from "../../context/app/context"
 import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
-import {isAfter, isBefore} from "date-fns"
+import {isBefore} from "date-fns"
 import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
+import {ListChildComponentProps, VariableSizeList} from "react-window"
+import useWindowResize from "../../hooks/useWindowResize"
+import FeedPost from "./FeedPost"
+import { ReactMainScroller } from "./ReactMainScroller"
+import AutoSizer from "react-virtualized-auto-sizer"
 
 type FeedProps = {
     loading?: boolean,
@@ -275,6 +280,49 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             setFormVisible(true)
     }, [completeFormType])
 
+    const listRef = useRef<VariableSizeList>()
+    const setListRef = useCallback((ele: VariableSizeList) => listRef.current = ele, [])
+
+    const sizeMap = useRef<{[key: number]: number}>({})
+
+    const setSize = useMemo(() => {
+        let minIndex = Infinity
+        return (index: number, size: number) => {
+            console.log("set size", index, "to", size)
+            console.log(Object.values(sizeMap.current).reduce((a, b) => a+b, 0))
+            sizeMap.current = { ...sizeMap.current, [index]: size }
+            minIndex = Math.min(index, minIndex)
+            listRef.current?.resetAfterIndex(index)
+        }
+    }, [])
+    const getSize = useCallback((index: number) => 
+        sizeMap.current[index] || 150
+    , [sizeMap])
+    const [windowWidth] = useWindowResize()
+
+    const windowData = useMemo(() => (
+        {posts, windowWidth, onPostRemoval, onPostUpdate, onPostPin, editPost, error, firstLoaded, setEditPost, setSize}
+    ), [posts, windowWidth, onPostRemoval, onPostUpdate, onPostPin, editPost, error, firstLoaded, setEditPost, setSize])
+
+    const renderPost = useCallback(({ data, index, style }: ListChildComponentProps<typeof windowData>) => (
+        <div style={style}>
+            <FeedPost
+                key={data.posts[index].publicationDateId}
+                index={index}
+                windowWidth={data.windowWidth}
+                data={data.posts}
+                onDelete={data.onPostRemoval}
+                onUpdate={data.onPostUpdate}
+                onPin={data.onPostPin}
+                isEdited={data.editPost === data.posts[index].id}
+                feedId={id}
+                error={data.error}
+                firstLoaded={data.firstLoaded}
+                setEditPost={data.setEditPost}
+                setSize={data.setSize}
+            />
+        </div>
+    ), [id])
     return (
         <div
             className={`${className}`}
@@ -415,23 +463,18 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 </>
                             )}
 
-                            {posts?.map(p => (isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id)) &&
-                                <div
-                                    key={p.publicationDateId}
-                                    className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none " : ""}
-                                >
-                                    <Post
-                                        feedId={id}
-                                        data={p}
-                                        onDelete={onPostRemoval}
-                                        onUpdate={onPostUpdate}
-                                        onPin={onPostPin}
-                                        noPinned={noPinned}
-                                        toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                        isEdited={editPost === p.id}
-                                    />
-                                </div>
-                            )}
+
+                            <ReactMainScroller 
+                                key="vsl"
+                                passRef={setListRef}
+                                style={style}
+                                width="100%"
+                                height={1000}
+                                itemSize={getSize}
+                                itemCount={posts.length}
+                                itemData={windowData}
+                                children={renderPost}
+                            />
                             {error && (
                                 <div className="flex flex-col text-center">
                                     <label className="text-neutral-800">{t("error:no_connection_retry")}</label>

@@ -20,7 +20,7 @@ import { copyToClipboard, getPostLink } from "../../util"
 import CustomText from "../Common/CustomText"
 
 
-type PostProps = {
+export type PostProps = {
     data: ManagerPost
     feedId: number | undefined,
     isEdited: boolean
