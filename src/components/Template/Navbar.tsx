@@ -112,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
             const header = ref.current!
             const scroll = element.scrollTop
             const change = Math.abs(lastScrollY - scroll)
-            if((Date.now() - lastChangeTime) < 300 && Math.abs(change - lastChange) > 10 || change > 20){
+            if((Date.now() - lastChangeTime) < 300 && Math.abs(change - lastChange) > 10){
                 lastScrollY = scroll
                 return
             }
