@@ -27,11 +27,8 @@ import {useLiveQuery} from "dexie-react-hooks"
 import {isBefore} from "date-fns"
 import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
-import {ListChildComponentProps, VariableSizeList} from "react-window"
-import useWindowResize from "../../hooks/useWindowResize"
 import FeedPost from "./FeedPost"
-import { ReactMainScroller } from "./ReactMainScroller"
-import AutoSizer from "react-virtualized-auto-sizer"
+import { Virtuoso } from "react-virtuoso"
 
 type FeedProps = {
     loading?: boolean,
@@ -280,49 +277,40 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             setFormVisible(true)
     }, [completeFormType])
 
-    const listRef = useRef<VariableSizeList>()
-    const setListRef = useCallback((ele: VariableSizeList) => listRef.current = ele, [])
-
-    const sizeMap = useRef<{[key: number]: number}>({})
-
-    const setSize = useMemo(() => {
-        let minIndex = Infinity
-        return (index: number, size: number) => {
-            console.log("set size", index, "to", size)
-            console.log(Object.values(sizeMap.current).reduce((a, b) => a+b, 0))
-            sizeMap.current = { ...sizeMap.current, [index]: size }
-            minIndex = Math.min(index, minIndex)
-            listRef.current?.resetAfterIndex(index)
-        }
-    }, [])
-    const getSize = useCallback((index: number) => 
-        sizeMap.current[index] || 150
-    , [sizeMap])
-    const [windowWidth] = useWindowResize()
-
-    const windowData = useMemo(() => (
-        {posts, windowWidth, onPostRemoval, onPostUpdate, onPostPin, editPost, error, firstLoaded, setEditPost, setSize}
-    ), [posts, windowWidth, onPostRemoval, onPostUpdate, onPostPin, editPost, error, firstLoaded, setEditPost, setSize])
-
-    const renderPost = useCallback(({ data, index, style }: ListChildComponentProps<typeof windowData>) => (
-        <div style={style}>
-            <FeedPost
-                key={data.posts[index].publicationDateId}
-                index={index}
-                windowWidth={data.windowWidth}
-                data={data.posts}
-                onDelete={data.onPostRemoval}
-                onUpdate={data.onPostUpdate}
-                onPin={data.onPostPin}
-                isEdited={data.editPost === data.posts[index].id}
-                feedId={id}
-                error={data.error}
-                firstLoaded={data.firstLoaded}
-                setEditPost={data.setEditPost}
-                setSize={data.setSize}
-            />
-        </div>
-    ), [id])
+    // const renderPost = useCallback(({ data, index, style }: ListChildComponentProps<typeof windowData>) => (
+    //     <div style={style}>
+    //         <FeedPost
+    //             key={data.posts[index].publicationDateId}
+    //             index={index}
+    //             windowWidth={data.windowWidth}
+    //             data={data.posts}
+    //             onDelete={data.onPostRemoval}
+    //             onUpdate={data.onPostUpdate}
+    //             onPin={data.onPostPin}
+    //             isEdited={data.editPost === data.posts[index].id}
+    //             feedId={id}
+    //             error={data.error}
+    //             firstLoaded={data.firstLoaded}
+    //             setEditPost={data.setEditPost}
+    //             setSize={data.setSize}
+    //         />
+    //     </div>
+    // ), [id])
+    const renderPost = useCallback((index: number) => {
+        const post = posts[index]
+        return <FeedPost
+            feedId={id}
+            data={post}
+            onDelete={onPostRemoval}
+            onUpdate={onPostUpdate}
+            onPin={onPostPin}
+            noPinned={noPinned}
+            isEdited={editPost === post.id}
+            error={error}
+            firstLoaded={firstLoaded}
+            setEditPost={setEditPost}
+        />
+    }, [posts, onPostRemoval, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
     return (
         <div
             className={`${className}`}
@@ -463,8 +451,14 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 </>
                             )}
 
+                            <Virtuoso
+                                increaseViewportBy={800}
+                                customScrollParent={document.getElementById("main")!}
+                                totalCount={posts.length}
+                                itemContent={renderPost}
+                            />
 
-                            <ReactMainScroller 
+                            {/* <ReactMainScroller 
                                 key="vsl"
                                 passRef={setListRef}
                                 style={style}
@@ -474,7 +468,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 itemCount={posts.length}
                                 itemData={windowData}
                                 children={renderPost}
-                            />
+                            /> */}
                             {error && (
                                 <div className="flex flex-col text-center">
                                     <label className="text-neutral-800">{t("error:no_connection_retry")}</label>

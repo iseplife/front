@@ -70,7 +70,7 @@ const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
             setSrc(propsSrc)
     }, [propsSrc])
     return <>
-        {src && <img {...props} src={src} />}
+        {src && <div {...props} style={{...props.style, backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center"}} />}
     </>
 }
 

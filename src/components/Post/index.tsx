@@ -110,7 +110,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
     }, [feedId, data.id, data.context, h.location.pathname])
 
     return (
-        <div>
+        <>
             {isEdited && (
                 <Modal
                     className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0 top-6 md:top-14"
@@ -122,7 +122,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                     <PostEditForm post={data} onEdit={confirmUpdate} onClose={() => toggleEdition(false)}/>
                 </Modal>
             )}
-            <div className={`flex flex-col p-4 rounded-lg bg-white my-5 relative ${className}`} ref={setRef}>
+            <div className={`flex flex-col p-4 rounded-lg bg-white relative ${className}`} ref={setRef}>
                 <div className="w-full flex justify-between mb-1">
                     <PostAuthor author={data.author} publicationDate={data.publicationDate}/>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
@@ -193,7 +193,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                     </div>
                 }
             </div>
-        </div>
+        </>
     )
 }
 

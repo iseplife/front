@@ -104,11 +104,20 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         let lastScrollY = 0
         let previousDirection = "up"
         let directionChangeHeight = 0
+        let lastChange = 0
+        let lastChangeTime = 0
         return () => {
             const element = document.getElementById("main")!
 
             const header = ref.current!
             const scroll = element.scrollTop
+            const change = Math.abs(lastScrollY - scroll)
+            if((Date.now() - lastChangeTime) < 300 && Math.abs(change - lastChange) > 10 || change > 20){
+                lastScrollY = scroll
+                return
+            }
+            lastChange = change
+            lastChangeTime = Date.now()
 
             const dir = scroll > lastScrollY ? "down" : "up"
             const justChanged = previousDirection != dir
