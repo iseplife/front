@@ -5,6 +5,10 @@
 .overflow-y-overlay {
     overflow-y: overlay;
 }
+.break-words {
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+}
 
 /********/
 .rbc-calendar > div {
