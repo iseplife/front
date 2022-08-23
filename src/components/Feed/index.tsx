@@ -30,6 +30,8 @@ import LoadingSpinner from "../Common/LoadingSpinner"
 import FeedPost from "./FeedPost"
 import { Virtuoso } from "react-virtuoso"
 
+const isTouchDevice = () => ("ontouchstart" in window) || navigator.maxTouchPoints > 0
+
 type FeedProps = {
     loading?: boolean,
     id?: number
@@ -416,7 +418,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             }
             <InfiniteScroller
                 block={error || baseLastLoad == -1}
-                triggerDistance={1500}
+                triggerDistance={1500 * (isTouchDevice() ? 2 : 1)}
                 watch="DOWN" callback={loadMorePost} empty={empty}
                 loadingComponent={error || 
                     <div className="w-full relative h-screen">
