@@ -1,10 +1,12 @@
-import React, {useCallback, useEffect, useMemo} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import VideoPlayer from "./VideoPlayer"
 import {MediaStatus, Video as VideoType} from "../../../data/media/types"
 import { EmbedEnumType, Post } from "../../../data/post/types"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
 import LoadingSpinner from "../../Common/LoadingSpinner"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlayCircle } from "@fortawesome/free-solid-svg-icons"
 
 type VideoProps = {
     data: VideoType
@@ -38,6 +40,10 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
         }
     }, [ready, onLoaded, data.name])
 
+    const [clicked, setClicked] = useState(false)
+    const onClick = useCallback(() => setClicked(true), [])
+    const thumb = useMemo(() => mediaPath(data.name.replace("vid/", "vid/thumb/")), [])
+
     return (
         <div>
             <div className="flex justify-between items-baseline">
@@ -50,7 +56,14 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                 aspectRatio: data.ratio.toString(),
             }}>
                 { ready ?
-                    <VideoPlayer src={data.name} thumbnail={data.thumbnail}/>
+                    <div className="w-full h-full relative">
+                        <div onClick={onClick} className={`w-full h-full bg-cover absolute z-10 transition-opacity duration-500 ${clicked ? "opacity-0 pointer-events-none" : "opacity-100"}`} style={{backgroundImage: `url(${thumb})`}}>
+                            <div className="absolute w-full h-full bg-neutral-800/50 text-6xl items-center justify-center text-white flex">
+                                <FontAwesomeIcon icon={faPlayCircle} />
+                            </div>
+                        </div>
+                        {clicked && <VideoPlayer src={data.name} thumbnail={thumb} autoPlay />}
+                    </div>
                     :
                     <div className="w-full h-full grid place-items-center bg-neutral-300 relative">
                         <LoadingSpinner className="drop-shadow-xl h-full scale-50" />
