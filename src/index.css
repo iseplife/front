@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.overflow-y-overlay {
+    overflow-y: overlay;
+}
+
 /********/
 .rbc-calendar > div {
     border-radius: 0.5rem !important;

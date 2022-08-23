@@ -24,9 +24,11 @@ import {AppContext} from "../../context/app/context"
 import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
-import {isAfter, isBefore} from "date-fns"
+import {isBefore} from "date-fns"
 import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
+import FeedPost from "./FeedPost"
+import { Virtuoso } from "react-virtuoso"
 
 type FeedProps = {
     loading?: boolean,
@@ -262,7 +264,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         posts?.reduce((prev, post) => isBefore(post.publicationDate, now) && post.publicationDateId > firstLoaded ? prev + 1 : prev, 0)
     ), [posts, firstLoaded])
 
-    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-3"/>, [])
+    const loadingSkeletons = useMemo(() => <CardTextSkeleton loading={true} number={5} className="my-2"/>, [])
 
     const empty = useMemo(() => (
         !loadingInformations && !fetching && !error && !posts?.length && !postsPinned?.length
@@ -275,6 +277,34 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             setFormVisible(true)
     }, [completeFormType])
 
+    const alreadyLoaded = useRef<{[key: number]: boolean}>({})
+
+    useEffect(() => {
+        alreadyLoaded.current = {}
+    }, [id])
+
+    const renderPost = useCallback((index: number) => {
+        const post = posts[index]
+        const wasLoaded = alreadyLoaded.current[post.publicationDateId]
+        if(!wasLoaded)
+            alreadyLoaded.current[post.publicationDateId] = true
+        return <FeedPost
+            feedId={id}
+            data={post}
+            onDelete={onPostRemoval}
+            onUpdate={onPostUpdate}
+            onPin={onPostPin}
+            noPinned={noPinned}
+            isEdited={editPost === post.id}
+            error={error}
+            firstLoaded={firstLoaded}
+            setEditPost={setEditPost}
+            loadAnimation={!wasLoaded}
+        />
+    }, [posts, onPostRemoval, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
+    const postKeyGenerator = useCallback((index: number) => 
+        posts[index].publicationDateId
+    , [posts])
     return (
         <div
             className={`${className}`}
@@ -388,8 +418,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 block={error || baseLastLoad == -1}
                 triggerDistance={1500}
                 watch="DOWN" callback={loadMorePost} empty={empty}
-                loadingComponent={error || loadingSkeletons}
-                className={`transition-opacity ${!posts?.length && !empty && "opacity-0"}`}
+                loadingComponent={error || 
+                    <div className="w-full relative h-screen">
+                        <LoadingSpinner className="absolute left-1/2 -translate-x-1/2 scale-50 top-0" />
+                    </div>
+                }
+                className={`transition-opacity ${!allowPublication && "-mt-2"} ${!posts?.length && !empty && "opacity-0"}`}
             >
                 {empty ?
                     <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
@@ -399,7 +433,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     : (
                         <>
                             {postsPinned.length !== 0 && (
-                                <>
+                                <div className="mt-4">
                                     {postsPinned.map(p => (
                                         <Post
                                             feedId={id}
@@ -411,27 +445,19 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                             isEdited={editPost === p.id}
                                         />
                                     ))}
-                                    <Divider className="text-gray-700"/>
-                                </>
-                            )}
-
-                            {posts?.map(p => (isAfter(p.publicationDate, now) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id)) &&
-                                <div
-                                    key={p.publicationDateId}
-                                    className={!feedsManager.isFresh(p, id) ? "opacity-60 pointer-events-none " : ""}
-                                >
-                                    <Post
-                                        feedId={id}
-                                        data={p}
-                                        onDelete={onPostRemoval}
-                                        onUpdate={onPostUpdate}
-                                        onPin={onPostPin}
-                                        noPinned={noPinned}
-                                        toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
-                                        isEdited={editPost === p.id}
-                                    />
+                                    <Divider className="text-gray-700 mb-4"/>
                                 </div>
                             )}
+
+                            <Virtuoso
+                                computeItemKey={postKeyGenerator}
+                                increaseViewportBy={800}
+                                customScrollParent={document.getElementById("main")!}
+                                className="mt-2"
+                                totalCount={posts.length}
+                                itemContent={renderPost}
+                            />
+
                             {error && (
                                 <div className="flex flex-col text-center">
                                     <label className="text-neutral-800">{t("error:no_connection_retry")}</label>

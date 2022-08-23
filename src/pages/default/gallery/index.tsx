@@ -23,7 +23,7 @@ export type GalleryPhoto = SafePhoto & {
     selected: boolean
     thread: number
 }
-const parserSelectablePhoto: ParserFunction<GalleryPhoto> = async (img: ImageType, key: string) => {
+const parserSelectablePhoto: ParserFunction<GalleryPhoto> = (img: ImageType, key: string) => {
     return {
         key,
         id: img.id,

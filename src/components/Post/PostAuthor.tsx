@@ -51,7 +51,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
     }, [author.id, author.authorType])
 
     return (
-        <LinkEntityPreloader preview={author}>
+        <LinkEntityPreloader preview={author} noWidth={true}>
             <AvatarWrapper>
                 <div className={`flex ${className} text-black/[85%] group`}>
                     <StudentAvatar
