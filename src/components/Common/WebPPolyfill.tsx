@@ -60,7 +60,7 @@ export const polyfillWebp = async (propsSrc: string, forceProcess?: boolean) => 
     })())
 }
 
-const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
+const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement> & { children?: React.ReactElement }> = (props) => {
     const propsSrc = props.src!
     const [src, setSrc] = useState(isWebPSupported ? props.src : loadedCache[propsSrc] ?? "")
     useEffect(() => {

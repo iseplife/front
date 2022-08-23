@@ -49,7 +49,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
         }
         <div className="w-full h-full absolute top-0">
             <div style={{paddingBottom: `${(1/ratio)*100}%`}} />
-            <img src={src} className="absolute w-full h-full object-cover" />
+            <img src={src} className="absolute w-full h-full object-cover opacity-0" />
             {ready && <>
                 {lowQualitySrc &&
                     <WebPPolyfill src={lowQualitySrc} alt="Low quality Image" className="w-full h-full absolute top-0" style={hidden ? {

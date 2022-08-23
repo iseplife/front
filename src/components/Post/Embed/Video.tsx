@@ -7,6 +7,7 @@ import { mediaPath } from "../../../util"
 import LoadingSpinner from "../../Common/LoadingSpinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlayCircle } from "@fortawesome/free-solid-svg-icons"
+import WebPPolyfill from "../../Common/WebPPolyfill"
 
 type VideoProps = {
     data: VideoType
@@ -70,11 +71,11 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                 <div style={{paddingBottom: `${(1/data.ratio)*100}%`}} />
                 { ready ?
                     <div className="w-full h-full absolute top-0">
-                        <div onClick={onClick} className={`w-full h-full bg-cover absolute z-10 transition-opacity duration-500 ${clicked ? "opacity-0 pointer-events-none" : "opacity-100"}`} style={{backgroundImage: `url(${thumb})`}}>
+                        <WebPPolyfill onClick={onClick} className={`w-full h-full bg-cover absolute z-10 transition-opacity duration-500 ${clicked ? "opacity-0 pointer-events-none" : "opacity-100"}`} src={thumb}>
                             <div className="absolute w-full h-full bg-neutral-800/50 text-6xl items-center justify-center text-white flex">
                                 <FontAwesomeIcon icon={faPlayCircle} />
                             </div>
-                        </div>
+                        </WebPPolyfill>
                         {clicked && <VideoPlayer src={data.name} thumbnail={thumb} autoPlay />}
                     </div>
                     :

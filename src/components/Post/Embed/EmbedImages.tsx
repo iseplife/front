@@ -100,6 +100,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
             ref={first.ref}
             onClick={() => open(0)}
             >
+                <div style={{paddingBottom: `${(1/first.ratio)*100}%`}} />
                 <SafeImage onLoaded={onLoadFactory(first.id)} src={first.src} ratio={first.ratio} nsfw={first.nsfw} status={first.status} />
             </div>
             :
