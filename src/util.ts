@@ -160,7 +160,7 @@ export type ParserFunction<T extends PhotoProps = SafePhoto> = (img: ImageType, 
 export const parsePhotosAsync= async <T extends PhotoProps = SafePhoto>(images: ImageType[], parser?: ParserFunction<T>, quality?: string): Promise<T[]> => {
     return images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id), quality)) as T[]
 }
-export const parsePhotosSync= (images: ImageType[], parser?: ParserFunction<T>, quality?: string): SafePhoto[] => 
+export const parsePhotosSync= (images: ImageType[], parser?: ParserFunction, quality?: string): SafePhoto[] => 
     images.map(img => (parser ?? defaultPhotoParser)(img, String(img.id), quality))
 
 export const defaultPhotoParser: ParserFunction = (img: ImageType, key: string, quality?: string): SafePhoto => {

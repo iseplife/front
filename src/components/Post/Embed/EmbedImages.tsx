@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
-import {getPostLink, parsePhotosAsync} from "../../../util"
+import {getPostLink, parsePhotosSync} from "../../../util"
 import SafeImage from "../../Common/SafeImage"
 import {Image, MediaStatus} from "../../../data/media/types"
-import {message} from "antd"
 import PostSidebar from "../PostSidebar"
 import {EmbedPseudoGallery, Post} from "../../../data/post/types"
 import { AnimatedLightbox, AnimatedSafePhoto } from "../../Common/AnimatedLightbox"
@@ -16,17 +15,11 @@ type EmbedImagesProps = {
     selected?: boolean
 }
 const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
-    const [photos, setPhotos] = useState<AnimatedSafePhoto[]>([])
+    const photos = useMemo<AnimatedSafePhoto[]>(() =>
+        parsePhotosSync(images, undefined, window.devicePixelRatio > 1.3 ? PostSizes.PREVIEW_HQ : PostSizes.PREVIEW)
+            .map(photo => ({ ...photo, ref: React.createRef<HTMLDivElement>() }))
+    , [images])
     const [lightboxPhotoIndex, _setLightboxPhotoIndex] = useState<number>()
-
-    useEffect(() => {
-        parsePhotosAsync(images, undefined, window.devicePixelRatio > 1.3 ? PostSizes.PREVIEW_HQ : PostSizes.PREVIEW).then(photos => 
-            setPhotos(photos.map(photo => ({ ...photo, ref: React.createRef<HTMLDivElement>() })))
-        ).catch(e => {
-            message.error("Error while parsing...")
-            console.error(e)
-        })
-    }, [images])
 
     const {pathname} = useLocation()
 
