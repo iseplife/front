@@ -55,11 +55,11 @@ const Discovery: React.FC = () => {
             <img src="img/icons/floating/star.svg" className="absolute top-[20px] right-[10%]" />
             <img src="img/icons/floating/square.svg" className="absolute top-[75px] left-[30%]" />
         </div>
-        <img src="img/wave.svg" draggable="false" className="mt-5 z-10 relative w-full select-none" />
-        <div className="bg-indigo-400">
+        <img src="img/wave.svg" draggable="false" className="mt-5 z-10 relative w-screen select-none" />
+        <div className="bg-indigo-400 -mt-1 z-10 relative">
             <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%] pb-5">
                 <div className="mb-5">
-                    <div className="bg-white rounded-full w-16 h-3"></div>
+                    <div className="bg-white rounded-full w-16 h-3 relative z-30"></div>
                     <div className="text-2xl mt-2">{t("assos")}</div>
                 </div>
 
