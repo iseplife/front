@@ -7,7 +7,8 @@ import {
     MediaUploadNSFW,
     MediaEditionNSFW,
     DocumentCreation,
-    DocumentEdition
+    DocumentEdition,
+    RichLink
 } from "../media/types"
 import {Poll, PollForm} from "../poll/types"
 import { Comment } from "../thread/types"
@@ -20,6 +21,7 @@ export enum EmbedEnumType {
     DOCUMENT = "document",
     VIDEO = "video",
     IMAGE = "image",
+    RICH_LINK = "rich_link",
 }
 
 export type BasicPostCreation = {
@@ -78,6 +80,10 @@ export type EmbedPoll = Poll & {
     embedType: EmbedEnumType.POLL
 }
 
+export type EmbedRichLink = RichLink & {
+    embedType: EmbedEnumType.RICH_LINK
+}
+
 export type EmbedGallery = {
     id: number
     name: string
@@ -94,7 +100,7 @@ export type EmbedPseudoGallery = {
 export type EmbedMedia = Video & {embedType: EmbedEnumType.VIDEO}
     | Document  & {embedType: EmbedEnumType.DOCUMENT}
 
-export type Embed = EmbedGallery | EmbedPseudoGallery | EmbedMedia | EmbedPoll
+export type Embed = EmbedGallery | EmbedPseudoGallery | EmbedMedia | EmbedPoll | EmbedRichLink
 
 export type EmbedGalleryCreation = {
     type: EmbedEnumType.GALLERY
@@ -144,7 +150,8 @@ export const ACCEPTED_FILETYPE: Record<EmbedEnumType, string> = {
     [EmbedEnumType.VIDEO]: ".mp4,.webm",
     [EmbedEnumType.DOCUMENT]: "*",
     [EmbedEnumType.GALLERY]: "*",
-    [EmbedEnumType.POLL]: "*"
+    [EmbedEnumType.POLL]: "*",
+    [EmbedEnumType.RICH_LINK]: "*"
 }
 
 export const DEFAULT_EMBED: Record<EmbedEnumType, EmbedCreation> = {
@@ -181,4 +188,5 @@ export const DEFAULT_EMBED: Record<EmbedEnumType, EmbedCreation> = {
         type: EmbedEnumType.VIDEO,
         data: []
     },
+    [EmbedEnumType.RICH_LINK]: undefined!,
 }

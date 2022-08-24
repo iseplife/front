@@ -6,6 +6,7 @@ import Video from "./Video"
 import EmbedImages from "./EmbedImages"
 import EmbedDocuments from "./EmbedDocuments"
 import { Video as VideoType } from "../../../data/media/types"
+import EmbedRichLink from "./EmbedRichLink"
 
 
 type EmbedProps = {
@@ -26,6 +27,8 @@ const Embed: React.FC<EmbedProps> = ({embed, post, selected}) => {
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
             return <EmbedImages images={embed.images} post={post} selected={selected}/>
+        case EmbedEnumType.RICH_LINK:
+            return <EmbedRichLink data={embed} />
         default:
             return null
     }

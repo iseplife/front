@@ -57,3 +57,12 @@ export type Document = Media & {
     title: string
     sizeBytes: number
 }
+
+export type RichLink = {
+    id: number
+
+    link: string
+    title: string
+    description: number
+    imageUrl: string
+}
