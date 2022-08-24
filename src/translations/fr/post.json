@@ -25,5 +25,6 @@
 	"just_now": "À l'instant",
 	"selected_post": "Publication sélectionnée",
 	"copy_link": "Partager",
-	"copied": "Lien copié dans le presse papier !"
+	"copied": "Lien copié dans le presse papier !",
+	"video_not_editable": "Les vidéos ne peuvent pas être modifiées."
 }
