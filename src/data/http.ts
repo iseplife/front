@@ -4,7 +4,7 @@ import { apiURI } from "./http.constants"
 
 export let apiClient: AxiosInstance
 export const AXIOS_TIMEOUT = 35_000
-export const appUrl = new URL(`https://${process.env.REACT_APP_URL ?? window.location.host}`)
+export const appUrl = new URL(process.env.REACT_APP_URL ?? window.location.origin)
 
 export function initializeAPIClient(): AxiosInstance {
     return apiClient = axios.create({
