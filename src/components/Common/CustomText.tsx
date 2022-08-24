@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import Linkify from "react-linkify"
 import { Link } from "react-router-dom"
+import { appUrl } from "../../data/http"
 
 interface CustomTextProps {
     description: string
@@ -11,7 +12,6 @@ interface CustomTextProps {
     disableLinks?: boolean
 }
 
-const appUrl = process.env.REACT_APP_URL ?? window.location.origin
 const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle = 0, disableSpacers, disableLinks}) => {
     const [seeAll, setSeeAll] = useState(false)
 
@@ -24,11 +24,11 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
             () => undefined
             :
             (href: string, text: string, key: number) => {
-                const relatedAppUrl = text.startsWith("http") ? appUrl : appUrl.split("://")[1]
-                const localLink = text.startsWith(relatedAppUrl)
+                const currentUrl = new URL(text.startsWith("http://") || text.startsWith("https://") ? text : `http://${text}`)
+                const related = currentUrl.host == appUrl.host
                 return <Link
-                    to={{pathname: localLink ? text.replace(relatedAppUrl, "") : href}}
-                    target={localLink ? "_self" : "_blank"}
+                    to={{pathname: related ? currentUrl.pathname : text}}
+                    target={related ? "_self" : "_blank"}
                     key={key}
                 >
                     {text.length > 31 ? text.substring(0, 31)+"..." : text}
