@@ -1,0 +1,7 @@
+{
+  "name": "iseplife",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
