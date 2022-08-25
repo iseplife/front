@@ -138,6 +138,10 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const [bigZoom, setBigZoom] = useState(false)
 
     const zoomStart = useCallback((event: ReactZoomPanPinchRef) => {
+        if(nextPhotoRef.current)
+            nextPhotoRef.current.style.opacity = ""
+        if(prevPhotoRef.current)
+            prevPhotoRef.current.style.opacity = ""
         setZooming(true)
     }, [])
     const zoomEnd = useCallback((event: ReactZoomPanPinchRef) => {
@@ -168,10 +172,14 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             prevPhoto = prevPhotoRef.current!,
             currPhoto = photoRef.current!
         
-        if (nextPhoto)
+        if (nextPhoto){
             nextPhoto.style.transition = nextPhoto.style.transform = ""
-        if (prevPhoto)
+            nextPhoto.style.opacity = "0"
+        }
+        if (prevPhoto){
             prevPhoto.style.transition = prevPhoto.style.transform = ""
+            prevPhoto.style.opacity = "0"
+        }
         currPhoto.style.transition = currPhoto!.style.transform = ""
     }, [currentIndex])
 
@@ -242,10 +250,14 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                 } else {
                     const diffStartX = touch.clientX - currentTouch.start.x
                     if ((diffStartX < 0 && nextPhotoRef.current) || (diffStartX > 0 && prevPhotoRef.current)){
-                        if (nextPhotoRef.current)
+                        if (nextPhotoRef.current){
+                            nextPhotoRef.current!.style.opacity = ""
                             nextPhotoRef.current!.style.transform = `translateX(${diffStartX - 10}px)`
-                        if (prevPhotoRef.current)
+                        }
+                        if (prevPhotoRef.current){
+                            prevPhotoRef.current!.style.opacity = ""
                             prevPhotoRef.current!.style.transform = `translateX(${diffStartX+ 10}px)`
+                        }
                         
                         photoRef.current!.style.transform = `translateX(${diffStartX}px)`
                     }

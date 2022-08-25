@@ -18,6 +18,7 @@ import {faEdit, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
+import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -230,14 +231,16 @@ const Gallery: React.FC = () => {
                                 {`${t("posted_date")} ${gallery && new Date(gallery.creation).toLocaleDateString()} ${t("by")}`}
                             </span>
                             <Tooltip title={gallery?.club.name}>
-                                <Link to={"/club/1"}>
-                                    <WebPAvatarPolyfill
-                                        src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
-                                        shape="circle"
-                                        className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
-                                        icon={<FontAwesomeIcon icon={faUserGroup}/>}
-                                    />
-                                </Link>
+                                <LinkEntityPreloader preview={gallery?.club}>
+                                    <Link to={`/club/${gallery?.club.id}`}>
+                                        <WebPAvatarPolyfill
+                                            src={mediaPath(gallery?.club.logoUrl, AvatarSizes.THUMBNAIL)}
+                                            shape="circle"
+                                            className=" ml-2 leading-tight hover:opacity-75 hover:shadow-outline cursor-pointer"
+                                            icon={<FontAwesomeIcon icon={faUserGroup}/>}
+                                        />
+                                    </Link>
+                                </LinkEntityPreloader>
                             </Tooltip>
                         </div>
                     }

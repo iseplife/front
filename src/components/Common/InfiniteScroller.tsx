@@ -36,36 +36,37 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
 
-    const [intersector, setIntersector] = useState<IntersectionObserver>(undefined!)
+    const intersector = useRef<IntersectionObserver>(undefined!)
+
+    const loaderRef = useRef<HTMLDivElement>(null)
+
+    const blockRef = useRef(block)
+    
     useEffect(() => {
-        setIntersector(intersector => {
-            intersector?.disconnect()
-            return new IntersectionObserver(
+        blockRef.current = block
+    }, [block])
+
+    useEffect(() => {
+        intersector.current?.disconnect()
+        if (!block){
+            intersector.current = new IntersectionObserver(
                 () => {
-                    if (block)
-                        return
                     if (watch !== "DOWN")
                         setUpLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
                     if (watch !== "UP")
                         setDownLoader(prevState => (prevState.loading ? prevState : {...prevState, fetch: true}))
                 }, {
                     threshold: 0,
+                    rootMargin: `${triggerDistance * 1.3}px`,
+                    root: document.getElementById("main")
                 }
             )
-        })
+            if(loaderRef?.current)
+                intersector?.current.observe(loaderRef.current)
+        }
     }, [block, watch])
 
-    const loaderRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        const ele = loaderRef?.current
-        if(ele){
-            intersector?.observe(ele)
-            return () => intersector?.unobserve(ele)
-        }
-    }, [loaderRef?.current, intersector])
-
-    useEffect(() => () => setIntersector(intersector => {intersector.disconnect(); return undefined!}), [])// Turn off intersector on unload
+    useEffect(() => () => {intersector.current.disconnect(); intersector.current = undefined!}, [])// Turn off intersector on unload
 
     const initialLoad = useCallback(() => {
         switch (watch) {
@@ -112,8 +113,12 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     loading: false
                 }))
 
-                if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0 && !block)
-                    setUpLoader(prevState => ({...prevState, fetch: true}))
+                requestAnimationFrame(() => 
+                    setTimeout(() => {
+                        if((loaderRef?.current?.getBoundingClientRect().top ?? 0) > 0 && !block)
+                            setUpLoader(prevState => ({...prevState, fetch: true}))
+                    }, 100)
+                )
             })
         }
     }, [upLoader, callback, loaderRef?.current, block])
@@ -129,11 +134,24 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
                     count: ++prevState.count,
                     loading: false
                 }))
-                if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !block)
-                    setDownLoader(prevState => ({...prevState, fetch: true}))
+                requestAnimationFrame(() => 
+                    setTimeout(() => {
+                        if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !block)
+                            setDownLoader(prevState => ({...prevState, fetch: true}))
+                    }, 100)
+                )
             })
         }
     }, [downLoader, callback, loaderRef?.current, block])
+
+    useEffect(() => {
+        const int = setInterval(() => {
+            if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !blockRef.current)
+                setDownLoader(prevState => !prevState.fetch ? ({...prevState, fetch: true}) : prevState)
+        }, 1000)
+
+        return () => clearInterval(int)
+    }, [])
 
     return (
         <div className={`relative h-auto ${className}`}>
@@ -147,7 +165,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
             {children}
 
-            <div className="invisible absolute" style={{marginTop: `-${triggerDistance}px`}} ref={loaderRef} />
+            <div className="invisible absolute mt-5" ref={loaderRef} />
 
             {(watch !== "UP") && !empty && (
                 <div className="mb-3 text-center">

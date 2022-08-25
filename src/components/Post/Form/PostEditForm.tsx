@@ -137,7 +137,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                         break
                     case EmbedEnumType.VIDEO: {
                         const media = embed.data[0]
-                        if (!("id" in media)) {
+                        if (media && !("id" in media)) {
                             const res = await createMedia(media, embed.type, post.linkedClub)
                             post.attachements = {[EmbedEnumType.VIDEO]: res.data.id}
                         }
