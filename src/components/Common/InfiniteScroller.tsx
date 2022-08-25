@@ -40,6 +40,12 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
     const loaderRef = useRef<HTMLDivElement>(null)
 
+    const blockRef = useRef(block)
+    
+    useEffect(() => {
+        blockRef.current = block
+    }, [block])
+
     useEffect(() => {
         intersector.current?.disconnect()
         if (!block){
@@ -137,6 +143,15 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
             })
         }
     }, [downLoader, callback, loaderRef?.current, block])
+
+    useEffect(() => {
+        const int = setInterval(() => {
+            if((loaderRef?.current?.getBoundingClientRect().top ?? Number.MAX_VALUE) < window.innerHeight && !blockRef.current)
+                setDownLoader(prevState => !prevState.fetch ? ({...prevState, fetch: true}) : prevState)
+        }, 1000)
+
+        return () => clearInterval(int)
+    }, [])
 
     return (
         <div className={`relative h-auto ${className}`}>
