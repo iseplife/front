@@ -7,6 +7,7 @@ import {Comment} from "../../data/thread/types"
 import {toggleThreadLike} from "../../data/thread"
 import heart from "react-useanimations/lib/heart"
 import Animation from "../Animation/Animation"
+import { likePopSoundUrl } from "../../constants/AudioFiles"
 
 type PostTheadProps = {
     thread: number
@@ -17,6 +18,7 @@ type PostTheadProps = {
     trendingComment?: Comment
     lightboxView?: boolean
 }
+const audio = new Audio(likePopSoundUrl)
 const PostThread: React.FC<PostTheadProps> = (props) => {
     const {commentsCount, thread, trendingComment, lightboxView} = props
     const [showComments, setShowComments] = useState<boolean>(props.forceShowComments)
@@ -27,14 +29,26 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
 
     const showMoreCommentsCallback = useCallback(() => setShowComments(true), [])
 
-    const toggleLike = useCallback(async (id: number) => {
-        setLiked(liked => !liked)
-        const res = await toggleThreadLike(id)
+    const toggleLike = useCallback(async () => {
+        try{
+            navigator.vibrate?.(7)
+        }catch(e){
+            console.log("Couldn't vibrate on like")
+        }
+        setLiked(liked => {
+            if(!liked){
+                audio.currentTime = 0
+                audio.play()
+            }
+            return !liked
+        })
+
+        const res = await toggleThreadLike(thread)
         if (res.status === 200) {
             setLiked(res.data)
             setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
         }
-    }, [])
+    }, [thread])
 
     useEffect(() => {
         if (!showComments && alreadyMore)
@@ -74,7 +88,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                     </span>
                     <span
                         className="group flex items-center justify-center cursor-pointer mr-3 text-xl"
-                        onClick={() => toggleLike(thread)}
+                        onClick={toggleLike}
                     >
                         <div className="text-base mx-1.5 w-7 text-right">
                             {likes > 0 && likes}
