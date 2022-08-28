@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   CapacitorUpdater: {
     "autoUpdate": true,
-    "autoUpdateUrl": process.env.REACT_APP_URL ?? "https://dev.iseplife.fr",
+    "autoUpdateUrl": process.env.REACT_APP_URL ?? "https://api.iseplife.fr/update",
   }
 };
 
