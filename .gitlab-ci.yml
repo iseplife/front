@@ -132,8 +132,8 @@ deploy-dev:
   stage: deploy
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
-    - aws s3 rm s3://dev.iseplife.fr --recursive
-    - aws s3 cp build/ s3://dev.iseplife.fr --recursive
+    - aws s3 rm s3://iseplife.fr --recursive
+    - aws s3 cp build/ s3://iseplife.fr --recursive
   dependencies:
     - build-dev
   rules:
