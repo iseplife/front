@@ -15,6 +15,7 @@ type InterceptState = {
 }
 
 export let refreshToken: () => AxiosPromise<TokenSet>
+export let getToken: (url?: string) => Promise<string>
 
 class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     refreshingPromise?: AxiosPromise<TokenSet>
@@ -25,6 +26,17 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     componentDidMount() {
         refreshToken = this.refreshToken.bind(this)
+        getToken = async (url?: string) => {
+            if(this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+                if(url)
+                    console.debug(`[Interceptor] Refreshing on request : "${url}"`)
+                else
+                    console.debug("[Interceptor] Refreshing token without request")
+                
+                await this.refreshToken()
+            }
+            return this.context.state.jwt
+        }
         this.intercept = [
             apiClient.interceptors.request.use(
                 this.axiosRequestInterceptor, e => Promise.reject(e)
@@ -59,7 +71,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
         if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
-            console.debug(`[Interceptor] Refreshing on request : "${request.url}"`)
             return new Promise<AxiosRequestConfig>((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 

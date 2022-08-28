@@ -1,54 +1,83 @@
 import { apiClient } from "../data/http"
 import FingerprintJS from "@fingerprintjs/fingerprintjs"
 import { notificationManager } from "../datamanager/NotificationManager"
+import { getMessaging, getToken } from "firebase/messaging"
+import { firebaseApp } from "../data/firebase"
+import { isPlatform, getPlatforms } from "@ionic/core"
+import { PushNotifications } from "@capacitor/push-notifications"
 
 class PushService {
-    private applicationServerKey = "BLWwNN2_bMjIeoh9JDxSVIx2qwrBchWDMHrb6nD1nDijSMoq6ZidqapvWMv5Git2SrObd8Do9glexD9wT-jECnY"
+    private applicationServerKey = "BBTc25yUa0mc8n4Fv5Xjyp4bC7NHdbK98K8J9V45fGF8xeljUJNlcwRc4qiroj_8aP48EJ0GbefUNWaAr4Qr7Mk"
     fingerpringJs = FingerprintJS.load()
 
     private registration?: ServiceWorkerRegistration
 
     lastCheckSubbed = false
+    firebaseMessaging = getMessaging(firebaseApp)
 
-    constructor() {
-        navigator.serviceWorker?.ready.then(async registration => {
-            this.registration = registration
-            notificationManager.setSubscribed(await this.checkSubscription())
-        })
-    }
+    capNotifRegistred = false
+
+    isWeb = !isPlatform("cordova")
+
     async initData() {
-        notificationManager.setWebPushEnabled("PushManager" in window)
+        console.debug("Platforms :", getPlatforms())
+        console.log("Loaded on web :", this.isWeb)
+        notificationManager.setWebPushEnabled(!this.isWeb || "PushManager" in window)
+
+        if(this.isWeb){
+            navigator.serviceWorker?.ready.then(async registration => {
+                console.debug("Service worker registred")
+                this.registration = registration
+                notificationManager.setSubscribed(await this.checkSubscription())
+            })
+        }else{
+            await PushNotifications.addListener("registration", token => {
+                this._updateSubscriptionOnServer(token.value)
+                console.info("Registration token: ", token.value)
+            })
+            await PushNotifications.addListener("registrationError", err => {
+                console.error("Registration error: ", err.error)
+            })
+            await PushNotifications.addListener("pushNotificationReceived", notification => {
+                console.log("Push notification received: ", notification)
+            })
+          
+            await PushNotifications.addListener("pushNotificationActionPerformed", notification => {
+                console.log("Push notification action performed", notification.actionId, notification.inputValue)
+            })
+
+            notificationManager.setSubscribed(await this.checkSubscription())
+        }
     }
 
     public async subscribeUser() {
         try{
-            const subscription = await this.registration?.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: this.applicationServerKey
-            })
+            let notificationAccepted = false
+            
+            try{
+                notificationAccepted = (this.isWeb ? await Notification.requestPermission() : (await PushNotifications.requestPermissions()).receive) === "granted"
+            }catch(e){
+                console.error("e", e)
+                //
+            }
 
-            if(!subscription)
-                return false
-
-            console.log("[PushService] Now subscribed.")
-            this._updateSubscriptionOnServer(subscription)
+            if(notificationAccepted){
+                if(await this.checkSubscription()){
+                    console.log("[PushService] Now subscribed.")
+                }
+            }else{
+                console.error("[PushService] Cannot subscribe to push notifications 1")
+            }
         }catch(e){
-            console.error("[PushService] Cannot subscribe to push notifications", e)
+            console.error("[PushService] Cannot subscribe to push notifications 2", e)
         }
         return false
     }
-    private async _updateSubscriptionOnServer(subscription: PushSubscription) {
+    private async _updateSubscriptionOnServer(subscriptionKey: string) {
         notificationManager.setSubscribed(true)
         this.lastCheckSubbed = true
-        // Get public key and user auth from the subscription object
-        const key = subscription.getKey ? subscription.getKey("p256dh") : ""
-        const auth = subscription.getKey ? subscription.getKey("auth") : ""
         await apiClient.post("/webpush/register/init", {
-            endpoint: subscription.endpoint,
-            // Take byte[] and turn it into a base64 encoded string suitable for
-            // POSTing to a server over HTTP
-            key: key ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(key)))) : "",
-            auth: auth ? btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(auth)))) : "",
+            subscriptionKey: subscriptionKey,
             fingerprint: (await (await this.fingerpringJs).get()).visitorId
         })
     }
@@ -61,16 +90,37 @@ class PushService {
         if(this.lastCheckSubbed)
             return true
 
-        const subscription = await this.registration?.pushManager.getSubscription()
-        const isSubscribed = !!subscription
-
-        if (isSubscribed) {
-            this._updateSubscriptionOnServer(subscription)
-            console.log("[PushService] Already subscribed.")
-        } else
-            console.log("[PushService] Not subscribed.")
-
-        return isSubscribed
+        if(this.isWeb){
+            try{
+                const token = await getToken(this.firebaseMessaging, { vapidKey: this.applicationServerKey, serviceWorkerRegistration: this.registration })
+                if(!token)
+                    throw new Error("No token, need to accept notifications")
+    
+                this._updateSubscriptionOnServer(token)
+                console.log("[PushService] Already subscribed.")
+                
+                return true
+            }catch(err){
+                console.log("An error occurred while retrieving token.", err)
+                console.log("[PushService] Not subscribed.")
+                return false
+            }
+        }else{
+            let perm = await PushNotifications.checkPermissions()
+            if(perm.receive != "granted"){
+                await this.subscribeUser()
+                perm = await PushNotifications.checkPermissions()
+            }
+            if(perm.receive == "granted"){
+                if(!this.capNotifRegistred){
+                    this.capNotifRegistred = true
+                    await PushNotifications.register()
+                }
+                return true
+            }
+            return false
+        }
+        return false
     }
 
     public refuse() {

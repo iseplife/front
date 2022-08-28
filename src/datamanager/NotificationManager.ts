@@ -6,6 +6,7 @@ import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import GeneralEventType from "../constants/GeneralEventType"
 import pushService from "../services/PushService"
 import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
+import { getToken } from "../components/Template/Interceptor"
 
 export default class NotificationManager extends DataManager<Notification> {
 
@@ -16,8 +17,12 @@ export default class NotificationManager extends DataManager<Notification> {
         super("notifications", ["id"], wsServerClient)
     }
 
+    public async init() {
+        await super.init()
+        getToken().then(() => this.registerPush())
+    }
+
     protected async initData() {
-        await pushService.initData()
         this.removeContext("maxLoaded")
         await this.loadPage(0)
         this.setContext("maxLoaded", { id: (await this.getNotifications(await this.getMinFresh())).reduce((prev, notif) => Math.max(prev, notif.id), 0) + 1 })
@@ -29,6 +34,9 @@ export default class NotificationManager extends DataManager<Notification> {
         }, true, false)
     }
 
+    public async registerPush() {
+        await pushService.initData()
+    }
 
     public register(): void {
         super.register()
