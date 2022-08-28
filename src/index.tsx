@@ -33,6 +33,9 @@ import LoadingPage from "./pages/LoadingPage"
 import { LocationState } from "./data/request.type"
 import UpdateService from "./services/UpdateService"
 import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
+import { CapacitorUpdater } from "@capgo/capacitor-updater"
+
+CapacitorUpdater.notifyAppReady()
 
 window.React = React
 

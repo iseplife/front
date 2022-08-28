@@ -89,7 +89,6 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
             this.refreshingPromise = (async () => {
                 try {
                     const res = await refresh()
-                    console.log(res)
                     this.context.dispatch({
                         type: AppActionType.SET_TOKEN,
                         token: res.data.token

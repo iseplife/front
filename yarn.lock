@@ -1662,6 +1662,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@capgo/capacitor-updater@npm:^3.3.20":
+  version: 3.3.20
+  resolution: "@capgo/capacitor-updater@npm:3.3.20"
+  peerDependencies:
+    "@capacitor/core": ^3.0.0 || ^4.0.0
+  checksum: db4663b9e4c5c6590bf10aa001e24e29a51fc5a5ac2769b2460e1713396de12eb06840cc55d317e5d11d9d92df631841cc98f0b9fffdf71f2c18d00cd3551ee1
+  languageName: node
+  linkType: hard
+
 "@cnakazawa/watch@npm:^1.0.3":
   version: 1.0.4
   resolution: "@cnakazawa/watch@npm:1.0.4"
@@ -8710,6 +8719,7 @@ __metadata:
     "@capacitor/keyboard": 4.0.1
     "@capacitor/push-notifications": ^4.0.1
     "@capacitor/status-bar": 4.0.1
+    "@capgo/capacitor-updater": ^3.3.20
     "@craco/craco": ^6.4.5
     "@fingerprintjs/fingerprintjs": ^3.3.3
     "@fortawesome/fontawesome-svg-core": ^6.1.1
@@ -8717,6 +8727,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": ^6.1.1
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@fortawesome/react-fontawesome": ^0.2.0
+    "@ionic/core": ^6.2.4
     "@ionic/react": ^6.0.0
     "@ionic/react-router": ^6.0.0
     "@juggle/resize-observer": ^3.4.0

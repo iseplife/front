@@ -34,3 +34,8 @@ public/css/index.css
 .pnp.cjs
 
 .pnp.loader.mjs
+
+resources/android
+resources/blackberry10
+resources/ios
+resources/windows

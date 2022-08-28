@@ -85,8 +85,11 @@ build-dev:
   before_script:
     - yarn set version berry
   script:
+    - apk --no-cache add zip
     - yarn install --immutable
     - yarn run build
+    - node get_git_hash.js > build/version.txt
+    - zip -r build/app.zip build
     - |
       YARN_LOCK_SHA256_HASH=$( sha256sum yarn.lock | awk '{ print $1 }')
       echo "Current sha256 hash is $YARN_LOCK_SHA256_HASH"

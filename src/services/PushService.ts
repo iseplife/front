@@ -5,6 +5,7 @@ import { getMessaging, getToken } from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
 import { isPlatform, getPlatforms } from "@ionic/core"
 import { PushNotifications } from "@capacitor/push-notifications"
+import { isWeb } from "../data/app"
 
 class PushService {
     private applicationServerKey = "BBTc25yUa0mc8n4Fv5Xjyp4bC7NHdbK98K8J9V45fGF8xeljUJNlcwRc4qiroj_8aP48EJ0GbefUNWaAr4Qr7Mk"
@@ -17,14 +18,10 @@ class PushService {
 
     capNotifRegistred = false
 
-    isWeb = !isPlatform("cordova")
-
     async initData() {
-        console.debug("Platforms :", getPlatforms())
-        console.log("Loaded on web :", this.isWeb)
-        notificationManager.setWebPushEnabled(!this.isWeb || "PushManager" in window)
+        notificationManager.setWebPushEnabled(!isWeb || "PushManager" in window)
 
-        if(this.isWeb){
+        if(isWeb){
             navigator.serviceWorker?.ready.then(async registration => {
                 console.debug("Service worker registred")
                 this.registration = registration
@@ -55,7 +52,7 @@ class PushService {
             let notificationAccepted = false
             
             try{
-                notificationAccepted = (this.isWeb ? await Notification.requestPermission() : (await PushNotifications.requestPermissions()).receive) === "granted"
+                notificationAccepted = (isWeb ? await Notification.requestPermission() : (await PushNotifications.requestPermissions()).receive) === "granted"
             }catch(e){
                 console.error("e", e)
                 //
@@ -90,7 +87,7 @@ class PushService {
         if(this.lastCheckSubbed)
             return true
 
-        if(this.isWeb){
+        if(isWeb){
             try{
                 const token = await getToken(this.firebaseMessaging, { vapidKey: this.applicationServerKey, serviceWorkerRegistration: this.registration })
                 if(!token)

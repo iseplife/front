@@ -31,6 +31,7 @@ const Login: React.FC = () => {
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
+                localStorage.setItem("refresh", res.data.refreshToken)
                 localStorage.setItem("logged", "1")
             }).catch(e => {
                 setLoadingStatus(false)
