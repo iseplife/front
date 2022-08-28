@@ -5,9 +5,11 @@ const config: CapacitorConfig = {
   appName: 'iseplife',
   webDir: 'build',
   bundledWebRuntime: false,
-  CapacitorUpdater: {
-    "autoUpdate": true,
-    "autoUpdateUrl": process.env.REACT_APP_URL ?? "https://api.iseplife.fr/update",
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": true,
+      "autoUpdateUrl": process.env.REACT_APP_URL ?? "https://api.iseplife.fr/health/update"
+    }
   }
 };
 

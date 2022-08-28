@@ -37,7 +37,6 @@ const Home: React.FC = () => {
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"/>
                 <UserGroups/>
             </div>
-            hello !
             <div className="w-full sm:col-span-2 overflow-x-hidden lg:overflow-x-visible scrollbar-none">
                 <Divider className="text-gray-700 text-lg px-4 md:px-10" orientation="left">
                     <div className="flex">
@@ -45,7 +44,7 @@ const Home: React.FC = () => {
                             onClick={() => setDiscover(false)}
                             className={"rounded-full text-base bg-black transition-colors px-3 py-[3px] cursor-pointer bg-opacity-[8%] hover:bg-opacity-[12%] text-neutral-700 " + (!discover && "bg-opacity-[15%] hover:bg-opacity-20 text-neutral-700")}
                         >
-                            {t("posts")}ddd
+                            {t("posts")}
                         </button>
                         <button
                             onClick={switchToDiscover}

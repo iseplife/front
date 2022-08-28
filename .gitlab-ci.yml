@@ -89,7 +89,10 @@ build-dev:
     - yarn install --immutable
     - yarn run build
     - node get_git_hash.js > build/version.txt
-    - zip -r build/app.zip build
+    - |
+      cd build
+      zip -r app.zip .
+      cd ../
     - |
       YARN_LOCK_SHA256_HASH=$( sha256sum yarn.lock | awk '{ print $1 }')
       echo "Current sha256 hash is $YARN_LOCK_SHA256_HASH"
