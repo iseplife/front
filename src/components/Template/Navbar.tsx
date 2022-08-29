@@ -116,6 +116,9 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
                 directionChangeHeight = scroll
 
             const bRect = header.getBoundingClientRect()
+            
+            if(scroll < 0)
+                return
 
             if(dir == "up"){
                 const height = bRect.height
@@ -277,7 +280,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 <div className="mx-auto flex">
                     <MobileFooterButton
                         route="/discovery"
-                        className="-mt-6 bg-indigo-400 text-white rounded-full h-[3.2rem] w-[3.2rem] scale-110 text-[1.3rem] shadow-[0px_-4px_15px_1px_rgba(0,0,0,0.1)]"
+                        className="-mt-6 bg-indigo-400 text-white rounded-full h-[3.2rem] w-[3.2rem] scale-110 text-[1.3rem] shadow-[0px_-4px_15px_1px_rgba(0,0,0,0.1)] z-50"
                         selectedIcon={cFaSearch}
                         notSelectedIcon={cFaSearch}
                         doubleClickAction={focusSearch}
