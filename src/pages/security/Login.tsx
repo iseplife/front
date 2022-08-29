@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react"
-import {useHistory} from "react-router-dom"
 import {useFormik} from "formik"
 import {useTranslation} from "react-i18next"
 import {connect} from "../../data/security"
@@ -18,7 +17,6 @@ interface LoginFormInputs {
 const Login: React.FC = () => {
     const {t, i18n} = useTranslation(["login", "common"])
     const {dispatch} = useContext(AppContext)
-    const history = useHistory()
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
@@ -106,6 +104,9 @@ const Login: React.FC = () => {
                     ))}
                 </div>
             </div>
+            <a href="https://docs.iseplife.fr/cgu.html" target="_blank" className="absolute left-5 my-2 text-gray-400">
+                CGU
+            </a>
             <span className="absolute right-5 my-2 text-gray-400">
                 {process.env.REACT_APP_VERSION} - {process.env.REACT_APP_COMMIT}
             </span>

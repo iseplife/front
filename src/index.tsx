@@ -7,9 +7,8 @@ import {
     Route,
     Switch,
     Redirect,
-    useHistory,
 } from "react-router-dom"
-import {getAPIStatus, initializeAPIClient} from "./data/http"
+import {initializeAPIClient} from "./data/http"
 import Login from "./pages/security/Login"
 import {refresh} from "./data/security"
 import Template from "./components/Template"
