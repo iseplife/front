@@ -7,6 +7,7 @@ import {
     Route,
     Switch,
     Redirect,
+    useHistory,
 } from "react-router-dom"
 import {getAPIStatus, initializeAPIClient} from "./data/http"
 import Login from "./pages/security/Login"
@@ -34,6 +35,7 @@ import { LocationState } from "./data/request.type"
 import UpdateService from "./services/UpdateService"
 import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
 import { CapacitorUpdater } from "@capgo/capacitor-updater"
+import NoConnectionDetector from "./components/Fix/NoConnectionDetector"
 
 CapacitorUpdater.notifyAppReady()
 
@@ -48,12 +50,6 @@ console.log(`Loaded version: ${process.env.REACT_APP_VERSION} - ${process.env.RE
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
     const [isLoggedIn, setLoggedIn] = useState<boolean>()
-    const [maintenance, setMaintenance] = useState<boolean>(false)
-
-    // Maintenance redirection if API is down
-    useEffect(() => {
-        getAPIStatus().catch(() => setMaintenance(true))
-    }, [])
 
     const [loading, setLoading] = useState<boolean>(true)
     const getUserInfos = useCallback(() => {
@@ -136,9 +132,9 @@ const App: React.FC = () => {
                     <Router>
                         <Interceptor />
                         <HeightFix />
+                        <NoConnectionDetector />
                         <Switch>
                             <Route path="/maintenance" component={Maintenance}/>
-                            {maintenance && <Redirect to="/maintenance" />}
 
                             <Route path="/login" component={Login}/>
                             <Route path="/" render={renderTemplate} />
