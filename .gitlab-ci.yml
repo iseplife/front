@@ -1,116 +1,80 @@
 stages:
-  - test
+  - prebuild
+  - deploy
   - build
   - docker
-  - deploy
 
-test:
-  stage: test
-  image: node:16.13-alpine
+cache:
+  key:
+    files:
+      - yarn.lock
+  paths:
+    - .yarn/
+    - yarn.lock.sha256sum
+
+prebuild:
   variables:
     CI: "false"
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - .yarn/
-      - yarn.lock.sha256sum
-  before_script:
-    - yarn set version berry
-  script:
-    - yarn install --immutable
-    - yarn run build
-    - |
-      YARN_LOCK_SHA256_HASH=$( sha256sum yarn.lock | awk '{ print $1 }')
-      echo "Current sha256 hash is $YARN_LOCK_SHA256_HASH"
-      echo "Checking sha256 hash of yarn.lock"
-
-      if ! sha256sum -c yarn.lock.sha256sum; then
-        echo "yarn.lock checksum does not match cache"
-        sha256sum yarn.lock > yarn.lock.sha256sum
-      else
-        echo "Cache is the same as before, removing cache files to prevent cache from updating"
-        rm -rf node_modules
-        rm -rf .yarn
-        rm -rf yarn.lock.sha256sum
-      fi
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"'
-
-## PROD PIPELINE #
-#build-prod:
-#  stage: build
-#  image: node:16.13-alpine
-#  variables:
-#    CI: "false"
-#    REACT_APP_HTTP_PROTOCOL: "https"
-#    REACT_APP_WS_PROTOCOL: "wss"
-#    REACT_APP_API_URL: "iseplife.fr/api"
-#  before_script:
-#    - SPA_VERSION=$(grep -m1 version package.json | awk -F\" '{ print $4 }')
-#  script:
-#    - yarn install --ignore-optional --frozen-lockfile --cache-folder .yarn
-#    - yarn run build
-#  artifacts:
-#    paths:
-#      - build/
-#  retry: 2
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#deploy-prod:
-#  stage: deploy
-#  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-#  script:
-#    - aws s3 rm s3://iseplife.fr --recursive
-#    - aws s3 cp build/ s3://iseplife.fr --recursive
-#  dependencies:
-#    - build-prod
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-
-# DEV PIPELINE #
-build-dev:
-  stage: build
   image: node:16.13-alpine
-  variables:
-    CI: "false"
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - .yarn/
-      - yarn.lock.sha256sum
+  stage: prebuild 
   before_script:
-    - yarn set version berry
-  script:
     - apk --no-cache add zip
-    - yarn install --immutable
+    - yarn set version berry
+  script:
+    - yarn install
     - yarn run build
     - node get_git_hash.js > build/version.txt
     - |
       cd build
       zip -r app.zip .
       cd ../
-    - |
-      YARN_LOCK_SHA256_HASH=$( sha256sum yarn.lock | awk '{ print $1 }')
-      echo "Current sha256 hash is $YARN_LOCK_SHA256_HASH"
-      echo "Checking sha256 hash of yarn.lock"
-
-      if ! sha256sum -c yarn.lock.sha256sum; then
-        echo "yarn.lock checksum does not match cache"
-        sha256sum yarn.lock > yarn.lock.sha256sum
-      else
-        echo "Cache is the same as before, removing cache files to prevent cache from updating"
-        rm -rf node_modules
-        rm -rf .yarn
-        rm -rf yarn.lock.sha256sum
-      fi
-  retry: 2
+    - sh opti_cache.sh
   artifacts:
     paths:
       - build/
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging"'
+
+build-android:
+  stage: build
+  image: mingc/android-build-box:latest
+  dependencies:
+    - prebuild
+  before_script:
+    - yarn set version berry
+    - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
+  script:
+    - yarn install
+    - yarn prebuild-android
+    - yarn build-android
+    - sh opti_cache.sh
+  artifacts:
+    paths:
+      - android/app/build/outputs/apk/release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+    
+build-ios:
+  stage: build
+  tags: 
+    - ios
+  dependencies:
+    - prebuild
+  before_script:
+    - yarn set version berry
+    - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
+  script:
+    - yarn install
+    - yarn prebuild-ios
+    - cd ios/App
+    - fastlane export_ipa
+    - cd ../../
+    - sh opti_cache.sh
+  after_script:
+    - security delete-keychain ios-build.keychain
+  artifacts:
+    paths:
+      - ios/App/devapp.ipa
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
@@ -127,7 +91,7 @@ docker-build:
     - docker push iseplife/front:latest
     - docker push registry.dev.juniorisep.com/iseplife/front
   dependencies:
-    - build-dev
+    - prebuild
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
@@ -138,7 +102,7 @@ deploy-dev:
     - aws s3 rm s3://iseplife.fr --recursive
     - aws s3 cp build/ s3://iseplife.fr --recursive
   dependencies:
-    - build-dev
+    - prebuild
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 

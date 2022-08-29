@@ -79,7 +79,13 @@
     "build": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
     "start-sw": "yarn run build && serve build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+
+    "ios-xcode-init": "cd ios/App && pod install",
+    "ios-xcode-analyze": "cd ios/App && xcodebuild -scheme App -sdk iphonesimulator15.5 -workspace App.xcworkspace clean analyze",
+    "build-android": "cd android && sh gradlew build",
+    "prebuild-ios": "ionic capacitor build ios --no-open --no-build",
+    "prebuild-android": "ionic capacitor build android --no-open --no-build"
   },
   "eslintConfig": {
     "extends": [
