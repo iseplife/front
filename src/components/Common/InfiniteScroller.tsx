@@ -66,7 +66,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
         }
     }, [block, watch])
 
-    useEffect(() => () => {intersector.current.disconnect(); intersector.current = undefined!}, [])// Turn off intersector on unload
+    useEffect(() => () => {intersector.current?.disconnect(); intersector.current = undefined!}, [])// Turn off intersector on unload
 
     const initialLoad = useCallback(() => {
         switch (watch) {
