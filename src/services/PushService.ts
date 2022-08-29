@@ -3,7 +3,6 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs"
 import { notificationManager } from "../datamanager/NotificationManager"
 import { getMessaging, getToken } from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
-import { isPlatform, getPlatforms } from "@ionic/core"
 import { PushNotifications } from "@capacitor/push-notifications"
 import { isWeb } from "../data/app"
 
@@ -71,6 +70,10 @@ class PushService {
         return false
     }
     private async _updateSubscriptionOnServer(subscriptionKey: string) {
+        if(localStorage.getItem("pushTokenValue") == subscriptionKey)
+            return
+        localStorage.setItem("pushTokenValue", subscriptionKey)
+        
         notificationManager.setSubscribed(true)
         this.lastCheckSubbed = true
         await apiClient.post("/webpush/register/init", {
