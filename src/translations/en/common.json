@@ -1,6 +1,7 @@
 {
   "error": "Sorry, we've encountered an error, try again later.",
   "end": "You've reached the end !",
+  "loading": "Loading your data...",
 	"see_more": "See more...",
   "explore": "Explore",
   "empty": "Nothing to display",

@@ -1,25 +1,16 @@
-import React, {useMemo} from "react"
-import Loading from "../components/Common/Loading"
+import React from "react"
+import { useTranslation } from "react-i18next"
+import LoadingSpinner from "../components/Common/LoadingSpinner"
 
-// https://www.makebullshit.com/
-const RANDOM_SENTENCE: string[] = [
-    "Chargement des vecteurs de temporisation",
-    "Synergize frictionless technologies",
-    "Génération du CA de JuniorISEP",
-    "Leverage dynamic schemas",
-    "Incubate value-added architectures",
-    "Capture et écoute du réseau duplex",
-    "Aggregate frictionless action-items",
-    "Creation de la connection à l'API ISEP",
-    "Incubate front-end relationships"
-]
 const LoadingPage: React.FC = () => {
-    const sentence = useMemo(() => RANDOM_SENTENCE[Math.floor(Math.random() * RANDOM_SENTENCE.length)], [])
+    const {t} = useTranslation("common")
 
     return (
         <div className="h-screen w-screen fixed top-0 overflow-hidden">
-            <Loading/>
-            {sentence}
+            <LoadingSpinner />
+            <div className="top-1/2 absolute mt-32 text-center w-full text-xl px-5">
+                {t("loading")}
+            </div>
         </div>
     )
 }

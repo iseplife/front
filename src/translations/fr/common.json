@@ -1,6 +1,7 @@
 {
   "error": "Désolé, y'a eu une erreur, réessaye plus tard",
   "update_available": "Une mise à jour est disponible. Rafraichissez la page pour l'activer.",
+  "loading": "Chargement de vos informations...",
 	"see_more": "Voir plus...",
   "explore": "Explorer",
   "end": "Vous avez tout visionné !",
