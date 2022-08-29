@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   "plugins": {
     "CapacitorUpdater": {
       "autoUpdate": true,
-      "autoUpdateUrl": process.env.REACT_APP_URL ?? "https://api.iseplife.fr/health/update"
+      "autoUpdateUrl": (process.env.REACT_APP_URL ? `${process.env.REACT_APP_HTTP_PROTOCOL}://${process.env.REACT_APP_URL}` : "https://api.iseplife.fr") + "/health/update"
     }
   }
 };
