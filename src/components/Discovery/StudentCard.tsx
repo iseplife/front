@@ -12,7 +12,7 @@ type StudentCardProps = {
 
 const StudentCard: React.FC<StudentCardProps> = React.memo(({ student, className }) => {
     const fullName = useMemo(() => `${student.firstName} ${student.lastName}`, [student.firstName, student.lastName])
-    return (<LinkEntityPreloader preview={student}>
+    return (<LinkEntityPreloader noWidth preview={student}>
         <Link to={`/student/${student.id}`}>
             <div
                 className={"relative bg-white rounded-2xl overflow-hidden hover:shadow-md h-52 px-3.5 items-end flex aspect-[18/20] cursor-pointer bg-[length:112%] hover:bg-[length:118%] transition-all " + className}

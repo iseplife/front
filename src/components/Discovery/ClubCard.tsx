@@ -10,7 +10,7 @@ type ClubCardProps = {
 }
 
 const ClubCard: React.FC<ClubCardProps> = ({club}) => (
-    <LinkEntityPreloader preview={club}>
+    <LinkEntityPreloader noWidth preview={club}>
         <Link to={`/club/${club.id}`}>
             <div
                 className="mx-1 bg-white rounded-2xl overflow-hidden hover:shadow-md h-52 px-4 items-end flex aspect-[18/20] bg-[length:112%] hover:bg-[length:118%] transition-all"
