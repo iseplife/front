@@ -23,9 +23,10 @@ i18n
 
 i18n.on("languageChanged", (lng) => {
     localStorage.setItem("lng", lng)
-    updateSettings({
-        language: lng
-    }).catch(() => message.error(i18n.t("error") as string))
+    if(localStorage.getItem("logged") == "1")
+        updateSettings({
+            language: lng
+        }).catch(() => message.error(i18n.t("error") as string))
 })
 
 export default i18n
