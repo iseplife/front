@@ -429,7 +429,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             >
                 {empty ?
                     <div className="mt-10 mb-2 flex flex-col items-center justify-center text-xl text-gray-400">
-                        <FontAwesomeIcon icon={faNewspaper} size="8x" className="block"/>
+                        <FontAwesomeIcon icon={faNewspaper} size="4x" className="block"/>
                         <span className="text-center">{t("empty_feed")}</span>
                     </div>
                     : (
