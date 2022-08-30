@@ -37,10 +37,6 @@ class PushService {
             await PushNotifications.addListener("pushNotificationReceived", notification => {
                 console.log("Push notification received: ", notification)
             })
-          
-            await PushNotifications.addListener("pushNotificationActionPerformed", notification => {
-                console.log("Push notification action performed", notification.actionId, notification.inputValue)
-            })
 
             notificationManager.setSubscribed(await this.checkSubscription())
         }

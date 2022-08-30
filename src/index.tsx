@@ -35,6 +35,7 @@ import UpdateService from "./services/UpdateService"
 import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
 import { CapacitorUpdater } from "@capgo/capacitor-updater"
 import NoConnectionDetector from "./components/Fix/NoConnectionDetector"
+import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
 
 CapacitorUpdater.notifyAppReady()
 
@@ -132,6 +133,7 @@ const App: React.FC = () => {
                         <Interceptor />
                         <HeightFix />
                         <NoConnectionDetector />
+                        <NotificationClickHandler />
                         <Switch>
                             <Route path="/maintenance" component={Maintenance}/>
 

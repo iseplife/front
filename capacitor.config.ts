@@ -8,7 +8,10 @@ const config: CapacitorConfig = {
   "plugins": {
     "CapacitorUpdater": {
       "autoUpdate": true,
-      "autoUpdateUrl": "https://api.iseplife.fr/health/update"
+      "autoUpdateUrl": "https://api.iseplife.fr/health/updatee"
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
     }
   }
 };

@@ -50,6 +50,7 @@ export const initPushWorker = () => {
     
     self.addEventListener("notificationclick", function(event) {
         event.notification.close()
+        console.log(event.notification)
         event.waitUntil(
             self.clients.openWindow(event.notification.data.url)
         )
