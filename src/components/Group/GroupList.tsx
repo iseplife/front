@@ -30,8 +30,8 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                                 <div className="absolute bottom-1 box-border w-full pr-4 break-words">{g.name}</div>
                             </div>
                         </Link>
-                    )) : [1, 2, 3, 4, 5, 6].map(_ =>
-                        <div className="px-2 rounded-lg flex-shrink-0 h-20 w-20 sm:h-full sm:w-full text-xs font-semibold relative flex bg-neutral-200 animate-pulse" />
+                    )) : [1, 2, 3, 4, 5, 6].map(i =>
+                        <div className={`px-2 rounded-lg flex-shrink-0 h-20 w-20 sm:h-full sm:w-full text-xs font-semibold relative flex bg-neutral-200 animate-pulse ${i && "ml-2.5 sm:ml-0"}`} />
                     )}
                 </div>
             </div>
