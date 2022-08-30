@@ -102,9 +102,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     if (err.response?.status == 401) {
                         this.refreshingPromise = undefined
                         this.props.history.push("/login")
+                        if(localStorage.getItem("logged") == "1")
+                            message.error(this.props.t("user_disconnected"))
                         this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
-
-                        message.error(this.props.t("user_disconnected"))
                     } else
                         throw e
                 }
