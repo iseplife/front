@@ -1617,6 +1617,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@capacitor/geolocation@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@capacitor/geolocation@npm:4.0.1"
+  peerDependencies:
+    "@capacitor/core": ^4.0.0
+  checksum: 352b7f63e9aa1097fd153f6a9bd129dfda7224b3d17fd25b49f74f13d71fd9c52529a33ef4aa4f0d296967463cd1525e26f4c75262e684fcba7968b5b3d346b1
+  languageName: node
+  linkType: hard
+
 "@capacitor/haptics@npm:4.0.1":
   version: 4.0.1
   resolution: "@capacitor/haptics@npm:4.0.1"
@@ -8939,6 +8948,7 @@ __metadata:
     "@capacitor/app": 4.0.1
     "@capacitor/cli": 4.1.0
     "@capacitor/core": 4.1.0
+    "@capacitor/geolocation": ^4.0.1
     "@capacitor/haptics": 4.0.1
     "@capacitor/ios": ^4.1.0
     "@capacitor/keyboard": 4.0.1
