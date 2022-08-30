@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">iseplife</string>
-    <string name="title_activity_main">iseplife</string>
+    <string name="app_name">IsepLife</string>
+    <string name="title_activity_main">IsepLife</string>
     <string name="package_name">fr.iseplive.iseplife</string>
     <string name="custom_url_scheme">fr.iseplive.iseplife</string>
 </resources>
