@@ -50,7 +50,7 @@ build-android:
     - sh opti_cache.sh
   artifacts:
     paths:
-      - android/app/build/outputs/apk/release
+      - android/app/build/outputs
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
     
