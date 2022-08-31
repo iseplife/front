@@ -1,7 +1,7 @@
 import { apiClient } from "../data/http"
 import FingerprintJS from "@fingerprintjs/fingerprintjs"
 import { notificationManager } from "../datamanager/NotificationManager"
-import { getMessaging, getToken } from "firebase/messaging"
+import { getMessaging, getToken, Messaging } from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
 import { PushNotifications } from "@capacitor/push-notifications"
 import { isWeb } from "../data/app"
@@ -13,7 +13,15 @@ class PushService {
     private registration?: ServiceWorkerRegistration
 
     lastCheckSubbed = false
-    firebaseMessaging = getMessaging(firebaseApp)
+    firebaseMessaging?: Messaging
+
+    constructor() {
+        try{
+            this.firebaseMessaging = getMessaging(firebaseApp)
+        }catch(e){
+            console.error("Firebase Messaging not supported !", e)
+        }
+    }
 
     capNotifRegistred = false
 
@@ -88,7 +96,7 @@ class PushService {
 
         if(isWeb){
             try{
-                if(Notification.permission == "default")
+                if(Notification.permission == "default" || !this.firebaseMessaging)
                     throw new Error("No token, need to accept notifications")
                     
                 const token = await getToken(this.firebaseMessaging, { vapidKey: this.applicationServerKey, serviceWorkerRegistration: this.registration })
