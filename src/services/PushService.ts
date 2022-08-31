@@ -88,6 +88,9 @@ class PushService {
 
         if(isWeb){
             try{
+                if(Notification.permission == "default")
+                    throw new Error("No token, need to accept notifications")
+                    
                 const token = await getToken(this.firebaseMessaging, { vapidKey: this.applicationServerKey, serviceWorkerRegistration: this.registration })
                 if(!token)
                     throw new Error("No token, need to accept notifications")
