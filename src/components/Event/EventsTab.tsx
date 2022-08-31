@@ -16,7 +16,7 @@ interface EventsTabProps {
 }
 
 const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) => {
-    const { t } = useTranslation("gallery")
+    const { t } = useTranslation("event")
     const [events, setEvents] = useState<EventTabPreviewType[]>([])
     const [empty, setEmpty] = useState<boolean>()
 
