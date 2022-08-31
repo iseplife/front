@@ -188,7 +188,8 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
 
     return <>
         <div className="topback fixed bg-white" ref={topHeaderRef} />
-        <div className="topback h-14 flex" />
+        <div className="h-14" />
+        <div className="topback" />
         <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
             <Link to="/" className="flex">
                 <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo"/>
