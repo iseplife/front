@@ -170,7 +170,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             {data.map((item) => filter[item.type] &&
                 <Option key={`${item.type}-${item.id}`} value={`${item.type.toLowerCase()}/${item.id}`}>
                     <LinkEntityPreloader preview={item}>
-                        <Link to={`${item.type.toLowerCase()}/${item.id}`} className="text-[color:inherit]">
+                        <Link to={`/${item.type.toLowerCase()}/${item.id}`} className="text-[color:inherit]">
                             <div className="flex justify-between">
                                 <div className="inline-flex">
                                     <AvatarSearchType
