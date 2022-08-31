@@ -16,7 +16,7 @@ const ClubLogoForm: React.FC = () => {
     const [image, setImage] = useState<File | null>(null)
     const [uploading, setUploading] = useState(false)
     const defaultImage = useMemo(() => (
-        club.logoUrl.startsWith("data:image") ?
+        club.logoUrl?.startsWith("data:image") ?
             club.logoUrl :
             mediaPath(club.logoUrl, AvatarSizes.DEFAULT)
     ), [club.logoUrl])
