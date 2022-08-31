@@ -51,11 +51,11 @@ const reducer: React.Reducer<StudentFilter, FilterReducerAction> = (filter, acti
 
 const parseSearchResults = (results: SearchItem[]): StudentPreview[] => {
     return results.map(r => {
-        const [firstName, lastName] = r.name.split(" ")
+        const splitted = r.name.split(" ")
         return ({
             id: r.id,
-            firstName,
-            lastName,
+            firstName: splitted.shift()!,
+            lastName: splitted.join(" "),
             photoUrlThumb: r.thumbURL,
             picture: r.thumbURL,
             promo: +r.description || -1,
