@@ -43,10 +43,10 @@ const EventPreviewList: React.FC<EventPreviewListProps> = ({ events }) => {
                     <EventPreview key={e.id} event={e} />
                 ))}
             </div>
-            <div onClick={scrollRight} className={"sm:hidden cursor-pointer absolute right-0 bg-black/[12%] backdrop-blur-sm grid place-items-center w-6 h-full text-lg transition-opacity " + ((maxScroll <= 5 || scroll > maxScroll - 10) && "opacity-0 pointer-events-none")}>
+            <div onClick={scrollRight} className={"sm:hidden z-20 cursor-pointer absolute right-0 bg-black/[12%] backdrop-blur-sm grid place-items-center w-6 h-full text-lg transition-opacity " + ((maxScroll <= 5 || scroll > maxScroll - 10) && "opacity-0 pointer-events-none")}>
                 <FontAwesomeIcon icon={faAngleRight} />
             </div>
-            <div onClick={scrollLeft} className={"sm:hidden cursor-pointer absolute left-0 bg-black/[12%] backdrop-blur-sm grid place-items-center w-6 h-full text-lg transition-opacity " + (scroll < 10 && "opacity-0 pointer-events-none")}>
+            <div onClick={scrollLeft} className={"sm:hidden z-20 cursor-pointer absolute left-0 bg-black/[12%] backdrop-blur-sm grid place-items-center w-6 h-full text-lg transition-opacity " + (scroll < 10 && "opacity-0 pointer-events-none")}>
                 <FontAwesomeIcon icon={faAngleLeft} />
             </div>
         </div>
