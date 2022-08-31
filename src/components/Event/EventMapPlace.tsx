@@ -39,7 +39,7 @@ const EventMapPlace: React.FC<EventMapPlaceProps> = ({loading, location = "", po
             location?.length ?
                 `${position.street}, ${position.city}` :
                 `${position.postcode}, ${position.city}` :
-            t("event:online")
+            t("event:no_position")
     ), [location, position])
 
     const place = useMemo(() => (

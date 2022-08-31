@@ -61,6 +61,6 @@
 		"until_diff_day": "Actuellement, jusqu'au {{end}}",
 		"before": "C'était "
 	},
-	"online": "En ligne",
+	"no_position": "Sans position",
 	"participate": "Participer"
 }
