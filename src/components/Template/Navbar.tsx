@@ -99,6 +99,7 @@ const NotificationHeaderButton: React.FC = () => {
 
 export const Header: React.FC<HeaderProps> = ({user}) => {
     const ref = useRef<HTMLDivElement>(null)
+    const topHeaderRef = useRef<HTMLDivElement>(null)
 
     const onScrollData = useRef({
         lastScrollY: 0,
@@ -126,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
 
             if(justChanged){
                 const height = bRect.height
-                const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
+                const top = Math.max(0, Math.max(scroll + bRect.top - (topHeaderRef.current?.getBoundingClientRect().height ?? 0), scroll - height))
                 data.directionChangeHeight = top
                 setStyles(header, {
                     position: "fixed",
@@ -186,7 +187,8 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
     useEffect(() => onScroll(), [pathname])
 
     return <>
-        <div className="navbar h-14 flex" />
+        <div className="topback fixed bg-white" ref={topHeaderRef} />
+        <div className="topback h-14 flex" />
         <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
             <Link to="/" className="flex">
                 <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo"/>

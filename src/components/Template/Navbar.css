@@ -15,16 +15,15 @@
     }
 }
 
+.topback {
+    height: constant(safe-area-inset-top);
+    height: env(safe-area-inset-top);
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100vw;
+}
 .navbar {
     transform: translateY(constant(safe-area-inset-top));
     transform: translateY(env(safe-area-inset-top));
-    position: relative;
-};
-.navbar:before {
-    content: "";
-    display: block;
-    position: absolute;
-    bottom:0;
-    width: 100vw;
-    height: 150px;
 }
