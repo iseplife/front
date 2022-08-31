@@ -46,7 +46,7 @@ const ClubHeader: React.FC = () => {
                     <WebPAvatarPolyfill
                         src={imageSrc}
                         icon={<FontAwesomeIcon icon={faUserGroup} />}
-                        className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md z-10"
+                        className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md z-10 flex-shrink-0"
                     />
                     <div className="flex ml-4 md:-mt-5 font-bold flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                         <h1 className="text-neutral-900 text-3xl mb-0 -mt-1 ml-0.5 sm:ml-0 mr-auto">{(club ?? cache)?.name}</h1>
