@@ -20,7 +20,7 @@ const ClubCard: React.FC<ClubCardProps> = ({club}) => (
                     backgroundPosition: "center",
                 }}
             >
-                <div className="bg-white/40 rounded-xl backdrop-blur grid place-items-center px-3 py-1 mb-3 mt-auto w-full text-neutral-800 font-semibold text-2xl">
+                <div className="bg-white/40 text-center rounded-xl backdrop-blur grid place-items-center px-3 py-1 mb-3 mt-auto w-full text-neutral-800 font-semibold text-2xl">
                     {club.name}
                 </div>
             </div>
