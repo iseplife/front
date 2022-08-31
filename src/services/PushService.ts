@@ -4,7 +4,7 @@ import { notificationManager } from "../datamanager/NotificationManager"
 import { getMessaging, getToken, Messaging } from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
 import { PushNotifications } from "@capacitor/push-notifications"
-import { isWeb } from "../data/app"
+import { isIosApp, isWeb } from "../data/app"
 
 class PushService {
     private applicationServerKey = "BBTc25yUa0mc8n4Fv5Xjyp4bC7NHdbK98K8J9V45fGF8xeljUJNlcwRc4qiroj_8aP48EJ0GbefUNWaAr4Qr7Mk"
@@ -115,6 +115,8 @@ class PushService {
         }else{
             let perm = await PushNotifications.checkPermissions()
             if(perm.receive != "granted"){
+                if(isIosApp)
+                    return false
                 await this.subscribeUser()
                 perm = await PushNotifications.checkPermissions()
             }
