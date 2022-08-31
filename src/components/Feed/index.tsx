@@ -24,7 +24,7 @@ import {AppContext} from "../../context/app/context"
 import "./Feed.css"
 import FeedsManager, {feedsManager, ManagerPost} from "../../datamanager/FeedsManager"
 import {useLiveQuery} from "dexie-react-hooks"
-import {isBefore} from "date-fns"
+import {isAfter, isBefore} from "date-fns"
 import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
 import FeedPost from "./FeedPost"
@@ -74,8 +74,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     useEffect(() => {
         if(_posts)
-            setPosts(_posts)
-    }, [_posts])
+            setPosts(_posts.filter(p => !!(isAfter(p.publicationDate, Date.now()) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id))))
+    }, [_posts, id, firstLoaded, error])
 
     //Cache hook for fast first loading
     useEffect(() => {

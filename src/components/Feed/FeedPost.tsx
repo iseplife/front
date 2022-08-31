@@ -1,4 +1,3 @@
-import { isAfter } from "date-fns"
 import { useCallback, useMemo } from "react"
 import { feedsManager } from "../../datamanager/FeedsManager"
 import Post, { PostProps } from "../Post"
@@ -19,7 +18,7 @@ const FeedPost: React.FC<FeedPostProps> = (props) => {
 
     const toggleEdition = useCallback((toggle: boolean) => props.setEditPost(toggle ? p.id : 0), [])
 
-    return <>{(isAfter(p.publicationDate, Date.now()) || p.publicationDateId <= props.firstLoaded) && (!props.error || feedsManager.isFresh(p, props.feedId)) &&
+    return (
         <div
             className={`${!feedsManager.isFresh(p, props.feedId) && "opacity-60 pointer-events-none"} py-2 ${loadAnimation && "animate-fadeIn"}`}
         >
@@ -37,7 +36,7 @@ const FeedPost: React.FC<FeedPostProps> = (props) => {
                 selected={props.selected}
             />
         </div>
-    }</>
+    )
 }
 
 export default FeedPost
