@@ -37,6 +37,17 @@ import { CapacitorUpdater } from "@capgo/capacitor-updater"
 import NoConnectionDetector from "./components/Fix/NoConnectionDetector"
 import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
 
+/* Core CSS required for Ionic components to work properly */
+import "@ionic/react/css/core.css"
+
+/* Basic CSS for apps built with Ionic */
+import "@ionic/react/css/normalize.css"
+import "@ionic/react/css/structure.css"
+import "@ionic/react/css/typography.css"
+import { IonApp, setupIonicReact } from "@ionic/react"
+
+setupIonicReact()
+
 CapacitorUpdater.notifyAppReady()
 
 window.React = React
@@ -126,24 +137,26 @@ const App: React.FC = () => {
     , [isLoggedIn])
 
     return (loading ? <LoadingPage /> :
-        <AppContext.Provider value={{state, dispatch}}>
-            <RecoilRoot>
-                {isLoggedIn != undefined && (
-                    <Router>
-                        <Interceptor />
-                        <HeightFix />
-                        <NoConnectionDetector />
-                        <NotificationClickHandler />
-                        <Switch>
-                            <Route path="/maintenance" component={Maintenance}/>
+        <IonApp>
+            <AppContext.Provider value={{state, dispatch}}>
+                <RecoilRoot>
+                    {isLoggedIn != undefined && (
+                        <Router>
+                            <Interceptor />
+                            <HeightFix />
+                            <NoConnectionDetector />
+                            <NotificationClickHandler />
+                            <Switch>
+                                <Route path="/maintenance" component={Maintenance}/>
 
-                            <Route path="/login" component={Login}/>
-                            <Route path="/" render={renderTemplate} />
-                        </Switch>
-                    </Router>
-                )}
-            </RecoilRoot>
-        </AppContext.Provider>
+                                <Route path="/login" component={Login}/>
+                                <Route path="/" render={renderTemplate} />
+                            </Switch>
+                        </Router>
+                    )}
+                </RecoilRoot>
+            </AppContext.Provider>
+        </IonApp>
     )
 }
 
