@@ -100,73 +100,94 @@ const NotificationHeaderButton: React.FC = () => {
 export const Header: React.FC<HeaderProps> = ({user}) => {
     const ref = useRef<HTMLDivElement>(null)
 
+    const onScrollData = useRef({
+        lastScrollY: 0,
+        previousDirection: "up",
+        directionChangeHeight: 0,
+    })
+
     const onScroll = useMemo(() => {
-        let lastScrollY = 0
-        let previousDirection = "up"
-        let directionChangeHeight = 0
+        const data = onScrollData.current
         return () => {
             const element = document.getElementById("main")!
 
             const header = ref.current!
             const scroll = element.scrollTop
 
-            const dir = scroll > lastScrollY ? "down" : "up"
-            const justChanged = previousDirection != dir
+            const dir = scroll > data.lastScrollY ? "down" : "up"
+            const justChanged = data.previousDirection != dir
             if(justChanged)
-                directionChangeHeight = scroll
+                data.directionChangeHeight = scroll
 
             const bRect = header.getBoundingClientRect()
             
-            if(scroll < 0)
+            if(scroll < 0 || window.innerWidth >= 768)
                 return
 
-            if(dir == "up"){
+            if(justChanged){
                 const height = bRect.height
-                if(directionChangeHeight - scroll >= 0 && !justChanged){
-                    if(header.style.willChange == "top")
+                const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
+                data.directionChangeHeight = top
+                setStyles(header, {
+                    position: "fixed",
+                    top: "0px",
+                    willChange: "top",
+                }, false)
+            }else{
+                if(header.style.willChange == "top")
+                    if(dir == "up" && data.directionChangeHeight - scroll >= 0){
                         setStyles(header, {
                             position: "fixed",
                             top: "0px",
                             willChange: "",
                         }, false)
-                } else {
-                    if(justChanged){
-                        const top = Math.max(0, Math.max(scroll + bRect.top, scroll - height))
-                        directionChangeHeight = top
+                    }else if(dir == "down" && data.directionChangeHeight - scroll <= -bRect.height){
                         setStyles(header, {
-                            willChange: "top",
+                            position: "fixed",
+                            top: "-100px",
+                            willChange: "",
                         }, false)
                     }
-                    setStyles(header, {
-                        position: "fixed",
-                        top: `${directionChangeHeight - scroll}px`,
-                    }, false)
-
-                }
-            }else if(dir == "down" && justChanged)
+            }
+            if(header.style.willChange == "top")
                 setStyles(header, {
-                    position: "absolute",
-                    top: `${bRect.bottom > 0 ? scroll + bRect.top : scroll}px`,
-                    willChange: "",
+                    position: "fixed",
+                    top: `${data.directionChangeHeight - scroll}px`,
                 }, false)
 
-            lastScrollY = scroll
-            previousDirection = dir
+            data.lastScrollY = scroll
+            data.previousDirection = dir
         }
+    }, [])
+
+    const onResize = useCallback(() => {
+        const data = onScrollData.current
+        const header = ref.current!
+        setStyles(header, {
+            position: "fixed",
+            top: "0px",
+        }, false)
+        data.lastScrollY = 0
+        data.previousDirection = "up"
+        data.directionChangeHeight = 0
     }, [])
 
     useEffect(() => {
         const element = document.getElementById("main")!
         element.addEventListener("scroll", onScroll)
-        return () => element.removeEventListener("scroll", onScroll)
+        window.addEventListener("resize", onResize)
+        return () => {
+            element.removeEventListener("scroll", onScroll)
+            window.removeEventListener("resize", onScroll)
+        }
     }, [])
 
     const { pathname } = useLocation()
     useEffect(() => onScroll(), [pathname])
 
     return <>
-        <div className="h-14 flex" />
-        <div className="flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 sm:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
+        <div className="navbar h-14 flex" />
+        <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
             <Link to="/" className="flex">
                 <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo"/>
                 <div className="items-center ml-1 text-indigo-500/90 font-medium text-base hidden lg:flex">

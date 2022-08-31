@@ -14,3 +14,17 @@
         display: none
     }
 }
+
+.navbar {
+    transform: translateY(constant(safe-area-inset-top));
+    transform: translateY(env(safe-area-inset-top));
+    position: relative;
+};
+.navbar:before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom:0;
+    width: 100vw;
+    height: 150px;
+}
