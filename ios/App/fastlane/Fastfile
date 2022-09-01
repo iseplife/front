@@ -164,7 +164,6 @@ platform :ios do
       destination: use_build_destination ? ENV['BUILD_DESTINATION'] : nil
     )
     upload_to_app_store(
-      username: ENV['APPSTORE_EMAIL'],
       apple_id: ENV['APPLE_ID'],
       app_identifier: ENV['APP_ID']
     )
