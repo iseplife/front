@@ -7,6 +7,7 @@ import {SUPPORTED_LANGUAGES} from "../../i18n"
 import {Input} from "antd"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
+import { isWeb } from "../../data/app"
 
 
 interface LoginFormInputs {
@@ -25,11 +26,13 @@ const Login: React.FC = () => {
         onSubmit: ({id, password}) => {
             setLoadingStatus(true)
             connect(id, password).then((res) => {
+                localStorage.removeItem("pushTokenValue")
                 dispatch({
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
-                localStorage.setItem("refresh", res.data.refreshToken)
+                if(!isWeb)
+                    localStorage.setItem("refresh", res.data.refreshToken)
                 localStorage.setItem("logged", "1")
             }).catch(e => {
                 setLoadingStatus(false)
