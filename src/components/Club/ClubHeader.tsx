@@ -32,8 +32,6 @@ const ClubHeader: React.FC = () => {
         })
     }, [club])
 
-    console.log(cache)
-
     return (
         <>
             <ClubCover/>

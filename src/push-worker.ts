@@ -12,8 +12,15 @@ onBackgroundMessage(firebaseMessaging, (payload) => {
 })
 
 console.log("load firebase")
+self.addEventListener("notificationclick", function(event) {
+    console.log("click", event)
+})
 
 export const initPushWorker = () => {
+    
+    self.addEventListener("push", async function (event) {
+        console.log("push", event)
+    })
     // self.addEventListener("push", async function (event) {
     //     if (!event.data)
     //         return
@@ -58,3 +65,6 @@ export const initPushWorker = () => {
         console.log("[Service Worker] Clicked, opening", event.notification.data.url)
     })
 }
+self.addEventListener("notificationclick", function(event) {
+    console.log("click2", event)
+})

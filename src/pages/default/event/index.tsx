@@ -45,7 +45,6 @@ const Event: React.FC = () => {
     
     const cache = useMemo(() => id ? entityPreloader.getEvent(parseInt(id)) : undefined, [id])
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
-    console.log(event?.feed ?? cache?.feedId, !(event?.feed ?? cache?.feedId))
     const feed = useMemo(() => (<Feed
         key={`efeed${id}`}
         id={(event?.feed ?? cache?.feedId)}

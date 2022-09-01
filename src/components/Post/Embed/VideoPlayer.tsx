@@ -15,7 +15,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({src, thumbnail, autoPlay}) => 
                 if(video != videoRef.current)
                     video.pause()
         }
-        console.log(videoRef.current)
         videoRef.current?.addEventListener("play", fnc)
         return () => videoRef.current?.removeEventListener("play", fnc)
     }, [videoRef.current])
