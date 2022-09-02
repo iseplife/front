@@ -1,5 +1,6 @@
 {
   "id": "ISEP id",
   "password": "password",
-  "submit": "Log in "
+  "submit": "Log in ",
+  "use_moodle": "Please use your ISEP Moodle account credentials"
 }

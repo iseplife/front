@@ -121,6 +121,7 @@ const Login: React.FC = () => {
                                 t("login:submit")
                             }
                         </button>
+                        <div className="text-black/40 text-center mt-2 -mb-1 max-w-[200px] mx-auto">{t("login:use_moodle")}</div>
                     </form>
                 </div>
             </div>
