@@ -62,11 +62,11 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     handleOffline = () => {
-        message.error(this.props.t("offline"))
+        // message.error(this.props.t("offline"))
     }
 
     handleOnline = () => {
-        message.info(this.props.t("online"))
+        // message.info(this.props.t("online"))
     }
 
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
