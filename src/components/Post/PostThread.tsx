@@ -8,6 +8,8 @@ import {toggleThreadLike} from "../../data/thread"
 import heart from "react-useanimations/lib/heart"
 import Animation from "../Animation/Animation"
 import { likePopSoundUrl } from "../../constants/AudioFiles"
+import { isWeb } from "../../data/app"
+import { Haptics, ImpactStyle } from "@capacitor/haptics"
 
 type PostTheadProps = {
     thread: number
@@ -31,7 +33,10 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
 
     const toggleLike = useCallback(async () => {
         try{
-            navigator.vibrate?.(7)
+            if(isWeb)
+                navigator.vibrate?.(7)
+            else
+                await Haptics.impact({ style: ImpactStyle.Medium })
         }catch(e){
             console.log("Couldn't vibrate on like")
         }
