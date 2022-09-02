@@ -18,7 +18,7 @@ const AdminTemplate: React.FC = () => {
         <div className="bg-gray-100 h-full">
             <AdminHeader/>
             <main className="bg-gray-100">
-                <div className="max-w-7xl mx-auto pt-6 pb-3 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto pt-6 pb-3 sm:px-6 lg:px-8 h-[calc(100vh-50px)] overflow-y-auto">
                     <Switch>
                         <Route path="/admin/user/:id" exact component={StudentPanel}/>
                         <Route path="/admin/user" exact component={StudentPanel}/>
