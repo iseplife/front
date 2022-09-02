@@ -107,6 +107,7 @@ const Login: React.FC = () => {
                     ))}
                 </div>
             </div>
+            <span className="fixed top-2 left-0 w-full text-black/[15%] text-center">© IsepLive 2022</span>
             <a href="https://docs.iseplife.fr/cgu.html" target="_blank" className="absolute left-5 my-2 text-gray-400">
                 CGU
             </a>
