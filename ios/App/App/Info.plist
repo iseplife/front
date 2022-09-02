@@ -48,6 +48,8 @@
 	<key>NSLocationAlwaysUsageDescription</key>
     <string>Your location is required for making the map work</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your location is being used for the map</string>
+    <string>Your location is being used for the map</string> 
+    <key>NSCameraUsageDescription</key>
+    <string>Your camera can be used when you take a photo for your posts or profile picture</string> 
 </dict>
 </plist>
