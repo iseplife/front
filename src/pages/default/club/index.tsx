@@ -19,6 +19,11 @@ import { getEventsFrom } from "../../../data/event"
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
 import { ClubPreview } from "../../../data/club/types"
 import { Author } from "../../../data/request.type"
+import DropdownPanel from "../../../components/Common/DropdownPanel"
+import DropdownPanelElement from "../../../components/Common/DropdownPanelElement"
+import { faBan } from "@fortawesome/free-solid-svg-icons"
+import { feedsManager } from "../../../datamanager/FeedsManager"
+import { useLiveQuery } from "dexie-react-hooks"
 
 export enum ClubTab {
     HOME_TAB,
@@ -70,8 +75,30 @@ const Club: React.FC = () => {
 
     const clubContext = useMemo(() => ({state: {club, cache}, dispatch}), [club, cache])
 
+    const onBlock = useCallback(() => {
+        const id = (club ?? cache)?.id
+        if(id)
+            feedsManager.addBlocked(id)
+    }, [(club ?? cache)?.id])
+    const onUnBlock = useCallback(() => {
+        const id = (club ?? cache)?.id
+        if(id)
+            feedsManager.removeBlocked(id)
+    }, [(club ?? cache)?.id])
+    
+
+    const isBlocked = useLiveQuery(async () => (club || cache) && (await feedsManager.getBlocked()).includes((club || cache)!.id), [(club ?? cache)?.id])
+
     return (
         <ClubContext.Provider value={clubContext}>
+            <div className="absolute flex">
+                <DropdownPanel
+                    buttonClassName="absolute top-2 left-2 z-50 "
+                    panelClassName="w-32 left-0 select-none text-base font-medium"
+                >
+                    <DropdownPanelElement icon={faBan} title={t(isBlocked ? "common:unblock" : "common:block")} onClick={isBlocked ? onUnBlock : onBlock} color="red" />
+                </DropdownPanel>
+            </div>
             <ClubHeader />
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-3 lg:grid-cols-4">
                 <div className="flex-1 mx-4 -mt-4 sm:mt-0">

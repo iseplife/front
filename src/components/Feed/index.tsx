@@ -73,10 +73,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
 
     const [posts, setPosts] = useState(loading ? [] : cache.get(`${id}`) as ManagerPost[] | undefined ?? [])
 
+    const blocked = useLiveQuery(async () => await feedsManager.getBlocked(), [], [] as number[])
+
     useEffect(() => {
         if(_posts)
-            setPosts(_posts.filter(p => !!(isAfter(p.publicationDate, Date.now()) || p.publicationDateId <= firstLoaded) && (!error || feedsManager.isFresh(p, id))))
-    }, [_posts, id, firstLoaded, error])
+            setPosts(_posts.filter(p => 
+                !!(isAfter(p.publicationDate, Date.now())
+                || p.publicationDateId <= firstLoaded)
+                && (!error || feedsManager.isFresh(p, id))
+                && !blocked?.includes(p.author.id)
+            ))
+    }, [_posts, id, firstLoaded, error, blocked])
 
     //Cache hook for fast first loading
     useEffect(() => {

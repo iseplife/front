@@ -84,5 +84,7 @@
   "cgu_deny": "Refuser",
   "cgu_open": "Consulter",
   "cgu_text": "To use IsepLife, you need to accept our EULA.",
-  "cgu": "EULA"
+  "cgu": "EULA",
+  "block": "Block",
+  "unblock": "Unlock"
 }

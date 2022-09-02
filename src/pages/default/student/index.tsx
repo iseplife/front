@@ -1,7 +1,11 @@
+import { faBan, faCross } from "@fortawesome/free-solid-svg-icons"
 import { message } from "antd"
+import { useLiveQuery } from "dexie-react-hooks"
 import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
+import DropdownPanel from "../../../components/Common/DropdownPanel"
+import DropdownPanelElement from "../../../components/Common/DropdownPanelElement"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import Feed from "../../../components/Feed"
@@ -15,6 +19,7 @@ import { Author } from "../../../data/request.type"
 import { getStudent } from "../../../data/student"
 import { StudentOverview, StudentPreview } from "../../../data/student/types"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
+import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
 
 enum StudentTab {
@@ -71,8 +76,30 @@ const Student: React.FC = () => {
             setStudent({...student, subscribed: sub })
     }, [student])
 
+    const onBlock = useCallback(() => {
+        const id = (student ?? cache)?.id
+        if(id)
+            feedsManager.addBlocked(id)
+    }, [(student ?? cache)?.id])
+    const onUnBlock = useCallback(() => {
+        const id = (student ?? cache)?.id
+        if(id)
+            feedsManager.removeBlocked(id)
+    }, [(student ?? cache)?.id])
+    
+
+    const isBlocked = useLiveQuery(async () => (student || cache) && (await feedsManager.getBlocked()).includes((student || cache)!.id), [(student ?? cache)?.id])
+
     return (
         <>
+            <div className="absolute flex w-full justify-end">
+                <DropdownPanel 
+                    buttonClassName="absolute top-2 right-2 "
+                    panelClassName="w-32 right-0 select-none text-base font-medium"
+                >
+                    <DropdownPanelElement icon={faBan} title={t(isBlocked ? "common:unblock" : "common:block")} onClick={isBlocked ? onUnBlock : onBlock} color="red" />
+                </DropdownPanel>
+            </div>
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-2 lg:grid-cols-5">
                 <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3 max-w-[calc(100vw-2rem)]">
                     <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">

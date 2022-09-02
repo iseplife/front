@@ -85,5 +85,7 @@
   "cgu_deny": "Refuser",
   "cgu_open": "Consulter",
   "cgu_text": "Pour utiliser l'application, vous devez accepter les CGU.",
-  "cgu": "CGU"
+  "cgu": "CGU",
+  "block": "Bloquer",
+  "unblock": "Débloquer"
 }

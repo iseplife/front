@@ -5,6 +5,8 @@ import {commentThread, deleteThreadComment, editThreadComment, getThreadComments
 import Loading from "../Common/Loading"
 import CommentForm from "./CommentForm"
 import {useTranslation} from "react-i18next"
+import { useLiveQuery } from "dexie-react-hooks"
+import { feedsManager } from "../../datamanager/FeedsManager"
 
 interface CommentListProps {
     id: number
@@ -92,6 +94,8 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
 
     const loadedComments = useMemo(() => comments.length + (trendingComment ? 1 : 0), [comments.length, !!trendingComment])
 
+    const blocked = useLiveQuery(() => feedsManager.getBlocked(), [])
+
     return loading && !trendingComment ?
         <div className="flex-1">
             <Loading size="sm"/>
@@ -99,7 +103,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
         <div className={`ml-4 ${className}`}>
             {showInput && !bottomInput &&
             <CommentForm lightboxView={lightboxView} handleUpload={sendComment} focus={autofocusInput && showInput}/>}
-            {trendingComment && (
+            {trendingComment && !blocked?.includes(trendingComment.author.id) && (
                 <>
                     <Comment
                         key={trendingComment.id}
@@ -112,7 +116,7 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 </>
             )}
             {loading && <div className="flex-1"> <Loading size="sm"/> </div>}
-            {comments.map(c =>
+            {comments.map(c => !blocked?.includes(c.author.id) && 
                 <Comment
                     lightboxView={lightboxView}
                     key={c.id}

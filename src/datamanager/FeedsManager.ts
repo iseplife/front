@@ -587,6 +587,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         super.unregister()
     }
 
+    public async getBlocked(): Promise<number[]>{
+        return (await this.getContext("blocked"))?.blocked ?? []
+    }
+
+    public async addBlocked(id: number){
+        return this.setContext("blocked", {blocked: [...await this.getBlocked(), id]})
+    }
+    public async removeBlocked(id: number){
+        return this.setContext("blocked", {blocked: (await this.getBlocked()).filter(otherId => otherId != id )})
+    }
+
 }
 let feedsManager = new FeedsManager(undefined!)
 
