@@ -164,7 +164,10 @@ platform :ios do
       sdk: use_build_sdk ? ENV['BUILD_SDK'] : nil,
       destination: use_build_destination ? ENV['BUILD_DESTINATION'] : nil
     )
-    upload_to_app_store
+    upload_to_app_store(
+      skip_metadata: true,
+      skip_screenshots: true
+    )
 
     # delete_keychain(name: 'ios-build.keychain')
   end

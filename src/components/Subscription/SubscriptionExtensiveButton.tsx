@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import React, {useCallback} from "react"
 import {subscribe} from "../../data/subscription"
 import {SubscribableType} from "../../data/subscription/SubscribableType"
+import pushService from "../../services/PushService"
 
 interface SubscriptionExtensiveButtonProps {
     id: number
@@ -14,6 +15,8 @@ interface SubscriptionExtensiveButtonProps {
 
 const SubscriptionExtensiveButton: React.FC<SubscriptionExtensiveButtonProps> = ({ id, type, extensive, updateExtensive }) => {
     const handleExtensive = useCallback(() => {
+        if(!extensive)
+            pushService.askIfNotSubbedOrRefused()
         subscribe(id, type, !extensive).then(() => {
             updateExtensive(!extensive)
         })

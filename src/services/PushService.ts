@@ -50,6 +50,11 @@ class PushService {
         }
     }
 
+    async askIfNotSubbedOrRefused() {
+        if(!await notificationManager.isRejected() && await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
+            this.subscribeUser()
+    }
+
     public async subscribeUser() {
         try{
             let notificationAccepted = false
