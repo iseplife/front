@@ -9,6 +9,8 @@ export const updatePost = (id: number, update: PostUpdateForm): AxiosPromise<Pos
 
 export const deletePost = (id: number): AxiosPromise<void> => apiClient.delete(`/post/${id}`)
 
+export const reportPost = (id: number): AxiosPromise<void> => apiClient.put(`/post/${id}/report`)
+
 export const pinPost = (id: number, pinned: boolean, homepage = false): AxiosPromise<void> => apiClient.put(`/post/${id}/pin`, {}, {
     params: {
         homepage,

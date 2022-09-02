@@ -4,7 +4,7 @@ import Embed from "./Embed"
 import {message, Modal} from "antd"
 import {useTranslation} from "react-i18next"
 import PostEditForm from "./Form/PostEditForm"
-import {faHouseCircleCheck, faShare, faThumbtack} from "@fortawesome/free-solid-svg-icons"
+import {faFlag, faHouseCircleCheck, faShare, faThumbtack} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import PostToolBar from "./PostToolBar"
 import {homepageForcedPost, pinPost} from "../../data/post"
@@ -18,6 +18,7 @@ import DropdownPanelElement from "../Common/DropdownPanelElement"
 import { useHistory } from "react-router-dom"
 import { copyToClipboard, getPostLink } from "../../util"
 import CustomText from "../Common/CustomText"
+import { id } from "date-fns/locale"
 
 
 export type PostProps = {
@@ -29,12 +30,13 @@ export type PostProps = {
     onPin: (id: number, pinned: boolean, homepage?: boolean) => void
     onDelete: (id: number) => Promise<void>
     onUpdate: (id: number, postUpdate: PostUpdate) => void
+    onReport: (id: number) => Promise<void>
     selected?: boolean
     className?: string
     noPinned?: boolean
 }
 
-const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, toggleEdition, selected, noPinned, className = "shadow-sm"}) => {
+const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = false, onPin, onDelete, onUpdate, onReport, toggleEdition, selected, noPinned, className = "shadow-sm"}) => {
     const {t} = useTranslation(["common", "post"])
     const [showEditMenu, setShowEditMenu] = useState<boolean>(false)
     const [superVisibility, setSuperVisibility] = useState<boolean>(data.homepageForced)
@@ -108,6 +110,10 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         copyToClipboard(getPostLink(data))
         message.success(t("post:copied"))
     }, [feedId, data.id, data.context, h.location.pathname])
+                                
+    const triggerReport = useCallback(() => 
+        onReport(data.id)
+    , [data.id, onReport])
 
     return (
         <>
@@ -164,6 +170,12 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                                         triggerDeletion={confirmDeletion}
                                     />
                                 }
+                                <DropdownPanelElement
+                                    title={t("post:report")}
+                                    onClick={triggerReport}
+                                    icon={faFlag}
+                                    color="red"
+                                />
                             </DropdownPanel>
                         )}
                     </div>

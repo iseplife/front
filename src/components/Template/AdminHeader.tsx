@@ -28,6 +28,9 @@ const AdminHeader: React.FC = () => {
                     <Link to="/admin/club" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
                         Associations
                     </Link>
+                    <Link to="/admin/report" className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl">
+                        Reports
+                    </Link>
                     <Link
                         to="/admin/group"
                         className="mx-3 my-auto font-bold text-gray-600 hover:text-gray-400 hover:text-xl"
@@ -99,6 +102,13 @@ const AdminHeader: React.FC = () => {
                             role="menuitem"
                         >
                             Associations
+                        </Link>
+                        <Link
+                            to="/admin/report"
+                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            role="menuitem"
+                        >
+                            Reports
                         </Link>
                         <Link
                             to="/admin/group"

@@ -1,18 +1,19 @@
 import React, {useCallback, useEffect, useState} from "react"
 import {Comment as CommentType} from "../../data/thread/types"
-import {toggleThreadLike} from "../../data/thread"
+import {reportComment, toggleThreadLike} from "../../data/thread"
 import CommentList from "./CommentList"
 import {useTranslation} from "react-i18next"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import StudentAvatar from "../Student/StudentAvatar"
 import {formatDateWithTimer} from "../../util"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faCircleNotch, faHeart as faSolidHeart, faPen, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
+import {faCircleNotch, faFlag, faHeart as faSolidHeart, faPen, faSave, faUndo} from "@fortawesome/free-solid-svg-icons"
 import {faHeart, faTrashAlt} from "@fortawesome/free-regular-svg-icons"
 import TextArea from "antd/lib/input/TextArea"
 import { Link } from "react-router-dom"
 import { cFaPreviousArrow } from "../../constants/CustomFontAwesome"
 import CustomText from "../Common/CustomText"
+import { message } from "antd"
 
 
 interface CommentProps {
@@ -63,6 +64,11 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
         }
     }, [data.thread])
 
+    const onReport = useCallback(() => {
+        reportComment(data.id)
+        message.success(t("post:reported"))
+    }, [data.id])
+
     return (
         <div className="flex my-1">
             <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className="mr-2">
@@ -111,6 +117,12 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                         />
                                     </>
                                 }
+                                <FontAwesomeIcon
+                                    icon={faFlag}
+                                    spin={isSubmitting}
+                                    className="ml-3 cursor-pointer text-gray-400 hover:text-red-400"
+                                    onClick={onReport}
+                                />
                             </div>
                         )}
                     </div>

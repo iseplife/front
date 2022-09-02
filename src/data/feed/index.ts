@@ -3,6 +3,7 @@ import {Post} from "../post/types"
 import {Page} from "../request.type"
 import {Feed} from "./types"
 import {apiClient} from "../http"
+import { Report } from "../report"
 
 export const getFeedPosts = (id?: number, page = 0): AxiosPromise<Page<Post>> => (
     apiClient.get(`/feed/${id == -1 ? "explore" : id ?? "main"}/post`, {
@@ -25,3 +26,5 @@ export const getFeedPostPinned = (id?: number): AxiosPromise<Post[]> => (
 export const toggleSubscription = (id: number): AxiosPromise<boolean> => apiClient.post(`/feed/${id}/subscribe`)
 
 export const getUserFeed = (): AxiosPromise<Feed[]> => apiClient.get("/feed")
+
+export const getAllReports = (): AxiosPromise<Report[]> => apiClient.get("/thread/reports")

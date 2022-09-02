@@ -27,6 +27,7 @@ const FeedPost: React.FC<FeedPostProps> = (props) => {
                 data={p}
                 toggleEdition={toggleEdition}
                 isEdited={props.isEdited}
+                onReport={props.onReport}
                 onDelete={props.onDelete}
                 onPin={props.onPin}
                 onUpdate={props.onUpdate}

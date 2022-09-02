@@ -29,6 +29,7 @@ import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
 import FeedPost from "./FeedPost"
 import { Virtuoso } from "react-virtuoso"
+import { reportPost } from "../../data/post"
 
 const isTouchDevice = () => ("ontouchstart" in window) || navigator.maxTouchPoints > 0
 
@@ -283,6 +284,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         alreadyLoaded.current = {}
     }, [id])
 
+    const onReport = useCallback(async (index: number) => {
+        reportPost(index)
+        message.success(t("post:reported"))
+    }, [])
+
     const renderPost = useCallback((index: number) => {
         const post = posts[index]
         const wasLoaded = alreadyLoaded.current[post.publicationDateId]
@@ -300,8 +306,9 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             firstLoaded={firstLoaded}
             setEditPost={setEditPost}
             loadAnimation={!wasLoaded}
+            onReport={onReport}
         />
-    }, [posts, onPostRemoval, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
+    }, [posts, onPostRemoval, onReport, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
     const postKeyGenerator = useCallback((index: number) => 
         posts[index].publicationDateId
     , [posts])
@@ -343,6 +350,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                 onDelete={onPostRemoval}
                                 onUpdate={onPostUpdate}
                                 onPin={onPostPin}
+                                onReport={onReport}
                                 toggleEdition={(toggle) => setEditPost(toggle ? selectedPost.id : 0)}
                                 isEdited={editPost === selectedPost.id}
                                 className="shadow-md"
@@ -441,6 +449,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                             onDelete={onPostRemoval}
                                             onUpdate={onPostUpdate}
                                             onPin={onPostPin}
+                                            onReport={onReport}
                                             toggleEdition={(toggle) => setEditPost(toggle ? p.id : 0)}
                                             isEdited={editPost === p.id}
                                         />

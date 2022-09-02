@@ -10,6 +10,7 @@ import GroupPanel from "../../pages/admin/group"
 import ClubPanel from "../../pages/admin/club"
 import SurveyPanel from "../../pages/admin/survey"
 import NotFound from "../../pages/errors/NotFound"
+import ReportPanel from "../../pages/admin/report"
 
 
 const AdminTemplate: React.FC = () => {
@@ -26,6 +27,7 @@ const AdminTemplate: React.FC = () => {
                         <Route path="/admin/group/:id" exact component={GroupPanel}/>
                         <Route path="/admin/group" exact component={GroupPanel}/>
                         <Route path="/admin/survey" exact component={SurveyPanel}/>
+                        <Route path="/admin/report" exact component={ReportPanel}/>
                         <Route path="/admin" exact component={Dashboard}/>
                         <Route path="*" component={NotFound}/>
                     </Switch>
