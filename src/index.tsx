@@ -42,7 +42,9 @@ import "@ionic/react/css/core.css"
 
 import { IonApp, setupIonicReact } from "@ionic/react"
 
-setupIonicReact()
+setupIonicReact({
+    mode: "ios"
+})
 
 CapacitorUpdater.notifyAppReady()
 
@@ -93,7 +95,7 @@ const App: React.FC = () => {
         return () => logoutWebSocket()
     }, [state.payload])
 
-    // Check user's state (logged in or not)
+    // Check user"s state (logged in or not)
     useEffect(() => {
         setLoading(true)
         if (state.payload && state.token_expiration >= new Date().getTime()) {

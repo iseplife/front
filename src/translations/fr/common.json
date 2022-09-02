@@ -80,5 +80,10 @@
   },
   "no_targets": "Aucune audience (Évènement public) ",
   "media_processing": "Media en cours de traitement",
-  "retry": "Réessayer"
+  "retry": "Réessayer",
+  "cgu_accept": "Accepter",
+  "cgu_deny": "Refuser",
+  "cgu_open": "Consulter",
+  "cgu_text": "Pour utiliser l'application, vous devez accepter les CGU.",
+  "cgu": "CGU"
 }

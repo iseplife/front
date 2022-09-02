@@ -8,6 +8,7 @@ import {Input} from "antd"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import { isWeb } from "../../data/app"
+import { useIonAlert } from "@ionic/react"
 
 
 interface LoginFormInputs {
@@ -21,38 +22,67 @@ const Login: React.FC = () => {
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>()
+    const [presentAlert] = useIonAlert()
     const formik = useFormik<LoginFormInputs>({
         initialValues: {id: "", password: ""},
         onSubmit: ({id, password}) => {
-            setLoadingStatus(true)
-            connect(id, password).then((res) => {
-                localStorage.removeItem("pushTokenValue")
-                dispatch({
-                    type: AppActionType.SET_TOKEN,
-                    token: res.data.token
-                })
-                if(!isWeb)
-                    localStorage.setItem("refresh", res.data.refreshToken)
-                localStorage.setItem("logged", "1")
-            }).catch(e => {
-                setLoadingStatus(false)
-                let msg
-                if (e.response) {
-                    switch (e.response.status) {
-                        case 401:
-                            msg = "Mauvais mot de passe ou utilisateur"
-                            break
-                        case 503:
-                            msg = "Mauvais mot de passe ou utilisateur"
-                            break
-                        default:
-                            msg = "Serveur indisponible"
-                    }
-                } else {
-                    msg = "Serveur indisponible"
-                }
-                setError(msg)
-            }).finally(() => setLoadingStatus(false))
+            presentAlert({
+                header: t("common:cgu"),
+                message: t("common:cgu_text"),
+                buttons: [
+                    {
+                        text: t("common:cgu_deny"),
+                        role: "cancel",
+                    },
+                    {
+                        text: t("common:cgu_open"),
+                        role: "",
+                        handler: () => {
+                            window.open("https://docs.iseplife.fr/cgu.html", "_blank")
+                            return false
+                        },
+                    },
+                    {
+                        text: t("common:cgu_accept"),
+                        role: "confirm",
+                        handler: () => {
+                            setLoadingStatus(true)
+                
+                            connect(id, password).then((res) => {
+                                localStorage.removeItem("pushTokenValue")
+                                
+                                dispatch({
+                                    type: AppActionType.SET_TOKEN,
+                                    token: res.data.token
+                                })
+                                if(!isWeb)
+                                    localStorage.setItem("refresh", res.data.refreshToken)
+                                localStorage.setItem("logged", "1")
+                            }).catch(e => {
+                                setLoadingStatus(false)
+                                let msg
+                                if (e.response) {
+                                    switch (e.response.status) {
+                                        case 401:
+                                            msg = "Mauvais mot de passe ou utilisateur"
+                                            break
+                                        case 503:
+                                            msg = "Mauvais mot de passe ou utilisateur"
+                                            break
+                                        default:
+                                            msg = "Serveur indisponible"
+                                    }
+                                } else {
+                                    msg = "Serveur indisponible"
+                                }
+                                setError(msg)
+                            }).finally(() => setLoadingStatus(false))
+                        },
+                    },
+                ],
+                onDidDismiss: () => console.log("lol"),
+            })
+            
         }
     })
 

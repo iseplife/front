@@ -79,5 +79,10 @@
   },
   "no_targets": "No targets (Public event)",
   "media_processing": "Media is being processed",
-  "retry": "Retry"
+  "retry": "Retry",
+  "cgu_accept": "Accepter",
+  "cgu_deny": "Refuser",
+  "cgu_open": "Consulter",
+  "cgu_text": "To use IsepLife, you need to accept our EULA.",
+  "cgu": "EULA"
 }
