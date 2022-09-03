@@ -117,14 +117,14 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                         />
                                     </>
                                 }
-                                <FontAwesomeIcon
-                                    icon={faFlag}
-                                    spin={isSubmitting}
-                                    className="ml-3 cursor-pointer text-gray-400 hover:text-red-400"
-                                    onClick={onReport}
-                                />
                             </div>
                         )}
+                        <FontAwesomeIcon
+                            icon={faFlag}
+                            spin={isSubmitting}
+                            className="ml-3 cursor-pointer text-gray-400 hover:text-red-400"
+                            onClick={onReport}
+                        />
                     </div>
 
                     <div className="flex-1 my-1 break-words">
