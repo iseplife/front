@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useReducer, useState} from "react"
 import { createRoot } from "react-dom/client"
-import { datadogRum } from '@datadog/browser-rum';
+import { datadogRum } from "@datadog/browser-rum"
 import * as serviceWorker from "./serviceWorker"
 import "./i18n"
 import {
@@ -56,18 +56,18 @@ initializeAPIClient()
 new UpdateService().init()
 
 datadogRum.init({
-    applicationId: '5a78df32-0770-4cbd-853c-984fd8a16809',
-    clientToken: 'pub00aecce089653075ee89a23fda9fb49c',
-    site: 'datadoghq.com',
-    service:'iseplife',
-    env:'prod',
+    applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
+    clientToken: "pub00aecce089653075ee89a23fda9fb49c",
+    site: "datadoghq.com",
+    service:"iseplife",
+    env: process.env.NODE_ENV,
     version: `${process.env.REACT_APP_VERSION} - ${process.env.REACT_APP_COMMIT}`,
     sampleRate: 100,
     premiumSampleRate: 100,
     trackInteractions: true,
-    defaultPrivacyLevel:'mask-user-input'
-});
-datadogRum.startSessionReplayRecording();
+    defaultPrivacyLevel:"mask-user-input"
+})
+datadogRum.startSessionReplayRecording()
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION} - ${process.env.REACT_APP_COMMIT}`)
 
 const App: React.FC = () => {
