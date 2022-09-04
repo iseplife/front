@@ -50,8 +50,7 @@ setupIonicReact({
 CapacitorUpdater.notifyAppReady()
 
 window.React = React
-
-windowResizeObserver ??= ResizeObserverPolyfill
+window.ResizeObserver ??= ResizeObserverPolyfill
 
 initializeAPIClient()
 new UpdateService().init()
