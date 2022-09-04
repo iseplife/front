@@ -1,5 +1,5 @@
 {
-  "name": "frontapp",
+  "name": "iseplife-spa",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -146,6 +146,6 @@
     "workbox-strategies": "^5.1.4",
     "workbox-streams": "^5.1.4"
   },
-  "description": "An Ionic project",
+  "description": "iseplife webapp",
   "packageManager": "yarn@3.2.3"
 }
