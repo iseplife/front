@@ -59,16 +59,16 @@ datadogRum.init({
     applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
     clientToken: "pub00aecce089653075ee89a23fda9fb49c",
     site: "datadoghq.com",
-    service:"iseplife",
+    service:"iseplife-spa",
     env: process.env.NODE_ENV,
-    version: `${process.env.REACT_APP_VERSION} - ${process.env.REACT_APP_COMMIT}`,
+    version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
     sampleRate: 100,
     premiumSampleRate: 100,
     trackInteractions: true,
     defaultPrivacyLevel:"mask-user-input"
 })
 datadogRum.startSessionReplayRecording()
-console.log(`Loaded version: ${process.env.REACT_APP_VERSION} - ${process.env.REACT_APP_COMMIT}`)
+console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(appContextReducer, DEFAULT_STATE)
