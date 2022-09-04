@@ -19,8 +19,6 @@ import {appContextReducer} from "./context/app/reducer"
 import Interceptor from "./components/Template/Interceptor"
 import {AppActionType} from "./context/app/action"
 import {RouteComponentProps} from "react-router-dom"
-import "./index.css"
-import "antd/dist/antd.min.css"
 import Maintenance from "./pages/errors/Maintenance"
 import HeightFix from "./components/Fix/HeightFix"
 import { getLoggedUser } from "./data/student"
@@ -40,6 +38,8 @@ import NotificationClickHandler from "./components/Notification/NotificationClic
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
+import "./index.css"
+import "antd/dist/antd.min.css"
 
 import { IonApp, setupIonicReact } from "@ionic/react"
 
