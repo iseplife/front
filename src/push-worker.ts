@@ -8,18 +8,18 @@ declare const self: ServiceWorkerGlobalScope & typeof globalThis
 const firebaseMessaging = getMessaging(firebaseApp)
 
 onBackgroundMessage(firebaseMessaging, (payload) => {
-    console.log("Received background message ", payload)
+    console.debug("Received background message ", payload)
 })
 
-console.log("load firebase")
+console.debug("load firebase")
 self.addEventListener("notificationclick", function(event) {
-    console.log("click", event)
+    console.debug("click", event)
 })
 
 export const initPushWorker = () => {
     
     self.addEventListener("push", async function (event) {
-        console.log("push", event)
+        console.debug("push", event)
     })
     // self.addEventListener("push", async function (event) {
     //     if (!event.data)
@@ -57,14 +57,13 @@ export const initPushWorker = () => {
     
     self.addEventListener("notificationclick", function(event) {
         event.notification.close()
-        console.log(event.notification)
         event.waitUntil(
             self.clients.openWindow(event.notification.data.url)
         )
 
-        console.log("[Service Worker] Clicked, opening", event.notification.data.url)
+        console.debug("[Service Worker] Clicked, opening", event.notification.data.url)
     })
 }
 self.addEventListener("notificationclick", function(event) {
-    console.log("click2", event)
+    console.debug("click2", event)
 })

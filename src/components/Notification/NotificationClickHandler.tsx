@@ -8,7 +8,7 @@ const NotificationClickHandler = () => {
         PushNotifications.addListener("pushNotificationActionPerformed", notification => {
             const link = notification.notification.data.link
             h.push(`/${link}`)
-            console.log("Go to "+link)
+            console.debug("Redirecting to " + link)
         })
     }
     return <></>

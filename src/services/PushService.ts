@@ -43,7 +43,7 @@ class PushService {
                 console.error("Registration error: ", err.error)
             })
             await PushNotifications.addListener("pushNotificationReceived", notification => {
-                console.log("Push notification received: ", notification)
+                console.debug("Push notification received: ", notification)
             })
 
             notificationManager.setSubscribed(await this.checkSubscription())
@@ -68,7 +68,7 @@ class PushService {
 
             if(notificationAccepted){
                 if(await this.checkSubscription()){
-                    console.log("[PushService] Now subscribed.")
+                    console.debug("[PushService] Now subscribed.")
                 }
             }else{
                 console.error("[PushService] Cannot subscribe to push notifications 1")
@@ -109,12 +109,12 @@ class PushService {
                     throw new Error("No token, need to accept notifications")
     
                 this._updateSubscriptionOnServer(token)
-                console.log("[PushService] Already subscribed.")
+                console.debug("[PushService] Already subscribed.")
                 
                 return true
             }catch(err){
-                console.log("An error occurred while retrieving token.", err)
-                console.log("[PushService] Not subscribed.")
+                console.debug("An error occurred while retrieving token.", err)
+                console.debug("[PushService] Not subscribed.")
                 return false
             }
         }else{

@@ -49,7 +49,7 @@ export const polyfillWebp = async (propsSrc: string, forceProcess?: boolean) => 
                             loadedCache[propsSrc] = url
                         return url
                     } catch (e) {
-                        console.log("Error when converting webp", e)
+                        console.debug("Error when converting webp", e)
                         await new Promise(resolve => setTimeout(resolve, 100))
                     }
             } finally {
