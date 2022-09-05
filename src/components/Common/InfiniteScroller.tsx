@@ -23,6 +23,7 @@ type InfiniteScrollerProps = {
     callback: ScrollerCallback
     empty?: boolean
     className?: string
+    loaderClassName?: string
     children: ReactNode
     loadingComponent?: React.ReactNode,
     scrollElement?: HTMLElement | null | false,
@@ -31,7 +32,7 @@ type InfiniteScrollerProps = {
 
 const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>((props, ref) => {
     const {t} = useTranslation("common")
-    const {watch, block = false, empty = false,  callback, triggerDistance = 200, loadingComponent, scrollElement, children, className} = props
+    const {watch, block = false, empty = false,  callback, triggerDistance = 200, loadingComponent, loaderClassName, children, className} = props
     const [upCallback, downCallback] = useMemo(() => (Array.isArray(callback) ? callback : [callback, callback]), [callback])
     const [upLoader, setUpLoader] = useState<Loader>(INITIAL_LOADER)
     const [downLoader, setDownLoader] = useState<Loader>(INITIAL_LOADER)
@@ -165,7 +166,7 @@ const InfiniteScroller = forwardRef<InfiniteScrollerRef, InfiniteScrollerProps>(
 
             {children}
 
-            <div className="invisible absolute mt-5" ref={loaderRef} />
+            <div className={`invisible absolute mt-5 ${loaderClassName}`} ref={loaderRef} />
 
             {(watch !== "UP") && !empty && (
                 <div className="mb-3 text-center">

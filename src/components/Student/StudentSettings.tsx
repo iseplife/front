@@ -26,8 +26,8 @@ const StudentSettings: React.FC<StudentSettingsProps> = ({info}) => {
                 <StudentImageUploader {...info.pictures}/>
             </div>
             <div className="md:w-1/2 w-full">
-                <ParameterSwitch name="recognition" value={info.recognition} onChange={handleChange("recognition")} />
-                <ParameterSwitch name="notification" value={info.notification} onChange={handleChange("notification")} />
+                {/* <ParameterSwitch name="recognition" value={info.recognition} onChange={handleChange("recognition")} /> */}
+                {/* <ParameterSwitch name="notification" value={info.notification} onChange={handleChange("notification")} /> */}
                 <ParameterSwitch name="nsfw" value={Boolean(localStorage.getItem("nsfw")) || true} onChange={v => localStorage.setItem("nsfw", String(v))} />
                 <LanguagePicker />
             </div>

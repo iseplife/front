@@ -14,7 +14,7 @@ type EventProps = {
 const EventPreview: React.FC<EventProps> = ({ event }) => {
     const {t} = useTranslation("event")
     return (
-        <LinkEntityPreloader preview={event}>
+        <LinkEntityPreloader preview={event} noWidth className="sm:truncate">
             <Link to={`/event/${event.id}`} className="w-full max-w-sm text-gray-700 hover:text-gray-500 relative">
                 <div
                     title={event.title}

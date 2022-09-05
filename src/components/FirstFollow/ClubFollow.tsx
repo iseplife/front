@@ -23,7 +23,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
             <div className="flex">
                 <WebPPolyfill
                     src={mediaPath(club.logoUrl, AvatarSizes.THUMBNAIL)}
-                    className="rounded-full h-14 w-14 sm:w-16 sm:h-16 "
+                    className="rounded-full h-14 w-14 sm:w-16 sm:h-16 flex-shrink-0"
                 />
                 <div className="w-full">
                     <div className="flex justify-between">

@@ -4,7 +4,7 @@ import {Link, useHistory, useParams} from "react-router-dom"
 import {MapContainer, Marker, TileLayer} from "react-leaflet"
 import {getEvent, getEventGalleries} from "../../../data/event"
 
-import {Event as EventType, EventPreview} from "../../../data/event/types"
+import {Event as EventType} from "../../../data/event/types"
 import "./Event.css"
 import {Skeleton} from "antd"
 import {useTranslation} from "react-i18next"
@@ -137,7 +137,21 @@ const Event: React.FC = () => {
             <div className="container mx-auto px-4">
                 <EventMapPlace position={event?.position} location={event?.location} loading={!event}/>
             </div>
+            {event?.hasRight && (
+                <div
+                    className="absolute z-[1000] grid place-items-center top-2 right-2 sm:top-5 sm:right-5 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
+                >
+                    <EventEditorModal values={event} onSubmit={setEvent}/>
+                </div>
+            )}
         </div>
+        {event?.hasRight && (
+            <div
+                className="absolute z-10 mt-2 grid place-items-center right-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group sm:hidden"
+            >
+                <EventEditorModal values={event} onSubmit={setEvent}/>
+            </div>
+        )}
         <div className="container mx-auto mt-4">
             <div className="flex items-center px-4">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative">
@@ -283,14 +297,6 @@ const Event: React.FC = () => {
                 </div>
             </div>
         </div>
-
-        {event?.hasRight && (
-            <div
-                className="absolute grid place-items-center top-2 right-2 sm:top-5 sm:right-5 z-10 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
-            >
-                <EventEditorModal values={event} onSubmit={setEvent}/>
-            </div>
-        )}
     </>)
 }
 

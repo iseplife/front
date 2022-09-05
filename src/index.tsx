@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import { createRoot } from "react-dom/client"
 import { datadogRum } from "@datadog/browser-rum"
 import * as serviceWorker from "./serviceWorker"
@@ -138,15 +138,21 @@ const App: React.FC = () => {
             getUserInfos()
     }, [isLoggedIn])
 
-    const renderTemplate = useCallback(({location}: RouteComponentProps) => isLoggedIn ?
-        <Template/> :
-        <Redirect
-            to={{
-                pathname: "/login",
-                state: {from: location}
-            }}
-        />
-    , [isLoggedIn])
+    const renderTemplate = useMemo(() => {
+        let savedLocation: RouteComponentProps
+        return ({location}: RouteComponentProps) => isLoggedIn ?
+            <Template/> :
+            <Redirect
+                to={{
+                    pathname: "/login",
+                    state: {from: savedLocation = savedLocation ?? location}
+                }}
+            />
+    }, [isLoggedIn])
+
+    const redirectLogin =  useMemo(() => 
+        <Route path="/" render={renderTemplate} />
+    , [renderTemplate])
 
     return (loading ? <LoadingPage /> :
         <IonApp>
@@ -162,7 +168,7 @@ const App: React.FC = () => {
                                 <Route path="/maintenance" component={Maintenance}/>
 
                                 <Route path="/login" component={Login}/>
-                                <Route path="/" render={renderTemplate} />
+                                {redirectLogin}
                             </Switch>
                         </Router>
                     )}
