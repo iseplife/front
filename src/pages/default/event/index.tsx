@@ -30,6 +30,7 @@ import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
+import {AxiosError} from "axios"
 
 interface ParamTypes {
     id?: string
@@ -111,11 +112,15 @@ const Event: React.FC = () => {
 
     useEffect(() => {
         if (!id || !+id)
-            history.push("/")
-        else
+            history.replace("/404")
+        else {
             getEvent(+id).then(res =>
                 setEvent(res.data)
-            )
+            ).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
+        }
     }, [id])
 
     useEffect(() => {

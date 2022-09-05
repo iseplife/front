@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react"
-import {useParams} from "react-router-dom"
+import {useHistory, useParams} from "react-router-dom"
 import {Group as GroupType, GroupMember} from "../../../data/group/types"
 import {addGroupMember, deleteGroupMember, demoteGroupMember, getGroup, getGroupMembers, promoteGroupMember} from "../../../data/group"
 import {message} from "antd"
@@ -16,6 +16,7 @@ import TabsSwitcher from "../../../components/Common/TabsSwitcher"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../../../components/Subscription"
 import {Subscription} from "../../../data/feed/types"
+import {AxiosError} from "axios"
 
 interface ParamTypes {
     id?: string
@@ -26,6 +27,7 @@ export enum GroupPanel {
 }
 const Group: React.FC = () => {
     const {t} = useTranslation(["group", "common"])
+    const history = useHistory()
     const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const [group, setGroup] = useState<GroupType>()
@@ -38,7 +40,12 @@ const Group: React.FC = () => {
         if (!isNaN(+id)) {
             getGroup(id).then(res =>
                 setGroup(res.data)
-            )
+            ).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
+        }else{
+            history.replace("/404")
         }
     }, [id])
 

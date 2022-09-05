@@ -19,6 +19,7 @@ import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
+import {AxiosError} from "axios"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -196,7 +197,10 @@ const Gallery: React.FC = () => {
                         })
                         .finally(() => setLoading(false))
                 }
-            }).catch(e => message.error(`Get this gallery failed ,${e}`))
+            }).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
         }
     }, [id])
 

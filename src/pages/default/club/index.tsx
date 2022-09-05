@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router-dom"
 import {getClub} from "../../../data/club"
-import {message} from "antd"
 import {useHistory} from "react-router-dom"
 import Feed from "../../../components/Feed"
 import ClubPresentation from "../../../components/Club/ClubDescription/ClubPresentation"
@@ -24,6 +23,7 @@ import DropdownPanelElement from "../../../components/Common/DropdownPanelElemen
 import { faBan } from "@fortawesome/free-solid-svg-icons"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
+import {AxiosError} from "axios"
 
 export enum ClubTab {
     HOME_TAB,
@@ -53,11 +53,12 @@ const Club: React.FC = () => {
         if (!isNaN(id)) {
             getClub(+id).then(res => {
                 dispatch({ type: ClubActionType.GET_CLUB, payload: res.data })
-            }).catch(e =>
-                message.error(e)
-            )
+            }).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
         } else {
-            history.push("404")
+            history.replace("404")
         }
     }, [id])
 
