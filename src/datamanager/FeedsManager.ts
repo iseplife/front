@@ -233,7 +233,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async getFirstPostedFresh(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).first()
+        return this.getTable().where(["loadedFeed", "lastLoadId"])
+            .between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity])
+            .first()
     }
 
     public getFeedPosts(feed: FeedId, limit: number) {
@@ -356,10 +358,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     private async checkUnloaded(feed: FeedId) {
+        const firstPostedFresh = (await this.getFirstPostedFresh(feed))
+        //if undefined then there's nothing to unload
+        if(firstPostedFresh == undefined)
+            return
+
         const posts = (await this.getTable()
             .where(["loadedFeed", "publicationDateId"])
             .between(
-                [feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId],
+                [feed ?? mainFeedId, firstPostedFresh.publicationDateId],
                 [feed ?? mainFeedId, Infinity]
             ).toArray())
             .sort((a, b) => a.id - b.id)
