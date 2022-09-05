@@ -20,8 +20,9 @@ type FeedSelectorProps = {
     defaultValues?: number[]
     onChange: (ids: number[]) => void
     tagRender?: (props: CustomTagProps) => React.ReactElement
+    className?: string
 }
-const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tagRender}) => {
+const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tagRender, className}) => {
     const {t} = useTranslation()
     const [options, setOptions] = useState<OptionType[]>([])
 
@@ -53,7 +54,7 @@ const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tag
             tagRender={tagComponent}
             options={options}
             bordered={false}
-            className="w-full hover:border-indigo-400"
+            className={`w-full hover:border-indigo-400 ${className}`}
             style={{borderBottom: "1px solid #d9d9d9"}}
         />
     )

@@ -16,6 +16,7 @@ import NotificationsOverlay from "../Notification/NotificationOverlay"
 import Student from "../../pages/default/student"
 import FirstFollow from "../FirstFollow"
 import { AppContext } from "../../context/app/context"
+import AddEventPage from "../../pages/default/event/add"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user: { didFirstFollow } } } = useContext(AppContext)
@@ -37,6 +38,7 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/group/:id" component={Group} />
                         <Route path="/gallery/:id" component={Gallery} />
                         <Route path="/setting" component={Setting} />
+                        <Route path="/add-event" component={AddEventPage} />
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
 
