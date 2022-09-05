@@ -9,10 +9,13 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {TokenSet} from "../../data/security/types"
 import {LocationState} from "../../data/request.type"
+import ReactError from "../../pages/errors/ReactError"
 
-type InterceptorProps = WithTranslation & RouteComponentProps
+type InterceptorProps = WithTranslation & RouteComponentProps & {
+    children: JSX.Element[]
+}
 type InterceptState = {
-    error?: string
+    hasError?: string
 }
 
 export let refreshToken: () => AxiosPromise<TokenSet>
@@ -29,12 +32,12 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
         refreshToken = this.refreshToken.bind(this)
 
         getToken = async (url?: string) => {
-            if(this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
-                if(url)
+            if (this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+                if (url)
                     console.debug(`[ErrorInterceptor] Refreshing on request : "${url}"`)
                 else
                     console.debug("[ErrorInterceptor] Refreshing token without request")
-                
+
                 await this.refreshToken()
             }
             return this.context.state.jwt
@@ -67,9 +70,9 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
 
     checkAPIConnection = () => {
         getAPIStatus().catch(() => {
-            this.props.history.push( "/maintenance")
+            this.props.history.push("/maintenance")
         }).then(() => {
-            if(location.pathname == "/maintenance"){
+            if (location.pathname == "/maintenance") {
                 const from = (window.history.state?.state as LocationState)?.from || {
                     pathname: !this.context.state.payload || this.context.state.payload.lastConnection ? "/" : "/discovery"
                 }
@@ -77,6 +80,12 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
             }
         })
     }
+
+    static getDerivedStateFromError(error: Error) {
+        console.debug(`[ERROR]: ${error}`)
+        return { hasError: true }
+    }
+
 
     handleOffline = () => {
         // message.error(this.props.t("offline"))
@@ -97,7 +106,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     request.headers["Authorization"] = `Bearer ${res.data.token}`
                     execute(request)
                 }).catch((e: Error) => {
-                    if(e.message !== "refreshing failed")
+                    if (e.message !== "refreshing failed")
                         reject(e)
                 })
             })
@@ -122,9 +131,9 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     if (err.response?.status === 401) {
                         this.refreshingPromise = undefined
                         this.props.history.push("/login")
-                        if(localStorage.getItem("logged") == "1")
+                        if (localStorage.getItem("logged") == "1")
                             message.error(this.props.t("user_disconnected"))
-                        this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
+                        this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
 
                         console.debug("refreshing failed", e)
                         throw new Error("refreshing failed")
@@ -162,7 +171,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                         return Promise.reject(error)
 
                     this.props.history.push("/login")
-                    this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
+                    this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
 
                     message.error(t("user_disconnected"))
                     break
@@ -170,7 +179,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
                     return Promise.reject(error)
                 default:
-                    if(!auth) {
+                    if (!auth) {
                         const errorKey = `error:${(error.response.data as { message: string }).message}`
                         message.error(t(i18n.exists(errorKey) ?
                             errorKey :
@@ -185,7 +194,10 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
     }
 
     render() {
-        return null
+        if (this.state.hasError)
+            return <ReactError />
+
+        return this.props.children
     }
 }
 

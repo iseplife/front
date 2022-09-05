@@ -1,5 +1,7 @@
 {
   "no_connection_retry": "It seems that you have lost your connection. Please check and try again.",
+  "apologize": "Sorry",
+  "working_on_it": "We have notified about it and will investigate the problem",
   "online": "You are back online !",
   "offline": "You are now offline",
   "user_disconnected": "You have been disconnected",

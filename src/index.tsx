@@ -16,7 +16,7 @@ import Template from "./components/Template"
 import {RecoilRoot} from "recoil"
 import {AppContext, DEFAULT_STATE} from "./context/app/context"
 import {appContextReducer} from "./context/app/reducer"
-import Interceptor from "./components/Template/ErrorInterceptor"
+import ErrorInterceptor from "./components/Template/ErrorInterceptor"
 import {AppActionType} from "./context/app/action"
 import {RouteComponentProps} from "react-router-dom"
 import Maintenance from "./pages/errors/Maintenance"
@@ -149,7 +149,7 @@ const App: React.FC = () => {
             />
     }, [isLoggedIn])
 
-    const redirectLogin =  useMemo(() => 
+    const redirectLogin =  useMemo(() =>
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
@@ -159,15 +159,16 @@ const App: React.FC = () => {
                 <RecoilRoot>
                     {isLoggedIn != undefined && (
                         <Router>
-                            <Interceptor />
-                            <HeightFix />
-                            <NotificationClickHandler />
-                            <Switch>
-                                <Route path="/maintenance" component={Maintenance}/>
+                            <ErrorInterceptor>
+                                <HeightFix />
+                                <NotificationClickHandler />
+                                <Switch>
+                                    <Route path="/maintenance" component={Maintenance}/>
 
-                                <Route path="/login" component={Login}/>
-                                {redirectLogin}
-                            </Switch>
+                                    <Route path="/login" component={Login}/>
+                                    {redirectLogin}
+                                </Switch>
+                            </ErrorInterceptor>
                         </Router>
                     )}
                 </RecoilRoot>
