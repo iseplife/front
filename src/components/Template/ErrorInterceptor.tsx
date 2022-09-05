@@ -140,8 +140,9 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
 
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
-            const {t} = this.props
+            const {t, i18n} = this.props
             console.debug(`[${error.code}] ${error.message}`)
+            console.debug(error)
 
             const auth = error.request?.url?.startsWith("/auth") || error.request?.responseURL?.includes("/auth")
 
@@ -169,8 +170,13 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
                     return Promise.reject(error)
                 default:
-                    if(!auth)
-                        message.error(t(error.message))
+                    if(!auth) {
+                        const errorKey = `error:${(error.response.data as { message: string }).message}`
+                        message.error(t(i18n.exists(errorKey) ?
+                            errorKey :
+                            `error_encountered.${Math.floor(Math.random() * 3)}`)
+                        )
+                    }
                     return Promise.reject(error)
             }
         } else {

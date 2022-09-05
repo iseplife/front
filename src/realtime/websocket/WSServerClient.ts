@@ -11,7 +11,7 @@ import PacketProtocol from "../protocol/PacketProtocol"
 import WSPCKeepAlive from "../protocol/packets/client/WSPCKeepAlive"
 import { refresh } from "../../data/security"
 import { AppActionType } from "../../context/app/action"
-import { refreshToken } from "../../components/Template/Interceptor"
+import { refreshToken } from "../../components/Template/ErrorInterceptor"
 
 class WSServerClient {
     private static reconnectTimeout: number

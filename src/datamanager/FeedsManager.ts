@@ -105,11 +105,10 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await (this.initLoadSyncWait = new Promise<void>(resolve => {
             let responded = false
             const id = Math.random()
-            console.time("ask")
+
             const handler = async (message: FeedsChannelMessage) => {
                 if (message.type == "response" && message.id == id
                 || (message.type == "ask" && message.id != id && message.reloadingId != this.reloadingPriorityId && message.reloadingId > this.reloadingPriorityId)) {
-                    console.timeEnd("ask")
                     responded = true
                     this.channel.removeEventListener("message", handler)
 
@@ -154,7 +153,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
             setTimeout(() => {
                 if (!responded) {
-                    console.timeEnd("ask")
                     this.channel.removeEventListener("message", handler)
                     resolve()
                 }
