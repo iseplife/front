@@ -25,6 +25,9 @@ import { feedsManager } from "../../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import {AxiosError} from "axios"
 
+interface ParamTypes {
+    id?: string
+}
 export enum ClubTab {
     HOME_TAB,
     EVENTS_TAB,
@@ -33,7 +36,7 @@ export enum ClubTab {
 }
 
 const Club: React.FC = () => {
-    const { id: idStr } = useParams<{ id?: string }>()
+    const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
     const [{club}, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)

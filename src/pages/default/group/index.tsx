@@ -37,14 +37,14 @@ const Group: React.FC = () => {
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
     useEffect(() => {
-        if (!isNaN(+id)) {
+        if (!isNaN(id)) {
             getGroup(id).then(res =>
                 setGroup(res.data)
             ).catch((e: AxiosError) => {
                 if (e.response && e.response.status == 404)
                     history.replace("/404")
             })
-        }else{
+        } else {
             history.replace("/404")
         }
     }, [id])

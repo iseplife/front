@@ -22,6 +22,9 @@ import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
 import {AxiosError} from "axios"
 
+interface ParamTypes {
+    id?: string
+}
 enum StudentTab {
     HOME_TAB,
     CLUBS,
@@ -29,8 +32,8 @@ enum StudentTab {
 }
 
 const Student: React.FC = () => {
-    const { id: idStr } = useParams<{ id?: string }>()
-    const id = useMemo(() => +idStr!, [idStr])
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
 
     const [student, setStudent] = useState<StudentOverview>()
 
