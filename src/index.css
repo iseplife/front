@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .overflow-y-overlay {
-    overflow-y: overlay;
+    overflow-y: overlay !important;
 }
 .break-words {
     overflow-wrap: break-word !important;
