@@ -77,7 +77,7 @@
   "scripts": {
     "ionic:build": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
     "ionic:serve": "cross-env REACT_APP_VERSION=$npm_package_version craco start",
-    "start": "cross-env REACT_APP_VERSION=$npm_package_version craco start",
+    "start": "cross-env REACT_APP_STORAGE_URL='https://iseplife-dev.s3.eu-west-3.amazonaws.com' REACT_APP_VERSION=$npm_package_version craco start",
     "build": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
     "start-sw": "yarn run build && serve build",
     "test": "craco test",

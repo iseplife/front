@@ -140,7 +140,7 @@ function mediaPath(fullPath: string, size?: string): string
 function mediaPath(fullPath: string | undefined, size?: string): string | undefined
 function mediaPath(fullPath: string | undefined, size?: string): string | undefined {
     if (fullPath) {
-        const storageUrl = process.env.STORAGE_URL || "https://storage.iseplife.fr"
+        const storageUrl = process.env.REACT_APP_STORAGE_URL || "https://storage.iseplife.fr"
         if (size) {
             const [_, path, filename, __] = fullPath.split(/(.*)\/(.*)/)
             fullPath = `${path}/${size}/${filename}`

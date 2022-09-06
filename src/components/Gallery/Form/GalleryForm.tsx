@@ -7,6 +7,7 @@ import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
 import HelperIcon from "../../Common/HelperIcon"
 import AuthorPicker from "../../Common/AuthorPicker"
+import {feedsManager} from "../../../datamanager/FeedsManager"
 
 const {TextArea} = Input
 
@@ -39,7 +40,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
     })
 
     const onFilesUploaded = useCallback((ids: number[]) => {
-        formik.setFieldValue("images", ids)
+        formik.values.images =  ids
         formik.submitForm()
     }, [formik])
     

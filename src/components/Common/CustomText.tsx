@@ -47,7 +47,7 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
                         if (totalLength >= descLengthThrottle && totalLength) return
 
                         if (val == "<spacer>")
-                            return disableSpacers ? undefined : <Divider className="my-4" />
+                            return disableSpacers ? undefined : <Divider key={index} className="my-4" />
 
                         if (!seeAll && descLengthThrottle) {
                             if (totalLength + val.length > descLengthThrottle)
@@ -59,7 +59,7 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
                             <span key={index}>
                                 <br /> {val}
                             </span> :
-                            val
+                            <span key={index}>{val}</span>
                     })
                 }
             </Linkify>

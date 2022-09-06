@@ -167,7 +167,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                     Supprimer images
                 </Button>
                 <Button
-                    disabled={!canSubmit}
+                    disabled={!canSubmit && images.size === 0}
                     type="primary"
                     className="border-green-500 bg-green-400 rounded m-3 self-end"
                     onClick={uploadImages}

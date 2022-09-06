@@ -53,7 +53,7 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 
 initializeAPIClient()
 new UpdateService().init()
-
+/*
 datadogRum.init({
     applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
     clientToken: "pub00aecce089653075ee89a23fda9fb49c",
@@ -67,6 +67,8 @@ datadogRum.init({
     defaultPrivacyLevel:"mask-user-input"
 })
 datadogRum.startSessionReplayRecording()
+*/
+
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 
 const App: React.FC = () => {
