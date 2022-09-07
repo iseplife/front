@@ -64,8 +64,11 @@ const Video: React.FC<VideoProps> = ({data, postId, postEmbed}) => {
                     {data.title}
                 </h3>
             </div>
-            <div className="mx-1 md:mx-3 rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer max-h-[400px] z-[1]" style={{
-                height: data.ratio <= 1 ? "400px" : "",
+            
+            <div className="rounded-xl overflow-hidden relative border-[#dbe2e6] border cursor-pointer max-h-[400px]" style={{
+                ...(data.ratio > 1 && {
+                    width: "100%",
+                }),
                 aspectRatio: data.ratio.toString(),
             }}>
                 <div style={{paddingBottom: `${(1/data.ratio)*100}%`}} />
