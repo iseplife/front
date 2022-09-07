@@ -11,7 +11,7 @@
     "Ouch, we've encountered an error...",
     "Seems like something broke...",
     "I don't know what you did but it didn't work",
-    "You found a bug (source: shitty code)"
+    "You found a bug (source: wierd code)"
   ],
   "maintenance": {
     "title":"We can't connect to our servers",
