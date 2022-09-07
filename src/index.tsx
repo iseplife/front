@@ -16,7 +16,7 @@ import Template from "./components/Template"
 import {RecoilRoot} from "recoil"
 import {AppContext, DEFAULT_STATE} from "./context/app/context"
 import {appContextReducer} from "./context/app/reducer"
-import Interceptor from "./components/Template/Interceptor"
+import ErrorInterceptor from "./components/Template/ErrorInterceptor"
 import {AppActionType} from "./context/app/action"
 import {RouteComponentProps} from "react-router-dom"
 import Maintenance from "./pages/errors/Maintenance"
@@ -33,7 +33,6 @@ import { LocationState } from "./data/request.type"
 import UpdateService from "./services/UpdateService"
 import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
 import { CapacitorUpdater } from "@capgo/capacitor-updater"
-import NoConnectionDetector from "./components/Fix/NoConnectionDetector"
 import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
 
 /* Core CSS required for Ionic components to work properly */
@@ -54,12 +53,12 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 
 initializeAPIClient()
 new UpdateService().init()
-
+/*
 datadogRum.init({
     applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
     clientToken: "pub00aecce089653075ee89a23fda9fb49c",
     site: "datadoghq.com",
-    service:"iseplife",
+    service:"iseplife-spa",
     env: process.env.NODE_ENV,
     version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
     sampleRate: 100,
@@ -68,6 +67,8 @@ datadogRum.init({
     defaultPrivacyLevel:"mask-user-input"
 })
 datadogRum.startSessionReplayRecording()
+*/
+
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 
 const App: React.FC = () => {
@@ -109,14 +110,14 @@ const App: React.FC = () => {
         return () => logoutWebSocket()
     }, [state.payload])
 
-    // Check user"s state (logged in or not)
+    // Check user's state (logged in or not)
     useEffect(() => {
         setLoading(true)
         if (state.payload && state.token_expiration >= new Date().getTime()) {
             setLoggedIn(true)
             if (state.payload.id == state.user?.id)
                 setLoading(false)
-        } else if(localStorage.getItem("logged") == "1") {
+        } else if(localStorage.getItem("logged") === "1") {
             refresh().then(res => {
                 dispatch({
                     type: AppActionType.SET_TOKEN,
@@ -150,7 +151,7 @@ const App: React.FC = () => {
             />
     }, [isLoggedIn])
 
-    const redirectLogin =  useMemo(() => 
+    const redirectLogin =  useMemo(() =>
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
@@ -160,16 +161,16 @@ const App: React.FC = () => {
                 <RecoilRoot>
                     {isLoggedIn != undefined && (
                         <Router>
-                            <Interceptor />
-                            <HeightFix />
-                            <NoConnectionDetector />
-                            <NotificationClickHandler />
-                            <Switch>
-                                <Route path="/maintenance" component={Maintenance}/>
+                            <ErrorInterceptor>
+                                <HeightFix />
+                                <NotificationClickHandler />
+                                <Switch>
+                                    <Route path="/maintenance" component={Maintenance}/>
 
-                                <Route path="/login" component={Login}/>
-                                {redirectLogin}
-                            </Switch>
+                                    <Route path="/login" component={Login}/>
+                                    {redirectLogin}
+                                </Switch>
+                            </ErrorInterceptor>
                         </Router>
                     )}
                 </RecoilRoot>

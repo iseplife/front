@@ -1,5 +1,5 @@
 import React from "react"
-import {apiClient, AXIOS_TIMEOUT} from "../../data/http"
+import {apiClient, AXIOS_TIMEOUT, getAPIStatus} from "../../data/http"
 import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router-dom"
@@ -8,16 +8,20 @@ import {refresh} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {TokenSet} from "../../data/security/types"
+import {LocationState} from "../../data/request.type"
+import ReactError from "../../pages/errors/ReactError"
 
-type InterceptorProps = WithTranslation & RouteComponentProps
+type InterceptorProps = WithTranslation & RouteComponentProps & {
+    children: JSX.Element[]
+}
 type InterceptState = {
-    error?: string
+    hasError?: string
 }
 
 export let refreshToken: () => AxiosPromise<TokenSet>
 export let getToken: (url?: string) => Promise<string>
 
-class Interceptor extends React.Component<InterceptorProps, InterceptState> {
+class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState> {
     refreshingPromise?: AxiosPromise<TokenSet>
     intercept?: number[]
 
@@ -26,13 +30,14 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     componentDidMount() {
         refreshToken = this.refreshToken.bind(this)
+
         getToken = async (url?: string) => {
-            if(this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
-                if(url)
-                    console.debug(`[Interceptor] Refreshing on request : "${url}"`)
+            if (this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+                if (url)
+                    console.debug(`[ErrorInterceptor] Refreshing on request : "${url}"`)
                 else
-                    console.debug("[Interceptor] Refreshing token without request")
-                
+                    console.debug("[ErrorInterceptor] Refreshing token without request")
+
                 await this.refreshToken()
             }
             return this.context.state.jwt
@@ -46,6 +51,8 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                 this.axiosResponseErrorInterceptor,
             )
         ]
+
+        this.checkAPIConnection()
 
         window.addEventListener("offline", this.handleOffline)
         window.addEventListener("online", this.handleOnline)
@@ -61,6 +68,25 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         window.removeEventListener("online", this.handleOnline)
     }
 
+    checkAPIConnection = () => {
+        getAPIStatus().catch(() => {
+            this.props.history.push("/maintenance")
+        }).then(() => {
+            if (location.pathname == "/maintenance") {
+                const from = (window.history.state?.state as LocationState)?.from || {
+                    pathname: !this.context.state.payload || this.context.state.payload.lastConnection ? "/" : "/discovery"
+                }
+                this.props.history.push(from.pathname)
+            }
+        })
+    }
+
+    static getDerivedStateFromError(error: Error) {
+        console.debug(`[ERROR]: ${error}`)
+        return { hasError: true }
+    }
+
+
     handleOffline = () => {
         // message.error(this.props.t("offline"))
     }
@@ -69,8 +95,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
         // message.info(this.props.t("online"))
     }
 
+    REGEX_UNSECURE_API_PREFIX = /^\/(auth|health)/
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
-        if (!request.url?.startsWith("/auth") && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
+        if (!request.url?.match(this.REGEX_UNSECURE_API_PREFIX) && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
             return new Promise<AxiosRequestConfig>((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
 
@@ -78,7 +105,10 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     request.headers = request.headers ?? {}
                     request.headers["Authorization"] = `Bearer ${res.data.token}`
                     execute(request)
-                }).catch(reject)
+                }).catch((e: Error) => {
+                    if (e.message !== "refreshing failed")
+                        reject(e)
+                })
             })
         }
         return request
@@ -93,22 +123,23 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                         type: AppActionType.SET_TOKEN,
                         token: res.data.token
                     })
-    
                     this.refreshingPromise = undefined
 
                     return res
                 } catch (e) {
                     const err = e as AxiosError
-                    if (err.response?.status == 401) {
+                    if (err.response?.status === 401) {
                         this.refreshingPromise = undefined
                         this.props.history.push("/login")
-                        if(localStorage.getItem("logged") == "1")
+                        if (localStorage.getItem("logged") == "1")
                             message.error(this.props.t("user_disconnected"))
-                        this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
+                        this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+
+                        console.debug("refreshing failed", e)
+                        throw new Error("refreshing failed")
                     } else
                         throw e
                 }
-                throw new Error("Refreshing failed")
             })()
         }
         return this.refreshingPromise
@@ -118,8 +149,9 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
 
     axiosResponseErrorInterceptor = (error: AxiosError) => {
         if (error.response) {
-            const {t} = this.props
+            const {t, i18n} = this.props
             console.debug(`[${error.code}] ${error.message}`)
+            console.debug(error)
 
             const auth = error.request?.url?.startsWith("/auth") || error.request?.responseURL?.includes("/auth")
 
@@ -135,26 +167,25 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
                     break
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
-                    if (!auth) {
-                        this.props.history.push("/login")
-                        this.context.dispatch({ type: AppActionType.SET_LOGGED_OUT })
-
-                        message.error(t("user_disconnected"))
-                    } else
+                    if (auth)
                         return Promise.reject(error)
-                    break
-                case 404:
-                    message.error(t(error.message))
-                    this.props.history.replace("/404")
 
+                    this.props.history.push("/login")
+                    this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+
+                    message.error(t("user_disconnected"))
                     break
                 case 500:
                     message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
-                    break
+                    return Promise.reject(error)
                 default:
-                    if(!auth)
-                        message.error(t(error.message))
-
+                    if (!auth) {
+                        const errorKey = `error:${(error.response.data as { message: string }).message}`
+                        message.error(t(i18n.exists(errorKey) ?
+                            errorKey :
+                            `error_encountered.${Math.floor(Math.random() * 3)}`)
+                        )
+                    }
                     return Promise.reject(error)
             }
         } else {
@@ -163,10 +194,13 @@ class Interceptor extends React.Component<InterceptorProps, InterceptState> {
     }
 
     render() {
-        return null
+        if (this.state.hasError)
+            return <ReactError />
+
+        return this.props.children
     }
 }
 
-Interceptor.contextType = AppContext
+ErrorInterceptor.contextType = AppContext
 
-export default withRouter(withTranslation("error")(Interceptor))
+export default withRouter(withTranslation("error")(ErrorInterceptor))

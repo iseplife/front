@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
 import {useParams} from "react-router-dom"
 import {getClub} from "../../../data/club"
-import {message} from "antd"
 import {useHistory} from "react-router-dom"
 import Feed from "../../../components/Feed"
 import ClubPresentation from "../../../components/Club/ClubDescription/ClubPresentation"
@@ -24,7 +23,11 @@ import DropdownPanelElement from "../../../components/Common/DropdownPanelElemen
 import { faBan } from "@fortawesome/free-solid-svg-icons"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
+import {AxiosError} from "axios"
 
+interface ParamTypes {
+    id?: string
+}
 export enum ClubTab {
     HOME_TAB,
     EVENTS_TAB,
@@ -33,7 +36,7 @@ export enum ClubTab {
 }
 
 const Club: React.FC = () => {
-    const { id: idStr } = useParams<{ id?: string }>()
+    const {id: idStr} = useParams<ParamTypes>()
     const id = useMemo(() => parseInt(idStr || ""), [idStr])
     const history = useHistory()
     const [{club}, dispatch] = useReducer(clubContextReducer, DEFAULT_STATE)
@@ -53,11 +56,12 @@ const Club: React.FC = () => {
         if (!isNaN(id)) {
             getClub(+id).then(res => {
                 dispatch({ type: ClubActionType.GET_CLUB, payload: res.data })
-            }).catch(e =>
-                message.error(e)
-            )
+            }).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
         } else {
-            history.push("404")
+            history.replace("404")
         }
     }, [id])
 
@@ -112,7 +116,7 @@ const Club: React.FC = () => {
                 />
                 
                 <div className="flex-1 lg:block hidden mr-4">
-                    <IncomingEvents wait={!club} allowCreate={false} />
+                    <IncomingEvents wait={!club} feed={club?.feed} allowCreate={false} />
                 </div>
             </div>
         </ClubContext.Provider>

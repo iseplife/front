@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react"
+import React, {useEffect, useMemo, useState} from "react"
 
 interface TabSwitcherProps {
     currentTab: number,
@@ -43,9 +43,9 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, set
                             tabName = splitted[1]
                         else
                             type = undefined!
-                        return <>
+                        return (
                             <div
-                                key={index}
+                                key={tabName}
                                 onClick={callback}
                                 className={
                                     `${type}:hidden rounded-full bg-black bg-opacity-[8%] hover:bg-opacity-[12%] transition-colors px-3 py-1 cursor-pointer mr-2.5 `
@@ -54,7 +54,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, set
                             >
                                 {tabName}
                             </div>
-                        </>
+                        )
                     })}
                 </div>
             </div>

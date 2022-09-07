@@ -105,18 +105,17 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         await (this.initLoadSyncWait = new Promise<void>(resolve => {
             let responded = false
             const id = Math.random()
-            console.time("ask")
+
             const handler = async (message: FeedsChannelMessage) => {
                 if (message.type == "response" && message.id == id
                 || (message.type == "ask" && message.id != id && message.reloadingId != this.reloadingPriorityId && message.reloadingId > this.reloadingPriorityId)) {
-                    console.timeEnd("ask")
                     responded = true
                     this.channel.removeEventListener("message", handler)
 
                     if (!("doNotRenew" in message) || message.doNotRenew) {
                         now = await this.getGeneralLastLoad() ?? 0
 
-                        console.log("Another tab took control.")
+                        console.debug("Another tab took control.")
                         
                         const handler2 = async (message: FeedsChannelMessage) => {
                             if (message.type == "lastLoadAll" && message.id == pageId) {
@@ -154,7 +153,6 @@ export default class FeedsManager extends DataManager<ManagerPost> {
 
             setTimeout(() => {
                 if (!responded) {
-                    console.timeEnd("ask")
                     this.channel.removeEventListener("message", handler)
                     resolve()
                 }
@@ -235,7 +233,9 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     public async getFirstPostedFresh(feed: FeedId) {
-        return this.getTable().where(["loadedFeed", "lastLoadId"]).between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity]).first()
+        return this.getTable().where(["loadedFeed", "lastLoadId"])
+            .between([feed ?? mainFeedId, this.getLastLoad(feed)], [feed ?? mainFeedId, Infinity])
+            .first()
     }
 
     public getFeedPosts(feed: FeedId, limit: number) {
@@ -358,10 +358,15 @@ export default class FeedsManager extends DataManager<ManagerPost> {
     }
 
     private async checkUnloaded(feed: FeedId) {
+        const firstPostedFresh = (await this.getFirstPostedFresh(feed))
+        //if undefined then there's nothing to unload
+        if(firstPostedFresh == undefined)
+            return
+
         const posts = (await this.getTable()
             .where(["loadedFeed", "publicationDateId"])
             .between(
-                [feed ?? mainFeedId, (await this.getFirstPostedFresh(feed))?.publicationDateId],
+                [feed ?? mainFeedId, firstPostedFresh.publicationDateId],
                 [feed ?? mainFeedId, Infinity]
             ).toArray())
             .sort((a, b) => a.id - b.id)

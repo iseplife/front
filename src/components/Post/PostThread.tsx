@@ -38,7 +38,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
             else
                 await Haptics.impact({ style: ImpactStyle.Medium })
         }catch(e){
-            console.log("Couldn't vibrate on like")
+            console.debug("Couldn't vibrate on like")
         }
         setLiked(liked => {
             if(!liked){

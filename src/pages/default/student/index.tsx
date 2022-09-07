@@ -1,7 +1,6 @@
-import { faBan, faCross } from "@fortawesome/free-solid-svg-icons"
-import { message } from "antd"
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { faBan } from "@fortawesome/free-solid-svg-icons"
 import { useLiveQuery } from "dexie-react-hooks"
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory, useParams } from "react-router-dom"
 import DropdownPanel from "../../../components/Common/DropdownPanel"
@@ -21,7 +20,11 @@ import { StudentOverview, StudentPreview } from "../../../data/student/types"
 import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
+import {AxiosError} from "axios"
 
+interface ParamTypes {
+    id?: string
+}
 enum StudentTab {
     HOME_TAB,
     CLUBS,
@@ -29,8 +32,8 @@ enum StudentTab {
 }
 
 const Student: React.FC = () => {
-    const { id: idStr } = useParams<{ id?: string }>()
-    const id = useMemo(() => +idStr!, [idStr])
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
 
     const [student, setStudent] = useState<StudentOverview>()
 
@@ -52,11 +55,12 @@ const Student: React.FC = () => {
         if (!isNaN(id)) {
             getStudent(id).then(res => 
                 setStudent(res.data)
-            ).catch(e =>
-                message.error(e)
-            )
+            ).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
         } else {
-            history.push("404")
+            history.replace("404")
         }
     }, [id])
 

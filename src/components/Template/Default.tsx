@@ -24,7 +24,7 @@ const DefaultTemplate: React.FC = () => {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <Navbar>
-                <div id="main" className="flex-grow overflow-y-overlay bg-gray-100 relative" style={{ height: "calc(100vh - 3rem)" }}>
+                <div id="main" className="flex-grow overflow-y-overlay overflow-y-auto bg-gray-100 relative" style={{ height: "calc(100vh - 3rem)" }}>
                     <Header user={user}/>
                     <Switch>
                         {/* Add your route here */}

@@ -71,28 +71,32 @@ interface HeaderProps {
 
 const NotificationHeaderButton: React.FC = () => {
     const [t] = useTranslation("notifications")
-    const unwatchedNotifications = useLiveQuery(async () => await notificationManager?.getUnwatched() as number, [])
-
+    const unwatchedNotifications = useLiveQuery(async () => await notificationManager?.getUnwatched(), [])
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
 
-    return <DropdownPanel
-        icon={<div>
-            <IconButton icon={cFaBellFull}/>
-            <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications || showPushAsk ? "scale-100" : "scale-0")}>
-                {Math.min((unwatchedNotifications ?? 0) + +(showPushAsk ?? false), 9)}
+    return (
+        <DropdownPanel
+            icon={
+                <div>
+                    <IconButton icon={cFaBellFull}/>
+                    <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-0 right-1.5 shadow-sm transition-transform "+(unwatchedNotifications || showPushAsk ? "scale-100" : "scale-0")}>
+                        {Math.min((unwatchedNotifications ?? 0) + +(showPushAsk ?? false), 9)}
+                    </div>
+                </div>
+            }
+            panelClassName="w-80 -right-6"
+            buttonClassName="group"
+        >
+            <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
+                {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
+                <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                    {t("see_more")}
+                </Link>
             </div>
-        </div>}
-        panelClassName="w-80 -right-6"
-        buttonClassName="group"
-    >
-        <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
-            {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
-            <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
-                {t("see_more")}
-            </Link>
-        </div>
-        <NotificationsCenter className="md:block "/>
-    </DropdownPanel>
+            <NotificationsCenter className="md:block "/>
+        </DropdownPanel>
+    )
+
 }
 
 
@@ -261,7 +265,7 @@ interface MobileFooterButtonProps {
     doubleClickAction?: () => void
 }
 
-const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts, className = "text-indigo-400", doubleClickAction }) => {
+const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts = 0, className = "text-indigo-400", doubleClickAction }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
 
@@ -272,20 +276,23 @@ const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selected
         }
     }, [doubleClickAction, selected])
     
-    return <Link to={route} className="w-full h-full grid place-items-center">
-        <button className={`border-0 grid place-items-center text-2xl ${className}`} onClick={onClick}>
-            <div className="relative">
-                <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
-                    <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
+    return (
+        <Link to={route} className="w-full h-full grid place-items-center">
+            <button className={`border-0 grid place-items-center text-2xl ${className}`} onClick={onClick}>
+                <div className="relative">
+                    <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
+                        <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
+                    </div>
+
+                    <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts ? "scale-100" : "scale-0")}>
+                        {Math.min(alerts, 9)}
+                    </div>
                 </div>
-                
-                <div className={"absolute text-xs bg-red-400 rounded-full w-[1.125rem] h-[1.125rem] text-white grid place-items-center top-1 right-0 shadow-sm transition-transform "+(alerts ? "scale-100" : "scale-0")}>
-                    {Math.min(alerts ?? 0, 9)}
-                </div>
-            </div>
-        </button>
-    </Link>
+            </button>
+        </Link>
+    )
 }
+
 const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const unwatchedNotifications = useLiveQuery(() => notificationManager?.getUnwatched(), [])
     
@@ -295,7 +302,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
     const showPushAsk = useLiveQuery(async () => await notificationManager.isWebPushEnabled() && !await notificationManager.isSubscribed())
     const close = useCallback(() => setVisible(false), [])
     const focusSearch = useCallback(() => (document.querySelector("input[type=\"search\"]") as HTMLInputElement).focus(), [])
-    
+
     return (
         <>
             <div className="md:hidden grid grid-cols-5 w-full h-16 shadow-[0px_-4px_20px_rgb(0_0_0_/_5%)] border-t border-neutral-200/50">
@@ -310,7 +317,12 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                         doubleClickAction={focusSearch}
                     />
                 </div>
-                <MobileFooterButton route="/notifications" selectedIcon={cFaBellFull} notSelectedIcon={cFaBellOutline} alerts={+(showPushAsk ?? false) + unwatchedNotifications} />
+                <MobileFooterButton
+                    route="/notifications"
+                    selectedIcon={cFaBellFull}
+                    notSelectedIcon={cFaBellOutline}
+                    alerts={+(showPushAsk ?? false) + (unwatchedNotifications ?? 0)}
+                />
                 <div className="cursor-pointer grid place-items-center h-full w-full" onClick={() => setVisible(true)}>
                     <StudentAvatar
                         id={user.id}

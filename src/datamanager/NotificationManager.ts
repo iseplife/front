@@ -6,7 +6,7 @@ import PacketHandler from "../realtime/protocol/listener/PacketHandler"
 import GeneralEventType from "../constants/GeneralEventType"
 import pushService from "../services/PushService"
 import WSPSNotificationReceived from "../realtime/protocol/packets/server/WSPSNotificationReceived"
-import { getToken } from "../components/Template/Interceptor"
+import { getToken } from "../components/Template/ErrorInterceptor"
 
 export default class NotificationManager extends DataManager<Notification> {
 

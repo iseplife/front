@@ -2,7 +2,7 @@ import  {AxiosPromise} from "axios"
 import {Gallery, GalleryForm} from "./types"
 import {apiClient} from "../http"
 
-export const getGallery = (id: string): AxiosPromise<Gallery> => apiClient.get(`/gallery/${id}`)
+export const getGallery = (id: number): AxiosPromise<Gallery> => apiClient.get(`/gallery/${id}`)
 
 export const createGallery = (form: GalleryForm): AxiosPromise<Gallery> => apiClient.post("gallery", form)
 

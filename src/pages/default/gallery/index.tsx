@@ -19,6 +19,7 @@ import GallerySidebar from "./GallerySidebar"
 import { AnimatedLightbox } from "../../../components/Common/AnimatedLightbox"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
+import {AxiosError} from "axios"
 
 export type GalleryPhoto = SafePhoto & {
     selected: boolean
@@ -47,9 +48,11 @@ interface ParamTypes {
 }
 
 const Gallery: React.FC = () => {
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
+
     const {t} = useTranslation(["gallery", "common"])
     const history = useHistory()
-    const {id} = useParams<ParamTypes>()
     const picture = useMemo<string | null>(() => new URLSearchParams(window.location.search).get("p"), [window.location.search])
 
     const [loading, setLoading] = useState<boolean>(true)
@@ -180,7 +183,7 @@ const Gallery: React.FC = () => {
      * Get Gallery and parse photos on first load
      */
     useEffect(() => {
-        if (id) {
+        if (!isNaN(id)) {
             getGallery(id).then(res => {
                 if (res.data) {
                     setGallery(res.data)
@@ -196,7 +199,12 @@ const Gallery: React.FC = () => {
                         })
                         .finally(() => setLoading(false))
                 }
-            }).catch(e => message.error(`Get this gallery failed ,${e}`))
+            }).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
+        } else {
+            history.replace("/404")
         }
     }, [id])
 

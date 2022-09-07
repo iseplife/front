@@ -9,6 +9,7 @@ import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import { isWeb } from "../../data/app"
 import { useIonAlert } from "@ionic/react"
+import {apiClient} from "../../data/http"
 
 
 interface LoginFormInputs {
@@ -79,10 +80,8 @@ const Login: React.FC = () => {
                             }).finally(() => setLoadingStatus(false))
                         },
                     },
-                ],
-                onDidDismiss: () => console.log("lol"),
+                ]
             })
-            
         }
     })
 

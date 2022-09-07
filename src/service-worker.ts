@@ -14,8 +14,8 @@ self.skipWaiting()
 
 const broadcastChannel = new BroadcastChannel("service-worker", { webWorkerSupport: true })
 
-self.addEventListener("install", function (event) {
-    console.log("Installed Service Worker")
+self.addEventListener("install", function () {
+    console.debug("Installed Service Worker")
     broadcastChannel.postMessage("update")
 })
 

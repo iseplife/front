@@ -1,5 +1,7 @@
 {
   "no_connection_retry": "It seems that you have lost your connection. Please check and try again.",
+  "apologize": "Sorry",
+  "working_on_it": "We have notified about it and will investigate the problem",
   "online": "You are back online !",
   "offline": "You are now offline",
   "user_disconnected": "You have been disconnected",
@@ -9,7 +11,7 @@
     "Ouch, we've encountered an error...",
     "Seems like something broke...",
     "I don't know what you did but it didn't work",
-    "You found a bug (source: shitty code)"
+    "You found a bug (source: wierd code)"
   ],
   "maintenance": {
     "title":"We can't connect to our servers",
@@ -21,7 +23,7 @@
   },
   "not_found": [
     "Seems like you went to far...",
-    "Il n'y a rien a voir par ici...",
+    "Nothing to see around here...",
     "You won't find your exams answers here sorry...",
     "Seems like the page you looked for doesn't exist"
   ],

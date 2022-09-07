@@ -31,7 +31,13 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                             </div>
                         </Link>
                     )) : [1, 2, 3, 4, 5, 6].map(i =>
-                        <div className={`px-2 rounded-lg flex-shrink-0 h-20 w-20 sm:h-full sm:w-full text-xs font-semibold relative flex bg-neutral-200 animate-pulse ${i && "ml-2.5 sm:ml-0"}`} />
+                        <div
+                            key={i}
+                            className={`
+                                px-2 rounded-lg flex-shrink-0 h-20 w-20 sm:h-full sm:w-full text-xs 
+                                font-semibold relative flex bg-neutral-200 animate-pulse ${i && "ml-2.5 sm:ml-0"}
+                            `}
+                        />
                     )}
                 </div>
             </div>

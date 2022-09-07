@@ -30,20 +30,23 @@ import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
+import {AxiosError} from "axios"
 
 interface ParamTypes {
     id?: string
 }
 
 const Event: React.FC = () => {
-    const {id} = useParams<ParamTypes>()
+    const {id: idStr} = useParams<ParamTypes>()
+    const id = useMemo(() => parseInt(idStr || ""), [idStr])
+
     const {t} = useTranslation(["event", "gallery", "common"])
     const history = useHistory()
     const [event, setEvent] = useState<EventType | undefined>()
     const [showLoadingMap, setShowLoadingMap] = useState(false)
     const [tab, setTab] = useState<number>(0)
-    
-    const cache = useMemo(() => id ? entityPreloader.getEvent(parseInt(id)) : undefined, [id])
+
+    const cache = useMemo(() => !isNaN(id) ? entityPreloader.getEvent(id) : undefined, [id])
     const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
     const feed = useMemo(() => (<Feed
         key={`efeed${id}`}
@@ -88,7 +91,7 @@ const Event: React.FC = () => {
     }, [event?.startsAt, event?.endsAt, cache?.startsAt, cache?.endsAt])
 
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
-    const galleriesCallback = useCallback((page?: number) => 
+    const galleriesCallback = useCallback((page?: number) =>
         getEventGalleries((event ?? cache)!.id, page)
     , [(event ?? cache)?.id])
 
@@ -110,12 +113,16 @@ const Event: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        if (!id || !+id)
-            history.push("/")
-        else
-            getEvent(+id).then(res =>
+        if (!isNaN(id)) {
+            getEvent(id).then(res =>
                 setEvent(res.data)
-            )
+            ).catch((e: AxiosError) => {
+                if (e.response && e.response.status == 404)
+                    history.replace("/404")
+            })
+        } else {
+            history.replace("/404")
+        }
     }, [id])
 
     useEffect(() => {
@@ -173,7 +180,7 @@ const Event: React.FC = () => {
                 <div className="ml-4">
                     {cache?.name ?? (event ?? cache)?.title ?
                         <>
-                            {date ? 
+                            {date ?
                                 <div
                                     className="text-red-600 uppercase text-base md:text-lg font-bold leading-4 mb-1 md:mb-0 rounded-full">
                                     {date}
