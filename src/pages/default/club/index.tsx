@@ -116,7 +116,7 @@ const Club: React.FC = () => {
                 />
                 
                 <div className="flex-1 lg:block hidden mr-4">
-                    <IncomingEvents wait={!club} allowCreate={false} />
+                    <IncomingEvents wait={!club} feed={club?.feed} allowCreate={false} />
                 </div>
             </div>
         </ClubContext.Provider>
