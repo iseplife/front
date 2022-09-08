@@ -86,6 +86,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     as={Textarea}
                     autoFocus={true}
                     name="description"
+                    maxLength={3000}
                     placeholder={`${t("post:whatsup")}, ${user.firstName} ?`}
                     className={`px-1 text-base text-gray-800 mb-4 bg-transparent resize-none focus:outline-none ${values.edit ? "max-h-[calc(80vh-300px)]" : "max-h-[calc(80vh-200px)]"} min-h-[35px]`}
                 />

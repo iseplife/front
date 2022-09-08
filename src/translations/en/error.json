@@ -57,5 +57,12 @@
   "poll_finished": "Poll is finished",
   "choice_already_picked": "Choice already picked",
   "invalid_embed_type": "Invalid embed type",
-  "fail_deserialize_data": "Failed deserializing data"
+  "fail_deserialize_data": "Failed deserializing data",
+  "club_description_too_long": "Club's description exceeds max length (max: 2000 chars)",
+  "event_title_too_long": "Event's title exceeds max length (max: 100 chars)",
+  "event_description_too_long": "Event's description exceeds max length (max: 2000 chars)",
+  "gallery_max_size_reached": "Gallery contains too much images (max: 2000)",
+  "gallery_description_too_long": "Gallery's description exceeds max length (max: 3000 chars)",
+  "post_description_too_long": "Post exceeds max length (max: 3000 chars)",
+  "comment_too_long": "Comment exceeds max length (max: 2000 chars)"
 }

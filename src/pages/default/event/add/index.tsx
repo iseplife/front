@@ -113,7 +113,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                             <Divider className="text-gray-700 text-lg my-1" orientation="left">{t("form.titles.additional")}</Divider>
                         </div>
                         <AddEventTextField title={t("form.label.description")}>
-                            <Textarea {...register("description", {required: true})} className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full resize-none max-h-[50vh]" placeholder={t("form.placeholder.description")} />
+                            <Textarea {...register("description", {required: true, maxLength: 2000})} className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full resize-none max-h-[50vh]" placeholder={t("form.placeholder.description")} />
                         </AddEventTextField>
                         <AddEventTextField title={t("form.label.location")} className="-mt-1 rounded-lg border border-neutral-200 p-2 flex flex-col">
                             <EventPlaceSelector />
