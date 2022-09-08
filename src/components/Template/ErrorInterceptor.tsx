@@ -180,9 +180,9 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     return Promise.reject(error)
                 default:
                     if (!auth) {
-                        const errorKey = `error:${(error.response.data as { message: string }).message}`
-                        message.error(t(i18n.exists(errorKey) ?
-                            errorKey :
+                        const errorMessage = ((error.response.data ?? {}) as { message: string }).message
+                        message.error(errorMessage && t(i18n.exists(`error:${errorMessage}`) ?
+                            errorMessage :
                             `error_encountered.${Math.floor(Math.random() * 3)}`)
                         )
                     }
