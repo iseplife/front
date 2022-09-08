@@ -41,6 +41,7 @@ import "./index.css"
 import "antd/dist/antd.min.css"
 
 import { IonApp, setupIonicReact } from "@ionic/react"
+import {isLocalhost} from "./util"
 
 setupIonicReact({
     mode: "ios"
@@ -53,21 +54,22 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 
 initializeAPIClient()
 new UpdateService().init()
-/*
-datadogRum.init({
-    applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
-    clientToken: "pub00aecce089653075ee89a23fda9fb49c",
-    site: "datadoghq.com",
-    service:"iseplife-spa",
-    env: process.env.NODE_ENV,
-    version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
-    sampleRate: 100,
-    premiumSampleRate: 100,
-    trackInteractions: true,
-    defaultPrivacyLevel:"mask-user-input"
-})
-datadogRum.startSessionReplayRecording()
-*/
+
+if(!isLocalhost) {
+    datadogRum.init({
+        applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
+        clientToken: "pub00aecce089653075ee89a23fda9fb49c",
+        site: "datadoghq.com",
+        service: "iseplife-spa",
+        env: process.env.NODE_ENV,
+        version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
+        sampleRate: 100,
+        premiumSampleRate: 100,
+        trackInteractions: true,
+        defaultPrivacyLevel: "mask-user-input"
+    })
+    datadogRum.startSessionReplayRecording()
+}
 
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 
