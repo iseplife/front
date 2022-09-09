@@ -1,5 +1,6 @@
 {
   "error": "Sorry, we've encountered an error, try again later.",
+  "update_available": "An update is available. Click here to activate it.",
   "end": "You've reached the end !",
   "loading": "Loading your data...",
 	"see_more": "See more...",
