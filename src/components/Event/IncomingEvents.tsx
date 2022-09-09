@@ -33,7 +33,7 @@ const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, class
             <Divider className="text-gray-700 text-lg sm:hidden" orientation="left">{t("incoming")}</Divider>
             <h3 className="text-gray-700 text-lg lg:mx-3 hidden sm:block">{t("incoming")}</h3>
             {wait || !events ?
-                <div className="flex gap-2.5 sm:flex-col sm:mb-4">
+                <div className="flex gap-2.5 sm:flex-col sm:mb-4 hidden-scroller w-full max-w-[calc(100vw-16px*2)] sm:max-w-full overflow-x-auto ">
                     <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
                     <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
                     <Skeleton.Input className="w-full rounded h-[92px] sm:h-[76px]" active size="large"/>
