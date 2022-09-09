@@ -1,4 +1,5 @@
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
 import { Author } from "../../../data/request.type"
@@ -11,10 +12,17 @@ interface ClubSelectorProps {
 }
 
 const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
-    const [selectedClub, setSelectedClub] = useState<Author>()
     const {state: {authors}} = useContext(AppContext)
+    const {register, setValue} = useFormContext()
 
-    const selectAuthorFactory = useCallback((author: Author) => () => setSelectedClub(author), [])
+    const club = useWatch({
+        name: "club",
+    }) as number
+    register("club", {required: true})
+
+    const clubEntity = useMemo(() => authors.find(author => author.id == club), [club, authors])
+
+    const selectAuthorFactory = useCallback((author: Author) => () => setValue("club", author.id), [])
 
     return <DropdownPanel
         closeOnClick
@@ -22,11 +30,11 @@ const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
         panelClassName="absolute top-[unset] -bottom-1.5 z-[9999] translate-y-full right-0 w-[200%] max-w-[200px] max-h-[50vh] overflow-y-auto scrollbar-thin bg-white rounded-lg shadow-xl border border-neutral-200"
         clickable
         icon={
-            <div className={`relative rounded-lg border border-neutral-200 px-3 ${selectedClub ? "py-[11px]" : "py-3"} cursor-pointer text-neutral-400 text-start`}>
+            <div className={`relative rounded-lg border border-neutral-200 px-3 ${clubEntity ? "py-[11px]" : "py-3"} cursor-pointer text-neutral-400 text-start`}>
                 {
-                    selectedClub ? <div className="flex items-center">
-                        <WebPAvatarPolyfill src={mediaPath(selectedClub.thumbnail, AvatarSizes.THUMBNAIL)} className="flex-shrink-0 w-6 h-6" />
-                        <div className="ml-3 w-full line-clamp-1 text-ellipsis overflow-hidden text-indigo-400">{selectedClub.name}</div>
+                    clubEntity ? <div className="flex items-center">
+                        <WebPAvatarPolyfill src={mediaPath(clubEntity.thumbnail, AvatarSizes.THUMBNAIL)} className="flex-shrink-0 w-6 h-6" />
+                        <div className="ml-3 w-full line-clamp-1 text-ellipsis overflow-hidden text-indigo-400">{clubEntity.name}</div>
                     </div> : <>Organisateur</>
                 }
             </div>
