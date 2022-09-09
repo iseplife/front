@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react"
 import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCommentAlt, faHeart} from "@fortawesome/free-regular-svg-icons"
-import {faCloudDownload, faDownload, faFileDownload, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
+import {faCloudDownload, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
 import {Divider, message} from "antd"
 import CommentList from "../../../components/Comment/CommentList"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
@@ -12,7 +12,6 @@ import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
 import { downloadFile, formatDateWithTimer, mediaPath } from "../../../util"
 import { useTranslation } from "react-i18next"
-import LoadingSpinner from "../../../components/Common/LoadingSpinner"
 import Loading from "../../../components/Common/Loading"
 import { isWebPSupported, polyfillWebp } from "../../../components/Common/WebPPolyfill"
 
@@ -59,7 +58,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
     const downloadCallback = useCallback(async () => {
         const link = mediaPath(currentImage.srcSet as string, GallerySizes.DOWNLOAD)
 
-        var req = new XMLHttpRequest()
+        const req = new XMLHttpRequest()
         req.open("GET", link, true)
         req.responseType = "blob"
 

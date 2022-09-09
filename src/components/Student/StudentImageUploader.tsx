@@ -33,7 +33,7 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
     useEffect(() => {
         if(file) {
             const reader = new FileReader()
-            reader.onload = e => setFileStr(reader.result as string)
+            reader.onload = () => setFileStr(reader.result as string)
 
             reader.readAsDataURL(file)
         }else {

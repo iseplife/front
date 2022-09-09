@@ -1,5 +1,4 @@
 import { AxiosPromise } from "axios"
-import { feedsManager } from "../../datamanager/FeedsManager"
 import { apiClient } from "../http"
 import { SubscribableType } from "./SubscribableType"
 

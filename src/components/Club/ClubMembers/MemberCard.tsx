@@ -1,6 +1,6 @@
 import React, {useMemo} from "react"
 import {ClubMember, ClubRoleIcon} from "../../../data/club/types"
-import {Link, useHistory} from "react-router-dom"
+import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"

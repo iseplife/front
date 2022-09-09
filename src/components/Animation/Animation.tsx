@@ -1,6 +1,5 @@
-
 import { useLottie } from "lottie-react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect } from "react"
 import { Animation as AnimationData } from "react-useanimations/utils"
 
 interface AnimationProps {

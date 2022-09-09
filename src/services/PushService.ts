@@ -1,7 +1,7 @@
 import { apiClient } from "../data/http"
 import FingerprintJS from "@fingerprintjs/fingerprintjs"
 import { notificationManager } from "../datamanager/NotificationManager"
-import { getMessaging, getToken, Messaging } from "firebase/messaging"
+import {getMessaging, getToken, isSupported, Messaging} from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
 import { PushNotifications } from "@capacitor/push-notifications"
 import { isIosApp, isWeb } from "../data/app"
@@ -17,9 +17,15 @@ class PushService {
 
     constructor() {
         try{
-            this.firebaseMessaging = getMessaging(firebaseApp)
+            isSupported().then(supported => {
+                if (supported) {
+                    this.firebaseMessaging = getMessaging(firebaseApp)
+                    return
+                }
+                throw new Error("Firebase Messaging not supported")
+            })
         }catch(e){
-            console.error("Firebase Messaging not supported !", e)
+            console.debug("Firebase Messaging not supported !", e)
         }
     }
 

@@ -18,8 +18,7 @@ import FirstFollow from "../FirstFollow"
 import { AppContext } from "../../context/app/context"
 
 const DefaultTemplate: React.FC = () => {
-    const { state: { user: { didFirstFollow } } } = useContext(AppContext)
-    const {state: {user}} = useContext(AppContext)
+    const { state: { user } } = useContext(AppContext)
     
     return (
         <div className="flex flex-col h-full overflow-hidden">
@@ -46,7 +45,7 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
             <NotificationsOverlay />
-            { !didFirstFollow && <FirstFollow /> }
+            { !user.didFirstFollow && <FirstFollow /> }
         </div>
     )
 }

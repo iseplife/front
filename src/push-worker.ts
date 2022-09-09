@@ -1,23 +1,28 @@
 /// <reference lib="WebWorker" />
-
 import { onBackgroundMessage, getMessaging } from "firebase/messaging/sw"
 import { firebaseApp } from "./data/firebase"
+import {isSupported} from "firebase/messaging"
 
 declare const self: ServiceWorkerGlobalScope & typeof globalThis
 
-const firebaseMessaging = getMessaging(firebaseApp)
+(async () => {
+    const isSupportedBrowser = await isSupported()
+    if (isSupportedBrowser)
+        return getMessaging(firebaseApp)
 
-onBackgroundMessage(firebaseMessaging, (payload) => {
-    console.debug("Received background message ", payload)
-})
+    throw Error("firebase not supported")
+})().then(messaging => {
+    onBackgroundMessage(messaging, (payload) => {
+        console.debug("Received background message ", payload)
+    })
+}).catch(err => console.debug("firebase not supported", err))
 
-console.debug("load firebase")
+
 self.addEventListener("notificationclick", function(event) {
     console.debug("click", event)
 })
 
 export const initPushWorker = () => {
-    
     self.addEventListener("push", async function (event) {
         console.debug("push", event)
     })
