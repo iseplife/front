@@ -9,6 +9,11 @@
     overflow-wrap: break-word !important;
     word-break: break-word !important;
 }
+.h-screen {
+    height: 100vh !important;
+    height: calc(var(--vh, 1vh) * 100) !important;
+}
+
 
 /********/
 .rbc-calendar > div {

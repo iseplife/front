@@ -1,5 +1,4 @@
 import React, { useEffect } from "react"
-import "./HeightFix.css"
 
 const HeightFix: React.FC = () => {
     useEffect(() => {
