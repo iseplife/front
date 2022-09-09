@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next"
 import ClubFollowSkeleton from "./ClubFollowSkeleton"
 import ClubFollow from "./ClubFollow"
 
-const REQUIRED_FOLLOWING = 3
+const REQUIRED_FOLLOWING = 5
 
 const FirstFollow: React.FC = () => {
     const [clubs, setClubs] = useState<ClubPreview[]>([])
