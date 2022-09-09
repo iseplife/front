@@ -10,9 +10,10 @@ interface CustomTextProps {
     descLengthThrottle?: number
     disableSpacers?: boolean
     disableLinks?: boolean
+    lineClamp?: boolean
 }
 
-const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle = 0, disableSpacers, disableLinks}) => {
+const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle = 0, lineClamp, disableSpacers, disableLinks}) => {
     const [seeAll, setSeeAll] = useState(false)
 
     const toggleSeeAll = useCallback(() => setSeeAll(see => !see), [])
@@ -41,30 +42,33 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
     let totalLength = 0
     return (
         <span className="break-words w-full">
-            <Linkify componentDecorator={componentDecorator}>
-                {
-                    description?.split("\n").map((val, index, array) => {
-                        if (totalLength >= descLengthThrottle && totalLength) return
+            <span className={lineClamp && tooLong && !seeAll ? "line-clamp-4" : ""}>
+                <Linkify componentDecorator={componentDecorator}>
+                    {
+                        description?.split("\n").map((val, index, array) => {
+                            if (totalLength >= descLengthThrottle && totalLength) return
 
-                        if (val == "<spacer>")
-                            return disableSpacers ? undefined : <Divider key={index} className="my-4" />
+                            if (val == "<spacer>")
+                                return disableSpacers ? undefined : <Divider key={index} className="my-4" />
 
-                        if (!seeAll && descLengthThrottle) {
-                            if (totalLength + val.length > descLengthThrottle)
-                                val = val.substring(0, descLengthThrottle - totalLength)
-                            totalLength += val.length
-                        }
+                            if (!seeAll && descLengthThrottle) {
+                                if (totalLength + val.length > descLengthThrottle)
+                                    val = val.substring(0, descLengthThrottle - totalLength)
+                                totalLength += val.length
+                            }
 
-                        return index && array[index - 1] != "<spacer>" ?
-                            <span key={index}>
-                                <br /> {val}
-                            </span> :
-                            <span key={index}>{val}</span>
-                    })
-                }
-            </Linkify>
+                            return index && array[index - 1] != "<spacer>" ?
+                                <span key={index}>
+                                    <br /> {val}
+                                </span> :
+                                <span key={index}>{val}</span>
+                        })
+                    }
+                </Linkify>
+                &nbsp;
+            </span>
             {tooLong && !seeAll && !!descLengthThrottle &&
-                <label className="ml-1 font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
+                <label className="font-semibold hover:underline cursor-pointer text-gray-500" onClick={toggleSeeAll}>
                     { t("see_more") }
                 </label>
             }

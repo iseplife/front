@@ -61,7 +61,7 @@ const FirstFollow: React.FC = () => {
                 </div>
             </div>
             <div className="relative sm:rounded-xl overflow-hidden bg-neutral-100 w-full sm:w-auto  m-auto sm:my-14 h-full max-w-full">
-                <div className="overflow-auto h-full p-4 sm:p-8 ">
+                <div className="overflow-auto h-full p-4 sm:p-8 pb-8">
                     { loading ?
                         <ClubFollowSkeleton count={10}/> :
                         clubs.map(club => (
