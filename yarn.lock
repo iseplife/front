@@ -10484,6 +10484,7 @@ __metadata:
     react-calendar: ^3.7.0
     react-dom: ^18.2.0
     react-expanding-textarea: ^2.3.6
+    react-hook-form: ^7.34.2
     react-i18next: ^11.18.1
     react-leaflet: ^4.0.1
     react-linkify: ^1.0.0-alpha
@@ -15340,6 +15341,15 @@ __metadata:
   version: 2.0.4
   resolution: "react-fast-compare@npm:2.0.4"
   checksum: 06046595f90a4e3e3a56f40a8078c00aa71bdb064ddb98343f577f546aa22e888831fd45f009c93b34707cc842b4c637737e956fd13d6f80607ee92fb9cf9a1c
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.34.2":
+  version: 7.34.2
+  resolution: "react-hook-form@npm:7.34.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 485cde0248e668ad1845b927f9cc05b434c384141bb03bc143a7d7cc937eebf119c935114ccbfa397b463808283dab5b2334022fe5dba975402b201e601d6876
   languageName: node
   linkType: hard
 
