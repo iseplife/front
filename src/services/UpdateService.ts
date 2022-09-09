@@ -10,7 +10,12 @@ export default class UpdateService {
     })
     public init() {
         const pageOpenned = Date.now()
+        let updateShown = false
         this.broadcastChannel.addEventListener("message", (e) => {
+            if(updateShown)
+                return
+            updateShown = true
+
             if (e == "update") {
                 if (Date.now() - pageOpenned < 4_000)
                     setTimeout(() => {
@@ -24,16 +29,24 @@ export default class UpdateService {
                     })
             }
         })
-        CapacitorUpdater.addListener("updateAvailable", () => {
+        CapacitorUpdater.addListener("updateAvailable", (version) => {
+            if(updateShown)
+                return
+            updateShown = true
+            
             if (Date.now() - pageOpenned < 2_500)
                 setTimeout(() => 
-                    CapacitorUpdater.reload()
+                    CapacitorUpdater.set({
+                        version: version.version
+                    })
                 , 200)
             else if(isPlatform("android"))
                 message.info({
                     content: t("update_available").toString(),
                     duration: 10,
-                    onClick: () => CapacitorUpdater.reload()
+                    onClick: () => CapacitorUpdater.set({
+                        version: version.version
+                    })
                 })
         })
     }
