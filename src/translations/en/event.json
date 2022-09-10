@@ -10,27 +10,36 @@
 		"edited": "Event updated !"
 	},
 	"form": {
+		"titles": {
+			"general": "General information",
+			"additional": "Additional information",
+			"tickets": "Ticketing (optional)"
+		},
 		"label": {
-			"name": "Name",
+			"name": "Name of the event",
 			"description": "Description",
-			"location": "Location",
-			"price": "Price",
-			"ticket_url": "Link ticket office",
-			"target": "Audience",
+			"location": "Location (optional)",
+			"search_location": "Search for an address...",
+			"location_name": "Location name (optional)",
+			"price": "Price (€)",
+			"ticket_url": "Link",
+			"target": "Audience (optional)",
 			"published": "Publication",
-			"published_help": "Your event won't be visible before this date"
+			"published_help": "Your event won't be visible before this date",
+			"range": {
+				"start": "Start of the event",
+				"end": "End of the event"
+			}
 		},
 		"placeholder": {
-			"title": "Winning of 2018 football world cup",
-			"description": "Describe your event...",
+			"title": "Métamorphoz",
+			"description": "This event will be insane !",
 			"published": "Publication date",
-			"range": [
-				"Start date",
-				"End date"
-			],
 			"location": "Russia",
 			"club": "Organiser"
-		}
+		},
+		"edit": "Edit",
+		"create": "Create"
 	},
 	"day": "Day",
 	"month": "Month",
@@ -62,5 +71,6 @@
 		"before": "It was "
 	},
 	"no_position": "No location",
-	"participate": "Participate"
+	"participate": "Participate",
+	"loading": "Loading event"
 }

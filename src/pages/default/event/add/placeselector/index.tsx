@@ -2,6 +2,7 @@ import axios from "axios"
 import { debounce, throttle } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet"
 import { ExtendedMarker, PlaceResponse, PlaceResponseFeature } from "../../../../../data/event/types"
 import RecenterAutomatically from "./RecenterAutomatically"
@@ -9,13 +10,13 @@ import RecenterAutomatically from "./RecenterAutomatically"
 const GOUV_ADRESSE_ENDPOINT = "https://api-adresse.data.gouv.fr/search/?"
 
 const EventPlaceSelector = () => {
+    const {t} = useTranslation("event")
     const {register, setValue} = useFormContext()
     const search = useWatch({
         name: "psb",
     })
     const coordinates = useWatch({
         name: "coordinates",
-        defaultValue: []
     })
 
     const marker = useMemo(() => coordinates?.length ? {
@@ -33,7 +34,6 @@ const EventPlaceSelector = () => {
     const [results, setResults] = useState([] as {result: PlaceResponseFeature, click: ()=>void}[])
 
     const searchFunction = useCallback(debounce(async (search: string) => {
-        console.log("search "+search)
         const url = GOUV_ADRESSE_ENDPOINT + new URLSearchParams({"q": search, limit: "5"})
         const resp = (await axios.get<PlaceResponse>(url)).data
         setResults(resp.features.map(result => ({result, click: () => onClick(result)})))
@@ -58,7 +58,7 @@ const EventPlaceSelector = () => {
 
     return <>
         <div className="relative">
-            <input {...register("psb")} type="text" className="rounded-lg mt-3 px-2 py-2 w-full mb-1 flex-shrink-0" placeholder="Rechercher une adresse..." />
+            <input {...register("psb")} type="text" className="rounded-lg mt-3 px-2 py-2 w-full mb-1 flex-shrink-0" placeholder={t("form.label.search_location")} />
             {
                 results?.length > 0 && <div className="rounded-lg border border-neutral-200 shadow-xl absolute z-[9999] bg-white -left-5 w-[calc(100%+40px)] sm:w-auto sm:left-auto">
                     {
@@ -85,7 +85,7 @@ const EventPlaceSelector = () => {
             </>}
             <MapEventsInjector />
         </MapContainer>
-        <input type="text" className="rounded-lg border border-neutral-200 p-3 py-2 mt-2 w-full" placeholder="Nom du lieu (facultatif)" />
+        <input {...register("location")} type="text" className="rounded-lg border border-neutral-200 p-3 py-2 mt-2 w-full" placeholder={t("form.label.location_name")} />
     </>
 }
 

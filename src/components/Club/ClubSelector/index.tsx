@@ -1,5 +1,6 @@
 import { useCallback, useContext, useMemo, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { AvatarSizes } from "../../../constants/MediaSizes"
 import { AppContext } from "../../../context/app/context"
 import { Author } from "../../../data/request.type"
@@ -12,6 +13,7 @@ interface ClubSelectorProps {
 }
 
 const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
+    const {t} = useTranslation("event")
     const {state: {authors}} = useContext(AppContext)
     const {register, setValue} = useFormContext()
 
@@ -35,7 +37,7 @@ const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
                     clubEntity ? <div className="flex items-center">
                         <WebPAvatarPolyfill src={mediaPath(clubEntity.thumbnail, AvatarSizes.THUMBNAIL)} className="flex-shrink-0 w-6 h-6" />
                         <div className="ml-3 w-full line-clamp-1 text-ellipsis overflow-hidden text-indigo-400">{clubEntity.name}</div>
-                    </div> : <>Organisateur</>
+                    </div> : <>{t("form.placeholder.club")}</>
                 }
             </div>
         }
