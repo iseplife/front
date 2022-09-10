@@ -10,7 +10,7 @@ interface SubscriptionButtonProps {
     subscribed: boolean
     loading?: boolean
     className?: string
-    updateSubscription: (subscribed: boolean) => void
+    updateSubscription: (sub?: {extensive: boolean}) => void
 }
 
 const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subscribed, loading, className, updateSubscription }) => {
@@ -19,8 +19,8 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
 
     const handleSubscription = useCallback(() => {
         if (id != undefined) {
-            (subscribed ? unsubscribe : subscribe)(id, type).then(() => {
-                updateSubscription(!subscribed)
+            (subscribed ? unsubscribe : subscribe)(id, type, true).then(() => {
+                updateSubscription(!subscribed ? {extensive: true} : undefined)
                 feedsManager.outdateFeed(undefined)// Because main feed has now differents posts
             })
             setMinWidth(0)

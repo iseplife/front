@@ -13,9 +13,9 @@ type ClubFollowProps = {
 }
 const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
     const [subscribed, setSubscribed] = useState(false)
-    const subscriptionCallback = useCallback((subscribed: boolean) => {
-        setSubscribed(subscribed)
-        onSubscribe(subscribed)
+    const subscriptionCallback = useCallback((subscribed?: {extensive: boolean}) => {
+        setSubscribed(!!subscribed)
+        onSubscribe(!!subscribed)
     }, [])
 
     return (
