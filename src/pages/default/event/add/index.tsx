@@ -1,4 +1,4 @@
-import { Divider, message } from "antd"
+import { Divider } from "antd"
 import ClubSelector from "../../../../components/Club/ClubSelector"
 import Textarea from "react-expanding-textarea"
 import EventTypeSelector from "./typeselector"
@@ -13,6 +13,7 @@ import { EventForm } from "../../../../data/event/types"
 import { useHistory } from "react-router"
 import { entityPreloader } from "../../../../components/Optimization/EntityPreloader"
 import { eventsManager } from "../../../../datamanager/EventsManager"
+import { isAfter } from "date-fns"
 
 
 interface AddEventPageProps {
@@ -26,7 +27,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
     const methods = useForm({
         defaultValues
     })
-    const {register, setValue, formState, control, handleSubmit} = methods
+    const {register, setValue, getValues, formState, control, handleSubmit} = methods
 
     register("targets")
 
@@ -54,6 +55,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                 ticketURL: values.ticketURL,
                 coordinates: values.coordinates,
             }
+            console.log(values)
             if (eventId)
                 editEvent(eventId, formattedValues).then(res => {
                     if (res.status === 200){
@@ -69,6 +71,9 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                 })
         }
     }, [eventId])
+    const endDateValidation = useCallback((date: Date) => {
+        return isAfter(date, getValues().startsAt)
+    }, [])
 
     return <form onSubmit={handleSubmit(printValues)}>
         <FormProvider {...methods} >
@@ -95,10 +100,10 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                         </AddEventTextField>
                         <div className="grid grid-cols-2 gap-3">
                             <AddEventTextField title={t("form.label.range.start")}>
-                                <input {...register("startsAt", {required: true})} type="datetime-local" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" />
+                                <input {...register("startsAt", {required: true, valueAsDate: true})} type="datetime-local" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" />
                             </AddEventTextField>
                             <AddEventTextField title={t("form.label.range.end")}>
-                                <input {...register("endsAt", {required: true})} type="datetime-local" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" />
+                                <input {...register("endsAt", {required: true, valueAsDate: true, validate: endDateValidation})} type="datetime-local" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" />
                             </AddEventTextField>
                         </div>
                         <div className="flex justify-center">
