@@ -35,6 +35,14 @@ export default class EventsManager extends DataManager<EventPreview> {
             return events.filter(event => event.targets.includes(feed))
     }
 
+    public async getEventsByClub(clubId?: number): Promise<EventPreview[]>{
+        const events = (await this.getTable().toArray()).sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
+        if(clubId == undefined)
+            return events
+        else
+            return events.filter(event => event.club.id == clubId)
+    }
+
     public async getEventByEventFeedId(feedId: number): Promise<EventPreview> {
         return (await this.getTable().where("feedId").equals(feedId).first())!
     }

@@ -12,6 +12,7 @@ import { EventPreview } from "../../data/event/types"
 
 type IncomingEventsProps = {
     feed?: number
+    club?: number
     wait?: boolean
     allowCreate?: boolean
     className?: string
@@ -19,9 +20,9 @@ type IncomingEventsProps = {
 
 const cache = new ExpiryMap(1000 * 60 * 60 * 10)
 
-const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, allowCreate, className, wait = false}) => {
+const IncomingEvents: React.FC<IncomingEventsProps> = ({feed, club, allowCreate, className, wait = false}) => {
     const {t} = useTranslation("event")
-    const events = useLiveQuery(async () => !wait && await eventsManager.getEvents(feed), [feed, wait], cache.get(`${feed}`) as EventPreview[])
+    const events = useLiveQuery(async () => !wait && feed ? await eventsManager.getEvents(feed) : await eventsManager.getEventsByClub(club), [feed, wait, club], cache.get(`${feed}`) as EventPreview[])
 
     useEffect(() => {
         if(events)
