@@ -17,7 +17,7 @@ export default class EventsManager extends DataManager<EventPreview> {
         super("events", ["id", "feedId", "type", "title", "startsAt", "endsAt"], wsServerClient)
     }
 
-    protected async initData() {
+    public async initData() {
         const data = (await getIncomingEvents()).data
         await this.addBulkData(data)
         await this.getTable().bulkDelete(

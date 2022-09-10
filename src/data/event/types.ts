@@ -85,3 +85,30 @@ export type EventFilter = {
     publishedOnly: boolean
     adminVision: boolean
 }
+
+export interface PlaceResponse {
+    features: PlaceResponseFeature[]
+}
+export interface PlaceResponseFeature {
+    geometry: PlaceResponseFeatureGeometry
+    properties: PlaceResponseFeatureProperties
+}
+export interface PlaceResponseFeatureGeometry {
+    coordinates: [number, number]
+}
+export interface PlaceResponseFeatureProperties {
+    city:        string
+    citycode:    string
+    context:     string
+    housenumber: string
+    id:          string
+    importance:  number
+    label:       string
+    name:        string
+    postcode:    string
+    score:       number
+    street:      string
+    type:        string
+    x:           number
+    y:           number
+}

@@ -14,7 +14,6 @@ import {AvatarSizes} from "../../../constants/MediaSizes"
 import GalleriesPreview from "../../../components/Gallery/GalleriesPreview"
 import GalleriesTab from "../../../components/Gallery/GalleriesTab"
 import TabsSwitcher from "../../../components/Common/TabsSwitcher"
-import EventEditorModal from "../../../components/Event/EventEditorModal"
 import EventDescription from "../../../components/Event/EventDescription"
 import EventParticipateButton from "../../../components/Event/EventParticipateButton"
 import {EventTypeEmoji} from "../../../constants/EventType"
@@ -26,7 +25,7 @@ import {Subscription} from "../../../data/feed/types"
 import GalleryModalForm from "../../../components/Gallery/Form/GalleryModalForm"
 import SubscriptionHandler from "../../../components/Subscription"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
+import { faPencilAlt, faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
@@ -47,7 +46,7 @@ const Event: React.FC = () => {
     const [tab, setTab] = useState<number>(0)
 
     const cache = useMemo(() => !isNaN(id) ? entityPreloader.getEvent(id) : undefined, [id])
-    const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
+    const day = useMemo(() => (event ?? cache)?.startsAt?.getDate(), [(event ?? cache)?.startsAt])
     const feed = useMemo(() => (<Feed
         key={`efeed${id}`}
         id={(event?.feed ?? cache?.feedId)}
@@ -145,19 +144,39 @@ const Event: React.FC = () => {
                 <EventMapPlace position={event?.position} location={event?.location} loading={!event}/>
             </div>
             {event?.hasRight && (
-                <div
-                    className="absolute z-[1000] grid place-items-center top-2 right-2 sm:top-5 sm:right-5 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
-                >
-                    <EventEditorModal values={event} onSubmit={setEvent}/>
-                </div>
+                <Link to={`/edit-event/${event.id}`}>
+                    <button
+                        className="absolute z-[1000] grid place-items-center top-2 right-2 sm:top-5 sm:right-5 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
+                    >
+                        <div
+                            className="w-full h-full grid place-items-center"
+                            style={{width: "max-content"}}
+                        >
+                            <FontAwesomeIcon
+                                className="cursor-pointer text-white text-opacity-90 mx-1 group-hover:text-opacity-100 transition-colors"
+                                icon={faPencilAlt}
+                            />
+                        </div>
+                    </button>
+                </Link>
             )}
         </div>
         {event?.hasRight && (
-            <div
-                className="absolute z-10 mt-2 grid place-items-center right-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group sm:hidden"
-            >
-                <EventEditorModal values={event} onSubmit={setEvent}/>
-            </div>
+            <Link to={`/edit-event/${event.id}`}>
+                <button
+                    className="absolute z-10 mt-2 grid place-items-center right-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group sm:hidden"
+                >
+                    <div
+                        className="w-full h-full grid place-items-center"
+                        style={{width: "max-content"}}
+                    >
+                        <FontAwesomeIcon
+                            className="cursor-pointer text-white text-opacity-90 mx-1 group-hover:text-opacity-100 transition-colors"
+                            icon={faPencilAlt}
+                        />
+                    </div>
+                </button>
+            </Link>
         )}
         <div className="container mx-auto mt-4">
             <div className="flex items-center px-4">
@@ -168,12 +187,12 @@ const Event: React.FC = () => {
                         <div className="grid place-items-center h-full">{day}</div>
                     </div>
 
-                    {event && (
+                    {(event ?? cache)?.type && (
                         <div
                             className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12"
-                            title={t(`type.${event?.type}`)}
+                            title={t(`type.${(event ?? cache)?.type}`)}
                         >
-                            {EventTypeEmoji[event?.type]}
+                            {EventTypeEmoji[(event ?? cache)!.type!]}
                         </div>
                     )}
                 </div>

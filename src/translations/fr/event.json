@@ -10,27 +10,36 @@
 		"edited": "Évènement modifié !"
 	},
 	"form": {
+		"titles": {
+			"general": "Informations générales",
+			"additional": "Informations complémentaires",
+			"tickets": "Billetterie (facultatif)"
+		},
 		"label": {
-			"name": "Nom",
+			"name": "Nom de l'événement",
 			"description": "Description",
-			"location": "Lieu",
-			"price": "Prix",
-			"ticket_url": "Lien billetterie",
-			"target": "Audience",
+			"location": "Position (facultatif)",
+			"search_location": "Rechercher une adresse...",
+			"location_name": "Nom du lieu (facultatif)",
+			"price": "Prix (€)",
+			"ticket_url": "Lien",
+			"target": "Audience (facultatif)",
 			"published": "Publication",
-			"published_help": "Votre évènement ne sera pas visible avant cette date"
+			"published_help": "Votre évènement ne sera pas visible avant cette date",
+			"range": {
+				"start": "Début de l'événement",
+				"end": "Fin de l'événement"
+			}
 		},
 		"placeholder": {
-			"title": "Victoire Coupe du monde 2018",
-			"description": "Décrivez votre évènement...",
+			"title": "Métamorphoz",
+			"description": "Cet événement va être super !",
 			"published": "Date de publication",
-			"range": [
-				"Date de début",
-				"Date de fin"
-			],
 			"location": "Russie",
 			"club": "Organisateur"
-		}
+		},
+		"edit": "Modifier",
+		"create": "Créer"
 	},
 	"day": "Jour",
 	"month": "Mois",
@@ -62,5 +71,6 @@
 		"before": "C'était "
 	},
 	"no_position": "Sans position",
-	"participate": "Participer"
+	"participate": "Participer",
+	"loading": "Chargement de l'événement"
 }
