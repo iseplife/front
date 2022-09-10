@@ -46,7 +46,7 @@ const Event: React.FC = () => {
     const [tab, setTab] = useState<number>(0)
 
     const cache = useMemo(() => !isNaN(id) ? entityPreloader.getEvent(id) : undefined, [id])
-    const day = useMemo(() => event?.startsAt.getDate(), [event?.startsAt])
+    const day = useMemo(() => (event ?? cache)?.startsAt?.getDate(), [(event ?? cache)?.startsAt])
     const feed = useMemo(() => (<Feed
         key={`efeed${id}`}
         id={(event?.feed ?? cache?.feedId)}
@@ -187,12 +187,12 @@ const Event: React.FC = () => {
                         <div className="grid place-items-center h-full">{day}</div>
                     </div>
 
-                    {event && (
+                    {(event ?? cache)?.type && (
                         <div
                             className="absolute -top-2.5 -right-2.5 text-lg sm:text-2xl rotate-12"
-                            title={t(`type.${event?.type}`)}
+                            title={t(`type.${(event ?? cache)?.type}`)}
                         >
-                            {EventTypeEmoji[event?.type]}
+                            {EventTypeEmoji[(event ?? cache)!.type!]}
                         </div>
                     )}
                 </div>
