@@ -33,11 +33,11 @@ export default class UpdateService {
             if(updateShown)
                 return
             updateShown = true
-            
+            console.log(version)
             if (Date.now() - pageOpenned < 2_500)
                 setTimeout(() => 
                     CapacitorUpdater.set({
-                        version: version.version
+                        version: version.version ?? (version as any ).newVersion
                     })
                 , 200)
             else if(isPlatform("android"))
@@ -45,7 +45,7 @@ export default class UpdateService {
                     content: t("update_available").toString(),
                     duration: 10,
                     onClick: () => CapacitorUpdater.set({
-                        version: version.version
+                        version: version.version ?? (version as any ).newVersion
                     })
                 })
         })
