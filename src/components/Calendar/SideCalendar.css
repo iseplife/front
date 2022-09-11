@@ -8,7 +8,7 @@
     border: none !important;
 }
 .rbc-timeslot-group {
-    min-height: calc(100vh / 24 - 50px / 24) !important;
+    min-height: calc(100vh / 24 - 100px / 24) !important;
 }
 .rbc-time-header {
     position: sticky;

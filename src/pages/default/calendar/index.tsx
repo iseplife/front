@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
+import React, {useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {Calendar, dateFnsLocalizer, Formats, View} from "react-big-calendar"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
@@ -164,6 +164,10 @@ const Events: React.FC = () => {
 
     const toggleShowInfo = useCallback(() => setShowInfo(show => !show), [])
 
+    useLayoutEffect(() => {
+        document.querySelector(".rbc-time-content")?.scrollTo({top:window.innerHeight / 24 * 7 - 100 / 24 * 7})
+    }, [view])
+
     return (
         <CalendarContext.Provider value={{feeds}}>
             <div className="h-[calc(100%-110px)] flex flex-row flex-wrap bg-gray-100">
@@ -214,7 +218,6 @@ const Events: React.FC = () => {
                             eventWrapper: eventWrapper as any,
                             header: headerWrapper,
                         }}
-                        
                         className="rounded-lg w-full border-none"
                         onSelectEvent={goToEvent}
                         date={date}
