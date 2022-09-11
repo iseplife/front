@@ -13,9 +13,9 @@ type ClubFollowProps = {
 }
 const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
     const [subscribed, setSubscribed] = useState(false)
-    const subscriptionCallback = useCallback((subscribed: boolean) => {
-        setSubscribed(subscribed)
-        onSubscribe(subscribed)
+    const subscriptionCallback = useCallback((subscribed?: {extensive: boolean}) => {
+        setSubscribed(!!subscribed)
+        onSubscribe(!!subscribed)
     }, [])
 
     return (
@@ -31,7 +31,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
                             <div className="font-bold text-lg sm:text-xl sm:mb-0.5">{club.name}</div>
                             <div className="text-md text-neutral-400 mb-0.5 -mt-1 sm:hidden">Association</div>
                             <div className="text-sm text-black/[65%] font-normal leading-4 sm:w-72 lg:w-96 hidden sm:block">
-                                <CustomText description={club.description} descLengthThrottle={400} disableSpacers disableLinks />{/* TODO: ellipsis */}
+                                <CustomText description={club.description} descLengthThrottle={310} disableSpacers disableLinks />{/* TODO: ellipsis */}
                             </div>
                         </div>
                         <div className="mb-1.5 sm:mb-0 sm:h-16 flex sm:items-center ml-8">
@@ -45,7 +45,7 @@ const ClubFollow: React.FC<ClubFollowProps> = ({club, onSubscribe}) => {
                         </div>
                     </div>
                     <div className="ml-2 text-sm text-black/[65%] font-normal leading-4 sm:hidden">
-                        <CustomText description={club.description} descLengthThrottle={250} disableSpacers disableLinks />{/* TODO: ellipsis */}
+                        <CustomText lineClamp description={club.description} descLengthThrottle={210} disableSpacers disableLinks />{/* TODO: ellipsis */}
                     </div>
                 </div>
             </div>

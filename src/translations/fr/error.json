@@ -1,5 +1,6 @@
 {
   "no_connection_retry": "Il semble que vous ayez perdu votre connexion. Veuillez vérifier et réessayer.",
+  "error_fetch_event": "Une erreur est survenue lors du chargement de l'événement.",
   "apologize": "Désolé",
   "working_on_it": "Nous avons été notifié de l'erreur et travaillons sur sa resolution",
   "online": "De nouveau connecté !",

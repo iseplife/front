@@ -17,7 +17,7 @@ export default class EventsManager extends DataManager<EventPreview> {
         super("events", ["id", "feedId", "type", "title", "startsAt", "endsAt"], wsServerClient)
     }
 
-    protected async initData() {
+    public async initData() {
         const data = (await getIncomingEvents()).data
         await this.addBulkData(data)
         await this.getTable().bulkDelete(
@@ -33,6 +33,14 @@ export default class EventsManager extends DataManager<EventPreview> {
             return events
         else
             return events.filter(event => event.targets.includes(feed))
+    }
+
+    public async getEventsByClub(clubId?: number): Promise<EventPreview[]>{
+        const events = (await this.getTable().toArray()).sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
+        if(clubId == undefined)
+            return events
+        else
+            return events.filter(event => event.club.id == clubId)
     }
 
     public async getEventByEventFeedId(feedId: number): Promise<EventPreview> {

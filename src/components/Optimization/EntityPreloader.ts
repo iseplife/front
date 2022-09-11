@@ -15,6 +15,9 @@ export default class EntityPreloader {
     public getEvent(key: number) {
         return this.cache.get(key) as Partial<EventPreview & Omit<SearchItem, "type">> & (EventPreview | Omit<SearchItem, "type">)
     }
+    public invalidate(key: number){
+        this.cache.delete(key)
+    }
 }
 
 const entityPreloader = new EntityPreloader()

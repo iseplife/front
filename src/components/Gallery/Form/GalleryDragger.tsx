@@ -117,6 +117,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
             }
         }
 
+        console.log("do", responses, responses.map(r => r.data.id))
         afterSubmit(responses.map(r => r.data.id))
         setUploadingState(UploadState.FINISHED)
     }, [afterSubmit, images, club])

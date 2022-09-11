@@ -1,5 +1,6 @@
 {
   "no_connection_retry": "It seems that you have lost your connection. Please check and try again.",
+  "error_fetch_event": "An error happened while fetching the event.",
   "apologize": "Sorry",
   "working_on_it": "We have notified about it and will investigate the problem",
   "online": "You are back online !",

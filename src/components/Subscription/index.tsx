@@ -12,7 +12,6 @@ type SubscriptionHandlerProps = {
 }
 const SubscriptionHandler: React.FC<SubscriptionHandlerProps> = ({subscribable, subscription, type, onUpdate}) => {
     const extensiveCallback = useCallback((ext: boolean) => onUpdate({ extensive: ext }), [onUpdate])
-    const subCallback = useCallback((sub: boolean) => onUpdate(sub ? { extensive: false } : undefined), [onUpdate])
     return (
         <>
             {type != SubscribableType.GROUP && <SubscriptionButton
@@ -20,7 +19,7 @@ const SubscriptionHandler: React.FC<SubscriptionHandlerProps> = ({subscribable, 
                 id={subscribable}
                 subscribed={subscription != undefined}
                 type={type}
-                updateSubscription={subCallback}
+                updateSubscription={onUpdate}
             />}
             {subscription && subscribable &&
                 <SubscriptionExtensiveButton

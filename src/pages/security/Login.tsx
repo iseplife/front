@@ -79,7 +79,7 @@ const Login: React.FC = () => {
                             }).finally(() => setLoadingStatus(false))
                         },
                     },
-                ]
+                ],
             })
         }
     })

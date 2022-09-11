@@ -1,7 +1,7 @@
 import { apiClient } from "../data/http"
 import FingerprintJS from "@fingerprintjs/fingerprintjs"
 import { notificationManager } from "../datamanager/NotificationManager"
-import {getMessaging, getToken, isSupported, Messaging} from "firebase/messaging"
+import { getMessaging, getToken, isSupported, Messaging } from "firebase/messaging"
 import { firebaseApp } from "../data/firebase"
 import { PushNotifications } from "@capacitor/push-notifications"
 import { isIosApp, isWeb } from "../data/app"
@@ -14,27 +14,20 @@ class PushService {
 
     lastCheckSubbed = false
     firebaseMessaging?: Messaging
-
-    constructor() {
-        try{
-            isSupported().then(supported => {
-                if (supported) {
-                    this.firebaseMessaging = getMessaging(firebaseApp)
-                    return
-                }
-                throw new Error("Firebase Messaging not supported")
-            })
-        }catch(e){
-            console.debug("Firebase Messaging not supported !", e)
-        }
-    }
-
     capNotifRegistred = false
 
     async initData() {
-        notificationManager.setWebPushEnabled(!isWeb || "PushManager" in window)
+        const supported = await isSupported()
+        notificationManager.setWebPushEnabled(supported)
 
         if(isWeb){
+            if(supported && !this.firebaseMessaging)
+                try{
+                    this.firebaseMessaging = getMessaging(firebaseApp)
+                }catch(e){
+                    console.debug("Firebase Messaging not supported !", e)
+                }
+
             navigator.serviceWorker?.ready.then(async registration => {
                 console.debug("Service worker registred")
                 this.registration = registration

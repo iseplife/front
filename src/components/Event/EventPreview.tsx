@@ -7,6 +7,7 @@ import { EventTypeEmoji } from "../../constants/EventType"
 import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 import { AvatarSizes } from "../../constants/MediaSizes"
 import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
+import { isBefore } from "date-fns/esm"
 
 type EventProps = {
     event: PreviewType
@@ -22,6 +23,12 @@ const EventPreview: React.FC<EventProps> = ({ event }) => {
                 >
                     <div className="text-center pb-1">
                         <div className="w-12 h-12 md:w-14 md:h-14 relative z-10">
+                            {
+                                isBefore(event.startsAt, new Date()) && 
+                                <div className="absolute w-full h-full flex items-center justify-center">
+                                    <div className="z-0 translate- bg-red-500 absolute rounded-md animate-ping h-8 w-8 md:h-9 md:w-9" />
+                                </div>
+                            }
                             <div className="w-full h-full mx-auto sm:mx-0 text-2xl md:text-3xl rounded-md bg-neutral-100 shadow-sm overflow-hidden font-medium relative flex flex-col flex-shrink-0">
                                 <div className="bg-red-500 w-full h-4 text-xs text-neutral-100 leading-4 md:leading-5 md:text-sm md:h-5 flex-shrink-0  uppercase">
                                     {_format(event.startsAt, "MMM")}

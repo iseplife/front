@@ -1,5 +1,5 @@
 import {Divider, Empty, Select} from "antd"
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useRef, useState} from "react"
 import {globalSearch, searchClub, searchEvent, searchStudent} from "../../data/searchbar"
 import {Link, useHistory} from "react-router-dom"
 import {SearchItem, SearchItemType} from "../../data/searchbar/types"
@@ -12,6 +12,7 @@ import Loading from "../Common/Loading"
 import Axios, {CancelTokenSource} from "axios"
 import {handleRequestCancellation} from "../../util"
 import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
+import { RefSelectProps } from "antd"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -48,6 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      */
     const handleSelect = useCallback((value: string) => {
         setCurrentValue("")
+        ref.current?.blur()
     }, [])
 
     /**
@@ -143,8 +145,11 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
         )
     }
 
+    const ref = useRef<RefSelectProps>(null)
+
     return (
         <Select
+            ref={ref}
             showSearch
             showArrow={false}
             filterOption={false}

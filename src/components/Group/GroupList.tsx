@@ -30,7 +30,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                                 <div className="absolute bottom-1 box-border w-full pr-4 break-words">{g.name}</div>
                             </div>
                         </Link>
-                    )) : [1, 2, 3, 4, 5, 6].map(i =>
+                    )) : [0, 1, 2, 3, 4, 5].map(i =>
                         <div
                             key={i}
                             className={`
