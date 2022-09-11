@@ -18,6 +18,15 @@ export const EventTypeColor: {[index: string]: string} = {
     [EventType.MEETING]: "#f56565",
     [EventType.OTHER]: "#fdce59",
 }
+export const EventTypeInvertColor: {[index: string]: string} = {
+    [EventType.PARTY]: "#fff",
+    [EventType.AFTERWORK]: "#fff",
+    [EventType.CONFERENCE]: "#fff",
+    [EventType.WORKSHOP]: "#fff",
+    [EventType.FORMATION]: "#fff",
+    [EventType.MEETING]: "#fff",
+    [EventType.OTHER]: "#333",
+}
 
 export const EventTypeEmoji: {[index: string]: string} = {
     [EventType.PARTY]: "\uD83C\uDF89",

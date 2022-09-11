@@ -4,7 +4,7 @@ import React from "react"
 
 type DropdownPanelElementProps = {
     title: string
-    icon: IconProp
+    icon?: IconProp
     color?: "red" | "gray"
     onClick: () => void
 }
@@ -21,10 +21,12 @@ const DropdownPanelElement: React.FC<DropdownPanelElementProps> = (props) => {
             onClick={onClick}
             className={`flex items-center w-full px-3 py-2 cursor-pointer transition-colors ${DropdownPanelColors[color]}`}
         >
-            <FontAwesomeIcon
-                icon={icon}
-                className="mr-2.5"
-            /> {title}
+            {icon && 
+                <FontAwesomeIcon
+                    icon={icon}
+                    className="mr-2.5"
+                />
+            } {title}
         </div>
     )
 }

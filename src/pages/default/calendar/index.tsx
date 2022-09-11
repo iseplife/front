@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from "react"
-import {Calendar, dateFnsLocalizer, View} from "react-big-calendar"
-import {Radio} from "antd"
+import {Calendar, dateFnsLocalizer, Formats, View} from "react-big-calendar"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
@@ -12,15 +11,17 @@ import {EventTypes} from "../../../constants/EventType"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import {enUS, fr} from "date-fns/locale"
-import {EventWrapper} from "../../../components/Calendar/CalendarItem"
-import EventCreatorModal from "../../../components/Event/EventCreatorModal"
+import {EventWrapper, HeaderWrapper} from "../../../components/Calendar/CalendarItem"
 import {CalendarContext, CalendarContextType} from "../../../context/calendar/context"
 import {getUserFeed} from "../../../data/feed"
 import {AppContext} from "../../../context/app/context"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faArrowLeft, faArrowRight, faSyncAlt} from "@fortawesome/free-solid-svg-icons"
+import {faSyncAlt} from "@fortawesome/free-solid-svg-icons"
 import { useHistory } from "react-router-dom"
 import useAdminRole from "../../../hooks/useAdminRole"
+import { cFaArrowDown, cFaArrowNext } from "../../../constants/CustomFontAwesome"
+import DropdownPanel from "../../../components/Common/DropdownPanel"
+import DropdownPanelElement from "../../../components/Common/DropdownPanelElement"
 
 const initFilter = (): EventFilter => {
     return (
@@ -125,22 +126,9 @@ const Events: React.FC = () => {
     }, [])
 
 
-    const dateTitle: string = useMemo(() => {
-        let formatPattern: string
-        switch (view) {
-            case "agenda":
-            case "month":
-            case "work_week":
-            case "week":
-                formatPattern = "MMMM yyyy"
-                break
-            case "day":
-                formatPattern = "dd MMMM yyyy"
-                break
-        }
-
-        return format(date, formatPattern, {locale: locales[i18n.language]})
-    }, [date, view, i18n.language])
+    const dateTitle: string = useMemo(() =>
+        format(date, (view == "day" ? "d " : "") + (date.getFullYear() != new Date().getFullYear() ? "MMM yyyy" : "MMMM"), {locale: locales[i18n.language]})
+    , [date, view, i18n.language])
 
     const incrementDate = useCallback(() => {
         setDate(d => add(d, {
@@ -158,60 +146,86 @@ const Events: React.FC = () => {
         }))
     }, [view])
 
+    const formats: Formats = useMemo(() => {
+        return {
+            dayFormat: "E",
+            dateFormat: "dd"
+        }
+    }, [])
+
+    const eventWrapper = useMemo(() =>
+        EventWrapper(view)
+    , [view])
+    const headerWrapper = useMemo(() =>
+        HeaderWrapper(view)
+    , [view])
+
+    const [showInfo, setShowInfo] = useState(false)
+
+    const toggleShowInfo = useCallback(() => setShowInfo(show => !show), [])
+
     return (
         <CalendarContext.Provider value={{feeds}}>
-            <div className="h-full flex flex-row flex-wrap bg-gray-100">
-                <SideCalendar date={date} handleDate={(d) => setDate(d)}/>
-                <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 ">
+            <div className="h-[calc(100%-110px)] flex flex-row flex-wrap bg-gray-100">
+                <SideCalendar date={date} handleDate={setDate}/>
+                <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 h-full">
                     <div className="w-full flex flex-wrap justify-between items-center m-2">
                         <div className="flex items-center flex-grow justify-start text-gray-700 m-2">
-                            <h1 className="text-2xl font-extrabold my-auto text-current">
+                            <div className="hidden sm:flex -ml-4">
+                                <button onClick={decrementDate} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600">
+                                    <FontAwesomeIcon icon={cFaArrowNext} className="rotate-180" />
+                                </button>
+                                <button onClick={incrementDate} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1 mr-1">
+                                    <FontAwesomeIcon icon={cFaArrowNext} />
+                                </button>
+                            </div>
+                            <h1 className="text-xl font-semibold my-auto text-current capitalize">
                                 {dateTitle}
                             </h1>
-                            <div>
-                                <FontAwesomeIcon
-                                    icon={faArrowLeft}
-                                    className="my-auto mx-2 cursor-pointer"
-                                    onClick={decrementDate}
-                                />
-                                <FontAwesomeIcon
-                                    icon={faArrowRight}
-                                    className="my-auto mx-2 cursor-pointer"
-                                    onClick={incrementDate}
-                                />
-                            </div>
-                            {canCreateEvent && (
-                                <EventCreatorModal onSubmit={fetchMonthEvents}/>
-                            )}
+                            <button onClick={toggleShowInfo} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1">
+                                <FontAwesomeIcon icon={cFaArrowDown} className={`${showInfo && "rotate-180"} transition-transform`} />
+                            </button>
                         </div>
-                        <div>
+                        <div className="flex">
                             <FontAwesomeIcon
                                 icon={faSyncAlt}
                                 spin={loading}
                                 className="my-auto mx-3 cursor-pointer text-gray-500"
                                 onClick={fetchMonthEvents}
                             />
-                            <Radio.Group value={view}  onChange={(e) => setView(e.target.value)}>
-                                <Radio.Button value="day">{t("day")}</Radio.Button>
-                                <Radio.Button value="week">{t("week")}</Radio.Button>
-                                <Radio.Button value="month">{t("month")}</Radio.Button>
-                            </Radio.Group>
+                            <DropdownPanel
+                                panelClassName="right-4"
+                                icon={
+                                    <div className="px-3 py-1 border border-neutral-300 rounded-md text-base font-medium mr-4 text-neutral-700 hover:bg-neutral-200/70 active:bg-neutral-200 transition-colors">
+                                        {t(view)}
+                                        <FontAwesomeIcon icon={cFaArrowDown} className="text-xs ml-1.5 mb-0.5 text-neutral-600" />
+                                    </div>
+                                }
+                                closeOnClick
+                            >
+                                <DropdownPanelElement title={t("day")} onClick={() => setView("day")} />
+                                <DropdownPanelElement title={t("week")} onClick={() => setView("week")} />
+                                <DropdownPanelElement title={t("month")} onClick={() => setView("month")} />
+                            </DropdownPanel>
                         </div>
                     </div>
                     <Calendar
                         components={{
-                            eventWrapper: EventWrapper
+                            eventWrapper: eventWrapper as any,
+                            header: headerWrapper,
                         }}
-                        className="mb-12 bg-white shadow rounded-lg"
+                        
+                        className="rounded-lg w-full border-none"
                         onSelectEvent={goToEvent}
                         date={date}
-                        onNavigate={(d) => setDate(d)}
+                        onNavigate={setDate}
                         culture={i18n.language}
                         localizer={localizer}
                         events={filteredEvents}
                         toolbar={false}
-                        onView={(v) => setView(v)}
+                        onView={setView}
                         view={view}
+                        formats={formats}
                     />
                 </div>
             </div>

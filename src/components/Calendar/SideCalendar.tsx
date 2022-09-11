@@ -45,44 +45,42 @@ const SideCalendar: React.FC<SideCalendarProps> = ({date, handleDate}) => {
         })
     }
 
-    return (
-        <div id="side-cal" className="md:w-1/5 w-full shadow bg-white p-4">
-            <div className="sticky w-full" style={{top: "1rem"}}>
-                <Calendar
-                    className="hidden md:block"
-                    locale={i18n.language}
-                    value={date}
-                    onChange={(d: Date) => handleDate(Array.isArray(d) ? d[0] : d)}
-                />
-                <hr className="my-1"/>
-                <div className="mt-2">
-                    {isAdmin &&
-                    <>
-                        <div className="flex items-center">
-                            <h3 className="text-gray-600 uppercase mb-0">{t("admin_view")} :</h3>
-                            <Switch className="ml-4" size="small" checked={filter.adminVision} onChange={() => handleChange("TOGGLE_ADMIN", "")}/>
-                        </div>
-                        <div className="flex items-center">
-                            <h3 className="text-gray-600 uppercase mb-0">{t("published_only")} :</h3>
-                            <Switch className="ml-4" size="small" checked={filter.publishedOnly} onChange={() => handleChange("TOGGLE_PUBLISHED", "")}/>
-                        </div>
-                    </>
-                    }
-                    <hr className="my-1"/>
-                    <h3 className="text-gray-600 uppercase mt-2">Feed :</h3>
-                    <FeedFilter />
-                    <h3 className="text-gray-600 uppercase mt-2">Types :</h3>
-                    <div id="types-filter" className="flex flex-wrap">
-                        {Object.entries(filter.types).map(([type, visible]) => (
-                            <Checkbox className="mx-0 text-black whitespace-no-wrap" style={{minWidth: "50%"}} key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
-                                {EventTypeEmoji[type]+ " "+ t(`type.${type}`)}
-                            </Checkbox>
-                        ))}
+    return <div id="side-cal" className="hidden md:block md:w-1/5 w-full shadow bg-white">
+        <div className="sticky w-full p-4" style={{top: "1rem"}}>
+            <Calendar
+                className="hidden md:block"
+                locale={i18n.language}
+                value={date}
+                onChange={(d: Date) => handleDate(Array.isArray(d) ? d[0] : d)}
+            />
+            <hr className="my-1"/>
+            <div className="mt-2">
+                {isAdmin &&
+                <>
+                    <div className="flex items-center">
+                        <h3 className="text-gray-600 uppercase mb-0">{t("admin_view")} :</h3>
+                        <Switch className="ml-4" size="small" checked={filter.adminVision} onChange={() => handleChange("TOGGLE_ADMIN", "")}/>
                     </div>
+                    <div className="flex items-center">
+                        <h3 className="text-gray-600 uppercase mb-0">{t("published_only")} :</h3>
+                        <Switch className="ml-4" size="small" checked={filter.publishedOnly} onChange={() => handleChange("TOGGLE_PUBLISHED", "")}/>
+                    </div>
+                </>
+                }
+                <hr className="my-1"/>
+                <h3 className="text-gray-600 uppercase mt-2">Feed :</h3>
+                <FeedFilter />
+                <h3 className="text-gray-600 uppercase mt-2">Types :</h3>
+                <div id="types-filter" className="flex flex-wrap">
+                    {Object.entries(filter.types).map(([type, visible]) => (
+                        <Checkbox className="mx-0 text-black whitespace-no-wrap" style={{minWidth: "50%"}} key={type} onChange={() => handleChange("TOGGLE_TYPE", type)} checked={visible}>
+                            {EventTypeEmoji[type]+ " "+ t(`type.${type}`)}
+                        </Checkbox>
+                    ))}
                 </div>
             </div>
         </div>
-    )
+    </div>
 }
 
 export default SideCalendar
