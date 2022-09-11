@@ -1,5 +1,5 @@
 import axios from "axios"
-import { debounce, throttle } from "lodash"
+import { debounce } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -14,7 +14,7 @@ const EventPlaceSelector = () => {
     const {register, setValue} = useFormContext()
     const search = useWatch({
         name: "psb",
-    })
+    }) as string
     const coordinates = useWatch({
         name: "coordinates",
     })
@@ -60,7 +60,7 @@ const EventPlaceSelector = () => {
         <div className="relative">
             <input {...register("psb")} type="text" className="rounded-lg mt-3 px-2 py-2 w-full mb-1 flex-shrink-0" placeholder={t("form.label.search_location")} />
             {
-                results?.length > 0 && <div className="rounded-lg border border-neutral-200 shadow-xl absolute z-[9999] bg-white -left-5 w-[calc(100%+40px)] sm:w-auto sm:left-auto">
+                results?.length > 0 && search.length > 0 && <div className="rounded-lg border border-neutral-200 shadow-xl absolute z-[9999] bg-white -left-5 w-[calc(100%+40px)] sm:w-auto sm:left-auto">
                     {
                         results.map(result => <div onClick={result.click} className="w-full py-2 px-3 border-b border-neutral-200 cursor-pointer hover:bg-neutral-200 transition-colors">
                             {result.result.properties.label}
