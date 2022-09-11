@@ -42,14 +42,14 @@ export default class UpdateService {
                 , 200)
             else if(isPlatform("android")){
                 const last = localStorage.getItem("lastUpdates")
+                const { versions } = await CapacitorUpdater.list()
+                localStorage.setItem("lastUpdates", JSON.stringify(versions))
                 if(last) {
                     const lastVersions = JSON.parse(last) as string[]
-                    const { versions } = await CapacitorUpdater.list()
                     const newVersion = versions.find(version => !lastVersions.includes(version))
                     console.debug("[Updater] Old versions were", last, "and now", versions)
                     console.debug("[Updater] Selecting", newVersion, "for update")
                     if(newVersion){
-                        localStorage.setItem("lastUpdates", JSON.stringify(versions))
                         message.info({
                             content: t("update_available").toString(),
                             duration: 10,
@@ -62,5 +62,12 @@ export default class UpdateService {
                 }
             }
         })
+        
+        const last = localStorage.getItem("lastUpdates")
+        if(!last)
+            CapacitorUpdater.list().then(({versions}) => 
+                localStorage.setItem("lastUpdates", JSON.stringify(versions))
+            )
+        
     }
 }
