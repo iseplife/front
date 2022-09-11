@@ -144,7 +144,7 @@ const Event: React.FC = () => {
                 <EventMapPlace position={event?.position} location={event?.location} loading={!event}/>
             </div>
             {event?.hasRight && (
-                <Link to={`/edit-event/${event.id}`}>
+                <Link to={`/event/${event.id}/edit`}>
                     <button
                         className="absolute z-[1000] grid place-items-center top-2 right-2 sm:top-5 sm:right-5 ml-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group"
                     >
@@ -162,7 +162,7 @@ const Event: React.FC = () => {
             )}
         </div>
         {event?.hasRight && (
-            <Link to={`/edit-event/${event.id}`}>
+            <Link to={`/event/${event.id}/edit`}>
                 <button
                     className="absolute z-10 mt-2 grid place-items-center right-2 text-xl w-10 h-10 rounded-full bg-black/[25%] hover:bg-black/[35%] backdrop-blur-sm transition-colors cursor-pointer group sm:hidden"
                 >

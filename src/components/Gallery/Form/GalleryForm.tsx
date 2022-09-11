@@ -28,7 +28,6 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
             club: -1,
         },
         onSubmit: (values) => {
-            console.log("vals", values)
             createGallery(values).then(res => {
                 message.success(t("created"))
                 onSubmit({

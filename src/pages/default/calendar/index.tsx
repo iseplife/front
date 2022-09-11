@@ -20,6 +20,7 @@ import {AppContext} from "../../../context/app/context"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faArrowLeft, faArrowRight, faSyncAlt} from "@fortawesome/free-solid-svg-icons"
 import { useHistory } from "react-router-dom"
+import useAdminRole from "../../../hooks/useAdminRole"
 
 const initFilter = (): EventFilter => {
     return (
@@ -82,9 +83,11 @@ export const filteredEventsState = selector<CalendarEvent[]>({
 
 const Events: React.FC = () => {
     const {state} = useContext(AppContext)
+    const isAdmin = useAdminRole()
+
     const canCreateEvent: boolean = useMemo(() => (
-        Boolean(state.payload.clubsPublisher.length)
-    ), [state.payload.clubsPublisher.length])
+        isAdmin || Boolean(state.payload.clubsPublisher.length)
+    ), [isAdmin, state.payload.clubsPublisher.length])
 
     const [feeds, setFeeds] = useState<CalendarContextType["feeds"]>({})
     const setEvents = useSetRecoilState(eventsState)

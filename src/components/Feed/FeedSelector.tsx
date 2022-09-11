@@ -30,10 +30,7 @@ const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tag
         tagRender && ((props: CustomTagProps) => <Tag closable={props.closable} onClose={props.onClose}>{props.label}</Tag>)
     ), [tagRender])
 
-    console.log(defaultValues)
-
     useEffect(() => {
-        getUserFeed().then(console.log)
         getUserFeed().then(res =>
             setOptions(res.data.map(feed => ({
                 value: feed.id,

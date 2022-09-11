@@ -11,7 +11,7 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
     return (
         <>
             <div className="flex justify-center">
-                <Link to="/add-event">
+                <Link to="/event/create">
                     <button
                         className="
                             flex items-center mx-auto rounded-full bg-indigo-400 text-base

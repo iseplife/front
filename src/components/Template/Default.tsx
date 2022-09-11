@@ -31,15 +31,15 @@ const DefaultTemplate: React.FC = () => {
                         {/* Add your route here */}
                         <Route path="/notifications" strict component={NotificationsPage} />
                         <Route path="/discovery" component={Discovery} />
-                        <Route path="/calendar" component={Events} />
                         <Route path="/student/:id" component={Student} />
+                        <Route path="/calendar" component={Events} />
+                        <Route path="/event/create" component={AddEventPage} />
                         <Route path="/event/:id" component={Event} />
+                        <Route path="/event/:id/edit" component={EventEditPage} />
                         <Route path="/club/:id" component={Club} />
                         <Route path="/group/:id" component={Group} />
                         <Route path="/gallery/:id" component={Gallery} />
                         <Route path="/setting" component={Setting} />
-                        <Route path="/add-event" component={AddEventPage} />
-                        <Route path="/edit-event/:id" component={EventEditPage} />
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
 
