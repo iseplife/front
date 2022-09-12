@@ -52,8 +52,6 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
             )
         ]
 
-        this.checkAPIConnection()
-
         window.addEventListener("offline", this.handleOffline)
         window.addEventListener("online", this.handleOnline)
     }
@@ -66,19 +64,6 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
 
         window.removeEventListener("offline", this.handleOffline)
         window.removeEventListener("online", this.handleOnline)
-    }
-
-    checkAPIConnection = () => {
-        getAPIStatus().catch(() => {
-            this.props.history.push("/maintenance")
-        }).then(() => {
-            if (location.pathname == "/maintenance") {
-                const from = (window.history.state?.state as LocationState)?.from || {
-                    pathname: !this.context.state.payload || this.context.state.payload.lastConnection ? "/" : "/discovery"
-                }
-                this.props.history.push(from.pathname)
-            }
-        })
     }
 
     static getDerivedStateFromError(error: Error) {

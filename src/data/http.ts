@@ -25,3 +25,15 @@ export function getAPIStatus(): AxiosPromise {
         responseType: "text"
     })
 }
+
+export async function tryMultipleTimes<T, V>(tries: number, fnc: (...any: T[]) => Promise<V>, ...args: T[]): Promise<V> {
+    for(let i = tries;i--;){
+        try{
+            return await fnc(...args)
+        }catch(e){
+            if(!i)
+                throw e
+        }
+    }
+    throw new Error("unreachable")
+}

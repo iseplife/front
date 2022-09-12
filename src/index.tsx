@@ -9,7 +9,7 @@ import {
     Switch,
     Redirect,
 } from "react-router-dom"
-import {initializeAPIClient} from "./data/http"
+import {initializeAPIClient, tryMultipleTimes} from "./data/http"
 import Login from "./pages/security/Login"
 import {refresh} from "./data/security"
 import Template from "./components/Template"
@@ -42,6 +42,7 @@ import "antd/dist/antd.min.css"
 
 import { IonApp, setupIonicReact } from "@ionic/react"
 import {isLocalhost} from "./util"
+import { AxiosError } from "axios"
 
 setupIonicReact({
     mode: "ios"
@@ -78,6 +79,8 @@ const App: React.FC = () => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>()
 
     const [loading, setLoading] = useState<boolean>(true)
+    const [noConnection, setNoConnection] = useState<boolean>(false)
+
     const getUserInfos = useCallback(() => {
         Promise.all([getLoggedUser(), getAuthorizedAuthors()]).then(([userRes, authorsRes]) => {
             const socket = initWebSocket(wsURI)
@@ -101,13 +104,16 @@ const App: React.FC = () => {
                 const from = (window.history.state?.state as LocationState)?.from || {
                     pathname: state.payload.lastConnection ? "/" : "/discovery"
                 }
-                history.pushState(null, "", from.pathname)
+                window.history.pushState(null, "", from.pathname)
             }
+            setLoading(false)
         }).catch((e) => {
             console.error(e)
-            setLoggedIn(false)
-        }).finally(() => 
-            setLoading(false))
+            const err: AxiosError = e
+            if(err.response?.status != 401)
+                setNoConnection(true)
+            setLoading(false)
+        })
 
         return () => logoutWebSocket()
     }, [state.payload])
@@ -120,14 +126,16 @@ const App: React.FC = () => {
             if (state.payload.id == state.user?.id)
                 setLoading(false)
         } else if(localStorage.getItem("logged") === "1") {
-            refresh().then(res => {
+            tryMultipleTimes(2, refresh).then(res => {
                 dispatch({
                     type: AppActionType.SET_TOKEN,
                     token: res.data.token
                 })
                 setLoggedIn(true)
-            }).catch(() => {
-                setLoggedIn(false)
+            }).catch((e) => {
+                const err: AxiosError = e
+                if(err.response?.status != 401)
+                    setNoConnection(true)
                 setLoading(false)
             })
         } else {
@@ -157,7 +165,7 @@ const App: React.FC = () => {
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
-    return (loading ? <LoadingPage /> :
+    return (loading ? <LoadingPage /> : noConnection ? <Maintenance /> :
         <IonApp>
             <AppContext.Provider value={{state, dispatch}}>
                 <RecoilRoot>
@@ -167,8 +175,6 @@ const App: React.FC = () => {
                                 <HeightFix />
                                 <NotificationClickHandler />
                                 <Switch>
-                                    <Route path="/maintenance" component={Maintenance}/>
-
                                     <Route path="/login" component={Login}/>
                                     {redirectLogin}
                                 </Switch>
