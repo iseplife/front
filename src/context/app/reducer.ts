@@ -4,6 +4,7 @@ import {parseToken} from "../../data/security"
 import {apiClient} from "../../data/http"
 import {logoutWebSocket} from "../../realtime/websocket/WSServerClient"
 import GeneralEventType from "../../constants/GeneralEventType"
+import { datadogRum } from "@datadog/browser-rum"
 
 
 export const appContextReducer = (state: AppContextState, action: AppContextAction): AppContextState => {
@@ -13,8 +14,20 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
         case AppActionType.SET_STATE:
             return {...action.state}
         case AppActionType.SET_STUDENT:
+            datadogRum.setUser({
+                id: action.payload.id.toString(),
+                name: `${action.payload.firstName} ${action.payload.lastName}`,
+                promo: action.payload.promo,
+            })
+
             return {...state, user: action.payload}
         case AppActionType.SET_INITIALIZATION:
+            datadogRum.setUser({
+                id: action.payload.user.id.toString(),
+                name: `${action.payload.user.firstName} ${action.payload.user.lastName}`,
+                promo: action.payload.user.promo,
+            })
+
             return {
                 ...state,
                 user: action.payload.user,
@@ -23,6 +36,7 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
         case AppActionType.SET_LOGGED_OUT:
             delete apiClient.defaults.headers.common["Authorization"]
             localStorage.removeItem("logged")
+            datadogRum.clearUser()
 
             logoutWebSocket()
             window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
