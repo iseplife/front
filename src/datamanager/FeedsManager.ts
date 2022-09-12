@@ -16,6 +16,7 @@ import WSPSFeedPostCommentsUpdate from "../realtime/protocol/packets/server/WSPS
 import WSPSFeedPostPollChoiceUpdate from "../realtime/protocol/packets/server/WSPSFeedPostPollChoiceUpdate"
 import { Poll } from "../data/poll/types"
 import WSPSFeedPostOwnLikeUpdate from "../realtime/protocol/packets/server/WSPSFeedPostOwnLikeUpdate"
+import { isWeb } from "../data/app"
 
 type FeedsChannelMessage = {
     type: "ask"
@@ -102,62 +103,63 @@ export default class FeedsManager extends DataManager<ManagerPost> {
         this.reloading = !!reconnect
         let now = Date.now()
         let lastLoadLoaded = false
-        await (this.initLoadSyncWait = new Promise<void>(resolve => {
-            let responded = false
-            const id = Math.random()
+        if(isWeb)
+            await (this.initLoadSyncWait = new Promise<void>(resolve => {
+                let responded = false
+                const id = Math.random()
 
-            const handler = async (message: FeedsChannelMessage) => {
-                if (message.type == "response" && message.id == id
-                || (message.type == "ask" && message.id != id && message.reloadingId != this.reloadingPriorityId && message.reloadingId > this.reloadingPriorityId)) {
-                    responded = true
-                    this.channel.removeEventListener("message", handler)
+                const handler = async (message: FeedsChannelMessage) => {
+                    if (message.type == "response" && message.id == id
+                    || (message.type == "ask" && message.id != id && message.reloadingId != this.reloadingPriorityId && message.reloadingId > this.reloadingPriorityId)) {
+                        responded = true
+                        this.channel.removeEventListener("message", handler)
 
-                    if (!("doNotRenew" in message) || message.doNotRenew) {
-                        now = await this.getGeneralLastLoad() ?? 0
+                        if (!("doNotRenew" in message) || message.doNotRenew) {
+                            now = await this.getGeneralLastLoad() ?? 0
 
-                        console.debug("Another tab took control.")
-                        
-                        const handler2 = async (message: FeedsChannelMessage) => {
-                            if (message.type == "lastLoadAll" && message.id == pageId) {
-                                this.channel.removeEventListener("message", handler2)
-                                lastLoadLoaded = true
-                                for (const entry of message.feeds)
-                                    this.lastLoadIdByFeed[entry.feedId] = entry.lastLoadId
-                                resolve()
+                            console.debug("Another tab took control.")
+                            
+                            const handler2 = async (message: FeedsChannelMessage) => {
+                                if (message.type == "lastLoadAll" && message.id == pageId) {
+                                    this.channel.removeEventListener("message", handler2)
+                                    lastLoadLoaded = true
+                                    for (const entry of message.feeds)
+                                        this.lastLoadIdByFeed[entry.feedId] = entry.lastLoadId
+                                    resolve()
+                                }
                             }
+                            this.channel.addEventListener("message", handler2)
+                            this.channel.postMessage({
+                                type: "askLastLoadAll",
+                                id: pageId,
+                                targettedPageId: message.pageId,
+                            })
+
+                            setTimeout(() => {
+                                if (!lastLoadLoaded) {
+                                    this.channel.removeEventListener("message", handler2)
+                                    resolve()
+                                }
+                            }, reconnect ? 200 : 170)
                         }
-                        this.channel.addEventListener("message", handler2)
-                        this.channel.postMessage({
-                            type: "askLastLoadAll",
-                            id: pageId,
-                            targettedPageId: message.pageId,
-                        })
-
-                        setTimeout(() => {
-                            if (!lastLoadLoaded) {
-                                this.channel.removeEventListener("message", handler2)
-                                resolve()
-                            }
-                        }, reconnect ? 200 : 170)
                     }
                 }
-            }
-            this.channel.addEventListener("message", handler)
-            this.channel.postMessage({
-                type: "ask",
-                id,
-                pageId,
-                reloading: this.reloading,
-                reloadingId: this.reloadingPriorityId
-            })
+                this.channel.addEventListener("message", handler)
+                this.channel.postMessage({
+                    type: "ask",
+                    id,
+                    pageId,
+                    reloading: this.reloading,
+                    reloadingId: this.reloadingPriorityId
+                })
 
-            setTimeout(() => {
-                if (!responded) {
-                    this.channel.removeEventListener("message", handler)
-                    resolve()
-                }
-            }, reconnect ? 200 : 170)
-        }))
+                setTimeout(() => {
+                    if (!responded) {
+                        this.channel.removeEventListener("message", handler)
+                        resolve()
+                    }
+                }, reconnect ? 200 : 170)
+            }))
 
         this.initLoadSyncWait = undefined
         this.reloading = false
