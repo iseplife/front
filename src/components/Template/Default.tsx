@@ -34,8 +34,8 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/student/:id" component={Student} />
                         <Route path="/calendar" component={Events} />
                         <Route path="/event/create" component={AddEventPage} />
-                        <Route path="/event/:id" component={Event} />
                         <Route path="/event/:id/edit" component={EventEditPage} />
+                        <Route path="/event/:id" component={Event} />
                         <Route path="/club/:id" component={Club} />
                         <Route path="/group/:id" component={Group} />
                         <Route path="/gallery/:id" component={Gallery} />
