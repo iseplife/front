@@ -5,6 +5,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ant-design/icons-svg": "^4.2.1",
+    "@awesome-cordova-plugins/core": "^5.45.0",
+    "@awesome-cordova-plugins/device-orientation": "^5.45.0",
     "@capacitor/android": "4.1.0",
     "@capacitor/app": "4.0.1",
     "@capacitor/core": "4.1.0",
@@ -39,6 +41,7 @@
     "antd": "^4.21.6",
     "axios": "^0.27.2",
     "broadcast-channel": "^4.13.0",
+    "cordova-plugin-device-orientation": "^2.0.1",
     "craco-esbuild": "^0.5.1",
     "date-fns": "^2.28.0",
     "dexie": "^3.2.2",

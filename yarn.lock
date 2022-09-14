@@ -82,6 +82,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@awesome-cordova-plugins/core@npm:^5.45.0":
+  version: 5.45.0
+  resolution: "@awesome-cordova-plugins/core@npm:5.45.0"
+  dependencies:
+    "@types/cordova": latest
+  peerDependencies:
+    rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
+  checksum: 045cf864b8e7b99e1768d08c21cfb64aac0b2062355f8c3bbf6111794bb6ef87b0644f7fe33e0b3f8144f40d02e9b3a2beb76bda4cf6e3a6d92be3bcc9f8f220
+  languageName: node
+  linkType: hard
+
+"@awesome-cordova-plugins/device-orientation@npm:^5.45.0":
+  version: 5.45.0
+  resolution: "@awesome-cordova-plugins/device-orientation@npm:5.45.0"
+  dependencies:
+    "@types/cordova": latest
+  peerDependencies:
+    "@awesome-cordova-plugins/core": ^5.1.0
+    rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
+  checksum: f9b682b92626d48e9db5d68be1f1f4f821413dc70b86734f04733e0f2ca6f927d099667c9ad6019b0d51d734625765ee09ad13807398076c1c27e29ae5933858
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.16.0, @babel/code-frame@npm:^7.18.6, @babel/code-frame@npm:^7.8.3":
   version: 7.18.6
   resolution: "@babel/code-frame@npm:7.18.6"
@@ -3914,6 +3937,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cordova@npm:latest":
+  version: 0.0.34
+  resolution: "@types/cordova@npm:0.0.34"
+  checksum: 6dfce96c95276fdc35997d73c1fd33482ef6602217edf187ea97de8fcdc668646e6f80b4ed1f3e2926cffeca5958eab8ff258093040f65d803a6364f9134a234
+  languageName: node
+  linkType: hard
+
 "@types/eslint-scope@npm:^3.7.3":
   version: 3.7.4
   resolution: "@types/eslint-scope@npm:3.7.4"
@@ -6526,6 +6556,13 @@ __metadata:
   dependencies:
     toggle-selection: ^1.0.6
   checksum: 968ec7ec3d0cf3067542b63dd244ba5d05e743899d7a0361fb0a3130e731d277f5ea54ea4d90fc88cc66eea2e4c67dc2dd8698e4ed360f921af5aa7c60b889ac
+  languageName: node
+  linkType: hard
+
+"cordova-plugin-device-orientation@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "cordova-plugin-device-orientation@npm:2.0.1"
+  checksum: d63081c554ff41149d51b2aa4d4d6dc48cef96cc06b7e4a84d599aa5ec492c5e82837e69a1e528e7c662f693e3f9ab03672105d464876174f633d305bc5f3ae8
   languageName: node
   linkType: hard
 
@@ -10412,6 +10449,8 @@ __metadata:
   dependencies:
     "@ant-design/icons": ^4.7.0
     "@ant-design/icons-svg": ^4.2.1
+    "@awesome-cordova-plugins/core": ^5.45.0
+    "@awesome-cordova-plugins/device-orientation": ^5.45.0
     "@capacitor/android": 4.1.0
     "@capacitor/app": 4.0.1
     "@capacitor/cli": 4.1.0
@@ -10458,6 +10497,7 @@ __metadata:
     axios: ^0.27.2
     broadcast-channel: ^4.13.0
     browserslist-to-esbuild: ^1.1.1
+    cordova-plugin-device-orientation: ^2.0.1
     craco-esbuild: ^0.5.1
     cross-env: ^7.0.3
     customize-cra: ^1.0.0

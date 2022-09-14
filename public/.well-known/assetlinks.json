@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "fr.iseplive.iseplife",
+            "sha256_cert_fingerprints": [
+                "E4:8E:67:A3:E2:9C:4C:E3:E7:C5:E2:E2:71:51:77:72:18:24:7A:2E:41:E7:C3:B9:5E:72:F3:D6:72:14:4C:69"
+            ]
+        }
+    }
+]
