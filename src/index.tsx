@@ -43,7 +43,7 @@ import "antd/dist/antd.min.css"
 import { IonApp, setupIonicReact } from "@ionic/react"
 import {isLocalhost} from "./util"
 import { AxiosError } from "axios"
-import DeepLinks from "./components/DeepLinks"
+import {App as AppIonic, URLOpenListenerEvent} from "@capacitor/app"
 
 setupIonicReact({
     mode: "ios"
@@ -193,6 +193,18 @@ const App: React.FC = () => {
     //         </AppContext.Provider>
     //     </IonApp>
     // )
+
+    useEffect(() => {
+        try{
+            AppIonic.addListener("appUrlOpen", (event: URLOpenListenerEvent) => {
+                const slug = event.url.split(".fr").pop()
+                if (slug)
+                    window.location.pathname = slug
+            })
+        }catch(e){
+            console.error(e)
+        }
+    }, [])
     return (loading ? <LoadingPage /> : noConnection ? <Maintenance /> :
         <IonApp>
             <AppContext.Provider value={{state, dispatch}}>
