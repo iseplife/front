@@ -140,7 +140,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                 </div>
                 <button
                     onClick={downloadProgress == -1 ? downloadCallback : undefined}
-                    className="md:hidden absolute m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
+                    className="md:hidden absolute navbar m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
                 >
                     <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
                     <div className="
