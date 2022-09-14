@@ -26,7 +26,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="iseplife.fr" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="iseplife.fr" />
             </intent-filter>
 
         </activity>
