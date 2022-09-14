@@ -78,9 +78,9 @@ class PushService {
         return false
     }
     private async _updateSubscriptionOnServer(subscriptionKey: string) {
-        if(localStorage.getItem("pushTokenValue") == subscriptionKey)
+        if(localStorage.getItem("lastPushToken") == subscriptionKey)
             return
-        localStorage.setItem("pushTokenValue", subscriptionKey)
+        localStorage.setItem("lastPushToken", subscriptionKey)
         
         notificationManager.setSubscribed(true)
         this.lastCheckSubbed = true
