@@ -43,8 +43,7 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
 
-                        <Route path="/404" exact component={NotFound} />
-                        <Route path="*" render={() => <Redirect to="/404" />} />
+                        <Route path="*" render={NotFound} />
                     </Switch>
                 </div>
             </Navbar>

@@ -153,40 +153,62 @@ const App: React.FC = () => {
     const renderTemplate = useMemo(() => {
         let savedLocation: RouteComponentProps
         return ({location}: RouteComponentProps) => isLoggedIn ?
-            <Template/> :
-            <Redirect
-                to={{
-                    pathname: "/login",
-                    state: {from: savedLocation = savedLocation ?? location}
-                }}
-            />
+            <Template/> : <>
+                <Route path="/login" component={Login}/>
+                <Redirect
+                    to={{
+                        pathname: "/login",
+                        state: {from: savedLocation = savedLocation ?? location}
+                    }}
+                />
+            </>
     }, [isLoggedIn])
 
     const redirectLogin =  useMemo(() =>
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
-    return (
+    // return (
+    //     <IonApp>
+    //         <AppContext.Provider value={{state, dispatch}}>
+    //             <RecoilRoot>
+    //                 <Router>
+    //                     <ErrorInterceptor>
+    //                         <HeightFix />
+    //                         <NotificationClickHandler />
+    //                         <DeepLinks />
+    //                         {
+    //                             loading || noConnection ? 
+    //                                 <Switch>
+    //                                     <Route path="*" component={noConnection ? Maintenance : LoadingPage} />
+    //                                 </Switch>
+    //                                 : isLoggedIn != undefined ?
+    //                                     <Switch>
+    //                                         {redirectLogin}
+    //                                     </Switch> : <></>
+    //                         }
+    //                     </ErrorInterceptor>
+    //                 </Router>
+    //             </RecoilRoot>
+    //         </AppContext.Provider>
+    //     </IonApp>
+    // )
+    return (loading ? <LoadingPage /> : noConnection ? <Maintenance /> :
         <IonApp>
             <AppContext.Provider value={{state, dispatch}}>
                 <RecoilRoot>
-                    <Router>
-                        <ErrorInterceptor>
-                            <HeightFix />
-                            <NotificationClickHandler />
-                            <DeepLinks />
-                            <Switch>
-                                {
-                                    loading ? <Route path="*" component={LoadingPage} /> : noConnection ? <Route path="*" component={Maintenance} /> : 
-                                        <>
-                                            <Route path="/login" component={Login}/>
-                                            {redirectLogin}
-                                        </>
-                                }
-                            </Switch>
-                            
-                        </ErrorInterceptor>
-                    </Router>
+                    {isLoggedIn != undefined && (
+                        <Router>
+                            <ErrorInterceptor>
+                                <HeightFix />
+                                <NotificationClickHandler />
+                                <Switch>
+                                    <Route path="/login" component={Login}/>
+                                    {redirectLogin}
+                                </Switch>
+                            </ErrorInterceptor>
+                        </Router>
+                    )}
                 </RecoilRoot>
             </AppContext.Provider>
         </IonApp>
