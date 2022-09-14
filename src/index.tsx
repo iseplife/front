@@ -43,6 +43,7 @@ import "antd/dist/antd.min.css"
 import { IonApp, setupIonicReact } from "@ionic/react"
 import {isLocalhost} from "./util"
 import { AxiosError } from "axios"
+import DeepLinks from "./components/DeepLinks"
 
 setupIonicReact({
     mode: "ios"
@@ -165,22 +166,27 @@ const App: React.FC = () => {
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
-    return (loading ? <LoadingPage /> : noConnection ? <Maintenance /> :
+    return (
         <IonApp>
             <AppContext.Provider value={{state, dispatch}}>
                 <RecoilRoot>
-                    {isLoggedIn != undefined && (
-                        <Router>
-                            <ErrorInterceptor>
-                                <HeightFix />
-                                <NotificationClickHandler />
-                                <Switch>
-                                    <Route path="/login" component={Login}/>
-                                    {redirectLogin}
-                                </Switch>
-                            </ErrorInterceptor>
-                        </Router>
-                    )}
+                    <Router>
+                        <ErrorInterceptor>
+                            <HeightFix />
+                            <NotificationClickHandler />
+                            <DeepLinks />
+                            <Switch>
+                                {
+                                    loading ? <Route path="*" component={LoadingPage} /> : noConnection ? <Route path="*" component={Maintenance} /> : 
+                                        <>
+                                            <Route path="/login" component={Login}/>
+                                            {redirectLogin}
+                                        </>
+                                }
+                            </Switch>
+                            
+                        </ErrorInterceptor>
+                    </Router>
                 </RecoilRoot>
             </AppContext.Provider>
         </IonApp>
