@@ -59,5 +59,12 @@
   "choice_already_picked": "Vous avez déjà voté",
   "invalid_embed_type": "Type d'attachement renseigné invalide",
   "fail_deserialize_data": "Impossible de traduire la requête",
-  "fail_serialize_data": "Impossible de traduire la requête"
+  "fail_serialize_data": "Impossible de traduire la requête",
+  "club_description_too_long": "Description dépasse la longueur maximum autorisée (max: 2000 lettres)",
+  "event_title_too_long": "Titre dépasse la longueur maximum autorisée (max: 100 chars)",
+  "event_description_too_long": "Description dépasse la longueur maximum autorisée (max: 2000 lettres)",
+  "gallery_max_size_reached": "Galerie contient trop d'images (max: 2000)",
+  "gallery_description_too_long": "Description dépasse la longueur maximum autorisée (max: 3000 lettres)",
+  "post_description_too_long": "Post dépasse la longueur maximum autorisée (max: 3000 lettres)",
+  "comment_too_long": "Commentaire dépasse la longueur maximum autorisée (max: 2000 lettres)"
 }

@@ -73,6 +73,7 @@ const ClubEditForm: React.FC = () => {
                     name="description"
                     placeholder="Décrivez l'association en quelques lignes..."
                     required
+                    maxLength={2000}
                     rows={4}
                     value={formik.values.description}
                     onChange={formik.handleChange}
