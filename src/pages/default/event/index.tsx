@@ -51,7 +51,8 @@ const Event: React.FC = () => {
         key={`efeed${id}`}
         id={(event?.feed ?? cache?.feedId)}
         loading={!(event?.feed ?? cache?.feedId)}
-    />), [event?.feed ?? cache?.feedId])
+        allowPublication={(event?.allow_publications ?? false) || event?.hasRight}
+    />), [event?.feed ?? cache?.feedId, event?.allow_publications, event?.hasRight])
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?

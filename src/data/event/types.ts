@@ -22,6 +22,7 @@ export type Event = {
     hasRight: boolean
     club: ClubPreview
     feed: number
+    allow_publications: boolean
 }
 
 export type EventPreview = {
