@@ -286,6 +286,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [completeFormType])
 
     const alreadyLoaded = useRef<{[key: number]: boolean}>({})
+    const cacheFeedPosts = useRef<{[key: number]: React.ReactElement}>({})
 
     useEffect(() => {
         alreadyLoaded.current = {}
@@ -301,7 +302,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         const wasLoaded = alreadyLoaded.current[post.publicationDateId]
         if(!wasLoaded)
             alreadyLoaded.current[post.publicationDateId] = true
-        return <FeedPost
+        return cacheFeedPosts.current[post.publicationDateId] ??= <FeedPost
             feedId={id}
             data={post}
             onDelete={onPostRemoval}
