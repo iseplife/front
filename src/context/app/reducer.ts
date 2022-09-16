@@ -16,16 +16,12 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
         case AppActionType.SET_STUDENT:
             datadogRum.setUser({
                 id: action.payload.id.toString(),
-                name: `${action.payload.firstName} ${action.payload.lastName}`,
-                promo: action.payload.promo,
             })
 
             return {...state, user: action.payload}
         case AppActionType.SET_INITIALIZATION:
             datadogRum.setUser({
                 id: action.payload.user.id.toString(),
-                name: `${action.payload.user.firstName} ${action.payload.user.lastName}`,
-                promo: action.payload.user.promo,
             })
 
             return {
