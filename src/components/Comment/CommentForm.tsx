@@ -41,19 +41,19 @@ const CommentForm: React.FC<CommentFormProps> = ({handleUpload, focus, lightboxV
     })
 
     return (
-        <form onSubmit={formik.handleSubmit} className="rounded-full border border-solid border-gray-300 flex px-2 py-1 my-3">
+        <form onSubmit={formik.handleSubmit} className="rounded-[19px] border border-solid border-gray-300 flex px-2 py-1 my-3">
             <AuthorPicker callback={(author => formik.setFieldValue("asClub", author?.id))} compact className="h-7 -ml-2 -mr-1"/>
             <Textarea
                 id="message"
                 placeholder={t("write_comment")}
                 maxLength={2000}
-                className={`message border-none flex-1 bg-transparent w-full focus:outline-none ${lightboxView ? "text-white md:text-neutral-800" : "text-neutral-800"}`}
+                className={`message border-none flex-1 bg-transparent w-full focus:outline-none resize-none mt-0.5 ${lightboxView ? "text-white md:text-neutral-800" : "text-neutral-800"}`}
                 onChange={formik.handleChange}
                 value={formik.values.message}
                 ref={inputRef}
             />
 
-            <button type="submit" className="cursor-pointer text-gray-500 hover:text-gray-700 px-2 self-end mb-1.5" disabled={isSubmitting}>
+            <button type="submit" className="cursor-pointer text-gray-500 hover:text-gray-700 px-2" disabled={isSubmitting}>
                 <FontAwesomeIcon icon={isSubmitting ? faCircleNotch : faPaperPlane} spin={isSubmitting}/>
             </button>
         </form>
