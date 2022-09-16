@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react"
 import { feedsManager } from "../../datamanager/FeedsManager"
 import Post, { PostProps } from "../Post"
 
-type FeedPostProps = {
+export type FeedPostProps = {
     firstLoaded: number
     error: boolean
     setEditPost: (index: number) => void
@@ -10,6 +10,7 @@ type FeedPostProps = {
     isEdited: boolean
     loadAnimation?: boolean
 } & Omit<Omit<Omit<PostProps, "toggleEdition">, "isEdited">, "feedId">
+
 
 const FeedPost: React.FC<FeedPostProps> = (props) => {
     const p = props.data

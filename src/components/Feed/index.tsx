@@ -27,7 +27,7 @@ import {useLiveQuery} from "dexie-react-hooks"
 import {isAfter, isBefore} from "date-fns"
 import ExpiryMap from "expiry-map"
 import LoadingSpinner from "../Common/LoadingSpinner"
-import FeedPost from "./FeedPost"
+import FeedPost, { FeedPostProps } from "./FeedPost"
 import { Virtuoso } from "react-virtuoso"
 import { reportPost } from "../../data/post"
 
@@ -286,7 +286,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     }, [completeFormType])
 
     const alreadyLoaded = useRef<{[key: number]: boolean}>({})
-    const cacheFeedPosts = useRef<{[key: number]: React.ReactElement}>({})
+    const cacheFeedPosts = useRef<{[key: number]: [React.ReactElement, FeedPostProps]}>({})
 
     useEffect(() => {
         alreadyLoaded.current = {}
@@ -302,20 +302,46 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         const wasLoaded = alreadyLoaded.current[post.publicationDateId]
         if(!wasLoaded)
             alreadyLoaded.current[post.publicationDateId] = true
-        return cacheFeedPosts.current[post.publicationDateId] ??= <FeedPost
-            feedId={id}
-            data={post}
-            onDelete={onPostRemoval}
-            onUpdate={onPostUpdate}
-            onPin={onPostPin}
-            noPinned={noPinned}
-            isEdited={editPost === post.id}
-            error={error}
-            firstLoaded={firstLoaded}
-            setEditPost={setEditPost}
-            loadAnimation={!wasLoaded}
-            onReport={onReport}
+        const cached = cacheFeedPosts.current[post.publicationDateId]
+        const isEdited = editPost === post.id
+        if(cached) {
+            const props = cached[1]
+            if(
+                props.feedId === id &&
+                props.data === post &&
+                props.onDelete === onPostRemoval &&
+                props.onUpdate === onPostUpdate &&
+                props.onPin === onPostPin &&
+                props.noPinned === noPinned &&
+                props.isEdited === isEdited &&
+                props.error === error &&
+                props.firstLoaded === firstLoaded &&
+                props.setEditPost === setEditPost &&
+                props.loadAnimation === !wasLoaded &&
+                props.onReport === onReport
+            )
+                return cached[0]
+        }
+        const props = {
+            feedId: id,
+            data: post,
+            onDelete: onPostRemoval,
+            onUpdate: onPostUpdate,
+            onPin: onPostPin,
+            noPinned: noPinned,
+            isEdited: isEdited,
+            error: error,
+            firstLoaded: firstLoaded,
+            setEditPost: setEditPost,
+            loadAnimation: !wasLoaded,
+            onReport: onReport,
+        }
+        const feedPost = <FeedPost
+            key={`pid${post.publicationDateId}`}
+            {...props}
         />
+        cacheFeedPosts.current[post.publicationDateId] = [feedPost, props]
+        return feedPost
     }, [posts, onPostRemoval, onReport, onPostUpdate, onPostPin, noPinned, error, firstLoaded, setEditPost, editPost])
     const postKeyGenerator = useCallback((index: number) => 
         posts[index].publicationDateId
