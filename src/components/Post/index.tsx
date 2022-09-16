@@ -180,7 +180,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                     </div>
                 </div>
                 <div>
-                    <CustomText descLengthThrottle={1400} description={data.description} />
+                    <CustomText descLengthThrottle={1000} description={data.description} />
                     {data.embed &&
                         <div className="mt-2">
                             <Embed embed={data.embed} post={data} selected={selected} />
