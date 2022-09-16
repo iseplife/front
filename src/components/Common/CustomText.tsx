@@ -31,7 +31,7 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
                     <Link
                         to={{pathname: related ? currentUrl.pathname : text}}
                         target={related ? "_self" : "_blank"}
-                        key={key}
+                        key={`l${key}`}
                     >
                         {text.length > 31 ? text.substring(0, 31)+"..." : text}
                     </Link>
@@ -58,10 +58,10 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
                             }
 
                             return index && array[index - 1] != "<spacer>" ?
-                                <span key={index}>
+                                <span key={`s${index}`}>
                                     <br /> {val}
                                 </span> :
-                                <span key={index}>{val}</span>
+                                <span key={`s${index}`}>{val}</span>
                         })
                     }
                 </Linkify>
