@@ -80,7 +80,6 @@ class PushService {
     private async _updateSubscriptionOnServer(subscriptionKey: string) {
         if(localStorage.getItem("lastPushToken") == subscriptionKey)
             return
-        localStorage.setItem("lastPushToken", subscriptionKey)
         
         notificationManager.setSubscribed(true)
         this.lastCheckSubbed = true
@@ -88,6 +87,7 @@ class PushService {
             subscriptionKey: subscriptionKey,
             fingerprint: (await (await this.fingerpringJs).get()).visitorId
         })
+        localStorage.setItem("lastPushToken", subscriptionKey)
     }
 
 
