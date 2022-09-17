@@ -110,9 +110,7 @@ const App: React.FC = () => {
             setLoading(false)
         }).catch((e) => {
             console.error(e)
-            const err: AxiosError = e
-            if(err.response?.status != 401)
-                setNoConnection(true)
+            setNoConnection(true)
             setLoading(false)
         })
 
@@ -134,6 +132,7 @@ const App: React.FC = () => {
                 })
                 setLoggedIn(true)
             }).catch((e) => {
+                console.error(e)
                 const err: AxiosError = e
                 if(err.response?.status != 401)
                     setNoConnection(true)
@@ -209,18 +208,16 @@ const App: React.FC = () => {
         <IonApp>
             <AppContext.Provider value={{state, dispatch}}>
                 <RecoilRoot>
-                    {isLoggedIn != undefined && (
-                        <Router>
-                            <ErrorInterceptor>
-                                <HeightFix />
-                                <NotificationClickHandler />
-                                <Switch>
-                                    <Route path="/login" component={Login}/>
-                                    {redirectLogin}
-                                </Switch>
-                            </ErrorInterceptor>
-                        </Router>
-                    )}
+                    <Router>
+                        <ErrorInterceptor>
+                            <HeightFix />
+                            <NotificationClickHandler />
+                            <Switch>
+                                <Route path="/login" component={Login}/>
+                                {redirectLogin}
+                            </Switch>
+                        </ErrorInterceptor>
+                    </Router>
                 </RecoilRoot>
             </AppContext.Provider>
         </IonApp>
