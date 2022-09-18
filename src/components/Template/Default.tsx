@@ -18,6 +18,7 @@ import FirstFollow from "../FirstFollow"
 import { AppContext } from "../../context/app/context"
 import AddEventPage from "../../pages/default/event/add"
 import EventEditPage from "../../pages/default/event/edit"
+import WeiPage from "../../pages/default/wei"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -39,6 +40,8 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/club/:id" component={Club} />
                         <Route path="/group/:id" component={Group} />
                         <Route path="/gallery/:id" component={Gallery} />
+                        <Route path="/wei/:id" component={WeiPage} />
+                        <Route path="/wei" component={WeiPage} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
