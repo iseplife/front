@@ -1,4 +1,4 @@
-import { Divider } from "antd"
+import { Divider, Switch } from "antd"
 import ClubSelector from "../../../../components/Club/ClubSelector"
 import Textarea from "react-expanding-textarea"
 import EventTypeSelector from "./typeselector"
@@ -49,7 +49,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                 endsAt: new Date(values.endsAt),
                 club: values.club,
                 published: new Date(values.published) ?? new Date(),
-                targets: values.targets,
+                targets: values.targets ?? [],
                 location: values.location,
                 price: values.price,
                 ticketURL: values.ticketURL,
