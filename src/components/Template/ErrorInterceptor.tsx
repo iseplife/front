@@ -82,6 +82,11 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
 
     REGEX_UNSECURE_API_PREFIX = /^\/(auth|health)/
     axiosRequestInterceptor = async (request: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+        if(request.data)
+            for(const entry of Object.entries(request.data))
+                if(typeof entry[1] == "string")
+                    request.data[entry[0]] = entry[1].trim()
+
         if (!request.url?.match(this.REGEX_UNSECURE_API_PREFIX) && this.context.state.token_expiration - (AXIOS_TIMEOUT + 10_000) <= new Date().getTime()) {
             return new Promise<AxiosRequestConfig>((execute, reject) => {
                 delete apiClient.defaults.headers.common["Authorization"]
