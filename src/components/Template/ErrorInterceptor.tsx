@@ -168,6 +168,8 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                 case 500:
                     message.error(t(`error_encountered.${Math.floor(Math.random() * 3)}`))
                     return Promise.reject(error)
+                case 404:
+                    return Promise.reject(error)
                 default:
                     if (!auth) {
                         const errorMessage = ((error.response.data ?? {}) as { message: string }).message
