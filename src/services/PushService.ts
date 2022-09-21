@@ -17,7 +17,7 @@ class PushService {
     capNotifRegistred = false
 
     async initData() {
-        const supported = await isSupported()
+        const supported = !isWeb || await isSupported()
         notificationManager.setWebPushEnabled(supported)
 
         if(isWeb){
