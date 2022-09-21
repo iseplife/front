@@ -1,0 +1,24 @@
+{
+    "rooms": {
+        "choose": "Choose your bungalow!",
+        "explaination": "Once booked, you'll have a few minutes to get everyone in your bungalow to click on your link and accept the invitation!",
+        "description": {
+            "5": "Un bungalow avec 5 places, entre potes !",
+            "6": "Un bungalow avec 6 places, plus on est de fous, plus on rit !",
+            "7": "Un bungalow avec 7 places, pour les familles nombreuses",
+            "8": "Un bungalow avec 8 places, pour ramener toute sa classe dans le bungalow"
+        },
+        "book": "Book",
+        "title": "Bungalow for {{capacity}} people",
+        "remaining": "{{count}} remaining",
+        "no_available": "No bungalow of {{capacity}} is available at the moment! Try again in a few minutes...",
+        "already": "You're already in a bungalow",
+        "join": "Join",
+        "not_booked": "No longer reserved!",
+        "no_exist": "This bungalow no longer exists",
+        "delete": "Delete ⚠️",
+        "booked": "Booked 👍",
+        "copy": "Copy the link",
+        "copied": "Link copied !"
+    }
+}
