@@ -47,6 +47,7 @@ const WeiRoomsPage = () => {
                 setTypes(old => [...old.filter(type => !types.find(newType => newType.capacity == type.capacity)), ...types].sort((a, b) => a.capacity-b.capacity))
             }catch(e){
                 setError(true)
+                id = -1
             }
             setLoading(false)
             if(id != -1)

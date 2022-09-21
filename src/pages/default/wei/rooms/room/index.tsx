@@ -38,6 +38,7 @@ const WeiRoomPage = () => {
                     setUnknown(true)
                 else
                     setError(true)
+                tid = -1
             }
             if(tid != -1)
                 tid = window.setTimeout(fnc, 5000)
