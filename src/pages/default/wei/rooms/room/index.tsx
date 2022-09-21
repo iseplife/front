@@ -93,7 +93,7 @@ const WeiRoomPage = () => {
                     <div className="flex justify-between">
                         <div className="ml-2 sm:ml-4">
                             <div className="font-bold text-lg sm:text-xl sm:mb-0.5 leading-6 mb-1">{t("rooms.title", room)}</div>
-                            <div className="text-sm text-black/[65%] font-normal leading-4 sm:w-72 lg:w-96 hidden sm:block">
+                            <div className="text-sm text-black/[65%] font-normal leading-4 hidden sm:block">
                                 {t(`rooms.description.${room.capacity}`)}
                             </div>
                         </div>
