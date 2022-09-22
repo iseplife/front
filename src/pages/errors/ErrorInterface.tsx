@@ -3,13 +3,15 @@ import {useTranslation} from "react-i18next"
 
 interface ErrorInterfaceProps {
     error: string
+    btnText?: string
+    onClick?: () => void
 }
 
-const ErrorInterface: React.FC<ErrorInterfaceProps> = ({error}) => {
+const ErrorInterface: React.FC<ErrorInterfaceProps> = ({error, btnText, onClick: clickAction}) => {
     const {t} = useTranslation("common")
 
     const refresh = useCallback(() => {
-        window.location.reload()
+        (clickAction ?? window.location.reload)()
     }, [])
     return (
         <div className="w-full h-full ">
@@ -23,7 +25,7 @@ const ErrorInterface: React.FC<ErrorInterfaceProps> = ({error}) => {
                             text-white hover:bg-indigo-500 hover:shadow-sm transition-all
                         "
                     >
-                        {t("retry")}
+                        {btnText ?? t("retry")}
                     </button>
                 </div>
             </div>

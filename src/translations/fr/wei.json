@@ -15,10 +15,11 @@
         "already": "Vous êtes déjà dans un bungalow.",
         "join": "Rejoindre",
         "not_booked": "Plus réservé !",
-        "no_exist": "This bungalow no longer exists",
+        "no_exist": "Ce bungalow n'existe plus !",
         "delete": "Supprimer ⚠️",
         "booked": "Réservé 👍",
-        "copy": "Copier le lien",
-        "copied": "Lien copié !"
+        "copy": "Copier le lien d'invitation",
+        "copied": "Lien copié !",
+        "back": "Retour"
     }
 }

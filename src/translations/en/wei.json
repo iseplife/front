@@ -18,7 +18,8 @@
         "no_exist": "This bungalow no longer exists",
         "delete": "Delete ⚠️",
         "booked": "Booked 👍",
-        "copy": "Copy the link",
-        "copied": "Link copied !"
+        "copy": "Copy the invite link",
+        "copied": "Link copied !",
+        "back": "Back"
     }
 }

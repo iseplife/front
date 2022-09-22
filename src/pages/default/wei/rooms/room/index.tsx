@@ -4,7 +4,7 @@ import { message } from "antd"
 import { AxiosError } from "axios"
 import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router"
+import { useHistory, useParams } from "react-router"
 import { roomsPictures } from ".."
 import Loading from "../../../../../components/Common/Loading"
 import { WebPAvatarPolyfill } from "../../../../../components/Common/WebPPolyfill"
@@ -14,6 +14,7 @@ import { tryMultipleTimes } from "../../../../../data/http"
 import { deleteRoom, getRoom, joinRoom } from "../../../../../data/wei/rooms"
 import { WeiRoom } from "../../../../../data/wei/rooms/types"
 import { copyToClipboard, mediaPath } from "../../../../../util"
+import ErrorInterface from "../../../../errors/ErrorInterface"
 import Maintenance from "../../../../errors/Maintenance"
 import LoadingPage from "../../../../LoadingPage"
 
@@ -81,7 +82,11 @@ const WeiRoomPage = () => {
         message.info(t("rooms.copied"))
     }, [id])
 
-    return unknown ? <div className="text-center mt-5 text-xl">{t("rooms.no_exist")}</div> : error ? <Maintenance /> : !room ? <LoadingPage /> : <div className="container max-w-md mx-auto px-3">
+    const h = useHistory()
+
+    const backHome = useCallback(() => h.push("/wei/rooms"), [])
+
+    return unknown ?<ErrorInterface error={t("rooms.no_exist")} btnText={t("rooms.back")} onClick={backHome} /> : error ? <Maintenance /> : !room ? <LoadingPage /> : <div className="container max-w-md mx-auto px-3">
         <div className="mt-10 bg-white rounded-lg shadow-sm p-3 ">
             
             <div className="flex">
