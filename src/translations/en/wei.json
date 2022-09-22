@@ -20,6 +20,7 @@
         "booked": "Booked 👍",
         "copy": "Copy the invite link",
         "copied": "Link copied !",
-        "back": "Back"
+        "back": "Back",
+        "join_explaination": "All your friends have to join the bungalow in the given time for it to be reserved. Send the link to those who must join."
     }
 }

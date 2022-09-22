@@ -20,6 +20,7 @@
         "booked": "Réservé 👍",
         "copy": "Copier le lien d'invitation",
         "copied": "Lien copié !",
-        "back": "Retour"
+        "back": "Retour",
+        "join_explaination": "Tous tes amis doivent rejoindre le bungalow dans le temps imparti pour qu'il soit réservé. Envoie le lien à ceux qui doivent rejoindre."
     }
 }

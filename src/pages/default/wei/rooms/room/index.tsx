@@ -1,6 +1,6 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { message } from "antd"
+import { Divider, message } from "antd"
 import { AxiosError } from "axios"
 import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -111,11 +111,15 @@ const WeiRoomPage = () => {
                     </div>
                 </div>
             </div>
+            <Divider />
             <div className="text-center font-medium text-xl mt-2">
                 { room.booked ? t("rooms.booked") : reservedSeconds > 0 ? <>Réservé pour {Math.floor(reservedSeconds / 60)} mn {reservedSeconds % 60}s</> : t("rooms.not_booked")}
+                <div className="text-base font-normal text-left mt-1 text-neutral-600">
+                    {t("rooms.join_explaination")}
+                </div>
             </div>
 
-            <div className="h-0.5 bg-black/5 w-full my-5 rounded-full" />
+            <Divider>{room.members.length} / {room.capacity}</Divider>
 
             <div className="px-3">
                 {
