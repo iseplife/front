@@ -143,7 +143,7 @@ const WeiRoomPage = () => {
                 }</button>
             }
             {
-                admin && <button onClick={adminDelete} className="rounded shadow bg-red-400 px-10 py-2 text-lg font-medium text-white mx-auto block mt-5">{
+                !room.booked && admin && <button onClick={adminDelete} className="rounded shadow bg-red-400 px-10 py-2 text-lg font-medium text-white mx-auto block mt-5">{
                     joining ? <Loading /> : t("rooms.delete")
                 }</button>
             }
