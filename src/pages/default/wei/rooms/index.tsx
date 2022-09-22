@@ -3,9 +3,7 @@ import { AxiosError } from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router"
-import Loading from "../../../../components/Common/Loading"
 import LoadingSpinner from "../../../../components/Common/LoadingSpinner"
-import { tryMultipleTimes } from "../../../../data/http"
 import { bookRoom, getAvailableRooms, getMyRoom } from "../../../../data/wei/rooms"
 import { WeiAvailableRoom } from "../../../../data/wei/rooms/types"
 import Maintenance from "../../../errors/Maintenance"
@@ -43,7 +41,7 @@ const WeiRoomsPage = () => {
         let id = 0
         const fnc = async () => {
             try {
-                const types = (await tryMultipleTimes(3, getAvailableRooms)).data
+                const types = (await getAvailableRooms()).data
                 setTypes(old => [...old.filter(type => !types.find(newType => newType.capacity == type.capacity)), ...types].sort((a, b) => a.capacity-b.capacity))
             }catch(e){
                 setError(true)

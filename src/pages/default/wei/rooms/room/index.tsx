@@ -10,7 +10,6 @@ import Loading from "../../../../../components/Common/Loading"
 import { WebPAvatarPolyfill } from "../../../../../components/Common/WebPPolyfill"
 import { AvatarSizes } from "../../../../../constants/MediaSizes"
 import { AppContext } from "../../../../../context/app/context"
-import { tryMultipleTimes } from "../../../../../data/http"
 import { deleteRoom, getRoom, joinRoom } from "../../../../../data/wei/rooms"
 import { WeiRoom } from "../../../../../data/wei/rooms/types"
 import { copyToClipboard, mediaPath } from "../../../../../util"
@@ -32,7 +31,7 @@ const WeiRoomPage = () => {
         let tid = 0
         const fnc = async () => {
             try {
-                const res = await tryMultipleTimes(2, getRoom, id)
+                const res =await getRoom(id)
                 setRoom(res.data)
             }catch(e){
                 if((e as AxiosError).response?.status == 404)
