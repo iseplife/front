@@ -15,10 +15,11 @@ enum WeiRoomsStep {
 }
 
 export const roomsPictures: {[key: number]: string} = {
-    5: "cabane.svg",
-    6: "petite-maison.svg",
-    7: "grande-maison.svg",
-    8: "manoir.svg",
+    4: "cabane.svg",
+    5: "petite-maison.svg",
+    6: "grande-maison.svg",
+    7: "manoir.svg",
+    8: "hotel.svg",
 }
 
 const WeiRoomsPage = () => {

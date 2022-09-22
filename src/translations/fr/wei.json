@@ -3,10 +3,11 @@
         "choose": "Choisissez votre bungalow !",
         "explaination": "Une fois réservé, tu auras quelques minutes pour que tous les membres de ton bungalow cliquent sur ton lien et acceptent l'invitation !",
         "description": {
-            "5": "Un bungalow avec 5 places, entre potes !",
-            "6": "Un bungalow avec 6 places, plus on est de fous, plus on rit !",
-            "7": "Un bungalow avec 7 places, pour les familles nombreuses",
-            "8": "Un bungalow avec 8 places, pour ramener toute sa classe dans le bungalow"
+            "4": "Un bungalow avec 4 places, entre potes !",
+            "5": "Un bungalow avec 5 places, plus on est de fous, plus on rit !",
+            "6": "Un bungalow avec 6 places, pour les familles très nombreuses",
+            "7": "Un bungalow avec 7 places, pour ramener toute sa classe dans le bungalow",
+            "8": "Un bungalow avec 8 places, pourquoi pas ?"
         },
         "book": "Réserver",
         "title": "Bungalow de {{capacity}} places",
