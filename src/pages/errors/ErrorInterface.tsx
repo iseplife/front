@@ -11,7 +11,7 @@ const ErrorInterface: React.FC<ErrorInterfaceProps> = ({error, btnText, onClick:
     const {t} = useTranslation("common")
 
     const refresh = useCallback(() => {
-        (clickAction ?? window.location.reload)()
+        clickAction ? clickAction() : window.location.reload()
     }, [])
     return (
         <div className="w-full h-full ">
