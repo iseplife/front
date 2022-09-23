@@ -6,6 +6,10 @@ const config: CapacitorConfig = {
   webDir: 'build',
   bundledWebRuntime: false,
   "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": true,
+      "autoUpdateUrl": "https://api.iseplife.fr/health/update"
+    },
     "PushNotifications": {
       "presentationOptions": ["badge", "sound", "alert"]
     }
