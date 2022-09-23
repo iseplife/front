@@ -30,9 +30,9 @@ const WeiMapPage: React.FC = () => {
     useEffect(() => {
         Geolocation.checkPermissions().then(perm => {
             if(perm.location != "granted"){
-                Geolocation.requestPermissions({
+                (isWeb ? Geolocation.getCurrentPosition({enableHighAccuracy: true}) : Geolocation.requestPermissions({
                     permissions: ["location"]
-                }).then(granted => {
+                })).then(granted => {
                     Geolocation.checkPermissions().then(granted => {
                         setPermission(granted.location == "granted")
                     })
