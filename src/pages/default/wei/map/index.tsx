@@ -8,7 +8,7 @@ import ErrorInterface from "../../../errors/ErrorInterface"
 import { useTranslation } from "react-i18next"
 import LoadingPage from "../../../LoadingPage"
 import { WeiMapEntity, WeiMapFriend } from "../../../../data/wei/rooms/map/types"
-import { getFriendsLocation, getMapEntities, sendLocation } from "../../../../data/wei/rooms/map"
+import { getFriendsLocation, getMapBackground, getMapEntities, sendLocation } from "../../../../data/wei/rooms/map"
 import { useIonAlert } from "@ionic/react"
 import { debounce } from "lodash"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
@@ -208,14 +208,18 @@ const WeiMapPage: React.FC = () => {
         }
     }, [snapMap, sendPermission])
 
-    const sizee = 1.5
+    const [background, setBackground] = useState<{color: string, assetUrl: string}>()
+
+    useEffect(() => {
+        getMapBackground().then(res => setBackground(res.data))
+    }, [])
 
     return permission === null ? <LoadingPage /> : !permission ? <ErrorInterface error={t("map.no_perm")} /> : <div className="w-full h-full max-h-full max-w-full">
         <TransformWrapper>
-            <TransformComponent wrapperClass="w-full h-full relative bg-[#ceead6]">
+            <TransformComponent wrapperClass="w-full h-full relative" wrapperStyle={{background: background?.color}}>
                 <div style={{width: size.w, height: size.h}} className="relative" >
-                    <img src="/img/wei/map/bg.png" alt="bg" className="w-full h-full" />
-                    <img src="/img/wei/map/mapV2.svg" alt="bg" className="absolute opacity-50" style={{top: 20, left: 40, width: 365 * sizee, height: 526 * sizee}}  />
+                    <img src={background?.assetUrl} alt="Background" />
+                    {/* <img src="/img/wei/map/mapV2.svg" alt="Background" className="absolute opacity-50" style={{top: 30, left: 40, width: 365 * sizee, height: 526 * sizee}}  /> */}
 
                     {
                         entities.map(entity => <div className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{background: `url(${entity.assetUrl})`, left: entity.x, top: entity.y, width: entity.size, height: entity.size}} />)
