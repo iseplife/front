@@ -258,14 +258,15 @@ const WeiMapPage: React.FC = () => {
         <TransformWrapper>
             <TransformComponent wrapperClass="w-full h-full relative" wrapperStyle={{background: background?.color}}>
                 <div style={{width: size.w, height: size.h}} className="relative" >
-                    <img src={background?.assetUrl} alt="Background" />
+                    <img src={background?.assetUrl} alt="Background" draggable={false} />
                     {/* <img src="/img/wei/map/mapV2.svg" alt="Background" className="absolute opacity-50" style={{top: 30, left: 40, width: 365 * sizee, height: 526 * sizee}}  /> */}
 
                     {
                         entities.map(entity => entity.disappearDate && isPast(entity.disappearDate) ? <></> : <div 
-                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{background: `url(${entity.assetUrl})`, left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
+                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
                         >
-                            {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 font-medium rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"m"}</div>}
+                            <img src={entity.assetUrl} alt="Image" className="w-full h-full"/>
+                            {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"m"}</div>}
                         </div>)
                     }
 
