@@ -23,6 +23,7 @@ import WeiRoomsPage from "../../pages/default/wei/rooms"
 import WeiRoomPage from "../../pages/default/wei/rooms/room"
 import WeiMapPage from "../../pages/default/wei/map"
 import WeiMapOverlay from "../../pages/default/wei/map/WeiMapOverlay"
+import WeiMapBackground from "../../pages/default/wei/WeiMapBackground"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -58,6 +59,7 @@ const DefaultTemplate: React.FC = () => {
             </Navbar>
             <NotificationsOverlay />
             <WeiMapOverlay />
+            <WeiMapBackground />
             { !user.didFirstFollow && <FirstFollow /> }
         </div>
     )

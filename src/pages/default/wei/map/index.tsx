@@ -1,6 +1,6 @@
 import {Geolocation} from "@capacitor/geolocation"
 import {DeviceOrientation, DeviceOrientationCompassHeading} from "@awesome-cordova-plugins/device-orientation"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { generatePositionUtil } from "../../../../data/wei/rooms/map/utils"
 import { isWeb } from "../../../../data/app"
 import { isPlatform } from "@ionic/core"
@@ -8,7 +8,7 @@ import ErrorInterface from "../../../errors/ErrorInterface"
 import { useTranslation } from "react-i18next"
 import LoadingPage from "../../../LoadingPage"
 import { WeiMapEntity, WeiMapFriend } from "../../../../data/wei/rooms/map/types"
-import { getFriendsLocation, getMapBackground, getMapEntities, sendLocation } from "../../../../data/wei/rooms/map"
+import { getFriendsLocation, getMapBackground, getMapEntities } from "../../../../data/wei/rooms/map"
 import { useIonAlert } from "@ionic/react"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { WebPAvatarPolyfill } from "../../../../components/Common/WebPPolyfill"
@@ -16,6 +16,7 @@ import { mediaPath } from "../../../../util"
 import { AvatarSizes } from "../../../../constants/MediaSizes"
 import { differenceInHours, differenceInMinutes, isPast } from "date-fns"
 import { isFuture } from "date-fns/esm"
+import { setWeiBackgroundGeoPerm, setWeiBackgroundSendPerm } from "../WeiMapBackground"
 
 const size = {w: 730, h: 786}
 
@@ -44,30 +45,40 @@ const WeiMapPage: React.FC = () => {
     useEffect(() => {
         if(!permission)
             return
+
+        setWeiBackgroundGeoPerm(true)
         
         const deviceorientation = isWeb || isPlatform("android")
+
+        const unWatchOnChange: (() => void)[] = []
         
-        Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
+        const geoWatchId = Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
             if(pos){
                 setGeoPos([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy])
                 console.debug(pos.coords)
             }
         })
+        unWatchOnChange.push(async () => Geolocation.clearWatch({id: await geoWatchId}))
 
         if(deviceorientation){
-            window.addEventListener("deviceorientation", event => {
+            const fnc = (event: DeviceOrientationEvent) => {
                 setHeading({
                     headingAccuracy: 0,
                     magneticHeading: -event.alpha!,
                     trueHeading: -event.alpha!,
                     timestamp: 0,
                 })
-            })
+            }
+            window.addEventListener("deviceorientation", fnc)
+            unWatchOnChange.push(() => window.removeEventListener("deviceorientation", fnc))
         }
-        else
-            DeviceOrientation.watchHeading({frequency: 50}).subscribe(heading => {
+        else {
+            const sub = DeviceOrientation.watchHeading({frequency: 50}).subscribe(heading => {
                 setHeading(heading)
             })
+            unWatchOnChange.push(() => sub.unsubscribe())
+        }
+        return () => unWatchOnChange.forEach(fnc => fnc())
     }, [permission])
 
     const [headingImage, setHeadingImage] = useState<string>()
@@ -157,38 +168,10 @@ const WeiMapPage: React.FC = () => {
 
     const snapMap = localStorage.getItem("showSnapMap2022") == "true"
     const [sendPermission, setSendPermission] = useState(localStorage.getItem("snapmap2022permission"))
-
-    const debouncedUpdateServerPos = useMemo(() => {
-        let lastTime = 0
-        let timingWaiting = 0
-        return (pos: [number, number, number]) => {
-            clearTimeout(timingWaiting)
-            const now = Date.now()
-            if(now - lastTime > 30000 ){
-                lastTime = now
-                console.debug("send pos")
-                sendLocation(pos[0], pos[1])
-            } else {
-                timingWaiting = window.setTimeout(() => {
-                    lastTime = Date.now()
-                    console.debug("send pos")
-                    sendLocation(pos[0], pos[1])
-                }, lastTime + 30_000 - now)
-            }
-            sendLocation(pos[0], pos[1])
-        }
-    }, [])
-
     const [friendPositions, setFriendPositions] = useState<(WeiMapFriend & {x: number, y: number})[]>([])
 
     useEffect(() => {
-        if(geoPos[0]/* && geoPos[2] < 50*/ && sendPermission == "true"){
-            console.debug("init send")
-            debouncedUpdateServerPos(geoPos)
-        }
-    }, [geoPos, sendPermission])
-
-    useEffect(() => {
+        setWeiBackgroundSendPerm(sendPermission == "true")
         if(sendPermission != "true")
             return
         let id = 0
@@ -266,7 +249,7 @@ const WeiMapPage: React.FC = () => {
                             className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
                         >
                             <img src={entity.assetUrl} alt="Image" className="w-full h-full"/>
-                            {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"m"}</div>}
+                            {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-0.5 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"mn"}</div>}
                         </div>)
                     }
 
