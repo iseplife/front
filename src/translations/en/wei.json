@@ -22,5 +22,8 @@
         "copied": "Link copied !",
         "back": "Back",
         "join_explaination": "All your friends have to join the bungalow in the given time for it to be reserved. Send the link to those who must join."
+    },
+    "map": {
+        "no_perm": "Permission to access the precise location is required for access to this map."
     }
 }

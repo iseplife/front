@@ -75,6 +75,7 @@
     "react-virtuoso": "^2.17.2",
     "react-zoom-pan-pinch": "^2.1.3",
     "recoil": "^0.7.4",
+    "rxjs": "^7.5.6",
     "tailwindcss-textshadow": "^2.1.3",
     "webp-hero": "^0.0.2"
   },
