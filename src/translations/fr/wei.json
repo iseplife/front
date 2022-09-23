@@ -23,5 +23,8 @@
         "copied": "Lien copié !",
         "back": "Retour",
         "join_explaination": "Tous tes amis doivent rejoindre le bungalow dans le temps imparti pour qu'il soit réservé. Envoie le lien à ceux qui doivent rejoindre."
+    },
+    "map": {
+        "no_perm": "La permission d'accès à la localisation précise est nécessaire pour l'accès à cette carte."
     }
 }

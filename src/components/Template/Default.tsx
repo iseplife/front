@@ -21,6 +21,8 @@ import EventEditPage from "../../pages/default/event/edit"
 import WeiPage from "../../pages/default/wei"
 import WeiRoomsPage from "../../pages/default/wei/rooms"
 import WeiRoomPage from "../../pages/default/wei/rooms/room"
+import WeiMapPage from "../../pages/default/wei/map"
+import WeiMapOverlay from "../../pages/default/wei/map/WeiMapOverlay"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -44,7 +46,7 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/gallery/:id" component={Gallery} />
                         <Route path="/wei/rooms/:id" component={WeiRoomPage} />
                         <Route path="/wei/rooms" component={WeiRoomsPage} />
-                        <Route path="/wei/:id" component={WeiPage} />
+                        <Route path="/wei/map" component={WeiMapPage} />
                         <Route path="/wei" component={WeiPage} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />
@@ -55,6 +57,7 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
             <NotificationsOverlay />
+            <WeiMapOverlay />
             { !user.didFirstFollow && <FirstFollow /> }
         </div>
     )
