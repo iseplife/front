@@ -14,7 +14,7 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { WebPAvatarPolyfill } from "../../../../components/Common/WebPPolyfill"
 import { mediaPath } from "../../../../util"
 import { AvatarSizes } from "../../../../constants/MediaSizes"
-import { differenceInHours, differenceInMinutes } from "date-fns"
+import { differenceInHours, differenceInMinutes, isPast } from "date-fns"
 import { isFuture } from "date-fns/esm"
 
 const size = {w: 730, h: 786}
@@ -137,6 +137,11 @@ const WeiMapPage: React.FC = () => {
         }
     }, [])
 
+    useEffect(() => {
+        const interval = setInterval(() => setEntities(ent => [...ent]), 30000)
+        return () => clearInterval(interval)
+    }, [])
+
     const openPopup = useCallback((entity: WeiMapEntity) => {
         presentAlert({
             header: entity.name,
@@ -244,7 +249,6 @@ const WeiMapPage: React.FC = () => {
     useEffect(() => {
         getMapBackground().then(res => setBackground(res.data))
     }, [])
-    console.log(entities)
 
     return permission === null ? <LoadingPage /> : !permission ? <ErrorInterface error={t("map.no_perm")} /> : <div className="w-full h-full max-h-full max-w-full relative">
         <div onClick={toggleWeiMap} className="bg-white/50 backdrop-blur shadow-lg shadow-black/[5%] px-4 py-2 absolute top-3 left-1/2 -translate-x-1/2 z-50 rounded-full font-medium cursor-pointer text-center w-[80%] sm:w-auto max-w-[80%] text-[15px]">
@@ -258,7 +262,7 @@ const WeiMapPage: React.FC = () => {
                     {/* <img src="/img/wei/map/mapV2.svg" alt="Background" className="absolute opacity-50" style={{top: 30, left: 40, width: 365 * sizee, height: 526 * sizee}}  /> */}
 
                     {
-                        entities.map(entity => <div 
+                        entities.map(entity => entity.disappearDate && isPast(entity.disappearDate) ? <></> : <div 
                             className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{background: `url(${entity.assetUrl})`, left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
                         >
                             {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 font-medium rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"m"}</div>}

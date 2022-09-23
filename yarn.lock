@@ -10537,6 +10537,7 @@ __metadata:
     react-virtuoso: ^2.17.2
     react-zoom-pan-pinch: ^2.1.3
     recoil: ^0.7.4
+    rxjs: ^7.5.6
     serve: ^14.0.1
     tailwind-scrollbar: ^1.3.1
     tailwindcss: ^3.1.6
@@ -16225,6 +16226,15 @@ __metadata:
   dependencies:
     tslib: ^1.9.0
   checksum: bc334edef1bb8bbf56590b0b25734ba0deaf8825b703256a93714308ea36dff8a11d25533671adf8e104e5e8f256aa6fdfe39b2e248cdbd7a5f90c260acbbd1b
+  languageName: node
+  linkType: hard
+
+"rxjs@npm:^7.5.6":
+  version: 7.5.6
+  resolution: "rxjs@npm:7.5.6"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: fc05f01364a74dac57490fb3e07ea63b422af04017fae1db641a009073f902ef69f285c5daac31359620dc8d9aee7d81e42b370ca2a8573d1feae0b04329383b
   languageName: node
   linkType: hard
 
