@@ -8,6 +8,7 @@ export interface WeiMapEntity {
     lat: number
     lng: number
     size: number
+    disappearDate: Date
 }
 export interface WeiMapFriend {
     lat: number
