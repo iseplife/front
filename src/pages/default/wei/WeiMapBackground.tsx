@@ -53,7 +53,7 @@ const WeiMapBackground = () => {
     }, [geoPerm])
 
     useEffect(() => {
-        if(geoPos[0] && geoPos[2] < 60 && sendPermission){
+        if(geoPos[0] && /*geoPos[2] < 140 &&*/ sendPermission){
             console.debug("init send")
             debouncedUpdateServerPos(geoPos)
         }
