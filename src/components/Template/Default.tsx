@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import {Redirect, Route, Switch} from "react-router-dom"
+import {Route, Switch} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -22,8 +22,6 @@ import WeiPage from "../../pages/default/wei"
 import WeiRoomsPage from "../../pages/default/wei/rooms"
 import WeiRoomPage from "../../pages/default/wei/rooms/room"
 import WeiMapPage from "../../pages/default/wei/map"
-import WeiMapOverlay from "../../pages/default/wei/map/WeiMapOverlay"
-import WeiMapBackground from "../../pages/default/wei/WeiMapBackground"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -58,8 +56,6 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
             <NotificationsOverlay />
-            <WeiMapOverlay />
-            <WeiMapBackground />
             { !user.didFirstFollow && <FirstFollow /> }
         </div>
     )
