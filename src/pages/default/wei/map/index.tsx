@@ -1,6 +1,6 @@
 import {Geolocation} from "@capacitor/geolocation"
 import {DeviceOrientation, DeviceOrientationCompassHeading} from "@awesome-cordova-plugins/device-orientation"
-import { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { generatePositionUtil } from "../../../../data/wei/rooms/map/utils"
 import { isWeb } from "../../../../data/app"
 import { isPlatform } from "@ionic/core"
@@ -19,7 +19,7 @@ import { isFuture } from "date-fns/esm"
 import { setWeiBackgroundGeoPerm, setWeiBackgroundSendPerm } from "../WeiMapBackground"
 
 const size = {w: 730, h: 786}
-
+let i = 0
 const WeiMapPage: React.FC = () => {
     const [geoPos, setGeoPos] = useState<[number, number, number]>([0, 0, 0])
     const [pos, setPos] = useState<{x: number, y: number}>({x:0,y:0})
@@ -113,7 +113,7 @@ const WeiMapPage: React.FC = () => {
     useEffect(() => {
         setPos(locationConverter(geoPos[0], geoPos[1]))
     }, [geoPos])
-    const locationConverter = generatePositionUtil({
+    const {screenXYLatLong, latlngToScreenXY: locationConverter} = generatePositionUtil({
         lat: 49.322642,
         lng: -1.111938,
         scrX: 0,
@@ -233,6 +233,14 @@ const WeiMapPage: React.FC = () => {
         getMapBackground().then(res => setBackground(res.data))
     }, [])
 
+    const click = useCallback((e: React.MouseEvent) => {
+        const bounds = (e.target as HTMLElement).getBoundingClientRect()
+        const x = e.clientX - bounds.left
+        const y = e.clientY - bounds.top
+        const pos = screenXYLatLong(x, y)
+        console.log(`map.put(${100+i++}, ${pos.lat}/${pos.lng});`)
+    }, [])
+
     return permission === null ? <LoadingPage /> : !permission ? <ErrorInterface error={t("map.no_perm")} /> : <div className="w-full h-full max-h-full max-w-full relative">
         <div onClick={toggleWeiMap} className="bg-white/50 backdrop-blur shadow-lg shadow-black/[5%] px-4 py-2 absolute top-3 left-1/2 -translate-x-1/2 z-50 rounded-full font-medium cursor-pointer text-center w-[80%] sm:w-auto max-w-[80%] text-[15px]">
             WeiMap {sendPermission == "true" ? "activée" : "desactivée"}
@@ -240,7 +248,7 @@ const WeiMapPage: React.FC = () => {
         </div>
         <TransformWrapper>
             <TransformComponent wrapperClass="w-full h-full relative" wrapperStyle={{background: background?.color}}>
-                <div style={{width: size.w, height: size.h}} className="relative" >
+                <div style={{width: size.w, height: size.h}} className="relative" onClick={click} >
                     <img src={background?.assetUrl} alt="Background" draggable={false} />
                     {/* <img src="/img/wei/map/mapV2.svg" alt="Background" className="absolute opacity-50" style={{top: 30, left: 40, width: 365 * sizee, height: 526 * sizee}}  /> */}
 

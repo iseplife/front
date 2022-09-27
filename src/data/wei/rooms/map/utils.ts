@@ -50,6 +50,29 @@ export function generatePositionUtil(p0: Point, p1: Point) {
         }
     }
 
-    return latlngToScreenXY
+    function xyTolatlng(x: number, y: number) {
+        const lat = y/radius
+        const lng = x / radius / Math.cos((p0.lat + p1.lat)/2)
+
+        return { lat, lng }
+    }
+    // This function converts lat and lng coordinates to SCREEN X and Y positions
+    function screenXYLatLong(x: number, y: number){
+
+        const perX = (x - p0.scrX) / (p1.scrX - p0.scrX)
+        const perY = (y - p0.scrY) / (p1.scrY - p0.scrY)
+
+        //Calculate global X and Y for projection point
+        //Calculate the percentage of Global X position in relation to total global width
+        const finalX = perX * (p1.pos!.x - p0.pos!.x) + p0.pos!.x
+        const finalY = perY * (p1.pos!.y - p0.pos!.y) + p0.pos!.y
+
+        const pos = xyTolatlng(finalX, finalY)
+
+        //Returns the screen position based on reference points
+        return pos
+    }
+
+    return {latlngToScreenXY, screenXYLatLong}
 
 }

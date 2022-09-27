@@ -87,5 +87,6 @@
   "cgu_text": "Pour utiliser l'application, vous devez accepter les CGU.",
   "cgu": "CGU",
   "block": "Bloquer",
-  "unblock": "Débloquer"
+  "unblock": "Débloquer",
+  "update": "Mettez à jour l'application sur le store pour télécharger des images"
 }

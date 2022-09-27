@@ -5,12 +5,18 @@ import {enUS, fr} from "date-fns/locale"
 import {Image as ImageType, MediaStatus} from "./data/media/types"
 import {PhotoProps} from "react-photo-gallery"
 import {GallerySizes} from "./constants/MediaSizes"
-import {TFunction} from "i18next"
+import {t, TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
 import { CSSProperties } from "react"
 import { Post } from "./data/post/types"
 import { appUrl } from "./data/http"
+import { isAndroidApp, isIosApp, isWeb } from "./data/app"
+import { Filesystem, Directory } from "@capacitor/filesystem"
+import { Media } from "@capacitor-community/media"
+import { Toast } from "@capacitor/toast"
+import { message } from "antd"
+
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -236,11 +242,48 @@ export const arrayEquals = (array: unknown[], array1: unknown[]) =>
     && array.length == array1.length
     && array.every((element, index) => array1[index] == element)
 
-export const downloadFile = (url: string, name: string) => {
-    const a = document.createElement("a")
-    a.download = name
-    a.href = url
-    a.click()
+export const downloadFile = async (url: string, name: string, savedMessage: string) => {
+    if(isWeb){
+        const a = document.createElement("a")
+        a.download = name
+        a.href = url
+        a.click()
+    } else {
+        try {
+            const albumName = "IsepLife"
+            const wallpaperTemp = await Filesystem.writeFile({
+                path: name,
+                data: url,
+                directory: Directory.Cache,
+            })
+            let albums = await Media.getAlbums()
+            let album = albums.albums.find(a => a.name === albumName)
+            if (!album) {
+                if(isIosApp){
+                    // Doesn't exist, create new album
+                    await Media.createAlbum({ name: albumName })
+                    albums = await Media.getAlbums()
+                    album = albums.albums.find(a => a.name === albumName)
+                }else if(isAndroidApp)
+                    await Media.createAlbum({ name: albumName })
+            }
+            
+            await Media.savePhoto({
+                path: wallpaperTemp.uri,
+                album: album?.identifier ?? albumName
+            }).then(() => console.debug("Image has been saved")).catch(console.error)
+    
+            Toast.show({
+                text: savedMessage,
+                position: "bottom",
+                duration: "short",
+            })
+        }catch(e){
+            console.error(e)
+            message.info(t("common:update").toString())
+        }
+    }
+    
 }
 
 export const TailwindUtils = {

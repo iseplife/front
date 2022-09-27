@@ -104,7 +104,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
         } else 
             downloadLink = await polyfillWebp(link, true)
         
-        downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`)
+        downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`, t("gallery:saved"))
     }, [gallery.name, currentImage.src])
 
     return (
