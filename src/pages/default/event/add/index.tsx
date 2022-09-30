@@ -4,7 +4,7 @@ import Textarea from "react-expanding-textarea"
 import EventTypeSelector from "./typeselector"
 import AddEventTextField from "./textfield"
 import FeedSelector from "../../../../components/Feed/FeedSelector"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import {FormProvider, useForm, useWatch} from "react-hook-form"
 import EventPlaceSelector from "./placeselector"
 import { useTranslation } from "react-i18next"
@@ -14,6 +14,7 @@ import { useHistory } from "react-router"
 import { entityPreloader } from "../../../../components/Optimization/EntityPreloader"
 import { eventsManager } from "../../../../datamanager/EventsManager"
 import { isAfter } from "date-fns"
+import Loading from "../../../../components/Common/Loading"
 
 
 interface AddEventPageProps {
@@ -22,6 +23,8 @@ interface AddEventPageProps {
 }
 
 const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => {
+
+    const [sending, setSending] = useState(false)
     const {t} = useTranslation("event")
     const history = useHistory()
     const methods = useForm({
@@ -38,8 +41,9 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
 
     const setTargets = useCallback((targets: number[]) => setValue("targets", targets), [])
     
-    const printValues = useCallback((values: any) => {
-        if (values.startsAt && !formState.errors.length){
+    const sendEvent = useCallback((values: any) => {
+        if (values.startsAt && !formState.errors.length && !sending){
+            setSending(true)
             const formattedValues: EventForm = {
                 type: values.type,
                 title: values.title,
@@ -55,7 +59,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                 ticketURL: values.ticketURL,
                 coordinates: values.coordinates,
             }
-            console.log(values)
+            console.debug(values)
             if (eventId)
                 editEvent(eventId, formattedValues).then(res => {
                     if (res.status === 200){
@@ -63,19 +67,19 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                         eventsManager.initData()
                         history.push(`/event/${res.data.id}`)
                     }
-                })
+                }).finally(() => setSending(false))
             else
                 createEvent(formattedValues).then(res => {
                     if (res.status === 200)
                         history.push(`/event/${res.data.id}`)
-                })
+                }).finally(() => setSending(false))
         }
-    }, [eventId])
+    }, [eventId, sending])
     const endDateValidation = useCallback((date: Date) => {
         return isAfter(date, getValues().startsAt)
     }, [])
 
-    return <form onSubmit={handleSubmit(printValues)}>
+    return <form onSubmit={handleSubmit(sendEvent)}>
         <FormProvider {...methods} >
             <div className="container mx-auto px-4 mb-4">
                 <div className="w-full sm:w-[70%] lg:w-1/2 mx-auto">
@@ -129,7 +133,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                                 <input {...register("ticketURL")} type="url" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" placeholder="https://google.com" />
                             </AddEventTextField>
                         </div>
-                        <button onClick={printValues} className="w-1/2 px-3 py-2 rounded-md bg-indigo-400 shadow-sm text-center mx-auto font-semibold text-white mt-3">{t(defaultValues ? "form.edit": "form.create")}</button>
+                        <button onClick={sendEvent} disabled={sending} className={`w-1/2 px-3 py-2 rounded-md bg-indigo-400 shadow-sm text-center mx-auto font-semibold text-white mt-3 ${sending && "opacity-80"}`}>{sending ? <Loading /> : t(defaultValues ? "form.edit": "form.create")}</button>
                     </div>
                 </div>
             </div>
