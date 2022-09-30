@@ -26,7 +26,7 @@ const Embed: React.FC<EmbedProps> = ({embed, post, selected}) => {
         case EmbedEnumType.GALLERY:
             return <EmbedGallery gallery={embed} />
         case EmbedEnumType.IMAGE:
-            return <EmbedImages images={embed.images} post={post} selected={selected}/>
+            return embed.images && embed.images?.length ? <EmbedImages images={embed.images} post={post} selected={selected}/> : <></>
         case EmbedEnumType.RICH_LINK:
             return <EmbedRichLink data={embed} />
         default:
