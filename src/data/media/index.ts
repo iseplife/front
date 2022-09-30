@@ -9,6 +9,7 @@ const fac = new FastAverageColor()
 export const createMedia = async (media: MediaUploadNSFW, type: EmbedEnumType, club?: number, gallery = false, progressListener?: (progressEvent: any) => void): Promise<AxiosResponse<Media>> => {
     const fd = new FormData()
     fd.append("file", media.file as Blob)
+    fd.append("type", type)
     fd.append("nsfw", Boolean(media.nsfw).toString())
     if(type == EmbedEnumType.IMAGE){
         const url = URL.createObjectURL(media.file as Blob)
