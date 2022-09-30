@@ -7,6 +7,7 @@ import CommentForm from "./CommentForm"
 import {useTranslation} from "react-i18next"
 import { useLiveQuery } from "dexie-react-hooks"
 import { feedsManager } from "../../datamanager/FeedsManager"
+import { differenceInMilliseconds } from "date-fns/esm"
 
 interface CommentListProps {
     id: number
@@ -22,9 +23,10 @@ interface CommentListProps {
     showOne?: boolean
     className?: string
     lightboxView?: boolean
+    orderOldFirst?: boolean
 }
 
-const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments: _showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className, lightboxView}) => {
+const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = true, showMoreComments: _showMoreComments, trendingComment, numberComments = 0, loadComment = true, showInput = true, bottomInput, autofocusInput, showOne, className, lightboxView, orderOldFirst}) => {
     const [comments, setComments] = useState<CommentType[]>([])
     const [loading, setLoading] = useState<boolean>(loadComment && showComments)
     const [t] = useTranslation(["post"])
@@ -39,11 +41,13 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 if (trendingComment)
                     r.data = r.data.filter(comm => comm.id != trendingComment.id)
 
+                if(orderOldFirst)
+                    r.data = r.data.sort((a, b) => differenceInMilliseconds(a.creation, b.creation))
                 setComments(r.data)
                 setLoading(false)
             }
         })
-    }, [trendingComment, id])
+    }, [trendingComment, id, orderOldFirst])
 
     const showMoreComments = useCallback(() => {
         if (loadComment && showComments) {

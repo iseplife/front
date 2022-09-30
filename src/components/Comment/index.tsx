@@ -177,6 +177,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                 bottomInput={true}
                                 autofocusInput={true}
                                 lightboxView={lightboxView}
+                                orderOldFirst
                             />
                         </> :
                         (data.comments > 0 && (
