@@ -17,3 +17,9 @@
 .rbc-time-content {
     @apply scrollbar-none;
 }
+.rbc-row-segment {
+    position: relative;
+}
+.rbc-time-header {
+    margin-right: 0px !important;
+}

@@ -14,9 +14,9 @@ export const EventWrapper: (view: View) => React.FC<{children: React.ReactElemen
             color: EventTypeInvertColor[event.type]
         }}
         onClick={children.props.onClick}
-        className={`rounded-md px-1 py-0.5 font-medium sm:text-sm break-words cursor-pointer overflow-hidden block box-border ${view == "month" ? "whitespace-nowrap overflow-hidden text-[10px] leading-[11px] sm:text-xs" : "break-words text-xs"} ${view == "month" || !children.props.className.includes("-allday") && "absolute"}`}
+        className={`rounded-md px-1 py-0.5 font-medium sm:text-sm break-words cursor-pointer overflow-hidden block box-border max-h-full w-full ${view == "month" ? "whitespace-nowrap overflow-hidden text-[10px] leading-[11px] sm:text-xs" : "break-words text-xs"} ${view == "month" || !children.props.className.includes("-allday") && "absolute"}`}
     >
-        <span className="drop-shadow hidden sm:contents">{EventTypeEmoji[event.type]}</span> {event.title}
+        <span className="text-shadow-md hidden sm:contents">{EventTypeEmoji[event.type]}</span> {event.title}
     </div>
 
 export const HeaderWrapper: (view: View) => React.FC<HeaderProps> =  (view) => ({date}) => 
@@ -27,7 +27,7 @@ export const HeaderWrapper: (view: View) => React.FC<HeaderProps> =  (view) => (
         <div className={`${view == "month" ? "text-sm" : "text-xs"} hidden sm:block ${isToday(date) ? "text-indigo-400" : "text-neutral-500"}`}>
             {_format(date, "E").replace(".", "")}
         </div>
-        {view != "month" && <div className={`text-base py-1 ${isToday(date) && "rounded-full px-2 bg-indigo-300"}`}>
+        {view != "month" && <div className={`text-base py-1 ${isToday(date) && "rounded-full px-2 bg-indigo-300 w-8"}`}>
             {_format(date, "d")}
         </div>}
     </div>

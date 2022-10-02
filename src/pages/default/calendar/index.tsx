@@ -3,7 +3,7 @@ import {Calendar, dateFnsLocalizer, Formats, View} from "react-big-calendar"
 import {EventFilter, EventPreview, FilterList} from "../../../data/event/types"
 import SideCalendar from "../../../components/Calendar/SideCalendar"
 import {useTranslation} from "react-i18next"
-import {add, parse, format, Locale} from "date-fns"
+import {add, parse, format, Locale, isSameDay, differenceInDays, differenceInMinutes} from "date-fns"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import {atom, selector, useRecoilValue, useSetRecoilState} from "recoil"
 import {getMonthEvents} from "../../../data/event"
@@ -22,6 +22,7 @@ import useAdminRole from "../../../hooks/useAdminRole"
 import { cFaArrowDown, cFaArrowNext } from "../../../constants/CustomFontAwesome"
 import DropdownPanel from "../../../components/Common/DropdownPanel"
 import DropdownPanelElement from "../../../components/Common/DropdownPanelElement"
+import { addDays } from "date-fns/esm"
 
 const initFilter = (): EventFilter => {
     return (
@@ -104,9 +105,46 @@ const Events: React.FC = () => {
 
     const fetchMonthEvents = useCallback(() => {
         setLoading(true)
-        getMonthEvents(date.getTime()).then(r => {
-            setEvents(r.data.map(e => ({...e, end: e.endsAt, start: e.startsAt})))
-        }).finally(() => setLoading(false))
+        const loadEvents = (events: EventPreview[]) => {
+            const generatedEvents = events.map(e => ({...e, end: e.endsAt, start: e.startsAt})).reduce((array, e) => {
+                if(isSameDay(e.start, e.end) || differenceInDays(e.end, e.start) >= 1)
+                    array.push(e)
+                else {
+                    const endFirstDay = new Date(e.start.getTime())
+                    endFirstDay.setHours(23)
+                    endFirstDay.setMinutes(59)
+                    endFirstDay.setSeconds(59)
+
+                    const startSecondDay = new Date(e.end.getTime())
+                    startSecondDay.setHours(0)
+                    startSecondDay.setSeconds(1)
+                    const addSecondEvent = Math.abs(differenceInMinutes(startSecondDay, e.end)) > 5
+                    array.push({
+                        ...e,
+                        title: e.title+(addSecondEvent ? " (1/2)" : ""),
+                        end: endFirstDay,
+                    })
+
+                    if(addSecondEvent)
+                        array.push({
+                            ...e,
+                            title: e.title+" (2/2)",
+                            start: startSecondDay,
+                        })
+                }
+                return array
+            }, [] as CalendarEvent[])
+
+            setEvents(events => [...events.filter(ele => !generatedEvents.find(other => other.id === ele.id)), ...generatedEvents])
+        }
+        if(date.getDate() < 7){
+            getMonthEvents(addDays(date.getTime(), -7).getTime()).then(r =>
+                loadEvents(r.data)
+            ).finally(() => setLoading(false))
+        }
+        getMonthEvents(date.getTime()).then(r =>
+            loadEvents(r.data)
+        ).finally(() => setLoading(false))
     }, [date])
 
     useEffect(() => {
@@ -127,7 +165,7 @@ const Events: React.FC = () => {
 
 
     const dateTitle: string = useMemo(() =>
-        format(date, (view == "day" ? "d " : "") + (date.getFullYear() != new Date().getFullYear() ? "MMM yyyy" : "MMMM"), {locale: locales[i18n.language]})
+        format(date, (view == "day" ? "d " : "") + (date.getFullYear() != new Date().getFullYear() ? "MMM yyyy" : "MMM"), {locale: locales[i18n.language]})
     , [date, view, i18n.language])
 
     const incrementDate = useCallback(() => {
@@ -175,7 +213,7 @@ const Events: React.FC = () => {
                 <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 h-full">
                     <div className="w-full flex flex-wrap justify-between items-center m-2">
                         <div className="flex items-center flex-grow justify-start text-gray-700 m-2">
-                            <div className="hidden sm:flex -ml-4">
+                            <div className="flex -ml-4">
                                 <button onClick={decrementDate} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600">
                                     <FontAwesomeIcon icon={cFaArrowNext} className="rotate-180" />
                                 </button>
@@ -186,9 +224,9 @@ const Events: React.FC = () => {
                             <h1 className="text-xl font-semibold my-auto text-current capitalize">
                                 {dateTitle}
                             </h1>
-                            <button onClick={toggleShowInfo} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1">
+                            {/* <button onClick={toggleShowInfo} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1">
                                 <FontAwesomeIcon icon={cFaArrowDown} className={`${showInfo && "rotate-180"} transition-transform`} />
-                            </button>
+                            </button> */}
                         </div>
                         <div className="flex">
                             <FontAwesomeIcon
