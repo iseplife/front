@@ -11,10 +11,11 @@ export const EventWrapper: (view: View) => React.FC<{children: React.ReactElemen
         style={{
             ...children.props.style,
             background: EventTypeColor[event.type],
-            color: EventTypeInvertColor[event.type]
+            color: EventTypeInvertColor[event.type],
+            width: children.props.style.width ?? "100%",
         }}
         onClick={children.props.onClick}
-        className={`rounded-md px-1 py-0.5 font-medium sm:text-sm break-words cursor-pointer overflow-hidden block box-border max-h-full w-full ${view == "month" ? "whitespace-nowrap overflow-hidden text-[10px] leading-[11px] sm:text-xs" : "break-words text-xs"} ${view == "month" || !children.props.className.includes("-allday") && "absolute"}`}
+        className={`rounded-md px-1 py-0.5 font-medium sm:text-sm break-words cursor-pointer overflow-hidden block box-border max-h-full ${view == "month" ? "whitespace-nowrap overflow-hidden text-[10px] leading-[11px] sm:text-xs" : "break-words text-xs"} ${view == "month" || !children.props.className.includes("-allday") && "absolute"}`}
     >
         <span className="text-shadow-md hidden sm:contents">{EventTypeEmoji[event.type]}</span> {event.title}
     </div>
