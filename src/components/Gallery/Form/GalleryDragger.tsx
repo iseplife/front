@@ -98,6 +98,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
         setUploadingState(UploadState.UPLOADING)
 
         let res: AxiosResponse<Media>
+        let i = 0
         for (const img of images.values()) {
             try {
                 if (isFileImage(img.file.type)) {
@@ -106,9 +107,11 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                         EmbedEnumType.IMAGE,
                         club,
                         true,
-                        e => setProgression(p => p + Math.round((e.loaded * 100) / (e.total * images.size)))
+                        e => setProgression((i + e.loaded / e.total) / images.size * 100)
                     )
                     responses.push(res)
+                    i++
+                    setProgression(i / images.size * 100)
                 }
             } catch (e: any) {
                 setUploadingState(UploadState.ERROR)
