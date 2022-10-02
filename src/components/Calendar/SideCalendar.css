@@ -1,3 +1,25 @@
-#side-cal .react-calendar {
+.rbc-time-view .rbc-row {
+    min-height: unset !important;
+}
+.rbc-events-container {
+    margin-right: 2px !important;
+}
+.rbc-time-header-content, .rbc-day-slot .rbc-time-slot, .rbc-header, .rbc-time-view, .rbc-time-content, #side-cal .react-calendar {
     border: none !important;
+}
+.rbc-timeslot-group {
+    min-height: calc(100vh / 24 - 100px / 24) !important;
+}
+.rbc-time-header {
+    position: sticky;
+}
+
+.rbc-time-content {
+    @apply scrollbar-none;
+}
+.rbc-row-segment {
+    position: relative;
+}
+.rbc-time-header {
+    margin-right: 0px !important;
 }
