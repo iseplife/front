@@ -17,7 +17,7 @@ import {getUserFeed} from "../../../data/feed"
 import {AppContext} from "../../../context/app/context"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSyncAlt} from "@fortawesome/free-solid-svg-icons"
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import useAdminRole from "../../../hooks/useAdminRole"
 import { cFaArrowDown, cFaArrowNext } from "../../../constants/CustomFontAwesome"
 import DropdownPanel from "../../../components/Common/DropdownPanel"
@@ -87,9 +87,9 @@ const Events: React.FC = () => {
     const {state} = useContext(AppContext)
     const isAdmin = useAdminRole()
 
-    const canCreateEvent: boolean = useMemo(() => (
+    const canCreateEvent: boolean = useMemo(() => 
         isAdmin || Boolean(state.payload.clubsPublisher.length)
-    ), [isAdmin, state.payload.clubsPublisher.length])
+    , [isAdmin, state.payload.clubsPublisher.length])
 
     const [feeds, setFeeds] = useState<CalendarContextType["feeds"]>({})
     const setEvents = useSetRecoilState(eventsState)
@@ -209,8 +209,15 @@ const Events: React.FC = () => {
     return (
         <CalendarContext.Provider value={{feeds}}>
             <div className="h-[calc(100%-110px)] flex flex-row flex-wrap bg-gray-100">
+                { canCreateEvent &&
+                    <div className="w-full mx-4 mt-4 flex justify-center">
+                        <Link to="/event/create" className="bg-indigo-400 rounded-full py-2 text-center px-4 w-full md:w-auto text-white font-medium text-base">
+                            Créer un événement
+                        </Link>
+                    </div>
+                }
                 <SideCalendar date={date} handleDate={setDate}/>
-                <div className="flex flex-col md:w-4/5 w-full pt-0 p-3 h-full">
+                <div className={`flex flex-col md:w-4/5 w-full pt-0 p-3 ${canCreateEvent ? "h-[calc(100%-55px)]" : "h-full"}`}>
                     <div className="w-full flex flex-wrap justify-between items-center m-2">
                         <div className="flex items-center flex-grow justify-start text-gray-700 m-2">
                             <div className="flex -ml-4">
