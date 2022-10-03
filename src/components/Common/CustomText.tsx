@@ -48,8 +48,8 @@ const CustomText: React.FC<CustomTextProps> = ({description, descLengthThrottle 
                         description?.split("\n").map((val, index, array) => {
                             if (totalLength >= descLengthThrottle && totalLength) return
 
-                            if (val == "<spacer>")
-                                return disableSpacers ? undefined : <Divider key={index} className="my-4" />
+                            if (val.indexOf("<spacer>") == 0)
+                                return disableSpacers ? undefined : <Divider key={index} className="my-4 text-[length:inherit] [font-weight:inherit!important]" >{ val != "<spacer>" && val.substring("<spacer>".length).trim() }</Divider>
 
                             if (!seeAll && descLengthThrottle) {
                                 if (totalLength + val.length > descLengthThrottle)
