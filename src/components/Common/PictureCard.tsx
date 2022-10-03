@@ -4,6 +4,7 @@ import {Badge} from "antd"
 import {faEyeSlash, faLowVision} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import { releaseCanvas } from "../../util"
 
 type PictureCardProps<MediaType> = {
     file: MediaType
@@ -20,14 +21,18 @@ const optiImage = async (url: string) => {
         await current
     return await (current = (async () => {
         const canva = document.createElement("canvas")
-        const context = canva.getContext("2d")
-        const img = new Image()
-        img.src = url
-        await new Promise(resolve => img.onload = resolve)
-        canva.width = 150
-        canva.height = 150 / img.width * img.height
-        context?.drawImage(img, 0, 0, canva.width, canva.height)
-        return canva.toDataURL()
+        try{
+            const context = canva.getContext("2d")
+            const img = new Image()
+            img.src = url
+            await new Promise(resolve => img.onload = resolve)
+            canva.width = 150
+            canva.height = 150 / img.width * img.height
+            context?.drawImage(img, 0, 0, canva.width, canva.height)
+            return canva.toDataURL()
+        } finally {
+            releaseCanvas(canva)
+        }
     })())
 }
 

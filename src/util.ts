@@ -241,7 +241,22 @@ export const arrayEquals = (array: unknown[], array1: unknown[]) =>
     Array.isArray(array) && Array.isArray(array1)
     && array.length == array1.length
     && array.every((element, index) => array1[index] == element)
+export const releaseCanvas = (canvas: HTMLCanvasElement) => {
+    canvas.width = canvas.height = 1
+    canvas.getContext("2d")?.clearRect(0, 0, 1, 1)
+}
+export const limitSize = (size: {width: number, height: number}, maximumPixels = 16777216) => {
+    const { width, height } = size
 
+    const requiredPixels = width * height
+    if (requiredPixels <= maximumPixels) return { width, height }
+
+    const scalar = Math.sqrt(maximumPixels) / Math.sqrt(requiredPixels)
+    return {
+        width: Math.floor(width * scalar),
+        height: Math.floor(height * scalar),
+    }
+}
 export const downloadFile = async (url: string, name: string, savedMessage: string) => {
     if(isWeb){
         const a = document.createElement("a")
@@ -259,13 +274,13 @@ export const downloadFile = async (url: string, name: string, savedMessage: stri
             let albums = await Media.getAlbums()
             let album = albums.albums.find(a => a.name === albumName)
             if (!album) {
-                if(isIosApp){
+                if(isIosApp) {
                     // Doesn't exist, create new album
                     await Media.createAlbum({ name: albumName })
                     albums = await Media.getAlbums()
                     album = albums.albums.find(a => a.name === albumName)
-                }else if(isAndroidApp)
-                    await Media.createAlbum({ name: albumName })
+                } else if(isAndroidApp)
+                    await Media.createAlbum({ name: albumName }).catch(e => console.debug(e))
             }
             
             await Media.savePhoto({

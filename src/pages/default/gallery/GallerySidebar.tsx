@@ -10,10 +10,11 @@ import {getThread, toggleThreadLike} from "../../../data/thread"
 import {SidebarProps} from "../../../components/Common/Lightbox"
 import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
-import { downloadFile, formatDateWithTimer, mediaPath } from "../../../util"
+import { downloadFile, formatDateWithTimer, limitSize, mediaPath, releaseCanvas } from "../../../util"
 import { useTranslation } from "react-i18next"
 import Loading from "../../../components/Common/Loading"
 import { isWebPSupported, polyfillWebp } from "../../../components/Common/WebPPolyfill"
+import { isWebKit } from "../../../data/app"
 
 type GallerySidebarProps = {
     gallery: Gallery
@@ -94,13 +95,24 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
             await new Promise(resolve => image.onload = resolve)
             setDownloadProgress(-1)
             URL.revokeObjectURL(originalResponseLink)
-    
+            
             const canva = document.createElement("canvas")
-            canva.width = image.width
-            canva.height = image.height
+
+            let size = {width: image.width, height: image.height}
+
+            if(isWebKit){
+                console.log("Limiting size of canva because of Safari")
+                size = limitSize(size)
+                console.log("Limited to", size)
+            }
+
+            canva.width = size.width
+            canva.height = size.height
             const context = canva.getContext("2d")!
             context.drawImage(image, 0, 0)
             downloadLink = canva.toDataURL("image/jpeg")
+
+            releaseCanvas(canva)
         } else 
             downloadLink = await polyfillWebp(link, true)
         

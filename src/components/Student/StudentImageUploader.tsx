@@ -2,7 +2,7 @@ import React, {useCallback, useContext, useEffect, useState} from "react"
 import ImagePicker from "../Common/ImagePicker"
 import {useTranslation} from "react-i18next"
 import {Button, message, Upload} from "antd"
-import {mediaPath} from "../../util"
+import {mediaPath, releaseCanvas} from "../../util"
 import {AvatarSizes} from "../../constants/MediaSizes"
 import {updateCustomPicture} from "../../data/student"
 import {StudentPicture} from "../../data/student/types"
@@ -62,6 +62,8 @@ const StudentImageUploader: React.FC<StudentImageUploaderProps> = ({original, cu
             
             const blob = await new Promise<Blob>(resolve => canva.toBlob(blob => resolve(blob as Blob)))
 
+            releaseCanvas(canva)
+            
             updateCustomPicture(blob).then(res => {
                 message.success(t("picture_updated"))
                 dispatch({ type: AppActionType.SET_PICTURE, payload: res.data })
