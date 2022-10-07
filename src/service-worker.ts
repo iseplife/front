@@ -17,6 +17,7 @@ const broadcastChannel = new BroadcastChannel("service-worker", { webWorkerSuppo
 self.addEventListener("install", function () {
     console.debug("Installed Service Worker")
     broadcastChannel.postMessage("update")
+    broadcastChannel.postMessage({type: "update", version: process.env.REACT_APP_COMMIT})
 })
 
 const registerCacheFirstRouteUsing = (

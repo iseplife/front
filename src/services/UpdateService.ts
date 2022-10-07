@@ -16,7 +16,7 @@ export default class UpdateService {
                 return
             updateShown = true
 
-            if (e == "update") {
+            if (e?.type == "update" && e?.version != process.env.REACT_APP_COMMIT) {
                 if (Date.now() - pageOpenned < 4_000)
                     setTimeout(() => {
                         location.reload()
