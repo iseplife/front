@@ -42,8 +42,10 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
         }
         setLiked(liked => {
             if(!liked){
-                audio.currentTime = 0
-                audio.play()
+                if(isWeb){
+                    audio.currentTime = 0
+                    audio.play()
+                }
             }
             return !liked
         })

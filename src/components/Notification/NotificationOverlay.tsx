@@ -6,6 +6,7 @@ import { Notification as NotificationType } from "../../data/notification/types"
 import Notification from "."
 import { setNotificationsWatched } from "../../data/notification"
 import { notificationSoundUrl } from "../../constants/AudioFiles"
+import { isWeb } from "../../data/app"
 
 const NotificationsOverlay: React.FC = () => {
     const minNotificationId = useLiveQuery(async () => await notificationManager.getMaxLoaded(), [])
@@ -22,8 +23,10 @@ const NotificationsOverlay: React.FC = () => {
 
     useEffect(() => {
         if(notifications?.find(notif => !lastUnwatched.find(other => other.id == notif.id))){
-            const audio = new Audio(notificationSoundUrl)
-            audio.play()
+            if(isWeb){
+                const audio = new Audio(notificationSoundUrl)
+                audio.play()
+            }
             setLastUnwatched(notifications ?? [])
         }
     }, [notifications, lastUnwatched])
