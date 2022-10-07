@@ -109,7 +109,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
             canva.width = size.width
             canva.height = size.height
             const context = canva.getContext("2d")!
-            context.drawImage(image, 0, 0)
+            context.drawImage(image, 0, 0, canva.width, canva.height)
             downloadLink = canva.toDataURL("image/jpeg")
 
             releaseCanvas(canva)
