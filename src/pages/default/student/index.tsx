@@ -48,6 +48,8 @@ const Student: React.FC = () => {
 
     const cache = entityPreloader.get<StudentPreview, Author>(id)
 
+    const linkedinUser = useMemo(() => myId == 60669, [myId])
+
     /**
      * Club initialisation on mounting
      */
@@ -137,11 +139,18 @@ const Student: React.FC = () => {
                                             <div className="w-10 h-10 rounded-full bg-neutral-200 ml-2" />
                                         </div>
                                     }
+                                    {linkedinUser && <img src="/img/linkedin (1).svg" alt="" className="h-8 w-8 mt-1 ml-2" />}
                                 </div>
                             }
                         </div>
                         
                     </div>
+                    {
+                        linkedinUser && 
+                            <div className="w-full text-center py-1 mb-4 -mt-6 text-lg rounded-full border-2 border-indigo-400/[30%] bg-indigo-400/[2%] font-medium text-indigo-400">
+                                Voir le CV
+                            </div>
+                    }
                     <TabsSwitcher
                         currentTab={tab}
                         setCurrentTab={setTabFactory}
