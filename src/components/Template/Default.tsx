@@ -22,6 +22,7 @@ import WeiPage from "../../pages/default/wei"
 import WeiRoomsPage from "../../pages/default/wei/rooms"
 import WeiRoomPage from "../../pages/default/wei/rooms/room"
 import WeiMapPage from "../../pages/default/wei/map"
+import CustomComing from "../../pages/default/custom"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -47,6 +48,8 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/wei/rooms" component={WeiRoomsPage} />
                         <Route path="/wei/map" component={WeiMapPage} />
                         <Route path="/wei" component={WeiPage} />
+                        <Route path="/c" component={CustomComing} />
+                        <Route path="/isepdor" component={CustomComing} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
