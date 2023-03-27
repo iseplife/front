@@ -49,9 +49,9 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/wei/rooms" component={WeiRoomsPage} />
                         <Route path="/wei/map" component={WeiMapPage} />
                         <Route path="/wei" component={WeiPage} />
-                        <Route path="/c" component={CustomComing} />
                         <Route path="/isepdor" component={IsepDor} />
                         <Route path="/c/isepdor" component={IsepDor} />
+                        <Route path="/c" component={CustomComing} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />
                         <Route path="/" exact component={Home} />
