@@ -1,3 +1,4 @@
+import WebPPolyfill from "../../../../components/Common/WebPPolyfill"
 import { AvatarSizes } from "../../../../constants/MediaSizes"
 import { SearchItem, SearchItemType } from "../../../../data/searchbar/types"
 import { mediaPath, _format } from "../../../../util"
@@ -18,10 +19,10 @@ const SearchItemComponent = ({item}: SearchItemProps) => {
             </div>
         </div>
         : 
-        <img 
+        <WebPPolyfill 
             src={mediaPath(item.thumbURL, AvatarSizes.THUMBNAIL)}
             alt="Profile picture"
-            className={"w-10 h-10 mr-4 "+(item.type === SearchItemType.CLUB ? "rounded-full" : "rounded-lg ")}
+            className={"w-10 h-10 mr-4 object-cover "+(item.type === SearchItemType.CLUB ? "rounded-full" : "rounded-lg ")}
         />
 }
 
