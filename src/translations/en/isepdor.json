@@ -1,0 +1,11 @@
+{
+	"loading": "Loading session",
+	"no_session": "No ongoing session",
+	"choose": "Choose",
+	"search": "Search {{type}} to find results...",
+	"type": [
+		"a student",
+		"a club",
+		"an event"
+	]
+}

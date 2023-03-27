@@ -1,0 +1,11 @@
+{
+	"loading": "Chargement de la session",
+	"no_session": "Aucune session en cours",
+	"choose": "Choisissez",
+	"search": "Recherchez {{type}} pour avoir des résultats...",
+	"type": {
+		"STUDENT": "un étudiant",
+		"CLUB": "une association",
+		"EVENT": "un événement"
+	}
+}

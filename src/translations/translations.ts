@@ -16,6 +16,7 @@ import error_en from "./en/error.json"
 import notifications_en from "./en/notification.json"
 import first_follow_en from "./en/first-follow.json"
 import wei_en from "./en/wei.json"
+import isepdor_en from "./en/isepdor.json"
 
 import login_fr from "./fr/login.json"
 import date_fr from "./fr/date.json"
@@ -35,6 +36,7 @@ import error_fr from "./fr/error.json"
 import notifications_fr from "./fr/notification.json"
 import first_follow_fr from "./fr/first-follow.json"
 import wei_fr from "./fr/wei.json"
+import isepdor_fr from "./fr/isepdor.json"
 
 export const en = {
     login: login_en,
@@ -55,6 +57,7 @@ export const en = {
     notifications: notifications_en,
     "first-follow": first_follow_en,
     wei: wei_en,
+    isepdor: isepdor_en,
 }
 export const fr = {
     login: login_fr,
@@ -75,6 +78,7 @@ export const fr = {
     notifications: notifications_fr,
     "first-follow": first_follow_fr,
     wei: wei_fr,
+    isepdor: isepdor_fr,
 }
 
 const translations = {en, fr}
