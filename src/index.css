@@ -82,6 +82,9 @@ abbr[title] {
 .no-padding-modal .ant-modal-body {
     padding: 0 !important;
 }
+.ant-modal {
+    pointer-events: auto !important;
+}
 
 /********/
 

@@ -8,7 +8,7 @@ import {GallerySizes} from "./constants/MediaSizes"
 import {t, TFunction} from "i18next"
 import axios from "axios"
 import {EventPosition, Marker} from "./data/event/types"
-import { CSSProperties } from "react"
+import { CSSProperties, MouseEvent, useCallback, useLayoutEffect, useRef } from "react"
 import { Post } from "./data/post/types"
 import { appUrl } from "./data/http"
 import { isAndroidApp, isIosApp, isWeb } from "./data/app"
@@ -266,7 +266,7 @@ export const downloadFile = async (url: string, name: string, savedMessage: stri
     } else {
         try {
             const albumName = "IsepLife"
-            
+
             while(name.indexOf("/") !== -1)
                 name = name.replace("/", "-")
 
@@ -379,3 +379,75 @@ export class EntitySet<T extends Entity> {
         return Array.from(this.items.values())
     }
 }
+
+
+interface Options {
+    isPreventDefault?: boolean
+    delay?: number
+}
+
+const isTouchEvent = (ev: TouchEvent | MouseEvent): ev is TouchEvent => {
+    return "touches" in ev
+}
+
+const useLongPress = (
+    callback: (e: TouchEvent | MouseEvent) => void,
+    click: () => void,
+    { isPreventDefault = true, delay = 300 }: Options = {}
+) => {
+    const timeout = useRef<ReturnType<typeof setTimeout>>()
+    const ref = useRef<HTMLElement>()
+    const timeoutStart = useRef<number>()
+
+    const startPosition = useRef({ x: 0, y: 0 })
+
+    const start = useCallback(
+        (event: TouchEvent | MouseEvent) => {
+            console.log("start")
+            // prevent ghost click on mobile devices
+            if(isTouchEvent(event))
+                startPosition.current = {
+                    x: event.touches[0].clientX,
+                    y: event.touches[0].clientY,
+                }
+            else
+                startPosition.current = { x: 0, y: 0 }
+
+            event.preventDefault()
+            timeoutStart.current = Date.now()
+            timeout.current = setTimeout(() => callback(event), delay)
+        },
+        [callback, delay]
+    )
+
+    const clear = useCallback((move?: boolean) => {
+        // clearTimeout and removeEventListener
+        timeout.current && clearTimeout(timeout.current)
+        if(!move && (timeoutStart.current ?? 0) + 250 > Date.now())
+            click()
+    }, [click])
+    const clearHandler = useCallback(() => clear(), [clear])
+
+    const touchMove = useCallback((event: React.TouchEvent) => {
+        if (
+            startPosition.current.x &&
+            (Math.abs(event.touches[0].clientX - startPosition.current.x) > 10 ||
+            Math.abs(event.touches[0].clientY - startPosition.current.y) > 10)
+        ){
+            clear(true)
+            timeoutStart.current = 0
+        }
+    }, [clear])
+
+    return {
+        onTouchEnd: clearHandler,
+        onTouchMove: touchMove,
+        ref: (element: HTMLElement) => {
+            ref.current = element
+            element?.removeEventListener("touchstart", start)
+            element?.addEventListener("touchstart", start, { passive: false })
+        }
+    } as const
+}
+  
+export {useLongPress}
