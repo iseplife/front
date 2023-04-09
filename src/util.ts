@@ -266,6 +266,10 @@ export const downloadFile = async (url: string, name: string, savedMessage: stri
     } else {
         try {
             const albumName = "IsepLife"
+            
+            while(name.indexOf("/") !== -1)
+                name = name.replace("/", "-")
+
             const wallpaperTemp = await Filesystem.writeFile({
                 path: name,
                 data: url,
