@@ -85,7 +85,7 @@ const PollForm: React.FC = () => {
                 <div className="mx-1">
                     <Switch
                         defaultChecked={poll.anonymous}
-                        onChange={value => setFieldValue("embed.data.multiple", value)}
+                        onChange={value => setFieldValue("embed.data.anonymous", value)}
                         className="mr-2"
                         size="small"
                     />
