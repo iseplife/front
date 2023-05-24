@@ -1,5 +1,6 @@
 import { ClubPreview } from "../../club/types"
 import { EventPreview } from "../../event/types"
+import { SearchItem } from "../../searchbar/types"
 import { StudentPreview } from "../../student/types"
 
 export interface IORSession {
@@ -11,7 +12,8 @@ export interface IORSession {
 
 export interface IORVotedQuestion {
     question: IORQuestion
-    vote: StudentPreview | EventPreview | ClubPreview
+    vote: SearchItem
+    choices: (SearchItem)[]
 }
 
 export interface IORQuestion {

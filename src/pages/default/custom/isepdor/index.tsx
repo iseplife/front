@@ -7,9 +7,8 @@ import { searchClub, searchEvent, searchStudent } from "../../../../data/searchb
 import ErrorInterface from "../../../errors/ErrorInterface"
 import LoadingPage from "../../../LoadingPage"
 import Axios, {CancelTokenSource} from "axios"
-import { handleRequestCancellation, mediaPath, _format } from "../../../../util"
+import { handleRequestCancellation } from "../../../../util"
 import { SearchItem, SearchItemType } from "../../../../data/searchbar/types"
-import { AvatarSizes } from "../../../../constants/MediaSizes"
 import SearchItemComponent from "./SearchItem"
 
 const IsepDor: React.FC = () => {
@@ -116,7 +115,10 @@ const IsepDor: React.FC = () => {
     const choose = (item: SearchItem) => {
         if(question){
             voteIORQuestion(question.question, item.id).then(question => {
-                setQuestions(questions => questions.map(q => q.question.id === question.data.question.id ? question.data : q))
+                setQuestions(questions => questions.map(q => q.question.id === question.data.question.id ? {
+                    ...question.data,
+                    vote: item,
+                } : q))
                 openResponding(undefined)
             })
         }
@@ -136,18 +138,10 @@ const IsepDor: React.FC = () => {
                             {question?.vote ?
                                 <button className="rounded-full bg-neutral-100 px-4 py-2 mt-3 text-neutral-500 hover:bg-neutral-200 transition-colors flex items-center h-10">
                                     <div className="scale-75">
-                                        <SearchItemComponent item={{
-                                            id: question.vote.id,
-                                            description: "",
-                                            thumbURL: ("logoUrl" in question.vote ? question.vote.logoUrl : "picture" in question.vote ? question.vote.picture : "") ?? "",
-                                            name: "name" in question.vote ? question.vote.name : "title" in question.vote ? question.vote.title : question.vote.firstName+" "+question.vote.lastName,
-                                            startsAt: "startsAt" in question.vote ? question.vote.startsAt : undefined,
-                                            status: true,
-                                            type: SearchItemType[question.question.type]
-                                        }} />
+                                        <SearchItemComponent item={question.vote} />
                                     </div>
                                     <span className="ml-0 font-medium text-base">
-                                        {"name" in question.vote ? question.vote.name : "title" in question.vote ? question.vote.title : question.vote.firstName+" "+question.vote.lastName}
+                                        { question.vote.name }
                                     </span>
                                 </button>
                                 :
@@ -166,11 +160,11 @@ const IsepDor: React.FC = () => {
                             {question?.question.title}
                         </div>
                         <div className="h-0.5 w-[50%] bg-black/5 mx-auto rounded mt-2" />
-                        <input onChange={e => setSearch(e.target.value)} ref={input} className="rounded-full bg-neutral-200 px-4 py-2 mt-3 text-black transition-colors w-full outline-none" placeholder={t("choose")+" "+t(`type.${question?.question.type}`)} />
+                        {!question?.choices && <input onChange={e => setSearch(e.target.value)} ref={input} className="rounded-full bg-neutral-200 px-4 py-2 mt-3 text-black transition-colors w-full outline-none" placeholder={t("choose")+" "+t(`type.${question?.question.type}`)} />}
                     </div>
                     <div className="bg-white z-0 px-3 py-2 text-center">
                         {
-                            results.length ? results.slice(0, 5).map(result =>
+                            (results.length || question?.choices) ? (question?.choices ?? results).slice(0, 5).map(result =>
                                 <div onClick={() => choose(result)} className="flex items-center font-medium px-3 py-2 rounded-lg text-lg bg-neutral-100 mt-2 hover:bg-neutral-200 transition-colors cursor-pointer">
                                     <SearchItemComponent item={result} />
                                     <div className="text-black">
