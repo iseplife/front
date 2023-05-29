@@ -10,6 +10,7 @@ import Axios, {CancelTokenSource} from "axios"
 import { handleRequestCancellation } from "../../../../util"
 import { SearchItem, SearchItemType } from "../../../../data/searchbar/types"
 import SearchItemComponent from "./SearchItem"
+import { Divider } from "antd"
 
 const IsepDor: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -128,28 +129,35 @@ const IsepDor: React.FC = () => {
         <>
             <div className="mx-auto container px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-10 mt-8 mb-4">
                 {
-                    questions.map(question => 
-                        <div className="flex flex-col px-4 py-3 rounded-lg bg-white relative shadow-sm" onClick={() => openResponding(question)}>
-                            <div className="text-center font-medium text-lg">
-                                {question.question.title}
-                            </div>
-                            <div className="h-0.5 w-[50%] bg-black/5 mx-auto rounded mt-2" />
-                            
-                            {question?.vote ?
-                                <button className="rounded-full bg-neutral-100 px-4 py-2 mt-3 text-neutral-500 hover:bg-neutral-200 transition-colors flex items-center h-10">
-                                    <div className="scale-75">
-                                        <SearchItemComponent item={question.vote} />
-                                    </div>
-                                    <span className="ml-0 font-medium text-base">
-                                        { question.vote.name }
-                                    </span>
-                                </button>
-                                :
-                                <button className="rounded-full bg-neutral-100 px-4 py-2 mt-3 text-neutral-500 hover:bg-neutral-200 transition-colors h-10">
-                                    {t("choose")+" "+t(`type.${question.question.type}`)}...
-                                </button>
+                    questions.map((question, index, array) => 
+                        <>
+                            {(index == 0 || array[index - 1].question.type != question.question.type) && 
+                                <div className="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4 flex items-center">
+                                    <Divider className="uppercase">{t(`type.${question.question.type}`).split(" ")[1]}</Divider>
+                                </div>
                             }
-                        </div>
+                            <div className="flex flex-col px-4 py-3 rounded-lg bg-white relative shadow-sm" onClick={() => openResponding(question)}>
+                                <div className="text-center font-medium text-lg">
+                                    {question.question.title}
+                                </div>
+                                <div className="h-0.5 w-[50%] bg-black/5 mx-auto rounded mt-2" />
+                                
+                                {question?.vote ?
+                                    <button className="rounded-full bg-neutral-100 px-4 py-2 mt-3 text-neutral-500 hover:bg-neutral-200 transition-colors flex items-center h-10">
+                                        <div className="scale-75">
+                                            <SearchItemComponent item={question.vote} />
+                                        </div>
+                                        <span className="ml-0 font-medium text-base">
+                                            { question.vote.name }
+                                        </span>
+                                    </button>
+                                    :
+                                    <button className="rounded-full bg-neutral-100 px-4 py-2 mt-3 text-neutral-500 hover:bg-neutral-200 transition-colors h-10">
+                                        {t("choose")+" "+t(`type.${question.question.type}`)}...
+                                    </button>
+                                }
+                            </div>
+                        </>
                     )
                 }
                 <div className={"fixed inset-0 bg-black/20 z-[999] transition-opacity duration-300 "+(responding ? "opacity-100" : "opacity-0 pointer-events-none")} onClick={() => openResponding(undefined)}>
