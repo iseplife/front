@@ -21,7 +21,7 @@
     z-index: 99999;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
 }
 .navbar {
     transform: translateY(constant(safe-area-inset-top));
