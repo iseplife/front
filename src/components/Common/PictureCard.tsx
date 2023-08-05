@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react"
 import ImageOverlay from "./ImageOverlay"
 import {Badge} from "antd"
-import {faEyeSlash, faLowVision} from "@fortawesome/free-solid-svg-icons"
+import {faEyeSlash, faLowVision, faCircleNotch, faCheck, faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faTrashAlt} from "@fortawesome/free-regular-svg-icons"
+import {faTrashAlt, faClock} from "@fortawesome/free-regular-svg-icons"
 import { releaseCanvas } from "../../util"
+import { MediaUploadStatus } from "../../data/media/types"
 
 type PictureCardProps<MediaType> = {
     file: MediaType
@@ -12,6 +13,8 @@ type PictureCardProps<MediaType> = {
     className?: string
     nsfw?: boolean
     toggleNsfw: (media: MediaType) => void
+    id?: string
+    statusUpload?: MediaUploadStatus
 }
 
 let current: Promise<string> | undefined = undefined
@@ -36,7 +39,7 @@ const optiImage = async (url: string) => {
     })())
 }
 
-const PictureCard = <MediaType extends (File | string)>({file, onDelete, nsfw, toggleNsfw, className}: PictureCardProps<MediaType>) => {
+const PictureCard = <MediaType extends (File | string)>({file, onDelete,id, nsfw, toggleNsfw, className, statusUpload}: PictureCardProps<MediaType>) => {
     const [image, setImage] = useState<string>()
 
     useEffect(() => {
@@ -75,14 +78,37 @@ const PictureCard = <MediaType extends (File | string)>({file, onDelete, nsfw, t
             <div className={`h-20 w-20 m-2 ${className}`}>
                 {image && (
                     <ImageOverlay src={image} className="h-full w-full rounded-xl overflow-hidden">
-                        <FontAwesomeIcon
-                            icon={faLowVision} size="lg" className="mx-1 text-white hover:text-blue-200 cursor-pointer"
-                            onClick={handleNSFW}
-                        />
-                        <FontAwesomeIcon
-                            icon={faTrashAlt} size="lg" className="mx-1 text-white hover:text-red-400 cursor-pointer"
-                            onClick={handleDelete}
-                        />
+
+                        { (!statusUpload || statusUpload == MediaUploadStatus.UNPROCESSED) && (
+                            <><FontAwesomeIcon
+                                icon={faLowVision} size="lg" className="mx-1 text-white hover:text-blue-200 cursor-pointer"
+                                onClick={handleNSFW}
+                            />
+                            <FontAwesomeIcon
+                                icon={faTrashAlt} size="lg" className="mx-1 text-white hover:text-red-400 cursor-pointer"
+                                onClick={handleDelete}
+                            /></>
+                        )}
+                        { (statusUpload && statusUpload == MediaUploadStatus.WAITING) && (
+                            <><FontAwesomeIcon
+                                icon={faClock} size="lg" className="mx-1 text-white cursor-pointer"
+                            /></>
+                        )}
+                        { (statusUpload && statusUpload == MediaUploadStatus.UPLOADING) && (
+                            <><FontAwesomeIcon
+                                icon={faCircleNotch} spin size="lg" className="mx-1 text-white cursor-pointer"
+                            /></>
+                        )}
+                        { (statusUpload && statusUpload == MediaUploadStatus.UPLOADED) && (
+                            <><FontAwesomeIcon
+                                icon={faCheck}  size="lg" className="mx-1 text-white cursor-pointer"
+                            /></>
+                        )}
+                        { (statusUpload && statusUpload == MediaUploadStatus.FAILED) && (
+                            <><FontAwesomeIcon
+                                icon={faTimes} size="lg" className="mx-1 text-white cursor-pointer"
+                            /></>
+                        )}
                     </ImageOverlay>
                 )}
             </div>
