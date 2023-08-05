@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from "react"
+import React, {useCallback, useContext, useMemo} from "react"
 import {useFormik} from "formik"
 import {GalleryPreview, OfficialGalleryForm} from "../../../data/gallery/types"
 import {Input, message, Switch} from "antd"
@@ -7,7 +7,7 @@ import GalleryDragger from "./GalleryDragger"
 import {createGallery} from "../../../data/gallery"
 import HelperIcon from "../../Common/HelperIcon"
 import AuthorPicker from "../../Common/AuthorPicker"
-import {feedsManager} from "../../../datamanager/FeedsManager"
+import { AppContext, AppContextType } from "../../../context/app/context"
 
 const {TextArea} = Input
 
@@ -18,6 +18,9 @@ type GalleryFormProps = {
 }
 const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGallery, onSubmit}) => {
     const {t} = useTranslation("gallery")
+
+    const {state: {authors}} = useContext<AppContextType>(AppContext)
+    
     const formik = useFormik<OfficialGalleryForm>({
         initialValues: {
             name: "",
@@ -26,7 +29,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
             pseudo: false,
             generatePost: true,
             feed: feed,
-            club: clubsAllowedToPublishGallery && clubsAllowedToPublishGallery.length > 0 ? clubsAllowedToPublishGallery[0] : -1,
+            club: clubsAllowedToPublishGallery && clubsAllowedToPublishGallery.length > 0 ? authors.filter(author => clubsAllowedToPublishGallery?.indexOf(author.id) != -1)[0].id : -1,
         },
         onSubmit: (values) => {
             createGallery(values).then(res => {

@@ -89,7 +89,7 @@ const App: React.FC = () => {
                 type: AppActionType.SET_INITIALIZATION,
                 payload: {
                     user: userRes.data,
-                    authors: authorsRes.data
+                    authors: authorsRes.data.sort((a, b) => a.name.localeCompare(b.name))
                 }
             })
 

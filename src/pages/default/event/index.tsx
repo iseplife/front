@@ -45,8 +45,6 @@ const Event: React.FC = () => {
     const [showLoadingMap, setShowLoadingMap] = useState(false)
     const [tab, setTab] = useState<number>(0)
 
-    console.log(event)
-
     const cache = useMemo(() => !isNaN(id) ? entityPreloader.getEvent(id) : undefined, [id])
     const day = useMemo(() => (event ?? cache)?.startsAt?.getDate(), [(event ?? cache)?.startsAt])
     const feed = useMemo(() => (<Feed
@@ -306,8 +304,6 @@ const Event: React.FC = () => {
                         getGalleriesCallback={galleriesCallback}
                     />
                     { event?.clubsAllowedToPublishGallery && event.clubsAllowedToPublishGallery.length > 0 && (
-                    // { event?.feed && (
-
                         <div className="text-center">
                             <GalleryModalForm feed={event.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery} />
                         </div>
