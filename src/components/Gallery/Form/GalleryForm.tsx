@@ -13,9 +13,10 @@ const {TextArea} = Input
 
 type GalleryFormProps = {
     feed: number
+    clubsAllowedToPublishGallery?: number[]
     onSubmit: (g: GalleryPreview) => void
 }
-const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
+const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGallery, onSubmit}) => {
     const {t} = useTranslation("gallery")
     const formik = useFormik<OfficialGalleryForm>({
         initialValues: {
@@ -25,7 +26,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
             pseudo: false,
             generatePost: true,
             feed: feed,
-            club: -1,
+            club: clubsAllowedToPublishGallery && clubsAllowedToPublishGallery.length > 0 ? clubsAllowedToPublishGallery[0] : -1,
         },
         onSubmit: (values) => {
             createGallery(values).then(res => {
@@ -97,7 +98,9 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, onSubmit}) => {
                         className="max-w-full w-64 hover:border-indigo-400"
                         style={{borderBottom: "1px solid #e2e8f0"}}
                         clubOnly={true}
+                        filter={clubsAllowedToPublishGallery}
                         callback={author => formik.setFieldValue("club", author?.id || -1)}
+                        defaultValue={formik.initialValues.club}
                     />
                 </div>
             </div>

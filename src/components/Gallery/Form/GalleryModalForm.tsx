@@ -8,10 +8,11 @@ import {faImages} from "@fortawesome/free-regular-svg-icons"
 
 type GalleryModalFormProps = {
     feed: number
+    clubsAllowedToPublishGallery?: number[]
     mobile?: boolean
     onSubmit?: (g: GalleryPreview) => void
 }
-const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit, mobile}) => {
+const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, clubsAllowedToPublishGallery, onSubmit, mobile}) => {
     const {t} = useTranslation("gallery")
     const [visible, setVisible] = useState(false)
 
@@ -35,7 +36,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, onSubmit, mobi
                 footer={null}
                 onCancel={() => setVisible(false)}
             >
-                <GalleryForm feed={feed} onSubmit={handleSubmit}/>
+                <GalleryForm feed={feed} clubsAllowedToPublishGallery={clubsAllowedToPublishGallery} onSubmit={handleSubmit}/>
             </Modal>
         </>
     )

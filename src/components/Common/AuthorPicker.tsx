@@ -12,6 +12,7 @@ const {Option} = Select
 export type AuthorPickerProps = {
     defaultValue?: number
     authors?: Author[]
+    filter?: number[]
     callback: (author?: Author) => void
     compact?: boolean
     className?: string
@@ -20,14 +21,13 @@ export type AuthorPickerProps = {
     style?: CSSProperties
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, defaultValue, callback, compact, clubOnly, ...props}) => {
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filter, defaultValue, callback, compact, clubOnly, ...props}) => {
     const [t] = useTranslation("common")
     const {state: {user: {picture}, authors}} = useContext<AppContextType>(AppContext)
 
     const choices = useMemo(() => {
-        return (givenAuthors ?? authors)
+        return (givenAuthors ?? (filter ? authors.filter(author => filter?.indexOf(author.id) != -1) : authors))
     }, [givenAuthors, authors])
-
 
     const handleChange = useCallback((v: number) => (
         callback(choices.find(author => author.id == v))

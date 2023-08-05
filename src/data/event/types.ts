@@ -23,6 +23,7 @@ export type Event = {
     club: ClubPreview
     feed: number
     allow_publications: boolean
+    clubsAllowedToPublishGallery: number[]
 }
 
 export type EventPreview = {
