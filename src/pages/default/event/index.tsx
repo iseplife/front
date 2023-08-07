@@ -30,6 +30,7 @@ import { WebPAvatarPolyfill } from "../../../components/Common/WebPPolyfill"
 import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPreloader"
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
 import {AxiosError} from "axios"
+import { GalleryPreview } from "../../../data/gallery/types"
 
 interface ParamTypes {
     id?: string
@@ -128,6 +129,10 @@ const Event: React.FC = () => {
     useEffect(() => {
         setTimeout(() => setShowLoadingMap(true), 200)
     }, [])// Wait for fast connections
+
+    const handleGallerySubmit = useCallback((g: GalleryPreview) => {
+        history.push(`/gallery/${g.id}`)
+    }, [])
 
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
@@ -305,7 +310,7 @@ const Event: React.FC = () => {
                     />
                     { event?.clubsAllowedToPublishGallery && event.clubsAllowedToPublishGallery.length > 0 && (
                         <div className="text-center">
-                            <GalleryModalForm feed={event.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery} />
+                            <GalleryModalForm feed={event.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery} onSubmit={handleGallerySubmit} />
                         </div>
                     )}
 

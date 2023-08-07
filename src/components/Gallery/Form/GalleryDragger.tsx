@@ -7,7 +7,7 @@ import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
 import {Media, MediaUploadNSFW, MediaUploadStatus,} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
-import {faInbox} from "@fortawesome/free-solid-svg-icons"
+import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
 
@@ -17,9 +17,10 @@ type GalleryDraggerProps = {
     club?: number
     canSubmit: boolean
     afterSubmit: (ids: number[]) => void
+    onUploading: () => void
 }
 
-const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, club}) => {
+const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading, canSubmit, club}) => {
     const {t} = useTranslation("gallery")
     const [uploadingState, setUploadingState] = useState<UploadState>(UploadState.OFF)
     const [images, setImages] = useState<Map<File, MediaUploadNSFW>>(new Map())
@@ -112,6 +113,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
 
     const uploadImages = useCallback(async () => {
 
+        onUploading()
+
         setUploadingState(UploadState.UPLOADING)
 
         setImages(prevState => {
@@ -136,7 +139,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
 
                     setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.UPLOADING}))
 
-                    // await new Promise(f => setTimeout(f, 700))
+                    // await new Promise(f => setTimeout(f, 500))
 
                     const res = await createMedia(
                         img,
@@ -176,68 +179,69 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
 
     return (
         <div
-            className="h-full w-full p-3"
+            className="h-full w-full p-8 flex flex-col justify-between"
             onDrop={handleDrop}
             onDragOver={handleOver}
             onDragLeave={handleLeave}
         >
-            <input id={UPLOADER_ID} type="file" multiple className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
-            <h1 className="text-gray-500 font-bold text-lg mb-2">Photos</h1>
-            <div className="text-right font-semibold">
-                {images.size} Photos
+            <div className="h-full flex flex-col py-4">
+                <input id={UPLOADER_ID} type="file" multiple value="" className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
+                <div
+                    onClick={handleClick}
+                    className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 hover:border-indigo-400 border-transparent transition duration-100 ${inDropZone ? "border-blue-600" : "border-gray-400"}`}
+                >
+                    {images.size > 0 ?
+                        [...images.values()].map((img) => (
+                            <PictureCard
+                                key={img.id}
+                                file={img.file}
+                                nsfw={img.nsfw}
+                                onDelete={deleteImage}
+                                toggleNsfw={toggleNSFW}
+                                statusUpload={img.state}
+                            />
+                        )) :
+                        <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
+                            <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
+                            <p className="text-5xl">
+                                <FontAwesomeIcon icon={faInbox}/>
+                            </p>
+                            <p className="text-xs" style={{width: "30rem"}}>
+                                {t("form.draganddrop.1")}
+                            </p>
+                        </div>
+                    }
+                </div>
+                <div className="px-2 font-semibold text-base">
+                    {images.size} Photos
+                </div>
             </div>
-            <div
-                onClick={handleClick}
-                className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 ${inDropZone ? "border-gray-600" : "border-gray-400"}`}
-            >
-                {images.size > 0 ?
-                    [...images.values()].map((img) => (
-                        <PictureCard
-                            key={img.id}
-                            file={img.file}
-                            nsfw={img.nsfw}
-                            onDelete={deleteImage}
-                            toggleNsfw={toggleNSFW}
-                            statusUpload={img.state}
-                        />
-                    )) :
-                    <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
-                        <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
-                        <p className="text-5xl">
-                            <FontAwesomeIcon icon={faInbox}/>
-                        </p>
-                        <p className="text-xs" style={{width: "30rem"}}>
-                            {t("form.draganddrop.1")}
-                        </p>
-                    </div>
-                }
-            </div>
+           
             {uploadingState !== UploadState.OFF &&
             <Progress percent={progression} status={uploadingState} showInfo={false}/>}
-            <div className="text-right">
-                <Button
+            <div className="flex justify-between">
+                <button
                     disabled={images.size == 0 || uploadingState !== UploadState.OFF}
-                    type="primary"
-                    className="border-red-500 bg-red-400 rounded m-3 self-end" onClick={clearAllFiles}
+                    className="text-center px-8 py-2 disabled:text-opacity-60 text-red-600 font-medium text-base duration-200" onClick={clearAllFiles}
                 >
-                    Supprimer images
-                </Button>
-                { isSorted && <Button
-                    disabled={!canSubmit && images.size === 0 || (uploadingState !== UploadState.OFF && uploadingState != UploadState.ERROR)}
-                    type="primary"
-                    className="border-green-500 bg-green-400 rounded m-3 self-end"
+                    <FontAwesomeIcon icon={faTrashAlt} className="mr-2"/> Vider les images
+                </button>
+                { isSorted && <button
+                    type="button"
+                    disabled={!canSubmit || images.size === 0 || (uploadingState !== UploadState.OFF && uploadingState != UploadState.ERROR)}
+                    className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
                     onClick={uploadImages}
                 >
                     Enregistrer
-                </Button>
-                || <Button
-                    disabled={!canSubmit && images.size === 0 || uploadingState !== UploadState.OFF}
-                    type="primary"
-                    className="border-green-500 bg-green-400 rounded m-3 self-end"
+                </button>
+                || <button
+                    type="button"
+                    disabled={!canSubmit || images.size === 0 || uploadingState !== UploadState.OFF}
+                    className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
                     onClick={sortImages}
                 >
                     Réorganiser
-                </Button>}
+                </button>}
             </div>
         </div>
     )

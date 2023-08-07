@@ -19,6 +19,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, clubsAllowedTo
     const handleSubmit = useCallback((g: GalleryPreview) => {
         setVisible(false)
         onSubmit && onSubmit(g)
+        
     }, [onSubmit])
     return (
         <>
@@ -30,7 +31,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, clubsAllowedTo
                 {t("add")} <FontAwesomeIcon icon={faImages} className="ml-2"/>
             </Button>
             <Modal
-                className="w-11/12 no-padding-modal"
+                className="w-11/12 no-padding-modal rounded-xl overflow-hidden pb-0 top-6 md:top-14"
                 visible={visible}
                 title={null}
                 footer={null}
