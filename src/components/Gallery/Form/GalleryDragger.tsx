@@ -10,6 +10,7 @@ import {UploadState} from "../../../data/request.type"
 import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
+import { add } from "lodash"
 
 const UPLOADER_ID = "imgupload"
 
@@ -28,7 +29,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
     const [uploadCount, setUploadCount] = useState<number>(0)
     const [uploadResp, setUploadResp] = useState<AxiosResponse<Media, any>[]>([])
     const [inDropZone, setInDropZone] = useState<boolean>(false)
-    const [isSorted, setSorted] = useState<boolean>(false)
 
     const clearAllFiles = useCallback(() => {
         setImages(new Map())
@@ -40,15 +40,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
 
         if(uploadingState !== UploadState.OFF) return
 
-        setSorted(false)
+        addImages(Array.from(e.dataTransfer.files))
 
-        setImages(prevState => {
-            const newMap = new Map(prevState)
-            for (const file of e.dataTransfer.files) {
-                newMap.set(file, {id: (Math.random() + 1).toString(36).substring(2), file, nsfw: false, state: MediaUploadStatus.UNPROCESSED})
-            }
-            return newMap
-        })
         setInDropZone(false)
     }, [uploadingState])
 
@@ -70,16 +63,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
 
     const handleManualSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if(uploadingState !== UploadState.OFF) return
-        setImages(prevState => {
-            setSorted(false)
-            const newMap = new Map(prevState)
-            const files = e.target.files || []
-
-            for (const file of files) {
-                newMap.set(file, {id: (Math.random() + 1).toString(36).substring(2), file, nsfw: false, state: MediaUploadStatus.UNPROCESSED})
-            }
-            return newMap
-        })
+        addImages(Array.from(e.target.files || []))
     }, [])
 
     const deleteImage = useCallback((media: File) => {
@@ -103,13 +87,20 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
         })
     }, [])
 
-    const sortImages = useCallback(async () => {
+    const addImages = (images : File[]) => {
         setImages(prevState => {
-            const newMap = new Map([...prevState.entries()].sort((a, b) => a[0].name.localeCompare(b[0].name)))
-            return newMap
+            const map = new Map(prevState)
+            const addMap = new Map()
+
+            for (const file of images.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))) {
+                addMap.set(file, {id: (Math.random() + 1).toString(36).substring(2), file, nsfw: false, state: MediaUploadStatus.UNPROCESSED})
+            }
+            
+            addMap.forEach((value, key) => map.set(key, value))
+
+            return map
         })
-        setSorted(true)
-    }, [isSorted])
+    }
 
     const uploadImages = useCallback(async () => {
 
@@ -226,7 +217,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 >
                     <FontAwesomeIcon icon={faTrashAlt} className="mr-2"/> Vider les images
                 </button>
-                { isSorted && <button
+                <button
                     type="button"
                     disabled={!canSubmit || images.size === 0 || (uploadingState !== UploadState.OFF && uploadingState != UploadState.ERROR)}
                     className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
@@ -234,14 +225,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 >
                     Enregistrer
                 </button>
-                || <button
-                    type="button"
-                    disabled={!canSubmit || images.size === 0 || uploadingState !== UploadState.OFF}
-                    className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
-                    onClick={sortImages}
-                >
-                    Réorganiser
-                </button>}
             </div>
         </div>
     )
