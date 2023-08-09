@@ -67,7 +67,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
 
                 
                 
-                <div className="flex flex-row lg:flex-col w-full lg:h-full px-4 my-4">
+                <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:h-full px-4 my-4">
 
                     <div className="px-4 lg:px-0">
                         <div className="mt-4">
