@@ -19,9 +19,10 @@ export type AuthorPickerProps = {
     clubOnly?: boolean
     placeholder?: string
     style?: CSSProperties
+    disabled?: boolean
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filter, defaultValue, callback, compact, clubOnly, ...props}) => {
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filter, defaultValue, callback, compact, clubOnly, disabled = false, ...props}) => {
     const [t] = useTranslation("common")
     const {state: {user: {picture}, authors}} = useContext<AppContextType>(AppContext)
 
@@ -69,6 +70,7 @@ const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filte
             onChange={handleChange}
             className={props.className}
             style={props.style}
+            disabled={disabled}
         >
             {!clubOnly && selfAuthor}
             {choices.map((p, i) => (

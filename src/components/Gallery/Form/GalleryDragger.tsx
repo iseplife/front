@@ -5,25 +5,31 @@ import PictureCard from "../../Common/PictureCard"
 import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
-import {Media, MediaUploadNSFW} from "../../../data/media/types"
+import {Media, MediaUploadNSFW, MediaUploadStatus,} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
-import {faInbox} from "@fortawesome/free-solid-svg-icons"
+import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
+import { add } from "lodash"
 
 const UPLOADER_ID = "imgupload"
+
+const debugUploader = false
 
 type GalleryDraggerProps = {
     club?: number
     canSubmit: boolean
     afterSubmit: (ids: number[]) => void
+    onUploading: () => void
 }
 
-const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, club}) => {
+const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading, canSubmit, club}) => {
     const {t} = useTranslation("gallery")
     const [uploadingState, setUploadingState] = useState<UploadState>(UploadState.OFF)
     const [images, setImages] = useState<Map<File, MediaUploadNSFW>>(new Map())
     const [progression, setProgression] = useState<number>(0)
+    const [uploadCount, setUploadCount] = useState<number>(0)
+    const [uploadResp, setUploadResp] = useState<AxiosResponse<Media, any>[]>([])
     const [inDropZone, setInDropZone] = useState<boolean>(false)
 
     const clearAllFiles = useCallback(() => {
@@ -34,15 +40,12 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
         e.preventDefault()
         e.stopPropagation()
 
-        setImages(prevState => {
-            const newMap = new Map(prevState)
-            for (const file of e.dataTransfer.files) {
-                newMap.set(file, {file, nsfw: false})
-            }
-            return newMap
-        })
+        if(uploadingState !== UploadState.OFF) return
+
+        addImages(Array.from(e.dataTransfer.files))
+
         setInDropZone(false)
-    }, [])
+    }, [uploadingState])
 
     const handleLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -53,24 +56,17 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
     const handleOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
-        if (!inDropZone) setInDropZone(true)
-    }, [inDropZone])
+        if (!inDropZone && uploadingState !== UploadState.OFF) setInDropZone(true)
+    }, [inDropZone, uploadingState])
 
     const handleClick = useCallback(() => {
         document.getElementById(UPLOADER_ID)?.click()
     }, [])
 
     const handleManualSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setImages(prevState => {
-            const newMap = new Map(prevState)
-            const files = e.target.files || []
-
-            for (const file of files) {
-                newMap.set(file, {file, nsfw: false})
-            }
-            return newMap
-        })
-    }, [])
+        if(uploadingState !== UploadState.OFF) return
+        addImages(Array.from(e.target.files || []))
+    }, [uploadingState])
 
     const deleteImage = useCallback((media: File) => {
         setImages(prevState => {
@@ -93,16 +89,48 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
         })
     }, [])
 
+    const addImages = (images : File[]) => {
+        setImages(prevState => {
+            const map = new Map(prevState)
+            const addMap = new Map()
+
+            for (const file of images.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))) {
+                addMap.set(file, {id: (Math.random() + 1).toString(36).substring(2), file, nsfw: false, state: MediaUploadStatus.UNPROCESSED})
+            }
+            
+            addMap.forEach((value, key) => map.set(key, value))
+
+            return map
+        })
+    }
+
     const uploadImages = useCallback(async () => {
-        const responses: AxiosResponse<Media>[] = []
+
+        onUploading()
+
         setUploadingState(UploadState.UPLOADING)
 
-        let res: AxiosResponse<Media>
-        let i = 0
+        setImages(prevState => {
+            prevState.forEach(value => value.state = MediaUploadStatus.WAITING)
+            return prevState
+        })
+
+        let i = uploadCount
+        const responses = uploadResp
+
         for (const img of images.values()) {
+
             try {
                 if (isFileImage(img.file.type)) {
-                    res = await createMedia(
+
+                    if(img.state == MediaUploadStatus.UPLOADED) continue
+
+                    setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.UPLOADING}))
+
+                    if(debugUploader)
+                        await new Promise(f => setTimeout(f, 500))
+
+                    const res = await createMedia(
                         img,
                         EmbedEnumType.IMAGE,
                         club,
@@ -110,73 +138,92 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, canSubmit, 
                         e => setProgression((i + e.loaded / e.total) / images.size * 100)
                     )
                     responses.push(res)
+
+                    if(debugUploader)
+                        if(Math.random() > 0.5) throw new Error("Une erreur de test !")
+
                     i++
                     setProgression(i / images.size * 100)
+
+                    setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.UPLOADED}))
                 }
             } catch (e: any) {
+                setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.FAILED}))
                 setUploadingState(UploadState.ERROR)
                 message.error(e.message)
+
+                setUploadCount(i)
+                setUploadResp(responses)
+
                 break
             }
         }
 
-        afterSubmit(responses.map(r => r.data.id))
-        setUploadingState(UploadState.FINISHED)
-    }, [afterSubmit, images, club])
+        if(i == images.size){
+            afterSubmit(responses.map(r => r.data.id))
+            setUploadingState(UploadState.FINISHED)
+        }
+        
+    }, [afterSubmit, images, uploadCount, uploadResp, club])
 
 
     return (
         <div
-            className="h-full w-full p-3"
+            className="h-full w-full p-8 flex flex-col justify-between"
             onDrop={handleDrop}
             onDragOver={handleOver}
             onDragLeave={handleLeave}
         >
-            <input id={UPLOADER_ID} type="file" multiple className="hidden" onChange={handleManualSelect}/>
-            <h1 className="text-gray-500 font-bold text-lg mb-6">Photos</h1>
-            <div
-                onClick={handleClick}
-                className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 ${inDropZone ? "border-gray-600" : "border-gray-400"}`}
-            >
-                {images.size > 0 ?
-                    [...images.values()].map((img) => (
-                        <PictureCard
-                            key={img.file.name}
-                            file={img.file}
-                            nsfw={img.nsfw}
-                            onDelete={deleteImage}
-                            toggleNsfw={toggleNSFW}
-                        />
-                    )) :
-                    <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
-                        <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
-                        <p className="text-5xl">
-                            <FontAwesomeIcon icon={faInbox}/>
-                        </p>
-                        <p className="text-xs" style={{width: "30rem"}}>
-                            {t("form.draganddrop.1")}
-                        </p>
-                    </div>
-                }
+            <div className="h-full flex flex-col py-4">
+                <input id={UPLOADER_ID} type="file" multiple value="" className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
+                <div
+                    onClick={handleClick}
+                    className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 hover:border-indigo-400 border-transparent transition duration-100 ${inDropZone ? "border-blue-600" : "border-gray-400"}`}
+                >
+                    {images.size > 0 ?
+                        [...images.values()].map((img) => (
+                            <PictureCard
+                                key={img.id}
+                                file={img.file}
+                                nsfw={img.nsfw}
+                                onDelete={deleteImage}
+                                toggleNsfw={toggleNSFW}
+                                statusUpload={img.state}
+                            />
+                        )) :
+                        <div className="flex flex-col justify-center h-full w-full items-center text-center text-gray-500">
+                            <p className="font-bold text-xl m-0">{t("form.draganddrop.0")}</p>
+                            <p className="text-5xl">
+                                <FontAwesomeIcon icon={faInbox}/>
+                            </p>
+                            <p className="text-xs" style={{width: "30rem"}}>
+                                {t("form.draganddrop.1")}
+                            </p>
+                        </div>
+                    }
+                </div>
+                <div className="px-2 font-semibold text-base">
+                    {images.size} Photos
+                </div>
             </div>
+           
             {uploadingState !== UploadState.OFF &&
             <Progress percent={progression} status={uploadingState} showInfo={false}/>}
-            <div className="text-right">
-                <Button
-                    disabled={images.size == 0}
-                    type="primary"
-                    className="border-red-500 bg-red-400 rounded m-3 self-end" onClick={clearAllFiles}
+            <div className="flex justify-between">
+                <button
+                    disabled={images.size == 0 || uploadingState !== UploadState.OFF}
+                    className="text-center px-8 py-2 disabled:text-opacity-60 text-red-600 font-medium text-base duration-200" onClick={clearAllFiles}
                 >
-                    Supprimer images
-                </Button>
-                <Button
-                    disabled={!canSubmit && images.size === 0}
-                    type="primary"
-                    className="border-green-500 bg-green-400 rounded m-3 self-end"
+                    <FontAwesomeIcon icon={faTrashAlt} className="mr-2"/> Vider les images
+                </button>
+                <button
+                    type="button"
+                    disabled={!canSubmit || images.size === 0 || (uploadingState !== UploadState.OFF && uploadingState != UploadState.ERROR)}
+                    className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
                     onClick={uploadImages}
                 >
                     Enregistrer
-                </Button>
+                </button>
             </div>
         </div>
     )

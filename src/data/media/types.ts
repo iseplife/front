@@ -4,9 +4,19 @@ export enum MediaStatus {
     READY = "READY"
 }
 
+export enum MediaUploadStatus {
+    UNPROCESSED = "UNPROCESSED",
+    WAITING = "WAITING",
+    UPLOADING = "UPLOADING",
+    UPLOADED = "UPLOADED",
+    FAILED = "FAILED"
+}
+
 export type MediaUploadNSFW = {
+    id?: string
     file: File
     nsfw: boolean
+    state?: MediaUploadStatus
 }
 
 export type MediaEditionNSFW = {
