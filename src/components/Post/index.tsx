@@ -131,7 +131,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                 <div className="w-full flex justify-between mb-1">
                     <PostAuthor author={data.author} publicationDate={data.publicationDate}/>
                     <div className="flex flex-row justify-end items-center text-lg -mt-4 -mr-1.5 min-w-0 ml-2">
-                        {feedId == undefined &&
+                        { (feedId == undefined || feedId == -1) &&
                             <PostContextTag context={data.context}/>
                         }
                         {superVisibility && isAdmin && (
