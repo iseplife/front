@@ -26,7 +26,7 @@ const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filte
     const {state: {user: {picture}, authors}} = useContext<AppContextType>(AppContext)
 
     const choices = useMemo(() => {
-        return (givenAuthors ?? (filter ? authors.filter(author => filter?.indexOf(author.id) != -1) : authors))
+        return (givenAuthors ?? (filter ? authors.filter(author => filter.includes(author.id)) : authors))
     }, [givenAuthors, authors])
 
     const handleChange = useCallback((v: number) => (

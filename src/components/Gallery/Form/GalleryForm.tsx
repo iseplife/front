@@ -29,7 +29,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
             pseudo: false,
             generatePost: true,
             feed: feed,
-            club: clubsAllowedToPublishGallery && clubsAllowedToPublishGallery.length > 0 ? authors.filter(author => clubsAllowedToPublishGallery?.indexOf(author.id) != -1)[0].id : -1,
+            club: authors.find(author => clubsAllowedToPublishGallery?.includes(author.id))?.id ?? -1,
         },
         onSubmit: (values) => {
             createGallery(values).then(res => {
