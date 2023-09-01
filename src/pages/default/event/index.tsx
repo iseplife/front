@@ -303,9 +303,9 @@ const Event: React.FC = () => {
                         loading={!(event ?? cache)?.id}
                         getGalleriesCallback={galleriesCallback}
                     />
-                    {event?.hasRight && (
+                    { event?.clubsAllowedToPublishGallery && event.clubsAllowedToPublishGallery.length > 0 && (
                         <div className="text-center">
-                            <GalleryModalForm feed={event.feed} />
+                            <GalleryModalForm feed={event.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery} />
                         </div>
                     )}
 
