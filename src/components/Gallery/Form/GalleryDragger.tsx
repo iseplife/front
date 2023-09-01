@@ -14,6 +14,8 @@ import { add } from "lodash"
 
 const UPLOADER_ID = "imgupload"
 
+const debugUploader = false
+
 type GalleryDraggerProps = {
     club?: number
     canSubmit: boolean
@@ -55,7 +57,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
         e.preventDefault()
         e.stopPropagation()
         if (!inDropZone && uploadingState !== UploadState.OFF) setInDropZone(true)
-    }, [inDropZone])
+    }, [inDropZone, uploadingState])
 
     const handleClick = useCallback(() => {
         document.getElementById(UPLOADER_ID)?.click()
@@ -64,7 +66,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
     const handleManualSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if(uploadingState !== UploadState.OFF) return
         addImages(Array.from(e.target.files || []))
-    }, [])
+    }, [uploadingState])
 
     const deleteImage = useCallback((media: File) => {
         setImages(prevState => {
@@ -109,13 +111,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
         setUploadingState(UploadState.UPLOADING)
 
         setImages(prevState => {
-            const newMap = new Map(prevState)
-            for (const file of images.keys()) {
-                const target = newMap.get(file) as MediaUploadNSFW
-                if(target.state != MediaUploadStatus.UPLOADED)
-                    newMap.set(file, {...target, state: MediaUploadStatus.WAITING})
-            }
-            return newMap
+            prevState.forEach(value => value.state = MediaUploadStatus.WAITING)
+            return prevState
         })
 
         let i = uploadCount
@@ -130,7 +127,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
 
                     setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.UPLOADING}))
 
-                    // await new Promise(f => setTimeout(f, 500))
+                    if(debugUploader)
+                        await new Promise(f => setTimeout(f, 500))
 
                     const res = await createMedia(
                         img,
@@ -141,7 +139,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                     )
                     responses.push(res)
 
-                    // if(Math.random() > 0.5) throw new Error("Une erreur de test !")
+                    if(debugUploader)
+                        if(Math.random() > 0.5) throw new Error("Une erreur de test !")
 
                     i++
                     setProgression(i / images.size * 100)

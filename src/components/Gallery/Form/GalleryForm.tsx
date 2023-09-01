@@ -35,7 +35,6 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
             club: authors.find(author => clubsAllowedToPublishGallery?.includes(author.id))?.id ?? -1,
         },
         onSubmit: (values) => {
-            console.log("submit here")
             createGallery(values).then(res => {
                 message.success(t("created"))
                 onSubmit({
@@ -55,6 +54,8 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
     const isFormValid = useMemo(() => (
         formik.values.name.length > 3 && (formik.values.description.length > 3 || !formik.values.generatePost) && formik.values.club != -1
     ), [formik.values.name, formik.values.description, formik.values.generatePost, formik.values.club])
+
+    const onStartUploading = useCallback(() => setOnUploading(true), [])
 
     return (
         <form className="flex flex-col lg:flex-row h-full " onSubmit={formik.handleSubmit}>
@@ -123,6 +124,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
                                 filter={clubsAllowedToPublishGallery}
                                 callback={author => formik.setFieldValue("club", author?.id || -1)}
                                 defaultValue={formik.initialValues.club}
+                                disabled={uploading}
                             />
                         </div>
                     </div>
@@ -132,7 +134,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
                
             </div>
             <div className="w-full lg:w-3/4">
-                <GalleryDragger club={formik.values.club} canSubmit={isFormValid} afterSubmit={onFilesUploaded} onUploading={() => setOnUploading(true)}/>
+                <GalleryDragger club={formik.values.club} canSubmit={isFormValid} afterSubmit={onFilesUploaded} onUploading={onStartUploading}/>
             </div>
         </form>
     )
