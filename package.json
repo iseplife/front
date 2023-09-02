@@ -157,5 +157,5 @@
     "workbox-streams": "^5.1.4"
   },
   "description": "iseplife webapp",
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@3.2.3"
 }
