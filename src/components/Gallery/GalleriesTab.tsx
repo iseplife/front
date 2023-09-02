@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {GalleryPreview} from "../../data/gallery/types"
 import GalleryCard from "./GalleryCard"
 import {useTranslation} from "react-i18next"
@@ -13,10 +13,12 @@ import GalleryModalForm from "./Form/GalleryModalForm"
 interface GalleriesTabProps {
     elementId: number
     feedId?: number
+    clubsAllowedToPublishGallery?: number[]
     getGalleriesCallback: (id: number, page?: number) => AxiosPromise<Page<GalleryPreview>>
+    onSubmit?: (g: GalleryPreview) => void
 }
 
-const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, feedId, getGalleriesCallback}) => {
+const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, feedId, clubsAllowedToPublishGallery, getGalleriesCallback, onSubmit}) => {
     const {t} = useTranslation("gallery")
     const [loading, setLoading] = useState<boolean>()
     const [galleriesPreview, setGalleriesPreview] = useState<GalleryPreview[]>([])
@@ -32,15 +34,20 @@ const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, feedId, getGaller
 
     }, [getGalleriesCallback, elementId])
 
+    const handleGallerySubmit = useCallback((g: GalleryPreview) => {
+        if(onSubmit)
+            onSubmit(g)
+    }, [])
+
     return loading ?
         <GalleriesPreviewSkeleton/> :
         <div>
-            {feedId && <div className="-mb-5 mt-5 mx-auto flex md:hidden">
-                <GalleryModalForm feed={feedId} mobile={true} />
+            {feedId && clubsAllowedToPublishGallery!.length>0 && <div className="-mb-5 mt-5 mx-auto flex sm:hidden">
+                <GalleryModalForm feed={feedId} clubsAllowedToPublishGallery={clubsAllowedToPublishGallery} mobile={true} onSubmit={handleGallerySubmit} />
             </div>}
             {galleriesPreview.map(g => (
-                <div className="flex flex-col px-4 py-2 shadow-sm rounded-lg bg-white my-5">
-                    <GalleryCard key={g.id} gallery={g}/>
+                <div key={g.id} className="flex flex-col px-4 py-2 shadow-sm rounded-lg bg-white my-5">
+                    <GalleryCard gallery={g}/>
                 </div>
             ))}
             {galleriesPreview.length == 0 && 

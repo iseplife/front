@@ -10,7 +10,6 @@ import {UploadState} from "../../../data/request.type"
 import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
-import { add } from "lodash"
 
 const UPLOADER_ID = "imgupload"
 

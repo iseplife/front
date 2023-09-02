@@ -46,6 +46,10 @@ const Event: React.FC = () => {
     const [showLoadingMap, setShowLoadingMap] = useState(false)
     const [tab, setTab] = useState<number>(0)
 
+    const handleGallerySubmit = useCallback((g: GalleryPreview) => {
+        history.push(`/gallery/${g.id}`)
+    }, [])
+
     const cache = useMemo(() => !isNaN(id) ? entityPreloader.getEvent(id) : undefined, [id])
     const day = useMemo(() => (event ?? cache)?.startsAt?.getDate(), [(event ?? cache)?.startsAt])
     const feed = useMemo(() => (<Feed
@@ -57,7 +61,7 @@ const Event: React.FC = () => {
     const tabs = useMemo(() => ({
         [t("common:posts")]: feed,
         [t("gallery:galleries")]: event?.id ?
-            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries} feedId={event.hasRight ? event?.feed : undefined} /> :
+            <GalleriesTab elementId={event?.id} getGalleriesCallback={getEventGalleries} feedId={event?.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery}  onSubmit={handleGallerySubmit} /> :
             <></>,
     }), [feed, event?.id, event?.hasRight, event?.feed])
 
@@ -129,10 +133,6 @@ const Event: React.FC = () => {
     useEffect(() => {
         setTimeout(() => setShowLoadingMap(true), 200)
     }, [])// Wait for fast connections
-
-    const handleGallerySubmit = useCallback((g: GalleryPreview) => {
-        history.push(`/gallery/${g.id}`)
-    }, [])
 
     return (<>
         <div className="w-full md:h-64 h-28 relative hidden sm:block z-10">
