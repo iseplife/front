@@ -68,7 +68,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
 
                 
                 
-                <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:h-full px-4 my-4">
+                <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:h-full sm:px-2 my-4">
 
                     <div className="px-4 lg:px-0">
                         <div className="mt-4">
@@ -115,10 +115,10 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
                                 disabled={uploading}
                             />
                         </div>
-                        <div className="flex-grow flex flex-col justify-end">
+                        <div className="flex-grow flex flex-col justify-end mt-8 sm:mt-16 lg:mt-0">
                             <label >{t("form.author")}</label>
                             <AuthorPicker
-                                className="max-w-full w-64 hover:border-indigo-400"
+                                className="max-w-full sm:w-64 hover:border-indigo-400"
                                 style={{borderBottom: "1px solid #e2e8f0"}}
                                 clubOnly={true}
                                 filter={clubsAllowedToPublishGallery}
