@@ -37,7 +37,7 @@ const GalleriesTab: React.FC<GalleriesTabProps> = ({elementId, feedId, clubsAllo
     const handleGallerySubmit = useCallback((g: GalleryPreview) => {
         if(onSubmit)
             onSubmit(g)
-    }, [])
+    }, [onSubmit])
 
     return loading ?
         <GalleriesPreviewSkeleton/> :
