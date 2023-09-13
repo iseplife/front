@@ -10,9 +10,6 @@ import {UploadState} from "../../../data/request.type"
 import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
-import { add } from "lodash"
-
-const UPLOADER_ID = "imgupload"
 
 const debugUploader = false
 
@@ -31,6 +28,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
     const [uploadCount, setUploadCount] = useState<number>(0)
     const [uploadResp, setUploadResp] = useState<AxiosResponse<Media, any>[]>([])
     const [inDropZone, setInDropZone] = useState<boolean>(false)
+    const [imgUploadZoneId, setImgUploadZoneId] = useState<string>("imgupload" + Math.random().toString(36))
 
     const clearAllFiles = useCallback(() => {
         setImages(new Map())
@@ -60,8 +58,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
     }, [inDropZone, uploadingState])
 
     const handleClick = useCallback(() => {
-        document.getElementById(UPLOADER_ID)?.click()
-    }, [])
+        document.getElementById(imgUploadZoneId)?.click()
+    }, [imgUploadZoneId])
 
     const handleManualSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if(uploadingState !== UploadState.OFF) return
@@ -166,7 +164,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
         
     }, [afterSubmit, images, uploadCount, uploadResp, club])
 
-
     return (
         <div
             className="h-full w-full p-8 flex flex-col justify-between"
@@ -175,7 +172,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
             onDragLeave={handleLeave}
         >
             <div className="h-full flex flex-col py-4">
-                <input id={UPLOADER_ID} type="file" multiple value="" className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
+                <input id={imgUploadZoneId} type="file" multiple value="" className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
                 <div
                     onClick={handleClick}
                     className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 hover:border-indigo-400 border-transparent transition duration-100 ${inDropZone ? "border-blue-600" : "border-gray-400"}`}
@@ -212,7 +209,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
             <div className="flex justify-between">
                 <button
                     disabled={images.size == 0 || uploadingState !== UploadState.OFF}
-                    className="text-center px-8 py-2 disabled:text-opacity-60 text-red-600 font-medium text-base duration-200" onClick={clearAllFiles}
+                    className="text-center py-2 disabled:text-opacity-60 text-red-600 font-medium text-base duration-200" onClick={clearAllFiles}
                 >
                     <FontAwesomeIcon icon={faTrashAlt} className="mr-2"/> Vider les images
                 </button>
