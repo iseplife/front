@@ -28,5 +28,6 @@
 	"copied": "Lien copié dans le presse papier !",
 	"video_not_editable": "Les vidéos ne peuvent pas être modifiées.",
 	"report": "Signaler",
-	"reported": "Vous avez bien signalé ce post, il sera audité sous 24h."
+	"reported": "Vous avez bien signalé ce post, il sera audité sous 24h.",
+	"post_deleted" : "Ce post a été supprimé."
 }
