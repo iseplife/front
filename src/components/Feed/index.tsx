@@ -373,7 +373,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
                     {!selectedPost ? 
-                        ((loading) ? 
+                        ((loading || fetching) ? 
                             <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/> 
                             : <div className="mb-8 flex items-center justify-center p-4"><FontAwesomeIcon
                                 icon={faTimes}
