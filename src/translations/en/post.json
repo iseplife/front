@@ -28,5 +28,6 @@
 	"copied": "Linked copied into clipboard !",
 	"video_not_editable": "Videos are not editable.",
 	"report": "Report",
-	"reported": "You just reported this post to the administrators, it will be reviewed in 24h"
+	"reported": "You just reported this post to the administrators, it will be reviewed in 24h",
+	"post_deleted" : "This post has been deleted"
 }

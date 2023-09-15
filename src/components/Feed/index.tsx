@@ -17,7 +17,7 @@ import CardTextSkeleton from "../Skeletons/CardTextSkeleton"
 import {useTranslation} from "react-i18next"
 import BasicPostForm from "../Post/Form/BasicPostForm"
 import PostCreateForm from "../Post/Form/PostCreateForm"
-import {faAlignLeft, faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
+import {faAlignLeft, faChartBar, faImages, faPaperclip, faTimes, faTrash, faTrashAlt, faVideo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
 import {AppContext} from "../../context/app/context"
@@ -368,11 +368,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     onClose={() => setCompleteFormType(undefined)}
                 />}
             </Modal>
+
             {
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
                     {!selectedPost ? 
-                        <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/>
+                        ((loading) ? 
+                            <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/> 
+                            : <div className="mb-8 flex items-center justify-center p-4"><FontAwesomeIcon
+                                icon={faTimes}
+                                className="mr-2"/>
+                            <div>{t("post:post_deleted")}</div></div>)
                         : <div
                             key={selectedPost.publicationDateId}
                             className={`${!feedsManager.isFresh(selectedPost, id) && "opacity-60 pointer-events-none"}`}
