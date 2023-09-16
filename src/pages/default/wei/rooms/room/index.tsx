@@ -69,7 +69,14 @@ const WeiRoomPage = () => {
 
     const join = useCallback(() => {
         setJoining(true)
-        joinRoom(id).then(res => setRoom(res.data))
+        joinRoom(id).then(res => setRoom(res.data)).catch(error => {
+            if((error as AxiosError).response?.status == 400) {
+                message.error("You are already in a room, here it is.")
+                setTimeout(() =>
+                    h.push("/wei/rooms")
+                , 1500)
+            }
+        })
     }, [id])
     const adminDelete = useCallback(() => {
         setJoining(true)
