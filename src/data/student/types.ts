@@ -1,3 +1,4 @@
+import FamilyType from "../../constants/FamilyType"
 import { GroupPreview } from "../group/types"
 
 export type StudentPicture = {
@@ -72,6 +73,8 @@ export type StudentOverview = StudentPreview & {
     twitter?: string
     instagram?: string
     snapchat?: string
+    
+    family?: FamilyType
 }
 
 export type StudentSettings = {

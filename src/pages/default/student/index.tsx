@@ -21,6 +21,7 @@ import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
 import {AxiosError} from "axios"
+import { familyColors, familyNames } from "../../../constants/FamilyType"
 
 interface ParamTypes {
     id?: string
@@ -95,7 +96,7 @@ const Student: React.FC = () => {
     
 
     const isBlocked = useLiveQuery(async () => (student || cache) && (await feedsManager.getBlocked()).includes((student || cache)!.id), [(student ?? cache)?.id])
-
+    
     return (
         <>
             <div className="absolute flex w-full justify-end">
@@ -124,6 +125,23 @@ const Student: React.FC = () => {
                                 <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo ?? cache?.promo}</div>
                                 :
                                 <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
+                            }
+                            {
+                                (student?.family !== undefined || !student) &&
+                                <div className="flex">
+                                    {student?.family !== undefined ?
+                                        <div className="text-lg sm:text-xl rounded-lg px-2 py-1" style={{
+                                            backgroundColor: familyColors[student?.family]?.color,
+                                            color: familyColors[student?.family]?.textColor
+                                        }}>
+                                            { familyNames[student?.family] }
+                                        </div>
+                                        :
+                                        <div className="text-lg sm:text-xl bg-neutral-200 rounded-lg px-2 py-1">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    }
+                                </div>
                             }
                             {id != myId &&
                                 <div className="flex mt-3">
