@@ -100,7 +100,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                             }
 
                             const res = await createGallery({
-                                feed: 1, //TODO change this with real feed
+                                feed: props.post.context.feedId,
                                 pseudo: true,
                                 images: ids
                             })
@@ -130,7 +130,7 @@ const PostEditForm = withFormik<PostEditFormProps, PostFormValues<EmbedEdition |
                         break
                     }
                     case EmbedEnumType.DOCUMENT:
-                        if (!("id" in embed.data)) {
+                        if (!("id" in embed.data) && embed.data.file) {
                             const res = await createMedia(embed.data, embed.type, post.linkedClub)
                             post.attachements = {[EmbedEnumType.DOCUMENT]: res.data.id}
                         }
