@@ -12,29 +12,11 @@ import { LoggedStudentPreview } from "../../../data/student/types"
 import AuthorPicker from "../../Common/AuthorPicker"
 
 
-export type BasicPostFormValues = {
-    description: string
-    private: boolean
-    feed: number
-    linkedClub?: number
-    selectedClub?: Author
-    setText: (value: string) => void
-}
-
 const BasicPostForm: React.FC<BasicPostForm> = ({ children, onInputClicked}) => {
     const {t} = useTranslation(["post"])
     const {state: {user}} = useContext(AppContext)
-    const textRef = useRef<HTMLInputElement>(null)
     const [selectedClub, setSelectedClub] = useState<Author>()
 
-    // useEffect(() => {
-    //     if(values.selectedClub != selectedClub)
-    //         setValues(values => ({...values, selectedClub}))
-    // }, [selectedClub, values.selectedClub])
-
-    // useEffect(() => {
-    //     values.setText(values.description)
-    // }, [textRef?.current, values.setText, values.description])
 
     return (
         <div className="flex flex-col items-center text-gray-500 rounded-lg shadow bg-white">
@@ -70,7 +52,6 @@ const BasicPostForm: React.FC<BasicPostForm> = ({ children, onInputClicked}) => 
         </div>
     )
 }
-
 
 type BasicPostForm = {
     feed?: number
