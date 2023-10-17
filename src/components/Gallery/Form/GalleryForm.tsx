@@ -123,7 +123,6 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
                                 clubOnly={true}
                                 filter={clubsAllowedToPublishGallery}
                                 callback={author => formik.setFieldValue("club", author?.id || -1)}
-                                defaultValue={formik.initialValues.club}
                                 disabled={uploading}
                             />
                         </div>

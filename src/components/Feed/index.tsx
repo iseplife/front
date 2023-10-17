@@ -352,6 +352,11 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         setCompleteFormType(undefined)
     }, [])
 
+    const openCreateModal = useCallback(() => {
+        setCompleteFormType(undefined!)
+        setFormVisible(true)
+    }, [])
+
     return (
         <div
             className={`${className}`}
@@ -372,6 +377,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     user={user}
                     onSubmit={onPostCreation}
                     onClose={closeForm}
+                    key={completeFormType!}
                 />}
             </Modal>
 
@@ -407,7 +413,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             }
             {!noDivider && <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>}
             {allowPublication && (
-                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={() => setFormVisible(true)}>
+                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={openCreateModal}>
                     <div className="grid grid-cols-4 sm:gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
