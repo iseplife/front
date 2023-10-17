@@ -15,13 +15,13 @@ type EventProps = {
 const EventPreview: React.FC<EventProps> = ({ event }) => {
     const {t} = useTranslation("event")
     return (
-        <LinkEntityPreloader preview={event} noWidth className="sm:truncate">
+        <LinkEntityPreloader preview={event} noWidth className="sm:truncate"> 
             <Link to={`/event/${event.id}`} className="w-full max-w-sm text-gray-700 hover:text-gray-500 relative">
                 <div
                     title={event.title}
                     className="flex flex-col sm:flex-row px-3 py-2 shadow-sm rounded-lg bg-white items-center"
                 >
-                    <div className="text-center pb-1">
+                    <div className="text-center pb-1 mx-8 sm:mx-auto">
                         <div className="w-12 h-12 md:w-14 md:h-14 relative z-10">
                             {
                                 isBefore(event.startsAt, new Date()) && 
