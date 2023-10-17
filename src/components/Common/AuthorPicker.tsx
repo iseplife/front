@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useMemo} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useMemo} from "react"
 import {Select} from "antd"
 import {Author} from "../../data/request.type"
 import "./AvatarPicker.css"
@@ -6,11 +6,11 @@ import {AvatarSizes} from "../../constants/MediaSizes"
 import {AppContext, AppContextType} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
 import {useTranslation} from "react-i18next"
+import { AppActionType } from "../../context/app/action"
 
 const {Option} = Select
 
 export type AuthorPickerProps = {
-    defaultValue?: number
     authors?: Author[]
     filter?: number[]
     callback: (author?: Author) => void
@@ -22,17 +22,28 @@ export type AuthorPickerProps = {
     disabled?: boolean
 }
 
-const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filter, defaultValue, callback, compact, clubOnly, disabled = false, ...props}) => {
+const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filter, callback, compact, clubOnly, disabled = false, ...props}) => {
     const [t] = useTranslation("common")
-    const {state: {user: {picture}, authors}} = useContext<AppContextType>(AppContext)
+    const {state: {user: {picture}, authors, selectedPublisher}, dispatch} = useContext<AppContextType>(AppContext)
 
     const choices = useMemo(() => {
         return (givenAuthors ?? (filter ? authors.filter(author => filter.includes(author.id)) : authors))
-    }, [givenAuthors, authors])
+    }, [givenAuthors, authors, filter])
 
-    const handleChange = useCallback((v: number) => (
+    const handleChange = useCallback((v: number) => {
         callback(choices.find(author => author.id == v))
-    ), [callback, choices])
+        if(!clubOnly)
+            dispatch({
+                type: AppActionType.SET_SELECTED_PUBLISHER,
+                selectedPublisher: choices.find(author => author.id == v),
+            })
+    }, 
+    [callback, choices, dispatch, clubOnly])
+
+    useEffect(() => {
+        if(!clubOnly)
+            callback(selectedPublisher)
+    }, [clubOnly, selectedPublisher])
 
     const selfAuthor = useMemo(() => (
         <Option
@@ -64,13 +75,14 @@ const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filte
             placeholder={props.placeholder}
             bordered={false}
             showArrow={false}
-            defaultValue={defaultValue ? defaultValue : clubOnly ? undefined : 0}
+            defaultValue={clubOnly ? choices[0].id : selectedPublisher?.id ?? 0}
             optionLabelProp={compact ? "label" : "children"}
             dropdownClassName="w-48"
             onChange={handleChange}
             className={props.className}
             style={props.style}
             disabled={disabled}
+            key={selectedPublisher?.id ?? 0}
         >
             {!clubOnly && selfAuthor}
             {choices.map((p, i) => (
