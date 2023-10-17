@@ -416,15 +416,6 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                 <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={openCreateModal}>
                     <div className="grid grid-cols-4 sm:gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
-                            onClick={() => setCompleteFormType(EmbedEnumType.RICH_LINK)}
-                            className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
-                        >
-                            <FontAwesomeIcon
-                                icon={faAlignLeft}
-                                className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
-                            />
-                        </div>
-                        <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
                             className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
                         >
