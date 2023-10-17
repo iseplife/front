@@ -346,6 +346,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const postKeyGenerator = useCallback((index: number) => 
         posts[index].publicationDateId
     , [posts])
+
+    const closeForm = useCallback(() => {
+        setFormVisible(false)
+        setCompleteFormType(undefined)
+    }, [])
+
     return (
         <div
             className={`${className}`}
@@ -354,10 +360,10 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         >
             <Modal
                 className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0 top-6 md:top-14"
-                visible={!!completeFormType}
+                visible={!!formVisible}
                 footer={null}
-                afterClose={() => setFormVisible(false)}
-                onCancel={() => setCompleteFormType(undefined)}
+                afterClose={closeForm}
+                onCancel={closeForm}
             >
                 {formVisible && <PostCreateForm
                     text={text}
@@ -365,7 +371,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     feed={id}
                     user={user}
                     onSubmit={onPostCreation}
-                    onClose={() => setCompleteFormType(undefined)}
+                    onClose={closeForm}
                 />}
             </Modal>
 
@@ -401,7 +407,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             }
             {!noDivider && <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>}
             {allowPublication && (
-                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={() => setCompleteFormType(EmbedEnumType.RICH_LINK)}>
+                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={() => setFormVisible(true)}>
                     <div className="grid grid-cols-4 sm:gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}

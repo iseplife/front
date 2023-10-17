@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { message } from "antd"
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons"
@@ -30,6 +30,11 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
         }
         return false
     }, [elementId, getEventsCallback])
+    
+    useEffect(() => {
+        setEvents([])
+        setEmpty(false)
+    }, [elementId])
 
     const loadingComponent = useMemo(() => <div>{
         Array(10).fill(
@@ -57,6 +62,7 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
             className="flex-row flex-wrap w-full mt-3"
             empty={empty}
             loadingComponent={loadingComponent}
+            key={elementId}
         >
             {
                 empty ? (
@@ -69,7 +75,6 @@ const EventsTab: React.FC<EventsTabProps> = ({ elementId, getEventsCallback }) =
                         <EventTabPreview key={event.id} event={event} className="my-2.5 block" />
                     ))
                 )
-
             }
         </InfiniteScroller>
     )
