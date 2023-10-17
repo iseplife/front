@@ -77,8 +77,9 @@ const ClubCover: React.FC = () => {
                     </Button>
                 </div>
             )}
+            <div className="bg-neutral-300 animate-pulse w-hull h-full absolute inset-0" />
             <div
-                className="w-full h-full"
+                className="w-full h-full absolute inset-0"
                 style={{
                     backgroundImage: `url("${preview || mediaPath(club?.coverUrl, CoverSizes.DEFAULT) || "img/static/default-cover.png"}")`,
                     backgroundRepeat: "no-repeat",
