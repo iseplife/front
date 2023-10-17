@@ -38,8 +38,8 @@ const ClubHeader: React.FC = () => {
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
                     <div className="relative">
-                        <div className="rounded-full w-full h-full bg-neutral-50 absolute"></div>
-                        <div className="rounded-full w-full h-full bg-neutral-200 animate-pulse absolute"></div>
+                        <div className="rounded-full w-full bg-neutral-50 absolute aspect-square"></div>
+                        <div className="rounded-full w-full bg-neutral-200 animate-pulse absolute aspect-square"></div>
                         <WebPAvatarPolyfill
                             src={imageLowSrc}
                             className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 bg-white !bg-transparent absolute"

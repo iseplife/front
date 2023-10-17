@@ -33,7 +33,7 @@ const TabsSwitcher: React.FC<TabSwitcherProps> = ({ currentTab: _currentTab, set
     , [tabs, setCurrentTab])
 
     return (
-        <div className={`mx-4 md:mx-10 ${className} relative`}>
+        <div className={`mx-4 md:mx-10 ${className} relative overflow-hidden`}>
             <div className="w-full max-w-full overflow-x-auto absolute scrollbar-thin select-none">
                 <div className="flex font-semibold text-neutral-600">
                     {tabsEntriesWithCallback.map(([tabName, tab, callback], index) => {
