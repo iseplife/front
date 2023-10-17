@@ -67,6 +67,12 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                     lastExploreWatch: action.lastWatch,
                 }
             }
+
+        case AppActionType.SET_SELECTED_PUBLISHER:
+            return {
+                ...state,
+                selectedPublisher: action.selectedPublisher
+            }
         default:
             return state
     }
