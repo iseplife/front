@@ -59,7 +59,7 @@ const StudentEditor: React.FC<StudentEditorProps> = ({id, onDelete, onArchive, o
         Modal.confirm({
             title: t("remove_item.title"),
             content: t("remove_item.content"),
-            okText: t("delete"),
+            okText: t("common:delete"),
             cancelText: t("cancel"),
             onOk: async () => {
                 const id = (student as Student).id
