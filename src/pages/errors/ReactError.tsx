@@ -8,7 +8,8 @@ const ReactError: React.FC = () => {
     const {t} = useTranslation(["error", "common"])
 
     const refresh = useCallback(() => {
-        window.location.reload()
+        window.history.back()
+        setTimeout( function() {  window.location.reload() }, 200)
     }, [])
 
     return (
@@ -31,7 +32,7 @@ const ReactError: React.FC = () => {
                             text-white hover:bg-indigo-500 hover:shadow-sm transition-all
                         "
                     >
-                        {t("common:retry")}
+                        {t("common:back")}
                     </button>
                 </div>
             </div>
