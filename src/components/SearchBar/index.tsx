@@ -1,18 +1,18 @@
-import {Divider, Empty, Select} from "antd"
-import React, {useCallback, useEffect, useRef, useState} from "react"
-import {globalSearch, searchClub, searchEvent, searchStudent} from "../../data/searchbar"
-import {Link, useHistory} from "react-router-dom"
-import {SearchItem, SearchItemType} from "../../data/searchbar/types"
-import {useTranslation} from "react-i18next"
+import { Divider, RefSelectProps, Select } from "antd"
+import Axios, { CancelTokenSource } from "axios"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { Link, useHistory } from "react-router-dom"
+import { AvatarSizes } from "../../constants/MediaSizes"
+import { globalSearch, searchClub, searchEvent, searchStudent } from "../../data/searchbar"
+import { SearchItem, SearchItemType } from "../../data/searchbar/types"
+import { _format, handleRequestCancellation, mediaPath } from "../../util"
+import Loading from "../Common/Loading"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
+import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
+import AvatarSearchType from "./AvatarSearchType"
 import CustomCheckbox from "./CustomCheckbox"
 import "./SearchBar.css"
-import AvatarSearchType from "./AvatarSearchType"
-import Pills from "../Common/Pills"
-import Loading from "../Common/Loading"
-import Axios, {CancelTokenSource} from "axios"
-import {handleRequestCancellation} from "../../util"
-import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
-import { RefSelectProps } from "antd"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -38,9 +38,20 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
     const [filter, setFilter] = useState<FilterType>(DEFAULT_FILTER)
     const [source, setSource] = useState<CancelTokenSource>()
 
-
     const updateFilter = useCallback((type: SearchItemType, state: boolean) => {
         setFilter(f => ({...f, [type]: state}))
+    }, [])
+
+    const lastFirstSeptember = useMemo(() => {
+        const today = new Date()
+        const anneeCourante = today.getFullYear()
+        const premierSeptembre = new Date(anneeCourante, 8, 1)
+    
+        if (today < premierSeptembre) {
+            premierSeptembre.setFullYear(anneeCourante - 1)
+        }
+    
+        return premierSeptembre
     }, [])
 
 
@@ -52,11 +63,13 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
         ref.current?.blur()
     }, [])
 
+
     /**
      * Call to search in API
      * @param queryParams
      */
     useEffect(() => {
+
         if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
             // We cancel the previous request to avoid any memory leaking
             if (source)
@@ -70,25 +83,25 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                     searchStudent(currentValue, "", 0, tokenSource.token)
                         .then(res => {
                             setData(res.data.content)
+                            setFetching(false)
                         })
                         .catch(handleRequestCancellation)
-                        .finally(() => setFetching(false))
                     break
                 case SearchItemType.EVENT:
                     searchEvent(currentValue, 0, tokenSource.token)
                         .then(res => {
                             setData(res.data.content)
+                            setFetching(false)
                         })
                         .catch(handleRequestCancellation)
-                        .finally(() => setFetching(false))
                     break
                 case SearchItemType.CLUB:
                     searchClub(currentValue, 0, tokenSource.token)
                         .then(res => {
                             setData(res.data.content)
+                            setFetching(false)
                         })
                         .catch(handleRequestCancellation)
-                        .finally(() => setFetching(false))
                     break
                 case SearchItemType.ALL:
                 default:
@@ -96,12 +109,11 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                         .then(res => {
                             if (res.data)
                                 setData(res.data.content)
+                            setFetching(false)
                         })
                         .catch(handleRequestCancellation)
-                        .finally(() => setFetching(false))
                     break
             }
-
         } else {
             setData([])
         }
@@ -112,7 +124,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
     }, [currentValue, searchType])
 
 
-    const customDropdownRender = (menu: React.ReactNode) => {
+    const customDropdownRender = useCallback((menu: React.ReactNode) => {
         return (
             searchType === SearchItemType.ALL ?
                 <>
@@ -143,9 +155,13 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                 </>
                 : <>{menu}</>
         )
-    }
+    }, [filter, searchType, t, updateFilter])
 
     const ref = useRef<RefSelectProps>(null)
+
+    const [nothing, setNothing] = useState<boolean>(false)
+
+    const skeletonWidth = useMemo(() => [1, 2, 3].map(() => Math.floor(Math.random() * 80) + 70), [])
 
     return (
         <Select
@@ -157,35 +173,78 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             value={currentValue ? currentValue : undefined}
             placeholder={t("placeholder")}
             className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
+            onInputKeyDown={e => {
+                if(e.key === "Enter") {
+                    e.stopPropagation()
+                    const activeOption = document.querySelector(".ant-select-item-option-active a") as HTMLElement
+                    if (activeOption) {
+                        activeOption.click()
+                    }
+                }
+            }}
             notFoundContent={
                 fetching ?
                     <div>
-                        <Loading size="3x"/>
+                        {[1, 2, 3].map((_, i) => 
+                            <div className="flex justify-between py-1 pb-[13px]">
+                                <div className="inline-flex items-center w-full">
+                                    <div className="w-8 h-8 rounded-full bg-neutral-200 animate-pulse" />
+                                    <div className="ml-2 leading-4">
+                                        <div className="bg-neutral-200 animate-pulse rounded-lg" style={{
+                                            width: skeletonWidth[i]+"px"
+                                        }}>&nbsp;</div>
+                                    </div>                           
+                                </div>
+                            </div>
+                        )}
                     </div> :
-                    <Empty
-                        className="flex flex-col items-center"
-                        image={"/img/meme-face.png"}
-                        description={t("funny_empty_message")}
-                    />
+                    <div className={"flex flex-col justify-center items-center w-full my-4 space-y-4 "+(nothing && "nothing")}>
+                        <img className="h-10" src="/img/tumbleweed.svg"></img>
+                        <span>{t("funny_empty_message")}</span>
+                    </div>
+                        
             }
             onSearch={setCurrentValue}
             onSelect={handleSelect}
-            dropdownRender={(menu: React.ReactNode) => customDropdownRender(menu)}
+            dropdownRender={customDropdownRender}
+            dropdownClassName="search-bar-dropdown rounded-lg shadow-lg border"
+            onDropdownVisibleChange={(open) => {
+                setTimeout(() =>
+                    setNothing(open)
+                , 250)
+            }}
         >
             {data.map((item) => filter[item.type] &&
                 <Option key={`${item.type}-${item.id}`} value={`${item.type.toLowerCase()}/${item.id}`}>
                     <LinkEntityPreloader preview={item}>
                         <Link to={`/${item.type.toLowerCase()}/${item.id}`} className="text-[color:inherit]">
-                            <div className="flex justify-between">
-                                <div className="inline-flex">
+                            <div className="flex justify-between py-1">
+                                <div className="inline-flex items-center w-full">
                                     <AvatarSearchType
                                         type={item.type}
                                         text={item.name}
                                         thumbURL={item.thumbURL}
+                                        startsAt={item.startsAt}
                                     />
-                                    <div className="ml-2 font-bold">{item.name}</div>
+                                    <div className="ml-2 leading-4">
+                                        <div className="font-bold">{item.name}</div>
+                                        { item.type == SearchItemType.STUDENT && 
+                                            <div>Promo {item.description}</div> }
+                                        { item.type == SearchItemType.EVENT && 
+                                            <div className="">
+                                                <div className="absolute top-2 right-2">
+                                                    <WebPAvatarPolyfill src={mediaPath(item.thumbURL, AvatarSizes.THUMBNAIL)} size="small" />
+                                                </div>
+                                                { item.type == SearchItemType.EVENT && item.startsAt && 
+                                                    <span className={"inline-flex items-center font-normal rounded-full mt-0.5 text-indigo-500"}>
+                                                        { _format(item.startsAt,  item.startsAt < lastFirstSeptember ? "d MMM yyyy" : "d MMMM")}
+                                                    </span>
+                                                }               
+                                            </div> 
+                                        }
+                                    </div>                           
                                 </div>
-                                <Pills status={item.status} event={item.type === SearchItemType.EVENT} style={{fontSize: ".65rem"}}/>
+                               
                             </div>
                         </Link>
                     </LinkEntityPreloader>

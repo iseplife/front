@@ -24,11 +24,47 @@
 }
 
 .pills:checked + .label-pills:hover {
-    background-color: #4c51bf !important;
+    /* background-color: #4c51bf !important; */
     color: white !important;
 }
 
 .pills:checked + .label-pills:active {
     background-color: white !important;
     color: #667eea !important;
+}
+
+@media (max-width: 768px) {
+    .search-bar-dropdown {
+        left:0!important;
+        width:100%!important;
+    }
+} 
+
+
+
+
+
+/* Nothing animation */
+
+
+
+@keyframes weed_anim {
+    0%{
+        animation-timing-function: cubic-bezier(.98,.24,.77,.21);
+        transform: translateY(0px);
+    }
+    50%{
+        animation-timing-function: cubic-bezier(.24,.92,.29,.88);
+        transform: translateY(15px) rotateZ(180deg);
+    }
+    100%{
+        transform: translateY(0px) rotateZ(360deg);
+    }
+}
+.nothing > img {
+    animation-timing-function: cubic-bezier(.24,.92,.29,.88);
+    animation: weed_anim 1s infinite;
+}
+.nothing > label {
+    display: block;
 }
