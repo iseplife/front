@@ -80,7 +80,7 @@ const Gallery: React.FC = () => {
             Modal.confirm({
                 title: t("common:remove_item.title"),
                 content: t("common:remove_item.content"),
-                okText: "Ok",
+                okText: t("delete"),
                 cancelText: t("common:cancel"),
                 onOk: async () => {
                     const ids: number[] = []
@@ -151,7 +151,7 @@ const Gallery: React.FC = () => {
         Modal.confirm({
             title: t("common:remove_item.title"),
             content: t("common:remove_item.content"),
-            okText: "Ok",
+            okText: t("delete"),
             cancelText: t("common:cancel"),
             onOk: async () => {
                 const res = await deleteGallery(gallery!.id)
