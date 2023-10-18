@@ -1,13 +1,13 @@
 import React, {useCallback, useState} from "react"
 import {AxiosResponse} from "axios"
-import {Button, message, Progress} from "antd"
+import {message, Progress} from "antd"
 import PictureCard from "../../Common/PictureCard"
 import {useTranslation} from "react-i18next"
 import {isFileImage} from "../../../util"
 import {createMedia} from "../../../data/media"
 import {Media, MediaUploadNSFW, MediaUploadStatus,} from "../../../data/media/types"
 import {UploadState} from "../../../data/request.type"
-import {faInbox, faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons"
+import {faInbox, faTrashAlt} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../../data/post/types"
 
@@ -108,12 +108,15 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
 
         setUploadingState(UploadState.UPLOADING)
 
-        setImages(prevState => {
-            prevState.forEach(value => value.state = MediaUploadStatus.WAITING)
-            return prevState
-        })
-
-        let i = uploadCount
+        if(uploadingState != UploadState.ERROR){
+            setImages(prevState => {
+                prevState.forEach(value => value.state = MediaUploadStatus.WAITING)
+                return prevState
+            })
+            setUploadCount(0)
+        }
+        
+        let count = uploadCount
         const responses = uploadResp
 
         for (const img of images.values()) {
@@ -133,15 +136,15 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                         EmbedEnumType.IMAGE,
                         club,
                         true,
-                        e => setProgression((i + e.loaded / e.total) / images.size * 100)
+                        e => setProgression((count + e.loaded / e.total) / images.size * 100)
                     )
                     responses.push(res)
 
                     if(debugUploader)
-                        if(Math.random() > 0.5) throw new Error("Une erreur de test !")
+                        if(Math.random() > 0.7) throw new Error("Une erreur de test !")
 
-                    i++
-                    setProgression(i / images.size * 100)
+                    count++
+                    setUploadCount(count)
 
                     setImages(prevState => prevState.set(img.file, {...img, state: MediaUploadStatus.UPLOADED}))
                 }
@@ -150,19 +153,20 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 setUploadingState(UploadState.ERROR)
                 message.error(e.message)
 
-                setUploadCount(i)
+                // setUploadCount(uploadCount => uploadCount + 1)
+                setProgression(count / images.size * 100)
                 setUploadResp(responses)
 
                 break
             }
         }
 
-        if(i == images.size){
+        if(count == images.size){
             afterSubmit(responses.map(r => r.data.id))
             setUploadingState(UploadState.FINISHED)
         }
         
-    }, [afterSubmit, images, uploadCount, uploadResp, club])
+    }, [afterSubmit, images, uploadCount, uploadResp, club, onUploading, uploadingState])
 
     return (
         <div
@@ -200,7 +204,8 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                     }
                 </div>
                 <div className="px-2 font-semibold text-base">
-                    {images.size} Photos
+                    {uploadingState == UploadState.OFF && <span>{images.size} Photos</span>}
+                    {uploadingState != UploadState.OFF && <span>{uploadCount}/{images.size} Photos</span>}                  
                 </div>
             </div>
            
@@ -219,7 +224,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                     className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
                     onClick={uploadImages}
                 >
-                    Enregistrer
+                    {uploadingState == UploadState.ERROR ? "Reprendre" :  "Enregistrer"}
                 </button>
             </div>
         </div>
