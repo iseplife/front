@@ -22,7 +22,7 @@
   "switch_lang": "Changer la langue",
   "remove_item": {
     "title": "Voulez-vous supprimez cela ?",
-    "content": "Attention, la suppression est une action définitive",
+    "content": "Attention, la suppression est une action définitive.",
     "complete": "Élément supprimé"
   },
   "archive_user": [
