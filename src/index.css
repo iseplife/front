@@ -73,10 +73,10 @@ abbr[title] {
 /********/
 
 .ant-modal-content, .ant-modal-header{
-    border-radius: 0.25rem !important;
+    border-radius: .75rem!important;
 }
 .ant-modal-body {
-    padding: 10px 24px 24px !important;
+    padding: 2 0px 24px 24px !important;
 }
 
 .no-padding-modal .ant-modal-body {
@@ -85,6 +85,45 @@ abbr[title] {
 .ant-modal {
     pointer-events: auto !important;
 }
+.ant-modal-confirm-content {
+    padding: 0!important;
+    margin: 20px 0 0 0!important;
+}
+
+/********/
+
+.ant-btn {
+    border-radius: 9999px!important;
+    border:none!important;
+    padding: 0.5rem 1rem!important;
+    height: auto!important;
+}
+
+.ant-btn-primary {
+    background-color: rgba(129, 140, 248)!important;
+}
+
+.ant-btn-primary {
+    background-color: rgba(129, 140, 248)!important;
+}
+
+.ant-btn-default:hover {
+    /* backgorund-color: rgb(220, 38, 38)!important; */
+    color: rgba(129, 140, 248)!important;
+}
+
+/********/
+
+.ant-message-custom-content, .ant-message-notice-content, .ant-message-notice {
+    border-radius: 9999px!important;
+}*
+
+.ant-message-custom-content {
+    display: flex;
+    align-items: center;
+}
+
+/* ant-message-custom-content ant-message-success */
 
 /********/
 
