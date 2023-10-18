@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
         Modal.confirm({
             title: t("remove_item.title"),
             content: t("remove_item.content"),
-            okText: t("delete"),
+            okText: t("common:delete"),
             cancelText: t("cancel"),
             onOk: async () => {
                 await onDelete(data.id)

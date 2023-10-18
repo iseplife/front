@@ -108,9 +108,22 @@ abbr[title] {
     background-color: rgba(129, 140, 248)!important;
 }
 
+.ant-btn-default {
+    color: rgba(129, 140, 248)!important;
+}
+
 .ant-btn-default:hover {
     /* backgorund-color: rgb(220, 38, 38)!important; */
     color: rgba(129, 140, 248)!important;
+}
+
+.ant-btn-dangerous {
+    background-color: rgb(220, 38, 38)!important;
+    color:white!important;
+}
+
+.ant-btn-dangerous:hover {
+    color:white!important;
 }
 
 /********/

@@ -32,7 +32,7 @@ const StudentEditionForm: React.FC<FormikProps<StudentAdminEditionForm>> = ({val
         Modal.confirm({
             title: t("remove_item.title"),
             content: t("remove_item.content"),
-            okText: t("delete"),
+            okText: t("common:delete"),
             cancelText: t("cancel"),
             onOk: async () => {
                 const id = values.id
