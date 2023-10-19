@@ -9,9 +9,9 @@ import {Field, Form, Formik, FormikHelpers} from "formik"
 import {mediaPath} from "../../../util"
 import {AvatarSizes} from "../../../constants/MediaSizes"
 import {SearchItem} from "../../../data/searchbar/types"
-import MemberCardToolbar from "./MemberCardToolbar"
-import {faPlus, faUser, faUserGroup} from "@fortawesome/free-solid-svg-icons"
+import {faPlus, faTimes, faUser} from "@fortawesome/free-solid-svg-icons"
 import { WebPAvatarPolyfill } from "../../Common/WebPPolyfill"
+import MemberCardToolbar from "./MemberCardToolbar"
 
 const {Option} = Select
 
@@ -31,6 +31,11 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
         year: year
     }), [year])
 
+    const toggleForm = useCallback((open: boolean) => {
+        setClicked(open)
+        setStudent(undefined)
+    }, [])
+
     const onStudentSelect = useCallback((setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => (id: number, metadata: SearchItem) => {
         setFieldValue("student", id)
         setStudent(metadata)
@@ -45,60 +50,35 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
 
             helpers.resetForm({values: initialValues})
         })
-    }, [club, onAdd])
+    }, [club, initialValues, onAdd, t])
 
     return (
         <Formik<ClubMemberCreationForm> onSubmit={createMember} initialValues={initialValues}>
             {({values, setFieldValue}) => (
-                <MemberCardToolbar isEdited={true} onUndo={() => setStudent(undefined)} visible={student != undefined}>
-                    <div
-                        className="h-20 w-full sm:h-60 sm:w-44 p-2 sm:p-3 pb-2 m-2 shadow-md flex sm:flex-col flex-row items-center bg-white rounded-lg overflow-hidden">
-                        {clicked ?
-                            student ?
-                                <>
-                                    <WebPAvatarPolyfill
-                                        src={mediaPath(student.thumbURL, AvatarSizes.DEFAULT)}
-                                        icon={<FontAwesomeIcon icon={faUser} className="text-6xl" />}
-                                        alt={student.name}
-                                        shape="square"
-                                        className="sm:w-full h-full w-1/3 rounded-lg flex items-center justify-center"
-                                    />
-                                    <div className="sm:text-center text-left mt-0 ml-2 sm:mt-2 sm:ml-0 w-2/3 sm:w-full">
-                                        <h5 className="font-bold text-xl mb-0 truncate">
-                                            {student.name}
-                                        </h5>
-                                        <Form className="flex justify-around text-md text-gray-500">
-                                            <Field
-                                                name="position"
-                                                className="w-3/5 mr-1 font-bold focus:text-gray-600 focus:outline-none border-b"
-                                            />
-                                            <Select
-                                                value={values.role}
-                                                onChange={(value: any) => setFieldValue("role", value)}
-                                            >
-                                                {ClubRoles.map(r =>
-                                                    <Option key={r} value={r}>
-                                                        <FontAwesomeIcon
-                                                            className="ml-1"
-                                                            icon={ClubRoleIcon[r]}
-                                                            title={t("club:role." + r)}
-                                                        />
-                                                    </Option>
-                                                )}
-                                            </Select>
-                                        </Form>
-                                    </div>
-                                </> :
-                                <StudentPicker className="my-auto w-full rounded-scroller" onChange={onStudentSelect(setFieldValue)}/> :
-                            <div
-                                onClick={() => setClicked(true)}
-                                className="cursor-pointer hover:bg-opacity-90 bg-gray-300 text-white text-center h-full w-full rounded-lg"
-                            >
-                                <FontAwesomeIcon icon={faPlus} size="3x" className="h-full"/>
-                            </div>
-                        }
-                    </div>
-                </MemberCardToolbar>
+                <div
+                    className="w-full text-center mt-2">
+                    { clicked  ?
+                        <Form className="flex flex-col sm:flex-row space-x-4 items-center">
+
+                            <StudentPicker className="my-auto w-full rounded-scroller" onChange={onStudentSelect(setFieldValue)}/>
+                            <div className="mt-2 sm:mt-0 space-x-4 whitespace-nowrap">
+                                <button disabled={!student} type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-indigo-400 hover:bg-opacity-90 text-white whitespace-nowrap">
+                                    <FontAwesomeIcon icon={faPlus} size="1x" className="mr-2"/>
+                                    {t("add")}
+                                </button>
+                                <FontAwesomeIcon onClick={() => toggleForm(false)} icon={faTimes} className="text-xl cursor-pointer text-red-400 hover:text-red-600"/>
+                            </div>                          
+                        </Form>
+                        
+                        : <button
+                            onClick={() => toggleForm(true)}
+                            type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-indigo-400 hover:bg-opacity-90 text-white"
+                        >
+                            <FontAwesomeIcon icon={faPlus} size="1x" className="mr-2"/>
+                            {t("add")}
+                        </button>
+                    }
+                </div>
             )}
         </Formik>
     )
