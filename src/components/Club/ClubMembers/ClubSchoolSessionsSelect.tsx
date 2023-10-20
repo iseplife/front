@@ -20,7 +20,7 @@ const ClubSchoolSessionsSelect: React.FC<ClubSchoolSessionsSelectProps> = ({club
         setLoading(true)
         if(club)
             getClubSchoolSessions(club).then(res => {
-                setSchoolSessions(res.data)
+                setSchoolSessions(res.data.sort((a, b) => a - b))
             }).finally(() => setLoading(false))
     }, [club])
 

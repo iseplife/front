@@ -25,7 +25,7 @@ const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showR
                 }}
             >
                 <div className="bg-white/50 rounded-xl backdrop-blur grid place-items-center px-2 py-1 leading-6 mb-3 mt-auto ml-auto text-neutral-900 font-semibold text-sm">
-                    <div className="line-clamp-2 text-ellipsis text-center whitespace-nowrap overflow-hidden max-w-full">
+                    <div className="line-clamp-2 text-ellipsis text-center max-w-full">
                         {m.position}  {showRole && <FontAwesomeIcon className="ml-2" icon={ClubRoleIcon[m.role]}/>}                
                     </div>
                 </div>
