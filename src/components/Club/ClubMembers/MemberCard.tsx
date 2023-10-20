@@ -14,7 +14,7 @@ type MemberCardProps = {
 }
 const MemberCard: React.FC<MemberCardProps> = React.memo(({id, m, onClick, showRole = false}) => {
     const fullName = useMemo(() => `${m.student.firstName} ${m.student.lastName}`, [m.student.firstName, m.student.lastName])
-    return (<LinkEntityPreloader noWidth preview={m.student} className="w-1/2 xl:w-1/3 p-2">
+    return (<LinkEntityPreloader noWidth preview={m.student} className="w-1/2 xl:w-1/3 2xl:w-1/4 p-2">
         <Link to={`/student/${m.student.id}`} className="block w-full rounded-lg shadow-sm group">
             <div
                 className={"relative bg-white rounded-t-lg overflow-hidden aspect-[18/20] w-full px-3.5 items-end flex  cursor-pointer bg-[length:112%] group-hover:bg-[length:118%] transition-all "}
