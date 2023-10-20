@@ -55,7 +55,7 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
             {clubs ?
                 clubsShowed.length > 0 ? clubsShowed.map(club => 
                     <div className="w-1/2 md:w-1/3 xl:w-1/4 p-2">
-                        <Link to={`/club/${club.club.id}`} className="mx-auto block w-full group">
+                        <Link to={`/club/${club.club.id}`} className="mx-auto block w-full shadow-sm group">
                             <div
                                 className="relative bg-white rounded-t-2xl px-4 overflow-hidden w-full items-end flex aspect-[18/20] bg-[length:112%] group-hover:bg-[length:118%] transition-all"
                                 style={{
