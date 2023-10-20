@@ -4,6 +4,7 @@
 
 .overflow-y-overlay {
     overflow-y: overlay !important;
+    scrollbar-gutter: stable;
 }
 .break-words {
     overflow-wrap: break-word !important;

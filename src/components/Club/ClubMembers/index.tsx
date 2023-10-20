@@ -34,18 +34,19 @@ const ClubMembers: React.FC = () => {
 
     useEffect(() => {
         setLoading(true)
-        setEditionMode(false)
+
+        if(!club?.canEdit)
+            setEditionMode(false)
         if(club?.id)
             getMembers(club?.id, selectedYear).then(res =>
                 setMembers(res.data)
             ).finally(() => setLoading(false))
-    }, [club?.id, selectedYear])
+    }, [club?.canEdit, club?.id, selectedYear])
 
     return (
         <div className="container mx-auto relative h-full py-4">
-            <div className="flex justify-between items-center mb-2 px-2">
-                {(club ?? cache)?.id && <ClubSchoolSessionsSelect club={(club ?? cache)!.id} handleChange={setSelectedYear}/>}
-                {club?.canEdit && (
+            {club?.canEdit && (
+                <div className="text-right px-2 mb-2">
                     <div
                         onClick={toggleEditionMode}
                         className="cursor-pointer text-xl"
@@ -55,10 +56,15 @@ const ClubMembers: React.FC = () => {
                             icon={editionMode ? faCheck : faPencilAlt}
                         />
                     </div>
-                )}
+                </div>
+            )}
+
+            <div className="flex justify-end items-center mb-2 px-2">
+                {(club ?? cache)?.id && <ClubSchoolSessionsSelect club={(club ?? cache)!.id} handleChange={setSelectedYear}/>}
+                
             </div>
 
-            <div className="flex flex-wrap justify-center pb-4">
+            <div className="flex flex-wrap justify-center">
                 {loading ?
                     <ClubMemberSkeleton amount={5} /> :
                     members.map(m => editionMode ?
