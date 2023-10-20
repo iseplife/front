@@ -58,7 +58,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
     return (
         <Formik onSubmit={updateMember} initialValues={defaultValues}>
             {({values, setFieldValue}) => (
-                (<LinkEntityPreloader noWidth preview={m.student} className="w-1/2 xl:w-1/3 p-2">
+                (<LinkEntityPreloader noWidth preview={m.student} className="w-1/2 xl:w-1/3 2xl:w-1/4 p-2">
                     <Form className="block w-full rounded-lg shadow-sm">
                         <div
                             className={"relative bg-white rounded-t-lg overflow-hidden aspect-[18/20] w-full px-3.5 items-end flex cursor-pointer bg-[length:112%]"}

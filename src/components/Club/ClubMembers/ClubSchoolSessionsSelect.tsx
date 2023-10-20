@@ -31,7 +31,7 @@ const ClubSchoolSessionsSelect: React.FC<ClubSchoolSessionsSelectProps> = ({club
 
     return (
         <>
-            <div className="flex space-x-4 text-lg">
+            <div className="flex space-x-4 text-lg px-2">
                 {schoolSessions.map((s, i) =>
                     <div key={i} className={"h-hull flex items-center font-bold border-b-2 " + (selectSchoolSession == s ? "text-indigo-600 border-indigo-600" : "cursor-pointer border-transparent")} onClick={() => changeSchoolSession(s)}>{s}</div>
                 )}

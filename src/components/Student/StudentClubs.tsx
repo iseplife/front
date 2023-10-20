@@ -54,7 +54,7 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
         <div className="flex flex-wrap mt-2 mb-8 w-full">
             {clubs ?
                 clubsShowed.length > 0 ? clubsShowed.map(club => 
-                    <div className="w-1/2 md:w-1/3 p-2">
+                    <div className="w-1/2 md:w-1/3 xl:w-1/4 p-2">
                         <Link to={`/club/${club.club.id}`} className="mx-auto block w-full">
                             <div
                                 className="relative bg-white rounded-t-2xl px-4 overflow-hidden hover:shadow-sm transition-shadow w-full items-end flex aspect-[18/20]"
@@ -72,8 +72,8 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
                                 </div>
                                
                             </div>
-                            <div className="bg-white rounded-b-lg text-base text-center text-neutral-900 px-2 font-semibold h-14 flex items-center justify-center">
-                                <span className="overflow-hidden text-ellipsis line-clamp-2">{club.club.name}</span>
+                            <div className="bg-white rounded-b-lg text-base text-center text-neutral-900 px-2 font-semibold h-10 flex items-center justify-center">
+                                <span className="overflow-hidden text-ellipsis line-clamp-1">{club.club.name}</span>
                             </div>
                         </Link>
                     </div>
@@ -81,12 +81,12 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
                     <div className="text-neutral-600 mt-8 mx-auto">{t("user:no_club", {user: `${student?.firstName} ${student?.lastName}`})}</div>
                 :
                 [1, 2, 3].map((i) =>
-                    <div key={i} className="w-1/2 md:w-1/3 p-2">
+                    <div key={i} className="w-1/2 md:w-1/3 xl:w-1/4 p-2">
                         <div className="bg-white block w-full rounded-lg shadow-sm">
                             <div className="w-full aspect-[18/20] rounded-t-lg bg-gray-300 animate-pulse">
 
                             </div>
-                            <div className="h-14 flex items-center justify-center">
+                            <div className="h-10 flex items-center justify-center">
                                 <div className="bg-gray-300 h-6 animate-pulse rounded-full w-2/3"></div>
                             </div>
                         </div>                  

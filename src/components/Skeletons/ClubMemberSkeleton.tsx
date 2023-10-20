@@ -9,7 +9,7 @@ const ClubMemberSkeleton: React.FC<ClubMemberSkeletonProps> = ({amount}) => {
         const cardTextSkeletonArray = []
         for (let i = 0; i < amount; i++) {
             cardTextSkeletonArray.push(
-                <div key={i} className="w-1/2 xl:w-1/3 p-2">
+                <div key={i} className="w-1/2 xl:w-1/3 2xl:w-1/4 p-2">
                     <div className="bg-white block w-full rounded-lg shadow-sm">
                         <div className="w-full aspect-[18/20] rounded-t-lg bg-gray-300 animate-pulse">
 
