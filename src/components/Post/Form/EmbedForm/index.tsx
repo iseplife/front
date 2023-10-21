@@ -6,12 +6,16 @@ import ImageForm from "./ImageForm"
 import PollForm from "./PollForm"
 import DocumentForm from "./DocumentForm"
 import VideoForm from "./VideoForm"
+import { useTranslation } from "react-i18next"
+
 
 const EmbedForm: React.FC = () => {
+    const {t} = useTranslation(["gallery"])
+
     const {values: {embed}} = useFormikContext<PostFormValues<EmbedFormType>>()
     switch (embed?.type) {
         case EmbedEnumType.GALLERY:
-            return <h3>Edition of a gallery is not possible from a post</h3>
+            return <h3>{t("edition_from_post")}</h3>
         case EmbedEnumType.POLL:
             return <PollForm/>
         case EmbedEnumType.VIDEO:
