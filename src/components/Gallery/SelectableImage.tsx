@@ -4,6 +4,7 @@ import {GalleryPhoto} from "../../pages/default/gallery"
 import SafeImage from "../Common/SafeImage"
 import {faCheckCircle} from "@fortawesome/free-regular-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { faCircle } from "@fortawesome/free-regular-svg-icons"
 
 const imgStyle = {
     transition: "transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s"
@@ -65,7 +66,11 @@ const SelectableImage: React.FC<SelectableImageProps> = ({ index, photo, margin,
             />
             {photo.selected && <>
                 <div className="bg-neutral-300/40 w-full h-full absolute top-0" />
-                <FontAwesomeIcon icon={faCheckCircle} className="absolute m-2 top-0" />
+                <FontAwesomeIcon icon={faCheckCircle} className="absolute m-2 top-0 text-gray-500 text-lg" />
+            </>}
+            {!photo.selected && selectable && <>
+                <div className="w-full h-full absolute top-0" />
+                <FontAwesomeIcon icon={faCircle} className="absolute m-2 top-0 text-gray-300 text-lg" />
             </>}
         </div>
     )

@@ -1,10 +1,12 @@
 import  {AxiosPromise} from "axios"
-import {Gallery, GalleryForm} from "./types"
+import {Gallery, GalleryForm, GalleryUpdateForm} from "./types"
 import {apiClient} from "../http"
 
 export const getGallery = (id: number): AxiosPromise<Gallery> => apiClient.get(`/gallery/${id}`)
 
 export const createGallery = (form: GalleryForm): AxiosPromise<Gallery> => apiClient.post("gallery", form)
+
+export const updateGallery = (id: number, form: GalleryUpdateForm): AxiosPromise<Gallery> => apiClient.put(`gallery/${id}`, form)
 
 export const deleteGallery = (id: number): AxiosPromise<boolean> => apiClient.delete(`gallery/${id}`)
 

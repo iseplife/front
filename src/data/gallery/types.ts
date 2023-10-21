@@ -8,6 +8,7 @@ export type Gallery = {
     club: ClubPreview
     images: Image[]
     hasRight: boolean
+    description: string
 }
 
 export type GalleryPreview = {
@@ -40,4 +41,9 @@ export type GalleryPreForm = {
     feed: number
     pseudo: boolean
     images: File[]
+}
+
+export type GalleryUpdateForm = {
+    name: string
+    description: string
 }

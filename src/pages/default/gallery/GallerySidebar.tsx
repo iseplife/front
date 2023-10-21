@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react"
 import {AvatarSizes, GallerySizes} from "../../../constants/MediaSizes"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCommentAlt, faHeart} from "@fortawesome/free-regular-svg-icons"
-import {faCloudDownload, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
+import {faCloudDownload, faShare, faShareAlt, faHeart as faSolidHeart} from "@fortawesome/free-solid-svg-icons"
 import {Divider, message} from "antd"
 import CommentList from "../../../components/Comment/CommentList"
 import StudentAvatar from "../../../components/Student/StudentAvatar"
@@ -10,16 +10,17 @@ import {getThread, toggleThreadLike} from "../../../data/thread"
 import {SidebarProps} from "../../../components/Common/Lightbox"
 import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
-import { downloadFile, formatDateWithTimer, limitSize, mediaPath, releaseCanvas } from "../../../util"
+import { copyToClipboard, downloadFile, formatDateWithTimer, getImageLink, limitSize, mediaPath, releaseCanvas } from "../../../util"
 import { useTranslation } from "react-i18next"
 import Loading from "../../../components/Common/Loading"
 import { isWebPSupported, polyfillWebp } from "../../../components/Common/WebPPolyfill"
 import { isWebKit } from "../../../data/app"
+import { cFaShare } from "../../../constants/CustomFontAwesome"
 
 type GallerySidebarProps = {
     gallery: Gallery
 } & SidebarProps<GalleryPhoto>
-const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) => {
+const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentIndex, currentImage}) => {
     const [liked, setLiked] = useState<boolean>(false)
     const [nbLikes, setNbLikes] = useState<number>(0)
     const [nbComments, setNbComments] = useState<number>(0)
@@ -119,6 +120,11 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
         downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`, t("gallery:saved"))
     }, [gallery.name, currentImage.src])
 
+    const copyLink = useCallback(() => {
+        copyToClipboard(getImageLink(currentIndex, gallery))
+        message.success(t("post:copied"))
+    }, [currentIndex, gallery, t])
+
     return (
         <div>
             <div className="flex flex-col p-4">
@@ -137,18 +143,32 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                             <div className="text-md">{ formattedDate }</div>
                         </div>
                     </div>
-                    <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
-                        <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
-                        <div className="z-10 hidden md:flex items-center">
-                            {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
-                            {
-                                downloadProgress == -1 ?
-                                    <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
-                                    :
-                                    <Loading className="ml-2" />
-                            }
-                        </div>
-                    </button>
+                    <div className="flex space-x-4">
+                        <span 
+                            className="group flex items-center justify-center cursor-pointer hover:text-indigo-500 text-xl transition-colors duration-100"
+                            onClick={copyLink}
+                        >
+                            <div className="-ml-1 cursor-pointer rounded-full bg-indigo-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
+                                <FontAwesomeIcon
+                                    icon={cFaShare}
+                                    size="sm"
+                                />
+                            </div>
+                        </span>
+                        <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
+                            <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                            <div className="z-10 hidden md:flex items-center">
+                                {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
+                                {
+                                    downloadProgress == -1 ?
+                                        <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
+                                        :
+                                        <Loading className="ml-2" />
+                                }
+                            </div>
+                        </button>
+                    </div>
+                   
                 </div>
                 <button
                     onClick={downloadProgress == -1 ? downloadCallback : undefined}
@@ -193,7 +213,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                             <div className="-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
                                 <FontAwesomeIcon
                                     icon={liked ? faSolidHeart: faHeart}
-                                    className={`${liked ? "text-red-400" : "hover:text-red-600"} transition-colors`}
+                                    className={`${liked ? "text-red-400" : "group-hover:text-red-600"} transition-colors`}
                                     size="1x"
                                 />
                             </div>

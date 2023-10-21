@@ -23,7 +23,7 @@
   "upload_failed":  "Envoi des images a échoué",
   "upload_success": "Images ajoutées avec succès !",
   "select_img": "Sélectionner vos photos",
-  "add_img": "Ajouter",
+  "add_img": "Ajouter des images",
   "delete_selection": "Supprimer la selection",
   "selection_delete": "Images supprimées avec succès !",
   "no_gallery": "Aucune galerie par ici...",
@@ -33,5 +33,11 @@
   "failed_download": "Echec du téléchargement de l'image",
   "downloading": "Téléchargement...",
   "see_events": "Voir les événements",
-  "saved": "Image sauvegardée."
+  "saved": "Image sauvegardée.",
+  "gallery_name" : "Nom de la galerie",
+  "gallery_description" : "Description de la galerie",
+  "save": "Enregistrer",
+  "edit_gallery": "Edition de la galerie",
+  "delete_gallery": "Supprimer la galerie",
+  "enable_selection" : "Sélectionner des photos"
 }

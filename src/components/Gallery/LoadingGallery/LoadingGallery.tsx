@@ -8,22 +8,14 @@ const LoadingGallery: React.FC = () => {
         const galleryLoading = []
         for(let i = 0; i< SKELETON_PLACEHOLDER_COUNT; i++) {
             galleryLoading.push(
-                <Skeleton
-                    key={i}
-                    active
-                    className="w-auto h-auto pb-4 mx-auto"
-                    loading={true}
-                    avatar={{shape: "square", className: "w-48 h-48"}}
-                    paragraph={false}
-                    title={false}
-                />
+                <div className="p-2 w-1/2 md:w-1/3 xl:w-1/4 2xl:w-1/5 aspect-[3/2]"><div className="bg-gray-300 animate-pulse w-full h-full"></div></div>
             )
         }
         return galleryLoading
     }, [])
 
     return (
-        <div className="flex flex-row flex-wrap w-full p-4">
+        <div className="flex flex-row flex-wrap w-full">
             {LoadingGalleryElements}
         </div>
     )

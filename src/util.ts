@@ -16,6 +16,8 @@ import { Filesystem, Directory } from "@capacitor/filesystem"
 import { Media } from "@capacitor-community/media"
 import { Toast } from "@capacitor/toast"
 import { message } from "antd"
+import { Gallery } from "./data/gallery/types"
+import { GalleryPhoto } from "./pages/default/gallery"
 
 
 const locales: { [id: string]: Locale } = {
@@ -224,6 +226,12 @@ export const waitForFrame = async () => new Promise(requestAnimationFrame)
 
 export const getPostLink = (post: Post, withHost = true) => 
     [...(withHost ? [appUrl.origin] : []), post.context.type.toLowerCase(), post.context.id, "post", post.id.toString()].join("/")
+
+export const getGalleryLink = (gallery: Gallery, withHost = true) => 
+    [...(withHost ? [appUrl.origin] : []), "gallery", gallery.id.toString()].join("/")
+
+export const getImageLink = (imgIndex: number, gallery: Gallery, withHost = true) => 
+    [...(withHost ? [appUrl.origin] : []), "gallery", gallery.id.toString(), imgIndex].join("/")
 
 export const copyToClipboard = (str: string) => {
     const el = document.createElement("textarea")

@@ -33,5 +33,11 @@
   "failed_download": "Failed to download the image",
   "downloading": "Downloading...",
   "see_events": "See events",
-  "saved": "Saved to gallery."
+  "saved": "Saved to gallery.",
+  "gallery_name" : "Gallery name",
+  "gallery_description" : "Gallery description",
+  "save": "Save",
+  "edit_gallery": "Edit gallery",
+  "delete_gallery": "Delete gallery",
+  "enable_selection" : "Enable selection"
 }

@@ -11,6 +11,7 @@ import { isWebPSupported } from "./WebPPolyfill"
 
 export interface SidebarProps<T extends SafePhoto> {
     currentImage: T
+    currentIndex: number
 }
 
 type LightboxProps<T extends AnimatedSafePhoto> = {
@@ -40,7 +41,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
             className="md:bg-white w-full md:w-96 rounded-t-xl md:overflow-auto md:rounded-none md:rounded-tl-md md:rounded-bl-md md:block z-50 bg-neutral-500/50"
             ref={rightPanel}
         >
-            <Sidebar currentImage={currentPhoto} />
+            <Sidebar currentImage={currentPhoto} currentIndex={currentIndex} />
         </div>
     ), [Sidebar, currentPhoto])
 

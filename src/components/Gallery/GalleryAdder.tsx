@@ -7,7 +7,7 @@ import axios, {AxiosPromise} from "axios"
 import {Image, Media, MediaUploadNSFW} from "../../data/media/types"
 import {addGalleryImages} from "../../data/gallery"
 import {UploadFile} from "antd/es/upload/interface"
-import {faFileUpload} from "@fortawesome/free-solid-svg-icons"
+import {faFileUpload, faPlus} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { EmbedEnumType } from "../../data/post/types"
 
@@ -62,9 +62,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
 
     return (
         <div>
-            <Button className="rounded mx-1" onClick={() => setVisible(true)}>
-                {t("add_img")}
-            </Button>
+            <button onClick={() => setVisible(true)} className={"px-4 py-2 rounded-full bg-indigo-400 hover:bg-opacity-90 duration-100 shadow-sm text-center font-semibold text-white whitespace-nowrap flex flex-row items-center"}><FontAwesomeIcon icon={faPlus} className="mr-2" /> {t("add_img")}</button>
             <Modal
                 visible={visible}
                 onCancel={() => setVisible(false)}
