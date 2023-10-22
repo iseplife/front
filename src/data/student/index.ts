@@ -4,12 +4,13 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, StudentsImportData, LoggedStudentPreview
+    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, LoggedStudentPreview, StudentsImportPicture
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
 import {SearchItem} from "../searchbar/types"
 import {apiClient} from "../http"
+import { head } from "lodash"
 
 export const getLoggedUser = (): AxiosPromise<LoggedStudentPreview> => apiClient.get("/student/me")
 
@@ -86,17 +87,24 @@ export const importStudent = (student: StudentPreview, file: Blob | undefined): 
     return apiClient.post("/student/import", fd)
 }
 
-export const importStudents = (students: StudentsImportData[]): AxiosPromise => {
+export const importStudents = (students: StudentPreview[]): AxiosPromise => {
     const fd = new FormData()
     for(const student of students){
-        fd.append("firstName[]", student.student.firstName)
-        fd.append("lastName[]", student.student.lastName)
-        fd.append("id[]", student.student.id.toString())
-        fd.append("promo[]", student.student.promo.toString())
-        fd.append("hasFile[]", (!!student.file).toString())
-        if(student.file)
-            fd.append("file[]", student.file)
+        fd.append("id[]", student.id.toString())
+        fd.append("firstName[]", student.firstName)
+        fd.append("lastName[]", student.lastName)
+        fd.append("promo[]", student.promo.toString())
     }
 
-    return apiClient.post("/student/import/multiple", fd)
+    return apiClient.post("/student/import/multiple", fd, {headers: {"Content-Type": "multipart/form-data"}})
+}
+
+export const importStudentsPicture = (students: StudentsImportPicture[]): AxiosPromise => {
+    const fd = new FormData()
+    for(const student of students){
+        if(student.file)
+            fd.append("files[]", student.file)
+    }
+
+    return apiClient.post("/student/import/multiple/pictures", fd)
 }
