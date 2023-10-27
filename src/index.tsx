@@ -105,7 +105,7 @@ const App: React.FC = () => {
                 const from = (window.history.state?.state as LocationState)?.from || {
                     pathname: state.payload.lastConnection ? "/" : "/discovery"
                 }
-                window.history.pushState(null, "", from.pathname)
+                window.history.pushState({firstPage: true}, "", from.pathname)
             }
             setLoading(false)
         }).catch((e) => {
