@@ -1,17 +1,17 @@
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react"
-import {Divider, Drawer} from "antd"
-import {Link, useLocation} from "react-router-dom"
-import {useTranslation} from "react-i18next"
-import {LoggedStudentPreview, StudentPreview} from "../../data/student/types"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import { Divider, Drawer } from "antd"
+import { Link, useHistory, useLocation } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { LoggedStudentPreview, StudentPreview } from "../../data/student/types"
 import "./Navbar.css"
-import {Roles} from "../../data/security/types"
+import { Roles } from "../../data/security/types"
 import SearchBar from "../SearchBar"
-import {AvatarSizes} from "../../constants/MediaSizes"
-import {AppContext} from "../../context/app/context"
+import { AvatarSizes } from "../../constants/MediaSizes"
+import { AppContext } from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
-import {faCogs, faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {IconDefinition} from "@fortawesome/fontawesome-svg-core"
+import { faArrowLeft, faCogs, faSignOutAlt, faUserShield } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import DropdownPanel from "../Common/DropdownPanel"
 import NotificationsCenter from "../Notification/NotificationsCenter"
 import { cFaBellFull, cFaBellOutline, cFaCalendarFull, cFaCalendarOutline, cFaCompassFull, cFaHomeFull, cFaHomeOutline, cFaSearch } from "../../constants/CustomFontAwesome"
@@ -20,6 +20,7 @@ import { notificationManager } from "../../datamanager/NotificationManager"
 import useAdminRole from "../../hooks/useAdminRole"
 import StudentLargeCard from "../Student/StudentLargeCard"
 import { setStyles } from "../../util"
+import { isAndroidApp, isIosApp } from "../../data/app"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -187,6 +188,22 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         }
     }, [])
 
+    const history = useHistory()
+
+    const onPressBack = useCallback(() => {    
+        if(window.history.state.firstPage){
+            history.replace("/")
+        } else {
+            history.goBack()
+        }
+    }, [history])
+
+    const goHome = useCallback(() => {
+        history.replace("/")
+    }, [history])
+
+    const isFirstPage = useMemo(() => history.location.pathname == "/" || window.history.state.firstPage, [history.location.pathname])
+
     const { pathname } = useLocation()
     useEffect(() => onScroll(), [pathname])
 
@@ -194,23 +211,31 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         <div className="topback fixed bg-white" ref={topHeaderRef} />
         <div className="h-14" />
         <div className="topback" />
-        <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{position: "absolute", top: "0px"}} ref={ref}>
-            <Link to="/" className="flex">
-                <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo"/>
-                <div className="items-center ml-1 text-indigo-500/90 font-medium text-base hidden lg:flex">
-                    iseplife
-                </div>
-            </Link>
+        <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{ position: "absolute", top: "0px" }} ref={ref}>
 
-            <SearchBar/>
+            <div className="flex items-center">
+                { (isIosApp || isAndroidApp) && <div className={`cursor-pointer text-xl sm:hidden duration-300 ease-out overflow-hidden active:text-indigo-500 ${isFirstPage ? "w-0" : "w-6"} `}>
+                    <FontAwesomeIcon icon={faArrowLeft} onClick={onPressBack} className="mr-2"></FontAwesomeIcon>
+                </div> }
+
+                <button onClick={goHome} className="flex items-center">
+                    <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo" />
+                    <div className="items-center ml-1 text-indigo-500/90 font-medium text-base hidden lg:flex">
+                        iseplife
+                    </div>
+                </button>
+            </div>
+
+
+            <SearchBar />
 
             <div className="hidden md:flex justify-end items-center py-5">
                 <div className="flex justify-around items-center mr-4 text-xl text-indigo-400">
                     <Link to="/discovery" className="group">
-                        <IconButton icon={cFaCompassFull}/>
+                        <IconButton icon={cFaCompassFull} />
                     </Link>
                     <Link to="/calendar" className="group">
-                        <IconButton icon={cFaCalendarFull}/>
+                        <IconButton icon={cFaCalendarFull} />
                     </Link>
                     <NotificationHeaderButton />
                 </div>
