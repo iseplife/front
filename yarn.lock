@@ -1703,6 +1703,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@capacitor/share@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@capacitor/share@npm:4.1.1"
+  peerDependencies:
+    "@capacitor/core": ^4.0.0
+  checksum: 3356d1719040d92331f4c69e7842fd86820b0bffbbca3d7233b1c69d5518304f2d895944e1b0386ad5995b2592eb8f2c699c7740ab8b1fa30489cae093bc840b
+  languageName: node
+  linkType: hard
+
 "@capacitor/status-bar@npm:4.0.1":
   version: 4.0.1
   resolution: "@capacitor/status-bar@npm:4.0.1"
@@ -10489,6 +10498,7 @@ __metadata:
     "@capacitor/ios": ^4.1.0
     "@capacitor/keyboard": 4.0.1
     "@capacitor/push-notifications": ^4.0.1
+    "@capacitor/share": ^4.1.1
     "@capacitor/status-bar": 4.0.1
     "@capacitor/toast": ^4.0.1
     "@capgo/capacitor-updater": ^3.3.20

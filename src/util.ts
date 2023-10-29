@@ -17,8 +17,7 @@ import { Media } from "@capacitor-community/media"
 import { Toast } from "@capacitor/toast"
 import { message } from "antd"
 import { Gallery } from "./data/gallery/types"
-import { GalleryPhoto } from "./pages/default/gallery"
-
+import { Share } from "@capacitor/share"
 
 const locales: { [id: string]: Locale } = {
     en: enUS,
@@ -332,7 +331,22 @@ export const shareImage = async (url: string, name: string) => {
         files: filesArray,
     }
 
-    navigator.share(shareData)
+    if(isIosApp || isAndroidApp) {
+        
+        const imgTemp = await Filesystem.writeFile({
+            path: name,
+            data: url,
+            directory: Directory.Cache,
+        })
+
+        await Share.share({
+            title: name,
+            url: imgTemp.uri  
+        })
+
+        imgTemp.uri && await Filesystem.deleteFile({ path: imgTemp.uri, directory: Directory.Cache })
+    } else
+        navigator.share(shareData)
 }
 
 export const TailwindUtils = {
