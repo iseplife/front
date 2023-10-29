@@ -313,6 +313,28 @@ export const downloadFile = async (url: string, name: string, savedMessage: stri
     
 }
 
+export const shareImage = async (url: string, name: string) => {
+    const response = await fetch(url)
+    const blob = await response.blob()
+
+    const filesArray = [
+        new File(
+            [blob],
+            name,
+            {
+                type: "image/jpeg",
+                lastModified: new Date().getTime()
+            }
+        )
+    ]
+
+    const shareData = {
+        files: filesArray,
+    }
+
+    navigator.share(shareData)
+}
+
 export const TailwindUtils = {
     isMd: () => window.innerWidth >= 768
 }

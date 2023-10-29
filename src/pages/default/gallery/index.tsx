@@ -342,7 +342,7 @@ const Gallery: React.FC = () => {
                         }
 
                         { !loading &&
-                            <p className="pt-2 mb-0 whitespace-pre">{gallery?.description}</p>
+                            <p className="pt-2 mb-0 whitespace-pre-wrap">{gallery?.description}</p>
                         }
                     </>  
                     }

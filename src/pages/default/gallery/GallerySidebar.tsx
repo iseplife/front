@@ -10,7 +10,7 @@ import {getThread, toggleThreadLike} from "../../../data/thread"
 import {SidebarProps} from "../../../components/Common/Lightbox"
 import {Gallery} from "../../../data/gallery/types"
 import {GalleryPhoto} from "./index"
-import { copyToClipboard, downloadFile, formatDateWithTimer, getImageLink, limitSize, mediaPath, releaseCanvas } from "../../../util"
+import { copyToClipboard, downloadFile, formatDateWithTimer, getImageLink, limitSize, mediaPath, releaseCanvas, shareImage as sImage } from "../../../util"
 import { useTranslation } from "react-i18next"
 import Loading from "../../../components/Common/Loading"
 import { isWebPSupported, polyfillWebp } from "../../../components/Common/WebPPolyfill"
@@ -24,6 +24,9 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentIndex, c
     const [liked, setLiked] = useState<boolean>(false)
     const [nbLikes, setNbLikes] = useState<number>(0)
     const [nbComments, setNbComments] = useState<number>(0)
+    const [isDownloadingImage, setIsDownloadingImage] = useState<boolean>(false)
+    const [isSharingImage, setIsSharingImage] = useState<boolean>(false)
+
 
     const {t} = useTranslation(["common", "gallery"])
 
@@ -117,13 +120,24 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentIndex, c
         } else 
             downloadLink = await polyfillWebp(link, true)
         
-        downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`, t("gallery:saved"))
-    }, [gallery.name, currentImage.src])
+        return downloadLink
 
-    const copyLink = useCallback(() => {
-        copyToClipboard(getImageLink(currentIndex, gallery))
-        message.success(t("post:copied"))
-    }, [currentIndex, gallery, t])
+    }, [currentImage.srcSet, t])
+
+    const downloadImage = useCallback(async () => {
+        setIsDownloadingImage(true)
+        const downloadLink = await downloadCallback()
+        downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`, t("gallery:saved"))
+        setIsDownloadingImage(false)
+
+    }, [currentImage.id, downloadCallback, gallery.name, t])
+
+    const shareImage = useCallback(async () => {
+        setIsSharingImage(true)
+        const downloadLink = await downloadCallback()
+        sImage(downloadLink, `${gallery.name}-${currentImage.id}.jpg`)
+        setIsSharingImage(false)
+    }, [currentImage.id, downloadCallback, gallery.name])
 
     return (
         <div>
@@ -140,27 +154,29 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentIndex, c
                         />
                         <div className="items-center ml-3">
                             <div className="font-bold -mb-0.5 text-base">{gallery.club.name}</div>
-                            <div className="text-md">{ formattedDate }</div>
+                            <div className="text-md whitespace-nowrap">{ formattedDate }</div>
                         </div>
                     </div>
-                    <div className="flex space-x-4">
-                        <span 
-                            className="group flex items-center justify-center cursor-pointer hover:text-indigo-500 text-xl transition-colors duration-100"
-                            onClick={copyLink}
-                        >
-                            <div className="-ml-1 cursor-pointer rounded-full bg-indigo-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
-                                <FontAwesomeIcon
-                                    icon={cFaShare}
-                                    size="sm"
-                                />
-                            </div>
-                        </span>
-                        <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
-                            <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                    <div className="flex space-x-2">
+
+                        <button onClick={downloadProgress == -1 ? shareImage : undefined} className="rounded-full flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all text-white font-medium px-3.5 items-center">
+                            <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 || isDownloadingImage ? 0 : downloadProgress*100}%`}}></div>
                             <div className="z-10 hidden md:flex items-center">
-                                {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
                                 {
-                                    downloadProgress == -1 ?
+                                    downloadProgress == -1 || isDownloadingImage ?
+                                        <FontAwesomeIcon icon={cFaShare}/>
+                                        :
+                                        <Loading />
+                                }
+                            </div>
+                        </button>
+                        
+                        <button onClick={downloadProgress == -1 ? downloadImage : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
+                            <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 || isSharingImage ? 0 : downloadProgress*100}%`}}></div>
+                            <div className="z-10 hidden md:flex items-center">
+                                {downloadProgress == -1 || isSharingImage ? t("gallery:download") : t("gallery:downloading")}
+                                {
+                                    downloadProgress == -1 || isSharingImage ?
                                         <FontAwesomeIcon icon={faCloudDownload} className="ml-2" />
                                         :
                                         <Loading className="ml-2" />
@@ -170,23 +186,43 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentIndex, c
                     </div>
                    
                 </div>
-                <button
-                    onClick={downloadProgress == -1 ? downloadCallback : undefined}
-                    className="md:hidden absolute navbar m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
-                >
-                    <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
-                    <div className="
-                        grid place-items-center ml-[1.5px] rounded-full
-                        cursor-pointer z-50 text-white transition-all duration-300 false
-                    ">
-                        {
-                            downloadProgress == -1 ?
-                                <FontAwesomeIcon icon={faCloudDownload} />
-                                :
-                                <Loading className="ml-0.5" />
-                        }
-                    </div>
-                </button>
+                <div className="md:hidden absolute navbar m-3.5 top-0 right-0 flex space-x-4">
+                    <button
+                        onClick={downloadProgress == -1 ? shareImage : undefined}
+                        className="w-9 h-9 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center justify-center relative"
+                    >
+                        <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 || isDownloadingImage ? 0 : downloadProgress*100}%`}}></div>
+                        <div className="
+                            grid place-items-center rounded-full
+                            cursor-pointer z-50 text-white transition-all duration-300 false
+                        ">
+                            {
+                                downloadProgress == -1 || isDownloadingImage ?
+                                    <FontAwesomeIcon icon={cFaShare} />
+                                    :
+                                    <Loading className="ml-0.5" />
+                            }
+                        </div>
+                    </button>
+                    <button
+                        onClick={downloadProgress == -1 ? downloadImage : undefined}
+                        className="w-9 h-9 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center justify-center relative"
+                    >
+                        <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 || isSharingImage ? 0 : downloadProgress*100}%`}}></div>
+                        <div className="
+                            grid place-items-center rounded-full
+                            cursor-pointer z-50 text-white transition-all duration-300 false
+                        ">
+                            {
+                                downloadProgress == -1 || isSharingImage ?
+                                    <FontAwesomeIcon icon={faCloudDownload} />
+                                    :
+                                    <Loading className="ml-0.5" />
+                            }
+                        </div>
+                    </button>
+                </div>
+                
                 <div className="text-base ml-2 mt-2 hidden md:block">
                     {gallery.name}
                 </div>
