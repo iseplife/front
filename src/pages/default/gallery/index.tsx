@@ -369,7 +369,7 @@ const Gallery: React.FC = () => {
                     </>}
                 </div>
             </div>    
-            {gallery && !editMode && gallery.hasRight && <div className="flex space-x-2 mt-4 px-2 text-sm">
+            {gallery && !editMode && gallery.hasRight && <div className="flex space-x-2 mt-4 px-2 text-sm overflow-x-auto pb-2">
 
                 { !selectMode && 
                     <GalleryAdder club={gallery.club.id} gallery={gallery.id} afterUpload={addNewImages}/>
