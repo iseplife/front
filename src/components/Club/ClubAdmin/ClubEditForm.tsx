@@ -125,18 +125,15 @@ const ClubEditForm: React.FC = () => {
                 </div>
             </div>
 
-            <div className="w-full text-right">
-                <Button
-                    htmlType="submit"
-                    className="text-white rounded border-green-500 bg-green-500"
-                    disabled={formik.isSubmitting}
-                >
-                    {t("common:save")}
+            <div className="w-full flex justify-end mt-2">
+
+                <button type="submit" disabled={formik.isSubmitting} className="py-2 items-center cursor-pointer rounded-full flex bg-indigo-400 hover:bg-opacity-90 px-5 text-white">
                     {formik.isSubmitting ?
-                        <FontAwesomeIcon icon={faCircleNotch} spin className="ml-2"/> :
-                        <FontAwesomeIcon icon={faSave} className="ml-2"/>
+                        <FontAwesomeIcon icon={faCircleNotch} spin className="mr-2"/> :
+                        <FontAwesomeIcon icon={faSave} className="mr-2"/>
                     }
-                </Button>
+                    {t("common:save")}
+                </button>
             </div>
         </form>
     )

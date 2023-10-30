@@ -17,7 +17,7 @@ import CardTextSkeleton from "../Skeletons/CardTextSkeleton"
 import {useTranslation} from "react-i18next"
 import BasicPostForm from "../Post/Form/BasicPostForm"
 import PostCreateForm from "../Post/Form/PostCreateForm"
-import {faChartBar, faImages, faPaperclip, faVideo} from "@fortawesome/free-solid-svg-icons"
+import {faAlignLeft, faChartBar, faImages, faPaperclip, faTimes, faTrash, faTrashAlt, faVideo} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faNewspaper} from "@fortawesome/free-regular-svg-icons"
 import {AppContext} from "../../context/app/context"
@@ -346,6 +346,17 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
     const postKeyGenerator = useCallback((index: number) => 
         posts[index].publicationDateId
     , [posts])
+
+    const closeForm = useCallback(() => {
+        setFormVisible(false)
+        setCompleteFormType(undefined)
+    }, [])
+
+    const openCreateModal = useCallback(() => {
+        setCompleteFormType(undefined!)
+        setFormVisible(true)
+    }, [])
+
     return (
         <div
             className={`${className}`}
@@ -354,10 +365,10 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
         >
             <Modal
                 className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl overflow-hidden pb-0 top-6 md:top-14"
-                visible={!!completeFormType}
+                visible={!!formVisible}
                 footer={null}
-                afterClose={() => setFormVisible(false)}
-                onCancel={() => setCompleteFormType(undefined)}
+                afterClose={closeForm}
+                onCancel={closeForm}
             >
                 {formVisible && <PostCreateForm
                     text={text}
@@ -365,14 +376,21 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     feed={id}
                     user={user}
                     onSubmit={onPostCreation}
-                    onClose={() => setCompleteFormType(undefined)}
+                    onClose={closeForm}
+                    key={completeFormType!}
                 />}
             </Modal>
+
             {
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
                     {!selectedPost ? 
-                        <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/>
+                        ((loading || fetching) ? 
+                            <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/> 
+                            : <div className="mb-8 flex items-center justify-center p-4"><FontAwesomeIcon
+                                icon={faTimes}
+                                className="mr-2"/>
+                            <div>{t("post:post_deleted")}</div></div>)
                         : <div
                             key={selectedPost.publicationDateId}
                             className={`${!feedsManager.isFresh(selectedPost, id) && "opacity-60 pointer-events-none"}`}
@@ -395,8 +413,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
             }
             {!noDivider && <Divider className="text-gray-700 text-lg" orientation="left">{t("posts")}</Divider>}
             {allowPublication && (
-                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation}>
-                    <div className="grid grid-cols-4 gap-2.5 items-center text-xl mt-1 -mb-2">
+                <BasicPostForm setText={setText} user={user} feed={id} onPost={onPostCreation} onInputClicked={openCreateModal}>
+                    <div className="grid grid-cols-4 sm:gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
                             className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"

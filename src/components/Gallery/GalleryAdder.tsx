@@ -62,7 +62,7 @@ const GalleryAdder: React.FC<GalleryAdderProps> = ({gallery, afterUpload, club})
 
     return (
         <div>
-            <Button className="rounded mx-1" onClick={() => setVisible(true)}>
+            <Button className="rounded mx-1" type="primary" onClick={() => setVisible(true)}>
                 {t("add_img")}
             </Button>
             <Modal

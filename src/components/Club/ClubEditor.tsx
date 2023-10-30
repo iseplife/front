@@ -137,7 +137,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
         Modal.confirm({
             title: t("remove_item.title"),
             content: t("remove_item.content"),
-            okText: "Ok",
+            okText: t("common:delete"),
             cancelText: t("cancel"),
             onOk: async () => {
                 const res = await deleteClub(club!.id)
