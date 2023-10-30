@@ -57,6 +57,8 @@ export type ClubMemberPreview = {
     role: ClubRole
     position: string
     club: ClubPreview
+    fromYear: number;
+    toYear: number;
 }
 
 export type ClubMemberCreationForm = {

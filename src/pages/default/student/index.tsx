@@ -108,8 +108,8 @@ const Student: React.FC = () => {
                 </DropdownPanel>
             </div>
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-2 lg:grid-cols-5">
-                <div className="mx-4 md:mx-10 sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3 max-w-[calc(100vw-2rem)]">
-                    <div className="container mx-auto my-5 mb-10 flex gap-5 items-center">
+                <div className="sm:col-span-2 sm:col-start-1 lg:col-start-2 lg:col-span-3">
+                    <div className="px-4 md:px-10  container my-5 mb-10 flex gap-5 items-center">
                         <WebPAvatarPolyfill className="w-32 h-32 rounded-full absolute" src={cache?.picture ?? cache?.thumbURL ?? cache?.thumbnail ? mediaPath(cache?.picture ?? cache?.thumbURL ?? cache?.thumbnail, AvatarSizes.THUMBNAIL) : "/img/icons/discovery/user.svg"} />
                         <WebPAvatarPolyfill className="w-32 h-32 rounded-full z-10 bg-transparent flex-shrink-0" src={student?.picture && mediaPath(student?.picture, AvatarSizes.FULL)} />
                         <div>

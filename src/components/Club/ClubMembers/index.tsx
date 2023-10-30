@@ -3,7 +3,7 @@ import {ClubMember} from "../../../data/club/types"
 import {getMembers} from "../../../data/club"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {getCurrentSchoolYear} from "../../../util"
-import {faPencilAlt, faTimes} from "@fortawesome/free-solid-svg-icons"
+import {faCheck, faPencilAlt} from "@fortawesome/free-solid-svg-icons"
 import MemberCard from "./MemberCard"
 import ClubSchoolSessionsSelect from "./ClubSchoolSessionsSelect"
 import ClubMemberSkeleton from "../../Skeletons/ClubMemberSkeleton"
@@ -34,32 +34,42 @@ const ClubMembers: React.FC = () => {
 
     useEffect(() => {
         setLoading(true)
+
+        if(!club?.canEdit)
+            setEditionMode(false)
         if(club?.id)
             getMembers(club?.id, selectedYear).then(res =>
                 setMembers(res.data)
             ).finally(() => setLoading(false))
-    }, [club?.id, selectedYear])
+    }, [club?.canEdit, club?.id, selectedYear])
 
     return (
-        <div className="container mx-auto relative h-full py-4">
-            <div className="flex justify-end item-center mb-2">
+        <div className="container mx-auto relative h-full py-3">
+            
+
+            <div className="flex items-center mb-2">
+                <div className="w-full my-3 border-t mr-4"></div>
                 {(club ?? cache)?.id && <ClubSchoolSessionsSelect club={(club ?? cache)!.id} handleChange={setSelectedYear}/>}
+                
                 {club?.canEdit && (
-                    <div
-                        onClick={toggleEditionMode}
-                        className="text-xl flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-200 transition-colors cursor-pointer group mx-2"
-                    >
-                        <FontAwesomeIcon
-                            className="cursor-pointer text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors"
-                            icon={editionMode ? faTimes : faPencilAlt}
-                        />
+                    <div className="text-right px-2 mb-2">
+                        <div
+                            onClick={toggleEditionMode}
+                            className="cursor-pointer text-xl"
+                        >
+                            <FontAwesomeIcon
+                                className={"transition-colors duration-100 ml-1 " + (editionMode ? "text-green-500  hover:text-green-600" : "text-gray-500  hover:text-gray-600")}
+                                icon={editionMode ? faCheck : faPencilAlt}
+                            />
+                        </div>
                     </div>
                 )}
+
             </div>
 
-            <div className="flex flex-wrap justify-center h-full">
+            <div className="flex flex-wrap justify-center">
                 {loading ?
-                    <ClubMemberSkeleton amount={5} loading={true}/> :
+                    <ClubMemberSkeleton amount={5} /> :
                     members.map(m => editionMode ?
                         <ClubMemberEditor
                             key={m.id}
@@ -68,9 +78,11 @@ const ClubMembers: React.FC = () => {
                             onUpdate={onUpdate}
                         /> :
                         <MemberCard key={m.id} id={m.id} m={m} showRole={club?.canEdit}/>
+
                     )
                 }
                 {editionMode && <ClubMemberAdder club={club!.id} year={selectedYear} onAdd={onAdd}/>}
+                
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import { Select } from "antd"
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {getClubSchoolSessions} from "../../../data/club"
 import {getCurrentSchoolYear} from "../../../util"
 
@@ -10,6 +10,8 @@ type ClubSchoolSessionsSelectProps = {
     handleChange: (year: number) => void
 }
 const ClubSchoolSessionsSelect: React.FC<ClubSchoolSessionsSelectProps> = ({club, handleChange}) => {
+
+    const [selectSchoolSession, setSelectedSchoolSection] = useState(getCurrentSchoolYear())
     const [loading, setLoading] = useState(true)
     const [schoolSessions, setSchoolSessions] = useState<number[]>([getCurrentSchoolYear()])
 
@@ -18,16 +20,23 @@ const ClubSchoolSessionsSelect: React.FC<ClubSchoolSessionsSelectProps> = ({club
         setLoading(true)
         if(club)
             getClubSchoolSessions(club).then(res => {
-                setSchoolSessions(res.data)
+                setSchoolSessions(res.data.sort((a, b) => a - b))
             }).finally(() => setLoading(false))
     }, [club])
 
+    const changeSchoolSession = useCallback((year: number) => {
+        handleChange(year)
+        setSelectedSchoolSection(year)
+    }, [handleChange])
+
     return (
-        <Select className="rounded my-auto" style={{borderRadius: 10}} dropdownClassName="rounded" loading={loading} defaultValue={schoolSessions[0]} onChange={handleChange}>
-            {schoolSessions.map((s, i) =>
-                <Option key={i} value={s}>{s}</Option>
-            )}
-        </Select>
+        <>
+            <div className="flex space-x-4 text-lg px-2">
+                {schoolSessions.map((s, i) =>
+                    <div key={i} className={"h-hull flex items-center font-bold border-b-2 " + (selectSchoolSession == s ? "text-indigo-600 border-indigo-600" : "cursor-pointer border-transparent")} onClick={() => changeSchoolSession(s)}>{s}</div>
+                )}
+            </div>
+        </>
     )
 }
 export default ClubSchoolSessionsSelect
