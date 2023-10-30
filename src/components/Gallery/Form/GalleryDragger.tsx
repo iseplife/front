@@ -153,7 +153,6 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 setUploadingState(UploadState.ERROR)
                 message.error(e.message)
 
-                // setUploadCount(uploadCount => uploadCount + 1)
                 setProgression(count / images.size * 100)
                 setUploadResp(responses)
 
