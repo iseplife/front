@@ -23,13 +23,13 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, clubsAllowedTo
     }, [onSubmit])
     return (
         <>
-            <Button
-                className={`rounded-full px-3 bg-indigo-400 text-white font-semibold mx-auto mb-3 ${!mobile && "hidden sm:block" }`}
+            <button
+                className={`rounded-full px-4 bg-indigo-400 hover:bg-opacity-90 duration-100 py-2 text-white font-semibold mx-auto mb-3 ${!mobile && "hidden sm:block" }`}
                 style={{width: "max-content"}}
                 onClick={() => setVisible(true)}
             >
                 {t("add")} <FontAwesomeIcon icon={faImages} className="ml-2"/>
-            </Button>
+            </button>
             <Modal
                 className="w-11/12 no-padding-modal rounded-xl overflow-hidden pb-0 top-6 md:top-14"
                 visible={visible}
