@@ -24,7 +24,6 @@
 }
 
 .pills:checked + .label-pills:hover {
-    /* background-color: #4c51bf !important; */
     color: white !important;
 }
 
