@@ -202,7 +202,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         history.replace("/")
     }, [history])
 
-    const isFirstPage = useMemo(() => history.location.pathname == "/" || window.history.state.firstPage, [history.location.pathname])
+    const isFirstPage = useMemo(() => ["/", "/discovery", "/calendar", "/event", "/notifications"].includes(history.location.pathname) || window.history.state.firstPage, [history.location.pathname])
 
     const { pathname } = useLocation()
     useEffect(() => onScroll(), [pathname])
