@@ -97,7 +97,7 @@ const Club: React.FC = () => {
         <ClubContext.Provider value={clubContext}>
             <div className="absolute flex">
                 <DropdownPanel
-                    buttonClassName="absolute top-2 left-2 z-50 "
+                    buttonClassName="absolute top-2 left-2 z-10"
                     panelClassName="w-32 left-0 select-none text-base font-medium"
                 >
                     <DropdownPanelElement icon={faBan} title={t(isBlocked ? "common:unblock" : "common:block")} onClick={isBlocked ? onUnBlock : onBlock} color="red" />

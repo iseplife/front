@@ -118,7 +118,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
     return (
         <>
             <Modal
-                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl pb-0 top-6 md:top-14 max-h-[min(80vh,590px)] overflow-scroll scrollbar-thin"
+                className="w-11/12 md:w-1/2 md:max-w-[600px] rounded-xl pb-0 top-6 md:top-14 max-h-[min(80vh,590px)] overflow-scroll scrollbar-thin scrollbar-none"
                 visible={likesOpenned}
                 footer={null}
                 afterClose={closeLikes}
