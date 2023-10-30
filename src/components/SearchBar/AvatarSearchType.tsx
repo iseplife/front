@@ -49,13 +49,6 @@ const AvatarSearchType: React.FC<AvatarSearchTypeProps> = ({thumbURL, text, type
                         {text.split(" ")[0].slice(0, 1)}
                     </WebPAvatarPolyfill>
                 }
-                {/* <div className="z-10">
-                    <FontAwesomeIcon
-                        className="-ml-2 mt-3 bg-white rounded-full border-4 border-transparent text-gray-600"
-                        icon={icon}
-                        size="lg"
-                    />
-                </div> */}
             </div>   
         </>
     )
