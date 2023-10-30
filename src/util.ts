@@ -332,19 +332,26 @@ export const shareImage = async (url: string, name: string) => {
     }
 
     if(isIosApp || isAndroidApp) {
+
+        try {
+            const imgTemp = await Filesystem.writeFile({
+                path: name,
+                data: url,
+                directory: Directory.Cache,
+            })
+    
+            await Share.share({
+                title: name,
+                url: imgTemp.uri  
+            })
+    
+            imgTemp.uri && await Filesystem.deleteFile({ path: imgTemp.uri, directory: Directory.Cache })
+        } catch(e) {
+            console.error(e)
+            message.info(t("common:update").toString())
+        }
         
-        const imgTemp = await Filesystem.writeFile({
-            path: name,
-            data: url,
-            directory: Directory.Cache,
-        })
-
-        await Share.share({
-            title: name,
-            url: imgTemp.uri  
-        })
-
-        imgTemp.uri && await Filesystem.deleteFile({ path: imgTemp.uri, directory: Directory.Cache })
+       
     } else
         navigator.share(shareData)
 }
