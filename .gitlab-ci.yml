@@ -19,7 +19,7 @@ prebuild:
   stage: prebuild 
   before_script:
     - apk --no-cache add zip
-    - yarn set version berry
+    - yarn set version 3.6.4
   script:
     - yarn install
     - yarn run build
@@ -41,7 +41,7 @@ build-android:
   dependencies:
     - prebuild
   before_script:
-    - yarn set version berry
+    - yarn set version 3.6.4
     - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
   script:
     - yarn install
@@ -61,7 +61,7 @@ build-ios:
   dependencies:
     - prebuild
   before_script:
-    - yarn set version berry
+    - yarn set version 3.6.4
     - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
   script:
     - yarn install
