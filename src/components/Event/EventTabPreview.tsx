@@ -34,7 +34,7 @@ const EventTabPreview: React.FC<EventTabProps> = ({ event, className }) => {
                                 <div className="absolute -top-2.5 -right-2.5 text-lg rotate-12" title={t(`type.${event.type}`)}>{EventTypeEmoji[event.type]}</div>
                             </div>
                         </div>
-                        <span className="flex-1 text-left font-semibold text-lg -mb-1 sm:mb-0 sm:text-xl truncate sm:ml-2.5 xl:ml-3.5">
+                        <span className="flex-1 text-left font-semibold text-lg -mb-1 sm:mb-0 sm:text-xl truncate sm:ml-2.5 xl:ml-3.5 whitespace-normal line-clamp-1">
                             {event.title}
                         </span>
                     </div>
