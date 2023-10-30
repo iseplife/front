@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
     const history = useHistory()
 
     const onPressBack = useCallback(() => {    
-        if(window.history.state.firstPage){
+        if(!window.history.state || window.history.state.firstPage){
             history.replace("/")
         } else {
             history.goBack()
@@ -202,7 +202,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         history.replace("/")
     }, [history])
 
-    const isFirstPage = useMemo(() => ["/", "/discovery", "/calendar", "/event", "/notifications"].includes(history.location.pathname) || window.history.state.firstPage, [history.location.pathname])
+    const isFirstPage = useMemo(() => ["/", "/discovery", "/calendar", "/event", "/notifications"].includes(history.location.pathname) || !window.history.state || window.history.state.firstPage, [history.location.pathname])
 
     const { pathname } = useLocation()
     useEffect(() => onScroll(), [pathname])
