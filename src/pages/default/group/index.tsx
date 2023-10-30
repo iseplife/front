@@ -33,8 +33,26 @@ const Group: React.FC = () => {
     const [group, setGroup] = useState<GroupType>()
     const [orgaLoading, setOrgaLoading] = useState<boolean>(true)
     const [tab, setTab] = useState<GroupPanel>(GroupPanel.POSTS)
+    const [fullMembersLoaded, setFullMembersLoaded] = useState<boolean>(false)
 
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
+
+    const loadMembers = useCallback(() => {
+        if (!fullMembersLoaded) {
+            setOrgaLoading(orgaLoading => {
+                if(!orgaLoading)
+                    getGroupMembers(id, false).then(res => {
+                        setOrga((res.data).reduce((acc: GroupMember[][], curr) => {
+                            acc[curr.admin ? 0 : 1].push(curr)
+                            return acc
+                        }, [[], []]))
+                        setFullMembersLoaded(true)
+                    }).finally(() => setOrgaLoading(false))
+
+                return true
+            })
+        }
+    }, [id, fullMembersLoaded])
 
     useEffect(() => {
         if (!isNaN(id)) {
@@ -53,7 +71,8 @@ const Group: React.FC = () => {
 
     useEffect(() => {
         setOrgaLoading(true)
-        getGroupMembers(id).then(res =>
+        setFullMembersLoaded(false)
+        getGroupMembers(id, true).then(res =>
             setOrga((res.data).reduce((acc: GroupMember[][], curr) => {
                 acc[curr.admin ? 0 : 1].push(curr)
                 return acc
@@ -112,7 +131,7 @@ const Group: React.FC = () => {
             id={group?.feedId}
             loading={!group}
         />,
-        [t("members")]: <GroupMembersPanel onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} hasRight={group?.hasRight} />,
+        [t("members")]: <GroupMembersPanel loadMembers={loadMembers} orgaLoading={orgaLoading} fullMembersLoaded={fullMembersLoaded} onDelete={onDelete} onPromote={onPromote} onDemote={onDemote} orga={orga} hasRight={group?.hasRight} />,
     }), [group, onDelete, onPromote, onDemote, orga])
 
 

@@ -30,7 +30,7 @@ export const uploadGroupCover = (id: number, file: File | null): AxiosPromise<Me
     return apiClient.put(`/group/${id}/cover`, fd)
 }
 
-export const getGroupMembers = (group: number): AxiosPromise<GroupMember[]> => apiClient.get(`/group/${group}/member`)
+export const getGroupMembers = (group: number, minimal = false): AxiosPromise<GroupMember[]> => apiClient.get(`/group/${group}/member?minimal=${minimal}`)
 
 export const addGroupMember = (group: number, studentId: number): AxiosPromise<GroupMember> => apiClient.post(`/group/${group}/member/`, {studentId })
 
