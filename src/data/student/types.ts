@@ -46,8 +46,8 @@ export interface LoggedStudentPreview extends StudentPreview {
     lastExploreWatch: Date
 }
 
-export interface StudentsImportData {
-    student: StudentPreview,
+export interface StudentsImportPicture {
+    id: number,
     file?: Blob
 }
 
