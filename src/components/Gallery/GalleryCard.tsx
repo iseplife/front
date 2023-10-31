@@ -15,8 +15,9 @@ type GalleryCardProps = {
     gallery: GalleryPreview
     event?: EventPreview
     className?: string
+    showTitle?: boolean
 }
-const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className}) => {
+const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className, showTitle = true}) => {
     const {t} = useTranslation("gallery")
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
     return (
@@ -30,42 +31,41 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className}) =>
                             </div>
                         </div>
                     }
-                    <div className="whitespace-nowrap 2xl:flex w-full overflow-hidden text-ellipsis leading-4">
+                    <div className="whitespace-nowrap 2xl:flex w-full overflow-hidden leading-4">
                         {event && <b className="mr-2 block">{event?.title}</b>}
-                        <div className={`w-full text-ellipsis overflow-hidden ${!event && "font-semibold"}`}>{gallery.name}</div>
+                        <div className={`w-full whitespace-normal line-clamp-1  hover:opacity-80 duration-100 ${!event && "font-semibold text-sm sm:text-base"} ${event && "text-xs "}`} >{showTitle ? gallery.name : t("see_pictures")}</div>
                     </div>
                 </div>
             </Link>
-            <div className="flex flex-col flex-wrap content-start h-20 w-full">
+            <div className="grid grid-col-4 grid-flow-col gap-0.5 rounded-xl overflow-hidden">
                 {previewLength ?
                     gallery.preview.slice(0, previewLength).map((img, i) => (
                         i === previewLength - 1 ?
                             <Link
                                 key={img.id}
-                                to={`/gallery/${gallery.id}`} className="w-1/4 p-0.5 block" style={{height: "50%"}}
+                                to={`/gallery/${gallery.id}`} className="block"
                             >
-                                <div className="relative h-full w-full rounded bg-black text-gray-400 hover:text-white overflow-hidden" style={{backgroundColor: `#${img.color}`}}>
+                                <div className="relative h-full w-full duration-100 overflow-hidden aspect-[3/2]" style={{backgroundColor: `#${img.color}`}}>
                                     <SafeImage
                                         ratio={img.ratio}
-                                        className="h-full w-full rounded bg-gray-400 object-cover opacity-50"
+                                        className="h-full w-full object-cover"
                                         src={mediaPath(img.name, GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
                                         status={img.status}
                                     />
-                                    <FontAwesomeIcon icon={faPlus} className="absolute z-10" style={{top: "30%", left: "43%"}}/>
+                                    <div className="w-full h-full bg-neutral-800/60 hover:text-white text-gray-200 backdrop-blur-lg duration-100 absolute flex items-center justify-center"><FontAwesomeIcon icon={faPlus}/></div>
                                 </div>
                             </Link>
                             :
                             <Link
                                 key={img.id}
                                 to={`/gallery/${gallery.id}/${i}`}
-                                className={`p-0.5 block ${i === 0 ? "w-1/2" : "w-1/4"}`}
-                                style={{height: i === 0 ? "100%" : "50%"}}
+                                className={`block ${i === 0 ? "row-span-2 col-span-2" : "row-span-1 col-span-1"}`}
                             >
-                                <div className="hover:bg-black rounded h-full w-full relative overflow-hidden" style={{backgroundColor: `#${img.color}`}}>
+                                <div className="relative h-full w-full overflow-hidden aspect-[3/2]" style={{backgroundColor: `#${img.color}`}}>
                                     <SafeImage
                                         ratio={img.ratio}
-                                        className="h-full w-full bg-gray-400 object-cover hover:opacity-75 rounded"
+                                        className="h-full w-full object-cover"
                                         src={mediaPath(img.name, i === 0 ? GallerySizes.PREVIEW : GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
                                         status={img.status}

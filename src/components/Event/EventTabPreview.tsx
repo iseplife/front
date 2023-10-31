@@ -39,7 +39,7 @@ const EventTabPreview: React.FC<EventTabProps> = ({ event, className }) => {
                         </span>
                     </div>
                     {
-                        event.galleries?.map(g => <GalleryCard gallery={g} key={g.id} />)
+                        event.galleries?.map(g => <GalleryCard gallery={g} key={g.id} showTitle={(event.galleries ?? []).length>1} />)
                     }
                 </div>
             </Link>
