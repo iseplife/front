@@ -18,7 +18,7 @@ const EventTabPreview: React.FC<EventTabProps> = ({ event, className }) => {
             <Link to={`/event/${event.id}`} className={`w-full text-gray-700 hover:text-gray-500 ${className}`}>
                 <div
                     title={event.title}
-                    className="px-3 py-2 shadow-sm rounded-lg bg-white"
+                    className="px-2 py-2 shadow-sm rounded-lg bg-white"
                 >
                     <div className="flex flex-row items-center">
                         <div className="text-center">

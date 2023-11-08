@@ -21,7 +21,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className, sho
     const {t} = useTranslation("gallery")
     const previewLength = useMemo(() => Math.min(gallery.preview.length, PREVIEW_GALLERY_COUNT), [gallery.preview.length])
     return (
-        <div className={`my-2 ${className} ${!event && "mt-0 sm:mt-2"}`}>
+        <div className={`mt-2 ${className} ${!event && "mt-0 sm:mt-2"}`}>
             <Link to={`/gallery/${gallery.id}`}>
                 <div className={`text-gray-600 m-0 flex items-center ${event && "mb-1"}`}>
                     {event &&
@@ -38,7 +38,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className, sho
                     </div> }
                 </div>
             </Link>
-            <div className="grid grid-col-4 grid-flow-col gap-0.5 rounded-xl overflow-hidden">
+            <div className={`grid grid-col-4 grid-flow-col gap-0.5 rounded-xl overflow-hidden ${!showTitle && "mt-2 sm:mt-0"}`}>
                 {previewLength ?
                     gallery.preview.slice(0, previewLength).map((img, i) => (
                         i === previewLength - 1 ?
@@ -46,9 +46,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className, sho
                                 key={img.id}
                                 to={`/gallery/${gallery.id}`} className="block"
                             >
-                                <div className="relative h-full w-full duration-100 overflow-hidden aspect-[5/3]" style={{backgroundColor: `#${img.color}`}}>
+                                <div className="relative h-full w-full duration-100 overflow-hidden aspect-[5/2]" style={{backgroundColor: `#${img.color}`}}>
                                     <SafeImage
-                                        ratio={1.6}
+                                        ratio={2.5}
                                         className="h-full w-full object-cover"
                                         src={mediaPath(img.name, GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
@@ -63,9 +63,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({gallery, event, className, sho
                                 to={`/gallery/${gallery.id}/${i}`}
                                 className={`block ${i === 0 ? "row-span-2 col-span-2" : "row-span-1 col-span-1"}`}
                             >
-                                <div className="relative h-full w-full overflow-hidden aspect-[5/3]" style={{backgroundColor: `#${img.color}`}}>
+                                <div className="relative h-full w-full overflow-hidden aspect-[5/2]" style={{backgroundColor: `#${img.color}`}}>
                                     <SafeImage
-                                        ratio={1.6}
+                                        ratio={2.5}
                                         className="h-full w-full object-cover"
                                         src={mediaPath(img.name, i === 0 ? GallerySizes.PREVIEW : GallerySizes.THUMBNAIL)}
                                         nsfw={img.nsfw}
