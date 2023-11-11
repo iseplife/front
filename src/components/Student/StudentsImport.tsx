@@ -2,13 +2,12 @@ import React, {useCallback, useState} from "react"
 import {Button, message, Upload, Input} from "antd"
 import Table, {RowProps} from "../Common/TableAdmin"
 import {PageStatus} from "../../pages/admin/student"
-import {StudentPreview, StudentsImportPicture} from "../../data/student/types"
-import {importStudents, importStudentsPicture} from "../../data/student"
-import ImportedAvatar from "../Common/ImportedAvatar"
+import {StudentImportFamily, StudentPreview, StudentsImportPicture} from "../../data/student/types"
+import {importStudents, importStudentsFamily, importStudentsPicture} from "../../data/student"
 import {RcFile} from "antd/es/upload"
-import {faArrowLeft, faCheck, faSearch, faSyncAlt, faTimes, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {faCheck, faSearch, faSyncAlt, faTimes, faUpload} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons"
+import FamilyType from "../../constants/FamilyType"
 
 const importTableConfig = [
     {title: "Prénom", dataIndex: "firstName", className: "w-32"},
@@ -21,8 +20,9 @@ enum DisplayPage {
     AddCSV,
     StudentTable,
     Importing,
-    ImageStudent
-  }
+    ImageStudent,
+    StudentFamily
+}
 
 const DEFAULT_PAGE_SIZE = 10
 const StudentsImport: React.FC = () => {
@@ -37,6 +37,9 @@ const StudentsImport: React.FC = () => {
 
     const [uploadingStudentsPictures, setUploadingStudentsPictures] = useState<boolean>(false)
     const [importStudentsPictureList, setImportStudentsPictureList] = useState<StudentsImportPicture[]>([])
+
+    const [uploadingStudentsFamily, setUploadingtudentFamily] = useState<boolean>(false)
+    const [importStudentsFamilyList, setImportStudentFamily] = useState<StudentImportFamily[]>([])
 
 
     const [uploadingDataIndex, setUploadingDataIndex] = useState<number>(0)
@@ -73,13 +76,53 @@ const StudentsImport: React.FC = () => {
         const result: StudentPreview[] = []
         csv.split("\n").forEach(line => {
             if (line.length !== 0) {
-                const column = line.split(",")
+                const column = line.split(";")
                 result.push({
                     id: +column[0],
                     firstName: column[1],
                     lastName: column[2],
                     promo: +column[3],
                 })
+            }
+        })
+        return result
+    }
+
+    const uploadCSVFamily = useCallback((file: RcFile) => {
+        setLoadingCSV(true)
+        const csvFile = file.type === "text/csv" || file.type === "application/vnd.ms-excel"
+        if (!csvFile) {
+            message.error("You can only upload CSV File")
+        }
+        const reader = new FileReader()
+        reader.onload = () => {
+            const text = reader.result as string
+            const students = readCSVFamilyToObject(text)
+            setImportStudentFamily(students)
+            setLoadingCSV(false)
+        }
+        reader.readAsText(file)
+        setDisplayPage(DisplayPage.StudentFamily)
+        return false
+    }, [])
+
+    
+    const readCSVFamilyToObject = (csv: string) => {
+        const result: StudentImportFamily[] = []
+        csv.split("\n").forEach(line => {
+            if (line.length !== 0) {
+                const column = line.split(";")
+
+                if (Object.values(FamilyType).filter(f => (column[1].toUpperCase() as FamilyType).includes(f)).length == 1) {
+                    const family = Object.values(FamilyType).filter(f => (column[1].toUpperCase() as FamilyType).includes(f))[0]
+                    result.push({
+                        id: +column[0],
+                        family: family,
+                    })
+                } else {
+                    console.log("Valeur inconnue : " + column[1].toUpperCase())
+                }
+
             }
         })
         return result
@@ -109,6 +152,7 @@ const StudentsImport: React.FC = () => {
         setDisplayPage(DisplayPage.Importing)
         setUploadingStudents(true)
         setUploadingStudentsPictures(false)
+        setUploadingtudentFamily(false)
         setUploadSuccess(true)
         setUploadingDataIndex(0)
 
@@ -133,10 +177,41 @@ const StudentsImport: React.FC = () => {
 
     }, [importStudentsList])
 
+    const uploadStudentsFamily = useCallback(async () =>  {
+
+        setDisplayPage(DisplayPage.Importing)
+        setUploadingStudents(false)
+        setUploadingStudentsPictures(false)
+        setUploadingtudentFamily(true)
+        setUploadSuccess(true)
+        setUploadingDataIndex(0)
+
+        const stepSize = 10
+        const maxSteps = Math.ceil(importStudentsFamilyList.length/stepSize)+1
+        let index = 0
+
+        try {
+            for(let x = 0;x<maxSteps;x++){     
+                const uploadStudents = importStudentsFamilyList.slice(index, (index+1)+stepSize < importStudentsFamilyList.length ? (index+1)+stepSize : importStudentsFamilyList.length)
+                if(uploadStudents.length == 0) break
+                await importStudentsFamily(uploadStudents)
+                index+=stepSize
+                setUploadingDataIndex(index)
+            }
+            setUploadSuccess(true)
+        } catch (e) {
+            setUploadSuccess(false)
+        }
+       
+        setUploadingtudentFamily(false)
+
+    }, [importStudentsFamilyList])
+
     const uploadStudentsPicture = useCallback(async () =>  {
 
         setDisplayPage(DisplayPage.Importing)
         setUploadingStudents(false)
+        setUploadingtudentFamily(false)
         setUploadingStudentsPictures(true)
         setUploadSuccess(true)
         setUploadingDataIndex(0)
@@ -166,6 +241,7 @@ const StudentsImport: React.FC = () => {
         setImportStudentsList([])
         setImportStudentsPictureList([])
         setImportedStudentsDisplayed([])
+        setImportStudentFamily([])
         setDisplayPage(DisplayPage.AddCSV)
     }, [])
 
@@ -191,13 +267,16 @@ const StudentsImport: React.FC = () => {
             <div className={`flex flex-col items-center ${displayPage == DisplayPage.AddCSV ? "block" : "hidden"}`}>
                 <h3 className="font-bold text-gray-700">Information :</h3>
                 <p className="text-gray-700 text-center">
-                    le fichier doit être un CSV (séparation virgule) suivant le pattern : <br/>
-                    <strong>numéro étudiant, prénom, nom, année de promotion</strong>
+                    le fichier doit être un CSV (séparation point-virgule) suivant le pattern : <br/>
+                    <strong>numéro étudiant; prénom; nom; année de promotion</strong>
                 </p>
 
                 <div className="flex space-x-4">
                     <Upload name="csv" beforeUpload={uploadCSVFile} multiple={false} accept=".csv" showUploadList={false}>
                         <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded space-x-2">Importer des étudiants</Button>
+                    </Upload>
+                    <Upload name="csv_family" beforeUpload={uploadCSVFamily} multiple={false} accept=".csv" showUploadList={false}>
+                        <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded space-x-2">Importer les familles</Button>
                     </Upload>
                     <label
                         className=" bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200">
@@ -213,9 +292,10 @@ const StudentsImport: React.FC = () => {
                 </div>
                
             </div>
-            <div className={`${displayPage == DisplayPage.StudentTable ? "block" : "hidden"} mb-4 px-4`}>
-                <div className=" flex justify-center">
 
+            { displayPage == DisplayPage.StudentTable && 
+            <div className="mb-4 px-4">
+                <div className=" flex justify-center">
                     <Button
                         type="primary"
                         className="shadow-md mx-4 rounded"
@@ -247,6 +327,31 @@ const StudentsImport: React.FC = () => {
                     </ul>
                 </div>
             </div>
+            }
+
+            { displayPage == DisplayPage.StudentFamily && 
+            <div className="mb-4 px-4">
+                <div className=" flex justify-center">
+                    <Button
+                        type="primary"
+                        className="shadow-md mx-4 rounded"
+                        onClick={uploadStudentsFamily}
+                    >
+                        Enregistrer
+                    </Button>
+                    <Button
+                        type="primary"
+                        className="shadow-md py-1 px-2 text-white rounded border-yellow-500 bg-yellow-500"
+                        onClick={reset}
+                    >
+                        <FontAwesomeIcon icon={faSyncAlt} className="pr-2"/>
+                        Réinitialiser
+                    </Button>
+                </div>
+
+
+            </div>
+            }
 
             { displayPage == DisplayPage.StudentTable && 
             <Table
@@ -282,6 +387,14 @@ const StudentsImport: React.FC = () => {
                         </div>
                     </div>}
 
+                    { uploadingStudentsFamily && <div>                     
+                        <p>Importation des familles...</p>
+
+                        <div className="w-full bg-gray-200 rounded-full h-2.5 ">
+                            <div className="bg-blue-600 h-2.5 rounded-full duration-200" style={{width : uploadingDataIndex/importStudentsFamilyList.length*100 + "%" }}></div>
+                        </div>
+                    </div>}
+
                     
                     { uploadingStudentsPictures && <div>                     
                         <p>Importation des photos de profil en cours...</p>
@@ -289,9 +402,9 @@ const StudentsImport: React.FC = () => {
                         <div className="w-full bg-gray-200 rounded-full h-2.5 ">
                             <div className="bg-blue-600 h-2.5 rounded-full duration-200" style={{width : uploadingDataIndex/importStudentsPictureList.length*100 + "%" }}></div>
                         </div>
-                    </div>}
+                    </div>}          
 
-                    { !uploadingStudentsPictures && !uploadingStudents && uploadSuccess && <div className="flex items-center space-x-2">
+                    { !uploadingStudentsPictures && !uploadingStudents && !uploadingStudentsFamily && uploadSuccess && <div className="flex items-center space-x-2">
 
                         <div className="w-full flex items-center">
                             <FontAwesomeIcon icon={faCheck} className="text-green-600 mr-2"/>

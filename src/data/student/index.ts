@@ -4,7 +4,7 @@ import {
     StudentAdminForm,
     StudentAdmin,
     StudentPreview,
-    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, LoggedStudentPreview, StudentsImportPicture
+    StudentPreviewAdmin, StudentSettings, StudentPicture, StudentOverview, LoggedStudentPreview, StudentsImportPicture, StudentImportFamily
 } from "./types"
 import {ClubMemberPreview} from "../club/types"
 import {Page} from "../request.type"
@@ -97,6 +97,16 @@ export const importStudents = (students: StudentPreview[]): AxiosPromise => {
     }
 
     return apiClient.post("/student/import/multiple", fd, {headers: {"Content-Type": "multipart/form-data"}})
+}
+
+export const importStudentsFamily = (studentsFamily: StudentImportFamily[]): AxiosPromise => {
+    const fd = new FormData()
+    for(const student of studentsFamily){
+        fd.append("id[]", student.id.toString())
+        fd.append("family[]", student.family.toString())
+    }
+
+    return apiClient.post("/student/import/family", fd, {headers: {"Content-Type": "multipart/form-data"}})
 }
 
 export const importStudentsPicture = (students: StudentsImportPicture[]): AxiosPromise => {

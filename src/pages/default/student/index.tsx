@@ -121,30 +121,39 @@ const Student: React.FC = () => {
                                     <div className="text-2xl sm:text-3xl font-bold">&nbsp;</div>
                                 </>
                             }
-                            {student || cache?.promo ?
-                                <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo ?? cache?.promo}</div>
-                                :
-                                <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
-                            }
-                            {
+                           
+                            {/* {
                                 (student?.family !== undefined || !student) &&
                                 <div className="flex">
                                     {student?.family !== undefined ?
-                                        <div className="text-lg sm:text-xl rounded-lg px-2 py-1" style={{
-                                            backgroundColor: familyColors[student?.family]?.color,
-                                            color: familyColors[student?.family]?.textColor
-                                        }}>
-                                            { familyNames[student?.family] }
-                                        </div>
+                                        
                                         :
                                         <div className="text-lg sm:text-xl bg-neutral-200 rounded-lg px-2 py-1">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         </div>
                                     }
                                 </div>
-                            }
+                            } */}
+
+                            <div className="sm:flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                                {student?.family && 
+                                    <div className="text-lg rounded-lg px-4 py-1 mt-1 opacity-95 w-fit" style={{
+                                        backgroundColor: familyColors[student?.family]?.color,
+                                        color: familyColors[student?.family]?.textColor
+                                    }}>
+                                        { familyNames[student?.family] }
+                                    </div>
+                                }
+
+                                {student || cache?.promo ?
+                                    <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo ?? cache?.promo}</div>
+                                    :
+                                    <div className="text-lg sm:text-xl text-neutral-500 flex">Promo ...</div>
+                                }
+
+                            </div>
                             {id != myId &&
-                                <div className="flex mt-3">
+                                <div className="flex mt-4">
                                     {student ? 
                                         <SubscriptionHandler
                                             type={SubscribableType.STUDENT}

@@ -1,5 +1,4 @@
 import FamilyType from "../../constants/FamilyType"
-import { GroupPreview } from "../group/types"
 
 export type StudentPicture = {
     original?: string
@@ -49,6 +48,11 @@ export interface LoggedStudentPreview extends StudentPreview {
 export interface StudentsImportPicture {
     id: number,
     file?: Blob
+}
+
+export interface StudentImportFamily {
+    id: number,
+    family: FamilyType
 }
 
 export type StudentAdmin = Student & {
