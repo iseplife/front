@@ -1721,12 +1721,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capgo/capacitor-updater@npm:^3.3.20":
-  version: 3.3.20
-  resolution: "@capgo/capacitor-updater@npm:3.3.20"
+"@capgo/capacitor-updater@npm:^5.7.16":
+  version: 5.7.16
+  resolution: "@capgo/capacitor-updater@npm:5.7.16"
   peerDependencies:
-    "@capacitor/core": ^3.0.0 || ^4.0.0
-  checksum: db4663b9e4c5c6590bf10aa001e24e29a51fc5a5ac2769b2460e1713396de12eb06840cc55d317e5d11d9d92df631841cc98f0b9fffdf71f2c18d00cd3551ee1
+    "@capacitor/core": ^5.0.0
+  checksum: c6d3cbcb9ea3831bf7f51c01490c0729b75fdf90c11b1ca8da5d24241744f9f13a982fa20f4ba122a2068e03dcdcc54cc4db59a242b979f41b3a9323ba51f250
   languageName: node
   linkType: hard
 
@@ -10491,7 +10491,7 @@ __metadata:
     "@capacitor/push-notifications": ^4.0.1
     "@capacitor/status-bar": 4.0.1
     "@capacitor/toast": ^4.0.1
-    "@capgo/capacitor-updater": ^3.3.20
+    "@capgo/capacitor-updater": ^5.7.16
     "@craco/craco": ^6.4.5
     "@datadog/browser-rum": ^4.18.1
     "@fingerprintjs/fingerprintjs": ^3.3.3
