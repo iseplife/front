@@ -13,6 +13,7 @@ export enum AppActionType {
     SET_PICTURE,
     SET_TOKEN_EXPIRATION,
     SET_LAST_EXPLORE,
+    SET_SELECTED_PUBLISHER
 }
 
 
@@ -62,6 +63,11 @@ interface setLastExploreAction {
     lastWatch: Date
 }
 
+interface setSelectedPublisherAction {
+    type: AppActionType.SET_SELECTED_PUBLISHER,
+    selectedPublisher?: Author
+}
+
 export type AppContextAction =
     setInitializationAction |
     setStateLoggedOutAction |
@@ -71,6 +77,7 @@ export type AppContextAction =
     setTokenExpirationAction |
     setTokenAction |
     setStudentAction |
-    setLastExploreAction
+    setLastExploreAction |
+    setSelectedPublisherAction
 
 

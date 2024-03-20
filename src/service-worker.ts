@@ -1,6 +1,6 @@
 import { precacheAndRoute } from "workbox-precaching"
 import { registerRoute, Route } from "workbox-routing"
-import { StaleWhileRevalidate, CacheOnly } from "workbox-strategies"
+import { StaleWhileRevalidate, CacheFirst } from "workbox-strategies"
 import { initPushWorker } from "./push-worker"
 import { ExpirationPlugin } from "workbox-expiration"
 import { BroadcastChannel } from "broadcast-channel"
@@ -44,7 +44,7 @@ const registerCacheOnlyRouteUsing = (
     excludePaths: string[] = []
 ): Route => registerRoute(
     ({ request }) => request.destination === destination && !excludePaths.find(path => request.url.includes(path)),
-    new CacheOnly({
+    new CacheFirst({
         cacheName: cacheName,
     })
 )

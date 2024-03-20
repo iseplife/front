@@ -79,9 +79,11 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
 
     const originalPublicationDate = useMemo(() => values.publicationDate, [])
 
+    const changeAuthor = useCallback((author?: Author) => setValues({...values, selectedClub: author}), [values, setValues])
+
     return (
-        <Form className={`flex flex-col items-center text-gray-500 ${!values.edit && "pt-6"}`}>
-            <div className="flex flex-col bg-white rounded-lg w-full sm:w-11/12 pt-3" style={{minHeight: "5rem"}}>
+        <Form className={`flex flex-col items-center text-gray-500 ${!values.edit && "pt-4"}`}>
+            <div className="flex flex-col bg-white rounded-lg w-full sm:w-11/12" style={{minHeight: "5rem"}}>
                 <Field
                     as={Textarea}
                     autoFocus={true}
@@ -158,7 +160,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                     <div className="flex-1 flex justify-end items-center">
                         {!values.edit && <>
                             <AuthorPicker
-                                callback={author => setValues({...values, selectedClub: author})} 
+                                callback={changeAuthor} 
                                 className="text-gray-700 rounded hover:bg-gray-100"
                             />
                             <Divider type="vertical" />

@@ -2,7 +2,7 @@ import { SafePhoto, setStyles, waitForFrame } from "../../util"
 import Animated from "react-mount-animation"
 import Lightbox from "./Lightbox"
 import React, { useEffect, useCallback, useState } from "react"
-import { GallerySizes } from "../../constants/MediaSizes"
+import { GallerySizes, PostSizes } from "../../constants/MediaSizes"
 
 export interface SidebarProps<T extends SafePhoto> {
   currentImage: T
@@ -16,6 +16,7 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
   gallery?: boolean
   onClose: () => void
   onChange?: (index: number) => void
+  baseQualityName?: string
 }
 const AnimatedLightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const [show, setShow] = useState(false)

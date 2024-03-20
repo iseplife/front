@@ -145,6 +145,7 @@ const EmbedImages: React.FC<EmbedImagesProps> = ({images, post, selected}) => {
                 onClose={() => setLightboxPhotoIndex()}
                 Sidebar={sideBar!}
                 onChange={setLightboxPhotoIndex}
+                baseQualityName={PostSizes.PREVIEW_HQ}
             />
         </div>
     )

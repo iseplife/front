@@ -25,6 +25,7 @@ type LightboxProps<T extends AnimatedSafePhoto> = {
     show?: boolean
     onClose: () => void
     onChange?: (index: number) => void
+    baseQualityName?: string
 }
 const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
     const { photos, animated, showImage, firstImageCreatedCallback, initialIndex, Sidebar, gallery, show, onClose, onChange } = props
@@ -393,7 +394,7 @@ const Lightbox = <T extends AnimatedSafePhoto>(props: LightboxProps<T>) => {
                                 key={currentIndex}
                                 nsfw={currentPhoto.nsfw}
                                 status={currentPhoto.status}
-                                lowQualitySrc={mediaPath(currentPhoto.srcSet as string, GallerySizes.PREVIEW)}
+                                lowQualitySrc={mediaPath(currentPhoto.srcSet as string, props.baseQualityName ?? GallerySizes.PREVIEW)}
                                 src={mediaPath(currentPhoto.srcSet as string, GallerySizes.LIGHTBOX)}
                                 highQualitySrc={bigZoom && gallery && isWebPSupported && mediaPath(currentPhoto.srcSet as string, GallerySizes.DOWNLOAD)}
                                 alt={currentPhoto.alt}

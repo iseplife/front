@@ -11,7 +11,7 @@ import SubscriptionHandler from "../Subscription"
 import { cFaLinkWorld } from "../../constants/CustomFontAwesome"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons"
-import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
+import WebPPolyfill, { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 import { Subscription } from "../../data/feed/types"
 
 const ClubHeader: React.FC = () => {
@@ -37,15 +37,18 @@ const ClubHeader: React.FC = () => {
             <ClubCover/>
             <div className="flex justify-between container p-3 mx-auto">
                 <div className="flex">
-                    <WebPAvatarPolyfill
-                        src={imageLowSrc}
-                        className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 bg-white absolute"
-                    />
-                    <WebPAvatarPolyfill
-                        src={imageSrc}
-                        icon={<FontAwesomeIcon icon={faUserGroup} />}
-                        className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md z-10 flex-shrink-0"
-                    />
+                    <div className="relative">
+                        <div className="rounded-full w-full bg-neutral-50 absolute md:top-[-4.5rem] aspect-square"></div>
+                        <div className="rounded-full w-full bg-neutral-200 animate-pulse md:top-[-4.5rem] absolute aspect-square"></div>
+                        <WebPAvatarPolyfill
+                            src={imageLowSrc}
+                            className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 bg-white !bg-transparent absolute"
+                        />
+                        <WebPAvatarPolyfill
+                            src={imageSrc}
+                            className="-mt-13 md:mt-[-4.5rem] w-20 h-20 md:w-32 md:h-32 shadow-md !bg-transparent z-10 flex-shrink-0"
+                        />
+                    </div>
                     <div className="flex ml-4 md:-mt-5 font-bold flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                         <h1 className="text-neutral-900 text-3xl mb-0 -mt-1 ml-0.5 sm:ml-0 mr-auto">{(club ?? cache)?.name}</h1>
                         <div className="flex">

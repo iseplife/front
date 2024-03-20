@@ -16,6 +16,7 @@ export type AppContextState =  {
     authors: Author[]
     payload: TokenPayload
     jwt: string
+    selectedPublisher: Author | undefined
     token_expiration: number  // in milliseconds
 }
 

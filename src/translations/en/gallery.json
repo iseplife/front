@@ -39,5 +39,6 @@
   "save": "Save",
   "edit_gallery": "Edit gallery",
   "delete_gallery": "Delete gallery",
-  "enable_selection" : "Enable selection"
+  "enable_selection" : "Enable selection",
+  "edition_from_post": "Edition of a gallery is not possible from a post."
 }

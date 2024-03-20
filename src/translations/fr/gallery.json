@@ -39,5 +39,6 @@
   "save": "Enregistrer",
   "edit_gallery": "Edition de la galerie",
   "delete_gallery": "Supprimer la galerie",
-  "enable_selection" : "Sélectionner des photos"
+  "enable_selection" : "Sélectionner des photos",
+  "edition_from_post": "L'édition d'une galerie n'est pas possible depuis un post."
 }
