@@ -4,7 +4,7 @@ import UserGroups from "../../../components/Group/UserGroups"
 import IncomingEvents from "../../../components/Event/IncomingEvents"
 import {AppContext} from "../../../context/app/context"
 import StudentLargeCard from "../../../components/Student/StudentLargeCard"
-import { Divider } from "antd"
+import {Divider} from "antd"
 import { useTranslation } from "react-i18next"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { cFaCompassFull } from "../../../constants/CustomFontAwesome"
@@ -12,6 +12,8 @@ import { AppActionType } from "../../../context/app/action"
 import { useLiveQuery } from "dexie-react-hooks"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { updateLastExplore } from "../../../data/student"
+import EggSearch from "../../../components/EggSearch/EggSearch"
+import TakeOverAnnouncement from "../../../components/TakeOverAnnouncement/TakeOverAnnouncement"
 
 const Home: React.FC = () => {
     const {t} = useTranslation()
@@ -56,6 +58,11 @@ const Home: React.FC = () => {
                         </button>
                     </div>
                 </Divider>
+                <div className={"flex justify-center items-center flex-col mx-4 md:mx-10"}>
+                    <TakeOverAnnouncement></TakeOverAnnouncement>
+                    <EggSearch></EggSearch>
+                </div>
+
                 <Feed key={`feed${discover ? -1 : undefined}`} noDivider allowPublication={!discover} id={discover ? -1 : undefined} noPinned={discover} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
             </div>
             <div className="flex-1 lg:block hidden mr-4">

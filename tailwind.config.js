@@ -17,6 +17,7 @@ module.exports = {
                 },
             }),
         },
+
     },
     plugins: [
         require("tailwind-scrollbar"),
@@ -24,4 +25,3 @@ module.exports = {
         require("tailwindcss-textshadow"),
     ],
 }
-  

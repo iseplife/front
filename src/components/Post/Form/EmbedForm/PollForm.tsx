@@ -8,6 +8,7 @@ import moment from "moment"
 import {isPast} from "date-fns"
 import {faAdd, faTimes} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import EasterEgg from "../../../EasterEgg/EasterEgg"
 
 
 const PollForm: React.FC = () => {
@@ -39,7 +40,7 @@ const PollForm: React.FC = () => {
                     onChange={date => setFieldValue("embed.data.endsAt", date ? date.toDate() : new Date())}
                     bordered={false}
                     placeholder={t("ends_at")}
-                    className="hover:border-indigo-400 text-gray-500 border-gray-200"
+                    className="hover:border-[#fe9200] text-gray-500 border-gray-200"
                     style={{borderBottom: "1px solid #d9d9d9"}}
                 />  
             </div>
@@ -52,7 +53,7 @@ const PollForm: React.FC = () => {
                         {poll.choices.map((choice, index) => <div className="flex items-center">
                             <div
                                 key={index}
-                                className={`flex items-center rounded-lg border border-solid border-gray-200 focus-within:border-indigo-400 focus-within:border-2 w-full py-1 px-2 my-1
+                                className={`flex items-center rounded-lg border border-solid border-gray-200 focus-within:border-[#fe9200] focus-within:border-2 w-full py-1 px-2 my-1
                                           text-neutral-700 ${choice.id && "bg-neutral-100 opacity-70"}`}
                             >
 
@@ -78,6 +79,9 @@ const PollForm: React.FC = () => {
                                 />
                             }
                         </div>)}
+                        <div className={"mt-4 mx-2"}>
+                            <EasterEgg id={13} name={"philosophique"}></EasterEgg>
+                        </div>
                     </div>
                 )}
             />

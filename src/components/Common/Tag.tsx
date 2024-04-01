@@ -10,7 +10,7 @@ type TagProps = {
 const Tag: React.FC<TagProps> = ({children, className, selected, onClick}) => {
     return (
         <span
-            className={`inline-block rounded shadow ${selected ? "bg-indigo-200 text-indigo-500": "bg-red-200 text-red-500"} m-1 px-2 py-1 text-xs  font-semibold cursor-pointer ${className}`}
+            className={`inline-block rounded shadow ${selected ? "bg-[#fcc477] text-[#e87a05]": "bg-red-200 text-red-500"} m-1 px-2 py-1 text-xs  font-semibold cursor-pointer ${className}`}
             onClick={onClick}
         >
             {children}

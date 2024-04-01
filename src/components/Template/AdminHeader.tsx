@@ -16,7 +16,7 @@ const AdminHeader: React.FC = () => {
             <div className="flex items-center justify-between h-12 px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center py-1 mr-4">
                     <Link to="/admin">
-                        <h1 className="text-4xl font-bold leading-tight text-indigo-500 my-auto">
+                        <h1 className="text-4xl font-bold leading-tight text-[#e87a05] my-auto">
                             Administration
                         </h1>
                     </Link>
@@ -77,49 +77,49 @@ const AdminHeader: React.FC = () => {
                             />
                         </div>
                         <div className="ml-3">
-                            <div className="text-base font-medium leading-none text-indigo-500">{user.firstName + " " + user.lastName}</div>
+                            <div className="text-base font-medium leading-none text-[#e87a05]">{user.firstName + " " + user.lastName}</div>
                             <div className="mt-1 text-sm font-medium leading-none text-gray-400">{user.id + " - " + user.promo}</div>
                         </div>
                     </div>
                     <div className="mt-3 px-2" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
                         <Link
                             to="/admin"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-200 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Dashboard
                         </Link>
                         <Link
                             to="/admin/user"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-200 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Utilisateurs
                         </Link>
                         <Link
                             to="/admin/club"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-200 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Associations
                         </Link>
                         <Link
                             to="/admin/report"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-200 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Reports
                         </Link>
                         <Link
                             to="/admin/group"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-200 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-200 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Groupes
                         </Link>
                         <Link
                             to="/admin/survey"
-                            className="block px-3 py-2 rounded text-base font-medium text-indigo-500 hover:text-indigo-300 hover:bg-gray-2000 focus:bg-gray-200"
+                            className="block px-3 py-2 rounded text-base font-medium text-[#e87a05] hover:text-[#fca835] hover:bg-gray-2000 focus:bg-gray-200"
                             role="menuitem"
                         >
                             Votes
