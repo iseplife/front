@@ -14,7 +14,7 @@ const EventCreatorModal: React.FC<EventModalFormProps> = ({onSubmit}) => {
                 <Link to="/event/create">
                     <button
                         className="
-                            flex items-center mx-auto rounded-full bg-indigo-400 text-base
+                            flex items-center mx-auto rounded-full bg-[#fe9200] text-base
                             text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 p-2
                         "
                     >

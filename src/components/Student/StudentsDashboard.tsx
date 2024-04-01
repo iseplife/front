@@ -85,7 +85,7 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
                 <div className="ml-4 overflow-hidden">
                     <Link to={`/admin/user/${s.id}`}>
                         <div
-                            className="text-sm leading-5 font-medium text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words"
+                            className="text-sm leading-5 font-medium text-gray-900 hover:text-[#fe9200] focus:outline-none focus:underline break-words"
                             title={s.lastName.toUpperCase() + " " + s.firstName}
                         >
                             {s.lastName.toUpperCase() + " " + s.firstName}
@@ -107,7 +107,7 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
         <td className=" px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-xs leading-5">
             <div className="flex flex-wrap">
                 {s.roles.map((r, index) => (
-                    <span key={index} className="rounded bg-indigo-300 text-white m-1 p-1">
+                    <span key={index} className="rounded bg-[#fca835] text-white m-1 p-1">
                         {r.substr(5).replace(/_/g, " ")}
                     </span>
                 ))}
@@ -116,7 +116,7 @@ const TableRow: React.FC<RowProps<StudentPreviewAdmin>> = ({data: s}) => (
         <td className="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
             <Link
                 to={`/admin/user/${s.id}`}
-                className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
+                className="text-[#d66f02] hover:text-indigo-900 focus:outline-none focus:underline"
             >
                 Edit
             </Link>

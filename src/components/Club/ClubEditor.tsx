@@ -95,6 +95,7 @@ const ClubEditor: React.FC<ClubEditorProps> = ({id, onUpdate, onArchive, onDelet
                 setLoading(true)
                 getClub(+id).then(res => {
                     if (res.status === 200) {
+                        res.data.logoUrl = process.env.PUBLIC_URL+"/img/takeover/asso/ludisep.jpg"
                         setClub(res.data)
                         formik.setValues({
                             ...res.data,

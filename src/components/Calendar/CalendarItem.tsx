@@ -22,13 +22,13 @@ export const EventWrapper: (view: View) => React.FC<{children: React.ReactElemen
 
 export const HeaderWrapper: (view: View) => React.FC<HeaderProps> =  (view) => ({date}) => 
     <div className={`w-full h-full capitalize sm:lowercase font-medium ${view == "month" && "py-1"}`}>
-        <div className={`text-xs sm:hidden ${isToday(date) ? "text-indigo-400" : "text-neutral-500"}`}>
+        <div className={`text-xs sm:hidden ${isToday(date) ? "text-[#fe9200]" : "text-neutral-500"}`}>
             {_format(date, "E").substring(0, 1)}
         </div>
-        <div className={`${view == "month" ? "text-sm" : "text-xs"} hidden sm:block ${isToday(date) ? "text-indigo-400" : "text-neutral-500"}`}>
+        <div className={`${view == "month" ? "text-sm" : "text-xs"} hidden sm:block ${isToday(date) ? "text-[#fe9200]" : "text-neutral-500"}`}>
             {_format(date, "E").replace(".", "")}
         </div>
-        {view != "month" && <div className={`text-base py-1 ${isToday(date) && "rounded-full px-2 bg-indigo-300 w-8"}`}>
+        {view != "month" && <div className={`text-base py-1 ${isToday(date) && "rounded-full px-2 bg-[#fca835] w-8"}`}>
             {_format(date, "d")}
         </div>}
     </div>

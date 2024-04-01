@@ -52,7 +52,7 @@ const ClubEditForm: React.FC = () => {
                         bordered={false}
                         value={formik.values.name}
                         onChange={formik.handleChange}
-                        className="hover:border-indigo-400"
+                        className="hover:border-[#fe9200]"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
@@ -78,7 +78,7 @@ const ClubEditForm: React.FC = () => {
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     bordered={false}
-                    className="hover:border-indigo-400"
+                    className="hover:border-[#fe9200]"
                     style={{borderBottom: "1px solid #d9d9d9"}}
                 />
             </div>
@@ -93,7 +93,7 @@ const ClubEditForm: React.FC = () => {
                         placeholder="www.internet.com"
                         suffix={<FontAwesomeIcon icon={faLink}/>}
                         bordered={false}
-                        className="hover:border-indigo-400"
+                        className="hover:border-[#fe9200]"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
@@ -106,7 +106,7 @@ const ClubEditForm: React.FC = () => {
                         placeholder="Instagram"
                         suffix={<FontAwesomeIcon icon={faInstagram}/>}
                         bordered={false}
-                        className="hover:border-indigo-400"
+                        className="hover:border-[#fe9200]"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
@@ -119,7 +119,7 @@ const ClubEditForm: React.FC = () => {
                         placeholder="Facebook"
                         suffix={<FontAwesomeIcon icon={faFacebookF}/>}
                         bordered={false}
-                        className="hover:border-indigo-400"
+                        className="hover:border-[#fe9200]"
                         style={{borderBottom: "1px solid #d9d9d9"}}
                     />
                 </div>
@@ -127,7 +127,7 @@ const ClubEditForm: React.FC = () => {
 
             <div className="w-full flex justify-end mt-2">
 
-                <button type="submit" disabled={formik.isSubmitting} className="py-2 items-center cursor-pointer rounded-full flex bg-indigo-400 hover:bg-opacity-90 px-5 text-white">
+                <button type="submit" disabled={formik.isSubmitting} className="py-2 items-center cursor-pointer rounded-full flex bg-[#fe9200] hover:bg-opacity-90 px-5 text-white">
                     {formik.isSubmitting ?
                         <FontAwesomeIcon icon={faCircleNotch} spin className="mr-2"/> :
                         <FontAwesomeIcon icon={faSave} className="mr-2"/>

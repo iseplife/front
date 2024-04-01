@@ -24,6 +24,7 @@ import { faBan } from "@fortawesome/free-solid-svg-icons"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { useLiveQuery } from "dexie-react-hooks"
 import {AxiosError} from "axios"
+import {getTakeoverClubLogo} from "../../../util"
 
 interface ParamTypes {
     id?: string
@@ -48,13 +49,20 @@ const Club: React.FC = () => {
     const [tab, setTab] = useState<ClubTab>(ClubTab.HOME_TAB)
     const setTabFactory = useCallback((tab: number) => () => setTab(tab), [])
 
-
     /**
      * Club initialisation on mounting
      */
     useEffect(() => {
+        if(id===68){
+            history.push("/club/95")
+        }
         if (!isNaN(id)) {
             getClub(+id).then(res => {
+                if(getTakeoverClubLogo(res.data.id)!==""){
+                    res.data.logoUrl = getTakeoverClubLogo(res.data.id)
+                }
+
+                console.log("Data ::",res.data)
                 dispatch({ type: ClubActionType.GET_CLUB, payload: res.data })
             }).catch((e: AxiosError) => {
                 if (e.response && e.response.status == 404)
@@ -83,12 +91,12 @@ const Club: React.FC = () => {
         const id = (club ?? cache)?.id
         if(id)
             feedsManager.addBlocked(id)
-    }, [(club ?? cache)?.id])
+    }, [])
     const onUnBlock = useCallback(() => {
-        const id = (club ?? cache)?.id
+        const id =  (club ?? cache)?.id
         if(id)
             feedsManager.removeBlocked(id)
-    }, [(club ?? cache)?.id])
+    }, [])
     
 
     const isBlocked = useLiveQuery(async () => (club || cache) && (await feedsManager.getBlocked()).includes((club || cache)!.id), [(club ?? cache)?.id])
@@ -114,11 +122,11 @@ const Club: React.FC = () => {
                     setCurrentTab={setTabFactory}
                     tabs={tabs}
                 />
-                
                 <div className="flex-1 lg:block hidden mr-4">
                     <IncomingEvents wait={!(club ?? cache)?.id} club={(club ?? cache)?.id} allowCreate={false} />
                 </div>
             </div>
+
         </ClubContext.Provider>
     )
 }

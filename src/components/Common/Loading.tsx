@@ -9,7 +9,7 @@ type LoadingProps = {
 }
 const Loading: React.FC<LoadingProps> = (p) => (
     <div className={`text-center ${p.className}`} style={p.style}>
-        <FontAwesomeIcon icon={faCircleNotch} spin size={p.size} className="text-indigo-200"/>
+        <FontAwesomeIcon icon={faCircleNotch} spin size={p.size} className="text-[#fcc477]"/>
     </div>
 )
 

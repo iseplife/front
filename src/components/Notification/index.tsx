@@ -36,13 +36,13 @@ const Notification: React.FC<NotificationProps> = (props) => {
                     <Trans components={{"bold": <b className="text-neutral-900 font-semibold"/>}}>
                         {t(`notifications:in_menu:${notification.type}`, notification.informations)}
                     </Trans>
-                    <div className="text-indigo-500">
+                    <div className="text-[#e87a05]">
                         {formattedDate}
                     </div>
                 </div>
                 {!notification.watched && (
-                    <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-indigo-500 flex-shrink-0 ml-3">
-                        <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-indigo-500 animate-ping"/>
+                    <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-[#e87a05] flex-shrink-0 ml-3">
+                        <div className="w-3.5 h-3.5 rounded-full shadow-lg bg-[#e87a05] animate-ping"/>
                     </div>
                 )}
             </div>

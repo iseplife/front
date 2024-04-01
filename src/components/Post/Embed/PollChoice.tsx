@@ -19,7 +19,7 @@ const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled})
         <div
             className="relative items-center rounded-lg cursor-pointer
                 transition transition-border duration-300
-                border py-1 px-2 border-solid border-gray-200 hover:border-indigo-400
+                border py-1 px-2 border-solid border-gray-200 hover:border-[#fe9200]
                 flex mx-3 my-1 w-full"
         >
             <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={data.voted} onChange={onVote}>
@@ -29,7 +29,7 @@ const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled})
                 </div>
             </Checkbox>
             <div
-                className="absolute rounded-lg h-full left-0 bottom-0 top-0 bg-indigo-400"
+                className="absolute rounded-lg h-full left-0 bottom-0 top-0 bg-[#fe9200]"
                 style={{
                     width: `${percent}%`,
                     transition: "width 0.5s ease"

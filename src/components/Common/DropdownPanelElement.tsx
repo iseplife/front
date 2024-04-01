@@ -10,7 +10,7 @@ type DropdownPanelElementProps = {
 }
 
 const DropdownPanelColors = {
-    gray: "text-gray-500 hover:bg-gray-100/80",
+    gray: "text-gray-500 hover:bg-[#fff5e8]/80",
     red: "text-red-600 hover:bg-red-50"
 }
 

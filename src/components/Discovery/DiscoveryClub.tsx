@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react"
 import {getAllClubs} from "../../data/club"
 import {ClubPreview} from "../../data/club/types"
 import ClubCard from "./ClubCard"
+import {getTakeoverClubLogo, mediaPath} from "../../util"
+import {AvatarSizes} from "../../constants/MediaSizes"
 
 const ClubLoader = [...Array(18)].map(() =>
     <div className="mx-1 bg-neutral-300 animate-pulse rounded-2xl overflow-hidden hover:shadow-sm transition-shadow h-52 px-4 items-end flex aspect-[18/20]">
@@ -14,13 +16,21 @@ const DiscoveryClub: React.FC = () => {
     const [clubs, setClubs] = useState<ClubPreview[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
+
     /**
      * Get all active clubs on first load
      */
     useEffect(() => {
         setLoading(true)
         getAllClubs().then(res => {
-            setClubs(res.data)
+            const altered = res.data.map(elem => {
+                if(getTakeoverClubLogo(elem.id)!==""){
+                    elem.logoUrl = getTakeoverClubLogo(elem.id)
+                }
+                return elem
+            })
+            console.log(altered)
+            setClubs(altered)
         }).finally(() => setLoading(false))
     }, [])
 

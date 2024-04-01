@@ -34,7 +34,7 @@ const BasicPostForm: React.FC<BasicPostForm> = ({ children, onInputClicked}) => 
                     <div className="flex-1 flex justify-end items-center mt-1 -mb-1">
                         <AuthorPicker
                             callback={setSelectedClub}
-                            className="text-gray-700 rounded-lg hover:bg-gray-100 transition-colors py-1 mt-1"
+                            className="text-gray-700 rounded-lg hover:bg-[#fff5e8] transition-colors py-1 mt-1"
                         />
                         <Divider type="vertical" className="mr-3 ml-2 mt-0.5 -mb-0.5" />
                     </div>
@@ -42,7 +42,7 @@ const BasicPostForm: React.FC<BasicPostForm> = ({ children, onInputClicked}) => 
                         <button
                             type="submit"
                            
-                            className={("cursor-pointer hover:bg-gray-100") + " rounded-full h-10 w-10 justify-center items-center flex pr-0.5 -m-1.5 mt-1 transition-colors"}
+                            className={("cursor-pointer hover:bg-[#fff5e8]") + " rounded-full h-10 w-10 justify-center items-center flex pr-0.5 -m-1.5 mt-1 transition-colors"}
                         >
                             <FontAwesomeIcon icon={faPaperPlane}  />
                         </button>

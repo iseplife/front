@@ -49,7 +49,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                     {!groups?.length &&
                         [1, 2, 3].map(id => 
                             <div key={id} className="bg-gray-400 md:bg-transparent flex p-2">
-                                <div className="bg-indigo-300/70 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto animate-pulse" />
+                                <div className="bg-[#fca835]/70 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto animate-pulse" />
                                 <div className="bg-neutral-200 w-32 rounded-md animate-pulse">&nbsp;</div>
                             </div>
                         )
@@ -57,7 +57,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                     {preview.map((g) => (
                         <div key={g.id} className="bg-gray-400 md:bg-transparent">
                             <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600 flex hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2">
-                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto flex items-center">
+                                <div className="bg-[#fe9200] p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto flex items-center">
                                     <FontAwesomeIcon icon={cFaUserGroup} className="w-4 text-white" />
                                 </div>
                                 {g.name}
@@ -67,7 +67,7 @@ const GroupList: React.FC<GroupListProps> = ({ groups }) => {
                     {viewAll && leftovers.map((g) => (
                         <div key={g.id} className="rounded-full bg-gray-400 md:bg-transparent">
                             <Link to={`/group/${g.id}`} className="text-white md:text-gray-500 hover:text-gray-600 flex hover:bg-black hover:bg-opacity-5 transition-colors rounded-lg p-2">
-                                <div className="bg-indigo-400 p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto text-center flex items-center">
+                                <div className="bg-[#fe9200] p-1 rounded-full mr-2.5 h-6 w-6 flex-shrink-0 my-auto text-center flex items-center">
                                     <FontAwesomeIcon icon={cFaUserGroup} className="w-4 text-white" />
                                 </div>
                                 {g.name}

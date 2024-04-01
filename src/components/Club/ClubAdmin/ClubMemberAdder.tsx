@@ -62,7 +62,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
 
                             <StudentPicker className="my-auto w-full rounded-scroller" onChange={onStudentSelect(setFieldValue)}/>
                             <div className="mt-2 sm:mt-0 space-x-4 whitespace-nowrap">
-                                <button disabled={!student} type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-indigo-400 hover:bg-opacity-90 text-white whitespace-nowrap">
+                                <button disabled={!student} type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-[#fe9200] hover:bg-opacity-90 text-white whitespace-nowrap">
                                     <FontAwesomeIcon icon={faPlus} size="1x" className="mr-2"/>
                                     {t("add")}
                                 </button>
@@ -72,7 +72,7 @@ const ClubMemberAdder: React.FC<ClubMemberAdderProps> = ({club, year, onAdd}) =>
                         
                         : <button
                             onClick={() => toggleForm(true)}
-                            type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-indigo-400 hover:bg-opacity-90 text-white"
+                            type="submit" className="font-bold cursor-pointer rounded-full px-4 py-2 bg-[#fe9200] hover:bg-opacity-90 text-white"
                         >
                             <FontAwesomeIcon icon={faPlus} size="1x" className="mr-2"/>
                             {t("add")}

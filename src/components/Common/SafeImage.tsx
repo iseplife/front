@@ -71,7 +71,7 @@ const SafeImage: React.FC<SafeImageProps> = (props) => {
                     } : {}} />
                 }
                 {hidden && 
-                    <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-indigo-300 text-xl bg-neutral-800/50" onClick={unhideCallback}>
+                    <div className="cursor-pointer grid place-items-center w-full h-full absolute top-0 left-0 text-[#fca835] text-xl bg-neutral-800/50" onClick={unhideCallback}>
                         <span><FontAwesomeIcon icon={faEyeSlash} size="lg"/> NSFW</span>
                     </div>
                 }

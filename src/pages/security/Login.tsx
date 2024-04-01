@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next"
 import {connect} from "../../data/security"
 import Loading from "../../components/Common/Loading"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
-import {Input} from "antd"
+import {ConfigProvider, Input} from "antd"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import { isWeb } from "../../data/app"
@@ -99,20 +99,19 @@ const Login: React.FC = () => {
                             required
                             placeholder={t("id")}
                             value={formik.values.id}
-                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-[#e87a05] border border-[#fcc477] m-3 py-2 px-5 rounded-full focus:border-[#fcc477]"
                         />
                         <Input
                             id="password" name="password" type="password" onChange={formik.handleChange}
                             required
                             placeholder={t("password")}
                             value={formik.values.password}
-                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
+                            className="w-auto text-center text-[#e87a05] border border-[#fcc477] m-3 py-2 px-5 rounded-full"
                         />
-
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-indigo-500 text-white hover:text-indigo-200 transition-colors shadow-lg text-xl font-semibold`}
+                            className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-[#e87a05] text-white hover:text-[#fcc477] transition-colors shadow-lg text-xl font-semibold`}
                         >
                             {loading ?
                                 <Loading/> :

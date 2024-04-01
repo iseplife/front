@@ -44,7 +44,7 @@ const GalleriesPreview: React.FC<GalleriesPreviewProps> = ({ loading: _loading =
                 { galleriesPreview.length > 0 && (
                     <div
                         className="
-                        ml-auto py-1 -mr-1 hover:bg-black/5 transition-colors px-2 rounded text-indigo-500 font-normal
+                        ml-auto py-1 -mr-1 hover:bg-black/5 transition-colors px-2 rounded text-[#e87a05] font-normal
                         text-sm grid place-items-center cursor-pointer mt-1
                     "
                         onClick={openModal}

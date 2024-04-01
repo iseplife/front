@@ -54,7 +54,7 @@ const FeedSelector: React.FC<FeedSelectorProps> = ({onChange, defaultValues, tag
             tagRender={tagComponent}
             options={options}
             bordered={false}
-            className={`w-full hover:border-indigo-400 ${className}`}
+            className={`w-full hover:border-[#fe9200] ${className}`}
             style={{borderBottom: "1px solid #d9d9d9"}}
         />
     )

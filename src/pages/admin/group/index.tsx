@@ -89,7 +89,7 @@ const TableRow: React.FC<RowProps<GroupPreview>> = ({data: f}) => (
             {f.restricted && <FontAwesomeIcon icon={faLock} /> }
         </td>
         <td className="border-b border-gray-200 text-sm leading-5 font-medium px-6 py-2">
-            <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-indigo-400 focus:outline-none focus:underline break-words">
+            <Link to={`/admin/group/${f.id}`} className="text-gray-900 hover:text-[#fe9200] focus:outline-none focus:underline break-words">
                 {f.name}
             </Link>
         </td>
@@ -99,7 +99,7 @@ const TableRow: React.FC<RowProps<GroupPreview>> = ({data: f}) => (
         <td className="p-2 whitespace-no-wrap border-b border-gray-200 text-center text-sm leading-5 font-medium">
             <Link
                 to={`/admin/group/${f.id}`}
-                className="text-md text-indigo-500 hover:text-indigo-300 focus:outline-none focus:underline"
+                className="text-md text-[#e87a05] hover:text-[#fca835] focus:outline-none focus:underline"
             >
                 <FontAwesomeIcon icon={faEdit} />
             </Link>
