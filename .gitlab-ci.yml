@@ -15,7 +15,7 @@ cache:
 prebuild:
   variables:
     CI: "false"
-  image: node:16.13-alpine
+  image: node:21-alpine
   stage: prebuild 
   before_script:
     - apk --no-cache add zip
