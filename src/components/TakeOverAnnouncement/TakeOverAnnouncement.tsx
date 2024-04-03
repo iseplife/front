@@ -9,32 +9,28 @@ const TakeOverAnnouncement: React.FC<TakeOverAnnouncementProps> = () => {
     return(
         <div className={"flex flex-col p-4 rounded-lg bg-white relative mb-4 shadow w-full"}>
 
-            <div className="w-full flex mb-1 relativeflex flex-col justify-center items-center ">
-                <div className={" h-[30rem] absolute inset-0 bg-white rounded-lg m-4 z-1"}
+            <div className="flex mb-1 relative w-full flex-col justify-center items-center ">
+                <div className="bg-white rounded-lg z-1 w-full grid place-items-center"
                     style={{
-                        backgroundImage: `url(${process.env.PUBLIC_URL}/img/takeover/bg_take_over.png)`,
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/img/takeover/bg_take_over.webp)`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}
-                />
-                <div className={"justify-self-center absolute inset-0 bg-white rounded-lg opacity-80 h-28 mt-8 w-fit z-1"}
-
-                >   <h1 className={"text-3xl text-center px-4 mt-4 text-[#fe9200] relative z-2"}>L'Ordre du Malt</h1>
-                    <h2 className={"text-2xl text-center px-4 mb-8 text-[#fe9200] relative z-2"}>Prend le contrôle d'IsepLife!</h2>
+                >
+                    <div className="justify-self-center inset-0 bg-neutral-800/60 shadow-sm backdrop-blur-md rounded-lg p-2 px-3 mx-2 my-6 w-fit z-1">
+                        <div className={"text-3xl text-center text-[#fe9200] relative z-2 font-bold"}>L'Ordre du Malt</div>
+                        <div className={"text-xl text-center text-[#fe9200] relative z-2 opacity-90"}>Prend le contrôle d'IsepLife!</div>
+                    </div>
                 </div>
 
 
-                <div className={"flex flex-col justify-center mt-[30rem] items-center 12 text-center w-full z-2 relative"}>
+                <div className={"flex flex-col justify-center items-center text-center w-full z-2 relative"}>
                     <h3 className={"text text-center mt-4 px-4"}>
                         A l'insu de tous et après une soirée bien arrosée, les membres du bureau d'ODM ont eu une idée de génie.
                         Voler IsepLife le 1er avril pour une semaine! Ça nous a fait marrer, alors on l'a fait
                     </h3>
 
-                    <h2 className={"text-xl text-center px-4 mt-8 text-[#fe9200]"}>
-                        Attendez vous à passer une semaine sous l'aune de la bière !
-                    </h2>
-                    <h2>Et pour courroner le tout, on vous a préparé une surprise à la fin de ce décompte...</h2>
                     <TakeOverCountDown></TakeOverCountDown>
                 </div>
             </div>

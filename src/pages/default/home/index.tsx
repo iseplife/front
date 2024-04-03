@@ -40,6 +40,10 @@ const Home: React.FC = () => {
                 <UserGroups/>
             </div>
             <div className="w-full sm:col-span-2 overflow-x-hidden lg:overflow-x-visible scrollbar-none">
+                <div className={"flex justify-center items-center flex-col mx-4 md:mx-10"}>
+                    <TakeOverAnnouncement></TakeOverAnnouncement>
+                    <EggSearch></EggSearch>
+                </div>
                 <Divider className="text-gray-700 text-lg px-4 md:px-10" orientation="left">
                     <div className="flex">
                         <button
@@ -58,10 +62,6 @@ const Home: React.FC = () => {
                         </button>
                     </div>
                 </Divider>
-                <div className={"flex justify-center items-center flex-col mx-4 md:mx-10"}>
-                    <TakeOverAnnouncement></TakeOverAnnouncement>
-                    <EggSearch></EggSearch>
-                </div>
 
                 <Feed key={`feed${discover ? -1 : undefined}`} noDivider allowPublication={!discover} id={discover ? -1 : undefined} noPinned={discover} style={{flex: "2 1 0%"}} className="mx-4 md:mx-10"/>
             </div>

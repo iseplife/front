@@ -219,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
                 </div> }
 
                 <button onClick={goHome} className="flex items-center">
-                    <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/logoODM.png" alt="iseplife logo" />
+                    <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/takeover/logoODM.webp" alt="iseplife logo" />
                     <div className="items-center ml-1 text-[#e87a05]/90 font-medium text-base hidden lg:flex">
                         iseplife
                     </div>
