@@ -216,7 +216,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                         )}
                     </div> :
                     <div className={"flex flex-col justify-center items-center w-full my-4 space-y-4"}>
-                        <img className="h-32 rounded-2xl" src="/img/beer_serving.gif"></img>
+                        <img className="h-32 rounded-2xl" src="/img/beer_serving.webp"></img>
                         <span>Tu passes commande ?</span>
 
                     </div>
