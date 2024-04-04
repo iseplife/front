@@ -28,7 +28,7 @@ const EventTypeSelector: React.FC<EventTypeSelectorProps> = ({className}) => {
             <div className={`relative rounded-lg border border-neutral-200 px-3 ${type ? "py-[11px]" : "py-3"} cursor-pointer text-neutral-400 text-start`}>
                 {
                     type ? <div className="flex items-center">
-                        <div className="w-full line-clamp-1 text-ellipsis overflow-hidden text-indigo-400">{`${EventTypeEmoji[type]} ${t(`type.${type}`)}`}</div>
+                        <div className="w-full line-clamp-1 text-ellipsis overflow-hidden text-[#fe9200]">{`${EventTypeEmoji[type]} ${t(`type.${type}`)}`}</div>
                     </div> : <>Type d'événement</>
                 }
             </div>
@@ -38,7 +38,7 @@ const EventTypeSelector: React.FC<EventTypeSelectorProps> = ({className}) => {
             {
                 EventTypes.map(e =>
                     <div onClick={selectTypeFactory(e)} className="flex items-center rounded-lg hover:bg-neutral-100 p-2 px-3 cursor-pointer">
-                        <div className="overflow-hidden text-ellipsis line-clamp-1 text-indigo-400">{`${EventTypeEmoji[e]} ${t(`type.${e}`)}`}</div>
+                        <div className="overflow-hidden text-ellipsis line-clamp-1 text-[#fe9200]">{`${EventTypeEmoji[e]} ${t(`type.${e}`)}`}</div>
                     </div>
                 )
             }

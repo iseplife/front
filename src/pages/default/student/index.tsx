@@ -22,6 +22,7 @@ import { feedsManager } from "../../../datamanager/FeedsManager"
 import { mediaPath } from "../../../util"
 import {AxiosError} from "axios"
 import { familyColors, familyNames } from "../../../constants/FamilyType"
+import EasterEgg from "../../../components/EasterEgg/EasterEgg"
 
 interface ParamTypes {
     id?: string
@@ -121,6 +122,7 @@ const Student: React.FC = () => {
                                     <div className="text-2xl sm:text-3xl font-bold">&nbsp;</div>
                                 </>
                             }
+
                             {student || cache?.promo ?
                                 <div className="text-lg sm:text-xl text-neutral-500">Promo {student?.promo ?? cache?.promo}</div>
                                 :
@@ -160,12 +162,41 @@ const Student: React.FC = () => {
                                     {linkedinUser && <img src="/img/linkedin (1).svg" alt="" className="h-8 w-8 mt-1 ml-2" />}
                                 </div>
                             }
+                            {id===60733?
+                                <div className={"mt-12"}>
+                                    <EasterEgg id={15} name={"du rouxdoublant"}></EasterEgg>
+                                </div>
+                                :
+                                <> </>
+                            }
                         </div>
-                        
+                        {id===60857?
+                            <div className={"mt-12"}>
+                                <EasterEgg id={1} name={"du dev"}></EasterEgg>
+                            </div>
+                            :
+                            <> </>
+                        }
+
+                        {id===1?
+                            <div className={"mt-12"}>
+                                <EasterEgg id={7} name={"coup de boule"}></EasterEgg>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===60926?
+                            <div className={"mt-12"}>
+                                <EasterEgg id={8} name={"du senior dev"}></EasterEgg>
+                            </div>
+                            :
+                            <> </>
+                        }
+
                     </div>
                     {
                         linkedinUser && 
-                            <div className="w-full text-center py-1 mb-4 -mt-6 text-lg rounded-full border-2 border-indigo-400/[30%] bg-indigo-400/[2%] font-medium text-indigo-400">
+                            <div className="w-full text-center py-1 mb-4 -mt-6 text-lg rounded-full border-2 border-[#fe9200]/[30%] bg-[#fe9200]/[2%] font-medium text-[#fe9200]">
                                 Voir le CV
                             </div>
                     }

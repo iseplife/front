@@ -76,7 +76,7 @@ const FirstFollow: React.FC = () => {
                     { followsCount < REQUIRED_FOLLOWING ?
                         t("follow_needed", {clubs: REQUIRED_FOLLOWING - followsCount}) :
                         <div className="flex">
-                            <button onClick={didFollow} className="ml-auto mr-4 rounded-full px h-10 font-bold cursor-pointer select-none text-base grid place-items-center bg-indigo-400 hover:bg-opacity-90 px-5 text-white">
+                            <button onClick={didFollow} className="ml-auto mr-4 rounded-full px h-10 font-bold cursor-pointer select-none text-base grid place-items-center bg-[#fe9200] hover:bg-opacity-90 px-5 text-white">
                                 { t("next") }
                             </button>
                         </div>

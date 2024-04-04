@@ -51,7 +51,7 @@ const FeedFilter: React.FC = () => {
                     false
                 }
                 onSelect={selectCallback}
-                className="rounded-scroller w-full hover:border-indigo-400"
+                className="rounded-scroller w-full hover:border-[#fe9200]"
             >
                 {Object.entries(feeds).map(([id, name])=> (
                     <Option key={id} value={id} disabled={filter.feeds[+id]}>

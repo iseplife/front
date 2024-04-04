@@ -6,6 +6,7 @@ import {faCircleNotch, faPaperPlane} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import AuthorPicker from "../Common/AuthorPicker"
 import Textarea from "react-expanding-textarea"
+import EasterEgg from "../EasterEgg/EasterEgg"
 
 interface CommentFormProps {
     handleUpload: (comment: CommentFormType) => Promise<void>

@@ -10,6 +10,7 @@ import ClubMemberSkeleton from "../../Skeletons/ClubMemberSkeleton"
 import ClubMemberEditor from "../ClubAdmin/ClubMemberEditor"
 import ClubMemberAdder from "../ClubAdmin/ClubMemberAdder"
 import {ClubContext} from "../../../context/club/context"
+import EasterEgg from "../../EasterEgg/EasterEgg"
 
 
 const ClubMembers: React.FC = () => {
@@ -82,7 +83,13 @@ const ClubMembers: React.FC = () => {
                     )
                 }
                 {editionMode && <ClubMemberAdder club={club!.id} year={selectedYear} onAdd={onAdd}/>}
-                
+                {club?.id===95?
+                    <div className={"mt-4 mx-2"}>
+                        <EasterEgg id={11} name={"pas invité"}></EasterEgg>
+                    </div>
+                    :
+                    <></>
+                }
             </div>
         </div>
     )

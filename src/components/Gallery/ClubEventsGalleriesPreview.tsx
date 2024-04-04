@@ -40,7 +40,7 @@ const ClubEventsGalleriesPreview: React.FC<ClubEventsGalleriesPreviewProps> = ({
                 { galleriesPreview.length > 0 && (
                     <div
                         className="
-                        md:ml-auto py-1 md:-mr-1 hover:bg-black/5 transition-colors px-2 rounded text-indigo-500 font-normal
+                        md:ml-auto py-1 md:-mr-1 hover:bg-black/5 transition-colors px-2 rounded text-[#e87a05] font-normal
                         text-sm grid place-items-center cursor-pointer mt-1
                     "
                         onClick={seeAll}

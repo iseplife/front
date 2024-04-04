@@ -36,6 +36,7 @@ const PostAuthor: React.FC<PostAuthorProps> = ({author, publicationDate, classNa
             }, 30_000)
             return () => clearInterval(id)
         }
+        console.log(author)
     }, [publicationDate])
 
     const AvatarWrapper = useCallback<React.FC<{children: React.ReactNode}>>(({children}) => {

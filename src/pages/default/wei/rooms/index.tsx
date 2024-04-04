@@ -114,7 +114,7 @@ const WeiRoomsPage = () => {
                                                 {
                                                     type.count > 0 ? 
                                                         <button
-                                                            className="h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group bg-indigo-400 hover:bg-opacity-90 px-5 text-white whitespace-nowrap"
+                                                            className="h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group bg-[#fe9200] hover:bg-opacity-90 px-5 text-white whitespace-nowrap"
                                                             onClick={() => book(type.capacity)}
                                                         >
                                                             {t("rooms.book")}

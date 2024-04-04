@@ -27,12 +27,12 @@ const SubscriptionExtensiveButton: React.FC<SubscriptionExtensiveButtonProps> = 
             <FontAwesomeIcon
                 onClick={handleExtensive}
                 icon={extensive ? faSolidBell : faBell}
-                className="text-indigo-400 text-2xl cursor-pointer hover:text-opacity-90"
+                className="text-[#fe9200] text-2xl cursor-pointer hover:text-opacity-90"
             />
             {extensive && (
                 <FontAwesomeIcon
                     icon={faCheck}
-                    className="top-1.5 right-[3px] pointer-events-none text-indigo-400 cursor-pointer text-sm absolute transform scale-75"
+                    className="top-1.5 right-[3px] pointer-events-none text-[#fe9200] cursor-pointer text-sm absolute transform scale-75"
                 />
             )}
         </div>
