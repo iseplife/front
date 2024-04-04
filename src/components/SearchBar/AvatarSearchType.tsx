@@ -29,32 +29,6 @@ const AvatarSearchType: React.FC<AvatarSearchTypeProps> = ({thumbURL, text, type
         }
     }, [type])
 
-    // const getImgPath = (value:string | undefined) => {
-    //     console.log(value)
-    //     const id = 92
-    //     let newPath = process.env.PUBLIC_URL+"/img/takeover/asso/" // Initialisation du nouveau chemin avec la valeur actuelle de imgPath
-    //     switch (id) {
-    //         case 92:
-    //             newPath += "ludisep.jpg"
-    //             break
-    //         case 125:
-    //             newPath += "anim.jpg" // Assurez-vous que c'est ce que vous voulez pour l'ID 125
-    //             break
-    //         case 122:
-    //             newPath += "as.jpg"
-    //             break
-    //         case 59:
-    //             newPath += "aumonerie.jpg"
-    //             break
-    //         case 77:
-    //             newPath += "bands.jpg"
-    //             break
-    //         default:
-    //             break
-    //     }
-    //     return newPath
-    // }
-
     return (
         <>
             <div className="w-8 flex justify-center">

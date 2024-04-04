@@ -37,7 +37,7 @@ const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
                     {
                         clubEntity ? <div className="flex items-center">
                             <WebPAvatarPolyfill src={mediaPath(clubEntity.thumbnail, AvatarSizes.THUMBNAIL)} className="flex-shrink-0 w-6 h-6" />
-                            <div className="ml-3 w-full line-clamp-1 text-ellipsis overflow-hidden text-[#fe9200]">{clubEntity.name}</div>
+                            <div className="ml-3 w-full line-clamp-1 text-ellipsis overflow-hidden text-indigo-400">{clubEntity.name}</div>
                         </div> : <>{t("form.placeholder.club")}</>
                     }
                 </div>
@@ -47,7 +47,7 @@ const ClubSelector: React.FC<ClubSelectorProps> = ({className}) => {
                 { authors.map(author =>
                     <div key={author.feedId} onClick={selectAuthorFactory(author)} className="flex items-center rounded-lg hover:bg-neutral-100 p-2 px-3 cursor-pointer">
                         <WebPAvatarPolyfill src={mediaPath(author.thumbnail, AvatarSizes.THUMBNAIL)} className="flex-shrink-0" />
-                        <div className="ml-3 overflow-hidden text-ellipsis line-clamp-1 text-[#fe9200]">{author.name}</div>
+                        <div className="ml-3 overflow-hidden text-ellipsis line-clamp-1 text-indigo-400">{author.name}</div>
                     </div>
                 )}
             </>

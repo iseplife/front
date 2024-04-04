@@ -1,7 +1,6 @@
 import React from "react"
 import {useTranslation} from "react-i18next"
 import {SUPPORTED_LANGUAGES} from "../../i18n"
-import EasterEgg from "../EasterEgg/EasterEgg"
 
 
 const LanguagePicker: React.FC = () => {
@@ -10,22 +9,16 @@ const LanguagePicker: React.FC = () => {
     return (
         <div>
             <h4 className="text-gray-700 text-lg">{t("language")}</h4>
-            <div className="flex items-center">
+            <div className="flex ">
                 {SUPPORTED_LANGUAGES.map(lng => (
                     <img
                         key={lng}
-                        className={`h-10 mx-2 rounded-lg cursor-pointer border-solid border-2 hover:border-[#fe9200] ${i18n.language === lng ? "border-solid border-2 border-[#fca835]" : ""}`}
+                        className={`h-10 mx-2 rounded-lg cursor-pointer border-solid border-2 hover:border-indigo-400 ${i18n.language === lng ? "border-solid border-2 border-indigo-300" : ""}`}
                         src={`/img/flag/${lng}.jpg`}
                         onClick={() => i18n.changeLanguage(lng)}
                         alt={lng + " flag"}
                     />
                 ))}
-                <div className={""}>
-                    <EasterEgg
-                        id={6}
-                        name={"multilingue"}
-                    ></EasterEgg>
-                </div>
             </div>
         </div>
     )

@@ -147,7 +147,7 @@ const NotificationsCenter: React.FC<NotificationsCenterProps> = ({fullPage, clas
                     </div>
                 }
                 {pushRejected && 
-                    <div onClick={unReject} className="bg-[#fe9200]/30 rounded-lg mb-0.5 w-full text-sm px-3 py-2 flex items-center justify-center text-[#fe9200] cursor-pointer">
+                    <div onClick={unReject} className="bg-indigo-400/30 rounded-lg mb-0.5 w-full text-sm px-3 py-2 flex items-center justify-center text-indigo-400 cursor-pointer">
                         <FontAwesomeIcon icon={faMoon} className="text-base mr-0.5" />
                         {t("rejected")}
                     </div>

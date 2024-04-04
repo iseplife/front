@@ -7,7 +7,6 @@ import {AppContext, AppContextType} from "../../context/app/context"
 import StudentAvatar from "../Student/StudentAvatar"
 import {useTranslation} from "react-i18next"
 import { AppActionType } from "../../context/app/action"
-import EasterEgg from "../EasterEgg/EasterEgg"
 
 const {Option} = Select
 
@@ -109,9 +108,6 @@ const AuthorPicker: React.FC<AuthorPickerProps> = ({authors: givenAuthors, filte
                     </div>
                 </Option>
             ))}
-            <div className={"mt-4 mx-2"}>
-                <EasterEgg id={5} name={"égotique"}></EasterEgg>
-            </div>
         </Select>
     )
 }

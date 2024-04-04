@@ -121,7 +121,7 @@ const ClubMemberEditor: React.FC<ClubMemberEditorProps> = ({m, onUpdate, onDelet
                                     <button type="submit">
                                         <FontAwesomeIcon
                                             icon={faFloppyDisk}
-                                            className="text-[#fe9200] hover:text-[#d66f02] duration-100"
+                                            className="text-indigo-400 hover:text-indigo-600 duration-100"
                                         />
                                     </button>
                                 }
