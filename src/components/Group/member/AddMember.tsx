@@ -34,7 +34,7 @@ const AddMember: React.FC<AddMemberProps> = ({onAdd}) => {
             <button
                 ref={selectorRef}
                 onClick={()=>setSelected(true)}
-                className={"flex items-center mx-auto bg-[#fe9200] text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 " + (selected ? "w-full py-1 px-2.5 rounded-lg h-10" : "w-8 h-8 px-2 py-2 rounded-full")}
+                className={"flex items-center mx-auto bg-indigo-400 text-base text-white cursor-pointer opacity-100 hover:opacity-80 duration-200 " + (selected ? "w-full py-1 px-2.5 rounded-lg h-10" : "w-8 h-8 px-2 py-2 rounded-full")}
             >
                 <FontAwesomeIcon icon={faPlus} className="w-4 h-4 block flex-shrink-0"/>
                 <StudentPicker

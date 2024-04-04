@@ -156,7 +156,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                     <span
                         className="
                             group flex items-center justify-center cursor-pointer
-                            hover:text-[#e87a05] mr-3 text-xl transition-colors duration-100
+                            hover:text-indigo-500 mr-3 text-xl transition-colors duration-100
                         "
                         onClick={() => props.forceShowComments || setShowComments(!showComments)}
                     >
@@ -164,7 +164,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                             {commentsCount > 0 && commentsCount}
                         </div>
                         <div
-                            className="-ml-1 cursor-pointer rounded-full bg-[#ba6102] bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
+                            className="-ml-1 cursor-pointer rounded-full bg-indigo-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
                             <FontAwesomeIcon
                                 icon={faCommentAlt}
                                 size="1x"

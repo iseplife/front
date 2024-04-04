@@ -1,18 +1,18 @@
-import {Divider, RefSelectProps, Select} from "antd"
-import Axios, {CancelTokenSource} from "axios"
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react"
-import {useTranslation} from "react-i18next"
-import {Link, useHistory} from "react-router-dom"
-import {AvatarSizes} from "../../constants/MediaSizes"
-import {globalSearch, searchClub, searchEvent, searchStudent} from "../../data/searchbar"
-import {SearchItem, SearchItemType} from "../../data/searchbar/types"
-import {_format, getTakeoverClubLogo, handleRequestCancellation, mediaPath} from "../../util"
-import {WebPAvatarPolyfill} from "../Common/WebPPolyfill"
+import { Divider, RefSelectProps, Select } from "antd"
+import Axios, { CancelTokenSource } from "axios"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { Link, useHistory } from "react-router-dom"
+import { AvatarSizes } from "../../constants/MediaSizes"
+import { globalSearch, searchClub, searchEvent, searchStudent } from "../../data/searchbar"
+import { SearchItem, SearchItemType } from "../../data/searchbar/types"
+import { _format, handleRequestCancellation, mediaPath } from "../../util"
+import Loading from "../Common/Loading"
+import { WebPAvatarPolyfill } from "../Common/WebPPolyfill"
 import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
 import AvatarSearchType from "./AvatarSearchType"
 import CustomCheckbox from "./CustomCheckbox"
 import "./SearchBar.css"
-import {ClubPreview} from "../../data/club/types"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -98,13 +98,7 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                 case SearchItemType.CLUB:
                     searchClub(currentValue, 0, tokenSource.token)
                         .then(res => {
-                            const altered = res.data.content.map(elem => {
-                                if(getTakeoverClubLogo(elem.id)!==""){
-                                    elem.thumbURL = getTakeoverClubLogo(elem.id)
-                                }
-                                return elem
-                            })
-                            setData(altered)
+                            setData(res.data.content)
                             setFetching(false)
                         })
                         .catch(handleRequestCancellation)
@@ -113,10 +107,8 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                 default:
                     globalSearch(currentValue, 0, tokenSource.token)
                         .then(res => {
-                            if (res.data){
+                            if (res.data)
                                 setData(res.data.content)
-                            }
-
                             setFetching(false)
                         })
                         .catch(handleRequestCancellation)
@@ -130,15 +122,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             if (source) source.cancel("Operation canceled due to an unmounting component.")
         }
     }, [currentValue, searchType])
-
-    const getLogo = (club:SearchItem) => {
-        console.log("getlogo")
-        if(!club.thumbURL || club.thumbURL.split("/")[1] === "clb"){
-            return mediaPath(club.thumbURL, AvatarSizes.FULL)
-        }
-        console.log("LOGO uRL:",club.thumbURL)
-        return club.thumbURL
-    }
 
 
     const customDropdownRender = useCallback((menu: React.ReactNode) => {
@@ -215,10 +198,9 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                             </div>
                         )}
                     </div> :
-                    <div className={"flex flex-col justify-center items-center w-full my-4 space-y-4"}>
-                        <img className="h-32 rounded-2xl" src="/img/beer_serving.webp"></img>
-                        <span>Tu passes commande ?</span>
-
+                    <div className={"flex flex-col justify-center items-center w-full my-4 space-y-4 "+(nothing && "nothing")}>
+                        <img className="h-10" src="/img/tumbleweed.svg"></img>
+                        <span>{t("funny_empty_message")}</span>
                     </div>
                         
             }
@@ -251,10 +233,10 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                                         { item.type == SearchItemType.EVENT && 
                                             <div className="">
                                                 <div className="absolute top-2 right-2">
-                                                    <WebPAvatarPolyfill src={getLogo(item)} size="small" />
+                                                    <WebPAvatarPolyfill src={mediaPath(item.thumbURL, AvatarSizes.THUMBNAIL)} size="small" />
                                                 </div>
                                                 { item.type == SearchItemType.EVENT && item.startsAt && 
-                                                    <span className={"inline-flex items-center font-normal rounded-full mt-0.5 text-[#e87a05]"}>
+                                                    <span className={"inline-flex items-center font-normal rounded-full mt-0.5 text-indigo-500"}>
                                                         { _format(item.startsAt,  item.startsAt < lastFirstSeptember ? "d MMM yyyy" : "d MMMM")}
                                                     </span>
                                                 }               

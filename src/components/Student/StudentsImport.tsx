@@ -200,7 +200,7 @@ const StudentsImport: React.FC = () => {
                         <Button icon={<FontAwesomeIcon icon={faUpload}/>} className="rounded space-x-2">Importer des étudiants</Button>
                     </Upload>
                     <label
-                        className=" bg-[#e87a05] text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200">
+                        className=" bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200">
                         <input
                             type="file"
                             multiple={true}
@@ -266,8 +266,8 @@ const StudentsImport: React.FC = () => {
             <div className="mb-4 mx-auto w-1/2 bg-white shadow rounded-lg p-6 sticky">
                 <p>Importer {importStudentsPictureList.length} images.</p>
                 <div className="flex justify-between mt-4">
-                    <button className="bg-[#e87a05] text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
-                    <button className="bg-[#e87a05] text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={uploadStudentsPicture}>Enregistrer</button>
+                    <button className="bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
+                    <button className="bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={uploadStudentsPicture}>Enregistrer</button>
                 </div>
             </div>
             }
@@ -299,7 +299,7 @@ const StudentsImport: React.FC = () => {
                         </div>
 
                         <div className="text-right mt-4">
-                            <button className="bg-[#e87a05] text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
+                            <button className="bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
                         </div>
                     </div> }
 
@@ -310,7 +310,7 @@ const StudentsImport: React.FC = () => {
                         </div>
 
                         <div className="text-right mt-4">
-                            <button className="bg-[#e87a05] text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
+                            <button className="bg-indigo-500 text-white rounded cursor-pointer py-1 px-2 hover:shadow-md hover:bg-opacity-75 transition ease-in duration-200" onClick={reset}>Retour</button>
                         </div>
                     </div> }
                 

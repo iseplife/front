@@ -25,7 +25,7 @@ const ClubFollowSkeleton: React.FC<ClubFollowSkeletonProps> = ({count = 1}) => {
                                 </div>
                                 <div className="mb-1.5 sm:mb-0 sm:h-16 flex sm:items-center ml-8">
                                     <div
-                                        className="w-[80px] sm:w-[150px] bg-[#fe9200] rounded-full h-10 mr-2 flex-shrink-0"/>
+                                        className="w-[80px] sm:w-[150px] bg-indigo-400 rounded-full h-10 mr-2 flex-shrink-0"/>
                                 </div>
                             </div>
                             <div

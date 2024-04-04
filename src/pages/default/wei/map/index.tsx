@@ -262,7 +262,7 @@ const WeiMapPage: React.FC = () => {
                     }
 
                     {headingImage && <img src={headingImage} style={{transform: !heading ? "" : `rotateZ(${heading.trueHeading}deg)`, top: pos.y, left: pos.x}} alt="heading" className="absolute w-14 h-14 -ml-7 -mt-7 opacity-30" />}
-                    <div className="bg-[#fe9200] border-white border-2 shadow-md shadow-[#d66f02]/40 w-4 h-4 -mt-2 -ml-2 rounded-full absolute" style={{top: pos.y, left: pos.x}}></div>
+                    <div className="bg-indigo-400 border-white border-2 shadow-md shadow-indigo-600/40 w-4 h-4 -mt-2 -ml-2 rounded-full absolute" style={{top: pos.y, left: pos.x}}></div>
 
                     {
                         friendPositions.map(friend => {
