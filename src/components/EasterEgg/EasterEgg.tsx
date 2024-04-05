@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {LoggedStudentPreview} from "../../data/student/types"
 import {getLoggedUser} from "../../data/student"
-import {FoundShell} from "../EggShell/EggShell"
 
 interface EasterEggProps {
     id:number
@@ -19,7 +18,6 @@ export interface EventStudent{
     firstName:string,
     lastName:string
     eventInfo : FoundEgg[]
-    eggShells : FoundShell[]
 }
 
 export interface FoundEgg{
