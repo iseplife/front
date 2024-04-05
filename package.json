@@ -83,12 +83,12 @@
     "webp-hero": "^0.0.2"
   },
   "scripts": {
-    "ionic:build": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
+    "ionic:build": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false",
     "ionic:serve": "cross-env REACT_APP_VERSION=$npm_package_version craco start",
     "start": "cross-env REACT_APP_STORAGE_URL_='https://iseplife-dev.s3.eu-west-3.amazonaws.com' REACT_APP_VERSION=$npm_package_version craco start",
     "start_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version craco start",
     "build": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false",
-    "build_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
+    "build_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false",
     "start-sw": "yarn run build && serve build",
     "test": "craco test",
     "eject": "craco eject",
