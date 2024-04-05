@@ -23,7 +23,7 @@ prebuild:
   script:
     - yarn install
     - yarn run build
-    - node get_git_hash.js > build/version.txt
+#    - node get_git_hash.js > build/version.txt
     - |
       cd build
       zip -r app.zip .
