@@ -12,7 +12,7 @@ import LinkEntityPreloader from "../Optimization/LinkEntityPreloader"
 import AvatarSearchType from "./AvatarSearchType"
 import CustomCheckbox from "./CustomCheckbox"
 import "./SearchBar.css"
-import EasterEgg from "../EasterEgg/EasterEgg"
+import {ClubPreview} from "../../data/club/types"
 
 const SEARCH_LENGTH_TRIGGER = 2
 const {Option} = Select
@@ -68,8 +68,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
      * Call to search in API
      * @param queryParams
      */
-
-
     useEffect(() => {
 
         if (currentValue.length > SEARCH_LENGTH_TRIGGER) {
@@ -133,8 +131,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
         }
     }, [currentValue, searchType])
 
-
-
     const getLogo = (club:SearchItem) => {
         console.log("getlogo")
         if(!club.thumbURL || club.thumbURL.split("/")[1] === "clb"){
@@ -184,28 +180,9 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
 
     const skeletonWidth = useMemo(() => [1, 2, 3].map(() => Math.floor(Math.random() * 80) + 70), [])
 
-    const [ticking, setTicking] = useState(true),
-        [count, setCount] = useState(0)
-
-    const resetCounter = () => {
-
-        setCount(0)
-        setTicking(true)
-
-    }
-
-    useEffect(() => {
-        const timer = setTimeout(() => ticking && setCount(count + 1), 1e3)
-        if(count >= 20){
-            setTicking(false)
-        }
-        return () => clearTimeout(timer)
-    }, [count, ticking])
-
     return (
         <Select
             ref={ref}
-            onFocus={resetCounter}
             showSearch
             showArrow={false}
             filterOption={false}
@@ -214,7 +191,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
             placeholder={t("placeholder")}
             className="search-bar my-auto w-4/5 md:w-3/5 lg:w-5/12 xl:w-2/5"
             onInputKeyDown={e => {
-                setCount(0)
                 if(e.key === "Enter") {
                     e.stopPropagation()
                     const activeOption = document.querySelector(".ant-select-item-option-active a") as HTMLElement
@@ -242,25 +218,6 @@ const SearchBar: React.FC<SearchBarProps> = ({searchType}) => {
                     <div className={"flex flex-col justify-center items-center w-full my-4 space-y-4"}>
                         <img className="h-32 rounded-2xl" src="/img/beer_serving.webp"></img>
                         <span>Tu passes commande ?</span>
-                        {count<19?
-                            <></>
-                            :
-                            <div>
-                                <EasterEgg id={19} name={"de la patience"}/>
-                                William Cardew,
-                                Cyriaque de Montebel,
-                                Quentin Lefebvre,
-                                Romain Loras,
-                                Loïc PELHUCHE--MORIN,
-                                Florian podolak,
-                                Trystan Aubertin,
-                                Gabriel mosselmans,
-                                Baptiste CIHUELO,
-                                Clothilde Senon,
-                                William Brun,
-                                Wandrille BERGERON
-                            </div>
-                        }
 
                     </div>
                         

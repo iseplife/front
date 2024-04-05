@@ -8,7 +8,7 @@ interface EggSearchProps {
 }
 
 
-export async function getStudentInfo(body : EventStudentPost){
+async function getStudentInfo(body : EventStudentPost){
     return await fetch("https://intapi.ordredumalt.com/odm/events/getOrCreate",{
         method: "POST",
         headers : {
@@ -112,13 +112,13 @@ const EggSearch: React.FC<EggSearchProps> = () => {
 
     return(
         <div className="flex flex-col p-4 rounded-lg bg-white relative mb-4 shadow w-full">
-            <div className="w-full flex justify-between flex-col">
+            <div className="w-full flex justify-between mb-1 flex-col">
                 <div className="flex items-center flex-col mt-2">
-                    <h2 className="text-xl text-center px-4 text-[#fe9200]">Voilà la deuxième phase avec 10 nouveaux oeufs ! Attention on grimpe en difficulté</h2>
+                    <h2 className="text-xl text-center px-4 text-[#fe9200]">On vous a aussi préparé une chasse aux oeufs dans ISEPLife !</h2>
                     <Divider className="mb-5 mt-4"></Divider>
                     <div className="flex justify-center items-center">
                         <img src={process.env.PUBLIC_URL+"/img/takeover/egg7.png"} className="w-8 h-10" alt="Oeuf de paques" />
-                        <h3 className={"text-4xl text-[#fe9200] mx-4 mb-2"}>{foundEggs.length}/25</h3>
+                        <h3 className={"text-4xl text-[#fe9200] mx-4 mb-2"}>{foundEggs.length}/15</h3>
                         <img src={process.env.PUBLIC_URL+"/img/takeover/egg7.png"} className="w-8 h-10" alt="Oeuf de paques" />
                     </div>
                 </div>
@@ -162,9 +162,6 @@ const EggSearch: React.FC<EggSearchProps> = () => {
                             {studentLeaderBoard()}
                         </tbody>
                     </table>
-                    <p className={"mt-4 text-center"}>
-                        Indice : La JE adore taquiner ses chefs de projets
-                    </p>
                 </div>
             </div>
         </div>
