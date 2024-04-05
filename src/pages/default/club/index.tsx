@@ -62,7 +62,6 @@ const Club: React.FC = () => {
                     res.data.logoUrl = getTakeoverClubLogo(res.data.id)
                 }
 
-                console.log("Data ::",res.data)
                 dispatch({ type: ClubActionType.GET_CLUB, payload: res.data })
             }).catch((e: AxiosError) => {
                 if (e.response && e.response.status == 404)

@@ -14,6 +14,7 @@ import { feedsManager } from "../../../datamanager/FeedsManager"
 import { updateLastExplore } from "../../../data/student"
 import EggSearch from "../../../components/EggSearch/EggSearch"
 import TakeOverAnnouncement from "../../../components/TakeOverAnnouncement/TakeOverAnnouncement"
+import EggShell from "../../../components/EggShell/EggShell"
 
 const Home: React.FC = () => {
     const {t} = useTranslation()
