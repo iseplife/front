@@ -1,11 +1,45 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import TakeOverCountDown from "../TakeOverCountDown/TakeOverCountDown"
+import EasterEgg, {EventStudent} from "../EasterEgg/EasterEgg"
+import {getStudentInfo} from "../EggSearch/EggSearch"
+import {getLoggedUser} from "../../data/student"
+import {FoundShell} from "../EggShell/EggShell"
 
 interface TakeOverAnnouncementProps {
     number?:number
 }
 
 const TakeOverAnnouncement: React.FC<TakeOverAnnouncementProps> = () => {
+    const [student, setStudent] = useState<EventStudent | null>(null)
+    const [foundShells, setFoundShells] = useState<FoundShell[]>([])
+
+    useEffect(() => {
+        getLoggedUser()
+            .then(result => {
+                const student = result.data
+                if(!student){
+                    return
+                }
+                getStudentInfo({
+                    id:student.id,
+                    firstName:student.firstName,
+                    lastName:student.lastName
+                })
+                    .then(result => {
+                        if(result.status == 200){
+                            return result.json()
+                        }
+                        console.log("oups l'erreur")
+                    })
+                    .then(data => {
+                        const es = data as EventStudent
+                        setStudent(es)
+                        setFoundShells(es.eggShells)
+                    })
+            })
+
+    }, [])
+
     return(
         <div className={"flex flex-col p-4 rounded-lg bg-white relative mb-4 shadow w-full"}>
 
@@ -26,6 +60,13 @@ const TakeOverAnnouncement: React.FC<TakeOverAnnouncementProps> = () => {
 
 
                 <div className={"flex flex-col justify-center items-center text-center w-full z-2 relative"}>
+                    {foundShells.length !==12?
+                        <></>
+                        :
+                        <div className={"mt-4"}>
+                            <EasterEgg id={16} name={"du clown"}/>
+                        </div>
+                    }
                     <h3 className={"text text-center mt-4 px-4"}>
                         A l'insu de tous et après une soirée bien arrosée, les membres du bureau d'ODM ont eu une idée de génie.
                         Voler IsepLife le 1er avril pour une semaine! Ça nous a fait marrer, alors on l'a fait
