@@ -92,6 +92,13 @@ const ClubHeader: React.FC = () => {
                     :
                     <></>
                 }
+                {club?.id === 119?
+                    <div className={"mt-4 mx-2"}>
+                        <EasterEgg id={22} name={"de la bonté"}></EasterEgg>
+                    </div>
+                    :
+                    <></>
+                }
                 <div className="flex flex-wrap items-center" style={{height: "min-content"}}>
                     {club?.website && <SocialIcon icon={cFaLinkWorld} url={club.website}/>}
                     {club?.facebook && <SocialIcon icon={faFacebook} url={club.facebook}/>}

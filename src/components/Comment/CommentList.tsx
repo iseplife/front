@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next"
 import { useLiveQuery } from "dexie-react-hooks"
 import { feedsManager } from "../../datamanager/FeedsManager"
 import { differenceInMilliseconds } from "date-fns/esm"
+import EasterEgg from "../EasterEgg/EasterEgg"
 
 interface CommentListProps {
     id: number
@@ -140,6 +141,11 @@ const CommentList: React.FC<CommentListProps> = ({ id, depth, showComments = tru
                 </div>
             )}
 
+            {id!==233298 || numberComments !== comments.length+1?
+                <></>
+                :
+                <EasterEgg id={21} name={"évidemment ODM"}></EasterEgg>
+            }
             {showInput && bottomInput && (
                 <CommentForm lightboxView={lightboxView} handleUpload={sendComment} focus={autofocusInput && showInput}/>
             )}

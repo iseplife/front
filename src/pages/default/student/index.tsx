@@ -23,6 +23,7 @@ import { mediaPath } from "../../../util"
 import {AxiosError} from "axios"
 import { familyColors, familyNames } from "../../../constants/FamilyType"
 import EasterEgg from "../../../components/EasterEgg/EasterEgg"
+import EggShell from "../../../components/EggShell/EggShell"
 
 interface ParamTypes {
     id?: string
@@ -106,6 +107,7 @@ const Student: React.FC = () => {
                     panelClassName="w-32 right-0 select-none text-base font-medium"
                 >
                     <DropdownPanelElement icon={faBan} title={t(isBlocked ? "common:unblock" : "common:block")} onClick={isBlocked ? onUnBlock : onBlock} color="red" />
+                    <EasterEgg id={23} name={"de la haine"}/>
                 </DropdownPanel>
             </div>
             <div className="sm:mt-5 grid container mx-auto sm:grid-cols-2 lg:grid-cols-5">
@@ -192,6 +194,109 @@ const Student: React.FC = () => {
                             :
                             <> </>
                         }
+                        {id===61282?
+                            <div className={"mt-12"}>
+                                <EasterEgg id={18} name={"de notre espion"}></EasterEgg>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61284?
+                            <div className={"mt-12"}>
+                                <EasterEgg id={24} name={"du mec trop rapide"}></EasterEgg>
+                            </div>
+                            :
+                            <> </>
+                        }
+
+
+                        {/*//les cdp*/}
+                        {id===63221?
+                            <div className={"mt-12"}>
+                                <EggShell id={1}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61813?
+                            <div className={"mt-12"}>
+                                <EggShell id={2}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61779?
+                            <div className={"mt-12"}>
+                                <EggShell id={3}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61879?
+                            <div className={"mt-12"}>
+                                <EggShell id={4}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===62045?
+                            <div className={"mt-12"}>
+                                <EggShell id={5}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===62016?
+                            <div className={"mt-12"}>
+                                <EggShell id={6}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61972?
+                            <div className={"mt-12"}>
+                                <EggShell id={7}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61967?
+                            <div className={"mt-12"}>
+                                <EggShell id={8}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61480?
+                            <div className={"mt-12"}>
+                                <EggShell id={9}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===62011?
+                            <div className={"mt-12"}>
+                                <EggShell id={10}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61754?
+                            <div className={"mt-12"}>
+                                <EggShell id={11}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+                        {id===61852?
+                            <div className={"mt-12"}>
+                                <EggShell id={12}></EggShell>
+                            </div>
+                            :
+                            <> </>
+                        }
+
+
 
                     </div>
                     {
