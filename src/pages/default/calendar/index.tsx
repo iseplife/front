@@ -232,13 +232,6 @@ const Events: React.FC = () => {
                             <h1 className="text-xl font-semibold my-auto text-current capitalize">
                                 {dateTitle}
                             </h1>
-                            {date.getFullYear() !==1 || date.getMonth() !== 0?
-                                <></>
-                                :
-                                <div className={"ml-8 mt-4"}>
-                                    <EasterEgg id={25} name={"du commencement"}/>
-                                </div>
-                            }
                             {/* <button onClick={toggleShowInfo} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1">
                                 <FontAwesomeIcon icon={cFaArrowDown} className={`${showInfo && "rotate-180"} transition-transform`} />
                             </button> */}
