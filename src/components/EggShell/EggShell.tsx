@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react"
 import {LoggedStudentPreview} from "../../data/student/types"
 import {getLoggedUser} from "../../data/student"
-import {FoundShell} from "../EggShell/EggShell"
+import {FoundEgg} from "../EasterEgg/EasterEgg"
 
-interface EasterEggProps {
+interface EggShellProps {
     id:number
-    name:string
 }
 
 export interface EventStudentPost{
@@ -22,17 +21,15 @@ export interface EventStudent{
     eggShells : FoundShell[]
 }
 
-export interface FoundEgg{
+export interface FoundShell{
     id:number
-    createdAt:Date
 }
 
-interface PostFoundEgg{
+interface PostFoundShell{
     studentId:number
     firstName:string,
     lastName:string
-    eggId:number
-    eggName:string
+    shellId:number
 }
 
 async function getStudentInfo(body : EventStudentPost){
@@ -45,8 +42,8 @@ async function getStudentInfo(body : EventStudentPost){
     })
 }
 
-async function getEgg(body:PostFoundEgg){
-    return await fetch("https://intapi.ordredumalt.com/odm/events/found_egg",{
+async function getShell(body:PostFoundShell){
+    return await fetch("https://intapi.ordredumalt.com/odm/events/eggshell",{
         method: "POST",
         headers : {
             "Content-Type": "application/json",
@@ -55,10 +52,10 @@ async function getEgg(body:PostFoundEgg){
     })
 }
 
-const EasterEgg: React.FC<EasterEggProps> = ({id,name}) => {
+const EggShell: React.FC<EggShellProps> = ({id}) => {
 
-    const [foundEggs, setFoundEggs] =
-        useState<FoundEgg[]>([])
+    const [foundShells, setFoundShells] =
+        useState<FoundShell[]>([])
 
     const [studentInfo, setStudentInfo] =
         useState<LoggedStudentPreview | null>(null)
@@ -84,7 +81,7 @@ const EasterEgg: React.FC<EasterEggProps> = ({id,name}) => {
                     })
                     .then(data => {
                         const es = data as EventStudent
-                        setFoundEggs(es.eventInfo)
+                        setFoundShells(es.eggShells)
                     })
             })
 
@@ -92,7 +89,7 @@ const EasterEgg: React.FC<EasterEggProps> = ({id,name}) => {
 
     }, [])
 
-    if (foundEggs.map(elem => elem.id).includes(id) || !studentInfo){
+    if (foundShells.map(elem => elem.id).includes(id) || !studentInfo){
         return(<></>)
     }
 
@@ -100,17 +97,16 @@ const EasterEgg: React.FC<EasterEggProps> = ({id,name}) => {
     return(
         <div className={"flex justify-center items-center flex-col cursor-pointer"}
             onClick={
-                () => getEgg({
+                () => getShell({
                     studentId:studentInfo?.id,
                     firstName:studentInfo?.firstName,
                     lastName:studentInfo?.lastName,
-                    eggId:id,
-                    eggName:name
+                    shellId:id,
                 })
                     .then(result => result.json())
                     .then(data => {
                         const es = data as EventStudent
-                        setFoundEggs(es.eventInfo)
+                        setFoundShells(es.eggShells)
                     })
                     .catch((error) => console.log(error))
             }
@@ -118,15 +114,15 @@ const EasterEgg: React.FC<EasterEggProps> = ({id,name}) => {
             <div
                 className="w-[39px] h-[48px]"
                 style={{
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/img/takeover/egg${id%8}.png)`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/img/takeover/shell.png)`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}
             />
-            <p className={"text-center"}>Oeuf {name}</p>
+            <p className={"text-center"}>Coquille d'oeuf</p>
         </div>
     )
 }
 
-export default EasterEgg
+export default EggShell
