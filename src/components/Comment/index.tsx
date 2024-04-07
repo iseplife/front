@@ -81,7 +81,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                 />
             </Link>
             <div className="w-full">
-                <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightboxView ? "bg-[#fff5e8]/20 text-neutral-100 md:text-black md:bg-[#fff5e8]" : "bg-[#fff5e8]"}`}>
+                <div className={`flex flex-col justify-between rounded-lg px-2 py-1 ${lightboxView ? "bg-gray-100/20 text-neutral-100 md:text-black md:bg-gray-100" : "bg-gray-100"}`}>
                     <div className="items-center flex">
                         <Link to={`/${data.author.authorType.toLowerCase()}/${data.author.id}`} className={`${lightboxView ? "text-neutral-100 md:text-black" : "text-black" } text-xs flex-1 mr-3 font-bold hover:underline`}>{data.author.name}</Link>
                         {data.hasWriteAccess && (
@@ -106,7 +106,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                                     <>
                                         <FontAwesomeIcon
                                             icon={faPen}
-                                            className="mr-3 text-gray-400 cursor-pointer hover:text-[#fe9200]"
+                                            className="mr-3 text-gray-400 cursor-pointer hover:text-indigo-400"
                                             onClick={() => setEditMode(true)}
                                         />
                                         <FontAwesomeIcon

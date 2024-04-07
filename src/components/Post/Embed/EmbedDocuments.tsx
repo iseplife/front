@@ -22,7 +22,7 @@ const EmbedDocuments: React.FC<EmbedDocumentsProps> = ({ data }) => {
                     <div className="flex">
                         <FontAwesomeIcon icon={faFileArrowDown} className="text-4xl text-white drop-shadow-sm" />
                         <div className="ml-3 leading-5">
-                            <div className="text-[#e87a05] font-medium text-md group-hover:underline">{ data.title }</div>
+                            <div className="text-indigo-500 font-medium text-md group-hover:underline">{ data.title }</div>
                             <div className="text-neutral-500/90 font-normal text-sm -mb-0.5">{ sizeKo >= 1024 ? sizeMb + " Mo" : sizeKo + " Ko" }</div>
                         </div>
                     </div>

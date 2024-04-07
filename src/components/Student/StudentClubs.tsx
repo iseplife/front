@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { AvatarSizes } from "../../constants/MediaSizes"
@@ -7,7 +7,6 @@ import { ClubMemberPreview, ClubRoleIcon } from "../../data/club/types"
 import { getStudentClubs } from "../../data/student"
 import { StudentPreview } from "../../data/student/types"
 import { getCurrentSchoolYear, mediaPath } from "../../util"
-import EasterEgg from "../EasterEgg/EasterEgg"
 
 const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
 
@@ -48,12 +47,11 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
 
         <div className="flex justify-end space-x-4 text-lg mt-8 px-2">
             {schoolSessions.map((s, i) =>
-                <div key={i} className={"h-hull flex items-center font-bold border-b-2 " + (selectSchoolSession == s ? "text-[#d66f02] border-[#d66f02]" : "cursor-pointer border-transparent")} onClick={() => setSelectedSchoolSection(s)}>{s}</div>
-
+                <div key={i} className={"h-hull flex items-center font-bold border-b-2 " + (selectSchoolSession == s ? "text-indigo-600 border-indigo-600" : "cursor-pointer border-transparent")} onClick={() => setSelectedSchoolSection(s)}>{s}</div>
             )}
         </div>
 
-        <div className="flex flex-wrap mt-2 mb-8 w-full items-center">
+        <div className="flex flex-wrap mt-2 mb-8 w-full">
             {clubs ?
                 clubsShowed.length > 0 ? clubsShowed.map(club => 
                     <div className="w-1/2 md:w-1/3 xl:w-1/4 p-2">
@@ -78,7 +76,6 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
                                 <span className="overflow-hidden text-ellipsis line-clamp-1">{club.club.name}</span>
                             </div>
                         </Link>
-
                     </div>
                 ) :
                     <div className="text-neutral-600 mt-8 mx-auto">{t("user:no_club", {user: `${student?.firstName} ${student?.lastName}`})}</div>
@@ -96,15 +93,6 @@ const StudentClubs: React.FC<{student?: StudentPreview}> = ({ student }) => {
                     </div>
                 )
             }
-            {selectSchoolSession!==2023?
-                <div className={"mt-4 mx-2"}>
-                    <EasterEgg id={14} name={"du passé"}></EasterEgg>
-                </div>
-                :
-                <>
-                </>
-            }
-
         </div>
     </div>
 }

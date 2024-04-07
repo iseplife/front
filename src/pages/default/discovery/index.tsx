@@ -6,7 +6,6 @@ import DiscoverPurpose from "../../../components/Discovery/DiscoveryPurpose"
 import YearBook from "../../../components/Discovery/YearBook"
 import { AppContext } from "../../../context/app/context"
 import "./Discovery.css"
-import EasterEgg from "../../../components/EasterEgg/EasterEgg"
 
 const Discovery: React.FC = () => {
     const { t } = useTranslation("discovery")
@@ -26,16 +25,16 @@ const Discovery: React.FC = () => {
                         Bonjour
                         <img src="/img/icons/hello.svg" className="ml-3 w-11 h-11 mt-1" />
                     </div>
-                    <div className="text-[#fe9200] text-6xl">{ user.firstName }</div>
+                    <div className="text-indigo-400 text-6xl">{ user.firstName }</div>
                 </div>
                 <div className="flex gap-5 text-lg ml-auto mr-0 items-center mt-6 md:mt-0 text-center xsgrid">
                     <Link to="/">
-                        <div className="bg-[#fe9200] hover:bg-[#fe9200]/90 transition-colors text-white rounded-xl w-44 md:w-48 py-[11.5px] grid place-items-center">
+                        <div className="bg-indigo-400 hover:bg-indigo-400/90 transition-colors text-white rounded-xl w-44 md:w-48 py-[11.5px] grid place-items-center">
                             { t("my_feed") }
                         </div>
                     </Link>
                     <Link to={{pathname: "https://github.com/iseplife"}} target="_blank">
-                        <div className="border-[#fe9200] hover:border-[#fe9200]/90 transition-colors text-[#fe9200] hover:text-[#fe9200]/90 border-[3.5px] rounded-xl w-44 md:w-48 py-2 grid place-items-center">
+                        <div className="border-indigo-400 hover:border-indigo-400/90 transition-colors text-indigo-400 hover:text-indigo-400/90 border-[3.5px] rounded-xl w-44 md:w-48 py-2 grid place-items-center">
                             { t("watch_github") }
                         </div>
                     </Link>
@@ -43,7 +42,7 @@ const Discovery: React.FC = () => {
 
             </div>
             <div>
-                <div className="bg-[#fe9200] rounded-full w-16 h-3"></div>
+                <div className="bg-indigo-400 rounded-full w-16 h-3"></div>
                 <div className="text-2xl mt-2">{t("student_life")}</div>
             </div>
             <div className="grid gap-y-16 gap-x-10 grid-cols-1 lg:grid-cols-3 pt-20 md:pt-28 px-2 text-lg font-normal text-center">
@@ -57,7 +56,7 @@ const Discovery: React.FC = () => {
             <img src="img/icons/floating/square.svg" className="absolute top-[75px] left-[30%]" />
         </div>
         <img src="img/wave.svg" draggable="false" className="mt-5 z-10 relative w-screen select-none" />
-        <div className="bg-[#fe9200] -mt-1 z-10 relative">
+        <div className="bg-indigo-400 -mt-1 z-10 relative">
             <div className="container mx-auto px-5 md:px-10 font-bold text-white/[98%] pb-5">
                 <div className="mb-5">
                     <div className="bg-white rounded-full w-16 h-3 relative z-30"></div>
@@ -72,9 +71,6 @@ const Discovery: React.FC = () => {
                 </div>
 
                 <YearBook />
-                <div className={"mt-24"}>
-                    <EasterEgg id={2} name={"du scroll"}></EasterEgg>
-                </div>
             </div>
         </div>
     </>)

@@ -133,7 +133,7 @@ const AddEventPage: React.FC<AddEventPageProps> = ({defaultValues, eventId}) => 
                                 <input {...register("ticketURL")} type="url" className="rounded-lg border border-neutral-200 p-3 pt-5 pb-2 w-full" placeholder="https://google.com" />
                             </AddEventTextField>
                         </div>
-                        <button onClick={sendEvent} disabled={sending} className={`w-1/2 px-3 py-2 rounded-md bg-[#fe9200] shadow-sm text-center mx-auto font-semibold text-white mt-3 ${sending && "opacity-80"}`}>{sending ? <Loading /> : t(defaultValues ? "form.edit": "form.create")}</button>
+                        <button onClick={sendEvent} disabled={sending} className={`w-1/2 px-3 py-2 rounded-md bg-indigo-400 shadow-sm text-center mx-auto font-semibold text-white mt-3 ${sending && "opacity-80"}`}>{sending ? <Loading /> : t(defaultValues ? "form.edit": "form.create")}</button>
                     </div>
                 </div>
             </div>

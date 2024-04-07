@@ -113,7 +113,7 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
             downloadLink = canva.toDataURL("image/jpeg")
 
             releaseCanvas(canva)
-        } else
+        } else 
             downloadLink = await polyfillWebp(link, true)
         
         downloadFile(downloadLink, `${gallery.name}-${currentImage.id}.jpg`, t("gallery:saved"))
@@ -137,8 +137,8 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                             <div className="text-md">{ formattedDate }</div>
                         </div>
                     </div>
-                    <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-[#fe9200] hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
-                        <div className="bg-[#e87a05] top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                    <button onClick={downloadProgress == -1 ? downloadCallback : undefined} className="flex relative overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded text-white font-medium px-3.5 items-center">
+                        <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
                         <div className="z-10 hidden md:flex items-center">
                             {downloadProgress == -1 ? t("gallery:download") : t("gallery:downloading")}
                             {
@@ -152,9 +152,9 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                 </div>
                 <button
                     onClick={downloadProgress == -1 ? downloadCallback : undefined}
-                    className="md:hidden absolute navbar m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-[#fe9200] hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
+                    className="md:hidden absolute navbar m-3.5 w-9 h-9 top-0 right-0 flex overflow-hidden bg-indigo-400 hover:opacity-90 hover:shadow transition-all rounded-full text-white font-medium px-2 items-center"
                 >
-                    <div className="bg-[#e87a05] top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
+                    <div className="bg-indigo-500 top-0 left-0 absolute h-full" style={{width: `${downloadProgress == -1 ? 0 : downloadProgress*100}%`}}></div>
                     <div className="
                         grid place-items-center ml-[1.5px] rounded-full
                         cursor-pointer z-50 text-white transition-all duration-300 false
@@ -172,11 +172,11 @@ const GallerySidebar: React.FC<GallerySidebarProps> = ({gallery, currentImage}) 
                 </div>
                 <div className="flex flex-row text-gray-600 justify-between mt-1 -mb-2.5">
                     <div className="items-center text-gray-400 grid grid-cols-2 w-full mr-5 text-center">
-                        <span className="group flex items-center justify-center cursor-pointer hover:text-[#e87a05] mr-3 text-xl transition-colors duration-100">
+                        <span className="group flex items-center justify-center cursor-pointer hover:text-indigo-500 mr-3 text-xl transition-colors duration-100">
                             <div className="text-base mx-1.5 w-7 text-right">
                                 {nbComments > 0 && nbComments}
                             </div>
-                            <div className="-ml-1 cursor-pointer rounded-full bg-[#ba6102] bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
+                            <div className="-ml-1 cursor-pointer rounded-full bg-indigo-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
                                 <FontAwesomeIcon
                                     icon={faCommentAlt}
                                     size="1x"

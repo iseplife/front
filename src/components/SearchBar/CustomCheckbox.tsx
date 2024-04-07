@@ -19,8 +19,8 @@ const CustomCheckbox: React.FC<CustomCheckBoxProps> = ({title, filterStatus, onC
         <label
             htmlFor={`switch-${title.toLowerCase()}`}
             className="label-pills inline-flex items-center rounded-full border text-xs
-                    border-[#e87a05] text-[#e87a05] px-2 my-auto mx-1 ml-1 cursor-pointer
-                    hover:text-white hover:bg-[#ba6102] active:bg-[#e87a05] active:text-white"
+                    border-indigo-500 text-indigo-500 px-2 my-auto mx-1 ml-1 cursor-pointer
+                    hover:text-white hover:bg-indigo-700 active:bg-indigo-500 active:text-white"
         >
             {title}
         </label>

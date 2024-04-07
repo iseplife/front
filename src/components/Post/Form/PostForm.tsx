@@ -108,7 +108,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                         ) : (
                             <div className="flex items-center">
                                 <Upload
-                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group"
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
                                     showUploadList={false}
                                     multiple
                                     beforeUpload={handleFile(EmbedEnumType.IMAGE)}
@@ -117,7 +117,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                                     <FontAwesomeIcon icon={faImages} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
                                 <Upload
-                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group"
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
                                     showUploadList={false}
                                     beforeUpload={handleFile(EmbedEnumType.VIDEO)}
                                     accept=".mp4,.webm"
@@ -125,14 +125,14 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                                     <FontAwesomeIcon icon={faVideo} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
                                 <Upload
-                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group"
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
                                     showUploadList={false}
                                     beforeUpload={handleFile(EmbedEnumType.DOCUMENT)}
                                 >
                                     <FontAwesomeIcon icon={faPaperclip} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
                                 </Upload>
                                 <div
-                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group"
+                                    className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group"
                                     onClick={() => setFieldValue("embed", DEFAULT_EMBED[EmbedEnumType.POLL])}
                                 >
                                     <FontAwesomeIcon icon={faChartBar} className="text-gray-700 text-opacity-60 mx-1 group-hover:text-opacity-100 transition-colors text-xl"/>
@@ -153,7 +153,7 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                             onChange={date => setFieldValue("publicationDate", date!.toDate())}
                             bordered={false}
                             placeholder={t("publication_date")}
-                            className="hover:border-[#fe9200] text-gray-500 border-gray-200"
+                            className="hover:border-indigo-400 text-gray-500 border-gray-200"
                             style={{borderBottom: "1px solid #d9d9d9"}}
                         />
                     </div>}
@@ -161,14 +161,14 @@ const PostForm: React.FC<FormikProps<PostFormValues<EmbedFormType>>> = ({isSubmi
                         {!values.edit && <>
                             <AuthorPicker
                                 callback={changeAuthor} 
-                                className="text-gray-700 rounded hover:bg-[#fff5e8]"
+                                className="text-gray-700 rounded hover:bg-gray-100"
                             />
                             <Divider type="vertical" />
                         </>}
                         <button
                             type="submit"
                             disabled={isSubmitting || !values.description.length}
-                            className={(values.description.length ? "cursor-pointer hover:bg-[#fff5e8]" : "cursor-default text-gray-300") + " text-xl rounded-full h-10 w-10 justify-center items-center flex pr-0.5 -m-1.5 -ml-0.5 transition-colors"}
+                            className={(values.description.length ? "cursor-pointer hover:bg-gray-100" : "cursor-default text-gray-300") + " text-xl rounded-full h-10 w-10 justify-center items-center flex pr-0.5 -m-1.5 -ml-0.5 transition-colors"}
                         >
                             <FontAwesomeIcon icon={isSubmitting ? faCircleNotch : faPaperPlane} spin={isSubmitting} />
                         </button>

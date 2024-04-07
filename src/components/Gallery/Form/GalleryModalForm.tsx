@@ -24,7 +24,7 @@ const GalleryModalForm: React.FC<GalleryModalFormProps> = ({feed, clubsAllowedTo
     return (
         <>
             <button
-                className={`rounded-full px-4 bg-[#fe9200] hover:bg-opacity-90 duration-100 py-2 text-white font-semibold mx-auto mb-3 ${!mobile && "hidden sm:block" }`}
+                className={`rounded-full px-4 bg-indigo-400 hover:bg-opacity-90 duration-100 py-2 text-white font-semibold mx-auto mb-3 ${!mobile && "hidden sm:block" }`}
                 style={{width: "max-content"}}
                 onClick={() => setVisible(true)}
             >

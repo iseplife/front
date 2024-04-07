@@ -13,7 +13,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({icon, url, className}) => {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`mx-2 hover:text-[#fca835] text-[#e87a05] text-${className}`}
+            className={`mx-2 hover:text-indigo-300 text-indigo-500 text-${className}`}
         >
             <FontAwesomeIcon icon={icon} className="text-2xl sm:text-3xl"/>
         </a>

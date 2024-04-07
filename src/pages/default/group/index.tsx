@@ -17,7 +17,6 @@ import { SubscribableType } from "../../../data/subscription/SubscribableType"
 import SubscriptionHandler from "../../../components/Subscription"
 import {Subscription} from "../../../data/feed/types"
 import {AxiosError} from "axios"
-import EasterEgg from "../../../components/EasterEgg/EasterEgg"
 
 interface ParamTypes {
     id?: string
@@ -169,6 +168,7 @@ const Group: React.FC = () => {
                         </div>
                     </div>
                 )}
+
                 {!orgaLoading &&
                     <div className="sm:hidden">
                         <CompressedMembers
@@ -199,14 +199,6 @@ const Group: React.FC = () => {
                         loading={orgaLoading}
                     />
                 </div>
-                {group?.id===118826?
-                    <div className={"mt-8"}>
-                        <EasterEgg id={12} name={"orique"}></EasterEgg>
-                    </div>
-                    :
-                    <></>
-                }
-
             </div>
 
             <TabsSwitcher
