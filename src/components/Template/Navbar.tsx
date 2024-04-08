@@ -27,7 +27,7 @@ type IconButtonProps = {
 }
 const IconButton: React.FC<IconButtonProps> = ({icon}) => {
     return (
-        <div className="grid place-items-center p-2 cursor-pointer rounded-full mx-3 group-hover:bg-[#fe9200]/20 transition-colors text-[#fe9200]">
+        <div className="grid place-items-center p-2 cursor-pointer rounded-full mx-3 group-hover:bg-indigo-400/20 transition-colors text-indigo-400">
             <FontAwesomeIcon icon={icon}/>
         </div>
     )
@@ -42,7 +42,7 @@ const ProfilePanel: React.FC = () => {
             {isAdmin && (
                 <Link
                     to="/admin"
-                    className="flex items-center text-gray-500 m-1 px-3 py-2 cursor-pointer hover:bg-[#fff5e8] hover:bg-opacity-80 rounded transition-colors"
+                    className="flex items-center text-gray-500 m-1 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 rounded transition-colors"
                 >
                     {t("administration")}
                     <FontAwesomeIcon icon={faUserShield} className="ml-2"/>
@@ -50,7 +50,7 @@ const ProfilePanel: React.FC = () => {
             )}
             <Link
                 to="/setting"
-                className="flex items-center text-gray-500 m-1 px-3 py-2 cursor-pointer hover:bg-[#fff5e8] hover:bg-opacity-80 rounded transition-colors"
+                className="flex items-center text-gray-500 m-1 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 rounded transition-colors"
             >
                 {t("setting")}
                 <FontAwesomeIcon icon={faCogs} className="ml-2"/>
@@ -58,7 +58,7 @@ const ProfilePanel: React.FC = () => {
             <Divider className="my-2"/>
             <Link
                 to="/logout"
-                className="flex justify-center text-red-500 mx-3 mb-2 px-3 py-2 cursor-pointer hover:bg-[#fff5e8] hover:bg-opacity-80 rounded transition-colors"
+                className="flex justify-center text-red-500 mx-3 mb-2 px-3 py-2 cursor-pointer hover:bg-gray-100 hover:bg-opacity-80 rounded transition-colors"
             >
                 {t("logout")}
             </Link>
@@ -90,7 +90,7 @@ const NotificationHeaderButton: React.FC = () => {
         >
             <div className="flex font-bold text-2xl px-4 py-2.5 text-black">
                 {unwatchedNotifications ? `Notifications (${unwatchedNotifications > 9 ? "9+" : unwatchedNotifications})` : "Notifications"}
-                <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-[#e87a05] font-normal text-sm grid place-items-center cursor-pointer mt-1">
+                <Link to={"/notifications"}  className="hover:bg-black/5 transition-colors ml-auto px-2 -mr-1 rounded text-indigo-500 font-normal text-sm grid place-items-center cursor-pointer mt-1">
                     {t("see_more")}
                 </Link>
             </div>
@@ -214,13 +214,13 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
         <div className="navbar flex justify-between px-5 bg-white h-14 shadow-sm z-30 items-center w-full md:fixed md:top-0 md:will-change-[none]" style={{ position: "absolute", top: "0px" }} ref={ref}>
 
             <div className="flex items-center">
-                { (isIosApp || isAndroidApp) && <div className={`cursor-pointer text-xl sm:hidden duration-300 ease-out overflow-hidden active:text-[#e87a05] ${isFirstPage ? "w-0" : "w-6"} `}>
+                { (isIosApp || isAndroidApp) && <div className={`cursor-pointer text-xl sm:hidden duration-300 ease-out overflow-hidden active:text-indigo-500 ${isFirstPage ? "w-0" : "w-6"} `}>
                     <FontAwesomeIcon icon={faArrowLeft} onClick={onPressBack} className="mr-2"></FontAwesomeIcon>
                 </div> }
 
                 <button onClick={goHome} className="flex items-center">
-                    <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/takeover/logoODM.webp" alt="iseplife logo" />
-                    <div className="items-center ml-1 text-[#e87a05]/90 font-medium text-base hidden lg:flex">
+                    <img className="my-1 w-[50px] h-[50px] p-0.5 drop-shadow-sm" src="../../../img/icon.svg" alt="iseplife logo" />
+                    <div className="items-center ml-1 text-indigo-500/90 font-medium text-base hidden lg:flex">
                         iseplife
                     </div>
                 </button>
@@ -230,7 +230,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
             <SearchBar />
 
             <div className="hidden md:flex justify-end items-center py-5">
-                <div className="flex justify-around items-center mr-4 text-xl text-[#fe9200]">
+                <div className="flex justify-around items-center mr-4 text-xl text-indigo-400">
                     <Link to="/discovery" className="group">
                         <IconButton icon={cFaCompassFull} />
                     </Link>
@@ -241,7 +241,7 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
                 </div>
                 <DropdownPanel
                     icon={
-                        <div className="flex rounded-full ml-1 p-1 hover:bg-[#fe9200]/20 transition-colors font-medium text-[#fe9200]">
+                        <div className="flex rounded-full ml-1 p-1 hover:bg-indigo-400/20 transition-colors font-medium text-indigo-400">
                             <StudentAvatar
                                 id={user.id}
                                 name={user.firstName + " " + user.lastName}
@@ -290,7 +290,7 @@ interface MobileFooterButtonProps {
     doubleClickAction?: () => void
 }
 
-const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts = 0, className = "text-[#fe9200]", doubleClickAction }) => {
+const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selectedIcon, notSelectedIcon, alerts = 0, className = "text-indigo-400", doubleClickAction }) => {
     const { pathname } = useLocation()
     const selected = useMemo(() => pathname == route, [route, pathname])
 
@@ -305,7 +305,7 @@ const MobileFooterButton: React.FC<MobileFooterButtonProps> = ({ route, selected
         <Link to={route} className="w-full h-full grid place-items-center">
             <button className={`border-0 grid place-items-center text-2xl ${className}`} onClick={onClick}>
                 <div className="relative">
-                    <div className={"w-12 h-12 grid place-items-center active:bg-[#fe9200]/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
+                    <div className={"w-12 h-12 grid place-items-center active:bg-indigo-400/20 duration-200 rounded-full scale-[95%] "+(selected && "scale-105")}>
                         <FontAwesomeIcon icon={selected ? selectedIcon : notSelectedIcon} />
                     </div>
 
@@ -336,7 +336,7 @@ const MobileFooter: React.FC<{ user: StudentPreview }> = ({user}) => {
                 <div className="mx-auto flex">
                     <MobileFooterButton
                         route="/discovery"
-                        className="-mt-6 bg-[#fe9200] text-white rounded-full h-[3.2rem] w-[3.2rem] scale-110 text-[1.3rem] shadow-[0px_-4px_15px_1px_rgba(0,0,0,0.1)] z-50"
+                        className="-mt-6 bg-indigo-400 text-white rounded-full h-[3.2rem] w-[3.2rem] scale-110 text-[1.3rem] shadow-[0px_-4px_15px_1px_rgba(0,0,0,0.1)] z-50"
                         selectedIcon={cFaSearch}
                         notSelectedIcon={cFaSearch}
                         doubleClickAction={focusSearch}

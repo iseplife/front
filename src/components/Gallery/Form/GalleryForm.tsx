@@ -59,7 +59,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
 
     return (
         <form className="flex flex-col lg:flex-row h-full " onSubmit={formik.handleSubmit}>
-            <div className="flex flex-col w-full lg:w-1/4 bg-[#fff5e8] p-4 rounded-l">
+            <div className="flex flex-col w-full lg:w-1/4 bg-gray-100 p-4 rounded-l">
                 <div className="mr-12 lg:mr-0">
                     <div className="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-left text-gray-700 text-lg my-1" role="separator">
                         <span className="ant-divider-inner-text">{t("form.title")}</span>
@@ -118,7 +118,7 @@ const GalleryForm: React.FC<GalleryFormProps> = ({feed, clubsAllowedToPublishGal
                         <div className="flex-grow flex flex-col justify-end mt-8 sm:mt-16 lg:mt-0">
                             <label >{t("form.author")}</label>
                             <AuthorPicker
-                                className="max-w-full sm:w-64 hover:border-[#fe9200]"
+                                className="max-w-full sm:w-64 hover:border-indigo-400"
                                 style={{borderBottom: "1px solid #e2e8f0"}}
                                 clubOnly={true}
                                 filter={clubsAllowedToPublishGallery}

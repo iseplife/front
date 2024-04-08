@@ -23,7 +23,6 @@ import { cFaArrowDown, cFaArrowNext } from "../../../constants/CustomFontAwesome
 import DropdownPanel from "../../../components/Common/DropdownPanel"
 import DropdownPanelElement from "../../../components/Common/DropdownPanelElement"
 import { addDays } from "date-fns/esm"
-import EasterEgg from "../../../components/EasterEgg/EasterEgg"
 
 const initFilter = (): EventFilter => {
     return (
@@ -209,10 +208,10 @@ const Events: React.FC = () => {
 
     return (
         <CalendarContext.Provider value={{feeds}}>
-            <div className="h-[calc(100%-110px)] flex flex-row flex-wrap bg-[#fff5e8]">
+            <div className="h-[calc(100%-110px)] flex flex-row flex-wrap bg-gray-100">
                 { canCreateEvent &&
                     <div className="w-full mx-4 mt-4 flex justify-center">
-                        <Link to="/event/create" className="bg-[#fe9200] rounded-full py-2 text-center px-4 w-full md:w-auto text-white font-medium text-base">
+                        <Link to="/event/create" className="bg-indigo-400 rounded-full py-2 text-center px-4 w-full md:w-auto text-white font-medium text-base">
                             Créer un événement
                         </Link>
                     </div>
@@ -232,13 +231,6 @@ const Events: React.FC = () => {
                             <h1 className="text-xl font-semibold my-auto text-current capitalize">
                                 {dateTitle}
                             </h1>
-                            {date.getFullYear() !==1 || date.getMonth() !== 0?
-                                <></>
-                                :
-                                <div className={"ml-8 mt-4"}>
-                                    <EasterEgg id={25} name={"du commencement"}/>
-                                </div>
-                            }
                             {/* <button onClick={toggleShowInfo} className="p-2 active:bg-neutral-200 rounded-full w-8 h-8 flex items-center justify-center text-sm text-neutral-600 ml-1">
                                 <FontAwesomeIcon icon={cFaArrowDown} className={`${showInfo && "rotate-180"} transition-transform`} />
                             </button> */}
@@ -263,9 +255,6 @@ const Events: React.FC = () => {
                                 <DropdownPanelElement title={t("day")} onClick={() => setView("day")} />
                                 <DropdownPanelElement title={t("week")} onClick={() => setView("week")} />
                                 <DropdownPanelElement title={t("month")} onClick={() => setView("month")} />
-                                <div className={"mt-4 mx-2"}>
-                                    <EasterEgg id={3} name={"périodique"}></EasterEgg>
-                                </div>
                             </DropdownPanel>
                         </div>
                     </div>

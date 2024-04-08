@@ -37,11 +37,11 @@ const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
         <div className={`${buttonClassName} relative rounded-lg`}>
             <button onClick={toggleOpen}>
                 {icon ?? <div
-                    className="cursor-pointer group rounded-full hover:bg-[#ba6102] hover:bg-opacity-10 transition-colors w-9 h-9 grid place-items-center"
+                    className="cursor-pointer group rounded-full hover:bg-indigo-700 hover:bg-opacity-10 transition-colors w-9 h-9 grid place-items-center"
                 >
                     <FontAwesomeIcon
                         icon={faEllipsisH}
-                        className="text-gray-400 group-hover:text-[#fe9200] transition-colors"
+                        className="text-gray-400 group-hover:text-indigo-400 transition-colors"
                     />
                 </div>}
             </button>
@@ -61,7 +61,6 @@ const DropdownPanel: React.FC<DropdownPanelProps> = (props) => {
                     )}
                     {children}
                 </div>
-
             )}
         </div>
     )

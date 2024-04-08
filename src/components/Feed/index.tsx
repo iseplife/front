@@ -30,8 +30,6 @@ import LoadingSpinner from "../Common/LoadingSpinner"
 import FeedPost, { FeedPostProps } from "./FeedPost"
 import { Virtuoso } from "react-virtuoso"
 import { reportPost } from "../../data/post"
-import TakeOverAnnouncement from "../TakeOverAnnouncement/TakeOverAnnouncement"
-import EggSearch from "../EggSearch/EggSearch"
 
 const isTouchDevice = () => ("ontouchstart" in window) || navigator.maxTouchPoints > 0
 
@@ -382,11 +380,12 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     key={completeFormType!}
                 />}
             </Modal>
+
             {
                 !!selectedPostId && <>
                     <Divider className="text-gray-700 text-lg" orientation="left">{t("post:selected_post")}</Divider>
                     {!selectedPost ? 
-                        ((loading || fetching) ?
+                        ((loading || fetching) ? 
                             <CardTextSkeleton loading={true} number={1} className="my-0.5 shadow-md"/> 
                             : <div className="mb-8 flex items-center justify-center p-4"><FontAwesomeIcon
                                 icon={faTimes}
@@ -418,7 +417,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     <div className="grid grid-cols-4 sm:gap-2.5 items-center text-xl mt-1 -mb-2">
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.IMAGE)}
-                            className="w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group xsm"
+                            className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
                         >
                             <FontAwesomeIcon
                                 icon={faImages}
@@ -427,7 +426,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                         </div>
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.VIDEO)}
-                            className="w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group xsm"
+                            className="w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm"
                         >
                             <FontAwesomeIcon
                                 icon={faVideo}
@@ -436,7 +435,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                         </div>
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.DOCUMENT)}
-                            className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group xsm-span"
+                            className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                         >
                             <FontAwesomeIcon
                                 icon={faPaperclip}
@@ -445,7 +444,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                         </div>
                         <div
                             onClick={() => setCompleteFormType(EmbedEnumType.POLL)}
-                            className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-[#fff5e8] transition-colors cursor-pointer group xsm-span"
+                            className="flex w-10 h-10 justify-center items-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer group xsm-span"
                         >
                             <FontAwesomeIcon
                                 icon={faChartBar}
@@ -455,6 +454,7 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                     </div>
                 </BasicPostForm>
             )}
+
             {(!!toLoad || needFullReload) &&
                 <div
                     onClick={needFullReload ? fullReload : loadAllPosts}
@@ -526,8 +526,8 @@ const Feed: React.FC<FeedProps> = ({loading, id, allowPublication, style, classN
                                         <button
                                             onClick={loadMorePost}
                                             className="
-                                                bg-[#fe9200] rounded-full px-4 py-2 font-semibold text-base
-                                                text-white hover:bg-[#e87a05] hover:shadow-sm transition-all
+                                                bg-indigo-400 rounded-full px-4 py-2 font-semibold text-base
+                                                text-white hover:bg-indigo-500 hover:shadow-sm transition-all
                                             "
                                         >
                                             {t("retry")}

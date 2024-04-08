@@ -36,7 +36,7 @@ const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({ id, type, subsc
         onClick={handleSubscription}
         className={
             "h-10 font-bold cursor-pointer select-none rounded-full text-base grid place-items-center group "
-            + (subscribed ? "border-[#fe9200] border-2 text-[#fe9200] sm:hover:text-red-500 sm:hover:border-red-500 sm:hover:bg-red-400/10 px-3.5 " : "bg-[#fe9200] hover:bg-opacity-90 px-5 text-white ")
+            + (subscribed ? "border-indigo-400 border-2 text-indigo-400 sm:hover:text-red-500 sm:hover:border-red-500 sm:hover:bg-red-400/10 px-3.5 " : "bg-indigo-400 hover:bg-opacity-90 px-5 text-white ")
             + className
         }
         style={{ minWidth }}

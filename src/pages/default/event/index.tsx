@@ -31,7 +31,6 @@ import LinkEntityPreloader from "../../../components/Optimization/LinkEntityPrel
 import { entityPreloader } from "../../../components/Optimization/EntityPreloader"
 import {AxiosError} from "axios"
 import { GalleryPreview } from "../../../data/gallery/types"
-import EasterEgg from "../../../components/EasterEgg/EasterEgg"
 
 interface ParamTypes {
     id?: string
@@ -314,13 +313,6 @@ const Event: React.FC = () => {
                             <GalleryModalForm feed={event.feed} clubsAllowedToPublishGallery={event.clubsAllowedToPublishGallery} onSubmit={handleGallerySubmit} />
                         </div>
                     )}
-                    {id!==236863?
-                        <></>
-                        :
-                        <div className={"mt-8"}>
-                            <EasterEgg id={20} name={"immortel"}></EasterEgg>
-                        </div>
-                    }
 
                 </div>
                 <TabsSwitcher

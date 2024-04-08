@@ -178,7 +178,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 <input id={imgUploadZoneId} type="file" multiple value="" className="hidden" onChange={handleManualSelect} disabled={uploadingState !== UploadState.OFF}/>
                 <div
                     onClick={handleClick}
-                    className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 hover:border-[#fe9200] border-transparent transition duration-100 ${inDropZone ? "border-blue-600" : "border-gray-400"}`}
+                    className={`h-80 overflow-y-auto flex flex-wrap cursor-pointer m-2 text-center rounded flex-grow border-dashed border-2 hover:border-indigo-400 border-transparent transition duration-100 ${inDropZone ? "border-blue-600" : "border-gray-400"}`}
                 >
                     {images.size > 0 ?
                         [...images.values()].map((img) => (
@@ -220,7 +220,7 @@ const GalleryDragger: React.FC<GalleryDraggerProps> = ({afterSubmit, onUploading
                 <button
                     type="button"
                     disabled={!canSubmit || images.size === 0 || (uploadingState !== UploadState.OFF && uploadingState != UploadState.ERROR)}
-                    className="bg-[#fe9200] rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
+                    className="bg-indigo-400 rounded-full text-center px-8 py-2 disabled:bg-opacity-60 text-white font-medium text-base duration-200"
                     onClick={uploadImages}
                 >
                     {uploadingState == UploadState.ERROR ? "Reprendre" :  "Enregistrer"}
