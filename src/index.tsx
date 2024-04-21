@@ -34,19 +34,22 @@ import UpdateService from "./services/UpdateService"
 import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
 import { CapacitorUpdater } from "@capgo/capacitor-updater"
 import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
+import { App as IonicApp } from "@capacitor/app"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
 import "./index.css"
 import "antd/dist/antd.min.css"
 
-import { IonApp, setupIonicReact } from "@ionic/react"
+import { AnimationBuilder, IonApp, setupIonicReact } from "@ionic/react"
 import {isLocalhost} from "./util"
 import { AxiosError } from "axios"
 import {App as AppIonic, URLOpenListenerEvent} from "@capacitor/app"
+import { Capacitor } from "@capacitor/core"
 
 setupIonicReact({
-    mode: "ios"
+    mode: "ios",
+    swipeBackEnabled: true
 })
 
 CapacitorUpdater.notifyAppReady()
@@ -148,6 +151,15 @@ const App: React.FC = () => {
         if(isLoggedIn)
             getUserInfos()
     }, [isLoggedIn])
+
+    useEffect(() => {
+        if (Capacitor.getPlatform() === "android") {
+            IonicApp.addListener("backButton", (data) => {
+                if (data.canGoBack)
+                    window.history.back()
+            })
+        }
+    }, [])
 
     const renderTemplate = useMemo(() => {
         let savedLocation: RouteComponentProps

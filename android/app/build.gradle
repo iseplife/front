@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'fr.iseplive.iseplife'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "fr.iseplive.iseplife"
