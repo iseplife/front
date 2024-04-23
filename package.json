@@ -17,6 +17,7 @@
     "@capacitor/ios": "^5.0.0",
     "@capacitor/keyboard": "^5.0.0",
     "@capacitor/push-notifications": "^5.0.0",
+    "@capacitor/share": "5",
     "@capacitor/status-bar": "^5.0.0",
     "@capacitor/toast": "^5.0.0",
     "@capgo/capacitor-updater": "^5.8.9",
@@ -96,7 +97,8 @@
     "ios-xcode-analyze": "cd ios/App && xcodebuild -scheme App -sdk iphonesimulator15.5 -workspace App.xcworkspace clean analyze",
     "build-android": "cd android && sh gradlew bundleRelease",
     "prebuild-ios": "ionic capacitor build ios --no-open --no-build",
-    "prebuild-android": "ionic capacitor build android --no-open --no-build"
+    "prebuild-android": "ionic capacitor build android --no-open --no-build",
+    "run-android": "ionic capacitor run android --no-build"
   },
   "eslintConfig": {
     "extends": [
@@ -118,7 +120,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^5.0.0",
-    "@ionic/cli": "^6.20.1",
+    "@ionic/cli": "^7.2.0",
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/leaflet": "^1.7.11",
     "@types/lodash": "^4.14.184",

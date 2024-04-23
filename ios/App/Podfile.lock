@@ -18,6 +18,8 @@ PODS:
     - Capacitor
   - CapacitorPushNotifications (5.1.1):
     - Capacitor
+  - CapacitorShare (5.0.7):
+    - Capacitor
   - CapacitorStatusBar (5.0.7):
     - Capacitor
   - CapacitorToast (5.0.7):
@@ -105,6 +107,7 @@ DEPENDENCIES:
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
   - "CapgoCapacitorUpdater (from `../../node_modules/@capgo/capacitor-updater`)"
@@ -146,6 +149,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorPushNotifications:
     :path: "../../node_modules/@capacitor/push-notifications"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
@@ -166,6 +171,7 @@ SPEC CHECKSUMS:
   CapacitorHaptics: 7c7c206f0c96a628fed073830c96d28c4b2e772e
   CapacitorKeyboard: aec619a578235c6ce279075009a2689c2cf5c42c
   CapacitorPushNotifications: 2327900bc002f5ff49ee6d2231796d0635b4a1b0
+  CapacitorShare: c6a1ebbf0114ff9e863b966cd6052678fa25d480
   CapacitorStatusBar: f390fbb49b82ffb754ea4b3cf71dc8b048baf3e7
   CapacitorToast: c8bb89eeb59a23c1fc298f138cc06c8ff4d90ac1
   CapgoCapacitorUpdater: fa6fedc02691b5a699a83304160c31f9bbc60ccc
@@ -183,6 +189,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Version: de5907f2c5d0f3cf21708db7801d1d5401139486
 
-PODFILE CHECKSUM: a6b97c5e38edd65bb12f0e77e1dc8b36568d1715
+PODFILE CHECKSUM: bd8e11ca5e256199b40e42a77326d392413a4e9b
 
 COCOAPODS: 1.15.2
