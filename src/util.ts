@@ -286,10 +286,12 @@ export const downloadFile = async (url: string, name: string, savedMessage: stri
                 } else if(isAndroidApp)
                     await Media.createAlbum({ name: albumName }).catch(e => console.debug(e))
             }
-            
+
             await Media.savePhoto({
                 path: wallpaperTemp.uri,
-                album: album?.identifier ?? albumName
+                //@ts-ignore support for older versions of the android/ios app
+                album: album?.identifier ?? albumName,
+                albumIdentifier: album?.identifier ?? albumName,
             }).then(() => console.debug("Image has been saved")).catch(console.error)
     
             Toast.show({
