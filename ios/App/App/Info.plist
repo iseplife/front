@@ -51,5 +51,9 @@
     <string>Your location is being used for the map</string> 
     <key>NSCameraUsageDescription</key>
     <string>Your camera can be used when you take a photo for your posts or profile picture</string> 
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Your photo library is accessed in order to add the IsepLive album and add photos you download in app to it</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Your photo library is accessed to save photos you download in your albums</string>
 </dict>
 </plist>
