@@ -5,9 +5,9 @@
         ],
         "target": {
             "namespace": "android_app",
-            "package_name": "fr.iseplive.iseplife",
+            "package_name": "com.iseplive.iseplife",
             "sha256_cert_fingerprints": [
-                "4B:D2:8F:62:CF:41:4A:77:D9:93:CC:D4:30:A1:C8:CD:4E:33:D7:0E:2C:0C:F4:10:6B:D2:C2:76:D0:7E:45:7C"
+                "F1:1C:54:A5:A9:5A:9F:49:A1:DC:E9:C4:41:3D:AF:37:E3:66:4C:E4:1F:A4:E0:03:4A:F1:62:88:05:BD:B4:9F"
             ]
         }
     }

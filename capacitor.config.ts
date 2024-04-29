@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'fr.iseplive.iseplife',
+  appId: 'com.iseplive.iseplife',
   appName: 'IsepLife',
   webDir: 'build',
   bundledWebRuntime: false,

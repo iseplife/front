@@ -1,4 +1,4 @@
-package fr.iseplive.iseplife;
+package com.iseplive.iseplife;
 
 import com.getcapacitor.BridgeActivity;
 
