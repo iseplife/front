@@ -118,8 +118,8 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     return res
                 } catch (e) {
                     const err = e as AxiosError
+                    this.refreshingPromise = undefined
                     if (err.response?.status === 401) {
-                        this.refreshingPromise = undefined
                         this.props.history.push("/login")
                         if (localStorage.getItem("logged") == "1")
                             message.error(this.props.t("user_disconnected"))
