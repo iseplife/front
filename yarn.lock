@@ -1959,34 +1959,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/browser-core@npm:4.18.1":
-  version: 4.18.1
-  resolution: "@datadog/browser-core@npm:4.18.1"
-  checksum: ba303a8821b813c622e0a13f2050c4c8aa724e0c6b3a007b06cce8ffbc2c98c53b5fb07a5a1fcc981a06ec6fb3473d19b965bf96a80d6106e691d919cdbebfae
+"@datadog/browser-core@npm:5.16.0":
+  version: 5.16.0
+  resolution: "@datadog/browser-core@npm:5.16.0"
+  checksum: 913eb5601739eb4392a8546cb3fccd63626c555a858a6d6e253b3e9350180160b448833645d2de5419d79b7d6b5c2d172ef6638b4cc83bddb2d5b9efb2b1511a
   languageName: node
   linkType: hard
 
-"@datadog/browser-rum-core@npm:4.18.1":
-  version: 4.18.1
-  resolution: "@datadog/browser-rum-core@npm:4.18.1"
+"@datadog/browser-rum-core@npm:5.16.0":
+  version: 5.16.0
+  resolution: "@datadog/browser-rum-core@npm:5.16.0"
   dependencies:
-    "@datadog/browser-core": 4.18.1
-  checksum: f32e785eac8e13ba8563e3701e260f34ba98725a3c3fb4c7fc71eec3d3474b466aa1cdbab94ef0e34ef4cae1a22c81ee82e51ed8cc9b6adf651c79b0bd03c792
+    "@datadog/browser-core": 5.16.0
+  checksum: 0a2690e03fe67a8b78ddf4f55587569201e41d2cd133e782f457a84b79339934d36e6882baaf84799210ca77fa836de7ad7495d2b23e76d110cbac4d84e545c6
   languageName: node
   linkType: hard
 
-"@datadog/browser-rum@npm:^4.18.1":
-  version: 4.18.1
-  resolution: "@datadog/browser-rum@npm:4.18.1"
+"@datadog/browser-rum@npm:^5.16.0":
+  version: 5.16.0
+  resolution: "@datadog/browser-rum@npm:5.16.0"
   dependencies:
-    "@datadog/browser-core": 4.18.1
-    "@datadog/browser-rum-core": 4.18.1
+    "@datadog/browser-core": 5.16.0
+    "@datadog/browser-rum-core": 5.16.0
   peerDependencies:
-    "@datadog/browser-logs": 4.18.1
+    "@datadog/browser-logs": 5.16.0
   peerDependenciesMeta:
     "@datadog/browser-logs":
       optional: true
-  checksum: 88789a63572e8021e79fbef9af1cdd3b3c899150cdc3388d9f8595d72e841101e7891e0c1c31c9eecd4d1dcc407ea37b110de85e3ded458e17550e4e36954d94
+  checksum: e9248be38802febbc57e4744e1659e1373986010c083024a5d9c6da837c47b725a4c76cf3d41462af197e4c562ab3290233850a10e4e5fd19864aa47c9289dbf
   languageName: node
   linkType: hard
 
@@ -10760,7 +10760,7 @@ __metadata:
     "@capacitor/toast": ^5.0.0
     "@capgo/capacitor-updater": ^5.8.9
     "@craco/craco": ^6.4.5
-    "@datadog/browser-rum": ^4.18.1
+    "@datadog/browser-rum": ^5.16.0
     "@fingerprintjs/fingerprintjs": ^3.3.3
     "@fortawesome/fontawesome-svg-core": ^6.1.1
     "@fortawesome/free-brands-svg-icons": ^6.1.1

@@ -60,21 +60,21 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 initializeAPIClient()
 new UpdateService().init()
 
-if(!isLocalhost) {
-    datadogRum.init({
-        applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
-        clientToken: "pub00aecce089653075ee89a23fda9fb49c",
-        site: "datadoghq.com",
-        service: "iseplife-spa",
-        env: process.env.NODE_ENV,
-        version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
-        sampleRate: 100,
-        premiumSampleRate: 100,
-        trackInteractions: true,
-        defaultPrivacyLevel: "mask-user-input"
-    })
-    datadogRum.startSessionReplayRecording()
-}
+datadogRum.init({
+    applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
+    clientToken: "pub00aecce089653075ee89a23fda9fb49c",
+    site: "datadoghq.com",
+    proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
+    service: "iseplife-spa",
+    env: process.env.NODE_ENV,
+    version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
+    traceSampleRate: 100,
+    sessionSampleRate: 100,
+    telemetrySampleRate: 100,
+    trackUserInteractions: true,
+    defaultPrivacyLevel: "mask"
+})
+datadogRum.startSessionReplayRecording()
 
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 

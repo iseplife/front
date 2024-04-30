@@ -22,7 +22,7 @@
     "@capacitor/toast": "^5.0.0",
     "@capgo/capacitor-updater": "^5.8.9",
     "@craco/craco": "^6.4.5",
-    "@datadog/browser-rum": "^4.18.1",
+    "@datadog/browser-rum": "^5.16.0",
     "@fingerprintjs/fingerprintjs": "^3.3.3",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
