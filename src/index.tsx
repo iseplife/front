@@ -41,7 +41,7 @@ import "@ionic/react/css/core.css"
 import "./index.css"
 import "antd/dist/antd.min.css"
 
-import { AnimationBuilder, IonApp, setupIonicReact } from "@ionic/react"
+import { IonApp, setupIonicReact } from "@ionic/react"
 import {isLocalhost} from "./util"
 import { AxiosError } from "axios"
 import {App as AppIonic, URLOpenListenerEvent} from "@capacitor/app"
@@ -60,21 +60,29 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 initializeAPIClient()
 new UpdateService().init()
 
-datadogRum.init({
-    applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
-    clientToken: "pub00aecce089653075ee89a23fda9fb49c",
-    site: "datadoghq.com",
-    proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
-    service: "iseplife-spa",
-    env: process.env.NODE_ENV,
-    version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
-    traceSampleRate: 100,
-    sessionSampleRate: 100,
-    telemetrySampleRate: 100,
-    trackUserInteractions: true,
-    defaultPrivacyLevel: "mask"
+if(!isLocalhost)
+    datadogRum.init({
+        applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
+        clientToken: "pub00aecce089653075ee89a23fda9fb49c",
+        site: "datadoghq.com",
+        proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
+        service: "iseplife-spa",
+        env: process.env.NODE_ENV,
+        version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
+        traceSampleRate: 100,
+        sessionSampleRate: 100,
+        sessionReplaySampleRate: 100,
+        telemetrySampleRate: 100,
+        trackUserInteractions: true,
+        startSessionReplayRecordingManually: true,
+        defaultPrivacyLevel: "mask"
+    })
+
+window.addEventListener(GeneralEventType.LOGGED, () => {
+    console.debug("Logged !")
+    if(!isLocalhost)
+        datadogRum.startSessionReplayRecording()
 })
-datadogRum.startSessionReplayRecording()
 
 console.log(`Loaded version: ${process.env.REACT_APP_VERSION}-g${process.env.REACT_APP_COMMIT}`)
 
