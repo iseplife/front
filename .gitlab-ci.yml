@@ -22,7 +22,7 @@ prebuild:
     - yarn set version 3.6.4
   script:
     - yarn install
-    - yarn run build
+    - yarn run build_with_sourcemap
     - node get_git_hash.js > build/version.txt
     - |
       cd build
@@ -54,29 +54,29 @@ build-android:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
     
-build-ios:
-  stage: build
-  tags: 
-    - ios
-  dependencies:
-    - prebuild
-  before_script:
-    - yarn set version 3.6.4
-    - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
-  script:
-    - yarn install
-    - yarn prebuild-ios
-    - cd ios/App
-    - fastlane export_ipa
-    - cd ../../
-    - sh opti_cache.sh
-  after_script:
-    - security delete-keychain ios-build.keychain
-  artifacts:
-    paths:
-      - ios/App/devapp.ipa
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+# build-ios:
+#   stage: build
+#   tags: 
+#     - ios
+#   dependencies:
+#     - prebuild
+#   before_script:
+#     - yarn set version 3.6.4
+#     - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
+#   script:
+#     - yarn install
+#     - yarn prebuild-ios
+#     - cd ios/App
+#     - fastlane export_ipa
+#     - cd ../../
+#     - sh opti_cache.sh
+#   after_script:
+#     - security delete-keychain ios-build.keychain
+#   artifacts:
+#     paths:
+#       - ios/App/devapp.ipa
+#   rules:
+#     - if: '$CI_COMMIT_REF_NAME == "master"'
 
 docker-build:
   stage: docker
@@ -106,4 +106,18 @@ deploy-dev:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
-
+deploy-datadog:
+  stage: deploy
+  image: node:21-alpine
+  dependencies:
+    - prebuild
+  before_script:
+    - yarn set version 3.6.4
+    - "echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
+  script:
+    - yarn install
+    - export DD_URL=$REACT_APP_URL/static/js
+    - export DD_VERSION=$(yarn run version)-$(cat build/version.txt)
+    - yarn run upload_datadog_sourcemaps
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'

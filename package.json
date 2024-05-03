@@ -89,7 +89,10 @@
     "start": "cross-env REACT_APP_STORAGE_URL_='https://iseplife-dev.s3.eu-west-3.amazonaws.com' REACT_APP_VERSION=$npm_package_version craco start",
     "start_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version craco start",
     "build": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
+    "build_with_sourcemap": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=true craco build",
     "build_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
+    "version": "echo $npm_package_version",
+    "upload_datadog_sourcemaps": "cross-env COMMIT_VERSION=test datadog-ci sourcemaps upload build/static/js --service=iseplife-spa --release-version=$DD_VERSION --minified-path-prefix=$DD_URL --disable-git",
     "start-sw": "yarn run build && serve build",
     "test": "craco test",
     "eject": "craco eject",
@@ -120,6 +123,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^5.0.0",
+    "@datadog/datadog-ci": "^2.34.0",
     "@ionic/cli": "^7.2.0",
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/leaflet": "^1.7.11",
