@@ -25,6 +25,7 @@ import WeiMapPage from "../../pages/default/wei/map"
 import CustomComing from "../../pages/default/custom"
 import IsepDor from "../../pages/default/custom/isepdor"
 import IOROverlay from "../../pages/default/custom/isepdor/IOROverlay"
+import BDECampaign from "../../pages/default/custom/campaign"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -52,6 +53,7 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/wei" component={WeiPage} />
                         <Route path="/isepdor" component={IsepDor} />
                         <Route path="/c/isepdor" component={IsepDor} />
+                        <Route path="/c/campaign" component={BDECampaign} />
                         <Route path="/c" component={CustomComing} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />

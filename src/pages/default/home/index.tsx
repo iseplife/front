@@ -12,6 +12,8 @@ import { AppActionType } from "../../../context/app/action"
 import { useLiveQuery } from "dexie-react-hooks"
 import { feedsManager } from "../../../datamanager/FeedsManager"
 import { updateLastExplore } from "../../../data/student"
+import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
 
 const Home: React.FC = () => {
     const {t} = useTranslation()
@@ -37,7 +39,46 @@ const Home: React.FC = () => {
                 <div className="ant-divider ant-devider-horizontal mb-3 self-center hidden sm:grid"/>
                 <UserGroups/>
             </div>
-            <div className="w-full sm:col-span-2 overflow-x-hidden lg:overflow-x-visible scrollbar-none">
+            <div className="w-full sm:col-span-2 overflow-x-hidden lg:overflow-x-visible scrollbar-none max-sm:mt-3">
+                <div className="flex flex-col p-4 rounded-lg bg-white relative shadow-md mx-4 md:mx-10">
+                    <div className="w-full flex justify-between mb-1">
+                        <div className="text-xl font-semibold text-center w-full">
+                            La semaine de campagne
+                            <div className="text-base font-normal text-neutral-500">
+                                C'est maintenant !
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mt-3 relative w-9/12 mx-auto">
+                        <div className="w-full rounded-md bg-green-200 grid place-items-center p-3 cursor-pointer hover:bg-green-300 transition-colors group">
+                            <img className="rounded-full w-20 h-20 group-hover:scale-105 transition-transform" src="https://storage.iseplife.fr/img/clb/200x200/8ppv9T91cKdGno5Ay867kDj539FWFe.webp" />
+                        </div>
+                        <img src="assets/vs.webp" alt="VS" className="w-16 h-16 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform -rotate-12 pointer-events-none select-none" />
+                        <div className="w-full rounded-md bg-blue-200 grid place-items-center p-3 cursor-pointer hover:bg-blue-300 transition-colors group">
+                            <img className="rounded-full w-20 h-20 group-hover:scale-105 transition-transform" src="https://storage.iseplife.fr/img/clb/200x200/8ppv9T91cKdGno5Ay867kDj539FWFe.webp" />
+                        </div>
+                    </div>
+
+                    <div className="flex border-neutral-300 rounded-md border mt-3 px-2 py-1 text-justify">
+                        <FontAwesomeIcon icon={faInfoCircle} className="text-indigo-400 p-1" />
+                        <div className="ml-1">
+                            Deux listes ont travaillé d'arrache pieds pour vous préparer une semaine mémorable.
+                            <br />
+                            <br />
+                            Deux soirées gratuites, deux befores, des crêpes, des repas et des boissons toute la journée.
+
+                            <div className="grid place-items-center">
+                                
+                                <Link to="c/campaign">
+                                    <button className="font-medium text-base bg-indigo-400 rouneded px-2 py-1 rounded-md text-white my-1 group hover:shadow-md transition-shadow">
+                                        Découvre ça <FontAwesomeIcon icon={faArrowRight} className="ml-1 group-hover:ml-1.5 mr-0.5 group-hover:mr-0 transition-all" />
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <Divider className="text-gray-700 text-lg px-4 md:px-10" orientation="left">
                     <div className="flex">
                         <button
