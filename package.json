@@ -92,7 +92,7 @@
     "build_with_sourcemap": "cross-env REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=true craco build",
     "build_realapi": "cross-env REACT_APP_API_URL='api.iseplife.fr' REACT_APP_HTTP_PROTOCOL='https' REACT_APP_WS_PROTOCOL='wss' REACT_APP_VERSION=$npm_package_version GENERATE_SOURCEMAP=false craco build",
     "version": "echo $npm_package_version",
-    "upload_datadog_sourcemaps": "cross-env COMMIT_VERSION=test datadog-ci sourcemaps upload build/static/js --service=iseplife-spa --release-version=$DD_VERSION --minified-path-prefix=$DD_URL --disable-git",
+    "upload_datadog_sourcemaps": "cross-env COMMIT_VERSION=test datadog-ci sourcemaps upload build/static/js --service=iseplife-spa --release-version=$DD_VERSION --minified-path-prefix=$DD_URL --repository-url=https://github.com/iseplife/front",
     "start-sw": "yarn run build && serve build",
     "test": "craco test",
     "eject": "craco eject",
