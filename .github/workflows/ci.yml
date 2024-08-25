@@ -21,9 +21,16 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Cache Yarn
+        uses: actions/cache@v3
+        with:
+          path: |
+            .yarn/
+            yarn.lock.sha256sum
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Install Dependencies
         run: |
-          apk --no-cache add zip
           yarn set version 3.6.4
           yarn install
 
@@ -33,6 +40,7 @@ jobs:
           REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           REACT_APP_URL: ${{ vars.REACT_APP_URL }}
           REACT_APP_WS_PROTOCOL: ${{ vars.REACT_APP_WS_PROTOCOL }}
+          CI: false
         run: yarn run build_with_sourcemap
 
       - name: Save git hash to version.txt
@@ -88,6 +96,14 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Cache Yarn
+        uses: actions/cache@v3
+        with:
+          path: |
+            .yarn/
+            yarn.lock.sha256sum
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Install Dependencies
         run: |
           yarn set version 3.6.4
@@ -102,8 +118,5 @@ jobs:
           export DD_VERSION=$(yarn run version)-$(cat build/version.txt)
           yarn run upload_datadog_sourcemaps
 
-  cache:
-    key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-    paths:
-      - .yarn/
-      - yarn.lock.sha256sum
+      - name: Optimize cache
+        run: sh opti_cache.sh
