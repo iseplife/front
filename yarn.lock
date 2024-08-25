@@ -2418,12 +2418,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capacitor/share@npm:5":
-  version: 5.0.7
-  resolution: "@capacitor/share@npm:5.0.7"
+"@capacitor/share@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@capacitor/share@npm:6.0.1"
   peerDependencies:
-    "@capacitor/core": ^5.0.0
-  checksum: a0e2633e154e4edcbe4b0581838e3c17c21e83850efff4f91ea37d833856352eb6843831364196a921bf9ad90b3d12886410b72dbc0d1be34e693abf21161122
+    "@capacitor/core": ^6.0.0
+  checksum: 3cbd3ebfd288dcaa0fbff4cd0ae3781813dc4003445b2614612b8a9b27cb2e7cec68924eae09976db3c3c7f1e3fc4812a73d0b88e11ef9a7110bd26a0238fc43
   languageName: node
   linkType: hard
 
@@ -12762,7 +12762,7 @@ __metadata:
     "@capacitor/ios": ^5.0.0
     "@capacitor/keyboard": ^5.0.0
     "@capacitor/push-notifications": ^5.0.0
-    "@capacitor/share": 5
+    "@capacitor/share": ^6.0.1
     "@capacitor/status-bar": ^5.0.0
     "@capacitor/toast": ^5.0.0
     "@capgo/capacitor-updater": ^5.8.9

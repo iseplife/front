@@ -1,6 +1,6 @@
 {
   "name": "iseplife-spa",
-  "version": "1.6",
+  "version": "1.7",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -17,7 +17,7 @@
     "@capacitor/ios": "^5.0.0",
     "@capacitor/keyboard": "^5.0.0",
     "@capacitor/push-notifications": "^5.0.0",
-    "@capacitor/share": "5",
+    "@capacitor/share": "^6.0.1",
     "@capacitor/status-bar": "^5.0.0",
     "@capacitor/toast": "^5.0.0",
     "@capgo/capacitor-updater": "^5.8.9",
