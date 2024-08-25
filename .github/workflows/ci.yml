@@ -52,9 +52,6 @@ jobs:
           zip -r app.zip .
           cd ../
 
-      - name: Optimize cache
-        run: sh opti_cache.sh
-
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
