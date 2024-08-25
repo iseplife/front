@@ -11,7 +11,7 @@ on:
 jobs:
   prebuild:
     name: Prebuild
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -31,7 +31,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          apt install zip -y
           yarn set version 3.6.4
           yarn install
 
@@ -63,7 +62,7 @@ jobs:
 
   deploy-dev:
     name: Deploy to S3 (Development)
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     needs: prebuild
     if: github.ref == 'refs/heads/master'
     steps:
@@ -84,7 +83,7 @@ jobs:
 
   deploy-datadog:
     name: Deploy to Datadog
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     needs: prebuild
     if: github.ref == 'refs/heads/master'
     steps:
