@@ -13,6 +13,7 @@ export type Comment = {
     creation: Date
     lastEdition?: Date
     likes: number
+    oldLikes?: number
     comments: number
     liked: boolean
     message: string

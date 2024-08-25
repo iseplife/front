@@ -14,6 +14,7 @@ import { Link } from "react-router-dom"
 import { cFaPreviousArrow } from "../../constants/CustomFontAwesome"
 import CustomText from "../Common/CustomText"
 import { message } from "antd"
+import { Toast } from "@capacitor/toast"
 
 
 interface CommentProps {
@@ -29,7 +30,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     const [liked, setLiked] = useState<boolean>(data.liked)
     const [editMode, setEditMode] = useState<boolean>(false)
     const [showComments, setShowComments] = useState<boolean>(false)
-    const [likes, setLikes] = useState<number>(data.likes)
+    const [likes, setLikes] = useState<number>(data.oldLikes || data.likes)
     const [formattedDate, setFormattedDate] = useState<string>("")
     const [editedMessage, setEditedMessage] = useState<string>(data.message)
     const [isSubmitting, setSubmitting] = useState<boolean>(false)
@@ -57,6 +58,14 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     }, [handleDeletion, data.id])
 
     const toggleLike = useCallback(async () => {
+        if(data.oldLikes) {
+            Toast.show({
+                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                position: "bottom",
+                duration: "short",
+            })
+            return
+        }
         const res = await toggleThreadLike(data.thread)
         if (res.status === 200) {
             setLiked(res.data)
@@ -145,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
                         {likes > 0 && likes}
                         <FontAwesomeIcon
                             icon={liked ? faSolidHeart : faHeart}
-                            className={`${liked ? "text-red-400" : "hover:text-red-600"} ml-1`}
+                            className={`${liked ? "text-red-400" : data.oldLikes ? "" : "hover:text-red-600"} ml-1`}
                             onClick={toggleLike}
                             size="sm"
                         />

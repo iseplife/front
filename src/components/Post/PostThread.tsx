@@ -16,12 +16,14 @@ import LoadingSpinner from "../Common/LoadingSpinner"
 import StudentAvatar from "../Student/StudentAvatar"
 import { Link } from "react-router-dom"
 import { useLongPress } from "../../util"
+import { Toast } from "@capacitor/toast"
 // import { useLongPress } from "use-long-press"
 
 type PostTheadProps = {
     thread: number
     liked: boolean
     likesCount: number
+    oldLikes: boolean
     commentsCount: number
     forceShowComments: boolean
     trendingComment?: Comment
@@ -54,6 +56,16 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
             return
             
         vibrate()
+
+        if(props.oldLikes) {
+            Toast.show({
+                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                position: "bottom",
+                duration: "short",
+            })
+            return
+        }
+
         setLiked(liked => {
             if(!liked){
                 if(isWeb){
@@ -69,7 +81,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
             setLiked(res.data)
             setLikes(prevLikes => res.data ? prevLikes + 1 : prevLikes - 1)
         }
-    }, [thread])
+    }, [thread, props.oldLikes])
 
     useEffect(() => {
         if (!showComments && alreadyMore)
@@ -91,6 +103,15 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
     const [likesOpenned, setLikesOpenned] = useState(false)
 
     const openLikes = useCallback(() => {
+        if(props.oldLikes) {
+            Toast.show({
+                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                position: "bottom",
+                duration: "short",
+            })
+            return
+        }
+
         setLikesLoading(true)
         setLikesOpenned(true)
         getLikes(thread).then(res => {
@@ -176,17 +197,20 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                         onClick={toggleLike}
                         {...likesLongPressBind}
                     >
-                        <div className="text-base mx-1.5 w-7 text-right sm:hover:underline" onClick={seeLikes}>
+                        <div className={"text-base mx-1.5 w-7 text-right " + (props.oldLikes || "sm:hover:underline")} onClick={seeLikes}>
                             {likes > 0 && likes}
                         </div>
                         <div
-                            className="-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 group-hover:bg-opacity-10 transition-colors duration-200 w-10 h-10 items-center flex justify-center">
+                            className={
+                                "-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 transition-colors duration-200 w-10 h-10 items-center flex justify-center "
+                                + (props.oldLikes || "group-hover:bg-opacity-10")
+                            }>
                             
                             <Animation
                                 animation={heart}
                                 enabled={liked}
                                 size={30.5}
-                                className={`${liked && "text-red-400"} group-hover:text-red-500 transition-colors`}
+                                className={`${liked && "text-red-400"} ${props.oldLikes || "group-hover:text-red-500"} transition-colors`}
                             />
                         </div>
                     </span>
