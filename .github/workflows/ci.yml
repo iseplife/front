@@ -40,6 +40,7 @@ jobs:
           REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           REACT_APP_URL: ${{ vars.REACT_APP_URL }}
           REACT_APP_WS_PROTOCOL: ${{ vars.REACT_APP_WS_PROTOCOL }}
+          CI: false
         run: yarn run build_with_sourcemap
 
       - name: Save git hash to version.txt
