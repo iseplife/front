@@ -190,10 +190,12 @@ const Post: React.FC<PostProps> = ({data, feedId, isEdited, forceShowComments = 
                 <PostThread
                     thread={data.thread}
                     liked={data.liked}
-                    likesCount={data.nbLikes}
+                    likesCount={data.oldLikes || data.nbLikes}
+                    oldLikes={!!data.oldLikes}
                     commentsCount={data.nbComments}
                     forceShowComments={forceShowComments}
                     trendingComment={data.trendingComment}
+
                 />
 
                 {data.waitingForUpdate &&

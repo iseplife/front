@@ -48,7 +48,8 @@ const PostSidebar: React.FC<PostSidebarProps> = ({post}) => {
                     lightboxView={true}
                     thread={post.thread}
                     liked={post.liked}
-                    likesCount={post.nbLikes}
+                    likesCount={post.oldLikes || post.nbLikes}
+                    oldLikes={!!post.oldLikes}
                     commentsCount={post.nbComments}
                     forceShowComments={true}
                 />

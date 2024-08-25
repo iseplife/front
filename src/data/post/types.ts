@@ -60,6 +60,7 @@ export type Post = {
     trendingComment?: Comment
     nbComments: number
     nbLikes: number
+    oldLikes: number
     liked: boolean
     hasWriteAccess: boolean
 }
