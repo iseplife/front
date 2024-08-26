@@ -131,5 +131,3 @@ jobs:
           export DD_VERSION=$(yarn run version)-$(cat build/version.txt)
           yarn run upload_datadog_sourcemaps
 
-      - name: Optimize cache
-        run: sh opti_cache.sh
