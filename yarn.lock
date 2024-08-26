@@ -2327,6 +2327,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@capacitor/browser@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "@capacitor/browser@npm:6.0.2"
+  peerDependencies:
+    "@capacitor/core": ^6.0.0
+  checksum: fb51ff878039e81dccea392cfb1b79bb6de1977072da2b0ceccd005e32460edcd8f7ff76965f32e7fe34ad2bcafd2382d16aa541c29a3e338ea413c18897baf3
+  languageName: node
+  linkType: hard
+
 "@capacitor/cli@npm:^5.0.0":
   version: 5.7.5
   resolution: "@capacitor/cli@npm:5.7.5"
@@ -12754,6 +12763,7 @@ __metadata:
     "@capacitor-community/media": ^5.4.1
     "@capacitor/android": ^5.0.0
     "@capacitor/app": ^5.0.0
+    "@capacitor/browser": ^6.0.2
     "@capacitor/cli": ^5.0.0
     "@capacitor/core": ^5.0.0
     "@capacitor/filesystem": ^5.0.0

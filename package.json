@@ -10,6 +10,7 @@
     "@capacitor-community/media": "^5.4.1",
     "@capacitor/android": "^5.0.0",
     "@capacitor/app": "^5.0.0",
+    "@capacitor/browser": "^6.0.2",
     "@capacitor/core": "^5.0.0",
     "@capacitor/filesystem": "^5.0.0",
     "@capacitor/geolocation": "^5.0.0",
@@ -162,5 +163,6 @@
     "workbox-strategies": "^5.1.4",
     "workbox-streams": "^5.1.4"
   },
-  "description": "iseplife webapp"
+  "description": "iseplife webapp",
+  "packageManager": "yarn@3.6.4"
 }
