@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache Yarn
         uses: actions/cache@v3
         with:
@@ -31,7 +34,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn set version 3.6.4
           yarn install
 
       - name: Build with sourcemaps
@@ -105,6 +107,9 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache Yarn
         uses: actions/cache@v3
         with:
@@ -115,7 +120,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn set version 3.6.4
           echo "nodeLinker: node-modules" >> .yarnrc.yml
           yarn install
 
