@@ -1,6 +1,6 @@
 {
   "name": "iseplife-spa",
-  "version": "1.7",
+  "version": "1.7.1",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
