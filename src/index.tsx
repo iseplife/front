@@ -24,7 +24,7 @@ import HeightFix from "./components/Fix/HeightFix"
 import { getLoggedUser } from "./data/student"
 import { getAuthorizedAuthors } from "./data/post"
 import { initWebSocket, logoutWebSocket } from "./realtime/websocket/WSServerClient"
-import { wsURI } from "./data/http.constants"
+import { apiURI, wsURI } from "./data/http.constants"
 import GeneralEventType from "./constants/GeneralEventType"
 import LoggedEvent from "./events/LoggedEvent"
 import { notificationManager } from "./datamanager/NotificationManager"
@@ -75,7 +75,8 @@ if(!isLocalhost)
         telemetrySampleRate: 100,
         trackUserInteractions: true,
         startSessionReplayRecordingManually: true,
-        defaultPrivacyLevel: "mask"
+        defaultPrivacyLevel: "mask",
+        allowedTracingUrls : [ apiURI ],
     })
 
 window.addEventListener(GeneralEventType.LOGGED, () => {
