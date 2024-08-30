@@ -78,9 +78,8 @@ class PushService {
         return false
     }
     private async _updateSubscriptionOnServer(subscriptionKey: string) {
-        if(localStorage.getItem("lastPushToken") == subscriptionKey)
-            return
-        
+        // if(localStorage.getItem("lastPushToken") == subscriptionKey)
+        //     return
         notificationManager.setSubscribed(true)
         this.lastCheckSubbed = true
         await apiClient.post("/webpush/register/init", {
