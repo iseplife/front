@@ -58,7 +58,7 @@ const ClubCover: React.FC = () => {
         <div className="w-full md:h-64 h-28 relative">
             <input type="file" hidden onChange={handleChange} ref={uploadRef}/>
             {image && (
-                <div className="absolute" style={{bottom: 5, right: 5}}>
+                <div className="absolute bottom-3 right-1 z-10">
                     <Button
                         className="mx-1 text-white rounded border-red-500 bg-red-500"
                         onClick={undoChange}
