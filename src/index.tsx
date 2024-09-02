@@ -77,6 +77,8 @@ if(!isLocalhost)
         startSessionReplayRecordingManually: true,
         defaultPrivacyLevel: "mask",
         allowedTracingUrls : [ apiURI ],
+        trackingConsent: "granted",
+        excludedActivityUrls: [ /\/login$/, ]
     })
 
 window.addEventListener(GeneralEventType.LOGGED, () => {
