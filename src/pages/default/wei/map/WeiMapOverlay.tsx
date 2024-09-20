@@ -10,9 +10,9 @@ const WeiMapOverlay = () => {
         const fnc = () => {
             if(id == -1)return
             tryMultipleTimes(2, isActivated).then(res => {
-                localStorage.setItem("showWeiMap2024", res.data.enabled.toString())
-                localStorage.setItem("showSnapMap2024", res.data.snapmap.toString())
-                setShow(res.data.enabled)
+                localStorage.setItem("showWeiMap2024", res.data.enabled2024?.toString() ?? "false")
+                localStorage.setItem("showSnapMap2024", res.data.snapmap2024?.toString() ?? "false")
+                setShow(res.data.enabled2024 ?? false)
             }).finally(() => id != -1 && setTimeout(fnc, 30_000))
         }
         fnc()
