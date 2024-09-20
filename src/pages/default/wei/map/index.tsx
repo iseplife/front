@@ -1,6 +1,6 @@
 import {Geolocation} from "@capacitor/geolocation"
 import {DeviceOrientation, DeviceOrientationCompassHeading} from "@awesome-cordova-plugins/device-orientation"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { generatePositionUtil } from "../../../../data/wei/rooms/map/utils"
 import { isWeb } from "../../../../data/app"
 import { isPlatform } from "@ionic/core"
@@ -16,17 +16,21 @@ import { mediaPath } from "../../../../util"
 import { AvatarSizes } from "../../../../constants/MediaSizes"
 import { differenceInHours, differenceInMinutes, isPast } from "date-fns"
 import { isFuture } from "date-fns/esm"
-import { setWeiBackgroundGeoPerm, setWeiBackgroundSendPerm } from "../WeiMapBackground"
+import { setWeiBackgroundGeoPerm, setWeiBackgroundSendPerm, weiLastLoc } from "../WeiMapBackground"
 
-const size = {w: 730, h: 786}
+const bgSize = {w: 2425, h: 3491}
 let i = 0
 const WeiMapPage: React.FC = () => {
-    const [geoPos, setGeoPos] = useState<[number, number, number]>([0, 0, 0])
+    const [geoPos, setGeoPos] = useState<[number, number, number]>(weiLastLoc)
     const [pos, setPos] = useState<{x: number, y: number}>({x:0,y:0})
     const [heading, setHeading] = useState<DeviceOrientationCompassHeading>()
     const [permission, setPermission] = useState<boolean>()
 
     const [presentAlert] = useIonAlert()
+
+    const size = useMemo(() => ({
+        w: window.innerWidth, h: 3491/2425*window.innerWidth
+    }), [])
 
     useEffect(() => {
         Geolocation.checkPermissions().then(perm => {
@@ -112,17 +116,18 @@ const WeiMapPage: React.FC = () => {
 
     useEffect(() => {
         setPos(locationConverter(geoPos[0], geoPos[1]))
+        console.debug(locationConverter(geoPos[0], geoPos[1]))
     }, [geoPos])
     const {screenXYLatLong, latlngToScreenXY: locationConverter} = generatePositionUtil({
-        lat: 49.322642,
-        lng: -1.111938,
-        scrX: 0,
-        scrY: 0,
+        lat: 45.11153094038729,
+        lng: 1.9584357288968062,
+        scrX: 401/bgSize.w*size.w,
+        scrY: 969/bgSize.h*size.h,
     },{
-        lat: 49.318026,
-        lng: -1.105361,
-        scrX: size.w,
-        scrY: size.h,
+        lat: 45.1095294470397,
+        lng: 1.9617392641228724,
+        scrX: 1427/bgSize.w*size.w,
+        scrY: 1841/bgSize.h*size.h,
     })
 
     const {t} = useTranslation("wei")
@@ -166,7 +171,7 @@ const WeiMapPage: React.FC = () => {
         })
     }, [])
 
-    const snapMap = localStorage.getItem("showSnapMap2022") == "true"
+    const snapMap = localStorage.getItem("showSnapMap2024") == "true"
     const [sendPermission, setSendPermission] = useState(localStorage.getItem("snapmap2022permission"))
     const [friendPositions, setFriendPositions] = useState<(WeiMapFriend & {x: number, y: number})[]>([])
 
@@ -227,10 +232,13 @@ const WeiMapPage: React.FC = () => {
             setFriendPositions([])
     }, [sendPermission])
 
-    const [background, setBackground] = useState<{color: string, assetUrl: string}>()
+    const [background, setBackground] = useState<{color: string, assetUrl: string}>({
+        "color": "#c9c7f0"/*"#99B68C"*/,
+        "assetUrl": "/img/wei/map/bg2024.svg",
+    })
 
     useEffect(() => {
-        getMapBackground().then(res => setBackground(res.data))
+        // getMapBackground().then(res => setBackground(res.data))
     }, [])
 
     const click = useCallback((e: React.MouseEvent) => {
@@ -246,15 +254,15 @@ const WeiMapPage: React.FC = () => {
             WeiMap {sendPermission == "true" ? "activée" : "desactivée"}
             <div className="text-[10px] leading-3 text-neutral-500">{sendPermission == "false" ? "Cliquez ici pour l'activer. Vous pourrez la desactiver à votre guise" : "Votre position est partagée avec les gens que vous suivez"}</div>
         </div>
-        <TransformWrapper>
+        <TransformWrapper limitToBounds minScale={1.4} initialScale={1.6} minPositionY={0} minPositionX={0}>
             <TransformComponent wrapperClass="w-full h-full relative" wrapperStyle={{background: background?.color}}>
-                <div style={{width: size.w, height: size.h}} className="relative" onClick={click} >
-                    <img src={background?.assetUrl} alt="Background" draggable={false} />
+                <div style={{width: window.innerWidth, height: size.h/size.w*window.innerWidth}} className="relative" onClick={click} >
+                    <img src={background?.assetUrl} alt="Background" className="h-full w-full" draggable={false} />
                     {/* <img src="/img/wei/map/mapV2.svg" alt="Background" className="absolute opacity-50" style={{top: 30, left: 40, width: 365 * sizee, height: 526 * sizee}}  /> */}
 
                     {
                         entities.map(entity => entity.disappearDate && isPast(entity.disappearDate) ? <></> : <div 
-                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
+                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer scale-[80%]" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
                         >
                             <img src={entity.assetUrl} alt="Image" className="w-full h-full"/>
                             {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-0.5 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"mn"}</div>}
@@ -262,11 +270,11 @@ const WeiMapPage: React.FC = () => {
                     }
 
                     {headingImage && <img src={headingImage} style={{transform: !heading ? "" : `rotateZ(${heading.trueHeading}deg)`, top: pos.y, left: pos.x}} alt="heading" className="absolute w-14 h-14 -ml-7 -mt-7 opacity-30" />}
-                    <div className="bg-indigo-400 border-white border-2 shadow-md shadow-indigo-600/40 w-4 h-4 -mt-2 -ml-2 rounded-full absolute" style={{top: pos.y, left: pos.x}}></div>
+                    <div className="bg-indigo-400 border-white border-2 shadow-md shadow-indigo-600/40 w-4 h-4 -mt-2 -ml-2 rounded-full absolute scale-75" style={{top: pos.y, left: pos.x}}></div>
 
                     {
                         friendPositions.map(friend => {
-                            return <div className="absolute flex justify-center flex-col transform -translate-x-1/2 -translate-y-1/2" style={{left: friend.x, top: friend.y}}>
+                            return <div className="absolute flex justify-center flex-col transform -translate-x-1/2 -translate-y-1/2 scale-[80%]" style={{left: friend.x, top: friend.y}}>
                                 <WebPAvatarPolyfill src={mediaPath(friend.student.picture, AvatarSizes.THUMBNAIL)} className="w-7 h-7 rounded-full border-2 border-white shadow-sm" />
                                 <div className="px-1 py-[1px] mt-1 font-medium rounded-md shadow-sm bg-white text-black text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full">{Math.abs(differenceInMinutes(new Date(), friend.timestamp)) > 60 ? differenceInHours(new Date(), friend.timestamp)+"h" : differenceInMinutes(new Date(), friend.timestamp)+"m"}</div>
                             </div>

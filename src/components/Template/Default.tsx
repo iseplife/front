@@ -25,6 +25,8 @@ import WeiMapPage from "../../pages/default/wei/map"
 import CustomComing from "../../pages/default/custom"
 import IsepDor from "../../pages/default/custom/isepdor"
 import IOROverlay from "../../pages/default/custom/isepdor/IOROverlay"
+import WeiMapBackground from "../../pages/default/wei/WeiMapBackground"
+import WeiMapOverlay from "../../pages/default/wei/map/WeiMapOverlay"
 
 const DefaultTemplate: React.FC = () => {
     const { state: { user } } = useContext(AppContext)
@@ -62,6 +64,8 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
             <NotificationsOverlay />
+            <WeiMapBackground />
+            <WeiMapOverlay />
             <IOROverlay />
             { !user.didFirstFollow && <FirstFollow /> }
         </div>

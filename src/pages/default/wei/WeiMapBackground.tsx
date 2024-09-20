@@ -5,6 +5,8 @@ import { sendLocation } from "../../../data/wei/rooms/map"
 export let setWeiBackgroundGeoPerm: (bool: boolean) => void
 export let setWeiBackgroundSendPerm: (bool: boolean) => void
 
+export let weiLastLoc: [number, number, number] = [0, 0, 0]
+
 const WeiMapBackground = () => {
 
     const debouncedUpdateServerPos = useMemo(() => {
@@ -16,6 +18,7 @@ const WeiMapBackground = () => {
             if(now - lastTime > 30000 ){
                 lastTime = now
                 console.debug("send pos")
+                weiLastLoc = pos
                 sendLocation(pos[0], pos[1])
             } else {
                 timingWaiting = window.setTimeout(() => {
@@ -30,7 +33,7 @@ const WeiMapBackground = () => {
     const [geoPos, setGeoPos] = useState<[number, number, number]>([0, 0, 0])
 
     const [geoPerm, setGeoPerm] = useState(false)
-    const [sendPermission, setSendPermission] = useState(localStorage.getItem("showSnapMap2022") == "true")
+    const [sendPermission, setSendPermission] = useState(localStorage.getItem("showSnapMap2024") == "true")
     setWeiBackgroundGeoPerm = setGeoPerm
     setWeiBackgroundSendPerm = setSendPermission
 

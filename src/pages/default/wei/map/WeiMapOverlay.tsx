@@ -4,14 +4,14 @@ import { tryMultipleTimes } from "../../../../data/http"
 import { isActivated } from "../../../../data/wei/rooms/map"
 
 const WeiMapOverlay = () => {
-    const [show, setShow] = useState(localStorage.getItem("showWeiMap2022") == "true")
+    const [show, setShow] = useState(localStorage.getItem("showWeiMap2024") == "true")
     useEffect(() => {
         let id = 0
         const fnc = () => {
             if(id == -1)return
             tryMultipleTimes(2, isActivated).then(res => {
-                localStorage.setItem("showWeiMap2022", res.data.enabled.toString())
-                localStorage.setItem("showSnapMap2022", res.data.snapmap.toString())
+                localStorage.setItem("showWeiMap2024", res.data.enabled.toString())
+                localStorage.setItem("showSnapMap2024", res.data.snapmap.toString())
                 setShow(res.data.enabled)
             }).finally(() => id != -1 && setTimeout(fnc, 30_000))
         }
