@@ -48,8 +48,11 @@ const WeiMapBackground = () => {
             return
         
         const id = Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
-            if(pos)
+            if(pos) {
+                console.log("got position background", pos)
+
                 setGeoPos([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy])
+            }
         })
 
         return () => {id.then(id => Geolocation.clearWatch({id}))}
