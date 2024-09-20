@@ -19,7 +19,7 @@ import { isFuture } from "date-fns/esm"
 import { setWeiBackgroundGeoPerm, setWeiBackgroundSendPerm, weiLastLoc } from "../WeiMapBackground"
 
 const bgSize = {w: 2425, h: 3491}
-let i = 0
+let i = -1
 const WeiMapPage: React.FC = () => {
     const [geoPos, setGeoPos] = useState<[number, number, number]>(weiLastLoc)
     const [pos, setPos] = useState<{x: number, y: number}>({x:0,y:0})
@@ -56,7 +56,9 @@ const WeiMapPage: React.FC = () => {
 
         const unWatchOnChange: (() => void)[] = []
         
+        console.log("start watching")
         const geoWatchId = Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
+            console.log("got position", pos)
             if(pos){
                 setGeoPos([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy])
                 console.debug(pos.coords)
@@ -172,9 +174,15 @@ const WeiMapPage: React.FC = () => {
     }, [])
 
     const snapMap = localStorage.getItem("showSnapMap2024") == "true"
-    const [sendPermission, setSendPermission] = useState(localStorage.getItem("snapmap2022permission"))
+    const [sendPermission, setSendPermission] = useState(localStorage.getItem("snapmap2024permission"))
     const [friendPositions, setFriendPositions] = useState<(WeiMapFriend & {x: number, y: number})[]>([])
 
+    useEffect(() => {
+        const id = setInterval(() => {
+            setGeoPos(weiLastLoc)
+        }, 1000)
+        return () => clearInterval(id)
+    }, [])
     useEffect(() => {
         setWeiBackgroundSendPerm(sendPermission == "true")
         if(sendPermission != "true")
@@ -202,7 +210,7 @@ const WeiMapPage: React.FC = () => {
                         role: "cancel",
                         handler: () => {
                             setSendPermission("false")
-                            localStorage.setItem("snapmap2022permission", "false")
+                            localStorage.setItem("snapmap2024permission", "false")
                             return false
                         },
                     },
@@ -211,7 +219,7 @@ const WeiMapPage: React.FC = () => {
                         role: "confirm",
                         handler: () => {
                             setSendPermission("true")
-                            localStorage.setItem("snapmap2022permission", "true")
+                            localStorage.setItem("snapmap2024permission", "true")
                         },
                     },
                 ],
@@ -222,7 +230,7 @@ const WeiMapPage: React.FC = () => {
     const toggleWeiMap = useCallback(() => {
         setSendPermission(perm => {
             const newPerm = perm == "false" ? "true" : "false"
-            localStorage.setItem("snapmap2022permission", newPerm)
+            localStorage.setItem("snapmap2024permission", newPerm)
             return newPerm
         })
     }, [])
@@ -246,7 +254,8 @@ const WeiMapPage: React.FC = () => {
         const x = e.clientX - bounds.left
         const y = e.clientY - bounds.top
         const pos = screenXYLatLong(x, y)
-        console.log(`map.put(${100+i++}, ${pos.lat}/${pos.lng});`)
+        const list = [185, 186, 187, 188, 189, 190, 192, 193, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 226, 227, 228, 230, 231, 232, 233, 234, 235, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 273, 274, 275, 276, 277]
+        console.log(`map.put(${list[i++]}, ${pos.lat}/${pos.lng});`)
     }, [])
 
     return permission === null ? <LoadingPage /> : !permission ? <ErrorInterface error={t("map.no_perm")} /> : <div className="w-full h-full max-h-full max-w-full relative">
@@ -254,7 +263,7 @@ const WeiMapPage: React.FC = () => {
             WeiMap {sendPermission == "true" ? "activée" : "desactivée"}
             <div className="text-[10px] leading-3 text-neutral-500">{sendPermission == "false" ? "Cliquez ici pour l'activer. Vous pourrez la desactiver à votre guise" : "Votre position est partagée avec les gens que vous suivez"}</div>
         </div>
-        <TransformWrapper limitToBounds minScale={1.4} initialScale={1.6} minPositionY={0} minPositionX={0}>
+        <TransformWrapper limitToBounds minScale={1} initialScale={1} minPositionY={0} minPositionX={0}>
             <TransformComponent wrapperClass="w-full h-full relative" wrapperStyle={{background: background?.color}}>
                 <div style={{width: window.innerWidth, height: size.h/size.w*window.innerWidth}} className="relative" onClick={click} >
                     <img src={background?.assetUrl} alt="Background" className="h-full w-full" draggable={false} />
@@ -262,7 +271,7 @@ const WeiMapPage: React.FC = () => {
 
                     {
                         entities.map(entity => entity.disappearDate && isPast(entity.disappearDate) ? <></> : <div 
-                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer scale-[80%]" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
+                            className="absolute drop-shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-pointer" onClick={() => openPopup(entity)} style={{left: entity.x, top: entity.y, width: entity.size, height: entity.size}}
                         >
                             <img src={entity.assetUrl} alt="Image" className="w-full h-full"/>
                             {entity.disappearDate && Math.abs(differenceInMinutes(new Date(), entity.disappearDate)) < 60 && isFuture(entity.disappearDate) && <div className="px-1 py-[1px] mt-1 rounded-md shadow-sm bg-white text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-0.5 translate-y-full font-medium text-red-900">{differenceInMinutes(entity.disappearDate, new Date())+"mn"}</div>}
