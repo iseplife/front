@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import {Route, Switch} from "react-router-dom"
+import {Redirect, Route, Switch} from "react-router-dom"
 import Events from "../../pages/default/calendar"
 import Event from "../../pages/default/event"
 import Logout from "../../pages/security/Logout"
@@ -54,6 +54,10 @@ const DefaultTemplate: React.FC = () => {
                         <Route path="/wei" component={WeiPage} />
                         <Route path="/isepdor" component={IsepDor} />
                         <Route path="/c/isepdor" component={IsepDor} />
+                        <Route path="/c/map" render={_ => <Redirect to={{
+                            pathname: "/wei/map",
+                        }}/>} />
+                        
                         <Route path="/c" component={CustomComing} />
                         <Route path="/setting" component={Setting} />
                         <Route path="/logout" component={Logout} />
