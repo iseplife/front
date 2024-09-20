@@ -57,14 +57,14 @@ const WeiMapPage: React.FC = () => {
         const unWatchOnChange: (() => void)[] = []
         
         console.log("start watching")
-        const geoWatchId = Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
-            console.log("got position", pos)
-            if(pos){
-                setGeoPos([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy])
-                console.debug(pos.coords)
-            }
-        })
-        unWatchOnChange.push(async () => Geolocation.clearWatch({id: await geoWatchId}))
+        // const geoWatchId = Geolocation.watchPosition({ enableHighAccuracy: true }, pos => {
+        //     console.log("got position", pos)
+        //     if(pos){
+        //         setGeoPos([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy])
+        //         console.debug(pos.coords)
+        //     }
+        // })
+        // unWatchOnChange.push(async () => Geolocation.clearWatch({id: await geoWatchId}))
 
         if(deviceorientation){
             const fnc = (event: DeviceOrientationEvent) => {
