@@ -283,7 +283,7 @@ const WeiMapPage: React.FC = () => {
 
                     {
                         friendPositions.map(friend => {
-                            return <div className="absolute flex justify-center flex-col transform -translate-x-1/2 -translate-y-1/2 scale-[80%]" style={{left: friend.x, top: friend.y}}>
+                            return <div className="absolute flex justify-center flex-col transform -translate-x-1/2 -translate-y-1/2 scale-[60%]" style={{left: friend.x, top: friend.y}}>
                                 <WebPAvatarPolyfill src={mediaPath(friend.student.picture, AvatarSizes.THUMBNAIL)} className="w-7 h-7 rounded-full border-2 border-white shadow-sm" />
                                 <div className="px-1 py-[1px] mt-1 font-medium rounded-md shadow-sm bg-white text-black text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-1 translate-y-full">{Math.abs(differenceInMinutes(new Date(), friend.timestamp)) > 60 ? differenceInHours(new Date(), friend.timestamp)+"h" : differenceInMinutes(new Date(), friend.timestamp)+"m"}</div>
                             </div>
