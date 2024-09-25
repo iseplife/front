@@ -59,7 +59,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
 
         if(props.oldLikes) {
             Toast.show({
-                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                text: "Nous avons perdu les anciens likes à cause de Garage.",
                 position: "bottom",
                 duration: "short",
             })
@@ -105,7 +105,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
     const openLikes = useCallback(() => {
         if(props.oldLikes) {
             Toast.show({
-                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                text: "Nous avons perdu les anciens likes à cause de Garage.",
                 position: "bottom",
                 duration: "short",
             })
