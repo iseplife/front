@@ -60,7 +60,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
     const toggleLike = useCallback(async () => {
         if(data.oldLikes) {
             Toast.show({
-                text: "Nous avons perdu les détails des anciens likes suite à la suppression de notre serveur par Garage.",
+                text: "Nous avons perdu les anciens likes à cause de Garage.",
                 position: "bottom",
                 duration: "short",
             })
