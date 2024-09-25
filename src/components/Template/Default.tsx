@@ -68,8 +68,10 @@ const DefaultTemplate: React.FC = () => {
                 </div>
             </Navbar>
             <NotificationsOverlay />
+            {/* 
             <WeiMapBackground />
             <WeiMapOverlay />
+            */}
             <IOROverlay />
             { !user.didFirstFollow && <FirstFollow /> }
         </div>
