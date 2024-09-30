@@ -77,11 +77,11 @@ const Event: React.FC = () => {
             const now = startMs < new Date().getTime()
             const finished = endsAt.getTime() < new Date().getTime()
             if (endsAt.getTime() - startMs <= 24 * 60 * 60 * 1000) {// It lasts for less than a day
-                const delayDays = (startMs - new Date().getTime()) / 1000 / 60 / 60 / 24
+                const delayDays = (new Date().getTime() - startMs) / 1000 / 60 / 60 / 24
                 toRespond = t(now && !finished ? "event:date.until_same_day" : "event:date.same_day_this_week", {
                     day: isSameDay(new Date(), startsAt) ?
                         t("event:date.today") : // If same day, we show "Today"
-                        _format(startsAt, `EEEE${(delayDays > 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
+                        _format(startsAt, `EEEE${(delayDays >= 7 ? ` ${fullDay}` : "")}`), // If not, we show the day
                     start: _format(startsAt, "HH:mm"),
                     end: _format(endsAt, "HH:mm"),
                 })
