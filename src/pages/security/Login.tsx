@@ -72,16 +72,16 @@ const Login: React.FC = () => {
     }, [cguAlert, dispatch])
 
     const openCapacitorSite = useCallback(async () => {
-        if(isWeb) {
-            window.location.href = ssoUrl
-            return
-        }
-        setError(undefined)
-        setLoadingStatus(true)
-        localStorage.removeItem("sso-token")
-        await Browser.removeAllListeners()
-        await Browser.open({ url: ssoUrl })
-        await Browser.addListener("browserFinished", validateSSOToken)
+        // if(isWeb || true) {
+        window.location.href = ssoUrl
+        //     return
+        // }
+        // setError(undefined)
+        // setLoadingStatus(true)
+        // localStorage.removeItem("sso-token")
+        // await Browser.removeAllListeners()
+        // await Browser.open({ url: ssoUrl })
+        // await Browser.addListener("browserFinished", validateSSOToken)
     }, [validateSSOToken])
 
     useEffect(() => {
