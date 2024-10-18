@@ -4,7 +4,6 @@ import {apiClient} from "../http"
 import { isWeb } from "../app"
 
 export const connect = (username: string, password: string): AxiosPromise<TokenSet> => apiClient.post("/auth", {username, password})
-export const connectSSO = (ticket: string, service: string): AxiosPromise<TokenSet> => apiClient.post("/auth/sso", {ticket, service})
 
 export const logout = (): AxiosPromise<TokenSet> => apiClient.put("/auth/logout")
 
