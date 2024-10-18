@@ -1,127 +1,120 @@
-import React, {useContext, useState} from "react"
-import {useFormik} from "formik"
-import {useTranslation} from "react-i18next"
-import {connect} from "../../data/security"
-import Loading from "../../components/Common/Loading"
-import {SUPPORTED_LANGUAGES} from "../../i18n"
-import {Input} from "antd"
-import {AppContext} from "../../context/app/context"
-import {AppActionType} from "../../context/app/action"
-import { isWeb } from "../../data/app"
+import { Browser } from "@capacitor/browser"
 import { useIonAlert } from "@ionic/react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
+import Loading from "../../components/Common/Loading"
+import { AppActionType } from "../../context/app/action"
+import { AppContext } from "../../context/app/context"
+import { isWeb } from "../../data/app"
+import { connectSSO } from "../../data/security"
+import { SUPPORTED_LANGUAGES } from "../../i18n"
 
-
-interface LoginFormInputs {
-    id: string,
-    password: string
-}
+const service = window.location.origin+"/login"
+const ssoUrl = "https://portail-ovh.isep.fr/cas/login?service="+service
 
 const Login: React.FC = () => {
     const {t, i18n} = useTranslation(["login", "common"])
     const {dispatch} = useContext(AppContext)
 
     const [loading, setLoadingStatus] = useState<boolean>(false)
-    const [error, setError] = useState<string | undefined>()
     const [presentAlert] = useIonAlert()
-    const formik = useFormik<LoginFormInputs>({
-        initialValues: {id: "", password: ""},
-        onSubmit: ({id, password}) => {
-            presentAlert({
-                header: t("common:cgu"),
-                message: t("common:cgu_text"),
-                buttons: [
-                    {
-                        text: t("common:cgu_deny"),
-                        role: "cancel",
+    const [error, setError] = useState<string>()
+
+    const cguAlert = useCallback((callback: (() => void)) => {
+        presentAlert({
+            header: t("common:cgu"),
+            message: t("common:cgu_text"),
+            buttons: [
+                {
+                    text: t("common:cgu_deny"),
+                    role: "cancel",
+                },
+                {
+                    text: t("common:cgu_open"),
+                    role: "",
+                    handler: () => {
+                        window.open("https://docs.iseplife.fr/cgu.html", "_blank")
+                        return false
                     },
-                    {
-                        text: t("common:cgu_open"),
-                        role: "",
-                        handler: () => {
-                            window.open("https://docs.iseplife.fr/cgu.html", "_blank")
-                            return false
-                        },
-                    },
-                    {
-                        text: t("common:cgu_accept"),
-                        role: "confirm",
-                        handler: () => {
-                            setLoadingStatus(true)
-                
-                            connect(id, password).then((res) => {
-                                localStorage.removeItem("pushTokenValue")
-                                
-                                dispatch({
-                                    type: AppActionType.SET_TOKEN,
-                                    token: res.data.token
-                                })
-                                if(!isWeb)
-                                    localStorage.setItem("refresh", res.data.refreshToken)
-                                localStorage.setItem("logged", "1")
-                            }).catch(e => {
-                                setLoadingStatus(false)
-                                let msg
-                                if (e.response) {
-                                    switch (e.response.status) {
-                                        case 401:
-                                            msg = "Mauvais mot de passe ou utilisateur"
-                                            break
-                                        case 503:
-                                            msg = "Mauvais mot de passe ou utilisateur"
-                                            break
-                                        default:
-                                            msg = "Serveur indisponible"
-                                    }
-                                } else {
-                                    msg = "Serveur indisponible"
-                                }
-                                setError(msg)
-                            }).finally(() => setLoadingStatus(false))
-                        },
-                    },
-                ],
+                },
+                {
+                    text: t("common:cgu_accept"),
+                    role: "confirm",
+                    handler: callback,
+                },
+            ],
+        })
+    }, [presentAlert, t])
+
+    const validateSSOToken = useCallback(() => {
+        Browser.removeAllListeners()
+        const token = localStorage.getItem("sso-token")
+        if(token) {
+            localStorage.removeItem("sso-token")
+            cguAlert(() => {
+                setLoadingStatus(true)
+                connectSSO(token, service).then((res) => {
+                    dispatch({
+                        type: AppActionType.SET_TOKEN,
+                        token: res.data.token
+                    })
+                    if(!isWeb)
+                        localStorage.setItem("refresh", res.data.refreshToken)
+                    localStorage.setItem("logged", "1")
+                }).catch(_ => {
+                    setLoadingStatus(false)
+                    setError("Serveur indisponible")
+                }).finally(() => setLoadingStatus(false))
             })
+        } else {
+            setLoadingStatus(false)
         }
-    })
+    }, [cguAlert, dispatch])
+
+    const openCapacitorSite = useCallback(async () => {
+        // if(isWeb || true) {
+        window.location.href = ssoUrl
+        //     return
+        // }
+        // setError(undefined)
+        // setLoadingStatus(true)
+        // localStorage.removeItem("sso-token")
+        // await Browser.removeAllListeners()
+        // await Browser.open({ url: ssoUrl })
+        // await Browser.addListener("browserFinished", validateSSOToken)
+    }, [validateSSOToken])
+
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search)
+        if (query.has("ticket")) {
+            const ticket = query.get("ticket")
+            if (ticket) {
+                localStorage.setItem("sso-token", ticket)
+                window.history.replaceState({}, document.title, window.location.pathname)
+                validateSSOToken()
+            }
+        }
+        console.log("e")
+    }, [])
 
     return (
         <div className="h-full flex flex-col justify-end items-center overflow-y-auto relative">
+            {error && <div className="bg-red-500 text-white p-2 rounded-md top-20 absolute">{error}</div>}
             <div className="flex-grow flex items-center">
-                <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col">
-                    {error && (
-                        <div className="text-center">
-                            <h6 className="text-red-600">{error}</h6>
-                        </div>
-                    )}
-                    <form className="flex flex-col justify-center " onSubmit={formik.handleSubmit}>
-                        <Input
-                            name="id" type="text" onChange={formik.handleChange}
-                            required
-                            placeholder={t("id")}
-                            value={formik.values.id}
-                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
-                        />
-                        <Input
-                            id="password" name="password" type="password" onChange={formik.handleChange}
-                            required
-                            placeholder={t("password")}
-                            value={formik.values.password}
-                            className="w-auto text-center text-indigo-500 border border-indigo-200 m-3 py-2 px-5 rounded-full"
-                        />
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`${loading && "cursor-not-allowed"} rounded-full mt-8 py-2 px-4 bg-indigo-500 text-white hover:text-indigo-200 transition-colors shadow-lg text-xl font-semibold`}
-                        >
-                            {loading ?
-                                <Loading/> :
-                                t("login:submit")
-                            }
-                        </button>
-                        <div className="text-black/40 text-center mt-2 -mb-1 max-w-[200px] mx-auto">{t("login:use_moodle")}</div>
-                    </form>
-                </div>
+                <button
+                    onClick={openCapacitorSite}
+                    disabled={loading}
+                    className={`${loading && "cursor-not-allowed"} rounded-md flex items-center mt-8 py-2 px-4 bg-indigo-500 text-white hover:bg-indigo-600 transition-colors text-xl font-semibold`}
+                >
+                    <div className="mr-3">
+                        { 
+                            loading ?
+                                <Loading /> :
+                                <img src="./assets/moodle_m.svg" alt="Moodle logo" className="h-9" />
+                        }
+                    </div>
+                    {t("login:sso_loggin")}
+                </button>
             </div>
             <div className="flex flex-col items-center my-2">
                 <div className="flex flex-row">
