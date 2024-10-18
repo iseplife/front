@@ -2,6 +2,5 @@
   "id": "identifiant ISEP",
   "password": "mot de passe",
   "submit": "Se connecter",
-  "use_moodle": "Utilisez vos identifiants Moodle",
-  "sso_loggin": "Connexion avec Moodle"
+  "use_moodle": "Utilisez vos identifiants Moodle"
 }
