@@ -46,6 +46,7 @@ import {isLocalhost} from "./util"
 import { AxiosError } from "axios"
 import {App as AppIonic, URLOpenListenerEvent} from "@capacitor/app"
 import { Capacitor } from "@capacitor/core"
+import { isWeb } from "./data/app"
 
 setupIonicReact({
     mode: "ios",
@@ -60,26 +61,41 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 initializeAPIClient()
 new UpdateService().init()
 
-if(!isLocalhost)
-    datadogRum.init({
-        applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
-        clientToken: "pub00aecce089653075ee89a23fda9fb49c",
-        site: "datadoghq.com",
-        proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
-        service: "iseplife-spa",
-        env: process.env.NODE_ENV,
-        version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
-        traceSampleRate: 100,
-        sessionSampleRate: 100,
-        sessionReplaySampleRate: 100,
-        telemetrySampleRate: 100,
-        trackUserInteractions: true,
-        startSessionReplayRecordingManually: true,
-        defaultPrivacyLevel: "mask",
-        allowedTracingUrls : [ apiURI ],
-        trackingConsent: "granted",
-        excludedActivityUrls: [ /\/login$/, ]
-    })
+if(!isLocalhost) {
+    const dataDogInit = (nativeVersion: string) => {
+        datadogRum.init({
+            applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
+            clientToken: "pub00aecce089653075ee89a23fda9fb49c",
+            site: "datadoghq.com",
+            proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
+            service: "iseplife-spa",
+            env: process.env.NODE_ENV,
+            version: `${nativeVersion}-${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
+            traceSampleRate: 100,
+            sessionSampleRate: 100,
+            sessionReplaySampleRate: 100,
+            telemetrySampleRate: 100,
+            trackUserInteractions: true,
+            startSessionReplayRecordingManually: true,
+            defaultPrivacyLevel: "mask",
+            allowedTracingUrls : [ apiURI ],
+            trackingConsent: "granted",
+            excludedActivityUrls: [ /\/login$/, ]
+        })
+    }
+    if(isWeb)
+        dataDogInit("web")
+    else
+        try {
+            CapacitorUpdater.current().then(cu => dataDogInit(cu.native)).catch(e => {
+                console.error(e)
+                dataDogInit("unknown")
+            })
+        } catch(e) {
+            console.error(e)
+            dataDogInit("unknown")
+        }
+}
 
 window.addEventListener(GeneralEventType.LOGGED, () => {
     console.debug("Logged !")

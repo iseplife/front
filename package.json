@@ -1,6 +1,6 @@
 {
   "name": "iseplife-spa",
-  "version": "1.7.1",
+  "version": "1.8",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -10,7 +10,6 @@
     "@capacitor-community/media": "^5.4.1",
     "@capacitor/android": "^5.0.0",
     "@capacitor/app": "^5.0.0",
-    "@capacitor/browser": "^6.0.2",
     "@capacitor/core": "^5.0.0",
     "@capacitor/filesystem": "^5.0.0",
     "@capacitor/geolocation": "^5.0.0",
@@ -22,6 +21,7 @@
     "@capacitor/status-bar": "^5.0.0",
     "@capacitor/toast": "^5.0.0",
     "@capgo/capacitor-updater": "^6.1.13",
+    "@capgo/inappbrowser": "^6.8.13",
     "@craco/craco": "^6.4.5",
     "@datadog/browser-rum": "^5.16.0",
     "@fingerprintjs/fingerprintjs": "^3.3.3",
@@ -46,7 +46,6 @@
     "antd": "^4.21.6",
     "axios": "^0.27.2",
     "broadcast-channel": "^4.13.0",
-    "cordova-plugin-device-orientation": "^2.0.1",
     "craco-esbuild": "^0.5.1",
     "date-fns": "^2.28.0",
     "dexie": "^3.2.2",
