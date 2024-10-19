@@ -63,7 +63,7 @@ const SSOLogin: React.FC = () => {
     }, [presentAlert, t])
 
     const validateSSOToken = useCallback(() => {
-        const token = localStorage.getItem("sso-token")
+        const token = localStorage.getItem("sso-token")?.split("#")[0]
         if(token) {
             localStorage.removeItem("sso-token")
             cguAlert(() => {
