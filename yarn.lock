@@ -2327,15 +2327,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capacitor/browser@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@capacitor/browser@npm:6.0.2"
-  peerDependencies:
-    "@capacitor/core": ^6.0.0
-  checksum: fb51ff878039e81dccea392cfb1b79bb6de1977072da2b0ceccd005e32460edcd8f7ff76965f32e7fe34ad2bcafd2382d16aa541c29a3e338ea413c18897baf3
-  languageName: node
-  linkType: hard
-
 "@capacitor/cli@npm:^5.0.0":
   version: 5.7.5
   resolution: "@capacitor/cli@npm:5.7.5"
@@ -2460,6 +2451,15 @@ __metadata:
   peerDependencies:
     "@capacitor/core": ^6.0.0
   checksum: b14cb4dcf09564c3bf727d7fff260229d8978b7afce5b3652b6aeb6aeb6150c36b82056417b339d4786bcdfeea3b9cb17e3a1f207e46f43502d83410b31a8f1f
+  languageName: node
+  linkType: hard
+
+"@capgo/inappbrowser@npm:^6.8.13":
+  version: 6.8.13
+  resolution: "@capgo/inappbrowser@npm:6.8.13"
+  peerDependencies:
+    "@capacitor/core": ^6.0.0
+  checksum: 74b6bdf7dd8a187e0eee6bea8c9750f93e76f2d178dca460f3f324edaff67cc00b2baa31f4d67f89eff53c3f570722a4295c3493f851f9e76be6c7dc96991e34
   languageName: node
   linkType: hard
 
@@ -8326,13 +8326,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cordova-plugin-device-orientation@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "cordova-plugin-device-orientation@npm:2.0.1"
-  checksum: d63081c554ff41149d51b2aa4d4d6dc48cef96cc06b7e4a84d599aa5ec492c5e82837e69a1e528e7c662f693e3f9ab03672105d464876174f633d305bc5f3ae8
-  languageName: node
-  linkType: hard
-
 "core-js-compat@npm:^3.21.0, core-js-compat@npm:^3.22.1":
   version: 3.25.0
   resolution: "core-js-compat@npm:3.25.0"
@@ -12763,7 +12756,6 @@ __metadata:
     "@capacitor-community/media": ^5.4.1
     "@capacitor/android": ^5.0.0
     "@capacitor/app": ^5.0.0
-    "@capacitor/browser": ^6.0.2
     "@capacitor/cli": ^5.0.0
     "@capacitor/core": ^5.0.0
     "@capacitor/filesystem": ^5.0.0
@@ -12776,6 +12768,7 @@ __metadata:
     "@capacitor/status-bar": ^5.0.0
     "@capacitor/toast": ^5.0.0
     "@capgo/capacitor-updater": ^6.1.13
+    "@capgo/inappbrowser": ^6.8.13
     "@craco/craco": ^6.4.5
     "@datadog/browser-rum": ^5.16.0
     "@datadog/datadog-ci": ^2.34.0
@@ -12812,7 +12805,6 @@ __metadata:
     axios: ^0.27.2
     broadcast-channel: ^4.13.0
     browserslist-to-esbuild: ^1.1.1
-    cordova-plugin-device-orientation: ^2.0.1
     craco-esbuild: ^0.5.1
     cross-env: ^7.0.3
     customize-cra: ^1.0.0
@@ -12858,20 +12850,11 @@ __metadata:
     tailwindcss: ^3.1.6
     tailwindcss-textshadow: ^2.1.3
     typescript: ^4.7.4
-    web-vitals: ^0.2.4
     webp-hero: ^0.0.2
-    workbox-background-sync: ^5.1.4
-    workbox-broadcast-update: ^5.1.4
-    workbox-cacheable-response: ^5.1.4
-    workbox-core: ^5.1.4
     workbox-expiration: ^5.1.4
-    workbox-google-analytics: ^5.1.4
-    workbox-navigation-preload: ^5.1.4
     workbox-precaching: ^5.1.4
-    workbox-range-requests: ^5.1.4
     workbox-routing: ^5.1.4
     workbox-strategies: ^5.1.4
-    workbox-streams: ^5.1.4
   languageName: unknown
   linkType: soft
 
@@ -21058,13 +21041,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^0.2.4":
-  version: 0.2.4
-  resolution: "web-vitals@npm:0.2.4"
-  checksum: 128a4e87730b0a02fb6af3eef7d31f9a79b4646e83cfe4465aa8ce6054fe16f7b1f4125a384f1b4f039091bd9513cb54b4e559c0b10ae953c01900786a16b1c2
-  languageName: node
-  linkType: hard
-
 "webidl-conversions@npm:^3.0.0":
   version: 3.0.1
   resolution: "webidl-conversions@npm:3.0.1"
@@ -21396,30 +21372,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-background-sync@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-background-sync@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-  checksum: 14655d0254813d2580935c88fe4768eb4794158a3c0700505aa06784dcd8d7498563e8b55152f0a4afb609163e76787a3a3eb61813b810bd76830c866d6ceb9e
-  languageName: node
-  linkType: hard
-
 "workbox-broadcast-update@npm:6.5.4":
   version: 6.5.4
   resolution: "workbox-broadcast-update@npm:6.5.4"
   dependencies:
     workbox-core: 6.5.4
   checksum: 63cbab2012456871ffeae401e10b16668a0654fa3fa311743cf14e05b8719b797ac3afb47dc8955d87e24f0f1199a547b090bcfdbddd67191b07697d24ac5746
-  languageName: node
-  linkType: hard
-
-"workbox-broadcast-update@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-broadcast-update@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-  checksum: b56df2fde652c2efa8afbb8880562aaac6932be313ddcbbb688bb48beeb3164c928a644407f359168789a31592c765f63526608afe6cd803ac89402f786064d1
   languageName: node
   linkType: hard
 
@@ -21477,15 +21435,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-cacheable-response@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-cacheable-response@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-  checksum: 3d8940dbee11880fdd86d76f85c063cf0a42d722be828332acf2f69ff5eaaedc8a0d779e44175adba4e8485f98392052539b2126df79125cebcec57dea0bee3c
-  languageName: node
-  linkType: hard
-
 "workbox-core@npm:6.5.4":
   version: 6.5.4
   resolution: "workbox-core@npm:6.5.4"
@@ -21531,33 +21480,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-google-analytics@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-google-analytics@npm:5.1.4"
-  dependencies:
-    workbox-background-sync: ^5.1.4
-    workbox-core: ^5.1.4
-    workbox-routing: ^5.1.4
-    workbox-strategies: ^5.1.4
-  checksum: 2783e93f8a5aeccc038f51a9960c05aebd104fd8d113b5fd78a09bac2da8ed8e2be4c9fd7d8a6751682301d6b5e36ba055240a74a3591b4e887aabb2784cd531
-  languageName: node
-  linkType: hard
-
 "workbox-navigation-preload@npm:6.5.4":
   version: 6.5.4
   resolution: "workbox-navigation-preload@npm:6.5.4"
   dependencies:
     workbox-core: 6.5.4
   checksum: c8c341b799f328bb294de8eb9e331a55501d495153237e4ddbaa08bf8630efa700621df5d81f08fb9bffc0f40ecd191a60581f72a3cd5cc72ed2e5baa318c63a
-  languageName: node
-  linkType: hard
-
-"workbox-navigation-preload@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-navigation-preload@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-  checksum: ed6b19f063f17e2dd12ef08594ea338fcf96d994ea8f7d9b2987099cb08a890c73f139a23b68c9c5523308fba4634f24aca079deb7d00684c8d76fdfb07b0fc9
   languageName: node
   linkType: hard
 
@@ -21587,15 +21515,6 @@ __metadata:
   dependencies:
     workbox-core: 6.5.4
   checksum: 50f144ced7af7db77b3c64c06c0f9924db5b8573ff2c50b3899fc22c4a360baaf6b332e65f47cf812adfc9dec882a94556fed1cf90ae4ef20b645caa03d1149e
-  languageName: node
-  linkType: hard
-
-"workbox-range-requests@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-range-requests@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-  checksum: c67b467023e85a45599c411079907585c4d4b7aab77205dd905cd0d8b1487aa248469bc2f89045e8bd4a08eed4ede14795fc9089d01beff65ff3c6f2f1deff45
   languageName: node
   linkType: hard
 
@@ -21657,16 +21576,6 @@ __metadata:
     workbox-core: 6.5.4
     workbox-routing: 6.5.4
   checksum: efd6917ead915011be2b25dc3ebbb9d051dbd10ba2d91cdaec36ca742360e2c33627564653fc40f336dee874d501e94bcc4a25d1b65eaf5a6ee5f1a8b894af44
-  languageName: node
-  linkType: hard
-
-"workbox-streams@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "workbox-streams@npm:5.1.4"
-  dependencies:
-    workbox-core: ^5.1.4
-    workbox-routing: ^5.1.4
-  checksum: daaedb22dae6eb4723e7a21d758854adb36b75f1fa2453a914b6768628d91555e3db76fccb70a101f5cf1a39056e783eab1c8b0f4a59649f7ef4fad173c6f7d3
   languageName: node
   linkType: hard
 

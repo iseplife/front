@@ -151,9 +151,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     message.error(t("server_disconnected"))
                     break
                 case 403:
-                    message.error(t("user_disconnected"))
-                    this.props.history.push("/login")
-                    this.context.dispatch({type: AppActionType.SET_LOGGED_OUT})
+                    message.error(t("insufficient_rights"))
                     break
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
