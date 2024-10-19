@@ -38,16 +38,6 @@ const registerCacheFirstRouteUsing = (
         ]
     })
 )
-const registerCacheOnlyRouteUsing = (
-    destination: RequestDestination,
-    cacheName: string,
-    excludePaths: string[] = []
-): Route => registerRoute(
-    ({ request }) => request.destination === destination && !excludePaths.find(path => request.url.includes(path)),
-    new CacheFirst({
-        cacheName: cacheName,
-    })
-)
 
 const CACHE_PREFIX = "iseplife-cache"
 const CACHE_SCRIPT_NAME = `${CACHE_PREFIX}-scripts`
@@ -55,7 +45,7 @@ const CACHE_STYLES_NAME = `${CACHE_PREFIX}-styles`
 const CACHE_DOCUMENTS_NAME = `${CACHE_PREFIX}-documents`
 const CACHE_FONTS_NAME = `${CACHE_PREFIX}-fonts`
 registerCacheFirstRouteUsing("style", CACHE_STYLES_NAME, 60, 7)
-registerCacheOnlyRouteUsing("script", CACHE_SCRIPT_NAME)
+registerCacheFirstRouteUsing("script", CACHE_SCRIPT_NAME, 100, 7)
 registerCacheFirstRouteUsing("document", CACHE_DOCUMENTS_NAME, 5, 7)
 registerCacheFirstRouteUsing("font", CACHE_FONTS_NAME, 10, 60 * 24 * 30)
 

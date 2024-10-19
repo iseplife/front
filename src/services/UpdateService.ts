@@ -1,5 +1,3 @@
-import { CapacitorUpdater } from "@capgo/capacitor-updater"
-import { isPlatform } from "@ionic/core"
 import { message } from "antd"
 import { BroadcastChannel } from "broadcast-channel"
 import { t } from "i18next"
