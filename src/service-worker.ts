@@ -1,12 +1,11 @@
+import { BroadcastChannel } from "broadcast-channel"
 import { precacheAndRoute } from "workbox-precaching"
 import { registerRoute, Route } from "workbox-routing"
-import { StaleWhileRevalidate, CacheFirst } from "workbox-strategies"
+import { CacheFirst } from "workbox-strategies"
 import { initPushWorker } from "./push-worker"
-import { ExpirationPlugin } from "workbox-expiration"
-import { BroadcastChannel } from "broadcast-channel"
 
 declare const self: Window & typeof globalThis & ServiceWorkerGlobalScope
-export {}
+export { }
 
 precacheAndRoute(self.__WB_MANIFEST)
 
@@ -23,19 +22,11 @@ self.addEventListener("install", function () {
 const registerCacheFirstRouteUsing = (
     destination: RequestDestination,
     cacheName: string,
-    maxEntries: number,
-    maxAgeMins: number,
     excludePaths: string[] = []
 ): Route => registerRoute(
     ({ request }) => request.destination === destination && !excludePaths.find(path => request.url.includes(path)),
-    new StaleWhileRevalidate({
+    new CacheFirst({
         cacheName: cacheName,
-        plugins: [
-            new ExpirationPlugin({
-                maxEntries,
-                maxAgeSeconds: maxAgeMins * 60, 
-            })
-        ]
     })
 )
 
@@ -44,9 +35,9 @@ const CACHE_SCRIPT_NAME = `${CACHE_PREFIX}-scripts`
 const CACHE_STYLES_NAME = `${CACHE_PREFIX}-styles`
 const CACHE_DOCUMENTS_NAME = `${CACHE_PREFIX}-documents`
 const CACHE_FONTS_NAME = `${CACHE_PREFIX}-fonts`
-registerCacheFirstRouteUsing("style", CACHE_STYLES_NAME, 60, 7)
-registerCacheFirstRouteUsing("script", CACHE_SCRIPT_NAME, 100, 7)
-registerCacheFirstRouteUsing("document", CACHE_DOCUMENTS_NAME, 5, 7)
-registerCacheFirstRouteUsing("font", CACHE_FONTS_NAME, 10, 60 * 24 * 30)
+registerCacheFirstRouteUsing("style", CACHE_STYLES_NAME)
+registerCacheFirstRouteUsing("script", CACHE_SCRIPT_NAME)
+registerCacheFirstRouteUsing("document", CACHE_DOCUMENTS_NAME)
+registerCacheFirstRouteUsing("font", CACHE_FONTS_NAME)
 
 initPushWorker()
