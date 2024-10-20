@@ -1,52 +1,53 @@
-import React, {useCallback, useEffect, useMemo, useReducer, useState} from "react"
-import { createRoot } from "react-dom/client"
-import { datadogRum } from "@datadog/browser-rum"
-import * as serviceWorker from "./serviceWorker"
-import "./i18n"
-import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
-    Redirect,
-} from "react-router-dom"
-import {initializeAPIClient, tryMultipleTimes} from "./data/http"
-import Login from "./pages/security/Login"
-import {refresh} from "./data/security"
-import Template from "./components/Template"
-import {RecoilRoot} from "recoil"
-import {AppContext, DEFAULT_STATE} from "./context/app/context"
-import {appContextReducer} from "./context/app/reducer"
-import ErrorInterceptor from "./components/Template/ErrorInterceptor"
-import {AppActionType} from "./context/app/action"
-import {RouteComponentProps} from "react-router-dom"
-import Maintenance from "./pages/errors/Maintenance"
-import HeightFix from "./components/Fix/HeightFix"
-import { getLoggedUser } from "./data/student"
-import { getAuthorizedAuthors } from "./data/post"
-import { initWebSocket, logoutWebSocket } from "./realtime/websocket/WSServerClient"
-import { apiURI, wsURI } from "./data/http.constants"
-import GeneralEventType from "./constants/GeneralEventType"
-import LoggedEvent from "./events/LoggedEvent"
-import { notificationManager } from "./datamanager/NotificationManager"
-import LoadingPage from "./pages/LoadingPage"
-import { LocationState } from "./data/request.type"
-import UpdateService from "./services/UpdateService"
-import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
-import { CapacitorUpdater } from "@capgo/capacitor-updater"
-import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
 import { App as IonicApp } from "@capacitor/app"
+import { CapacitorUpdater } from "@capgo/capacitor-updater"
+import { datadogRum } from "@datadog/browser-rum"
+import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer"
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react"
+import { createRoot } from "react-dom/client"
+import {
+    Redirect,
+    Route,
+    RouteComponentProps,
+    BrowserRouter as Router,
+    Switch,
+} from "react-router-dom"
+import { RecoilRoot } from "recoil"
+import HeightFix from "./components/Fix/HeightFix"
+import NotificationClickHandler from "./components/Notification/NotificationClickHandler"
+import Template from "./components/Template"
+import ErrorInterceptor from "./components/Template/ErrorInterceptor"
+import GeneralEventType from "./constants/GeneralEventType"
+import { AppActionType } from "./context/app/action"
+import { AppContext, DEFAULT_STATE } from "./context/app/context"
+import { appContextReducer } from "./context/app/reducer"
+import { initializeAPIClient, tryMultipleTimes } from "./data/http"
+import { apiURI, wsURI } from "./data/http.constants"
+import { getAuthorizedAuthors } from "./data/post"
+import { LocationState } from "./data/request.type"
+import { refresh } from "./data/security"
+import { getLoggedUser } from "./data/student"
+import { notificationManager } from "./datamanager/NotificationManager"
+import LoggedEvent from "./events/LoggedEvent"
+import "./i18n"
+import Maintenance from "./pages/errors/Maintenance"
+import LoadingPage from "./pages/LoadingPage"
+import Login from "./pages/security/Login"
+import { initWebSocket, logoutWebSocket } from "./realtime/websocket/WSServerClient"
+import UpdateService from "./services/UpdateService"
+import * as serviceWorker from "./serviceWorker"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css"
-import "./index.css"
 import "antd/dist/antd.min.css"
+import "./index.css"
 
-import { IonApp, setupIonicReact } from "@ionic/react"
-import {isLocalhost} from "./util"
-import { AxiosError } from "axios"
-import {App as AppIonic, URLOpenListenerEvent} from "@capacitor/app"
+import { App as AppIonic, URLOpenListenerEvent } from "@capacitor/app"
 import { Capacitor } from "@capacitor/core"
+import { IonApp, setupIonicReact } from "@ionic/react"
+import { AxiosError } from "axios"
 import { isWeb } from "./data/app"
+import UserPassLogin from "./pages/security/UserPassLogin"
+import { isLocalhost } from "./util"
 
 setupIonicReact({
     mode: "ios",
@@ -253,6 +254,7 @@ const App: React.FC = () => {
                             <NotificationClickHandler />
                             <Switch>
                                 <Route path="/login" component={Login}/>
+                                <Route path="/alternative-login" component={UserPassLogin}/>
                                 {redirectLogin}
                             </Switch>
                         </ErrorInterceptor>

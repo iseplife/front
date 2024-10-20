@@ -3,5 +3,6 @@
   "password": "mot de passe",
   "submit": "Se connecter",
   "use_moodle": "Utilisez vos identifiants Moodle",
-  "sso_loggin": "Connexion avec Moodle"
+  "sso_loggin": "Connexion avec Moodle",
+  "alternative": "Connexion alternative"
 }

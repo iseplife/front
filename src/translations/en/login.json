@@ -3,5 +3,6 @@
   "password": "password",
   "submit": "Log in ",
   "use_moodle": "Please use your ISEP Moodle account credentials",
-  "sso_loggin": "Login with Moodle"
+  "sso_loggin": "Login with Moodle",
+  "alternative": "Alternative connection"
 }

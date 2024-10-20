@@ -8,6 +8,7 @@ import { isWeb } from "../../data/app"
 import { connectSSO } from "../../data/security"
 import { SUPPORTED_LANGUAGES } from "../../i18n"
 import { InAppBrowser, ToolBarType } from "@capgo/inappbrowser"
+import { Link } from "react-router-dom"
 
 const service = isWeb ? window.location.origin+"/login" : "https://iseplife-done"
 const ssoUrl = "https://portail-ovh.isep.fr/cas/login?service="+service
@@ -128,6 +129,9 @@ const SSOLogin: React.FC = () => {
                 </button>
             </div>
             <div className="flex flex-col items-center my-2">
+                <Link to={"/alternative-login"} className="bottom-12 absolute text-gray-400">
+                    {t("login:alternative")}
+                </Link>
                 <div className="flex flex-row">
                     {SUPPORTED_LANGUAGES.map(lng => (
                         <img
