@@ -4,5 +4,6 @@
   "submit": "Log in ",
   "use_moodle": "Please use your ISEP Moodle account credentials",
   "sso_loggin": "Login with Moodle",
-  "alternative": "Alternative connection"
+  "alternative": "Alternative connection",
+  "bad_login": "Bad login or password"
 }

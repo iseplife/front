@@ -64,10 +64,10 @@ const UserPassLogin: React.FC = () => {
                                 if (e.response) {
                                     switch (e.response.status) {
                                         case 401:
-                                            msg = "Mauvais mot de passe ou utilisateur"
+                                            msg = t("login:bad_login")
                                             break
                                         case 503:
-                                            msg = "Mauvais mot de passe ou utilisateur"
+                                            msg = t("login:bad_login")
                                             break
                                         default:
                                             msg = "Serveur indisponible"

@@ -155,7 +155,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     break
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
-                    if (auth && !error.request?.url?.equals("/auth/refresh") && !error.request?.responseURL?.equals("/auth/refresh"))
+                    if (auth && error.request?.url != "/auth/refresh" && error.request?.responseURL != "/auth/refresh")
                         return Promise.reject(error)
 
                     this.props.history.push("/login")
