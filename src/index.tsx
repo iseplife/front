@@ -132,11 +132,11 @@ const App: React.FC = () => {
 
             notificationManager.setUnwatched(userRes.data.unwatchedNotifications)
             socket.connect({ state, dispatch })
-            if (window.location.pathname.toLowerCase() == "/login") {
+            if (window.location.pathname.toLowerCase() == "/login" || window.location.pathname.toLowerCase() == "/alternative-login") {
                 const from = (window.history.state?.state as LocationState)?.from || {
                     pathname: state.payload.lastConnection ? "/" : "/discovery"
                 }
-                window.history.pushState({firstPage: true}, "", from.pathname)
+                window.history.replaceState({firstPage: true}, "", from.pathname)
             }
             setLoading(false)
         }).catch((e) => {
@@ -167,6 +167,10 @@ const App: React.FC = () => {
                 const err: AxiosError = e
                 if(err.response?.status != 401)
                     setNoConnection(true)
+                else
+                    dispatch({
+                        type: AppActionType.SET_LOGGED_OUT,
+                    })
                 setLoading(false)
             })
         } else {

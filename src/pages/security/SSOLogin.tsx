@@ -129,7 +129,7 @@ const SSOLogin: React.FC = () => {
                 </button>
             </div>
             <div className="flex flex-col items-center my-2">
-                <Link to={"/alternative-login"} className="bottom-12 absolute text-gray-400">
+                <Link to={"/alternative-login"} replace className="bottom-12 absolute text-gray-400">
                     {t("login:alternative")}
                 </Link>
                 <div className="flex flex-row">
