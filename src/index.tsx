@@ -64,7 +64,7 @@ new UpdateService().init()
 
 if(!isLocalhost) {
     const dataDogInit = (nativeVersion: string) => {
-        datadogRum.init({
+        const response = datadogRum.init({
             applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
             clientToken: "pub00aecce089653075ee89a23fda9fb49c",
             site: "datadoghq.com",
@@ -81,8 +81,10 @@ if(!isLocalhost) {
             defaultPrivacyLevel: "mask",
             allowedTracingUrls : [ apiURI ],
             trackingConsent: "granted",
-            excludedActivityUrls: [ /\/login$/, ]
+            excludedActivityUrls: [ /\/login$/, ],
+            allowFallbackToLocalStorage: true,
         })
+        console.log(response)
     }
     if(isWeb)
         dataDogInit("web")
