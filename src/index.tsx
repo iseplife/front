@@ -71,7 +71,7 @@ if(!isLocalhost) {
             proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
             service: "iseplife-spa",
             env: process.env.NODE_ENV,
-            version: `${nativeVersion}-${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
+            version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
             traceSampleRate: 100,
             sessionSampleRate: 100,
             sessionReplaySampleRate: 100,
