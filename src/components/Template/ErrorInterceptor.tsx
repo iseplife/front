@@ -1,5 +1,5 @@
 import React from "react"
-import {apiClient, AXIOS_TIMEOUT, getAPIStatus} from "../../data/http"
+import {apiClient, AXIOS_TIMEOUT} from "../../data/http"
 import {message} from "antd"
 import {AxiosError, AxiosPromise, AxiosRequestConfig, AxiosResponse} from "axios"
 import {RouteComponentProps, withRouter} from "react-router-dom"
@@ -8,11 +8,11 @@ import {refresh} from "../../data/security"
 import {AppContext} from "../../context/app/context"
 import {AppActionType} from "../../context/app/action"
 import {TokenSet} from "../../data/security/types"
-import {LocationState} from "../../data/request.type"
 import ReactError from "../../pages/errors/ReactError"
 
 type InterceptorProps = WithTranslation & RouteComponentProps & {
     children: JSX.Element[]
+    initialized?: () => void
 }
 type InterceptState = {
     hasError?: string
@@ -54,6 +54,8 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
 
         window.addEventListener("offline", this.handleOffline)
         window.addEventListener("online", this.handleOnline)
+
+        this.props.initialized?.()
     }
 
     componentWillUnmount() {
@@ -155,7 +157,7 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     break
                 case 401:
                     // 401 Error code of /auth are handled in axiosRequestInterceptor function
-                    if (auth && error.request?.url != "/auth/refresh" && error.request?.responseURL != "/auth/refresh")
+                    if (auth && !error.request?.responseURL.endsWith("/auth/refresh"))
                         return Promise.reject(error)
 
                     this.props.history.push("/login")

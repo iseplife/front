@@ -114,6 +114,11 @@ const App: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(true)
     const [noConnection, setNoConnection] = useState<boolean>(false)
+    const [initialized, setInitialized] = useState<boolean>(false)
+    
+    const init = useCallback(() => {
+        setInitialized(true)
+    }, [])
 
     const getUserInfos = useCallback(() => {
         Promise.all([getLoggedUser(), getAuthorizedAuthors()]).then(([userRes, authorsRes]) => {
@@ -148,10 +153,13 @@ const App: React.FC = () => {
         })
 
         return () => logoutWebSocket()
-    }, [state.payload])
+    }, [state])
 
     // Check user's state (logged in or not)
     useEffect(() => {
+        if(!initialized)
+            return
+
         setLoading(true)
         if (state.payload && state.token_expiration >= new Date().getTime()) {
             setLoggedIn(true)
@@ -179,12 +187,12 @@ const App: React.FC = () => {
             setLoggedIn(false)
             setLoading(false)
         }
-    }, [state.payload, state.token_expiration, state.user, getUserInfos])
+    }, [state.payload, state.token_expiration, state.user, getUserInfos, initialized])
 
     useEffect(() => {
-        if(isLoggedIn)
+        if(isLoggedIn && initialized)
             getUserInfos()
-    }, [isLoggedIn])
+    }, [isLoggedIn, initialized, getUserInfos])
 
     useEffect(() => {
         if (Capacitor.getPlatform() === "android") {
@@ -213,32 +221,6 @@ const App: React.FC = () => {
         <Route path="/" render={renderTemplate} />
     , [renderTemplate])
 
-    // return (
-    //     <IonApp>
-    //         <AppContext.Provider value={{state, dispatch}}>
-    //             <RecoilRoot>
-    //                 <Router>
-    //                     <ErrorInterceptor>
-    //                         <HeightFix />
-    //                         <NotificationClickHandler />
-    //                         <DeepLinks />
-    //                         {
-    //                             loading || noConnection ? 
-    //                                 <Switch>
-    //                                     <Route path="*" component={noConnection ? Maintenance : LoadingPage} />
-    //                                 </Switch>
-    //                                 : isLoggedIn != undefined ?
-    //                                     <Switch>
-    //                                         {redirectLogin}
-    //                                     </Switch> : <></>
-    //                         }
-    //                     </ErrorInterceptor>
-    //                 </Router>
-    //             </RecoilRoot>
-    //         </AppContext.Provider>
-    //     </IonApp>
-    // )
-
     useEffect(() => {
         try{
             AppIonic.addListener("appUrlOpen", (event: URLOpenListenerEvent) => {
@@ -250,25 +232,31 @@ const App: React.FC = () => {
             console.error(e)
         }
     }, [])
-    return (loading ? <LoadingPage /> : noConnection ? <Maintenance /> :
-        <IonApp>
-            <AppContext.Provider value={{state, dispatch}}>
-                <RecoilRoot>
-                    <Router>
-                        <ErrorInterceptor>
-                            <HeightFix />
-                            <NotificationClickHandler />
-                            <Switch>
-                                <Route path="/login" component={Login}/>
-                                <Route path="/alternative-login" component={UserPassLogin}/>
-                                {redirectLogin}
-                            </Switch>
-                        </ErrorInterceptor>
-                    </Router>
-                </RecoilRoot>
-            </AppContext.Provider>
-        </IonApp>
-    )
+    return <IonApp>
+        <AppContext.Provider value={{state, dispatch}}>
+            <RecoilRoot>
+                <Router>
+                    <ErrorInterceptor initialized={init}>
+                        <HeightFix />
+                        <NotificationClickHandler />
+                        {
+                            loading ?
+                                <LoadingPage />
+                                :
+                                noConnection ?
+                                    <Maintenance />
+                                    :
+                                    <Switch>
+                                        <Route path="/login" component={Login}/>
+                                        <Route path="/alternative-login" component={UserPassLogin}/>
+                                        {redirectLogin}
+                                    </Switch>
+                        }
+                    </ErrorInterceptor>
+                </Router>
+            </RecoilRoot>
+        </AppContext.Provider>
+    </IonApp>
 }
 
 const root = createRoot(document.getElementById("root")!)
