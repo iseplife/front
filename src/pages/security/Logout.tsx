@@ -13,8 +13,9 @@ const Logout: React.FC = () => {
             logout().then(() => {
                 dispatch({type: AppActionType.SET_LOGGED_OUT})
             })
-        else
-            localStorage.removeItem("refresh")
+        else {
+            dispatch({type: AppActionType.SET_LOGGED_OUT})
+        }
     }, [])
 
     return <Redirect to="/login" />
