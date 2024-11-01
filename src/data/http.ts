@@ -3,7 +3,7 @@ import {JSONDateParser} from "../util"
 import { apiURI } from "./http.constants"
 
 export let apiClient: AxiosInstance
-export const AXIOS_TIMEOUT = 60_000 * 5
+export const AXIOS_TIMEOUT = 20_000 // 60_000 * 5
 export const appUrl = new URL(process.env.REACT_APP_URL ?? window.location.origin)
 
 export function initializeAPIClient(): AxiosInstance {

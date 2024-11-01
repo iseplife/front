@@ -21,6 +21,9 @@ import useAdminRole from "../../hooks/useAdminRole"
 import StudentLargeCard from "../Student/StudentLargeCard"
 import { setStyles } from "../../util"
 import { isAndroidApp, isIosApp } from "../../data/app"
+import ConnectionEvent from "../../events/ConnectionEvent"
+import { connectionManager } from "../../datamanager/ConnectionManager"
+import GeneralEventType from "../../constants/GeneralEventType"
 
 type IconButtonProps = {
     icon: IconDefinition
@@ -207,6 +210,16 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
     const { pathname } = useLocation()
     useEffect(() => onScroll(), [pathname])
 
+
+    const [online, setOnline] = useState(connectionManager.online)
+    useEffect(() => {
+        const connectionChange = (event: ConnectionEvent) =>
+            setOnline(event.online)
+
+        window.addEventListener(GeneralEventType.CONNECTION, connectionChange as EventListener)
+        return () => window.removeEventListener(GeneralEventType.CONNECTION, connectionChange as EventListener)
+    }, [])
+
     return <>
         <div className="topback fixed bg-white" ref={topHeaderRef} />
         <div className="h-14" />
@@ -262,6 +275,11 @@ export const Header: React.FC<HeaderProps> = ({user}) => {
                 </DropdownPanel>
             </div>
         </div>
+        {
+            online && <div className="absolute left-1/2 max-w-5xl w-full md:hidden h-1/2 rounded-t-md bg-red-500/50 text-white flex items-center justify-center">
+                <span className="text-lg">You are offline</span>
+            </div>
+        }
     </>
 }
 

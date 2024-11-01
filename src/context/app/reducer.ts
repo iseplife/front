@@ -24,6 +24,8 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 id: action.payload.user.id.toString(),
             })
 
+            localStorage.setItem("init_parameters", JSON.stringify(action.payload))
+
             return {
                 ...state,
                 user: action.payload.user,
@@ -32,6 +34,8 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
         case AppActionType.SET_LOGGED_OUT:
             delete apiClient.defaults.headers.common["Authorization"]
             localStorage.removeItem("logged")
+            localStorage.removeItem("init_parameters")
+            localStorage.removeItem("refresh")
             datadogRum.clearUser()
 
             logoutWebSocket()
@@ -42,6 +46,9 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
             const parsedToken = parseToken(action.token)
 
             apiClient.defaults.headers.common["Authorization"] = `Bearer ${action.token}`
+
+            localStorage.setItem("token", action.token)
+            
             return {
                 ...state,
                 jwt: action.token,

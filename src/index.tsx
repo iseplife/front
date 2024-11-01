@@ -17,13 +17,12 @@ import NotificationClickHandler from "./components/Notification/NotificationClic
 import Template from "./components/Template"
 import ErrorInterceptor from "./components/Template/ErrorInterceptor"
 import GeneralEventType from "./constants/GeneralEventType"
-import { AppActionType } from "./context/app/action"
+import { AppActionType, setInitializationAction } from "./context/app/action"
 import { AppContext, DEFAULT_STATE } from "./context/app/context"
 import { appContextReducer } from "./context/app/reducer"
 import { initializeAPIClient, tryMultipleTimes } from "./data/http"
 import { apiURI, wsURI } from "./data/http.constants"
 import { getAuthorizedAuthors } from "./data/post"
-import { LocationState } from "./data/request.type"
 import { refresh } from "./data/security"
 import { getLoggedUser } from "./data/student"
 import { notificationManager } from "./datamanager/NotificationManager"
@@ -46,8 +45,10 @@ import { Capacitor } from "@capacitor/core"
 import { IonApp, setupIonicReact } from "@ionic/react"
 import { AxiosError } from "axios"
 import { isWeb } from "./data/app"
+import { connectionManager } from "./datamanager/ConnectionManager"
 import UserPassLogin from "./pages/security/UserPassLogin"
 import { isLocalhost } from "./util"
+import LoginRedirect from "./components/User/LoginRedirect"
 
 setupIonicReact({
     mode: "ios",
@@ -118,42 +119,63 @@ const App: React.FC = () => {
     
     const init = useCallback(() => {
         setInitialized(true)
+
+        console.log("Initialized")
+
+        const cachedInitParameters = localStorage.getItem("init_parameters")
+        if(cachedInitParameters) {
+            const params = JSON.parse(cachedInitParameters)
+
+            console.log("Logged from cache")
+
+            dispatch({
+                type: AppActionType.SET_TOKEN,
+                token: localStorage.getItem("token")!
+            })
+            setTimeout(() => {
+                loggedCallback(params)
+            }, 1)
+        }
     }, [])
+
+    const loggedCallback = useCallback((payload: setInitializationAction["payload"]) => {
+        console.log("Logged from callback", payload)
+        const socket = initWebSocket(wsURI)
+        connectionManager.updateConnectionStatus(true)
+        dispatch({
+            type: AppActionType.SET_INITIALIZATION,
+            payload
+        })
+
+        if (localStorage.getItem("logged_id") != payload.user.id.toString())
+            window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
+        
+        localStorage.setItem("logged_id", payload.user.id.toString())
+        window.dispatchEvent(new LoggedEvent({ state, dispatch }))
+
+        notificationManager.setUnwatched(payload.user.unwatchedNotifications)
+        socket.connect({ state, dispatch })
+        setLoggedIn(true)
+        setLoading(false)
+    }, [state.payload])
 
     const getUserInfos = useCallback(() => {
         Promise.all([getLoggedUser(), getAuthorizedAuthors()]).then(([userRes, authorsRes]) => {
-            const socket = initWebSocket(wsURI)
-            dispatch({
-                type: AppActionType.SET_INITIALIZATION,
-                payload: {
+            loggedCallback(
+                {
                     user: userRes.data,
                     authors: authorsRes.data.sort((a, b) => a.name.localeCompare(b.name))
                 }
-            })
-
-            if (localStorage.getItem("logged_id") != userRes.data.id.toString())
-                window.dispatchEvent(new Event(GeneralEventType.LOGOUT))
-            
-            localStorage.setItem("logged_id", userRes.data.id.toString())
-            window.dispatchEvent(new LoggedEvent({ state, dispatch }))
-
-            notificationManager.setUnwatched(userRes.data.unwatchedNotifications)
-            socket.connect({ state, dispatch })
-            if (window.location.pathname.toLowerCase() == "/login" || window.location.pathname.toLowerCase() == "/alternative-login") {
-                const from = (window.history.state?.state as LocationState)?.from || {
-                    pathname: state.payload.lastConnection ? "/" : "/discovery"
-                }
-                window.history.replaceState({firstPage: true}, "", from.pathname)
-            }
-            setLoading(false)
+            )
         }).catch((e) => {
             console.error(e)
-            setNoConnection(true)
+            // setNoConnection(true)
+            connectionManager.updateConnectionStatus(false)
             setLoading(false)
         })
 
         return () => logoutWebSocket()
-    }, [state])
+    }, [state.payload])
 
     // Check user's state (logged in or not)
     useEffect(() => {
@@ -176,11 +198,7 @@ const App: React.FC = () => {
                 console.error(e)
                 const err: AxiosError = e
                 if(err.response?.status != 401)
-                    setNoConnection(true)
-                else
-                    dispatch({
-                        type: AppActionType.SET_LOGGED_OUT,
-                    })
+                    connectionManager.updateConnectionStatus(false)
                 setLoading(false)
             })
         } else {
@@ -192,7 +210,7 @@ const App: React.FC = () => {
     useEffect(() => {
         if(isLoggedIn && initialized)
             getUserInfos()
-    }, [isLoggedIn, initialized, getUserInfos])
+    }, [isLoggedIn, initialized])
 
     useEffect(() => {
         if (Capacitor.getPlatform() === "android") {
@@ -206,7 +224,7 @@ const App: React.FC = () => {
     const renderTemplate = useMemo(() => {
         let savedLocation: RouteComponentProps
         return ({location}: RouteComponentProps) => isLoggedIn ?
-            <Template/> : <>
+            <Template/> : !loading && <>
                 <Route path="/login" component={Login}/>
                 <Redirect
                     to={{
@@ -215,7 +233,7 @@ const App: React.FC = () => {
                     }}
                 />
             </>
-    }, [isLoggedIn])
+    }, [isLoggedIn, loading])
 
     const redirectLogin =  useMemo(() =>
         <Route path="/" render={renderTemplate} />
@@ -239,6 +257,7 @@ const App: React.FC = () => {
                     <ErrorInterceptor initialized={init}>
                         <HeightFix />
                         <NotificationClickHandler />
+                        <LoginRedirect />
                         {
                             loading ?
                                 <LoadingPage />

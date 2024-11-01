@@ -17,7 +17,7 @@ export enum AppActionType {
 }
 
 
-interface setInitializationAction {
+export interface setInitializationAction {
     type: AppActionType.SET_INITIALIZATION,
     payload: {
         user: LoggedStudentPreview
