@@ -72,7 +72,7 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 initializeAPIClient()
 new UpdateService().init()
 
-if(!isLocalhost) {
+if(!isLocalhost && !location.origin.endsWith("dev-github-pr.iseplife.fr")) {
     const dataDogInit = (nativeVersion: string) => {
         const response = datadogRum.init({
             applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
