@@ -67,11 +67,10 @@ jobs:
           name: build
           path: build
 
-      - name: Zip the build directory
+      - name: Remove sourcemaps
         run: |
           cd build
           find . -name "*.map" -type f -delete
-          zip -r app.zip .
           cd ../
 
       - name: Set up AWS credentials
