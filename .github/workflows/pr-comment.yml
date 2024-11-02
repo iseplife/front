@@ -2,7 +2,7 @@ name: CI Workflow for PR
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened]
     branches:
       - master
 
@@ -18,7 +18,7 @@ jobs:
       - name: Generate message file
         run: |
           export BRANCH_HASH=$(git rev-parse --abbrev-ref HEAD | md5sum | awk '{print $1}')
-          echo "Hello :wave:\n\nYou can preview your changes at [this link](https://$BRANCH_HASH.dev-github-pr.iseplife.fr)" > message.txt
+          printf "Hello :wave:\n\nYou can preview your changes at [this link](https://$BRANCH_HASH.dev-github-pr.iseplife.fr)" > message.txt
 
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v3
