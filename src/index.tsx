@@ -49,6 +49,16 @@ import { isWeb } from "./data/app"
 import UserPassLogin from "./pages/security/UserPassLogin"
 import { isLocalhost } from "./util"
 
+const handleQueryRedirect = () => {
+    const query = new URLSearchParams(window.location.search)
+    if(query.has("redirect")) {
+        const redirect = query.get("redirect")
+        if(redirect)
+            window.history.replaceState({}, "", redirect)
+    }
+}
+handleQueryRedirect()
+
 setupIonicReact({
     mode: "ios",
     swipeBackEnabled: true
