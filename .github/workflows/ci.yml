@@ -87,8 +87,8 @@ jobs:
       - name: Deploy to S3
         run: |
           export BRANCH_HASH=$(git rev-parse --abbrev-ref HEAD | md5sum | awk '{print $1}')
-          aws s3 rm s3://iseplife-prod-backup/$BRANCH_HASH --recursive
-          aws s3 cp build/ s3://iseplife-prod-backup/$BRANCH_HASH --recursive
+          aws s3 rm s3:///$BRANCH_HASH --recursive
+          aws s3 cp build/ s3://iseplife-github-prs/$BRANCH_HASH --recursive
 
   deploy-s3:
     name: Deploy to S3
