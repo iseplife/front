@@ -21,7 +21,7 @@ jobs:
           echo "Hello :wave:\n\nYou can preview your changes at [this link](https://$BRANCH_HASH.dev-github-pr.iseplife.fr)" > message.txt
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
+        uses: thollander/actions-comment-pull-request@v3
         with:
           file-path: message.txt
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
