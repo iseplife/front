@@ -49,6 +49,7 @@ import { isWeb } from "./data/app"
 import UserPassLogin from "./pages/security/UserPassLogin"
 import { isLocalhost } from "./util"
 
+const isPRPreview = location.origin.endsWith("dev-github-pr.iseplife.fr")
 const handleQueryRedirect = () => {
     const query = new URLSearchParams(window.location.search)
     if(query.has("redirect")) {
@@ -57,7 +58,8 @@ const handleQueryRedirect = () => {
             window.history.replaceState({}, "", redirect)
     }
 }
-handleQueryRedirect()
+if(isPRPreview)
+    handleQueryRedirect()
 
 setupIonicReact({
     mode: "ios",
@@ -72,7 +74,7 @@ window.ResizeObserver ??= ResizeObserverPolyfill
 initializeAPIClient()
 new UpdateService().init()
 
-if(!isLocalhost && !location.origin.endsWith("dev-github-pr.iseplife.fr")) {
+if(!isLocalhost && !isPRPreview) {
     const dataDogInit = (nativeVersion: string) => {
         const response = datadogRum.init({
             applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
@@ -283,4 +285,6 @@ const App: React.FC = () => {
 
 const root = createRoot(document.getElementById("root")!)
 root.render(<App/>)
-serviceWorker.register()
+
+if(!isPRPreview)
+    serviceWorker.register()
