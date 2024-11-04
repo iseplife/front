@@ -70,7 +70,7 @@ const WebPPolyfill: React.FC<ImgHTMLAttributes<HTMLImageElement> & { children?: 
             setSrc(propsSrc)
     }, [propsSrc])
     return <>
-        {src && <div {...props} style={{...props.style, backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center"}} />}
+        {src && <div {...props} style={{...props.style, backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center"}} data-dd-privacy="hidden" />}
     </>
 }
 
@@ -86,7 +86,7 @@ export const WebPAvatarPolyfill: React.FC<AvatarProps & React.RefAttributes<HTML
     }, [propsSrc])
 
     return <>
-        {<Avatar {...props} src={src} />}
+        {<Avatar {...props} src={src} data-dd-privacy="hidden" />}
     </>
 }
 
