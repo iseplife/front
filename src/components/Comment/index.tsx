@@ -150,7 +150,7 @@ const Comment: React.FC<CommentProps> = ({data, allowReplies, handleDeletion, ha
 
                 </div>
                 <div className="flex items-center text-gray-400 mt-0.5">
-                    <span className="flex items-center cursor-pointer ml-0.5 mr-2.5">
+                    <span className="flex items-center cursor-pointer ml-0.5 mr-2.5" data-dd-privacy="hidden">
                         {likes > 0 && likes}
                         <FontAwesomeIcon
                             icon={liked ? faSolidHeart : faHeart}

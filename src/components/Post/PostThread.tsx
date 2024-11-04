@@ -201,6 +201,7 @@ const PostThread: React.FC<PostTheadProps> = (props) => {
                             {likes > 0 && likes}
                         </div>
                         <div
+                            data-dd-privacy="hidden"
                             className={
                                 "-ml-1 cursor-pointer rounded-full bg-red-700 bg-opacity-0 transition-colors duration-200 w-10 h-10 items-center flex justify-center "
                                 + (props.oldLikes || "group-hover:bg-opacity-10")
