@@ -21,6 +21,7 @@ const PollChoice: React.FC<PollChoiceProps> = ({total, onClick, data, disabled})
                 transition transition-border duration-300
                 border py-1 px-2 border-solid border-gray-200 hover:border-indigo-400
                 flex mx-3 my-1 w-full"
+            data-dd-privacy="hidden"
         >
             <Checkbox className="z-10 text-gray-700 w-full" disabled={disabled} checked={data.voted} onChange={onVote}>
                 <div className="flex w-full">
