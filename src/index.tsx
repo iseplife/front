@@ -80,7 +80,7 @@ if(!isLocalhost && !isPRPreview) {
             applicationId: "5a78df32-0770-4cbd-853c-984fd8a16809",
             clientToken: "pub00aecce089653075ee89a23fda9fb49c",
             site: "datadoghq.com",
-            proxy: (options) => `https://dd.iseplife.fr${options.path}?${options.parameters}`,
+            proxy: (options) => `https://dd.iseplife.fr${options.path}?o=o&${options.parameters}`,
             service: "iseplife-spa",
             env: process.env.NODE_ENV,
             version: `${process.env.REACT_APP_VERSION}-${process.env.REACT_APP_COMMIT}`,
