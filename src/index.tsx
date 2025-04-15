@@ -95,6 +95,7 @@ if(!isLocalhost && !isPRPreview) {
             trackingConsent: "granted",
             excludedActivityUrls: [ /\/login$/, ],
             allowFallbackToLocalStorage: true,
+            trackResources: true,
         })
         console.log(response)
     }
