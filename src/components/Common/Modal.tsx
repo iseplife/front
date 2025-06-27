@@ -6,7 +6,7 @@ const style = {
 
 export type ModalProps = {
     open: boolean
-    onClose: () => void
+    onClose?: () => void
     height?: string
     width?: string
     children: React.ReactNode

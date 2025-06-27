@@ -44,6 +44,7 @@ export interface LoggedStudentPreview extends StudentPreview {
     totalNotifications: number
     didFirstFollow: number
     lastExploreWatch: Date
+    passwordSetup: boolean
 }
 
 export interface StudentsImportPicture {

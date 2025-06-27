@@ -13,7 +13,8 @@ export enum AppActionType {
     SET_PICTURE,
     SET_TOKEN_EXPIRATION,
     SET_LAST_EXPLORE,
-    SET_SELECTED_PUBLISHER
+    SET_SELECTED_PUBLISHER,
+    SET_PASSWORD_SETUP
 }
 
 
@@ -68,6 +69,11 @@ interface setSelectedPublisherAction {
     selectedPublisher?: Author
 }
 
+interface setPasswordSetupAction {
+    type: AppActionType.SET_PASSWORD_SETUP,
+    passwordSetup: boolean
+}
+
 export type AppContextAction =
     setInitializationAction |
     setStateLoggedOutAction |
@@ -78,6 +84,7 @@ export type AppContextAction =
     setTokenAction |
     setStudentAction |
     setLastExploreAction |
-    setSelectedPublisherAction
+    setSelectedPublisherAction |
+    setPasswordSetupAction
 
 

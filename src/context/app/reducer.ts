@@ -73,6 +73,14 @@ export const appContextReducer = (state: AppContextState, action: AppContextActi
                 ...state,
                 selectedPublisher: action.selectedPublisher
             }
+        case AppActionType.SET_PASSWORD_SETUP:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    passwordSetup: action.passwordSetup
+                }
+            }
         default:
             return state
     }
