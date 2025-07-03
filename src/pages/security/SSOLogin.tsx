@@ -9,9 +9,12 @@ import { connectSSO } from "../../data/security"
 import { SUPPORTED_LANGUAGES } from "../../i18n"
 import { InAppBrowser, ToolBarType } from "@capgo/inappbrowser"
 import { Link } from "react-router-dom"
+import { LocationState } from "../../data/request.type"
 
 const service = isWeb ? window.location.origin+"/login" : "https://iseplife-done"
 const ssoUrl = "https://portail-ovh.isep.fr/cas/login?service="+service
+
+localStorage.removeItem("from")
 
 InAppBrowser.addListener("urlChangeEvent", async (e) => {
     if(e.url.includes("iseplife-done")) {
@@ -69,7 +72,23 @@ const SSOLogin: React.FC = () => {
             localStorage.removeItem("sso-token")
             cguAlert(() => {
                 setLoadingStatus(true)
-                connectSSO(token, service).then((res) => {
+                    
+                const currentPath = window.location.pathname
+                const pathParts = currentPath.split("/")
+                const fromBase64 = pathParts[pathParts.length - 1]
+                
+                if(fromBase64 != "login" && fromBase64.length)
+                    try {
+                        const decodedFrom = atob(fromBase64)
+                        if (decodedFrom && decodedFrom !== "") {
+                            console.log("User coming from : ", decodedFrom)
+                            localStorage.setItem("from", decodedFrom)
+                        }
+                    } catch (error) {
+                        console.log("No valid from parameter found in URL : ", fromBase64)
+                    }
+
+                connectSSO(token, service + "/" + fromBase64).then((res) => {
                     dispatch({
                         type: AppActionType.SET_TOKEN,
                         token: res.data.token
@@ -87,14 +106,38 @@ const SSOLogin: React.FC = () => {
         }
     }, [cguAlert, dispatch])
 
-    const openCapacitorSite = useCallback(async () => {
+    const openCAS = useCallback(async () => {
+
+        const currentPath = window.location.pathname
+        const pathParts = currentPath.split("/")
+        const fromBase64 = pathParts[pathParts.length - 1]
+
+        let from = ""
+        
+        if(fromBase64 != "login" && fromBase64.length)
+            try {
+                const decodedFrom = atob(fromBase64)
+                if (decodedFrom && decodedFrom !== "") {
+                    from = decodedFrom
+                }
+            } catch (error) {
+                console.log("No valid from parameter found in URL : ", fromBase64)
+            }
+        if(!from.length)
+            from = (window.history.state?.state as LocationState)?.from?.pathname ?? ""
+
+        const fromAsB64 = btoa(from)
+        const url = ssoUrl+"/"+fromAsB64
+        console.log(`Opening CAS with url: ${url}`)
+
         if(isWeb) {
-            window.location.href = ssoUrl
+            window.location.href = url
             return
         }
         setError(undefined)
         localStorage.removeItem("sso-token")
-        await InAppBrowser.openWebView({ url: ssoUrl, toolbarType: ToolBarType.ACTIVITY, title: t("login:sso_loggin") })
+
+        await InAppBrowser.openWebView({ url, toolbarType: ToolBarType.ACTIVITY, title: t("login:sso_loggin") })
     }, [t])
 
     useEffect(() => {
@@ -114,7 +157,7 @@ const SSOLogin: React.FC = () => {
             {error && <div className="bg-red-500 text-white p-2 rounded-md top-20 absolute">{error}</div>}
             <div className="flex-grow flex items-center">
                 <button
-                    onClick={openCapacitorSite}
+                    onClick={openCAS}
                     disabled={loading}
                     className={`${loading && "cursor-not-allowed"} rounded-md flex items-center mt-8 py-2 px-4 bg-indigo-500 text-white hover:bg-indigo-600 transition-colors text-xl font-semibold`}
                 >

@@ -147,11 +147,11 @@ const App: React.FC = () => {
 
             notificationManager.setUnwatched(userRes.data.unwatchedNotifications)
             socket.connect({ state, dispatch })
-            if (window.location.pathname.toLowerCase() == "/login" || window.location.pathname.toLowerCase() == "/alternative-login") {
-                const from = (window.history.state?.state as LocationState)?.from || {
-                    pathname: state.payload.lastConnection ? "/" : "/discovery"
-                }
-                window.history.replaceState({firstPage: true}, "", from.pathname)
+            if (window.location.pathname.toLowerCase().includes("/login") || window.location.pathname.toLowerCase() == "/alternative-login") {
+                const from = localStorage.getItem("from") || (window.history.state?.state as LocationState)?.from?.pathname || (state.payload.lastConnection ? "/" : "/discovery")
+                window.history.replaceState({firstPage: true}, "", from)
+                console.log("Redirecting after login to : ", from)
+                localStorage.removeItem("from")
             }
             setLoading(false)
         }).catch((e) => {
