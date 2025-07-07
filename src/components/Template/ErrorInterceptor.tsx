@@ -170,11 +170,13 @@ class ErrorInterceptor extends React.Component<InterceptorProps, InterceptState>
                     return Promise.reject(error)
                 default:
                     if (!auth) {
-                        const errorMessage = ((error.response.data ?? {}) as { message: string }).message
-                        message.error(errorMessage && t(i18n.exists(`error:${errorMessage}`) ?
-                            errorMessage :
-                            `error_encountered.${Math.floor(Math.random() * 3)}`)
-                        )
+                        if(!error.request?.url?.includes("ior/current")) {
+                            const errorMessage = ((error.response.data ?? {}) as { message: string }).message
+                            message.error(errorMessage && t(i18n.exists(`error:${errorMessage}`) ?
+                                errorMessage :
+                                `error_encountered.${Math.floor(Math.random() * 3)}`)
+                            )
+                        }
                     }
                     return Promise.reject(error)
             }
