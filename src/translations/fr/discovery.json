@@ -4,15 +4,15 @@
   "purposes": [
     {
       "title": "Partager",
-      "description": "Partage et retrouve tes meilleurs photos et souvenirs des évènements ISEP (soirée, afterwork). Sinon cultive-toi avec les supports et les présentations de formation/workshop (si les organisateurs les partagent). "
+      "description": "Partage et retrouve tes meilleures photos et souvenirs des évènements ISEP (soirée, afterwork). Sinon cultive-toi avec les supports et les présentations de formations/workshops (si les organisateurs les partagent). "
     },
     {
       "title": "Rassembler",
-      "description": "Retrouve tous les étudiants de l'ISEP, quelque soit la promotion (étudiant et alumnis). Que ce soit pour stalker (personne n'est parfait) ou pour te faire un réseau (on sait jamais \uD83E\uDD37\u200D♂), tu as l'ISEP à portée de main."
+      "description": "Retrouve tous les étudiants de l'ISEP, quelle que soit la promotion (étudiants et alumnis). Que ce soit pour stalker (personne n'est parfait) ou pour te faire un réseau (on sait jamais \uD83E\uDD37\u200D♂), tu as l'ISEP à portée de main."
     },
     {
       "title": "Informer",
-      "description": "Reste au courant des dernières informations sur toutes la vie de l'ISEP, qu'il s'agisse d'un évènement, d'un club ou tout ce qui peut-être relié à l'ISEP. Abonne-toi aux feeds qui t'intéressent pour ne pas en perdre une miette"
+      "description": "Reste au courant des dernières informations sur toute la vie de l'ISEP, qu'il s'agisse d'un évènement, d'un club ou tout ce qui peut-être relié à l'ISEP. Abonne-toi aux feeds qui t'intéressent pour ne pas en perdre une miette"
     }
   ],
   "placeholder_search": "Rechercher un(e) ami(e)...",
