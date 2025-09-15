@@ -27,7 +27,7 @@ const WeiRoomsPage = () => {
     const { t } = useTranslation("wei")
     const [step, setStep] = useState(WeiRoomsStep.START)
 
-    const [types, setTypes] = useState<WeiAvailableRoom[]>([/*4, 5, */6, 7, 8].map(capacity => ({capacity, count: 0})))
+    const [types, setTypes] = useState<WeiAvailableRoom[]>([4, 6/*5, 6, 7, 8*/].map(capacity => ({capacity, count: 0})))
     const [loading, setLoading] = useState(true)
 
     const [error, setError] = useState(false)
